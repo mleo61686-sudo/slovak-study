@@ -35,7 +35,7 @@ export default function UserMenu({ name, email }: Props) {
 
   const initial = (name || email || "?").charAt(0).toUpperCase();
 
-  // 🔥 Закриття при кліку поза меню
+  // Закриття при кліку поза меню
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -48,27 +48,21 @@ export default function UserMenu({ name, email }: Props) {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  // 🔥 Закриття по Escape
+  // Закриття по Escape
   useEffect(() => {
     function handleEsc(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
+      if (event.key === "Escape") setOpen(false);
     }
 
     document.addEventListener("keydown", handleEsc);
-    return () => {
-      document.removeEventListener("keydown", handleEsc);
-    };
+    return () => document.removeEventListener("keydown", handleEsc);
   }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative ml-auto" ref={menuRef}>
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white"
@@ -81,12 +75,11 @@ export default function UserMenu({ name, email }: Props) {
       {open && (
         <div
           className="
-            absolute top-full mt-2
-            left-1/2 -translate-x-1/2
-            sm:left-auto sm:right-0 sm:translate-x-0
-            w-56 max-w-[calc(100vw-16px)]
+            absolute top-full mt-2 right-0
+            w-56
             rounded-xl border bg-white shadow-lg overflow-hidden
           "
+          style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="px-4 py-3 text-sm">
             <div className="font-medium">{name || t.userFallback}</div>
