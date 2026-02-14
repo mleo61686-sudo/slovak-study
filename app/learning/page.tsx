@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 import { CEFR_LEVELS } from "./data";
 import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
@@ -57,7 +60,6 @@ function bandOrder(band: string) {
 }
 
 function compareLevel(a: string, b: string) {
-  // -1 якщо a < b, 0 якщо рівні, 1 якщо a > b
   const pa = parseLevelId(a);
   const pb = parseLevelId(b);
   if (!pa || !pb) return 0;
@@ -74,7 +76,6 @@ function nextLevelId(id: string) {
   const p = parseLevelId(id);
   if (!p) return id;
 
-  // якщо хочеш: після a0-30 → a1-1
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= 30) return "a1-1";
   return `${p.band}-${p.n + 1}`;
 }
@@ -101,6 +102,11 @@ function getLastDone(progress: LessonsProgress) {
 }
 
 export default function LearningPage() {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const isPremium = (session?.user as any)?.isPremium === true;
+
+
   const [progress, setProgress] = useState<LessonsProgress>({});
   const { lang } = useLanguage() as { lang: Lang };
   const t = dict[lang];
@@ -132,7 +138,7 @@ export default function LearningPage() {
       const lastWrong =
         typeof v.lastWrong === "number"
           ? v.lastWrong
-          : Math.max(0, v.lastTotal - lastCorrect);
+          : Math.max(0, v.lastTotal - Number(v.lastCorrect ?? 0));
 
       return { lastCorrect, lastWrong, lastTotal: v.lastTotal };
     }
@@ -148,13 +154,11 @@ export default function LearningPage() {
     [progress]
   );
 
-  // ✅ ГЛОБАЛЬНО дозволений “наступний” урок
   const allowed = useMemo(() => {
     const lastDone = getLastDone(progress);
     return lastDone ? nextLevelId(lastDone) : "a0-1";
   }, [progress]);
 
-  // ✅ відкриті всі <= allowed (повторення можна), все що > allowed — закрито
   function isLessonUnlockedGlobal(lessonId: string) {
     return compareLevel(lessonId, allowed) <= 0;
   }
@@ -167,6 +171,11 @@ export default function LearningPage() {
       <p className="mt-3 text-sm text-slate-500">
         {t.done} <span className="font-medium">{completedCount}</span>
       </p>
+      {isPremium && (
+        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
+          ⭐ Premium активний — безліміт доступу
+        </div>
+      )}
 
       <div className="mt-2 text-xs text-slate-500">
         Доступний зараз: <span className="font-medium">{allowed}</span>
@@ -216,12 +225,13 @@ export default function LearningPage() {
                   const done = isDone(lesson.id);
                   const stats = getStats(lesson.id);
 
+                  const isStart = lesson.id === allowed && !done;
+
                   return (
                     <div
                       key={lesson.id}
-                      className={`rounded-2xl border p-4 ${
-                        unlocked ? "hover:bg-slate-50" : "opacity-60"
-                      }`}
+                      className={`rounded-2xl border p-4 ${unlocked ? "hover:bg-slate-50" : "opacity-60"
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="font-medium">
@@ -241,12 +251,21 @@ export default function LearningPage() {
 
                       <div className="mt-3 flex justify-end">
                         {unlocked ? (
-                          <Link
-                            href={`/learning/${lesson.id}`}
-                            className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
-                          >
-                            {lesson.id === allowed && !done ? t.start : t.repeat}
-                          </Link>
+                          isStart ? (
+                            <button
+                              onClick={() => router.push(`/learning/${lesson.id}`)}
+                              className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
+                            >
+                              {t.start}
+                            </button>
+                          ) : (
+                            <Link
+                              href={`/learning/${lesson.id}`}
+                              className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
+                            >
+                              {t.repeat}
+                            </Link>
+                          )
                         ) : (
                           <button
                             disabled

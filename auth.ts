@@ -35,19 +35,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
+      // 1) при логіні записуємо id
+      if (user) token.id = user.id;
+
+      // 2) завжди (коли є id) підтягни premium з БД
+      if (token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { isPremium: true, premiumUntil: true },
+        });
+
+        token.isPremium = dbUser?.isPremium ?? false;
+        token.premiumUntil = dbUser?.premiumUntil ?? null;
       }
+
       return token;
     },
 
     async session({ session, token }) {
-      if (session.user && token.id) {
-        session.user.id = token.id as string;
+      if (session.user) {
+        (session.user as any).id = token.id as string;
+        (session.user as any).isPremium = token.isPremium as boolean;
+        (session.user as any).premiumUntil = token.premiumUntil as Date | null;
       }
       return session;
     },
   },
+
 
   pages: {
     signIn: "/login",

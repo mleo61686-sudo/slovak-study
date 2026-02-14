@@ -90,9 +90,20 @@ export default async function Page({
   const email = session?.user?.email;
   if (!email) redirect("/login");
 
-  // ✅ user
-  const user = await prisma.user.findUnique({ where: { email } });
+  // ✅ user (беремо premium поля теж)
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      email: true,
+      isPremium: true,
+      premiumUntil: true,
+    },
+  });
   if (!user) redirect("/login");
+
+  const hasPremium =
+    user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
   // ✅ progress row (беремо також lessonsProgress для бекап-відновлення)
   const row = await prisma.userProgress.upsert({
@@ -133,11 +144,12 @@ export default async function Page({
   const allowed = lastUnlockedLevel ? nextLevelId(lastUnlockedLevel) : "a0-1";
 
   console.log("[LOCK]", {
-  levelId,
-  allowed,
-  cmp: compareLevel(levelId, allowed),
-  lastUnlockedLevel,
-});
+    levelId,
+    allowed,
+    cmp: compareLevel(levelId, allowed),
+    lastUnlockedLevel,
+    hasPremium,
+  });
 
   // ✅ урок існує?
   const lesson = getLesson(levelId);
@@ -160,11 +172,12 @@ export default async function Page({
   }
 
   // ✅ ліміт 2/день: застосовуємо ТІЛЬКИ коли користувач заходить саме в "allowed" (новий урок)
+  // ✅ PREMIUM: ігнорує ліміт
   const today = new Date();
   const dailyCount =
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
 
-  if (levelId === allowed && dailyCount >= 2) {
+  if (!hasPremium && levelId === allowed && dailyCount >= 2) {
     redirect("/learning/limit");
   }
 

@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 import UserMenu from "@/app/components/UserMenu";
 import SyncBadge from "@/app/components/SyncBadge";
+import PremiumButton from "@/app/components/PremiumButton";
 
 const nav = [
   { href: "/grammar", label: "Граматика" },
@@ -29,6 +30,7 @@ export default async function Navbar() {
     <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
       <div className="mx-auto max-w-5xl px-4 py-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <span className="text-xl">🇸🇰</span>
@@ -37,6 +39,7 @@ export default async function Navbar() {
 
           {/* Nav + actions */}
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 min-w-0">
+            
             {/* Links */}
             <nav className="flex flex-wrap items-center gap-1 min-w-0">
               {nav.map((item) => (
@@ -49,7 +52,6 @@ export default async function Navbar() {
                 </Link>
               ))}
 
-              {/* ✅ Адмін-кнопка (видно тільки адмінам) */}
               {admin && (
                 <Link
                   href="/admin/reports"
@@ -63,8 +65,11 @@ export default async function Navbar() {
 
             {/* Right side */}
             <div className="flex flex-wrap items-center gap-2">
-              {/* 🔥 Показуємо тільки в development */}
+              
               {process.env.NODE_ENV === "development" && <SyncBadge />}
+
+              {/* 🔥 Premium button тільки для залогінених */}
+              {session && <PremiumButton />}
 
               {session ? (
                 <UserMenu
