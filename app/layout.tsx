@@ -8,13 +8,14 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
 };
-
 export const metadata: Metadata = {
   title: "Slovak Study — вивчення словацької",
   description: "Граматика, словник і тренажер для україномовних.",
   colorScheme: "light",
+  verification: {
+    google: "Vf__jszEN37vi_wmJQYr10o8iZFtAInen8V__txW3Ds",
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
