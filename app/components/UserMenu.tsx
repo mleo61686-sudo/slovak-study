@@ -46,10 +46,10 @@ export default function UserMenu({ name, email }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-xl border bg-white shadow-lg">
+        <div className="absolute right-0 left-auto top-full mt-2 w-56 max-w-[calc(100vw-16px)] rounded-xl border bg-white shadow-lg overflow-hidden">
           <div className="px-4 py-3 text-sm">
             <div className="font-medium">{name || t.userFallback}</div>
-            <div className="text-slate-500 truncate">{email}</div>
+            <div className="text-slate-500 truncate max-w-[220px]">{email}</div>
           </div>
 
           <div className="border-t" />
