@@ -1,498 +1,514 @@
 // app/learning/phrases/a0-3.ts
 import type { Phrase } from "./a0";
-
-const k = (sk: string, ua: string) => `${sk}||${ua}`.toLowerCase();
+import { phraseKey } from "./phraseKey";
 
 export const A0_PHRASES_3: Record<string, Phrase> = {
-
   // =========================
-  // LESSON 21 — Місця
+  // LESSON 21 — Miesta
   // =========================
-  [k("miesto", "місце")]: {
-    sk: "Toto je pekné miesto.",
+  [phraseKey("miesto", "місце", "a0-21")]: {
+    sk: "To je pekné miesto.",
     ua: "Це гарне місце.",
-    ru: "Это хорошее место.",
-    tokens: ["Toto", "je", "pekné", "miesto", "."],
+    ru: "Это красивое место.",
+    tokens: ["To", "je", "pekné", "miesto", "."],
   },
-  [k("centrum", "центр")]: {
-    sk: "Som v centre.",
-    ua: "Я в центрі.",
-    ru: "Я в центре.",
-    tokens: ["Som", "v", "centre", "."],
+  [phraseKey("centrum", "центр", "a0-21")]: {
+    sk: "Som v centre mesta.",
+    ua: "Я в центрі міста.",
+    ru: "Я в центре города.",
+    tokens: ["Som", "v", "centre", "mesta", "."],
   },
-  [k("obchod", "магазин")]: {
+  [phraseKey("obchod", "магазин", "a0-21")]: {
     sk: "Idem do obchodu.",
-    ua: "Я йду в магазин.",
+    ua: "Я йду до магазину.",
     ru: "Я иду в магазин.",
     tokens: ["Idem", "do", "obchodu", "."],
   },
-  [k("reštaurácia", "ресторан")]: {
-    sk: "Reštaurácia je otvorená.",
-    ua: "Ресторан відкритий.",
-    ru: "Ресторан открыт.",
-    tokens: ["Reštaurácia", "je", "otvorená", "."],
+  [phraseKey("reštaurácia", "ресторан", "a0-21")]: {
+    sk: "Večer ideme do reštaurácie.",
+    ua: "Увечері ми йдемо до ресторану.",
+    ru: "Вечером мы идём в ресторан.",
+    tokens: ["Večer", "ideme", "do", "reštaurácie", "."],
   },
-  [k("kaviareň", "кафе")]: {
-    sk: "Sedím v kaviarni.",
-    ua: "Я сиджу в кафе.",
-    ru: "Я сижу в кафе.",
-    tokens: ["Sedím", "v", "kaviarni", "."],
+  [phraseKey("kaviareň", "кафе", "a0-21")]: {
+    sk: "Sedím v kaviarni s priateľom.",
+    ua: "Я сиджу в кафе з другом.",
+    ru: "Я сижу в кафе с другом.",
+    tokens: ["Sedím", "v", "kaviarni", "s", "priateľom", "."],
   },
-  [k("park", "парк")]: {
-    sk: "Som v parku.",
-    ua: "Я в парку.",
-    ru: "Я в парке.",
-    tokens: ["Som", "v", "parku", "."],
+  [phraseKey("park", "парк", "a0-21")]: {
+    sk: "Prechádzam sa v parku.",
+    ua: "Я гуляю в парку.",
+    ru: "Я гуляю в парке.",
+    tokens: ["Prechádzam", "sa", "v", "parku", "."],
   },
-  [k("banka", "банк")]: {
-    sk: "Idem do banky.",
-    ua: "Я йду в банк.",
-    ru: "Я иду в банк.",
-    tokens: ["Idem", "do", "banky", "."],
+  [phraseKey("banka", "банк", "a0-21")]: {
+    sk: "Musím ísť do banky.",
+    ua: "Мені потрібно піти до банку.",
+    ru: "Мне нужно идти в банк.",
+    tokens: ["Musím", "ísť", "do", "banky", "."],
   },
-  [k("pošta", "пошта")]: {
-    sk: "Pošta je blízko.",
-    ua: "Пошта близько.",
-    ru: "Почта рядом.",
-    tokens: ["Pošta", "je", "blízko", "."],
+  [phraseKey("pošta", "пошта", "a0-21")]: {
+    sk: "Balík je na pošte.",
+    ua: "Посилка на пошті.",
+    ru: "Посылка на почте.",
+    tokens: ["Balík", "je", "na", "pošte", "."],
   },
-  [k("polícia", "поліція")]: {
+  [phraseKey("polícia", "поліція", "a0-21")]: {
     sk: "Volám políciu.",
     ua: "Я викликаю поліцію.",
     ru: "Я вызываю полицию.",
     tokens: ["Volám", "políciu", "."],
   },
-  [k("stanica", "станція / вокзал")]: {
-    sk: "Stanica je tam.",
-    ua: "Станція там.",
-    ru: "Станция там.",
-    tokens: ["Stanica", "je", "tam", "."],
+  [phraseKey("stanica", "станція / вокзал", "a0-21")]: {
+    sk: "Čakám na stanici.",
+    ua: "Я чекаю на вокзалі.",
+    ru: "Я жду на вокзале.",
+    tokens: ["Čakám", "na", "stanici", "."],
   },
 
   // =========================
-  // LESSON 22 — Емоції
+  // LESSON 22 — Emócie
   // =========================
-  [k("radosť", "радість")]: {
-    sk: "Cítim radosť.",
-    ua: "Я відчуваю радість.",
-    ru: "Я чувствую радость.",
-    tokens: ["Cítim", "radosť", "."],
+  [phraseKey("radosť", "радість", "a0-22")]: {
+    sk: "Cítim veľkú radosť.",
+    ua: "Я відчуваю велику радість.",
+    ru: "Я чувствую большую радость.",
+    tokens: ["Cítim", "veľkú", "radosť", "."],
   },
-  [k("smútok", "смуток")]: {
-    sk: "Cítim smútok.",
-    ua: "Я відчуваю смуток.",
-    ru: "Я чувствую грусть.",
-    tokens: ["Cítim", "smútok", "."],
+  [phraseKey("smútok", "смуток", "a0-22")]: {
+    sk: "Je to hlboký smútok.",
+    ua: "Це глибокий смуток.",
+    ru: "Это глубокая грусть.",
+    tokens: ["Je", "to", "hlboký", "smútok", "."],
   },
-  [k("strach", "страх")]: {
-    sk: "Mám strach.",
-    ua: "Мені страшно.",
-    ru: "Мне страшно.",
-    tokens: ["Mám", "strach", "."],
+  [phraseKey("strach", "страх", "a0-22")]: {
+    sk: "Mám strach z tmy.",
+    ua: "Я боюся темряви.",
+    ru: "Я боюсь темноты.",
+    tokens: ["Mám", "strach", "z", "tmy", "."],
   },
-  [k("hnev", "злість")]: {
+  [phraseKey("hnev", "злість", "a0-22")]: {
     sk: "Cítim hnev.",
     ua: "Я відчуваю злість.",
-    ru: "Я чувствую злость.",
+    ru: "Я чувствую гнев.",
     tokens: ["Cítim", "hnev", "."],
   },
-  [k("láska", "любов")]: {
-    sk: "Láska je dôležitá.",
-    ua: "Любов важлива.",
-    ru: "Любовь важна.",
-    tokens: ["Láska", "je", "dôležitá", "."],
+  [phraseKey("láska", "любов", "a0-22")]: {
+    sk: "Láska je krásna.",
+    ua: "Любов прекрасна.",
+    ru: "Любовь прекрасна.",
+    tokens: ["Láska", "je", "krásna", "."],
   },
-  [k("šťastie", "щастя")]: {
-    sk: "Mám šťastie.",
-    ua: "Мені пощастило.",
-    ru: "Мне повезло.",
-    tokens: ["Mám", "šťastie", "."],
+  [phraseKey("šťastie", "щастя", "a0-22")]: {
+    sk: "Cítim šťastie.",
+    ua: "Я відчуваю щастя.",
+    ru: "Я чувствую счастье.",
+    tokens: ["Cítim", "šťastie", "."],
   },
-  [k("únava", "втома")]: {
-    sk: "Cítim únavu.",
-    ua: "Я відчуваю втому.",
-    ru: "Я чувствую усталость.",
-    tokens: ["Cítim", "únavu", "."],
+  [phraseKey("únava", "втома", "a0-22")]: {
+    sk: "Som unavený.",
+    ua: "Я втомлений.",
+    ru: "Я устал.",
+    tokens: ["Som", "unavený", "."],
   },
-  [k("stres", "стрес")]: {
-    sk: "Mám stres.",
-    ua: "У мене стрес.",
-    ru: "У меня стресс.",
-    tokens: ["Mám", "stres", "."],
+  [phraseKey("stres", "стрес", "a0-22")]: {
+    sk: "Mám veľa stresu.",
+    ua: "У мене багато стресу.",
+    ru: "У меня много стресса.",
+    tokens: ["Mám", "veľa", "stresu", "."],
   },
-  [k("pokoj", "спокій")]: {
+  [phraseKey("pokoj", "спокій", "a0-22")]: {
     sk: "Chcem pokoj.",
     ua: "Я хочу спокою.",
-    ru: "Я хочу покоя.",
+    ru: "Я хочу спокойствия.",
     tokens: ["Chcem", "pokoj", "."],
   },
-  [k("prekvapenie", "здивування")]: {
+  [phraseKey("prekvapenie", "здивування", "a0-22")]: {
     sk: "To je prekvapenie.",
-    ua: "Це здивування.",
-    ru: "Это удивление.",
+    ua: "Це сюрприз.",
+    ru: "Это сюрприз.",
     tokens: ["To", "je", "prekvapenie", "."],
   },
 
   // =========================
-  // LESSON 23 — Хобі
+  // LESSON 23 — Hobby
   // =========================
-  [k("hobby", "хобі")]: {
-    sk: "Moje hobby je šport.",
-    ua: "Моє хобі — спорт.",
-    ru: "Моё хобби — спорт.",
-    tokens: ["Moje", "hobby", "je", "šport", "."],
+  [phraseKey("hobby", "хобі", "a0-23")]: {
+    sk: "Moje hobby je hudba.",
+    ua: "Моє хобі — музика.",
+    ru: "Моё хобби — музыка.",
+    tokens: ["Moje", "hobby", "je", "hudba", "."],
   },
-  [k("šport", "спорт")]: {
-    sk: "Mám rád šport.",
-    ua: "Я люблю спорт.",
-    ru: "Я люблю спорт.",
-    tokens: ["Mám", "rád", "šport", "."],
+  [phraseKey("šport", "спорт", "a0-23")]: {
+    sk: "Rád športujem.",
+    ua: "Я люблю займатися спортом.",
+    ru: "Я люблю заниматься спортом.",
+    tokens: ["Rád", "športujem", "."],
   },
-  [k("futbal", "футбол")]: {
+  [phraseKey("futbal", "футбол", "a0-23")]: {
     sk: "Hrám futbal.",
     ua: "Я граю у футбол.",
     ru: "Я играю в футбол.",
     tokens: ["Hrám", "futbal", "."],
   },
-  [k("hudba", "музика")]: {
-    sk: "Počúvam hudbu.",
-    ua: "Я слухаю музику.",
-    ru: "Я слушаю музыку.",
-    tokens: ["Počúvam", "hudbu", "."],
+  [phraseKey("hudba", "музика", "a0-23")]: {
+    sk: "Počúvam hudbu každý deň.",
+    ua: "Я слухаю музику щодня.",
+    ru: "Я слушаю музыку каждый день.",
+    tokens: ["Počúvam", "hudbu", "každý", "deň", "."],
   },
-  [k("film", "фільм")]: {
+  [phraseKey("film", "фільм", "a0-23")]: {
     sk: "Pozerám film.",
     ua: "Я дивлюся фільм.",
     ru: "Я смотрю фильм.",
     tokens: ["Pozerám", "film", "."],
   },
-  [k("čítanie", "читання")]: {
+  [phraseKey("čítanie", "читання", "a0-23")]: {
     sk: "Mám rád čítanie.",
     ua: "Я люблю читання.",
     ru: "Я люблю чтение.",
     tokens: ["Mám", "rád", "čítanie", "."],
   },
-  [k("cestovanie", "подорожі")]: {
+  [phraseKey("cestovanie", "подорожі", "a0-23")]: {
     sk: "Milujem cestovanie.",
-    ua: "Я люблю подорожі.",
-    ru: "Я люблю путешествия.",
+    ua: "Я люблю подорожувати.",
+    ru: "Я люблю путешествовать.",
     tokens: ["Milujem", "cestovanie", "."],
   },
-  [k("hra", "гра")]: {
-    sk: "Tá hra je zaujímavá.",
-    ua: "Ця гра цікава.",
-    ru: "Эта игра интересная.",
-    tokens: ["Tá", "hra", "je", "zaujímavá", "."],
+  [phraseKey("hra", "гра", "a0-23")]: {
+    sk: "Hrám hru.",
+    ua: "Я граю в гру.",
+    ru: "Я играю в игру.",
+    tokens: ["Hrám", "hru", "."],
   },
-  [k("maľovanie", "малювання")]: {
-    sk: "Mám rád maľovanie.",
-    ua: "Я люблю малювання.",
-    ru: "Я люблю рисование.",
-    tokens: ["Mám", "rád", "maľovanie", "."],
+  [phraseKey("maľovanie", "малювання", "a0-23")]: {
+    sk: "Maľujem obraz.",
+    ua: "Я малюю картину.",
+    ru: "Я рисую картину.",
+    tokens: ["Maľujem", "obraz", "."],
   },
-  [k("tanec", "танець")]: {
-    sk: "Tanec je super.",
-    ua: "Танець — це класно.",
-    ru: "Танец — это классно.",
-    tokens: ["Tanec", "je", "super", "."],
+  [phraseKey("tanec", "танець", "a0-23")]: {
+    sk: "Tancujem večer.",
+    ua: "Я танцюю ввечері.",
+    ru: "Я танцую вечером.",
+    tokens: ["Tancujem", "večer", "."],
   },
 
   // =========================
-  // LESSON 24 — Спілкування
+  // LESSON 24 — Spilkuvannia
   // =========================
-  [k("hovoriť", "говорити")]: {
-    sk: "Rád hovorím po slovensky.",
-    ua: "Я люблю говорити словацькою.",
-    ru: "Я люблю говорить по-словацки.",
-    tokens: ["Rád", "hovorím", "po", "slovensky", "."],
+  [phraseKey("hovoriť", "говорити", "a0-24")]: {
+    sk: "Hovorím po slovensky.",
+    ua: "Я говорю словацькою.",
+    ru: "Я говорю по-словацки.",
+    tokens: ["Hovorím", "po", "slovensky", "."],
   },
-  [k("rozprávať", "розповідати")]: {
-    sk: "Rozprávam príbeh.",
-    ua: "Я розповідаю історію.",
-    ru: "Я рассказываю историю.",
-    tokens: ["Rozprávam", "príbeh", "."],
+  [phraseKey("rozprávať", "розповідати", "a0-24")]: {
+    sk: "Rozprávam ti príbeh.",
+    ua: "Я розповідаю тобі історію.",
+    ru: "Я рассказываю тебе историю.",
+    tokens: ["Rozprávam", "ti", "príbeh", "."],
   },
-  [k("počúvať", "слухати")]: {
+  [phraseKey("počúvať", "слухати", "a0-24")]: {
     sk: "Počúvam ťa.",
     ua: "Я слухаю тебе.",
     ru: "Я слушаю тебя.",
     tokens: ["Počúvam", "ťa", "."],
   },
-  [k("pýtať sa", "питати")]: {
-    sk: "Chcem sa pýtať.",
-    ua: "Я хочу запитати.",
-    ru: "Я хочу спросить.",
-    tokens: ["Chcem", "sa", "pýtať", "."],
+  [phraseKey("pýtať sa", "питати", "a0-24")]: {
+    sk: "Pýtam sa na cenu.",
+    ua: "Я питаю про ціну.",
+    ru: "Я спрашиваю про цену.",
+    tokens: ["Pýtam", "sa", "na", "cenu", "."],
   },
-  [k("odpovedať", "відповідати")]: {
+  [phraseKey("odpovedať", "відповідати", "a0-24")]: {
     sk: "Odpovedám na otázku.",
     ua: "Я відповідаю на питання.",
     ru: "Я отвечаю на вопрос.",
     tokens: ["Odpovedám", "na", "otázku", "."],
   },
-  [k("telefonovať", "телефонувати")]: {
+  [phraseKey("telefonovať", "телефонувати", "a0-24")]: {
     sk: "Telefonujem mame.",
     ua: "Я телефоную мамі.",
     ru: "Я звоню маме.",
     tokens: ["Telefonujem", "mame", "."],
   },
-  [k("správa", "повідомлення")]: {
+  [phraseKey("správa", "повідомлення", "a0-24")]: {
     sk: "Posielam správu.",
     ua: "Я надсилаю повідомлення.",
     ru: "Я отправляю сообщение.",
     tokens: ["Posielam", "správu", "."],
   },
-  [k("stretnutie", "зустріч")]: {
-    sk: "Máme stretnutie.",
-    ua: "У нас зустріч.",
-    ru: "У нас встреча.",
-    tokens: ["Máme", "stretnutie", "."],
+  [phraseKey("stretnutie", "зустріч", "a0-24")]: {
+    sk: "Mám stretnutie o tretej.",
+    ua: "У мене зустріч о третій.",
+    ru: "У меня встреча в три.",
+    tokens: ["Mám", "stretnutie", "o", "tretej", "."],
   },
-  [k("diskusia", "обговорення")]: {
-    sk: "Je diskusia.",
-    ua: "Є обговорення.",
-    ru: "Идёт обсуждение.",
-    tokens: ["Je", "diskusia", "."],
+  [phraseKey("diskusia", "обговорення", "a0-24")]: {
+    sk: "Máme diskusiu v práci.",
+    ua: "У нас обговорення на роботі.",
+    ru: "У нас обсуждение на работе.",
+    tokens: ["Máme", "diskusiu", "v", "práci", "."],
   },
-  [k("pozdrav", "привітання")]: {
-    sk: "To je pekný pozdrav.",
-    ua: "Це гарне привітання.",
-    ru: "Это хорошее приветствие.",
-    tokens: ["To", "je", "pekný", "pozdrav", "."],
+  [phraseKey("pozdrav", "привітання", "a0-24")]: {
+    sk: "Dám ti pozdrav.",
+    ua: "Передам тобі привітання.",
+    ru: "Передам тебе привет.",
+    tokens: ["Dám", "ti", "pozdrav", "."],
   },
 
   // =========================
-  // LESSON 25 — Подорожі
+  // LESSON 25 — Podorozhi
   // =========================
-  [k("cesta", "подорож")]: {
+  [phraseKey("cesta", "подорож", "a0-25")]: {
     sk: "Tá cesta je dlhá.",
     ua: "Ця подорож довга.",
-    ru: "Это путешествие длинное.",
+    ru: "Это путешествие долгое.",
     tokens: ["Tá", "cesta", "je", "dlhá", "."],
   },
-  [k("cestovať", "подорожувати")]: {
-    sk: "Chcem cestovať.",
-    ua: "Я хочу подорожувати.",
-    ru: "Я хочу путешествовать.",
-    tokens: ["Chcem", "cestovať", "."],
+  [phraseKey("cestovať", "подорожувати", "a0-25")]: {
+    sk: "Chcem cestovať v lete.",
+    ua: "Я хочу подорожувати влітку.",
+    ru: "Я хочу путешествовать летом.",
+    tokens: ["Chcem", "cestovať", "v", "lete", "."],
   },
-  [k("kufor", "валіза")]: {
-    sk: "Mám veľký kufor.",
-    ua: "У мене велика валіза.",
-    ru: "У меня большой чемодан.",
-    tokens: ["Mám", "veľký", "kufor", "."],
+  [phraseKey("kufor", "валіза", "a0-25")]: {
+    sk: "Kufor je ťažký.",
+    ua: "Валіза важка.",
+    ru: "Чемодан тяжёлый.",
+    tokens: ["Kufor", "je", "ťažký", "."],
   },
-  [k("pas", "паспорт")]: {
-    sk: "Potrebujem pas.",
-    ua: "Мені потрібен паспорт.",
-    ru: "Мне нужен паспорт.",
-    tokens: ["Potrebujem", "pas", "."],
+  [phraseKey("pas", "паспорт", "a0-25")]: {
+    sk: "Kde je môj pas?",
+    ua: "Де мій паспорт?",
+    ru: "Где мой паспорт?",
+    tokens: ["Kde", "je", "môj", "pas", "?"],
   },
-  [k("letenka", "авіаквиток")]: {
-    sk: "Mám letenku.",
-    ua: "У мене авіаквиток.",
-    ru: "У меня авиабилет.",
-    tokens: ["Mám", "letenku", "."],
+  [phraseKey("letenka", "авіаквиток", "a0-25")]: {
+    sk: "Mám letenku do Viedne.",
+    ua: "У мене є авіаквиток до Відня.",
+    ru: "У меня есть авиабилет в Вену.",
+    tokens: ["Mám", "letenku", "do", "Viedne", "."],
   },
-  [k("vlak", "поїзд")]: {
-    sk: "Vlak je rýchly.",
-    ua: "Потяг швидкий.",
-    ru: "Поезд быстрый.",
-    tokens: ["Vlak", "je", "rýchly", "."],
+  [phraseKey("vlak", "поїзд", "a0-25")]: {
+    sk: "Vlak ide o šiestej.",
+    ua: "Поїзд їде о шостій.",
+    ru: "Поезд едет в шесть.",
+    tokens: ["Vlak", "ide", "o", "šiestej", "."],
   },
-  [k("autobus", "автобус")]: {
-    sk: "Čakám na autobus.",
-    ua: "Я чекаю на автобус.",
-    ru: "Я жду автобус.",
-    tokens: ["Čakám", "na", "autobus", "."],
+  [phraseKey("autobus", "автобус", "a0-25")]: {
+    sk: "Autobus je už tu.",
+    ua: "Автобус уже тут.",
+    ru: "Автобус уже здесь.",
+    tokens: ["Autobus", "je", "už", "tu", "."],
   },
-  [k("letisko", "аеропорт")]: {
+  [phraseKey("letisko", "аеропорт", "a0-25")]: {
     sk: "Som na letisku.",
     ua: "Я в аеропорту.",
     ru: "Я в аэропорту.",
     tokens: ["Som", "na", "letisku", "."],
   },
-  [k("mapa", "карта")]: {
-    sk: "Mám mapu.",
-    ua: "У мене є карта.",
-    ru: "У меня есть карта.",
-    tokens: ["Mám", "mapu", "."],
+  [phraseKey("mapa", "карта", "a0-25")]: {
+    sk: "Mám mapu mesta.",
+    ua: "У мене є карта міста.",
+    ru: "У меня есть карта города.",
+    tokens: ["Mám", "mapu", "mesta", "."],
   },
-  [k("rezervácia", "бронювання")]: {
-    sk: "Mám rezerváciu.",
-    ua: "У мене є бронювання.",
-    ru: "У меня есть бронирование.",
-    tokens: ["Mám", "rezerváciu", "."],
+  [phraseKey("rezervácia", "бронювання", "a0-25")]: {
+    sk: "Mám rezerváciu v hoteli.",
+    ua: "У мене є бронювання в готелі.",
+    ru: "У меня есть бронь в отеле.",
+    tokens: ["Mám", "rezerváciu", "v", "hoteli", "."],
   },
 
   // =========================
-  // LESSON 26 — Готель і ресторан
+  // LESSON 26 — Hotel a reštaurácia
   // =========================
-  [k("hotel", "готель")]: {
-    sk: "Hotel je blízko.",
-    ua: "Готель близько.",
-    ru: "Отель рядом.",
-    tokens: ["Hotel", "je", "blízko", "."],
+  [phraseKey("hotel", "готель", "a0-26")]: {
+    sk: "Hotel je v centre.",
+    ua: "Готель у центрі.",
+    ru: "Отель в центре.",
+    tokens: ["Hotel", "je", "v", "centre", "."],
   },
-  [k("izba", "кімната")]: {
+  [phraseKey("izba", "кімната", "a0-26")]: {
     sk: "Izba je čistá.",
     ua: "Кімната чиста.",
     ru: "Комната чистая.",
     tokens: ["Izba", "je", "čistá", "."],
   },
-  [k("recepcia", "ресепшн")]: {
-    sk: "Recepcia je dole.",
-    ua: "Ресепшн внизу.",
-    ru: "Ресепшн внизу.",
-    tokens: ["Recepcia", "je", "dole", "."],
+  [phraseKey("recepcia", "ресепшн", "a0-26")]: {
+    sk: "Idem na recepciu.",
+    ua: "Я йду на ресепшн.",
+    ru: "Я иду на ресепшн.",
+    tokens: ["Idem", "na", "recepciu", "."],
   },
-  [k("menu", "меню")]: {
-    sk: "Prosím, menu.",
+  [phraseKey("reštaurácia", "ресторан", "a0-26")]: {
+    sk: "Reštaurácia je otvorená.",
+    ua: "Ресторан відкритий.",
+    ru: "Ресторан открыт.",
+    tokens: ["Reštaurácia", "je", "otvorená", "."],
+  },
+  [phraseKey("menu", "меню", "a0-26")]: {
+    sk: "Prosím si menu.",
     ua: "Будь ласка, меню.",
     ru: "Пожалуйста, меню.",
-    tokens: ["Prosím", ",", "menu", "."],
+    tokens: ["Prosím", "si", "menu", "."],
   },
-  [k("objednať", "замовити")]: {
-    sk: "Chcem objednať obed.",
-    ua: "Я хочу замовити обід.",
-    ru: "Я хочу заказать обед.",
-    tokens: ["Chcem", "objednať", "obed", "."],
+  [phraseKey("objednať", "замовити", "a0-26")]: {
+    sk: "Chcem si objednať polievku.",
+    ua: "Я хочу замовити суп.",
+    ru: "Я хочу заказать суп.",
+    tokens: ["Chcem", "si", "objednať", "polievku", "."],
   },
-  [k("raňajky", "сніданок")]: {
-    sk: "Raňajky sú o ôsmej.",
-    ua: "Сніданок о восьмій.",
-    ru: "Завтрак в восемь.",
-    tokens: ["Raňajky", "sú", "o", "ôsmej", "."],
+  [phraseKey("raňajky", "сніданок", "a0-26")]: {
+    sk: "Raňajky sú o siedmej.",
+    ua: "Сніданок о сьомій.",
+    ru: "Завтрак в семь.",
+    tokens: ["Raňajky", "sú", "o", "siedmej", "."],
   },
-  [k("obed", "обід")]: {
-    sk: "Obed je chutný.",
-    ua: "Обід смачний.",
-    ru: "Обед вкусный.",
-    tokens: ["Obed", "je", "chutný", "."],
+  [phraseKey("obed", "обід", "a0-26")]: {
+    sk: "Dám si obed.",
+    ua: "Я візьму обід.",
+    ru: "Я возьму обед.",
+    tokens: ["Dám", "si", "obed", "."],
   },
-  [k("večera", "вечеря")]: {
-    sk: "Večera je o siedmej.",
-    ua: "Вечеря о сьомій.",
-    ru: "Ужин в семь.",
-    tokens: ["Večera", "je", "o", "siedmej", "."],
+  [phraseKey("večera", "вечеря", "a0-26")]: {
+    sk: "Večera je chutná.",
+    ua: "Вечеря смачна.",
+    ru: "Ужин вкусный.",
+    tokens: ["Večera", "je", "chutná", "."],
   },
-  [k("účet", "рахунок")]: {
-    sk: "Prosím účet.",
+  [phraseKey("účet", "рахунок", "a0-26")]: {
+    sk: "Prosím, účet.",
     ua: "Рахунок, будь ласка.",
     ru: "Счёт, пожалуйста.",
-    tokens: ["Prosím", "účet", "."],
+    tokens: ["Prosím", ",", "účet", "."],
   },
 
   // =========================
-  // LESSON 27 — Гроші
+  // LESSON 27 — Hroši
   // =========================
-  [k("peniaze", "гроші")]: {
-    sk: "Nemám peniaze.",
-    ua: "У мене немає грошей.",
-    ru: "У меня нет денег.",
-    tokens: ["Nemám", "peniaze", "."],
+  [phraseKey("peniaze", "гроші", "a0-27")]: {
+    sk: "Nemám teraz peniaze.",
+    ua: "Я зараз не маю грошей.",
+    ru: "У меня сейчас нет денег.",
+    tokens: ["Nemám", "teraz", "peniaze", "."],
   },
-  [k("euro", "євро")]: {
-    sk: "To je jedno euro.",
-    ua: "Це одне євро.",
-    ru: "Это одно евро.",
-    tokens: ["To", "je", "jedno", "euro", "."],
+  [phraseKey("euro", "євро", "a0-27")]: {
+    sk: "Je to desať eur.",
+    ua: "Це десять євро.",
+    ru: "Это десять евро.",
+    tokens: ["Je", "to", "desať", "eur", "."],
   },
-  [k("cena", "ціна")]: {
+  [phraseKey("cena", "ціна", "a0-27")]: {
     sk: "Aká je cena?",
     ua: "Яка ціна?",
     ru: "Какая цена?",
     tokens: ["Aká", "je", "cena", "?"],
   },
-  [k("platba", "платіж")]: {
-    sk: "Platba je kartou.",
-    ua: "Платіж карткою.",
-    ru: "Оплата картой.",
-    tokens: ["Platba", "je", "kartou", "."],
+  [phraseKey("platba", "платіж", "a0-27")]: {
+    sk: "Platba je úspešná.",
+    ua: "Платіж успішний.",
+    ru: "Платёж успешный.",
+    tokens: ["Platba", "je", "úspešná", "."],
   },
-  [k("hotovosť", "готівка")]: {
-    sk: "Platím hotovosťou.",
+  [phraseKey("hotovosť", "готівка", "a0-27")]: {
+    sk: "Platím v hotovosti.",
     ua: "Я плачу готівкою.",
     ru: "Я плачу наличными.",
-    tokens: ["Platím", "hotovosťou", "."],
+    tokens: ["Platím", "v", "hotovosti", "."],
   },
-  [k("karta", "картка")]: {
-    sk: "Mám kartu.",
-    ua: "У мене є картка.",
-    ru: "У меня есть карта.",
-    tokens: ["Mám", "kartu", "."],
+  [phraseKey("karta", "картка", "a0-27")]: {
+    sk: "Platím kartou.",
+    ua: "Я плачу карткою.",
+    ru: "Я плачу картой.",
+    tokens: ["Platím", "kartou", "."],
   },
-  [k("zľava", "знижка")]: {
-    sk: "Je zľava.",
-    ua: "Є знижка.",
-    ru: "Есть скидка.",
-    tokens: ["Je", "zľava", "."],
+  [phraseKey("účet", "рахунок", "a0-27")]: {
+    sk: "Účet je vysoký.",
+    ua: "Рахунок великий.",
+    ru: "Счёт большой.",
+    tokens: ["Účet", "je", "vysoký", "."],
   },
-  [k("výdavky", "витрати")]: {
-    sk: "Mám veľké výdavky.",
-    ua: "У мене великі витрати.",
-    ru: "У меня большие расходы.",
-    tokens: ["Mám", "veľké", "výdavky", "."],
+  [phraseKey("banka", "банк", "a0-27")]: {
+    sk: "Banka je blízko.",
+    ua: "Банк близько.",
+    ru: "Банк близко.",
+    tokens: ["Banka", "je", "blízko", "."],
+  },
+  [phraseKey("zľava", "знижка", "a0-27")]: {
+    sk: "Dnes je zľava.",
+    ua: "Сьогодні знижка.",
+    ru: "Сегодня скидка.",
+    tokens: ["Dnes", "je", "zľava", "."],
+  },
+  [phraseKey("výdavky", "витрати", "a0-27")]: {
+    sk: "Moje výdavky sú veľké.",
+    ua: "Мої витрати великі.",
+    ru: "Мои расходы большие.",
+    tokens: ["Moje", "výdavky", "sú", "veľké", "."],
   },
 
   // =========================
-  // LESSON 28 — Технології
+  // LESSON 28 — Technológie
   // =========================
-  [k("technológia", "технологія")]: {
-    sk: "Technológia je moderná.",
-    ua: "Технологія сучасна.",
-    ru: "Технология современная.",
-    tokens: ["Technológia", "je", "moderná", "."],
+  [phraseKey("technológia", "технологія", "a0-28")]: {
+    sk: "Technológia sa rýchlo mení.",
+    ua: "Технології швидко змінюються.",
+    ru: "Технологии быстро меняются.",
+    tokens: ["Technológia", "sa", "rýchlo", "mení", "."],
   },
-  [k("počítač", "комп’ютер")]: {
+  [phraseKey("počítač", "комп’ютер", "a0-28")]: {
     sk: "Mám nový počítač.",
     ua: "У мене новий комп’ютер.",
     ru: "У меня новый компьютер.",
     tokens: ["Mám", "nový", "počítač", "."],
   },
-  [k("telefón", "телефон")]: {
-    sk: "Môj telefón je nový.",
-    ua: "Мій телефон новий.",
-    ru: "Мой телефон новый.",
-    tokens: ["Môj", "telefón", "je", "nový", "."],
+  [phraseKey("telefón", "телефон", "a0-28")]: {
+    sk: "Telefón je na stole.",
+    ua: "Телефон на столі.",
+    ru: "Телефон на столе.",
+    tokens: ["Telefón", "je", "na", "stole", "."],
   },
-  [k("internet", "інтернет")]: {
-    sk: "Používam internet.",
-    ua: "Я користуюся інтернетом.",
-    ru: "Я пользуюсь интернетом.",
-    tokens: ["Používam", "internet", "."],
+  [phraseKey("internet", "інтернет", "a0-28")]: {
+    sk: "Nemám internet.",
+    ua: "У мене немає інтернету.",
+    ru: "У меня нет интернета.",
+    tokens: ["Nemám", "internet", "."],
   },
-  [k("aplikácia", "додаток")]: {
-    sk: "Tá aplikácia je dobrá.",
-    ua: "Цей додаток хороший.",
-    ru: "Это приложение хорошее.",
-    tokens: ["Tá", "aplikácia", "je", "dobrá", "."],
+  [phraseKey("aplikácia", "додаток", "a0-28")]: {
+    sk: "Používam túto aplikáciu.",
+    ua: "Я використовую цей додаток.",
+    ru: "Я использую это приложение.",
+    tokens: ["Používam", "túto", "aplikáciu", "."],
   },
-  [k("program", "програма")]: {
-    sk: "Ten program je nový.",
-    ua: "Ця програма нова.",
-    ru: "Эта программа новая.",
-    tokens: ["Ten", "program", "je", "nový", "."],
+  [phraseKey("program", "програма", "a0-28")]: {
+    sk: "Program nefunguje.",
+    ua: "Програма не працює.",
+    ru: "Программа не работает.",
+    tokens: ["Program", "nefunguje", "."],
   },
-  [k("systém", "система")]: {
-    sk: "Systém funguje.",
-    ua: "Система працює.",
-    ru: "Система работает.",
-    tokens: ["Systém", "funguje", "."],
+  [phraseKey("systém", "система", "a0-28")]: {
+    sk: "Systém je rýchly.",
+    ua: "Система швидка.",
+    ru: "Система быстрая.",
+    tokens: ["Systém", "je", "rýchly", "."],
   },
-  [k("sieť", "мережа")]: {
-    sk: "Nemám sieť.",
-    ua: "У мене немає мережі.",
-    ru: "У меня нет сети.",
-    tokens: ["Nemám", "sieť", "."],
+  [phraseKey("sieť", "мережа", "a0-28")]: {
+    sk: "Sieť je slabá.",
+    ua: "Мережа слабка.",
+    ru: "Сеть слабая.",
+    tokens: ["Sieť", "je", "slabá", "."],
   },
-  [k("dáta", "дані")]: {
-    sk: "Nemám dáta.",
-    ua: "У мене немає даних.",
-    ru: "У меня нет данных.",
-    tokens: ["Nemám", "dáta", "."],
+  [phraseKey("dáta", "дані", "a0-28")]: {
+    sk: "Ukladám dáta.",
+    ua: "Я зберігаю дані.",
+    ru: "Я сохраняю данные.",
+    tokens: ["Ukladám", "dáta", "."],
   },
-  [k("heslo", "пароль")]: {
+  [phraseKey("heslo", "пароль", "a0-28")]: {
     sk: "Zabudol som heslo.",
     ua: "Я забув пароль.",
     ru: "Я забыл пароль.",
@@ -500,131 +516,130 @@ export const A0_PHRASES_3: Record<string, Phrase> = {
   },
 
   // =========================
-  // LESSON 29 — Повсякденні фрази
+  // LESSON 29 — Každodenné frázy
   // =========================
-  [k("dobrý deň", "добрий день")]: {
-    sk: "Dobrý deň!",
-    ua: "Добрий день!",
-    ru: "Добрый день!",
-    tokens: ["Dobrý", "deň", "!"],
+  [phraseKey("dobrý deň", "добрий день", "a0-29")]: {
+    sk: "Dobrý deň, ako sa máte?",
+    ua: "Добрий день, як ви?",
+    ru: "Добрый день, как вы?",
+    tokens: ["Dobrý", "deň", ",", "ako", "sa", "máte", "?"],
   },
-  [k("ahoj", "привіт")]: {
-    sk: "Ahoj!",
-    ua: "Привіт!",
-    ru: "Привет!",
-    tokens: ["Ahoj", "!"],
+  [phraseKey("ahoj", "привіт", "a0-29")]: {
+    sk: "Ahoj, čo robíš?",
+    ua: "Привіт, що ти робиш?",
+    ru: "Привет, что ты делаешь?",
+    tokens: ["Ahoj", ",", "čo", "robíš", "?"],
   },
-  [k("ďakujem", "дякую")]: {
-    sk: "Ďakujem pekne.",
-    ua: "Дякую дуже.",
-    ru: "Большое спасибо.",
-    tokens: ["Ďakujem", "pekne", "."],
+  [phraseKey("ďakujem", "дякую", "a0-29")]: {
+    sk: "Ďakujem za pomoc.",
+    ua: "Дякую за допомогу.",
+    ru: "Спасибо за помощь.",
+    tokens: ["Ďakujem", "za", "pomoc", "."],
   },
-  [k("prosím", "будь ласка")]: {
-    sk: "Prosím.",
-    ua: "Будь ласка.",
-    ru: "Пожалуйста.",
-    tokens: ["Prosím", "."],
+  [phraseKey("prosím", "будь ласка", "a0-29")]: {
+    sk: "Prosím, sadnite si.",
+    ua: "Будь ласка, сідайте.",
+    ru: "Пожалуйста, садитесь.",
+    tokens: ["Prosím", ",", "sadnite", "si", "."],
   },
-  [k("prepáč", "вибач")]: {
-    sk: "Prepáč mi.",
-    ua: "Вибач мені.",
-    ru: "Извини меня.",
-    tokens: ["Prepáč", "mi", "."],
+  [phraseKey("prepáč", "вибач", "a0-29")]: {
+    sk: "Prepáč, meškám.",
+    ua: "Вибач, я запізнився.",
+    ru: "Извини, я опоздал.",
+    tokens: ["Prepáč", ",", "meškám", "."],
   },
-  [k("rozumiem", "розумію")]: {
-    sk: "Rozumiem.",
-    ua: "Я розумію.",
-    ru: "Я понимаю.",
-    tokens: ["Rozumiem", "."],
+  [phraseKey("rozumiem", "розумію", "a0-29")]: {
+    sk: "Rozumiem všetko.",
+    ua: "Я все розумію.",
+    ru: "Я всё понимаю.",
+    tokens: ["Rozumiem", "všetko", "."],
   },
-  [k("nerozumiem", "не розумію")]: {
-    sk: "Nerozumiem.",
-    ua: "Я не розумію.",
-    ru: "Я не понимаю.",
-    tokens: ["Nerozumiem", "."],
+  [phraseKey("nerozumiem", "не розумію", "a0-29")]: {
+    sk: "Nerozumiem tej otázke.",
+    ua: "Я не розумію цього питання.",
+    ru: "Я не понимаю этот вопрос.",
+    tokens: ["Nerozumiem", "tej", "otázke", "."],
   },
-  [k("pomôžte", "допоможіть")]: {
+  [phraseKey("pomôžte", "допоможіть", "a0-29")]: {
     sk: "Pomôžte mi, prosím.",
     ua: "Допоможіть мені, будь ласка.",
     ru: "Помогите мне, пожалуйста.",
     tokens: ["Pomôžte", "mi", ",", "prosím", "."],
   },
-  [k("jasné", "ясно")]: {
-    sk: "Jasné.",
-    ua: "Ясно.",
-    ru: "Ясно.",
-    tokens: ["Jasné", "."],
+  [phraseKey("jasné", "ясно", "a0-29")]: {
+    sk: "Jasné, súhlasím.",
+    ua: "Ясно, я згоден.",
+    ru: "Ясно, я согласен.",
+    tokens: ["Jasné", ",", "súhlasím", "."],
   },
-  [k("dobre", "добре")]: {
-    sk: "Dobre.",
-    ua: "Добре.",
-    ru: "Хорошо.",
-    tokens: ["Dobre", "."],
+  [phraseKey("dobre", "добре", "a0-29")]: {
+    sk: "Dobre, poďme.",
+    ua: "Добре, ходімо.",
+    ru: "Хорошо, пойдём.",
+    tokens: ["Dobre", ",", "poďme", "."],
   },
 
   // =========================
-  // LESSON 30 — Повторення бази
+  // LESSON 30 — Základ
   // =========================
-  [k("ja", "я")]: {
+  [phraseKey("ja", "я", "a0-30")]: {
     sk: "Ja som tu.",
     ua: "Я тут.",
     ru: "Я здесь.",
     tokens: ["Ja", "som", "tu", "."],
   },
-  [k("ty", "ти")]: {
-    sk: "Ty si doma.",
-    ua: "Ти вдома.",
-    ru: "Ты дома.",
-    tokens: ["Ty", "si", "doma", "."],
+  [phraseKey("ty", "ти", "a0-30")]: {
+    sk: "Ty si môj priateľ.",
+    ua: "Ти мій друг.",
+    ru: "Ты мой друг.",
+    tokens: ["Ty", "si", "môj", "priateľ", "."],
   },
-  [k("on", "він")]: {
-    sk: "On je doma.",
-    ua: "Він вдома.",
-    ru: "Он дома.",
-    tokens: ["On", "je", "doma", "."],
+  [phraseKey("on", "він", "a0-30")]: {
+    sk: "On pracuje dnes.",
+    ua: "Він працює сьогодні.",
+    ru: "Он работает сегодня.",
+    tokens: ["On", "pracuje", "dnes", "."],
   },
-  [k("ona", "вона")]: {
-    sk: "Ona je tu.",
-    ua: "Вона тут.",
-    ru: "Она здесь.",
-    tokens: ["Ona", "je", "tu", "."],
+  [phraseKey("ona", "вона", "a0-30")]: {
+    sk: "Ona je doma.",
+    ua: "Вона вдома.",
+    ru: "Она дома.",
+    tokens: ["Ona", "je", "doma", "."],
   },
-  [k("my", "ми")]: {
-    sk: "My sme doma.",
-    ua: "Ми вдома.",
-    ru: "Мы дома.",
-    tokens: ["My", "sme", "doma", "."],
+  [phraseKey("my", "ми", "a0-30")]: {
+    sk: "My ideme do mesta.",
+    ua: "Ми йдемо до міста.",
+    ru: "Мы идём в город.",
+    tokens: ["My", "ideme", "do", "mesta", "."],
   },
-  [k("vy", "ви")]: {
-    sk: "Vy ste pripravení.",
-    ua: "Ви готові.",
-    ru: "Вы готовы.",
-    tokens: ["Vy", "ste", "pripravení", "."],
+  [phraseKey("vy", "ви", "a0-30")]: {
+    sk: "Vy ste pripravení?",
+    ua: "Ви готові?",
+    ru: "Вы готовы?",
+    tokens: ["Vy", "ste", "pripravení", "?"],
   },
-  [k("oni", "вони")]: {
-    sk: "Oni sú doma.",
-    ua: "Вони вдома.",
-    ru: "Они дома.",
-    tokens: ["Oni", "sú", "doma", "."],
+  [phraseKey("oni", "вони", "a0-30")]: {
+    sk: "Oni bývajú blízko.",
+    ua: "Вони живуть близько.",
+    ru: "Они живут рядом.",
+    tokens: ["Oni", "bývajú", "blízko", "."],
   },
-  [k("byť", "бути")]: {
-    sk: "Chcem byť šťastný.",
-    ua: "Я хочу бути щасливим.",
-    ru: "Я хочу быть счастливым.",
-    tokens: ["Chcem", "byť", "šťastný", "."],
+  [phraseKey("byť", "бути", "a0-30")]: {
+    sk: "Chcem byť doma.",
+    ua: "Я хочу бути вдома.",
+    ru: "Я хочу быть дома.",
+    tokens: ["Chcem", "byť", "doma", "."],
   },
-  [k("mať", "мати")]: {
-    sk: "Chcem mať auto.",
-    ua: "Я хочу мати авто.",
-    ru: "Я хочу иметь машину.",
-    tokens: ["Chcem", "mať", "auto", "."],
+  [phraseKey("mať", "мати", "a0-30")]: {
+    sk: "Mám čas.",
+    ua: "Я маю час.",
+    ru: "У меня есть время.",
+    tokens: ["Mám", "čas", "."],
   },
-  [k("ísť", "йти")]: {
-    sk: "Chcem ísť domov.",
-    ua: "Я хочу йти додому.",
-    ru: "Я хочу идти домой.",
-    tokens: ["Chcem", "ísť", "domov", "."],
+  [phraseKey("ísť", "йти", "a0-30")]: {
+    sk: "Idem do práce.",
+    ua: "Я йду на роботу.",
+    ru: "Я иду на работу.",
+    tokens: ["Idem", "do", "práce", "."],
   },
-
 };

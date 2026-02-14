@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String               @id @default(cuid())
+  email        String               @unique
   name         String?
   passwordHash String
-  createdAt    DateTime @default(now())
-  resetTokens PasswordResetToken[]
+  createdAt    DateTime             @default(now())
+  resetTokens  PasswordResetToken[]
 
   // ✅ зворотній зв'язок для прогресу
-  progress UserProgress?
+  progress     UserProgress?
+  errorReports ErrorReport[]
 }
 
 model UserProgress {
@@ -28,19 +29,50 @@ model UserProgress {
 
   lastUnlockedLevel String?
   dailyDate         DateTime?
-  dailyCount        Int      @default(0)
+  dailyCount        Int       @default(0)
 }
+
 model PasswordResetToken {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Зберігаємо ХЕШ токена (а не токен)
-  tokenHash String   @unique
+  tokenHash String @unique
 
   expiresAt DateTime
   createdAt DateTime @default(now())
 
   // ✅ Позначка “використано”
-  usedAt    DateTime?
+  usedAt DateTime?
+}
+
+model ErrorReport {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+
+  // хто відправив (якщо залогінений)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // контекст де знайшли баг
+  page      String?
+  lessonId  String?
+  exercise  String? // тип вправи: learn/quiz/... (що ти передаси)
+  actionIdx Int? // 1..10 (крок/слово в уроці)
+
+  // сам контент, про який скарга
+  sk  String?
+  ua  String?
+  ru  String?
+  key String? // наприклад `${sk}||${ua}` для фраз
+
+  // повідомлення користувача
+  category String?
+  status String @default("new")
+  message  String // головний текст
+
+  // тех інфа (корисно при дебагу)
+  userAgent String?
 }

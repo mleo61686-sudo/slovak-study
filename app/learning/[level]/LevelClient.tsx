@@ -6,6 +6,10 @@ import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
 import { finishLessonQuiz } from "@/lib/src/progress";
+import ReportErrorButton from "@/app/components/ReportErrorButton";
+
+// ✅ беремо фрази з централізованого словника
+import { A0_PHRASES, phraseKey } from "@/app/learning/phrases/a0";
 
 export type Word = {
   sk: string;
@@ -20,14 +24,14 @@ export type Word = {
     sk: string;
     ua: string;
     ru?: string;
-    tokens: string[]; // ["Ja", "pracujem", "v", "práci"]
+    tokens: string[];
   };
 };
 
 function getNextLevelId(levelId: string) {
   const m = /^([a-z]\d)-(\d+)$/.exec(levelId);
   if (m) {
-    const band = m[1]; // a0, a1...
+    const band = m[1];
     const n = Number(m[2]);
 
     if (band === "a0" && Number.isFinite(n) && n >= 30) return "a1-1";
@@ -50,7 +54,7 @@ type ExerciseKind =
 type ExerciseDef = {
   kind: ExerciseKind;
   title: string;
-  mode: "perWord" | "whole"; // perWord = по кожному слову, whole = одна вправа на весь урок
+  mode: "perWord" | "whole";
 };
 
 const EXERCISES: ExerciseDef[] = [
@@ -58,8 +62,6 @@ const EXERCISES: ExerciseDef[] = [
   { kind: "chooseSlovak", title: "Обери слово словацькою", mode: "perWord" },
   { kind: "writeWord", title: "Напиши словацькою", mode: "perWord" },
   { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-
-  // ✅ нові:
   { kind: "matchColumns", title: "Пари в 2 колонки", mode: "whole" },
   { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
 ];
@@ -71,8 +73,6 @@ function shuffle<T>(arr: T[]) {
 }
 
 function normalizeSentence(s: string) {
-  // прибираємо зайві пробіли, приводимо до нижнього регістру,
-  // робимо крапки/коми без пробілу перед ними
   return s
     .trim()
     .replace(/\s+/g, " ")
@@ -82,9 +82,11 @@ function normalizeSentence(s: string) {
 
 const trWord = (w: Word, lang: Lang) => (lang === "ru" ? w.ru ?? w.ua : w.ua);
 
-function getPhraseForWord(word: Word, lang: Lang) {
+function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
+  // 1) якщо фраза прямо в слові
   if (word.phrase) {
-    const target = lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
+    const target =
+      lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
     return {
       sk: word.phrase.sk,
       target,
@@ -92,10 +94,18 @@ function getPhraseForWord(word: Word, lang: Lang) {
     };
   }
 
-  // ✅ fallback, якщо phrase не задано
+  // 2) ✅ головне: шукаємо в A0_PHRASES по ключу (sk + ua + levelId)
+  const k = phraseKey(word.sk, word.ua, levelId);
+  const p = A0_PHRASES[k];
+  if (p) {
+    const target = lang === "ru" ? p.ru ?? p.ua : p.ua;
+    return { sk: p.sk, target, tokens: p.tokens };
+  }
+
+  // 3) fallback якщо фрази нема
   const sk = `To je ${word.sk}.`;
   const target = lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
-  const tokens = ["To", "je", word.sk]; // без крапки в токенах
+  const tokens = ["To", "je", word.sk, "."]; // ✅ пунктуація як токен
   return { sk, target, tokens };
 }
 
@@ -142,8 +152,6 @@ export default function LevelClient({
 }) {
   const [mode, setMode] = useState<"learn" | "quiz">("learn");
 
-  // quiz engine
-
   const [exerciseIndex, setExerciseIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
 
@@ -155,8 +163,10 @@ export default function LevelClient({
   const { lang } = useLanguage();
 
   const totalQuestions = useMemo(() => {
-    // perWord = words.length питань; whole = words.length питань (у нас matchColumns = words.length)
-    return EXERCISES.reduce((sum, ex) => sum + (ex.mode === "perWord" ? words.length : words.length), 0);
+    return EXERCISES.reduce(
+      (sum, ex) => sum + (ex.mode === "perWord" ? words.length : words.length),
+      0
+    );
   }, [words.length]);
 
   // =============== LEARN MODE ===============
@@ -251,14 +261,12 @@ export default function LevelClient({
       return;
     }
 
-    // закінчили слова в цій вправі
     if (!lastExercise) {
       setExerciseIndex((e) => e + 1);
       setWordIndex(0);
       return;
     }
 
-    // фінал
     const finalScore = score + (correct ? 1 : 0);
     finishLesson(finalScore);
   }
@@ -322,9 +330,21 @@ export default function LevelClient({
         )}
       </div>
 
+      <ReportErrorButton
+        context={{
+          lessonId: levelId,
+          exercise: `${mode}:${exercise.kind}`,
+          actionIdx: exercise.mode === "perWord" ? wordIndex + 1 : undefined,
+          sk: exercise.mode === "perWord" ? currentWord?.sk : undefined,
+          ua: exercise.mode === "perWord" ? currentWord?.ua : undefined,
+          ru: exercise.mode === "perWord" ? currentWord?.ru : undefined,
+          key:
+            exercise.mode === "perWord" && currentWord?.sk && currentWord?.ua
+              ? phraseKey(currentWord.sk, currentWord.ua, levelId)
+              : undefined,
+        }}
+      />
 
-
-      {/* 1 */}
       {exercise.kind === "chooseTranslation" && (
         <ChooseTranslation
           word={currentWord}
@@ -334,7 +354,6 @@ export default function LevelClient({
         />
       )}
 
-      {/* 2 */}
       {exercise.kind === "chooseSlovak" && (
         <ChooseSlovak
           word={currentWord}
@@ -344,17 +363,14 @@ export default function LevelClient({
         />
       )}
 
-      {/* 3 */}
       {exercise.kind === "writeWord" && (
         <WriteWord word={currentWord} lang={lang} onNext={nextPerWord} />
       )}
 
-      {/* 4 */}
       {exercise.kind === "audioQuiz" && (
         <AudioQuiz word={currentWord} words={words} onNext={nextPerWord} />
       )}
 
-      {/* 5 (whole) */}
       {exercise.kind === "matchColumns" && (
         <MatchColumns
           words={words}
@@ -363,9 +379,13 @@ export default function LevelClient({
         />
       )}
 
-      {/* 6 */}
       {exercise.kind === "buildSentence" && (
-        <BuildSentence word={currentWord} lang={lang} onNext={nextPerWord} />
+        <BuildSentence
+          word={currentWord}
+          lang={lang}
+          levelId={levelId}
+          onNext={nextPerWord}
+        />
       )}
     </div>
   );
@@ -386,8 +406,8 @@ function WordImage({
     size === "large"
       ? "h-52 sm:h-64 md:h-72"
       : size === "small"
-        ? "h-40 sm:h-48 md:h-52"
-        : "h-48 sm:h-56 md:h-60";
+      ? "h-40 sm:h-48 md:h-52"
+      : "h-48 sm:h-56 md:h-60";
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -576,11 +596,12 @@ function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-        ? "border-red-500"
-        : "border-slate-300";
+      ? "border-red-500"
+      : "border-slate-300";
 
   return (
-    <><WordImage word={word} />
+    <>
+      <WordImage word={word} />
       <div className="text-lg font-semibold">
         Напиши словацькою:{" "}
         <span className="font-bold">{trWord(word, lang)}</span>
@@ -677,7 +698,9 @@ function AudioQuiz({
 
   return (
     <>
-      <div className="text-lg font-semibold">Прослухай слово і обери правильне:</div>
+      <div className="text-lg font-semibold">
+        Прослухай слово і обери правильне:
+      </div>
 
       <div className="flex justify-center">
         <SpeakButton text={word.sk} />
@@ -749,19 +772,18 @@ function MatchColumns({
 
   const doneAll = matchedLeft.size >= words.length;
   const doneByWrong = wrongCount >= MAX_WRONG;
-  const locked = doneAll || doneByWrong; // ✅ блокуємо гру
+  const locked = doneAll || doneByWrong;
 
   function clearSelection() {
-    if (locked) return; // ✅ не даємо “гратися” після ліміту
+    if (locked) return;
     setSelectedLeft(null);
     setSelectedRight(null);
     setWrongPair(null);
     setShakeWrong(false);
   }
 
-  // ✅ коли вибрані і ліве і праве — робимо “спробу”
   useEffect(() => {
-    if (locked) return; // ✅ після ліміту — нічого не рахуємо
+    if (locked) return;
     if (!selectedLeft || !selectedRight) return;
 
     const correct = mapSkToTr.get(selectedLeft) === selectedRight;
@@ -873,7 +895,6 @@ function MatchColumns({
           shakeWrong ? "animate-[shake_0.2s_linear_0s_2]" : "",
         ].join(" ")}
       >
-        {/* left column */}
         <div className="space-y-2">
           {left.map((sk) => (
             <button
@@ -890,7 +911,6 @@ function MatchColumns({
           ))}
         </div>
 
-        {/* right column */}
         <div className="space-y-2">
           {right.map((t) => (
             <button
@@ -910,56 +930,43 @@ function MatchColumns({
 
       <style jsx>{`
         @keyframes shake {
-          0% { transform: translateX(0); }
-          25% { transform: translateX(-6px); }
-          50% { transform: translateX(6px); }
-          75% { transform: translateX(-6px); }
-          100% { transform: translateX(0); }
+          0% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-6px);
+          }
+          50% {
+            transform: translateX(6px);
+          }
+          75% {
+            transform: translateX(-6px);
+          }
+          100% {
+            transform: translateX(0);
+          }
         }
       `}</style>
     </div>
   );
 }
 
-
 // 6️⃣ ЗБЕРИ РЕЧЕННЯ (perWord)
 function BuildSentence({
   word,
   lang,
+  levelId,
   onNext,
 }: {
   word: Word;
   lang: Lang;
+  levelId: string;
   onNext: (c: boolean) => void;
 }) {
-  const phrase = useMemo(() => getPhraseForWord(word, lang), [word, lang]);
-
-  // ✅ якщо фрази нема — НЕ показуємо неправильні шаблони типу "To je peniaze"
-  if (!phrase) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="font-semibold">B) Збери речення</div>
-            <div className="text-sm text-slate-500">
-              Для цього слова фраза ще не додана (щоб було граматично правильно).
-            </div>
-          </div>
-
-          <button
-            onClick={() => onNext(true)}
-            className="px-4 py-2 rounded-xl bg-black text-white"
-          >
-            Пропустити →
-          </button>
-        </div>
-
-        <div className="rounded-2xl border bg-white p-4 text-slate-600">
-          Додай фразу у <b>phrases/a0.ts</b> (або файл свого рівня), і тут з’явиться вправа.
-        </div>
-      </div>
-    );
-  }
+  const phrase = useMemo(
+    () => getPhraseForWord(word, lang, levelId),
+    [word, lang, levelId]
+  );
 
   const baseTokens = useMemo(() => phrase.tokens, [phrase.tokens]);
   const [available, setAvailable] = useState<string[]>(() => shuffle(baseTokens));
@@ -1005,7 +1012,7 @@ function BuildSentence({
     setPicked((p) => {
       if (p.length === 0) return p;
       const last = p[p.length - 1];
-      setAvailable((a) => [...a, last]); // повертаємо назад
+      setAvailable((a) => [...a, last]);
       return p.slice(0, -1);
     });
   }
@@ -1021,16 +1028,17 @@ function BuildSentence({
     const target = baseTokens.join(" ");
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
-    if (phrase) {
-      speak(phrase.sk);
-    }
+    speak(phrase.sk);
   }
 
   function next() {
     onNext(status === "correct");
   }
 
-  const builtPretty = picked.join(" ") + (picked.length ? "." : "");
+  // ✅ НЕ додаємо "." вручну — пунктуація вже є токеном
+  const builtPretty = picked
+    .join(" ")
+    .replace(/\s+([.,!?;:])/g, "$1");
 
   return (
     <div className="space-y-4">

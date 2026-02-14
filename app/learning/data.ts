@@ -3,7 +3,7 @@ import { WORDS } from "../data/words";
 import { A1_ALL } from "./levels/a1";
 import { A2_ALL } from "./levels/a2";
 import { B1_ALL } from "./levels/b1";
-import { A0_PHRASES } from "./phrases/a0";
+import { A0_PHRASES, phraseKey } from "./phrases/a0";
 
 
 export type Lang = "ua" | "ru";
@@ -737,13 +737,10 @@ function normalizeLessonList(list: any[]): Lesson[] {
   }));
 }
 
-function phraseKey(w: Word) {
-  return `${w.sk}||${w.ua}`.toLowerCase();
-}
 
-function attachPhrases(words: Word[], dict: Record<string, any>) {
+function attachPhrases(words: Word[], dict: Record<string, any>, lessonId: string) {
   return words.map((w) => {
-    const p = dict[phraseKey(w)];
+    const p = dict[phraseKey(w.sk, w.ua, lessonId)];
     return p ? { ...w, phrase: p } : w;
   });
 }
@@ -809,7 +806,7 @@ export function getLesson(id: string) {
     if (band === "a0") {
       return {
         ...lesson,
-        words: attachPhrases(withRu, A0_PHRASES),
+        words: attachPhrases(withRu, A0_PHRASES, `a0-${raw}`),
       };
     }
 
@@ -828,6 +825,6 @@ export function getLesson(id: string) {
 
   return {
     ...lesson,
-    words: attachPhrases(withRu, A0_PHRASES),
+    words: attachPhrases(withRu, A0_PHRASES, `a0-${raw}`),
   };
 }

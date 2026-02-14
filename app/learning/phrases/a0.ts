@@ -10,6 +10,10 @@ export type Phrase = {
   tokens: string[];
 };
 
+// ✅ один-єдиний phraseKey (щоб не було розсинхронів)
+export { phraseKey } from "./phraseKey";
+
+// ✅ просто зливаємо — ключі вже містять lessonId (a0-1, a0-2, ...)
 export const A0_PHRASES: Record<string, Phrase> = {
   ...A0_PHRASES_1,
   ...A0_PHRASES_2,
