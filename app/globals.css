@@ -1,14 +1,22 @@
 @import "tailwindcss";
 
+/* 🔒 Фіксуємо світлу тему */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ❌ Прибираємо auto-dark Safari */
+/* (ми вже керуємо colorScheme через layout.tsx) */
+
+/* 🚫 Забороняємо горизонтальний зсув */
+html, body {
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html, body {
+    overflow-x: clip;
   }
 }
 
