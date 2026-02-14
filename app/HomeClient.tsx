@@ -21,6 +21,22 @@ const t = {
     seoP2:
       "Сайт підходить для українців, які планують працювати, навчатися або переїхати до Словаччини. Вивчайте словацьку мову онлайн безкоштовно, у зручному форматі з поступовим ускладненням матеріалу.",
 
+    // PREMIUM
+    premiumTitle: "Premium — навчання без обмежень 🚀",
+    premiumSubtitle:
+      "Відкрий усі рівні A0–B2 одразу та проходь уроки без денного ліміту.",
+    premiumBullets: [
+      "🔓 Всі рівні та уроки відкриті одразу (A0–B2)",
+      "🚫 Без денного ліміту на нові уроки",
+      "🏋️ Повний доступ до тренажера",
+      "🔁 Повторення тільки помилок",
+      "📊 Статистика, серії та рекорди",
+      "🔊 Озвучка слів (Premium)",
+    ],
+    premiumPriceNote: "7.99€ / місяць • можна скасувати будь-коли",
+    premiumCta: "Спробувати Premium →",
+    premiumSecondary: "Подивитись тренажер →",
+
     grammarTitle: "Граматика",
     grammarDesc: "Теми коротко й по суті + приклади та міні-вправи.",
     dictTitle: "Словник",
@@ -30,6 +46,7 @@ const t = {
     open: "Відкрити →",
     start: "Почати →",
   },
+
   ru: {
     h1: "Изучай словацкий 🇸🇰 онлайн",
     heroP:
@@ -38,22 +55,39 @@ const t = {
     ctaDict: "Открыть словарь",
     ctaGrammar: "Перейти к грамматике",
 
-    seoH2: "Онлайн курс словацкого языка ",
+    seoH2: "Онлайн курс словацкого языка",
     seoP1:
       "Slovak Study — это онлайн платформа для изучения словацкого языка с нуля. Здесь вы найдёте грамматику с примерами, тематический словарь, упражнения для тренировки и системное обучение по уровням A0–B2.",
     seoP2:
       "Сайт подходит для украинцев, которые планируют работать, учиться или переехать в Словакию. Изучайте словацкий онлайн бесплатно, в удобном формате с постепенным усложнением материала.",
+
+    // PREMIUM
+    premiumTitle: "Premium — обучение без ограничений 🚀",
+    premiumSubtitle:
+      "Открой все уровни A0–B2 сразу и проходи уроки без дневного лимита.",
+    premiumBullets: [
+      "🔓 Все уровни и уроки открыты сразу (A0–B2)",
+      "🚫 Без дневного лимита на новые уроки",
+      "🏋️ Полный доступ к тренажёру",
+      "🔁 Повторять только ошибки",
+      "📊 Статистика, серии и рекорды",
+      "🔊 Озвучка слов (Premium)",
+    ],
+    premiumPriceNote: "7.99€ / месяц • можно отменить в любой момент",
+    premiumCta: "Попробовать Premium →",
+    premiumSecondary: "Посмотреть тренажёр →",
 
     grammarTitle: "Грамматика",
     grammarDesc: "Темы кратко и по делу + примеры и мини-упражнения.",
     dictTitle: "Словарь",
     dictDesc: "Поиск, темы, примеры предложений и «в избранное».",
     levelsTitle: "Уровни",
-    levelsDesc: "Упражнения: выбор ответа, вставить слово, составить предложение.",
+    levelsDesc:
+      "Упражнения: выбор ответа, вставить слово, составить предложение.",
     open: "Открыть →",
     start: "Начать →",
   },
-} satisfies Record<Lang, Record<string, string>>;
+} satisfies Record<Lang, any>;
 
 export default function HomeClient() {
   const { lang } = useLanguage();
@@ -72,7 +106,10 @@ export default function HomeClient() {
           <p className="max-w-2xl text-slate-700">{tr.heroP}</p>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link href="/learning" className="bg-black text-white px-4 py-2 rounded-xl">
+            <Link
+              href="/learning"
+              className="bg-black text-white px-4 py-2 rounded-xl"
+            >
               {tr.ctaLearning}
             </Link>
 
@@ -96,10 +133,51 @@ export default function HomeClient() {
       {/* SEO CONTENT BLOCK */}
       <section className="rounded-3xl border bg-white p-8 shadow-sm">
         <h2 className="text-xl font-semibold mb-3">{tr.seoH2}</h2>
-
         <p className="text-slate-700 mb-3">{tr.seoP1}</p>
-
         <p className="text-slate-700">{tr.seoP2}</p>
+      </section>
+
+      {/* PREMIUM BLOCK */}
+      <section className="rounded-3xl border bg-white p-8 shadow-sm">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">{tr.premiumTitle}</h2>
+            <p className="text-slate-700 max-w-2xl">
+              {tr.premiumSubtitle}
+            </p>
+
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {tr.premiumBullets.map((item: string) => (
+                <li
+                  key={item}
+                  className="rounded-2xl border bg-slate-50 px-4 py-3 text-sm text-slate-800"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="text-sm text-slate-600">
+              {tr.premiumPriceNote}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:pt-2">
+            <Link
+              href="/premium"
+              className="rounded-2xl bg-amber-500 px-6 py-3 text-sm font-semibold text-black hover:opacity-90 text-center"
+            >
+              {tr.premiumCta}
+            </Link>
+
+            <Link
+              href="/practice"
+              className="rounded-2xl border bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 text-center"
+            >
+              {tr.premiumSecondary}
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* MAIN CARDS */}

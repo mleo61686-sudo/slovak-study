@@ -16,6 +16,8 @@ model User {
   resetTokens  PasswordResetToken[]
   isPremium    Boolean   @default(false)
   premiumUntil DateTime?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
 
   // ✅ зворотній зв'язок для прогресу
   progress     UserProgress?

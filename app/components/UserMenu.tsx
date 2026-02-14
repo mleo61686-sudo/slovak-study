@@ -15,22 +15,29 @@ type Lang = "ua" | "ru";
 const T: Record<Lang, any> = {
   ua: {
     profile: "Профіль",
+    manageSub: "Керувати підпискою",
+    manageSubHint: "Stripe • скасування/картка/інвойси",
     logout: "Вийти",
     userFallback: "Користувач",
+    portalError: "Не вдалося відкрити керування підпискою.",
   },
   ru: {
     profile: "Профиль",
+    manageSub: "Управлять подпиской",
+    manageSubHint: "Stripe • отмена/карта/инвойсы",
     logout: "Выйти",
     userFallback: "Пользователь",
+    portalError: "Не удалось открыть управление подпиской.",
   },
 };
 
 export default function UserMenu({ name, email }: Props) {
   const { lang } = useLanguage();
-  const L: Lang = (lang as Lang) ?? "ua";
+  const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
 
   const [open, setOpen] = useState(false);
+  const [loadingPortal, setLoadingPortal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const initial = (name || email || "?").charAt(0).toUpperCase();
@@ -60,6 +67,26 @@ export default function UserMenu({ name, email }: Props) {
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
+
+  async function openPortal() {
+    try {
+      setLoadingPortal(true);
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data?.url) {
+        setOpen(false);
+        window.location.href = data.url;
+        return;
+      }
+
+      alert(t.portalError);
+    } catch {
+      alert(t.portalError);
+    } finally {
+      setLoadingPortal(false);
+    }
+  }
 
   return (
     <div className="relative ml-auto" ref={menuRef}>
@@ -95,6 +122,19 @@ export default function UserMenu({ name, email }: Props) {
           >
             {t.profile}
           </Link>
+
+          {/* ✅ Manage subscription */}
+          <button
+            onClick={openPortal}
+            disabled={loadingPortal}
+            className="w-full px-4 py-2 text-left text-sm hover:bg-slate-50 disabled:opacity-50"
+            type="button"
+          >
+            <div className="font-medium">{t.manageSub}</div>
+            <div className="text-xs text-slate-500">{t.manageSubHint}</div>
+          </button>
+
+          <div className="border-t" />
 
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
