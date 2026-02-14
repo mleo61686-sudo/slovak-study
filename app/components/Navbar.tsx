@@ -5,12 +5,6 @@ import UserMenu from "@/app/components/UserMenu";
 import SyncBadge from "@/app/components/SyncBadge";
 import PremiumButton from "@/app/components/PremiumButton";
 
-const nav = [
-  { href: "/grammar", label: "Граматика" },
-  { href: "/dictionary", label: "Словник" },
-  { href: "/practice", label: "Тренажер" },
-];
-
 function isAdmin(email?: string | null) {
   if (!email) return false;
   const raw = process.env.ADMIN_EMAILS ?? "";
@@ -25,6 +19,18 @@ function isAdmin(email?: string | null) {
 export default async function Navbar() {
   const session = await auth();
   const admin = isAdmin(session?.user?.email);
+
+  const isPremium = !!session?.user?.isPremium;
+
+  // 🔒 Динамічний nav
+  const nav = [
+    { href: "/grammar", label: "Граматика" },
+    { href: "/dictionary", label: "Словник" },
+    {
+      href: isPremium ? "/practice" : "/premium",
+      label: isPremium ? "Тренажер" : "Тренажер 🔒",
+    },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
@@ -68,7 +74,7 @@ export default async function Navbar() {
               
               {process.env.NODE_ENV === "development" && <SyncBadge />}
 
-              {/* 🔥 Premium button тільки для залогінених */}
+              {/* Premium button тільки для залогінених */}
               {session && <PremiumButton />}
 
               {session ? (

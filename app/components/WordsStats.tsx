@@ -127,7 +127,7 @@ export default function WordsStats() {
 
         {stats.due > 0 ? (
           <Link
-            href="/practice/words"
+            href="/words"
             className="rounded-xl bg-black px-4 py-2 text-sm text-white hover:opacity-90"
           >
             {t.repeat} {stats.due} →
@@ -136,7 +136,7 @@ export default function WordsStats() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-sm text-green-600">{t.done}</span>
             <Link
-              href="/practice/words"
+              href="/words"
               className="rounded-xl border px-4 py-2 text-sm hover:bg-slate-50"
             >
               {t.addNew} →

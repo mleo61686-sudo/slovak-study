@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
+
 import { CEFR_LEVELS } from "../../data";
 import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
@@ -13,6 +15,10 @@ export default function BandPage() {
   const bandId = String(params?.band || "").trim().toLowerCase();
 
   const { lang } = useLanguage();
+
+  // ✅ Premium (для відкриття всіх уроків)
+  const { data: session } = useSession();
+  const isPremium = (session?.user as any)?.isPremium === true;
 
   const band = useMemo(() => {
     return CEFR_LEVELS.find((b) => b.id === bandId) ?? null;
@@ -33,13 +39,17 @@ export default function BandPage() {
     };
   }, []);
 
+  // ✅ case-insensitive + підтримка різних форматів значень
   const isDone = (id: string) => {
-    const v: LessonProgressValue | undefined = progress[id];
-    return v === true || (typeof v === "object" && v?.done === true);
+    const key = id.toLowerCase();
+    const v: LessonProgressValue | undefined =
+      (progress as any)[key] ?? (progress as any)[id];
+    return v === true || (typeof v === "object" && (v as any)?.done === true);
   };
 
   const getStats = (id: string) => {
-    const v = progress[id];
+    const key = id.toLowerCase();
+    const v = (progress as any)[key] ?? (progress as any)[id];
     if (!v || v === true || typeof v !== "object") return null;
 
     if (typeof v.lastTotal === "number" && v.lastTotal > 0) {
@@ -62,12 +72,15 @@ export default function BandPage() {
           {lang === "ua" ? "Рівень не знайдено" : "Уровень не найден"}
         </h1>
         <p className="mt-2 text-slate-600">
-          {lang === "ua" ? "Спробуй повернутися назад." : "Попробуй вернуться назад."}
+          {lang === "ua"
+            ? "Спробуй повернутися назад."
+            : "Попробуй вернуться назад."}
         </p>
 
         <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-700">
           <div>
-            <span className="font-medium">bandId:</span> {bandId || "(порожньо)"}
+            <span className="font-medium">bandId:</span>{" "}
+            {bandId || "(порожньо)"}
           </div>
           <div className="mt-2">
             <span className="font-medium">
@@ -81,7 +94,7 @@ export default function BandPage() {
           className="mt-4 inline-block rounded-xl bg-black px-4 py-2 text-white"
           href="/learning"
         >
-          {lang === "ua" ? "Назад" : "Назад"}
+          ← {lang === "ua" ? "Назад" : "Назад"}
         </Link>
       </div>
     );
@@ -96,9 +109,16 @@ export default function BandPage() {
           <h1 className="text-3xl font-bold">{band.title[lang]}</h1>
           <p className="mt-2 text-slate-600">{band.subtitle[lang]}</p>
           <p className="mt-2 text-sm text-slate-500">
-            {lang === "ua" ? "Прогрес" : "Прогресс"}: {doneCount}/{band.lessons.length} ·{" "}
-            {lang === "ua" ? "Слів" : "Слов"}: {band.lessons.length * 10}
+            {lang === "ua" ? "Прогрес" : "Прогресс"}: {doneCount}/
+            {band.lessons.length} · {lang === "ua" ? "Слів" : "Слов"}:{" "}
+            {band.lessons.length * 10}
           </p>
+
+          {isPremium && (
+            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
+              ⭐ Premium активний — всі уроки відкриті
+            </div>
+          )}
         </div>
 
         <Link
@@ -127,11 +147,12 @@ export default function BandPage() {
           const stats = getStats(lesson.id);
 
           const prev = band.lessons[idx - 1];
-          const locked = idx > 0 && !isDone(prev.id);
+
+          // ✅ Premium: не блокуємо уроки
+          const locked = !isPremium && idx > 0 && prev && !isDone(prev.id);
 
           const cardClass = "rounded-2xl border bg-white p-4 hover:bg-slate-50";
-
-          const lessonTitle = lesson.title[lang]; // ✅ головне
+          const lessonTitle = lesson.title[lang];
 
           if (locked) {
             return (
@@ -150,7 +171,8 @@ export default function BandPage() {
 
                 {stats && (
                   <div className="mt-1 text-xs text-slate-500">
-                    ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} / {stats.lastTotal}
+                    ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
+                    {stats.lastTotal}
                   </div>
                 )}
 
@@ -162,7 +184,11 @@ export default function BandPage() {
           }
 
           return (
-            <Link key={lesson.id} href={`/learning/${lesson.id}`} className={cardClass}>
+            <Link
+              key={lesson.id}
+              href={`/learning/${lesson.id}`}
+              className={cardClass}
+            >
               <div className="flex items-start justify-between gap-2">
                 <div className="font-medium">
                   {lessonTitle} {done ? "✅" : ""}

@@ -146,9 +146,18 @@ function useAutoSpeak(text: string, enabled: boolean) {
 export default function LevelClient({
   levelId,
   words,
+
+  // ✅ NEW (optional): контроль переходу на next
+  canGoNext = true,
+  lockedReason,
+  onLockedNextRedirect = "/learning",
 }: {
   levelId: string;
   words: Word[];
+
+  canGoNext?: boolean;
+  lockedReason?: string;
+  onLockedNextRedirect?: string;
 }) {
   const [mode, setMode] = useState<"learn" | "quiz">("learn");
 
@@ -245,6 +254,11 @@ export default function LevelClient({
     setFinished(true);
     try {
       finishLessonQuiz(levelId, finalScore, totalQuestions);
+      fetch("/api/progress/lesson-done", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ levelId }),
+      }).catch(() => { });
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -292,6 +306,16 @@ export default function LevelClient({
           Результат: <b>{score}</b> / <b>{totalQuestions}</b>
         </div>
 
+        {!canGoNext && (
+          <div className="rounded-xl border bg-slate-50 p-3 text-sm text-slate-700">
+            <div className="font-semibold">Наступний урок зараз закритий 🔒</div>
+            <div className="mt-1">
+              {lockedReason ??
+                "У безкоштовній версії є ліміт/послідовність рівнів. Повернись до списку уроків."}
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => {
@@ -307,16 +331,35 @@ export default function LevelClient({
           </button>
 
           <button
-            onClick={() => router.push(`/learning/${nextLevelId}`)}
-            className="px-4 py-2 rounded-xl bg-black text-white"
+            onClick={() => {
+              if (!canGoNext) {
+                router.push(onLockedNextRedirect);
+                return;
+              }
+              router.push(`/learning/${nextLevelId}`);
+            }}
+            className={[
+              "px-4 py-2 rounded-xl text-white",
+              canGoNext ? "bg-black" : "bg-black/40 cursor-not-allowed",
+            ].join(" ")}
+            disabled={!canGoNext}
+            title={!canGoNext ? "Недоступно у free" : undefined}
           >
             Перейти до наступного рівня →
           </button>
+
+          {!canGoNext && (
+            <button
+              onClick={() => router.push(onLockedNextRedirect)}
+              className="px-4 py-2 border rounded-xl"
+            >
+              До списку уроків
+            </button>
+          )}
         </div>
       </div>
     );
   }
-
   return (
     <div className="rounded-2xl border bg-white p-6 space-y-4">
       <div className="text-sm text-slate-500">
@@ -406,8 +449,8 @@ function WordImage({
     size === "large"
       ? "h-52 sm:h-64 md:h-72"
       : size === "small"
-      ? "h-40 sm:h-48 md:h-52"
-      : "h-48 sm:h-56 md:h-60";
+        ? "h-40 sm:h-48 md:h-52"
+        : "h-48 sm:h-56 md:h-60";
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -596,8 +639,8 @@ function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-      ? "border-red-500"
-      : "border-slate-300";
+        ? "border-red-500"
+        : "border-slate-300";
 
   return (
     <>

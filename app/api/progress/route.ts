@@ -44,6 +44,28 @@ function hasPremium(user: { isPremium: boolean; premiumUntil: Date | null }) {
   return user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 }
 
+// ✅ Retry helper for Prisma deadlocks / write conflicts (P2034)
+async function withRetry<T>(fn: () => Promise<T>, retries = 5) {
+  let lastErr: any;
+
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (e: any) {
+      lastErr = e;
+
+      // Prisma P2034 = write conflict / deadlock
+      if (e?.code !== "P2034") throw e;
+
+      // backoff: 50, 100, 200, 400, 800 ms
+      const delay = 50 * Math.pow(2, i);
+      await new Promise((r) => setTimeout(r, delay));
+    }
+  }
+
+  throw lastErr;
+}
+
 export async function GET() {
   const session = await auth();
   const email = session?.user?.email;
@@ -117,96 +139,100 @@ export async function PUT(req: Request) {
   const today = new Date();
 
   try {
-    const result = await prisma.$transaction(
-      async (tx) => {
-        const prevRow = await tx.userProgress.findUnique({
-          where: { userId: user.id },
-          select: {
-            lessonsProgress: true,
-            lastUnlockedLevel: true,
-            dailyDate: true,
-            dailyCount: true,
+    const result = await withRetry(
+      () =>
+        prisma.$transaction(
+          async (tx) => {
+            const prevRow = await tx.userProgress.findUnique({
+              where: { userId: user.id },
+              select: {
+                lessonsProgress: true,
+                lastUnlockedLevel: true,
+                dailyDate: true,
+                dailyCount: true,
+              },
+            });
+
+            const prevLessons = (prevRow?.lessonsProgress ?? {}) as LessonsProgress;
+
+            const sameDay = prevRow?.dailyDate ? isSameDay(prevRow.dailyDate, today) : false;
+            const currentDailyCount = sameDay ? (prevRow?.dailyCount ?? 0) : 0;
+
+            const allowed = prevRow?.lastUnlockedLevel
+              ? nextLevelId(prevRow.lastUnlockedLevel)
+              : "a0-1";
+
+            // ✅ супер-важливо: перевіряємо тільки allowed
+            const doneNow = isDone(lessonsProgress[allowed]);
+            const donePrev = isDone(prevLessons[allowed]);
+
+            // Якщо урок "allowed" став done зараз — це завершення нового уроку
+            if (doneNow && !donePrev) {
+              // додаткова валідація
+              if (!parseLevelId(allowed)) {
+                return {
+                  status: 400,
+                  payload: { ok: false, code: "INVALID_LESSON_ID" },
+                };
+              }
+
+              // free ліміт (premium bypass)
+              if (!userHasPremium && currentDailyCount >= 2) {
+                return {
+                  status: 429,
+                  payload: { ok: false, code: "DAILY_LIMIT", limit: 2 },
+                };
+              }
+
+              const saved = await tx.userProgress.upsert({
+                where: { userId: user.id },
+                create: {
+                  userId: user.id,
+                  lessonsProgress,
+                  lastUnlockedLevel: allowed,
+                  dailyDate: today,
+                  dailyCount: userHasPremium ? 0 : 1,
+                },
+                update: {
+                  lessonsProgress,
+                  lastUnlockedLevel: allowed,
+                  dailyDate: userHasPremium ? prevRow?.dailyDate ?? today : today,
+                  dailyCount: userHasPremium ? prevRow?.dailyCount ?? 0 : currentDailyCount + 1,
+                },
+                select: {
+                  updatedAt: true,
+                  lastUnlockedLevel: true,
+                  dailyCount: true,
+                },
+              });
+
+              return {
+                status: 200,
+                payload: {
+                  ok: true,
+                  updatedAt: saved.updatedAt,
+                  lastUnlockedLevel: saved.lastUnlockedLevel,
+                  dailyCount: saved.dailyCount,
+                },
+              };
+            }
+
+            // ✅ інакше — просто синк (без unlock)
+            const saved = await tx.userProgress.upsert({
+              where: { userId: user.id },
+              create: { userId: user.id, lessonsProgress },
+              update: { lessonsProgress },
+              select: { updatedAt: true },
+            });
+
+            return {
+              status: 200,
+              payload: { ok: true, updatedAt: saved.updatedAt },
+            };
           },
-        });
-
-        const prevLessons = (prevRow?.lessonsProgress ?? {}) as LessonsProgress;
-
-        const sameDay = prevRow?.dailyDate ? isSameDay(prevRow.dailyDate, today) : false;
-        const currentDailyCount = sameDay ? (prevRow?.dailyCount ?? 0) : 0;
-
-        const allowed = prevRow?.lastUnlockedLevel
-          ? nextLevelId(prevRow.lastUnlockedLevel)
-          : "a0-1";
-
-        // ✅ супер-важливо: перевіряємо тільки allowed
-        const doneNow = isDone(lessonsProgress[allowed]);
-        const donePrev = isDone(prevLessons[allowed]);
-
-        // Якщо урок "allowed" став done зараз — це завершення нового уроку
-        if (doneNow && !donePrev) {
-          // додаткова валідація
-          if (!parseLevelId(allowed)) {
-            return {
-              status: 400,
-              payload: { ok: false, code: "INVALID_LESSON_ID" },
-            };
-          }
-
-          // free ліміт (premium bypass)
-          if (!userHasPremium && currentDailyCount >= 2) {
-            return {
-              status: 429,
-              payload: { ok: false, code: "DAILY_LIMIT", limit: 2 },
-            };
-          }
-
-          const saved = await tx.userProgress.upsert({
-            where: { userId: user.id },
-            create: {
-              userId: user.id,
-              lessonsProgress,
-              lastUnlockedLevel: allowed,
-              dailyDate: today,
-              dailyCount: userHasPremium ? 0 : 1,
-            },
-            update: {
-              lessonsProgress,
-              lastUnlockedLevel: allowed,
-              dailyDate: userHasPremium ? prevRow?.dailyDate ?? today : today,
-              dailyCount: userHasPremium ? prevRow?.dailyCount ?? 0 : currentDailyCount + 1,
-            },
-            select: {
-              updatedAt: true,
-              lastUnlockedLevel: true,
-              dailyCount: true,
-            },
-          });
-
-          return {
-            status: 200,
-            payload: {
-              ok: true,
-              updatedAt: saved.updatedAt,
-              lastUnlockedLevel: saved.lastUnlockedLevel,
-              dailyCount: saved.dailyCount,
-            },
-          };
-        }
-
-        // ✅ інакше — просто синк (без unlock)
-        const saved = await tx.userProgress.upsert({
-          where: { userId: user.id },
-          create: { userId: user.id, lessonsProgress },
-          update: { lessonsProgress },
-          select: { updatedAt: true },
-        });
-
-        return {
-          status: 200,
-          payload: { ok: true, updatedAt: saved.updatedAt },
-        };
-      },
-      { isolationLevel: "Serializable" }
+          { isolationLevel: "Serializable" }
+        ),
+      5
     );
 
     return NextResponse.json(result.payload, { status: result.status });

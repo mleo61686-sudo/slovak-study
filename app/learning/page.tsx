@@ -77,6 +77,9 @@ function nextLevelId(id: string) {
   if (!p) return id;
 
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= 30) return "a1-1";
+  if (p.band === "a1" && Number.isFinite(p.n) && p.n >= 40) return "a2-1";
+  if (p.band === "a2" && Number.isFinite(p.n) && p.n >= 50) return "b1-1";
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= 50) return "b2-1"; // на майбутнє, якщо треба
   return `${p.band}-${p.n + 1}`;
 }
 
@@ -99,6 +102,28 @@ function getLastDone(progress: LessonsProgress) {
   }
 
   return best;
+}
+function isDoneId(progress: LessonsProgress, id: string) {
+  const key = id.toLowerCase();
+  const v: LessonProgressValue | undefined =
+    (progress as any)[key] ?? (progress as any)[id];
+
+  return v === true || (typeof v === "object" && v?.done === true);
+}
+
+function getAllowedSequential(progress: LessonsProgress) {
+  // беремо всі уроки з CEFR_LEVELS, сортуємо глобально
+  const allIds = CEFR_LEVELS.flatMap((b) => b.lessons.map((l) => l.id)).sort(
+    (a, b) => compareLevel(a, b)
+  );
+
+  for (const id of allIds) {
+    if (!isDoneId(progress, id)) return id.toLowerCase();
+  }
+
+  // якщо все пройдено — дозволяємо "наступний" після останнього
+  const last = allIds[allIds.length - 1];
+  return last ? nextLevelId(last).toLowerCase() : "a0-1";
 }
 
 export default function LearningPage() {
@@ -124,11 +149,7 @@ export default function LearningPage() {
     };
   }, []);
 
-  const isDone = (id: string) => {
-    const v: LessonProgressValue | undefined = progress[id];
-    return v === true || (typeof v === "object" && v?.done === true);
-  };
-
+  const isDone = (id: string) => isDoneId(progress, id);
   const getStats = (id: string) => {
     const v = progress[id];
     if (!v || v === true || typeof v !== "object") return null;
@@ -153,16 +174,16 @@ export default function LearningPage() {
       ).length,
     [progress]
   );
-
   const allowed = useMemo(() => {
-    const lastDone = getLastDone(progress);
-    return lastDone ? nextLevelId(lastDone) : "a0-1";
+    // Premium — все можна, але "доступний зараз" хай показує перший непройдений
+    return getAllowedSequential(progress);
   }, [progress]);
 
+
   function isLessonUnlockedGlobal(lessonId: string) {
+    if (isPremium) return true;
     return compareLevel(lessonId, allowed) <= 0;
   }
-
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold">{t.title}</h1>

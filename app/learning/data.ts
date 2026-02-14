@@ -806,7 +806,7 @@ export function getLesson(id: string) {
     if (band === "a0") {
       return {
         ...lesson,
-        words: attachPhrases(withRu, A0_PHRASES, `a0-${raw}`),
+        words: attachPhrases(withRu, A0_PHRASES, raw),
       };
     }
 

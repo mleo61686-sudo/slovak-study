@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const KEY = 'slovakStudy.progress';
+const KEY = "slovakStudy.progress";
 
 const TOPIC_TITLES: Record<string, string> = {
-  'present-tense': 'Present tense (теперішній час)',
-  'past-tense': 'Past tense (минулий час)',
-  'future-tense': 'Future tense (майбутній час)',
-  'modal-verbs': 'Modal verbs (модальні дієслова)',
-  'word-order': 'Word order (порядок слів)',
+  "present-tense": "Present tense (теперішній час)",
+  "past-tense": "Past tense (минулий час)",
+  "future-tense": "Future tense (майбутній час)",
+  "modal-verbs": "Modal verbs (модальні дієслова)",
+  "word-order": "Word order (порядок слів)",
 };
 
 type TopicData =
@@ -56,10 +56,10 @@ export default function ReviewPage() {
         const value = data[id];
 
         const done =
-          value === true || (typeof value === 'object' && value?.done === true);
+          value === true || (typeof value === "object" && value?.done === true);
 
         const lastStudied =
-          typeof value === 'object' ? value.lastStudied : undefined;
+          typeof value === "object" ? value.lastStudied : undefined;
 
         return {
           id,
@@ -78,7 +78,7 @@ export default function ReviewPage() {
 
       setItems(list.filter((x) => x.done));
     } catch (e) {
-      console.error('Progress parse error:', e);
+      console.error("Progress parse error:", e);
       setItems([]);
       setTotal(0);
     }
@@ -91,26 +91,28 @@ export default function ReviewPage() {
       if (e.key === KEY) reload();
     };
 
-    window.addEventListener('storage', onStorage);
+    window.addEventListener("storage", onStorage);
 
     return () => {
-      window.removeEventListener('storage', onStorage);
+      window.removeEventListener("storage", onStorage);
     };
   }, []);
 
   function getStatus(item: TopicItem) {
-    if (item.daysAgo === null) return '🆕 нова';
-    if (item.daysAgo === 0) return '✅ сьогодні';
-    if (item.daysAgo <= 2) return '🙂 недавно';
-    if (item.daysAgo <= 6) return '🕒 давно';
-    return '🔁 пора повторити';
+    if (item.daysAgo === null) return "🆕 нова";
+    if (item.daysAgo === 0) return "✅ сьогодні";
+    if (item.daysAgo <= 2) return "🙂 недавно";
+    if (item.daysAgo <= 6) return "🕒 давно";
+    return "🔁 пора повторити";
   }
 
   return (
     <main className="mx-auto max-w-3xl p-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">🔁 Smart Review</h1>
-        <Link href="/practice" className="text-sm underline">
+
+        {/* ✅ Free-навігація: назад на навчання, а не на /practice */}
+        <Link href="/learning" className="text-sm underline">
           ← Назад
         </Link>
       </div>
@@ -136,6 +138,7 @@ export default function ReviewPage() {
                 </div>
               </div>
 
+              {/* Повторення теми: це граматика, не тренажер */}
               <Link
                 href={`/grammar/${item.id}`}
                 className="rounded-lg bg-black px-3 py-1 text-sm text-white hover:opacity-80"
