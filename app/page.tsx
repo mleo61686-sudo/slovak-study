@@ -23,7 +23,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function HomePage() {
   return (
     <div className="space-y-10">
@@ -40,7 +39,10 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link href="/learning" className="bg-black text-white px-4 py-2 rounded-xl">
+            <Link
+              href="/learning"
+              className="bg-black text-white px-4 py-2 rounded-xl"
+            >
               Перейти до навчання 🚀
             </Link>
 
@@ -59,6 +61,25 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+      </section>
+
+      {/* SEO CONTENT BLOCK */}
+      <section className="rounded-3xl border bg-white p-8 shadow-sm">
+        <h2 className="text-xl font-semibold mb-3">
+          Онлайн курс словацької мови для українців
+        </h2>
+
+        <p className="text-slate-700 mb-3">
+          Slovak Study — це онлайн платформа для вивчення словацької мови з нуля.
+          Тут ви знайдете граматику словацької мови з прикладами, тематичний словник,
+          вправи для тренування та системне навчання по рівнях A0–B2.
+        </p>
+
+        <p className="text-slate-700">
+          Сайт підходить для українців, які планують працювати, навчатися або
+          переїхати до Словаччини. Вивчайте словацьку мову онлайн безкоштовно,
+          у зручному форматі з поступовим ускладненням матеріалу.
+        </p>
       </section>
 
       {/* MAIN CARDS */}
