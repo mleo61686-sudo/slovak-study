@@ -16,7 +16,7 @@ function addOneMonth(d: Date) {
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const sig = headers().get("stripe-signature");
+  const sig = (await headers()).get("stripe-signature");
 
   if (!sig) return new Response("Missing signature", { status: 400 });
 
