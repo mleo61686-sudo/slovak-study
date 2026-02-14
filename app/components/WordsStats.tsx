@@ -15,8 +15,6 @@ type Stats = {
 };
 
 const KEY = "slovakStudy.srsWords";
-
-// ✅ same rules as /practice/words
 const DAILY_REVIEW_LIMIT = 30;
 const DAILY_SESSION_KEY = "slovakStudy.srsDailySession";
 
@@ -46,7 +44,7 @@ const I18N = {
 } as const;
 
 function getTodayKey() {
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  return new Date().toISOString().slice(0, 10);
 }
 
 function getDailySession(): { date: string; ids: string[] } | null {
@@ -78,7 +76,6 @@ function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
 
   const realDue = all.filter((s) => s.dueAt <= now).length;
 
-  // ✅ show only today's batch (max 30), don't accumulate backlog
   const daily = getDailySession();
   const due =
     daily && daily.ids.length > 0
@@ -86,6 +83,19 @@ function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
       : Math.min(realDue, DAILY_REVIEW_LIMIT);
 
   return { total: totalWords, learned, mastered, due };
+}
+
+function StatTile({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3">
+      <div className="text-[11px] text-slate-500 whitespace-nowrap overflow-hidden text-ellipsis">
+        {label}
+      </div>
+      <div className="mt-1 text-2xl font-semibold tabular-nums leading-none">
+        {value}
+      </div>
+    </div>
+  );
 }
 
 export default function WordsStats() {
@@ -106,8 +116,6 @@ export default function WordsStats() {
     };
 
     update();
-
-    // refresh when returning to tab or when other tab changes localStorage
     window.addEventListener("focus", update);
     window.addEventListener("storage", update);
 
@@ -121,7 +129,7 @@ export default function WordsStats() {
     stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);
 
   return (
-    <section className="rounded-3xl border bg-white p-6 shadow-sm space-y-4">
+    <section className="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">📊 {t.title}</h2>
 
@@ -137,7 +145,7 @@ export default function WordsStats() {
             <span className="text-sm text-green-600">{t.done}</span>
             <Link
               href="/words"
-              className="rounded-xl border px-4 py-2 text-sm hover:bg-slate-50"
+              className="rounded-xl border border-slate-200 px-4 py-2 text-sm hover:bg-slate-50"
             >
               {t.addNew} →
             </Link>
@@ -145,37 +153,21 @@ export default function WordsStats() {
         )}
       </div>
 
-      <div className="grid gap-2 grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-2xl border p-4 flex flex-col justify-between h-full">
-          <div className="text-xs text-gray-500">{t.total}</div>
-          <div className="text-3xl font-semibold leading-none">
-            {stats.total}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border p-4">
-          <div className="text-xs text-gray-500">{t.learned}</div>
-          <div className="text-2xl font-semibold">{stats.learned}</div>
-        </div>
-
-        <div className="rounded-2xl border p-4">
-          <div className="text-xs text-gray-500">{t.mastered}</div>
-          <div className="text-2xl font-semibold">{stats.mastered}</div>
-        </div>
-
-        <div className="rounded-2xl border p-4">
-          <div className="text-xs text-gray-500">{t.due}</div>
-          <div className="text-2xl font-semibold">{stats.due}</div>
-        </div>
+      {/* ✅ завжди 2x2 — стабільно в колонці */}
+      <div className="grid grid-cols-2 gap-3">
+        <StatTile label={t.total} value={stats.total} />
+        <StatTile label={t.learned} value={stats.learned} />
+        <StatTile label={t.mastered} value={stats.mastered} />
+        <StatTile label={t.due} value={stats.due} />
       </div>
 
       <div className="space-y-1">
-        <div className="text-xs text-gray-500">
+        <div className="text-xs text-slate-500">
           {t.progress}: {progress}%
         </div>
-        <div className="h-2 w-full rounded-full bg-slate-200">
+        <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
           <div
-            className="h-2 rounded-full bg-black transition-all"
+            className="h-2 bg-black transition-all"
             style={{ width: `${progress}%` }}
           />
         </div>

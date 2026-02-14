@@ -22,7 +22,8 @@ export default function RootLayout({
   return (
     <html lang="uk" style={{ colorScheme: "light" }}>
       <body
-        className="min-h-dvh bg-slate-50 text-slate-900 overflow-x-hidden"
+        className="min-h-dvh text-slate-900 overflow-x-hidden
+  bg-[radial-gradient(ellipse_at_top,_#f8fafc_0%,_#f1f5f9_40%,_#e2e8f0_100%)]"
         suppressHydrationWarning
       >
         <Navbar />
@@ -30,7 +31,7 @@ export default function RootLayout({
         <SessionProviderClient>
           <ProgressSync />
 
-          <main className="mx-auto max-w-5xl px-4 py-6 sm:py-8">
+          <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
             {children}
           </main>
         </SessionProviderClient>

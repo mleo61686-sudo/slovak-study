@@ -21,7 +21,6 @@ const t = {
     seoP2:
       "Сайт підходить для українців, які планують працювати, навчатися або переїхати до Словаччини. Вивчайте словацьку мову онлайн безкоштовно, у зручному форматі з поступовим ускладненням матеріалу.",
 
-    // PREMIUM
     premiumTitle: "Premium — навчання без обмежень 🚀",
     premiumSubtitle:
       "Відкрий усі рівні A0–B2 одразу та проходь уроки без денного ліміту.",
@@ -45,6 +44,12 @@ const t = {
     levelsDesc: "Вправи: вибір відповіді, вставити слово, скласти речення.",
     open: "Відкрити →",
     start: "Почати →",
+
+    strip: [
+      { k: "A0–B2", v: "Навчання по рівнях" },
+      { k: "10 хв/день", v: "Короткі уроки" },
+      { k: "Практика", v: "Тренажер і повторення" },
+    ],
   },
 
   ru: {
@@ -61,7 +66,6 @@ const t = {
     seoP2:
       "Сайт подходит для украинцев, которые планируют работать, учиться или переехать в Словакию. Изучайте словацкий онлайн бесплатно, в удобном формате с постепенным усложнением материала.",
 
-    // PREMIUM
     premiumTitle: "Premium — обучение без ограничений 🚀",
     premiumSubtitle:
       "Открой все уровни A0–B2 сразу и проходи уроки без дневного лимита.",
@@ -86,8 +90,23 @@ const t = {
       "Упражнения: выбор ответа, вставить слово, составить предложение.",
     open: "Открыть →",
     start: "Начать →",
+
+    strip: [
+      { k: "A0–B2", v: "Обучение по уровням" },
+      { k: "10 мин/день", v: "Короткие уроки" },
+      { k: "Практика", v: "Тренажёр и повторение" },
+    ],
   },
 } satisfies Record<Lang, any>;
+
+function StatPill({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 shadow-sm ring-1 ring-black/5 backdrop-blur">
+      <div className="text-sm font-semibold text-slate-900">{k}</div>
+      <div className="text-xs text-slate-600">{v}</div>
+    </div>
+  );
+}
 
 export default function HomeClient() {
   const { lang } = useLanguage();
@@ -95,87 +114,101 @@ export default function HomeClient() {
   const tr = t[L];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* HERO */}
-      <section className="rounded-3xl border bg-white p-8 shadow-sm">
-        <div className="space-y-4">
-          <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
+      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 ring-1 ring-black/5">
+        {/* controlled highlights (не лізуть вниз) */}
+        <div className="pointer-events-none absolute top-0 right-0 h-40 w-40 rounded-full bg-amber-200/20 blur-2xl" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-40 rounded-full bg-slate-200/35 blur-2xl" />
+
+        <div className="relative space-y-5">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
             {tr.h1}
           </h1>
 
-          <p className="max-w-2xl text-slate-700">{tr.heroP}</p>
+          <p className="max-w-2xl text-base text-slate-700 sm:text-lg">
+            {tr.heroP}
+          </p>
 
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-3 pt-1">
             <Link
               href="/learning"
-              className="bg-black text-white px-4 py-2 rounded-xl"
+              className="inline-flex h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 text-sm font-semibold text-white hover:bg-black"
             >
               {tr.ctaLearning}
             </Link>
 
             <Link
               href="/dictionary"
-              className="rounded-2xl border bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
               {tr.ctaDict}
             </Link>
 
             <Link
               href="/grammar"
-              className="rounded-2xl border bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
               {tr.ctaGrammar}
             </Link>
           </div>
+
+          {/* value strip */}
+          <div className="grid gap-3 pt-3 sm:grid-cols-3">
+            {tr.strip.map((it: any) => (
+              <StatPill key={it.k} k={it.k} v={it.v} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* SEO CONTENT BLOCK */}
-      <section className="rounded-3xl border bg-white p-8 shadow-sm">
-        <h2 className="text-xl font-semibold mb-3">{tr.seoH2}</h2>
-        <p className="text-slate-700 mb-3">{tr.seoP1}</p>
-        <p className="text-slate-700">{tr.seoP2}</p>
-      </section>
+      {/* PREMIUM (без fade і без overlap) */}
+      <section className="relative">
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 shadow-sm text-white">
+          {/* glow */}
+          <div className="pointer-events-none absolute -top-24 left-10 h-56 w-56 rounded-full bg-amber-400/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 right-10 h-56 w-56 rounded-full bg-sky-400/10 blur-3xl" />
+          {/* top highlight line */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-      {/* PREMIUM BLOCK */}
-      <section className="rounded-3xl border bg-white p-8 shadow-sm">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">{tr.premiumTitle}</h2>
-            <p className="text-slate-700 max-w-2xl">
-              {tr.premiumSubtitle}
-            </p>
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+            <div className="space-y-4">
+              <div className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+                Premium
+              </div>
 
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {tr.premiumBullets.map((item: string) => (
-                <li
-                  key={item}
-                  className="rounded-2xl border bg-slate-50 px-4 py-3 text-sm text-slate-800"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
+              <h2 className="text-2xl font-semibold">{tr.premiumTitle}</h2>
+              <p className="max-w-2xl text-white/80">{tr.premiumSubtitle}</p>
 
-            <div className="text-sm text-slate-600">
-              {tr.premiumPriceNote}
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {tr.premiumBullets.map((item: string) => (
+                  <li
+                    key={item}
+                    className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white/90"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="text-sm text-white/70">{tr.premiumPriceNote}</div>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-3 sm:pt-2">
-            <Link
-              href="/premium"
-              className="rounded-2xl bg-amber-500 px-6 py-3 text-sm font-semibold text-black hover:opacity-90 text-center"
-            >
-              {tr.premiumCta}
-            </Link>
+            <div className="flex flex-col gap-3 sm:pt-2">
+              <Link
+                href="/premium"
+                className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90"
+              >
+                {tr.premiumCta}
+              </Link>
 
-            <Link
-              href="/practice"
-              className="rounded-2xl border bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 text-center"
-            >
-              {tr.premiumSecondary}
-            </Link>
+              <Link
+                href="/practice"
+                className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white hover:bg-white/15"
+              >
+                {tr.premiumSecondary}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -186,7 +219,7 @@ export default function HomeClient() {
 
         <Link
           href="/grammar"
-          className="rounded-3xl border bg-white p-6 shadow-sm hover:bg-slate-50 transition block"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
         >
           <div className="text-2xl">📘</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.grammarTitle}</h2>
@@ -196,7 +229,7 @@ export default function HomeClient() {
 
         <Link
           href="/dictionary"
-          className="rounded-3xl border bg-white p-6 shadow-sm hover:bg-slate-50 transition block"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
         >
           <div className="text-2xl">📚</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.dictTitle}</h2>
@@ -206,13 +239,20 @@ export default function HomeClient() {
 
         <Link
           href="/learning"
-          className="rounded-3xl border bg-white p-6 shadow-sm hover:bg-slate-50 transition block"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
         >
           <div className="text-2xl">🏋️</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.levelsTitle}</h2>
           <p className="mt-1 text-sm text-slate-700">{tr.levelsDesc}</p>
           <div className="mt-4 text-sm font-semibold">{tr.start}</div>
         </Link>
+      </section>
+
+      {/* SEO CONTENT */}
+      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm ring-1 ring-black/5">
+        <h2 className="mb-3 text-xl font-semibold">{tr.seoH2}</h2>
+        <p className="mb-3 text-slate-700">{tr.seoP1}</p>
+        <p className="text-slate-700">{tr.seoP2}</p>
       </section>
     </div>
   );

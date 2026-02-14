@@ -10,17 +10,19 @@
 /* (ми вже керуємо colorScheme через layout.tsx) */
 
 /* 🚫 Забороняємо горизонтальний зсув */
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
 
 @supports (overflow: clip) {
-  html, body {
+
+  html,
+  body {
     overflow-x: clip;
   }
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
 }
