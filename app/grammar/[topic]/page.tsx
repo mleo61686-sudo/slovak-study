@@ -4,8 +4,14 @@ import AlphabetPage from "../alphabet/page";
 import VerbsPresentPage from "../verbs-present/page";
 import CasesPage from "../cases/page";
 
-export default function GrammarTopicPage({ params }: { params: { topic: string } }) {
-  switch (params.topic) {
+export default async function GrammarTopicPage({
+  params,
+}: {
+  params: Promise<{ topic: string }>;
+}) {
+  const { topic } = await params;
+
+  switch (topic) {
     case "alphabet":
       return <AlphabetPage />;
 
