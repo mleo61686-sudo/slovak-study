@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Граматика словацької мови для українців: алфавіт, відмінки, дієслова, приклади речень та міні-вправи.",
   alternates: {
-    canonical: "https://slovak-study.vercel.app/grammar",
+    canonical: "https://slovak-study.com/grammar",
   },
   openGraph: {
     title: "Граматика словацької мови — Slovak Study",
     description:
       "Алфавіт, відмінки, дієслова та приклади речень. Пояснення українською.",
-    url: "https://slovak-study.vercel.app/grammar",
+    url: "https://slovak-study.com/grammar",
     siteName: "Slovak Study",
     type: "website",
   },
