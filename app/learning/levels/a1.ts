@@ -13,7 +13,7 @@ export const A1_ALL: Lesson[] = [
       { sk: "bývať", ua: "жити (мешкати)", ru: "жить (проживать)", img: "/words_a1/bývať.jpg" },
       { sk: "pracovať", ua: "працювати", ru: "работать", img: "/words_a1/pracovať.jpg" },
       { sk: "teší ma", ua: "приємно познайомитись", ru: "приятно познакомиться", img: "/words_a1/teší ma.jpg" },
-      { sk: "mať rád/rada", ua: "подобатися/любити", ru: "нравиться/любить", img: "/words_a1/mať rád/rada.jpg" },
+      { sk: "mať rád", ua: "подобатися", ru: "нравиться", img: "/words_a1/mať rad.jpg" },
       { sk: "ďakujem", ua: "дякую", ru: "спасибо", img: "/words_a1/ďakujem.jpg" },
     ],
   },

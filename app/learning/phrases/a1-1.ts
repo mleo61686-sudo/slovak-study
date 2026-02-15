@@ -62,7 +62,7 @@ export const A1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Teší", "ma", ",", "že", "ťa", "spoznávam", "."],
     },
 
-    [phraseKey("mať rád/rada", "подобатися/любити", "a1-1")]: {
+    [phraseKey("mať rád", "подобатися", "a1-1")]: {
         sk: "Mám rád dobrú kávu.",
         ua: "Я люблю добру каву.",
         ru: "Я люблю хороший кофе.",
