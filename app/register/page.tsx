@@ -40,26 +40,14 @@ const T: Record<Lang, any> = {
 };
 
 const ERROR_TEXT: Record<string, { ua: string; ru: string }> = {
-  USER_EXISTS: {
-    ua: "Користувач вже існує",
-    ru: "Пользователь уже существует",
-  },
-  INVALID_EMAIL: {
-    ua: "Некоректний email",
-    ru: "Некорректный email",
-  },
+  USER_EXISTS: { ua: "Користувач вже існує", ru: "Пользователь уже существует" },
+  INVALID_EMAIL: { ua: "Некоректний email", ru: "Некорректный email" },
   WEAK_PASSWORD: {
     ua: "Слабкий пароль: мінімум 8 символів, 1 цифра, 1 велика літера",
     ru: "Слабый пароль: минимум 8 символов, 1 цифра, 1 заглавная буква",
   },
-  PASSWORD_MISMATCH: {
-    ua: "Паролі не співпадають",
-    ru: "Пароли не совпадают",
-  },
-  UNKNOWN_ERROR: {
-    ua: "Не вдалося створити акаунт",
-    ru: "Не удалось создать аккаунт",
-  },
+  PASSWORD_MISMATCH: { ua: "Паролі не співпадають", ru: "Пароли не совпадают" },
+  UNKNOWN_ERROR: { ua: "Не вдалося створити акаунт", ru: "Не удалось создать аккаунт" },
 };
 
 function scorePassword(pw: string) {
@@ -74,7 +62,7 @@ function scorePassword(pw: string) {
 
 export default function RegisterPage() {
   const { lang } = useLanguage();
-  const L: Lang = (lang as Lang) ?? "ua";
+  const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
 
   const router = useRouter();
@@ -147,22 +135,23 @@ export default function RegisterPage() {
       return;
     }
 
-    // автологін
+    // ✅ автологін після реєстрації
     const login = await signIn("credentials", {
       email: e2,
       password: pw,
       redirect: false,
-      callbackUrl: "/profile",
+      callbackUrl: "/", // 🔥 головна
     });
 
     setLoading(false);
 
-    if (!login?.ok) {
+    if (!login || login.error) {
       router.push("/login");
       return;
     }
 
-    router.push(login.url ?? "/profile");
+    // ✅ завжди кидаємо на головну
+    router.push("/");
     router.refresh();
   }
 
@@ -173,9 +162,7 @@ export default function RegisterPage() {
 
         <form onSubmit={onSubmit} className="mt-6 grid gap-4">
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.name}
-            </label>
+            <label className="text-sm font-medium text-slate-700">{t.name}</label>
             <input
               className="h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200"
               placeholder={t.name}
@@ -189,9 +176,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.email}
-            </label>
+            <label className="text-sm font-medium text-slate-700">{t.email}</label>
             <input
               className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${
                 emailOk ? "" : "border-red-400"
@@ -207,16 +192,12 @@ export default function RegisterPage() {
               required
             />
             {!emailOk && (
-              <div className="text-xs text-red-600">
-                {ERROR_TEXT.INVALID_EMAIL[L]}
-              </div>
+              <div className="text-xs text-red-600">{ERROR_TEXT.INVALID_EMAIL[L]}</div>
             )}
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.password}
-            </label>
+            <label className="text-sm font-medium text-slate-700">{t.password}</label>
 
             <div className="relative">
               <input
@@ -240,7 +221,6 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* сила пароля */}
             <div className="mt-2 grid gap-1">
               <div className="h-2 w-full rounded-full bg-slate-100">
                 <div
@@ -253,9 +233,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.password2}
-            </label>
+            <label className="text-sm font-medium text-slate-700">{t.password2}</label>
 
             <div className="relative">
               <input
@@ -280,9 +258,7 @@ export default function RegisterPage() {
             </div>
 
             {pw2.length > 0 && pw !== pw2 && (
-              <div className="text-xs text-red-600">
-                {ERROR_TEXT.PASSWORD_MISMATCH[L]}
-              </div>
+              <div className="text-xs text-red-600">{ERROR_TEXT.PASSWORD_MISMATCH[L]}</div>
             )}
           </div>
 

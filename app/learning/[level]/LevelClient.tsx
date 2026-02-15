@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
@@ -182,6 +183,17 @@ export default function LevelClient({
   const router = useRouter();
   const nextLevelId = getNextLevelId(levelId);
   const { lang } = useLanguage();
+
+  // ✅ preload наступного зображення (прибирає затримку при Next)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const nextImg = words[wordIndex + 1]?.img;
+    if (!nextImg) return;
+
+    const pre = new window.Image();
+    pre.src = nextImg;
+  }, [words, wordIndex]);
 
   const totalQuestions = useMemo(() => {
     return EXERCISES.reduce(
@@ -455,23 +467,52 @@ function WordImage({
   word: Word;
   size?: "small" | "medium" | "large";
 }) {
+  const [ready, setReady] = useState(true);
+
+  useEffect(() => {
+    if (!word?.img) return;
+
+    setReady(false);
+
+    const img = new window.Image();
+    img.src = word.img;
+
+    if (img.complete) {
+      setReady(true);
+    }
+  }, [word?.img]);
+
   if (!word?.img) return null;
 
-  const sizeClass =
+  const boxClass =
     size === "large"
-      ? "h-52 sm:h-64 md:h-72"
+      ? "h-52 w-52 sm:h-64 sm:w-64 md:h-72 md:w-72"
       : size === "small"
-        ? "h-40 sm:h-48 md:h-52"
-        : "h-48 sm:h-56 md:h-60";
+        ? "h-40 w-40 sm:h-48 sm:w-48 md:h-52 md:w-52"
+        : "h-48 w-48 sm:h-56 sm:w-56 md:h-60 md:w-60";
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className={`${sizeClass} overflow-hidden rounded-2xl`}>
-        <img
+      <div
+        className={[
+          "relative overflow-hidden rounded-2xl border bg-slate-50",
+          boxClass,
+        ].join(" ")}
+      >
+        {!ready && <div className="absolute inset-0 animate-pulse bg-black/10" />}
+
+        <Image
+          key={word.img}                 // ✅ не дає “старій” картинці залишатись на новому слові
           src={word.img}
           alt={word.sk}
-          className="h-full w-full object-contain sm:object-cover sm:scale-105 object-center"
-
+          fill
+          sizes="(max-width: 768px) 220px, 320px"
+          className={[
+            "object-contain sm:object-cover sm:scale-105 object-center",
+            "transition-opacity duration-200",
+            ready ? "opacity-100" : "opacity-0",
+          ].join(" ")}
+          onLoadingComplete={() => setReady(true)}
         />
       </div>
 

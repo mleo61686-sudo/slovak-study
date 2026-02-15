@@ -3,6 +3,7 @@
 import Link from "next/link";
 import WordsStats from "./components/WordsStats";
 import { useLanguage } from "@/lib/src/useLanguage";
+import { UPDATES } from "@/app/updates/updates";
 
 type Lang = "ua" | "ru";
 
@@ -112,6 +113,8 @@ export default function HomeClient() {
   const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const tr = t[L];
+  const latestDate = UPDATES[0]?.date; // "YYYY-MM-DD"
+  const latestBadge = latestDate ? latestDate.slice(5).replace("-", ".") : null; // "MM.DD"
 
   return (
     <div className="space-y-8">
@@ -150,6 +153,19 @@ export default function HomeClient() {
               className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
               {tr.ctaGrammar}
+            </Link>
+          </div>
+          <div className="mt-3">
+            <Link
+              href="/updates"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+            >
+              ✨ {L === "ru" ? "Что нового" : "Що нового"}
+              {latestBadge && (
+                <span className="rounded-full bg-amber-100 px-2 py-0.5 bg-amber-200 font-bold text-amber-900">
+                  {latestBadge.split(".").reverse().join(".")}
+                </span>
+              )}
             </Link>
           </div>
 
