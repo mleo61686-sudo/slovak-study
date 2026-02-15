@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 import UserMenu from "@/app/components/UserMenu";
 import PremiumButton from "@/app/components/PremiumButton";
-
 
 type NavItem = { href: string; label: string };
 
@@ -21,17 +20,47 @@ export default function NavbarClient({
   mobile?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // ✅ MOBILE: клік поза меню закриває dropdown
+  useEffect(() => {
+    if (!mobile) return;
+
+    function handleOutside(e: MouseEvent) {
+      if (!open) return;
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [open, mobile]);
+
+  // ✅ MOBILE: Escape закриває dropdown
+  useEffect(() => {
+    if (!mobile) return;
+
+    function handleEsc(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [mobile]);
 
   // DESKTOP: просто рендеримо праву частину (без ☰)
   if (!mobile) {
     return (
       <div className="flex items-center gap-2">
-        
-
         {session && <PremiumButton />}
 
         {session ? (
-          <UserMenu name={session.name} email={session.email} isPremium={session.isPremium} />
+          <UserMenu
+            name={session.name}
+            email={session.email}
+            isPremium={session.isPremium}
+          />
         ) : (
           <Link
             href="/login"
@@ -48,11 +77,12 @@ export default function NavbarClient({
 
   // MOBILE: ☰ + dropdown
   return (
-    <div className="relative">
+    <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen((v) => !v)}
         className="rounded-xl px-3 py-2 text-lg hover:bg-slate-100"
         aria-label="Menu"
+        type="button"
       >
         ☰
       </button>
@@ -83,10 +113,20 @@ export default function NavbarClient({
           </nav>
 
           <div className="mt-2 flex items-center justify-between gap-2">
-            {session && <PremiumButton />}
+            {session && (
+              <div onClick={() => setOpen(false)}>
+                <PremiumButton />
+              </div>
+            )}
 
             {session ? (
-              <UserMenu name={session.name} email={session.email} isPremium={session.isPremium} />
+              <div onClick={() => setOpen(false)}>
+                <UserMenu
+                  name={session.name}
+                  email={session.email}
+                  isPremium={session.isPremium}
+                />
+              </div>
             ) : (
               <Link
                 href="/login"
@@ -97,7 +137,9 @@ export default function NavbarClient({
               </Link>
             )}
 
-            <LanguageSwitcher />
+            <div onClick={() => setOpen(false)}>
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
       )}

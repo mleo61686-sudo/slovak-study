@@ -23,17 +23,15 @@ const T = {
       "🔁 Повторення тільки помилок",
       "📊 Статистика, серії та рекорди",
     ],
-
-    // 👇 ці тексти просто UI — суми підстав свої
     price: "Обери валюту: EUR / USD / UAH • можна скасувати будь-коли",
     buyEur: "Оформити Premium — €7.99 (EUR) →",
     buyUsd: "Оформити Premium — $8.99 (USD) →",
     buyUah: "Оформити Premium — ₴349 (UAH) →",
-
     manage: "Керувати підпискою →",
     secondary: "Подивитись тренажер →",
     lockedTrainer: "Тренажер 🔒",
-    loading: "Відкриваю Stripe…",
+    loading: "Завантажую…",
+    opening: "Відкриваю Stripe…",
   },
   ru: {
     topTitle: "Premium ⭐",
@@ -50,26 +48,26 @@ const T = {
       "🔁 Повторять только ошибки",
       "📊 Статистика, серии и рекорды",
     ],
-
     price: "Выбери валюту: EUR / USD / UAH • можно отменить в любой момент",
     buyEur: "Оформить Premium — €7.99 (EUR) →",
-    buyUsd: "Оформить Premium — $ (USD) →",
-    buyUah: "Оформить Premium — ₴ (UAH) →",
-
+    buyUsd: "Оформить Premium — $8.99 (USD) →",
+    buyUah: "Оформить Premium — ₴349 (UAH) →",
     manage: "Управлять подпиской →",
     secondary: "Посмотреть тренажёр →",
     lockedTrainer: "Тренажёр 🔒",
-    loading: "Открываю Stripe…",
+    loading: "Загрузка…",
+    opening: "Открываю Stripe…",
   },
 } satisfies Record<Lang, any>;
 
 export default function PremiumClient() {
   const { lang } = useLanguage();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
 
+  const isLoadingSession = status === "loading";
   const isPremium = !!session?.user?.isPremium;
 
   const [loading, setLoading] = useState<Currency | "portal" | null>(null);
@@ -77,7 +75,7 @@ export default function PremiumClient() {
   async function handleCheckout(currency: Currency) {
     setLoading(currency);
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const res = await fetch("/api/stripe/checkout",{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ currency }),
@@ -149,14 +147,18 @@ export default function PremiumClient() {
           </div>
 
           <div className="flex flex-col gap-3 sm:pt-2">
-            {!isPremium ? (
+            {isLoadingSession ? (
+              <div className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white/80">
+                {t.loading}
+              </div>
+            ) : !isPremium ? (
               <>
                 <button
                   onClick={() => handleCheckout("eur")}
                   disabled={!!loading}
                   className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
                 >
-                  {loading === "eur" ? t.loading : t.buyEur}
+                  {loading === "eur" ? t.opening : t.buyEur}
                 </button>
 
                 <button
@@ -164,7 +166,7 @@ export default function PremiumClient() {
                   disabled={!!loading}
                   className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
                 >
-                  {loading === "usd" ? t.loading : t.buyUsd}
+                  {loading === "usd" ? t.opening : t.buyUsd}
                 </button>
 
                 <button
@@ -172,7 +174,7 @@ export default function PremiumClient() {
                   disabled={!!loading}
                   className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
                 >
-                  {loading === "uah" ? t.loading : t.buyUah}
+                  {loading === "uah" ? t.opening : t.buyUah}
                 </button>
               </>
             ) : (
@@ -181,7 +183,7 @@ export default function PremiumClient() {
                 disabled={!!loading}
                 className="inline-flex h-11 items-center justify-center rounded-2xl bg-emerald-500 px-6 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
               >
-                {loading === "portal" ? t.loading : t.manage}
+                {loading === "portal" ? t.opening : t.manage}
               </button>
             )}
 
