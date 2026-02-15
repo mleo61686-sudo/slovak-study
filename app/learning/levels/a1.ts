@@ -626,7 +626,7 @@ export const A1_ALL: Lesson[] = [
     title: { ua: "Урок 39 — Абстрактні слова", ru: "Урок 39 — Абстрактные слова" },
     words: [
       { sk: "život", ua: "життя", ru: "жизнь" , img: "/words_a1/život.jpg"},
-      { sk: "čas", ua: "час", ru: "время", img: "/words_a1/čas.jpg" },
+      { sk: "čas", ua: "час", ru: "время", img: "/words_a1/time.jpg" },
       { sk: "možnosť", ua: "можливість", ru: "возможность", img: "/words_a1/možnosť.jpg" },
       { sk: "dôvod", ua: "причина", ru: "причина" , img: "/words_a1/dôvod.jpg"},
       { sk: "význam", ua: "значення", ru: "значение", img: "/words_a1/význam.jpg" },
