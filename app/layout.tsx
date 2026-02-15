@@ -19,6 +19,13 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <head>
+        {/* ✅ AdSense meta verification */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-1760161415033749"
+        />
+
+        {/* AdSense script (можна залишити) */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1760161415033749"
