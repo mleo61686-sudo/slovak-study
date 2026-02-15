@@ -458,7 +458,8 @@ function WordImage({
         <img
           src={word.img}
           alt={word.sk}
-          className="h-full w-full object-cover scale-105 object-center"
+          className="h-full w-full object-contain sm:object-cover sm:scale-105 object-center"
+
         />
       </div>
 
