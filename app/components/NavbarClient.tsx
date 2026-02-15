@@ -119,14 +119,13 @@ export default function NavbarClient({
               </div>
             )}
 
+            {/* ✅ НЕ обгортаємо UserMenu onClick, інакше воно не відкривається */}
             {session ? (
-              <div onClick={() => setOpen(false)}>
-                <UserMenu
-                  name={session.name}
-                  email={session.email}
-                  isPremium={session.isPremium}
-                />
-              </div>
+              <UserMenu
+                name={session.name}
+                email={session.email}
+                isPremium={session.isPremium}
+              />
             ) : (
               <Link
                 href="/login"
