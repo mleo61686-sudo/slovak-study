@@ -203,10 +203,10 @@ export default function HomeClient() {
               </Link>
 
               <Link
-                href="/practice"
+                href="/premium"
                 className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white hover:bg-white/15"
               >
-                {tr.premiumSecondary}
+                Тренажер 🔒
               </Link>
             </div>
           </div>

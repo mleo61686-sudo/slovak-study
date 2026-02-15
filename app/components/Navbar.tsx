@@ -36,7 +36,7 @@ export default async function Navbar() {
     <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
       <div className="mx-auto max-w-5xl px-4 py-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          
+
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <span className="text-xl">🇸🇰</span>
@@ -45,7 +45,7 @@ export default async function Navbar() {
 
           {/* Nav + actions */}
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 min-w-0">
-            
+
             {/* Links */}
             <nav className="flex flex-wrap items-center gap-1 min-w-0">
               {nav.map((item) => (
@@ -71,7 +71,7 @@ export default async function Navbar() {
 
             {/* Right side */}
             <div className="flex flex-wrap items-center gap-2">
-              
+
               {process.env.NODE_ENV === "development" && <SyncBadge />}
 
               {/* Premium button тільки для залогінених */}
@@ -81,6 +81,7 @@ export default async function Navbar() {
                 <UserMenu
                   name={session.user?.name}
                   email={session.user?.email}
+                  isPremium={!!session.user?.isPremium}
                 />
               ) : (
                 <Link

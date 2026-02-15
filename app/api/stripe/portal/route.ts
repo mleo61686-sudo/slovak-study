@@ -4,19 +4,25 @@ import Stripe from "stripe";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const runtime = "nodejs";
 
-export async function POST() {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2026-01-28.clover",
+});
+
+export async function POST(req: Request) {
   try {
     const session = await auth();
-    const email = session?.user?.email;
+    const emailRaw = session?.user?.email;
 
-    if (!email) {
+    if (!emailRaw) {
       return NextResponse.json(
         { ok: false, error: "UNAUTHORIZED" },
         { status: 401 }
       );
     }
+
+    const email = emailRaw.trim().toLowerCase();
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -30,14 +36,16 @@ export async function POST() {
       );
     }
 
+    const origin = req.headers.get("origin") ?? "http://localhost:3000";
+
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `${process.env.NEXTAUTH_URL}/`,
+      return_url: `${origin}/premium`,
     });
 
     return NextResponse.json({ ok: true, url: portalSession.url });
   } catch (e) {
-    console.error(e);
+    console.error("Stripe portal error:", e);
     return NextResponse.json(
       { ok: false, error: "SERVER_ERROR" },
       { status: 500 }

@@ -3,11 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Props = {
   name?: string | null;
   email?: string | null;
+  isPremium?: boolean;
 };
 
 type Lang = "ua" | "ru";
@@ -16,25 +18,26 @@ const T: Record<Lang, any> = {
   ua: {
     profile: "Профіль",
     manageSub: "Керувати підпискою",
-    manageSubHint: "Stripe • скасування/картка/інвойси",
+    manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
     userFallback: "Користувач",
-    portalError: "Не вдалося відкрити керування підпискою.",
   },
+
   ru: {
     profile: "Профиль",
     manageSub: "Управлять подпиской",
-    manageSubHint: "Stripe • отмена/карта/инвойсы",
+    manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
     userFallback: "Пользователь",
-    portalError: "Не удалось открыть управление подпиской.",
   },
 };
 
-export default function UserMenu({ name, email }: Props) {
+export default function UserMenu({ name, email, isPremium = false }: Props) {
   const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
+
+  const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loadingPortal, setLoadingPortal] = useState(false);
@@ -69,10 +72,26 @@ export default function UserMenu({ name, email }: Props) {
   }, []);
 
   async function openPortal() {
+    // ✅ Якщо НЕ Premium — редірект на /premium
+    if (!isPremium) {
+      setOpen(false);
+      router.push("/premium");
+      return;
+    }
+
+    // ✅ Якщо Premium — відкриваємо Stripe Portal
     try {
       setLoadingPortal(true);
+
       const res = await fetch("/api/stripe/portal", { method: "POST" });
-      const data = await res.json().catch(() => ({}));
+
+      const text = await res.text();
+      let data: any = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = { raw: text };
+      }
 
       if (res.ok && data?.url) {
         setOpen(false);
@@ -80,9 +99,13 @@ export default function UserMenu({ name, email }: Props) {
         return;
       }
 
-      alert(t.portalError);
-    } catch {
-      alert(t.portalError);
+      console.error("Portal error:", { status: res.status, data });
+      setOpen(false);
+      router.push("/premium");
+    } catch (e) {
+      console.error("Portal exception:", e);
+      setOpen(false);
+      router.push("/premium");
     } finally {
       setLoadingPortal(false);
     }
@@ -123,7 +146,6 @@ export default function UserMenu({ name, email }: Props) {
             {t.profile}
           </Link>
 
-          {/* ✅ Manage subscription */}
           <button
             onClick={openPortal}
             disabled={loadingPortal}

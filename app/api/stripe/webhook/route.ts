@@ -35,8 +35,10 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    const email =
+    // ✅ FIX: нормалізуємо email (інакше findUnique може не знайти користувача)
+    const rawEmail =
       session.customer_details?.email || session.customer_email || null;
+    const email = rawEmail ? rawEmail.trim().toLowerCase() : null;
 
     const stripeCustomerId =
       typeof session.customer === "string" ? session.customer : null;
