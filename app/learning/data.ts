@@ -3,8 +3,9 @@ import { WORDS } from "../data/words";
 import { A1_ALL } from "./levels/a1";
 import { A2_ALL } from "./levels/a2";
 import { B1_ALL } from "./levels/b1";
-import { A0_PHRASES, phraseKey } from "./phrases/a0";
-
+import { A0_PHRASES } from "./phrases/a0";
+import { A1_PHRASES } from "./phrases/a1";
+import { phraseKey } from "./phrases/phraseKey";
 
 export type Lang = "ua" | "ru";
 
@@ -738,16 +739,47 @@ function normalizeLessonList(list: any[]): Lesson[] {
 }
 
 
+function findPhrase(
+  dict: Record<string, any>,
+  sk: string,
+  ua: string,
+  lessonId: string
+) {
+  // 1) exact match (як було)
+  const exact = dict[phraseKey(sk, ua, lessonId)];
+  if (exact) return exact;
+
+  // 2) fallback: якщо ua мінявся — знайдемо будь-який ключ для цього sk + lessonId
+  const skNorm = sk.trim().toLowerCase();
+  const lid = String(lessonId).trim().toLowerCase();
+
+  const prefix = `${skNorm}||`;
+  const suffix = `||${lid}`;
+
+  const hitKey = Object.keys(dict).find(
+    (k) => k.startsWith(prefix) && k.endsWith(suffix)
+  );
+
+  return hitKey ? dict[hitKey] : undefined;
+}
+
 function attachPhrases(words: Word[], dict: Record<string, any>, lessonId: string) {
   return words.map((w) => {
-    const p = dict[phraseKey(w.sk, w.ua, lessonId)];
-    return p ? { ...w, phrase: p } : w;
+    const p = findPhrase(dict, w.sk, w.ua, lessonId);
+    return { ...w, phrase: p ?? undefined };
   });
 }
 
 const A1_LIST = normalizeLessonList(A1_ALL as any);
 const A2_LIST = normalizeLessonList(A2_ALL as any);
 const B1_LIST = normalizeLessonList(B1_ALL as any);
+
+
+
+const PHRASES_BY_BAND: Partial<Record<CefrBandId, Record<string, any>>> = {
+  a0: A0_PHRASES,
+  a1: A1_PHRASES,
+};
 
 // =============================
 // 6) CEFR_LEVELS
@@ -802,19 +834,13 @@ export function getLesson(id: string) {
 
     const withRu = addRu(lesson.words);
 
-    // ✅ A0 — додаємо фрази
-    if (band === "a0") {
-      return {
-        ...lesson,
-        words: attachPhrases(withRu, A0_PHRASES, raw),
-      };
-    }
+    const dict = PHRASES_BY_BAND[band];
 
-    // інші рівні поки без фраз
     return {
       ...lesson,
-      words: withRu,
+      words: dict ? attachPhrases(withRu, dict, raw) : withRu,
     };
+
   }
 
   // старий формат "1" (підтримка A0)
