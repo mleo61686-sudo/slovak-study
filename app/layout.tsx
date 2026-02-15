@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Script from "next/script";
 import Navbar from "./components/Navbar";
 import ProgressSync from "./components/ProgressSync";
 import SessionProviderClient from "./components/SessionProviderClient";
@@ -29,6 +30,14 @@ export default function RootLayout({
   bg-[radial-gradient(ellipse_at_top,_#f8fafc_0%,_#f1f5f9_40%,_#e2e8f0_100%)]"
         suppressHydrationWarning
       >
+        {/* AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1760161415033749"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+
         <TopBanner />
         <Navbar />
 
