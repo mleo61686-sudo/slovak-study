@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Lang = "ua" | "ru";
+type Currency = "eur" | "usd" | "uah";
 
 const T = {
   ua: {
@@ -22,10 +23,17 @@ const T = {
       "🔁 Повторення тільки помилок",
       "📊 Статистика, серії та рекорди",
     ],
-    price: "7.99€ / місяць • можна скасувати будь-коли",
-    buy: "Оформити Premium →",
+
+    // 👇 ці тексти просто UI — суми підстав свої
+    price: "Обери валюту: EUR / USD / UAH • можна скасувати будь-коли",
+    buyEur: "Оформити Premium — €7.99 (EUR) →",
+    buyUsd: "Оформити Premium — $8.99 (USD) →",
+    buyUah: "Оформити Premium — ₴349 (UAH) →",
+
     manage: "Керувати підпискою →",
     secondary: "Подивитись тренажер →",
+    lockedTrainer: "Тренажер 🔒",
+    loading: "Відкриваю Stripe…",
   },
   ru: {
     topTitle: "Premium ⭐",
@@ -42,41 +50,69 @@ const T = {
       "🔁 Повторять только ошибки",
       "📊 Статистика, серии и рекорды",
     ],
-    price: "7.99€ / месяц • можно отменить в любой момент",
-    buy: "Оформить Premium →",
+
+    price: "Выбери валюту: EUR / USD / UAH • можно отменить в любой момент",
+    buyEur: "Оформить Premium — €7.99 (EUR) →",
+    buyUsd: "Оформить Premium — $ (USD) →",
+    buyUah: "Оформить Premium — ₴ (UAH) →",
+
     manage: "Управлять подпиской →",
     secondary: "Посмотреть тренажёр →",
+    lockedTrainer: "Тренажёр 🔒",
+    loading: "Открываю Stripe…",
   },
 } satisfies Record<Lang, any>;
 
 export default function PremiumClient() {
   const { lang } = useLanguage();
   const { data: session } = useSession();
-  const [loading, setLoading] = useState(false);
 
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
 
   const isPremium = !!session?.user?.isPremium;
 
-  async function handleCheckout() {
-    setLoading(true);
-    const res = await fetch("/api/stripe/checkout", { method: "POST" });
-    const data = await res.json();
-    if (data.url) {
+  const [loading, setLoading] = useState<Currency | "portal" | null>(null);
+
+  async function handleCheckout(currency: Currency) {
+    setLoading(currency);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currency }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data?.url) {
+        console.error("Checkout error:", { status: res.status, data });
+        alert(data?.error ?? "Stripe checkout error");
+        return;
+      }
+
       window.location.href = data.url;
+    } finally {
+      setLoading(null);
     }
-    setLoading(false);
   }
 
   async function handleManage() {
-    setLoading(true);
-    const res = await fetch("/api/stripe/portal", { method: "POST" });
-    const data = await res.json();
-    if (data.url) {
+    setLoading("portal");
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data?.url) {
+        console.error("Portal error:", { status: res.status, data });
+        alert(data?.error ?? "Stripe portal error");
+        return;
+      }
+
       window.location.href = data.url;
+    } finally {
+      setLoading(null);
     }
-    setLoading(false);
   }
 
   return (
@@ -114,20 +150,38 @@ export default function PremiumClient() {
 
           <div className="flex flex-col gap-3 sm:pt-2">
             {!isPremium ? (
-              <button
-                onClick={handleCheckout}
-                disabled={loading}
-                className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
-              >
-                {t.buy}
-              </button>
+              <>
+                <button
+                  onClick={() => handleCheckout("eur")}
+                  disabled={!!loading}
+                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
+                >
+                  {loading === "eur" ? t.loading : t.buyEur}
+                </button>
+
+                <button
+                  onClick={() => handleCheckout("usd")}
+                  disabled={!!loading}
+                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
+                >
+                  {loading === "usd" ? t.loading : t.buyUsd}
+                </button>
+
+                <button
+                  onClick={() => handleCheckout("uah")}
+                  disabled={!!loading}
+                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
+                >
+                  {loading === "uah" ? t.loading : t.buyUah}
+                </button>
+              </>
             ) : (
               <button
                 onClick={handleManage}
-                disabled={loading}
+                disabled={!!loading}
                 className="inline-flex h-11 items-center justify-center rounded-2xl bg-emerald-500 px-6 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
               >
-                {t.manage}
+                {loading === "portal" ? t.loading : t.manage}
               </button>
             )}
 
@@ -135,7 +189,7 @@ export default function PremiumClient() {
               href={isPremium ? "/practice" : "/premium"}
               className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white hover:bg-white/15"
             >
-              {isPremium ? t.secondary : "Тренажер 🔒"}
+              {isPremium ? t.secondary : t.lockedTrainer}
             </a>
           </div>
         </div>
