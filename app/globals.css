@@ -6,9 +6,6 @@
   --foreground: #171717;
 }
 
-/* ❌ Прибираємо auto-dark Safari */
-/* (ми вже керуємо colorScheme через layout.tsx) */
-
 /* 🚫 Забороняємо горизонтальний зсув */
 html,
 body {
@@ -16,7 +13,6 @@ body {
 }
 
 @supports (overflow: clip) {
-
   html,
   body {
     overflow-x: clip;
@@ -25,4 +21,44 @@ body {
 
 body {
   color: var(--foreground);
+}
+
+
+/* ============================= */
+/* 🔵 Smooth Infinite Marquee   */
+/* ============================= */
+
+.marquee {
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-scroll 26s linear infinite; /* повільніше */
+}
+
+.marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 3rem;
+  padding: 0.6rem 3rem; /* висота банера */
+}
+
+.marquee__item {
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* рухаємо рівно на ширину ОДНІЄЇ групи */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }

@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import Navbar from "./components/Navbar";
 import ProgressSync from "./components/ProgressSync";
 import SessionProviderClient from "./components/SessionProviderClient";
+import TopBanner from "./components/TopBanner";
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
 };
+
 export const metadata: Metadata = {
   title: "Slovak Study — вивчення словацької",
   description: "Граматика, словник і тренажер для україномовних.",
@@ -16,6 +18,7 @@ export const metadata: Metadata = {
     google: "Vf__jszEN37vi_wmJQYr10o8iZFtAInen8V__txW3Ds",
   },
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -26,6 +29,7 @@ export default function RootLayout({
   bg-[radial-gradient(ellipse_at_top,_#f8fafc_0%,_#f1f5f9_40%,_#e2e8f0_100%)]"
         suppressHydrationWarning
       >
+        <TopBanner />
         <Navbar />
 
         <SessionProviderClient>
