@@ -82,6 +82,38 @@ function normalizeSentence(s: string) {
 
 const trWord = (w: Word, lang: Lang) => (lang === "ru" ? w.ru ?? w.ua : w.ua);
 
+function safeSpeak(text: string) {
+  try {
+    if (typeof window === "undefined") return;
+
+    const synth = window.speechSynthesis as SpeechSynthesis | undefined;
+    if (!synth) return;
+
+    // якщо в браузері нема повної підтримки — просто виходимо
+    if (typeof (window as any).SpeechSynthesisUtterance === "undefined") return;
+    if (typeof synth.speak !== "function") return;
+
+    synth.cancel();
+
+    const utter = new (window as any).SpeechSynthesisUtterance(text);
+    utter.lang = "sk-SK";
+    utter.rate = 1;
+    utter.pitch = 1;
+
+    const voices = typeof synth.getVoices === "function" ? synth.getVoices() : [];
+    const skVoice =
+      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
+      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
+      null;
+
+    if (skVoice) utter.voice = skVoice;
+
+    synth.speak(utter);
+  } catch {
+    // нічого — важливо НЕ ламати урок
+  }
+}
+
 function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
   // 1) якщо фраза прямо в слові
   if (word.phrase) {
@@ -114,30 +146,10 @@ function useAutoSpeak(text: string, enabled: boolean) {
 
   useEffect(() => {
     if (!enabled) return;
-    if (typeof window === "undefined") return;
-
     if (lastRef.current === text) return;
     lastRef.current = text;
 
-    const synth = window.speechSynthesis;
-    if (!synth) return;
-
-    synth.cancel();
-
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    const voices = synth.getVoices();
-    const skVoice =
-      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
-      null;
-
-    if (skVoice) utter.voice = skVoice;
-
-    synth.speak(utter);
+    safeSpeak(text);
   }, [text, enabled]);
 }
 
@@ -488,7 +500,7 @@ function ChooseTranslation({
     return variants.map((w) => trWord(w, lang));
   }, [word, words, lang]);
 
-  useAutoSpeak(word.sk, true);
+  useAutoSpeak(word?.sk ?? "", Boolean(word?.sk));
 
   const correctText = trWord(word, lang);
 
@@ -533,26 +545,7 @@ function ChooseSlovak({
     return variants.map((w) => w.sk);
   }, [word, words]);
 
-  function speak(text: string) {
-    if (typeof window === "undefined") return;
-    const synth = window.speechSynthesis;
-    if (!synth) return;
 
-    synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    const voices = synth.getVoices();
-    const skVoice =
-      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
-      null;
-
-    if (skVoice) utter.voice = skVoice;
-    synth.speak(utter);
-  }
 
   return (
     <>
@@ -567,7 +560,7 @@ function ChooseSlovak({
           <button
             key={opt}
             onClick={() => {
-              speak(opt);
+              safeSpeak(opt);
               onNext(opt === word.sk);
             }}
             className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
@@ -600,26 +593,7 @@ function WriteWord({
     setCorrectAnswer(null);
   }, [word.sk]);
 
-  function speak(text: string) {
-    if (typeof window === "undefined") return;
-    const synth = window.speechSynthesis;
-    if (!synth) return;
 
-    synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    const voices = synth.getVoices();
-    const skVoice =
-      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
-      null;
-
-    if (skVoice) utter.voice = skVoice;
-    synth.speak(utter);
-  }
 
   function normalize(s: string) {
     return s.trim().toLowerCase();
@@ -629,7 +603,7 @@ function WriteWord({
     const ok = normalize(value) === normalize(word.sk);
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
-    speak(word.sk);
+    safeSpeak(word.sk);
   }
 
   function next() {
@@ -680,7 +654,7 @@ function WriteWord({
 
             <div className="flex gap-2">
               <button
-                onClick={() => speak(word.sk)}
+                onClick={() => safeSpeak(word.sk)}
                 className="px-4 py-2 border rounded-xl"
               >
                 🔊 Прослухати
@@ -717,27 +691,7 @@ function AudioQuiz({
   }, [word, words]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const synth = window.speechSynthesis;
-    if (!synth) return;
-
-    synth.cancel();
-
-    const utter = new SpeechSynthesisUtterance(word.sk);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    const voices = synth.getVoices();
-    const skVoice =
-      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
-      null;
-
-    if (skVoice) utter.voice = skVoice;
-
-    synth.speak(utter);
+    safeSpeak(word.sk);
   }, [word.sk]);
 
   return (
@@ -764,6 +718,7 @@ function AudioQuiz({
     </>
   );
 }
+
 
 // 5️⃣ ПАРИ В 2 КОЛОНКИ (whole)
 function MatchColumns({
@@ -1023,27 +978,7 @@ function BuildSentence({
     setStatus("idle");
   }, [word.sk, lang, baseTokens.join("|")]);
 
-  function speak(text: string) {
-    if (typeof window === "undefined") return;
-    const synth = window.speechSynthesis;
-    if (!synth) return;
 
-    synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    const voices = synth.getVoices();
-    const skVoice =
-      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
-      null;
-
-    if (skVoice) utter.voice = skVoice;
-
-    synth.speak(utter);
-  }
 
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
@@ -1072,7 +1007,7 @@ function BuildSentence({
     const target = baseTokens.join(" ");
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
-    speak(phrase.sk);
+    safeSpeak(phrase.sk);
   }
 
   function next() {
