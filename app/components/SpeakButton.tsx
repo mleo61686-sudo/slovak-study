@@ -16,6 +16,52 @@ type Props = {
   asChild?: boolean;
 };
 
+function safeSpeak(opts: {
+  text: string;
+  lang: string;
+  rate: number;
+  voices: SpeechSynthesisVoice[];
+}) {
+  try {
+    if (typeof window === "undefined") return;
+
+    const synth = window.speechSynthesis as SpeechSynthesis | undefined;
+    if (!synth) return;
+
+    // Safari/деякі браузери можуть не мати Utterance
+    const Utter = (window as any).SpeechSynthesisUtterance;
+    if (typeof Utter === "undefined") return;
+
+    if (typeof synth.cancel === "function") synth.cancel();
+    if (typeof synth.speak !== "function") return;
+
+    const utter = new Utter(opts.text) as SpeechSynthesisUtterance;
+    utter.lang = opts.lang;
+    utter.rate = opts.rate;
+    utter.pitch = 1;
+
+    const voices = Array.isArray(opts.voices) ? opts.voices : [];
+
+    const bestVoice =
+      voices.find(
+        (v) =>
+          v.lang === "sk-SK" &&
+          typeof v.name === "string" &&
+          v.name.toLowerCase().includes("google")
+      ) ??
+      voices.find((v) => v.lang === "sk-SK") ??
+      voices.find((v) => (v.lang ?? "").toLowerCase().startsWith("cs")) ??
+      voices.find((v) => (v.lang ?? "").toLowerCase().startsWith("en")) ??
+      null;
+
+    if (bestVoice) utter.voice = bestVoice;
+
+    synth.speak(utter);
+  } catch {
+    // важливо: ніколи не ламати сторінку
+  }
+}
+
 export default function SpeakButton({
   text,
   lang = "sk-SK",
@@ -36,29 +82,39 @@ export default function SpeakButton({
   const slowModeRef = useRef(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    // голоса — опціонально, якщо не працює, то й ок
+    try {
+      if (typeof window === "undefined") return;
+      const synth = window.speechSynthesis as SpeechSynthesis | undefined;
+      if (!synth || typeof synth.getVoices !== "function") return;
 
-    const synth = window.speechSynthesis;
+      const loadVoices = () => {
+        try {
+          const v = synth.getVoices?.() ?? [];
+          if (Array.isArray(v) && v.length > 0) setVoices(v);
+        } catch {
+          // ignore
+        }
+      };
 
-    function loadVoices() {
-      const v = synth.getVoices();
-      if (v.length > 0) setVoices(v);
+      loadVoices();
+
+      // onvoiceschanged інколи null / не працює — тому в try/catch
+      (synth as any).onvoiceschanged = loadVoices;
+
+      return () => {
+        try {
+          (synth as any).onvoiceschanged = null;
+        } catch {
+          // ignore
+        }
+      };
+    } catch {
+      // ignore
     }
-
-    loadVoices();
-    synth.onvoiceschanged = loadVoices;
-
-    return () => {
-      synth.onvoiceschanged = null;
-    };
   }, []);
 
   function speak() {
-    if (typeof window === "undefined") return;
-
-    const synth = window.speechSynthesis;
-    synth.cancel();
-
     // якщо натискаємо те саме слово вдруге → повільніше
     if (lastTextRef.current === text) {
       slowModeRef.current = !slowModeRef.current;
@@ -67,23 +123,12 @@ export default function SpeakButton({
       lastTextRef.current = text;
     }
 
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = lang;
-
-    utter.rate = slowModeRef.current ? 0.6 : 1;
-    utter.pitch = 1;
-
-    const bestVoice =
-      voices.find(
-        (v) => v.lang === "sk-SK" && v.name.toLowerCase().includes("google")
-      ) ||
-      voices.find((v) => v.lang === "sk-SK") ||
-      voices.find((v) => v.lang.toLowerCase().startsWith("cs")) ||
-      voices.find((v) => v.lang.toLowerCase().startsWith("en"));
-
-    if (bestVoice) utter.voice = bestVoice;
-
-    synth.speak(utter);
+    safeSpeak({
+      text,
+      lang,
+      rate: slowModeRef.current ? 0.6 : 1,
+      voices,
+    });
   }
 
   const onClick = (e: React.MouseEvent) => {
