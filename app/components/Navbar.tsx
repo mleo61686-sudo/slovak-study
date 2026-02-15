@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/auth";
-import LanguageSwitcher from "@/app/components/LanguageSwitcher";
-import UserMenu from "@/app/components/UserMenu";
 import SyncBadge from "@/app/components/SyncBadge";
-import PremiumButton from "@/app/components/PremiumButton";
+import NavbarClient from "./NavbarClient";
 
 function isAdmin(email?: string | null) {
   if (!email) return false;
@@ -18,11 +16,10 @@ function isAdmin(email?: string | null) {
 
 export default async function Navbar() {
   const session = await auth();
-  const admin = isAdmin(session?.user?.email);
 
+  const admin = isAdmin(session?.user?.email);
   const isPremium = !!session?.user?.isPremium;
 
-  // 🔒 Динамічний nav
   const nav = [
     { href: "/grammar", label: "Граматика" },
     { href: "/dictionary", label: "Словник" },
@@ -34,20 +31,18 @@ export default async function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
-      <div className="mx-auto max-w-5xl px-4 py-3">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-
-          {/* Logo */}
+      <div className="mx-auto max-w-5xl px-4 py-2 sm:py-3">
+        {/* TOP ROW */}
+        <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <span className="text-xl">🇸🇰</span>
             <span>Slovak Study</span>
           </Link>
 
-          {/* Nav + actions */}
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 min-w-0">
-
+          {/* DESKTOP RIGHT */}
+          <div className="hidden sm:flex items-center gap-3">
             {/* Links */}
-            <nav className="flex flex-wrap items-center gap-1 min-w-0">
+            <nav className="flex items-center gap-1">
               {nav.map((item) => (
                 <Link
                   key={item.href}
@@ -69,31 +64,39 @@ export default async function Navbar() {
               )}
             </nav>
 
-            {/* Right side */}
-            <div className="flex flex-wrap items-center gap-2">
+            {process.env.NODE_ENV === "development" && <SyncBadge />}
+            {/* решта кнопок/меню/мови — у client-компоненті */}
+            <NavbarClient
+              nav={nav}
+              admin={admin}
+              session={
+                session
+                  ? {
+                      name: session.user?.name ?? null,
+                      email: session.user?.email ?? null,
+                      isPremium: !!session.user?.isPremium,
+                    }
+                  : null
+              }
+            />
+          </div>
 
-              {process.env.NODE_ENV === "development" && <SyncBadge />}
-
-              {/* Premium button тільки для залогінених */}
-              {session && <PremiumButton />}
-
-              {session ? (
-                <UserMenu
-                  name={session.user?.name}
-                  email={session.user?.email}
-                  isPremium={!!session.user?.isPremium}
-                />
-              ) : (
-                <Link
-                  href="/login"
-                  className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                >
-                  Login
-                </Link>
-              )}
-
-              <LanguageSwitcher />
-            </div>
+          {/* MOBILE (☰ + dropdown) */}
+          <div className="sm:hidden">
+            <NavbarClient
+              nav={nav}
+              admin={admin}
+              session={
+                session
+                  ? {
+                      name: session.user?.name ?? null,
+                      email: session.user?.email ?? null,
+                      isPremium: !!session.user?.isPremium,
+                    }
+                  : null
+              }
+              mobile
+            />
           </div>
         </div>
       </div>
