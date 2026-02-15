@@ -27,6 +27,8 @@ export default async function Navbar() {
       href: isPremium ? "/practice" : "/premium",
       label: isPremium ? "Тренажер" : "Тренажер 🔒",
     },
+    // ✅ NEW: Support
+    { href: "/support", label: "Підтримка" },
   ];
 
   return (
@@ -65,6 +67,7 @@ export default async function Navbar() {
             </nav>
 
             {process.env.NODE_ENV === "development" && <SyncBadge />}
+
             {/* решта кнопок/меню/мови — у client-компоненті */}
             <NavbarClient
               nav={nav}
