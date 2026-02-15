@@ -6,44 +6,33 @@ import ProgressSync from "./components/ProgressSync";
 import SessionProviderClient from "./components/SessionProviderClient";
 import TopBanner from "./components/TopBanner";
 
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
-
 export const metadata: Metadata = {
   title: "Slovak Study — вивчення словацької",
   description: "Граматика, словник і тренажер для україномовних.",
-  colorScheme: "light",
-  verification: {
-    google: "Vf__jszEN37vi_wmJQYr10o8iZFtAInen8V__txW3Ds",
-  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="uk" style={{ colorScheme: "light" }}>
-      <body
-        className="min-h-dvh text-slate-900 overflow-x-hidden
-  bg-[radial-gradient(ellipse_at_top,_#f8fafc_0%,_#f1f5f9_40%,_#e2e8f0_100%)]"
-        suppressHydrationWarning
-      >
-        {/* AdSense */}
+    <html lang="uk">
+      <head>
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1760161415033749"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
+      </head>
 
+      <body>
         <TopBanner />
         <Navbar />
 
         <SessionProviderClient>
           <ProgressSync />
-
           <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
             {children}
           </main>
