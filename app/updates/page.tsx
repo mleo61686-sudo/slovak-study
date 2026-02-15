@@ -119,7 +119,7 @@ export default function UpdatesPage() {
     }
 
     return (
-        <div className="w-full px-6 py-8">
+        <div className="w-full py-8">
             {/* НЕ центруємо mx-auto — тримаємо реально зліва */}
             <div className="max-w-6xl">
                 <div className="grid gap-8 lg:grid-cols-[340px_1fr] items-start">
