@@ -568,7 +568,7 @@ function ChooseTranslation({
     return variants.map((w) => trWord(w, lang));
   }, [word, words, lang]);
 
-  useAutoSpeak(word?.sk ?? "", Boolean(word?.sk));
+
 
   const correctText = trWord(word, lang);
 
@@ -578,6 +578,10 @@ function ChooseTranslation({
 
       <div className="text-lg font-semibold">
         Обери переклад: <span className="font-bold">{word.sk}</span>
+      </div>
+      {/* ✅ ДОДАЙ ОЦЕ ПІД ЗАГОЛОВКОМ */}
+      <div className="flex justify-center">
+        <SpeakButton text={word.sk} />
       </div>
 
       <div className="grid gap-3">
@@ -758,9 +762,6 @@ function AudioQuiz({
     return variants.map((w) => w.sk);
   }, [word, words]);
 
-  useEffect(() => {
-    safeSpeak(word.sk);
-  }, [word.sk]);
 
   return (
     <>
