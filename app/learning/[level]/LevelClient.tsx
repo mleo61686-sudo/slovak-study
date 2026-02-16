@@ -73,6 +73,36 @@ function shuffle<T>(arr: T[]) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
+async function playTtsMp3(text: string) {
+  try {
+    const key = `slovakStudy.tts:${text}`;
+    let url: string | null = null;
+
+    try {
+      url = localStorage.getItem(key);
+    } catch { }
+
+    if (!url) {
+      const r = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await r.json().catch(() => null);
+      if (!r.ok || !data?.url) return;
+
+      url = String(data.url);
+      try {
+        localStorage.setItem(key, url);
+      } catch { }
+    }
+
+    const a = new Audio(url);
+    a.currentTime = 0;
+    await a.play();
+  } catch { }
+}
+
 function normalizeSentence(s: string) {
   return s
     .trim()
@@ -588,8 +618,10 @@ function ChooseTranslation({
         {options.map((opt) => (
           <button
             key={opt}
-            onClick={() => onNext(opt === correctText)}
-            className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
+            onClick={() => {
+              void playTtsMp3(word.sk);     // ✅ слово звучить при кліку
+              onNext(opt === correctText);
+            }}
           >
             {opt}
           </button>
@@ -632,7 +664,7 @@ function ChooseSlovak({
           <button
             key={opt}
             onClick={() => {
-              safeSpeak(opt);
+              void playTtsMp3(opt);          // ✅ звучить саме те слово, яке натиснув
               onNext(opt === word.sk);
             }}
             className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
@@ -675,7 +707,7 @@ function WriteWord({
     const ok = normalize(value) === normalize(word.sk);
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
-    safeSpeak(word.sk);
+    void playTtsMp3(word.sk);
   }
 
   function next() {
@@ -726,7 +758,7 @@ function WriteWord({
 
             <div className="flex gap-2">
               <button
-                onClick={() => safeSpeak(word.sk)}
+                onClick={() => void playTtsMp3(word.sk)}
                 className="px-4 py-2 border rounded-xl"
               >
                 🔊 Прослухати
@@ -1076,7 +1108,7 @@ function BuildSentence({
     const target = baseTokens.join(" ");
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
-    safeSpeak(phrase.sk);
+    // нічого
   }
 
   function next() {
