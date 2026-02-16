@@ -83,6 +83,21 @@ function normalizeSentence(s: string) {
 
 const trWord = (w: Word, lang: Lang) => (lang === "ru" ? w.ru ?? w.ua : w.ua);
 
+function getImgFit(word?: Word) {
+  return word?.imgCredit ? "cover" : "contain";
+}
+
+function getImgPos(word?: Word) {
+  // для фото краще тримати фокус зверху (щоб голова не відрізалась)
+  return word?.imgCredit ? "object-top" : "object-center";
+}
+
+function getImgAspect(word?: Word) {
+  // фото часто портретні → дай їм більш високий контейнер
+  // ілюстрації можуть бути різні → лишимо square на моб і 4/3 далі
+  return word?.imgCredit ? "aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4]" : "aspect-[3/4]";
+}
+
 function safeSpeak(text: string) {
   try {
     if (typeof window === "undefined") return;
@@ -211,15 +226,27 @@ export default function LevelClient({
         <div className="sticky top-2 z-10 rounded-xl border bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold">
           Переглянуто: {wordIndex + 1}/{words.length}
         </div>
-
-        <div className="rounded-2xl border bg-white p-6 text-center space-y-3">
+        <div className="mx-auto w-full max-w-[720px] rounded-2xl border bg-white p-6 text-center space-y-3">
           {word?.img ? (
-            <div className="flex flex-col items-center gap-1">
-              <img
-                src={word.img}
-                alt={word.sk}
-                className="mx-auto h-52 w-52 sm:h-64 sm:w-64 md:h-72 md:w-72 rounded-2xl object-contain border bg-slate-50"
-              />
+            <div className="flex flex-col items-center gap-2">
+              <div className="mx-auto w-full max-w-[260px] sm:max-w-[320px] md:max-w-[420px] lg:max-w-[270px]">
+                <div className={["relative overflow-hidden rounded-2xl border bg-slate-50", getImgAspect(word)].join(" ")}>
+                  <Image
+                    src={word.img}
+                    alt={word.sk}
+                    fill
+                    sizes="(max-width: 640px) 260px, (max-width: 768px) 320px, (max-width: 1024px) 340px, 360px"
+                    className={[
+                      getImgFit(word) === "cover" ? "object-cover" : "object-contain",
+                      "object-center",
+                      getImgFit(word) === "contain" ? "p-2" : "",
+                    ].join(" ")}
+                    priority={wordIndex === 0}
+                  />
+                </div>
+              </div>
+
+
               {word.imgCredit && (
                 <div className="text-xs text-slate-500">{word.imgCredit}</div>
               )}
@@ -235,7 +262,7 @@ export default function LevelClient({
           <SpeakButton text={word.sk} />
         </div>
 
-        <div className="flex justify-between">
+        <div className="mx-auto flex w-full max-w-[720px] justify-between">
           <button
             disabled={wordIndex === 0}
             onClick={() => setWordIndex((i) => i - 1)}
@@ -471,50 +498,50 @@ function WordImage({
 
   useEffect(() => {
     if (!word?.img) return;
-
     setReady(false);
 
     const img = new window.Image();
     img.src = word.img;
 
-    if (img.complete) {
-      setReady(true);
-    }
+    if (img.complete) setReady(true);
   }, [word?.img]);
 
   if (!word?.img) return null;
 
-  const boxClass =
+  const widthClass =
     size === "large"
-      ? "h-52 w-52 sm:h-64 sm:w-64 md:h-72 md:w-72"
+      ? "w-[260px] sm:w-[320px] md:w-[340px] lg:w-[360px]"
       : size === "small"
-        ? "h-40 w-40 sm:h-48 sm:w-48 md:h-52 md:w-52"
-        : "h-48 w-48 sm:h-56 sm:w-56 md:h-60 md:w-60";
+        ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
+        : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div
-        className={[
-          "relative overflow-hidden rounded-2xl border bg-slate-50",
-          boxClass,
-        ].join(" ")}
-      >
-        {!ready && <div className="absolute inset-0 animate-pulse bg-black/10" />}
+      <div className={["mx-auto", widthClass].join(" ")}>
+        <div className={["relative overflow-hidden rounded-2xl border bg-slate-50", getImgAspect(word)].join(" ")}>
+          {!ready && (
+            <div className="absolute inset-0 animate-pulse bg-black/10" />
+          )}
 
-        <Image
-          key={word.img}                 // ✅ не дає “старій” картинці залишатись на новому слові
-          src={word.img}
-          alt={word.sk}
-          fill
-          sizes="(max-width: 768px) 220px, 320px"
-          className={[
-            "object-contain sm:object-cover sm:scale-105 object-center",
-            "transition-opacity duration-200",
-            ready ? "opacity-100" : "opacity-0",
-          ].join(" ")}
-          onLoadingComplete={() => setReady(true)}
-        />
+          <Image
+            key={word.img}
+            src={word.img}
+            alt={word.sk}
+            fill
+            sizes="(max-width: 640px) 240px, (max-width: 768px) 300px, 340px"
+            className={[
+              getImgFit(word) === "cover" ? "object-cover" : "object-contain",
+              getImgPos(word),
+              getImgFit(word) === "contain" ? "p-2" : "",
+              "transition-opacity duration-200",
+              ready ? "opacity-100" : "opacity-0",
+            ].join(" ")}
+            onLoadingComplete={() => setReady(true)}
+            onError={() => setReady(true)}
+          />
+        </div>
       </div>
+
 
       {word.imgCredit && (
         <div className="text-xs text-slate-500">{word.imgCredit}</div>
