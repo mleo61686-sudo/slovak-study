@@ -1,101 +1,82 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Props = {
   text: string;
-  lang?: string;
+  lang?: string; // sk-SK by default
   className?: string;
-
   title?: string;
   label?: string;
-
-  /** коли SpeakButton всередині іншого <button> */
   asChild?: boolean;
 };
 
-async function getTtsUrl(text: string) {
-  const r = await fetch("/api/tts", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
-  });
-
-  const data = await r.json().catch(() => null);
-
-  if (!r.ok) {
-    const msg = (data && (data.error || data.message)) || `TTS error (${r.status})`;
-    throw new Error(msg);
-  }
-
-  if (!data?.url) throw new Error("No TTS url");
-  return String(data.url);
-}
-
 export default function SpeakButton({
   text,
-  lang = "sk-SK", // зараз не критично, бо mp3 генерується на бекенді
-  className = "rounded-xl border bg-white px-3 py-2 text-sm font-semibold hover:bg-slate-50",
+  lang = "sk-SK",
+  className = "inline-flex items-center justify-center rounded-xl border bg-white px-3 py-2 text-sm font-semibold hover:bg-slate-50 active:scale-[0.99] transition",
   title,
   label,
   asChild = false,
 }: Props) {
-  const { lang: uiLang } = useLanguage(); // ua | ru
+  const { lang: uiLang } = useLanguage();
 
-  const computedTitle =
-    title ?? (uiLang === "ru" ? "Прослушать произношение" : "Прослухати вимову");
-  const computedLabel =
-    label ?? (uiLang === "ru" ? "🔊 Прослушать" : "🔊 Прослухати");
+  const computedTitle = useMemo(
+    () =>
+      title ??
+      (uiLang === "ru" ? "Прослушать произношение" : "Прослухати вимову"),
+    [title, uiLang]
+  );
+
+  const computedLabel = useMemo(
+    () => label ?? (uiLang === "ru" ? "🔊 Прослушать" : "🔊 Прослухати"),
+    [label, uiLang]
+  );
 
   const [loading, setLoading] = useState(false);
+  const lastTextRef = useRef<string>("");
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const lastTextRef = useRef<string | null>(null);
-  const slowModeRef = useRef(false);
+  function speakBrowserTts() {
+    const t = (text ?? "").trim();
+    if (!t) return;
 
-  async function speak() {
-    if (!text?.trim()) return;
-    if (loading) return;
-
-    // другий клік по тому самому слову → повільніше
-    if (lastTextRef.current === text) {
-      slowModeRef.current = !slowModeRef.current;
-    } else {
-      slowModeRef.current = false;
-      lastTextRef.current = text;
+    // якщо API нема — SpeechSynthesis єдиний варіант
+    const synth = window.speechSynthesis;
+    if (!synth) {
+      console.warn("speechSynthesis not supported");
+      return;
     }
+
+    // ✅ stop previous
+    try {
+      synth.cancel();
+    } catch {}
 
     setLoading(true);
 
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = lang;
+
+    // спроба вибрати словацький голос якщо є
     try {
-      const lsKey = `slovakStudy.tts:${text}`;
-      let url: string | null = null;
+      const voices = synth.getVoices?.() ?? [];
+      const v =
+        voices.find((x) => (x.lang || "").toLowerCase().startsWith("sk")) ??
+        voices.find((x) => (x.lang || "").toLowerCase().includes("sk"));
+      if (v) u.voice = v;
+    } catch {}
 
-      try {
-        url = localStorage.getItem(lsKey);
-      } catch {}
+    u.onend = () => setLoading(false);
+    u.onerror = () => setLoading(false);
 
-      if (!url) {
-        url = await getTtsUrl(text);
-        try {
-          localStorage.setItem(lsKey, url);
-        } catch {}
-      }
+    lastTextRef.current = t;
 
-      if (!audioRef.current) audioRef.current = new Audio();
-      const a = audioRef.current;
-
-      a.pause();
-      a.src = url;
-      a.currentTime = 0;
-      a.playbackRate = slowModeRef.current ? 0.85 : 1;
-
-      await a.play(); // важливо для iPhone
+    // ✅ iOS інколи не стартує з першого разу — але з кліку має
+    try {
+      synth.speak(u);
     } catch (e) {
-      // якщо не вийшло — просто мовчимо (без browser voice)
-      console.error("TTS play failed:", e);
-    } finally {
+      console.error("TTS speak error:", e);
       setLoading(false);
     }
   }
@@ -103,14 +84,14 @@ export default function SpeakButton({
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    void speak();
+    speakBrowserTts();
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       e.stopPropagation();
-      void speak();
+      speakBrowserTts();
     }
   };
 
