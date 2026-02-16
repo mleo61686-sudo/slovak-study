@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id           String               @id @default(cuid())
-  email        String               @unique
-  name         String?
-  passwordHash String
-  createdAt    DateTime             @default(now())
-  resetTokens  PasswordResetToken[]
-  isPremium    Boolean   @default(false)
-  premiumUntil DateTime?
+  id                   String               @id @default(cuid())
+  email                String               @unique
+  name                 String?
+  passwordHash         String
+  createdAt            DateTime             @default(now())
+  resetTokens          PasswordResetToken[]
+  isPremium            Boolean              @default(false)
+  premiumUntil         DateTime?
   stripeCustomerId     String?
   stripeSubscriptionId String?
 
@@ -54,7 +54,6 @@ model PasswordResetToken {
 model ErrorReport {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  
 
   // хто відправив (якщо залогінений)
   userId String?
@@ -74,9 +73,18 @@ model ErrorReport {
 
   // повідомлення користувача
   category String?
-  status String @default("new")
+  status   String  @default("new")
   message  String // головний текст
 
   // тех інфа (корисно при дебагу)
   userAgent String?
+}
+
+model TtsAudio {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  text      String
+  url       String
+  voice     String
+  createdAt DateTime @default(now())
 }

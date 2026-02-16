@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Props = {
@@ -28,7 +28,6 @@ function safeSpeak(opts: {
     const synth = window.speechSynthesis as SpeechSynthesis | undefined;
     if (!synth) return;
 
-    // Safari/деякі браузери можуть не мати Utterance
     const Utter = (window as any).SpeechSynthesisUtterance;
     if (typeof Utter === "undefined") return;
 
@@ -62,6 +61,25 @@ function safeSpeak(opts: {
   }
 }
 
+async function getTtsUrl(text: string) {
+  const r = await fetch("/api/tts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+
+  const data = await r.json().catch(() => null);
+
+  if (!r.ok) {
+    const msg =
+      (data && (data.error || data.message)) || `TTS error (${r.status})`;
+    throw new Error(msg);
+  }
+
+  if (!data?.url) throw new Error("No TTS url");
+  return String(data.url);
+}
+
 export default function SpeakButton({
   text,
   lang = "sk-SK",
@@ -78,8 +96,13 @@ export default function SpeakButton({
     label ?? (uiLang === "ru" ? "🔊 Прослушать" : "🔊 Прослухати");
 
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const lastTextRef = useRef<string | null>(null);
   const slowModeRef = useRef(false);
+
+  // ✅ для програвання mp3
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     // голоса — опціонально, якщо не працює, то й ок
@@ -98,8 +121,6 @@ export default function SpeakButton({
       };
 
       loadVoices();
-
-      // onvoiceschanged інколи null / не працює — тому в try/catch
       (synth as any).onvoiceschanged = loadVoices;
 
       return () => {
@@ -114,13 +135,51 @@ export default function SpeakButton({
     }
   }, []);
 
-  function speak() {
+  async function speak() {
+    if (!text?.trim()) return;
+    if (loading) return;
+
     // якщо натискаємо те саме слово вдруге → повільніше
     if (lastTextRef.current === text) {
       slowModeRef.current = !slowModeRef.current;
     } else {
       slowModeRef.current = false;
       lastTextRef.current = text;
+    }
+
+    // ✅ 1) спочатку пробуємо mp3 (правильна вимова)
+    try {
+      setLoading(true);
+
+      // маленький локальний кеш у браузері, щоб 2-й раз було миттєво
+      const lsKey = `slovakStudy.tts:${text}`;
+      const cached =
+        typeof window !== "undefined" ? localStorage.getItem(lsKey) : null;
+
+      const url = cached ?? (await getTtsUrl(text));
+
+      try {
+        if (!cached) localStorage.setItem(lsKey, url);
+      } catch {
+        // ignore (Safari private mode etc.)
+      }
+
+      if (!audioRef.current) audioRef.current = new Audio();
+      const a = audioRef.current;
+
+      a.pause();
+      a.src = url;
+      a.currentTime = 0;
+
+      // ✅ якщо натиснув вдруге на те саме — повільніше
+      a.playbackRate = slowModeRef.current ? 0.85 : 1;
+
+      await a.play();
+      setLoading(false);
+      return;
+    } catch {
+      setLoading(false);
+      // ✅ 2) fallback на старий браузерний TTS (щоб не було "нічого")
     }
 
     safeSpeak({
@@ -134,16 +193,18 @@ export default function SpeakButton({
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation(); // ✅ щоб не клікався outer button
-    speak();
+    void speak();
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       e.stopPropagation();
-      speak();
+      void speak();
     }
   };
+
+  const content = loading ? (uiLang === "ru" ? "⏳" : "⏳") : computedLabel;
 
   // ✅ ВАЖЛИВО: коли всередині <button>, рендеримо НЕ <button>, а <span>
   if (asChild) {
@@ -157,7 +218,7 @@ export default function SpeakButton({
         title={computedTitle}
         aria-label={computedTitle}
       >
-        {computedLabel}
+        {content}
       </span>
     );
   }
@@ -169,8 +230,9 @@ export default function SpeakButton({
       className={className}
       title={computedTitle}
       aria-label={computedTitle}
+      disabled={loading}
     >
-      {computedLabel}
+      {content}
     </button>
   );
 }

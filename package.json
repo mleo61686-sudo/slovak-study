@@ -13,6 +13,7 @@
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^6.19.2",
     "@supabase/supabase-js": "^2.94.0",
+    "@vercel/blob": "^2.2.0",
     "bcryptjs": "^3.0.3",
     "next": "15.5.9",
     "next-auth": "^5.0.0-beta.30",
