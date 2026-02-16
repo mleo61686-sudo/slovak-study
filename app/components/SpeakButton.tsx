@@ -105,7 +105,6 @@ export default function SpeakButton({
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // голоса — опціонально, якщо не працює, то й ок
     try {
       if (typeof window === "undefined") return;
       const synth = window.speechSynthesis as SpeechSynthesis | undefined;
@@ -115,9 +114,7 @@ export default function SpeakButton({
         try {
           const v = synth.getVoices?.() ?? [];
           if (Array.isArray(v) && v.length > 0) setVoices(v);
-        } catch {
-          // ignore
-        }
+        } catch {}
       };
 
       loadVoices();
@@ -126,14 +123,22 @@ export default function SpeakButton({
       return () => {
         try {
           (synth as any).onvoiceschanged = null;
-        } catch {
-          // ignore
-        }
+        } catch {}
       };
-    } catch {
-      // ignore
-    }
+    } catch {}
   }, []);
+
+  async function playUrl(url: string) {
+    if (!audioRef.current) audioRef.current = new Audio();
+    const a = audioRef.current;
+
+    a.pause();
+    a.src = url;
+    a.currentTime = 0;
+    a.playbackRate = slowModeRef.current ? 0.85 : 1;
+
+    await a.play();
+  }
 
   async function speak() {
     if (!text?.trim()) return;
@@ -147,41 +152,43 @@ export default function SpeakButton({
       lastTextRef.current = text;
     }
 
-    // ✅ 1) спочатку пробуємо mp3 (правильна вимова)
-    try {
-      setLoading(true);
+    const lsKey = `slovakStudy.tts:${text}`;
 
-      // маленький локальний кеш у браузері, щоб 2-й раз було миттєво
-      const lsKey = `slovakStudy.tts:${text}`;
+    // ✅ 1) якщо вже є url у localStorage — граємо ОДРАЗУ (iPhone це точно дозволяє)
+    try {
       const cached =
         typeof window !== "undefined" ? localStorage.getItem(lsKey) : null;
 
-      const url = cached ?? (await getTtsUrl(text));
+      if (cached) {
+        await playUrl(cached);
+        return;
+      }
+    } catch {
+      // ignore
+    }
+
+    // ✅ 2) якщо url ще нема — 1-й тап тільки генерує/підтягує url
+    // (Safari часто блокує play() після async fetch, тому не намагаємось autoplay тут)
+    try {
+      setLoading(true);
+      const url = await getTtsUrl(text);
+      setLoading(false);
 
       try {
-        if (!cached) localStorage.setItem(lsKey, url);
+        localStorage.setItem(lsKey, url);
       } catch {
-        // ignore (Safari private mode etc.)
+        // ignore
       }
 
-      if (!audioRef.current) audioRef.current = new Audio();
-      const a = audioRef.current;
-
-      a.pause();
-      a.src = url;
-      a.currentTime = 0;
-
-      // ✅ якщо натиснув вдруге на те саме — повільніше
-      a.playbackRate = slowModeRef.current ? 0.85 : 1;
-
-      await a.play();
-      setLoading(false);
+      // ✅ НЕ робимо await play() тут — щоб на iPhone не “пропадало”.
+      // Користувач натисне вдруге — і тоді cachedUrl вже буде і відтвориться.
       return;
     } catch {
       setLoading(false);
-      // ✅ 2) fallback на старий браузерний TTS (щоб не було "нічого")
+      // fallback нижче
     }
 
+    // ✅ 3) fallback — старий браузерний TTS
     safeSpeak({
       text,
       lang,
@@ -192,7 +199,7 @@ export default function SpeakButton({
 
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // ✅ щоб не клікався outer button
+    e.stopPropagation();
     void speak();
   };
 
@@ -204,9 +211,11 @@ export default function SpeakButton({
     }
   };
 
-  const content = loading ? (uiLang === "ru" ? "⏳" : "⏳") : computedLabel;
+  // 👇 підказка на 1-й тап (коли ще нема кешу)
+  const content = loading
+    ? "⏳"
+    : computedLabel;
 
-  // ✅ ВАЖЛИВО: коли всередині <button>, рендеримо НЕ <button>, а <span>
   if (asChild) {
     return (
       <span
