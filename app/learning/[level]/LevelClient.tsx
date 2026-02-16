@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SpeakButton from "@/app/components/SpeakButton";
@@ -73,36 +73,6 @@ function shuffle<T>(arr: T[]) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-async function playTtsMp3(text: string) {
-  try {
-    const key = `slovakStudy.tts:${text}`;
-    let url: string | null = null;
-
-    try {
-      url = localStorage.getItem(key);
-    } catch { }
-
-    if (!url) {
-      const r = await fetch("/api/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      const data = await r.json().catch(() => null);
-      if (!r.ok || !data?.url) return;
-
-      url = String(data.url);
-      try {
-        localStorage.setItem(key, url);
-      } catch { }
-    }
-
-    const a = new Audio(url);
-    a.currentTime = 0;
-    await a.play();
-  } catch { }
-}
-
 function normalizeSentence(s: string) {
   return s
     .trim()
@@ -118,61 +88,23 @@ function getImgFit(word?: Word) {
 }
 
 function getImgPos(word?: Word) {
-  // для фото краще тримати фокус зверху (щоб голова не відрізалась)
   return word?.imgCredit ? "object-top" : "object-center";
 }
 
 function getImgAspect(word?: Word) {
-  // фото часто портретні → дай їм більш високий контейнер
-  // ілюстрації можуть бути різні → лишимо square на моб і 4/3 далі
-  return word?.imgCredit ? "aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4]" : "aspect-[3/4]";
-}
-
-function safeSpeak(text: string) {
-  try {
-    if (typeof window === "undefined") return;
-
-    const synth = window.speechSynthesis as SpeechSynthesis | undefined;
-    if (!synth) return;
-
-    // якщо в браузері нема повної підтримки — просто виходимо
-    if (typeof (window as any).SpeechSynthesisUtterance === "undefined") return;
-    if (typeof synth.speak !== "function") return;
-
-    synth.cancel();
-
-    const utter = new (window as any).SpeechSynthesisUtterance(text);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    const voices = typeof synth.getVoices === "function" ? synth.getVoices() : [];
-    const skVoice =
-      voices.find((v) => v.lang?.toLowerCase().startsWith("sk")) ??
-      voices.find((v) => v.lang?.toLowerCase().startsWith("cs")) ??
-      null;
-
-    if (skVoice) utter.voice = skVoice;
-
-    synth.speak(utter);
-  } catch {
-    // нічого — важливо НЕ ламати урок
-  }
+  return word?.imgCredit
+    ? "aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4]"
+    : "aspect-[3/4]";
 }
 
 function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
   // 1) якщо фраза прямо в слові
   if (word.phrase) {
-    const target =
-      lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
-    return {
-      sk: word.phrase.sk,
-      target,
-      tokens: word.phrase.tokens,
-    };
+    const target = lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
+    return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
   }
 
-  // 2) ✅ головне: шукаємо в A0_PHRASES по ключу (sk + ua + levelId)
+  // 2) шукаємо в A0_PHRASES по ключу
   const k = phraseKey(word.sk, word.ua, levelId);
   const p = A0_PHRASES[k];
   if (p) {
@@ -183,20 +115,8 @@ function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
   // 3) fallback якщо фрази нема
   const sk = `To je ${word.sk}.`;
   const target = lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
-  const tokens = ["To", "je", word.sk, "."]; // ✅ пунктуація як токен
+  const tokens = ["To", "je", word.sk, "."];
   return { sk, target, tokens };
-}
-
-function useAutoSpeak(text: string, enabled: boolean) {
-  const lastRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (!enabled) return;
-    if (lastRef.current === text) return;
-    lastRef.current = text;
-
-    safeSpeak(text);
-  }, [text, enabled]);
 }
 
 // ------------------ main ------------------
@@ -204,8 +124,6 @@ function useAutoSpeak(text: string, enabled: boolean) {
 export default function LevelClient({
   levelId,
   words,
-
-  // ✅ NEW (optional): контроль переходу на next
   canGoNext = true,
   lockedReason,
   onLockedNextRedirect = "/learning",
@@ -229,7 +147,7 @@ export default function LevelClient({
   const nextLevelId = getNextLevelId(levelId);
   const { lang } = useLanguage();
 
-  // ✅ preload наступного зображення (прибирає затримку при Next)
+  // preload наступного зображення
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -256,11 +174,17 @@ export default function LevelClient({
         <div className="sticky top-2 z-10 rounded-xl border bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold">
           Переглянуто: {wordIndex + 1}/{words.length}
         </div>
+
         <div className="mx-auto w-full max-w-[720px] rounded-2xl border bg-white p-6 text-center space-y-3">
           {word?.img ? (
             <div className="flex flex-col items-center gap-2">
               <div className="mx-auto w-full max-w-[260px] sm:max-w-[320px] md:max-w-[420px] lg:max-w-[270px]">
-                <div className={["relative overflow-hidden rounded-2xl border bg-slate-50", getImgAspect(word)].join(" ")}>
+                <div
+                  className={[
+                    "relative overflow-hidden rounded-2xl border bg-slate-50",
+                    getImgAspect(word),
+                  ].join(" ")}
+                >
                   <Image
                     src={word.img}
                     alt={word.sk}
@@ -268,14 +192,13 @@ export default function LevelClient({
                     sizes="(max-width: 640px) 260px, (max-width: 768px) 320px, (max-width: 1024px) 340px, 360px"
                     className={[
                       getImgFit(word) === "cover" ? "object-cover" : "object-contain",
-                      "object-center",
+                      getImgPos(word),
                       getImgFit(word) === "contain" ? "p-2" : "",
                     ].join(" ")}
                     priority={wordIndex === 0}
                   />
                 </div>
               </div>
-
 
               {word.imgCredit && (
                 <div className="text-xs text-slate-500">{word.imgCredit}</div>
@@ -289,7 +212,10 @@ export default function LevelClient({
 
           <div className="text-3xl font-bold">{word.sk}</div>
           <div className="text-slate-600">{trWord(word, lang)}</div>
-          <SpeakButton text={word.sk} />
+
+          <div className="flex justify-center">
+            <SpeakButton text={word.sk} />
+          </div>
         </div>
 
         <div className="mx-auto flex w-full max-w-[720px] justify-between">
@@ -339,7 +265,7 @@ export default function LevelClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ levelId }),
-      }).catch(() => { });
+      }).catch(() => {});
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -441,6 +367,7 @@ export default function LevelClient({
       </div>
     );
   }
+
   return (
     <div className="rounded-2xl border bg-white p-6 space-y-4">
       <div className="text-sm text-slate-500">
@@ -496,11 +423,7 @@ export default function LevelClient({
       )}
 
       {exercise.kind === "matchColumns" && (
-        <MatchColumns
-          words={words}
-          lang={lang}
-          onDone={(correct) => doneWhole(correct)}
-        />
+        <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
       )}
 
       {exercise.kind === "buildSentence" && (
@@ -542,16 +465,19 @@ function WordImage({
     size === "large"
       ? "w-[260px] sm:w-[320px] md:w-[340px] lg:w-[360px]"
       : size === "small"
-        ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
-        : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
+      ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
+      : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div className={["mx-auto", widthClass].join(" ")}>
-        <div className={["relative overflow-hidden rounded-2xl border bg-slate-50", getImgAspect(word)].join(" ")}>
-          {!ready && (
-            <div className="absolute inset-0 animate-pulse bg-black/10" />
-          )}
+        <div
+          className={[
+            "relative overflow-hidden rounded-2xl border bg-slate-50",
+            getImgAspect(word),
+          ].join(" ")}
+        >
+          {!ready && <div className="absolute inset-0 animate-pulse bg-black/10" />}
 
           <Image
             key={word.img}
@@ -572,10 +498,7 @@ function WordImage({
         </div>
       </div>
 
-
-      {word.imgCredit && (
-        <div className="text-xs text-slate-500">{word.imgCredit}</div>
-      )}
+      {word.imgCredit && <div className="text-xs text-slate-500">{word.imgCredit}</div>}
     </div>
   );
 }
@@ -598,8 +521,6 @@ function ChooseTranslation({
     return variants.map((w) => trWord(w, lang));
   }, [word, words, lang]);
 
-
-
   const correctText = trWord(word, lang);
 
   return (
@@ -609,7 +530,7 @@ function ChooseTranslation({
       <div className="text-lg font-semibold">
         Обери переклад: <span className="font-bold">{word.sk}</span>
       </div>
-      {/* ✅ ДОДАЙ ОЦЕ ПІД ЗАГОЛОВКОМ */}
+
       <div className="flex justify-center">
         <SpeakButton text={word.sk} />
       </div>
@@ -618,10 +539,8 @@ function ChooseTranslation({
         {options.map((opt) => (
           <button
             key={opt}
-            onClick={() => {
-              void playTtsMp3(word.sk);     // ✅ слово звучить при кліку
-              onNext(opt === correctText);
-            }}
+            onClick={() => onNext(opt === correctText)}
+            className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
           >
             {opt}
           </button>
@@ -649,24 +568,24 @@ function ChooseSlovak({
     return variants.map((w) => w.sk);
   }, [word, words]);
 
-
-
   return (
     <>
+      <WordImage word={word} />
+
       <div className="text-lg font-semibold">
-        <WordImage word={word} />
         Обери слово словацькою:{" "}
         <span className="font-bold">{trWord(word, lang)}</span>
+      </div>
+
+      <div className="flex justify-center">
+        <SpeakButton text={word.sk} />
       </div>
 
       <div className="grid gap-3">
         {options.map((opt) => (
           <button
             key={opt}
-            onClick={() => {
-              void playTtsMp3(opt);          // ✅ звучить саме те слово, яке натиснув
-              onNext(opt === word.sk);
-            }}
+            onClick={() => onNext(opt === word.sk)}
             className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
           >
             {opt}
@@ -697,8 +616,6 @@ function WriteWord({
     setCorrectAnswer(null);
   }, [word.sk]);
 
-
-
   function normalize(s: string) {
     return s.trim().toLowerCase();
   }
@@ -707,7 +624,6 @@ function WriteWord({
     const ok = normalize(value) === normalize(word.sk);
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
-    void playTtsMp3(word.sk);
   }
 
   function next() {
@@ -718,15 +634,15 @@ function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-        ? "border-red-500"
-        : "border-slate-300";
+      ? "border-red-500"
+      : "border-slate-300";
 
   return (
     <>
       <WordImage word={word} />
+
       <div className="text-lg font-semibold">
-        Напиши словацькою:{" "}
-        <span className="font-bold">{trWord(word, lang)}</span>
+        Напиши словацькою: <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
       <div className="space-y-3">
@@ -756,18 +672,10 @@ function WriteWord({
               </div>
             )}
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => void playTtsMp3(word.sk)}
-                className="px-4 py-2 border rounded-xl"
-              >
-                🔊 Прослухати
-              </button>
+            <div className="flex gap-2 items-center">
+              <SpeakButton text={word.sk} />
 
-              <button
-                onClick={next}
-                className="px-4 py-2 rounded-xl bg-black text-white"
-              >
+              <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
                 Далі →
               </button>
             </div>
@@ -794,12 +702,9 @@ function AudioQuiz({
     return variants.map((w) => w.sk);
   }, [word, words]);
 
-
   return (
     <>
-      <div className="text-lg font-semibold">
-        Прослухай слово і обери правильне:
-      </div>
+      <div className="text-lg font-semibold">Прослухай слово і обери правильне:</div>
 
       <div className="flex justify-center">
         <SpeakButton text={word.sk} />
@@ -820,7 +725,6 @@ function AudioQuiz({
   );
 }
 
-
 // 5️⃣ ПАРИ В 2 КОЛОНКИ (whole)
 function MatchColumns({
   words,
@@ -832,10 +736,7 @@ function MatchColumns({
   onDone: (correctCount: number) => void;
 }) {
   const left = useMemo(() => shuffle(words.map((w) => w.sk)), [words]);
-  const right = useMemo(
-    () => shuffle(words.map((w) => trWord(w, lang))),
-    [words, lang]
-  );
+  const right = useMemo(() => shuffle(words.map((w) => trWord(w, lang))), [words, lang]);
 
   const mapSkToTr = useMemo(() => {
     const m = new Map<string, string>();
@@ -853,9 +754,7 @@ function MatchColumns({
   const [wrongCount, setWrongCount] = useState(0);
 
   const [shakeWrong, setShakeWrong] = useState(false);
-  const [wrongPair, setWrongPair] = useState<{ l: string; r: string } | null>(
-    null
-  );
+  const [wrongPair, setWrongPair] = useState<{ l: string; r: string } | null>(null);
 
   const MAX_WRONG = 3;
 
@@ -892,7 +791,6 @@ function MatchColumns({
       setCorrectCount((c) => c + 1);
       setMatchedLeft((prev) => new Set(prev).add(selectedLeft));
       setMatchedRight((prev) => new Set(prev).add(selectedRight));
-
       setSelectedLeft(null);
       setSelectedRight(null);
       setWrongPair(null);
@@ -921,9 +819,7 @@ function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched
-        ? "opacity-50 cursor-not-allowed bg-slate-50"
-        : "hover:bg-slate-50",
+      locked || isMatched ? "opacity-50 cursor-not-allowed bg-slate-50" : "hover:bg-slate-50",
       isSelected ? "border-green-600 ring-4 ring-green-200 bg-green-50" : "",
       isWrong ? "border-red-500 bg-red-50" : "",
     ].join(" ");
@@ -936,9 +832,7 @@ function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched
-        ? "opacity-50 cursor-not-allowed bg-slate-50"
-        : "hover:bg-slate-50",
+      locked || isMatched ? "opacity-50 cursor-not-allowed bg-slate-50" : "hover:bg-slate-50",
       isSelected ? "border-black ring-2 ring-black/10 bg-slate-50" : "",
       isWrong ? "border-red-500 bg-red-50" : "",
     ].join(" ");
@@ -1030,21 +924,11 @@ function MatchColumns({
 
       <style jsx>{`
         @keyframes shake {
-          0% {
-            transform: translateX(0);
-          }
-          25% {
-            transform: translateX(-6px);
-          }
-          50% {
-            transform: translateX(6px);
-          }
-          75% {
-            transform: translateX(-6px);
-          }
-          100% {
-            transform: translateX(0);
-          }
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-6px); }
+          50% { transform: translateX(6px); }
+          75% { transform: translateX(-6px); }
+          100% { transform: translateX(0); }
         }
       `}</style>
     </div>
@@ -1063,10 +947,7 @@ function BuildSentence({
   levelId: string;
   onNext: (c: boolean) => void;
 }) {
-  const phrase = useMemo(
-    () => getPhraseForWord(word, lang, levelId),
-    [word, lang, levelId]
-  );
+  const phrase = useMemo(() => getPhraseForWord(word, lang, levelId), [word, lang, levelId]);
 
   const baseTokens = useMemo(() => phrase.tokens, [phrase.tokens]);
   const [available, setAvailable] = useState<string[]>(() => shuffle(baseTokens));
@@ -1078,8 +959,6 @@ function BuildSentence({
     setPicked([]);
     setStatus("idle");
   }, [word.sk, lang, baseTokens.join("|")]);
-
-
 
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
@@ -1108,17 +987,13 @@ function BuildSentence({
     const target = baseTokens.join(" ");
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
-    // нічого
   }
 
   function next() {
     onNext(status === "correct");
   }
 
-  // ✅ НЕ додаємо "." вручну — пунктуація вже є токеном
-  const builtPretty = picked
-    .join(" ")
-    .replace(/\s+([.,!?;:])/g, "$1");
+  const builtPretty = picked.join(" ").replace(/\s+([.,!?;:])/g, "$1");
 
   return (
     <div className="space-y-4">
@@ -1126,8 +1001,7 @@ function BuildSentence({
         <div>
           <div className="font-semibold">B) Збери речення</div>
           <div className="text-sm text-slate-500">
-            Ціль:{" "}
-            <span className="text-slate-800 font-medium">{phrase.target}</span>
+            Ціль: <span className="text-slate-800 font-medium">{phrase.target}</span>
           </div>
         </div>
 
@@ -1145,10 +1019,7 @@ function BuildSentence({
               Перевірити
             </button>
           ) : (
-            <button
-              onClick={next}
-              className="px-4 py-2 rounded-xl bg-black text-white"
-            >
+            <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
               Наступне →
             </button>
           )}
@@ -1183,9 +1054,7 @@ function BuildSentence({
         </button>
       </div>
 
-      {status === "correct" && (
-        <div className="font-semibold text-green-600">✅ Правильно!</div>
-      )}
+      {status === "correct" && <div className="font-semibold text-green-600">✅ Правильно!</div>}
       {status === "wrong" && (
         <div className="font-semibold text-red-600">
           ❌ Неправильно. Правильно: <b>{baseTokens.join(" ")}</b>
