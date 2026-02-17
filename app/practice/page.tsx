@@ -584,7 +584,7 @@ export default function PracticePage() {
                         <div className="font-medium">
                           {m.sk} — <span className="text-slate-700">{tr}</span>
                         </div>
-                        <SpeakButton text={m.sk} lang="sk-SK" />
+                        <SpeakButton text={m.sk}  />
                       </div>
                       {m.your ? (
                         <div className="mt-1 text-sm text-slate-600">
@@ -645,7 +645,7 @@ export default function PracticePage() {
 
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span>{t.listen}</span>
-                    <SpeakButton text={qBase.sk} lang="sk-SK" />
+                    <SpeakButton text={qBase.sk}  />
                   </div>
                 </div>
 
@@ -671,7 +671,7 @@ ${!selected ? "hover:bg-slate-50" : "opacity-95"}
 
                             <SpeakButton
                               text={option}
-                              lang="sk-SK"
+                              
                               asChild
                               label="🔊"
                               className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
