@@ -100,7 +100,8 @@ function getImgAspect(word?: Word) {
 function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
   // 1) якщо фраза прямо в слові
   if (word.phrase) {
-    const target = lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
+    const target =
+      lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
     return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
   }
 
@@ -114,9 +115,51 @@ function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
 
   // 3) fallback якщо фрази нема
   const sk = `To je ${word.sk}.`;
-  const target = lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
+  const target =
+    lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
   const tokens = ["To", "je", word.sk, "."];
   return { sk, target, tokens };
+}
+
+// ✅ same hashing scheme as SpeakButton (local mp3)
+async function sha1Hex(input: string) {
+  const data = new TextEncoder().encode(input);
+  const hash = await crypto.subtle.digest("SHA-1", data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function guessKind(text: string): "word" | "phrase" {
+  return /[ ,.!?;:]/.test(text.trim()) ? "phrase" : "word";
+}
+
+async function buildLocalUrl(text: string, forcedKind?: "word" | "phrase") {
+  const clean = (text ?? "").trim();
+  const kind = forcedKind ?? guessKind(clean);
+  const h = await sha1Hex(`${kind}:${clean}`);
+  return kind === "word" ? `/audio/words/${h}.mp3` : `/audio/phrases/${h}.mp3`;
+}
+
+// ✅ play local audio (tries word/phrase fallback). Call this ONLY inside user gesture.
+async function playLocal(text: string) {
+  const clean = (text ?? "").trim();
+  if (!clean) return;
+
+  const kind = guessKind(clean);
+  const url1 = await buildLocalUrl(clean, kind);
+  const otherKind: "word" | "phrase" = kind === "word" ? "phrase" : "word";
+  const url2 = await buildLocalUrl(clean, otherKind);
+
+  try {
+    await new Audio(url1).play();
+  } catch {
+    try {
+      await new Audio(url2).play();
+    } catch {
+      // ignore
+    }
+  }
 }
 
 // ------------------ main ------------------
@@ -142,6 +185,9 @@ export default function LevelClient({
 
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+
+  // ✅ ключ для автоплею (залишаємо для 1 та 4 вправ, як було)
+  const [quizAutoKey, setQuizAutoKey] = useState(0);
 
   const router = useRouter();
   const nextLevelId = getNextLevelId(levelId);
@@ -191,7 +237,9 @@ export default function LevelClient({
                     fill
                     sizes="(max-width: 640px) 260px, (max-width: 768px) 320px, (max-width: 1024px) 340px, 360px"
                     className={[
-                      getImgFit(word) === "cover" ? "object-cover" : "object-contain",
+                      getImgFit(word) === "cover"
+                        ? "object-cover"
+                        : "object-contain",
                       getImgPos(word),
                       getImgFit(word) === "contain" ? "p-2" : "",
                     ].join(" ")}
@@ -214,7 +262,7 @@ export default function LevelClient({
           <div className="text-slate-600">{trWord(word, lang)}</div>
 
           <div className="flex justify-center">
-            <SpeakButton text={word.sk} />
+            <SpeakButton text={word.sk} autoPlayKey={word.sk} />
           </div>
         </div>
 
@@ -237,6 +285,9 @@ export default function LevelClient({
           ) : (
             <button
               onClick={() => {
+                // ✅ gesture тут!
+                setQuizAutoKey((k) => k + 1);
+
                 setMode("quiz");
                 setExerciseIndex(0);
                 setWordIndex(0);
@@ -402,16 +453,12 @@ export default function LevelClient({
           words={words}
           lang={lang}
           onNext={nextPerWord}
+          quizAutoKey={quizAutoKey}
         />
       )}
 
       {exercise.kind === "chooseSlovak" && (
-        <ChooseSlovak
-          word={currentWord}
-          words={words}
-          lang={lang}
-          onNext={nextPerWord}
-        />
+        <ChooseSlovak word={currentWord} words={words} lang={lang} onNext={nextPerWord} />
       )}
 
       {exercise.kind === "writeWord" && (
@@ -419,7 +466,12 @@ export default function LevelClient({
       )}
 
       {exercise.kind === "audioQuiz" && (
-        <AudioQuiz word={currentWord} words={words} onNext={nextPerWord} />
+        <AudioQuiz
+          word={currentWord}
+          words={words}
+          onNext={nextPerWord}
+          quizAutoKey={quizAutoKey}
+        />
       )}
 
       {exercise.kind === "matchColumns" && (
@@ -498,22 +550,26 @@ function WordImage({
         </div>
       </div>
 
-      {word.imgCredit && <div className="text-xs text-slate-500">{word.imgCredit}</div>}
+      {word.imgCredit && (
+        <div className="text-xs text-slate-500">{word.imgCredit}</div>
+      )}
     </div>
   );
 }
 
-// 1️⃣ вибір перекладу
+// 1️⃣ вибір перекладу (залишаємо autoplay як було)
 function ChooseTranslation({
   word,
   words,
   onNext,
   lang,
+  quizAutoKey,
 }: {
   word: Word;
   words: Word[];
   onNext: (c: boolean) => void;
   lang: Lang;
+  quizAutoKey: number;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -532,7 +588,7 @@ function ChooseTranslation({
       </div>
 
       <div className="flex justify-center">
-        <SpeakButton text={word.sk} />
+        <SpeakButton text={word.sk} autoPlayKey={`${quizAutoKey}:${word.sk}`} />
       </div>
 
       <div className="grid gap-3">
@@ -550,7 +606,7 @@ function ChooseTranslation({
   );
 }
 
-// 2️⃣ вибір словацького слова
+// 2️⃣ вибір словацького слова — ✅ вимовляємо ПІСЛЯ вибору відповіді
 function ChooseSlovak({
   word,
   words,
@@ -577,6 +633,7 @@ function ChooseSlovak({
         <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
+      {/* ✅ тільки кнопка, без autoplay */}
       <div className="flex justify-center">
         <SpeakButton text={word.sk} />
       </div>
@@ -585,7 +642,12 @@ function ChooseSlovak({
         {options.map((opt) => (
           <button
             key={opt}
-            onClick={() => onNext(opt === word.sk)}
+            onClick={async () => {
+              const correct = opt === word.sk;
+              // ✅ після вибору відповіді — вимовляємо слово (gesture)
+              await playLocal(word.sk);
+              onNext(correct);
+            }}
             className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
           >
             {opt}
@@ -596,7 +658,7 @@ function ChooseSlovak({
   );
 }
 
-// 3️⃣ введення слова
+// 3️⃣ введення слова — ✅ вимовляємо ПІСЛЯ "Перевірити"
 function WriteWord({
   word,
   onNext,
@@ -620,10 +682,13 @@ function WriteWord({
     return s.trim().toLowerCase();
   }
 
-  function check() {
+  async function check() {
     const ok = normalize(value) === normalize(word.sk);
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
+
+    // ✅ після вводу/перевірки — вимовляємо (gesture)
+    await playLocal(word.sk);
   }
 
   function next() {
@@ -673,9 +738,13 @@ function WriteWord({
             )}
 
             <div className="flex gap-2 items-center">
+              {/* ✅ тільки кнопка, без autoplay */}
               <SpeakButton text={word.sk} />
 
-              <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
+              <button
+                onClick={next}
+                className="px-4 py-2 rounded-xl bg-black text-white"
+              >
                 Далі →
               </button>
             </div>
@@ -686,15 +755,17 @@ function WriteWord({
   );
 }
 
-// 4️⃣ аудіо-вправа
+// 4️⃣ аудіо-вправа (залишаємо autoplay як було)
 function AudioQuiz({
   word,
   words,
   onNext,
+  quizAutoKey,
 }: {
   word: Word;
   words: Word[];
   onNext: (c: boolean) => void;
+  quizAutoKey: number;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -707,7 +778,7 @@ function AudioQuiz({
       <div className="text-lg font-semibold">Прослухай слово і обери правильне:</div>
 
       <div className="flex justify-center">
-        <SpeakButton text={word.sk} />
+        <SpeakButton text={word.sk} autoPlayKey={`${quizAutoKey}:${word.sk}`} />
       </div>
 
       <div className="grid gap-3">
@@ -725,7 +796,7 @@ function AudioQuiz({
   );
 }
 
-// 5️⃣ ПАРИ В 2 КОЛОНКИ (whole)
+// 5️⃣ ПАРИ В 2 КОЛОНКИ (whole) — без змін
 function MatchColumns({
   words,
   lang,
@@ -736,7 +807,10 @@ function MatchColumns({
   onDone: (correctCount: number) => void;
 }) {
   const left = useMemo(() => shuffle(words.map((w) => w.sk)), [words]);
-  const right = useMemo(() => shuffle(words.map((w) => trWord(w, lang))), [words, lang]);
+  const right = useMemo(
+    () => shuffle(words.map((w) => trWord(w, lang))),
+    [words, lang]
+  );
 
   const mapSkToTr = useMemo(() => {
     const m = new Map<string, string>();
@@ -754,7 +828,9 @@ function MatchColumns({
   const [wrongCount, setWrongCount] = useState(0);
 
   const [shakeWrong, setShakeWrong] = useState(false);
-  const [wrongPair, setWrongPair] = useState<{ l: string; r: string } | null>(null);
+  const [wrongPair, setWrongPair] = useState<{ l: string; r: string } | null>(
+    null
+  );
 
   const MAX_WRONG = 3;
 
@@ -819,7 +895,9 @@ function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched ? "opacity-50 cursor-not-allowed bg-slate-50" : "hover:bg-slate-50",
+      locked || isMatched
+        ? "opacity-50 cursor-not-allowed bg-slate-50"
+        : "hover:bg-slate-50",
       isSelected ? "border-green-600 ring-4 ring-green-200 bg-green-50" : "",
       isWrong ? "border-red-500 bg-red-50" : "",
     ].join(" ");
@@ -832,7 +910,9 @@ function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched ? "opacity-50 cursor-not-allowed bg-slate-50" : "hover:bg-slate-50",
+      locked || isMatched
+        ? "opacity-50 cursor-not-allowed bg-slate-50"
+        : "hover:bg-slate-50",
       isSelected ? "border-black ring-2 ring-black/10 bg-slate-50" : "",
       isWrong ? "border-red-500 bg-red-50" : "",
     ].join(" ");
@@ -924,18 +1004,28 @@ function MatchColumns({
 
       <style jsx>{`
         @keyframes shake {
-          0% { transform: translateX(0); }
-          25% { transform: translateX(-6px); }
-          50% { transform: translateX(6px); }
-          75% { transform: translateX(-6px); }
-          100% { transform: translateX(0); }
+          0% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-6px);
+          }
+          50% {
+            transform: translateX(6px);
+          }
+          75% {
+            transform: translateX(-6px);
+          }
+          100% {
+            transform: translateX(0);
+          }
         }
       `}</style>
     </div>
   );
 }
 
-// 6️⃣ ЗБЕРИ РЕЧЕННЯ (perWord)
+// 6️⃣ ЗБЕРИ РЕЧЕННЯ (perWord) — ✅ вимовляємо ТІЛЬКИ після "Перевірити"
 function BuildSentence({
   word,
   lang,
@@ -947,7 +1037,10 @@ function BuildSentence({
   levelId: string;
   onNext: (c: boolean) => void;
 }) {
-  const phrase = useMemo(() => getPhraseForWord(word, lang, levelId), [word, lang, levelId]);
+  const phrase = useMemo(
+    () => getPhraseForWord(word, lang, levelId),
+    [word, lang, levelId]
+  );
 
   const baseTokens = useMemo(() => phrase.tokens, [phrase.tokens]);
   const [available, setAvailable] = useState<string[]>(() => shuffle(baseTokens));
@@ -982,11 +1075,14 @@ function BuildSentence({
     setAvailable(shuffle(baseTokens));
   }
 
-  function check() {
+  async function check() {
     const built = picked.join(" ");
     const target = baseTokens.join(" ");
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
+
+    // ✅ після "Перевірити" — програємо фразу (gesture)
+    await playLocal(phrase.sk);
   }
 
   function next() {
@@ -1000,8 +1096,15 @@ function BuildSentence({
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="font-semibold">B) Збери речення</div>
+
           <div className="text-sm text-slate-500">
-            Ціль: <span className="text-slate-800 font-medium">{phrase.target}</span>
+            Ціль:{" "}
+            <span className="text-slate-800 font-medium">{phrase.target}</span>
+          </div>
+
+          {/* ✅ тільки кнопка, без autoplay */}
+          <div className="mt-2 flex justify-center">
+            <SpeakButton text={phrase.sk} />
           </div>
         </div>
 
@@ -1054,7 +1157,9 @@ function BuildSentence({
         </button>
       </div>
 
-      {status === "correct" && <div className="font-semibold text-green-600">✅ Правильно!</div>}
+      {status === "correct" && (
+        <div className="font-semibold text-green-600">✅ Правильно!</div>
+      )}
       {status === "wrong" && (
         <div className="font-semibold text-red-600">
           ❌ Неправильно. Правильно: <b>{baseTokens.join(" ")}</b>

@@ -12,6 +12,8 @@ import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
 import { WORDS } from "../app/data/words";
 
+type Item = { kind: "word" | "phrase"; text: string };
+
 const API_KEY = process.env.ELEVENLABS_API_KEY;
 const VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 
@@ -32,7 +34,7 @@ function sha1(input: string) {
   return crypto.createHash("sha1").update(input, "utf8").digest("hex");
 }
 
-function outPath(kind: "word" | "phrase", text: string) {
+function outPath(kind: Item["kind"], text: string) {
   const hash = sha1(`${kind}:${text.trim()}`);
   const folder = kind === "word" ? WORDS_DIR : PHRASES_DIR;
   return path.join(folder, `${hash}.mp3`);
@@ -53,6 +55,7 @@ async function ttsToFile(text: string, file: string) {
       },
       body: JSON.stringify({
         text,
+        model_id: "eleven_multilingual_v2", // ✅ важливо для діакритики
         voice_settings: {
           stability: 0.35,
           similarity_boost: 0.85,
@@ -102,10 +105,14 @@ function collectPhrases(): string[] {
   return list;
 }
 
-const ALL_LESSONS: any[] = [...(A1_ALL as any[]), ...(A2_ALL as any[]), ...(B1_ALL as any[])];
+const ALL_LESSONS: any[] = [
+  ...(A1_ALL as any[]),
+  ...(A2_ALL as any[]),
+  ...(B1_ALL as any[]),
+];
 
-function collect(): { kind: "word" | "phrase"; text: string }[] {
-  const items: { kind: "word" | "phrase"; text: string }[] = [];
+function collect(): Item[] {
+  const items: Item[] = [];
 
   // ✅ A1/A2/B1 lessons
   for (const lesson of ALL_LESSONS) {
@@ -115,7 +122,7 @@ function collect(): { kind: "word" | "phrase"; text: string }[] {
     }
   }
 
-  // ✅ A0 lessons from app/learning/data.ts
+  // ✅ A0 lessons
   for (const lesson of (A0_REAL_SOURCE as any[])) {
     for (const w of lesson.words ?? []) {
       if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
@@ -123,18 +130,18 @@ function collect(): { kind: "word" | "phrase"; text: string }[] {
     }
   }
 
-  // ✅ Dictionary (app/data/words.ts) — 1089 words
+  // ✅ Dictionary words
   for (const w of (WORDS as any[])) {
     if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
   }
 
-  // ✅ Phrases dictionaries
+  // ✅ Phrase dictionaries
   for (const phrase of collectPhrases()) {
     items.push({ kind: "phrase", text: phrase });
   }
 
   // ✅ uniq
-  const uniq = new Map<string, { kind: "word" | "phrase"; text: string }>();
+  const uniq = new Map<string, Item>();
   for (const it of items) {
     const key = `${it.kind}:${it.text.trim()}`;
     if (!uniq.has(key)) uniq.set(key, it);
@@ -143,8 +150,20 @@ function collect(): { kind: "word" | "phrase"; text: string }[] {
   return [...uniq.values()];
 }
 
+// ✅ CLI flags:
+// --only=deň        (генерить тільки 1 item по точному збігу text)
+// --force           (перегенерити навіть якщо файл існує)
+const ONLY = (process.argv.find((a) => a.startsWith("--only="))?.split("=")[1] ?? "").trim();
+const FORCE = process.argv.includes("--force");
+
 async function main() {
-  const items = collect();
+  let items = collect();
+
+  if (ONLY) {
+    items = items.filter((i) => i.text.trim() === ONLY);
+    console.log(`ONLY mode: "${ONLY}" -> ${items.length} item(s)`);
+  }
+
   console.log(`Total unique items: ${items.length}`);
 
   const limit = pLimit(4);
@@ -156,10 +175,10 @@ async function main() {
       limit(async () => {
         const file = outPath(it.kind, it.text);
 
-        if (fs.existsSync(file) && fs.statSync(file).size > 1000) {
+        if (!FORCE && fs.existsSync(file) && fs.statSync(file).size > 1000) {
           skipped++;
           done++;
-          if (done % 50 === 0) {
+          if (done % 20 === 0) {
             console.log(`Progress ${done}/${items.length} (skipped ${skipped})`);
           }
           return;
@@ -168,7 +187,7 @@ async function main() {
         await ttsToFile(it.text, file);
         done++;
 
-        if (done % 20 === 0) {
+        if (done % 10 === 0 || done === items.length) {
           console.log(`Progress ${done}/${items.length} (skipped ${skipped})`);
         }
       })

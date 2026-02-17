@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type Props = {
   text: string;
-  lang?: string;
   className?: string;
   title?: string;
   label?: string;
   asChild?: boolean;
+  autoPlayKey?: string | number;
 };
 
 async function sha1Hex(input: string) {
@@ -20,21 +20,16 @@ async function sha1Hex(input: string) {
 }
 
 function guessKind(text: string): "word" | "phrase" {
-  const t = text.trim();
-  if (/[ ,.!?;:]/.test(t)) return "phrase";
-  return "word";
+  return /[ ,.!?;:]/.test(text.trim()) ? "phrase" : "word";
 }
 
-async function buildLocalUrl(text: string, forcedKind?: "word" | "phrase") {
+async function buildLocalUrl(text: string) {
   const clean = text.trim();
-  const kind = forcedKind ?? guessKind(clean);
+  const kind = guessKind(clean);
   const h = await sha1Hex(`${kind}:${clean}`);
-  return kind === "word" ? `/audio/words/${h}.mp3` : `/audio/phrases/${h}.mp3`;
-}
-
-async function headOk(url: string) {
-  const r = await fetch(url, { method: "HEAD", cache: "force-cache" });
-  return r.ok;
+  return kind === "word"
+    ? `/audio/words/${h}.mp3`
+    : `/audio/phrases/${h}.mp3`;
 }
 
 export default function SpeakButton({
@@ -43,73 +38,65 @@ export default function SpeakButton({
   title,
   label,
   asChild,
+  autoPlayKey,
 }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const lastKey = useRef<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  function stopNow() {
-    const a = audioRef.current;
-    if (a) {
-      a.pause();
-      a.currentTime = 0;
+  function stop() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
       audioRef.current = null;
     }
   }
 
   async function play() {
-    const clean = (text ?? "").trim();
+    const clean = text?.trim();
     if (!clean) return;
 
-    // Якщо вже грає — другий клік зупиняє
-    if (audioRef.current) {
-      stopNow();
-      return;
-    }
-
+    stop();
     setLoading(true);
+
     try {
-      // 1) пробуємо “вгаданий” kind
-      const kind = guessKind(clean);
-      const url = await buildLocalUrl(clean, kind);
+      const url = await buildLocalUrl(clean);
+      const a = new Audio(url);
+      audioRef.current = a;
 
-      if (await headOk(url)) {
-        const a = new Audio(url);
-        a.preload = "auto";
-        audioRef.current = a;
-        a.onended = () => (audioRef.current = null);
-        await a.play();
-        return;
-      }
-
-      // 2) fallback: інший kind (інколи слово/фраза може плутатись)
-      const otherKind: "word" | "phrase" = kind === "word" ? "phrase" : "word";
-      const url2 = await buildLocalUrl(clean, otherKind);
-
-      if (await headOk(url2)) {
-        const a2 = new Audio(url2);
-        a2.preload = "auto";
-        audioRef.current = a2;
-        a2.onended = () => (audioRef.current = null);
-        await a2.play();
-        return;
-      }
-
-      // ✅ 3) НІЯКОГО throw — просто warning і вихід (щоб сторінка не падала)
-      console.warn(`No local mp3 for "${clean}". Tried: ${url} and ${url2}`);
-      return;
+      await a.play(); // ✅ прямий play без setTimeout
     } catch (e) {
-      console.error("TTS play failed:", e);
-      return;
+      console.error("Audio play failed:", e);
     } finally {
       setLoading(false);
     }
   }
 
-  const btnTitle = title ?? (audioRef.current ? "Stop" : "Play");
+  // ✅ autoplay без timeout (важливо)
+  useEffect(() => {
+    if (autoPlayKey === undefined) return;
+    if (!text?.trim()) return;
+
+    const key = `${autoPlayKey}:${text}`;
+
+    if (lastKey.current === key) return;
+    lastKey.current = key;
+
+    // ⚡ без setTimeout
+    play().catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPlayKey, text]);
+
+  const btnTitle = title ?? "Play";
 
   if (asChild) {
     return (
-      <span onClick={play} title={btnTitle} className={className} role="button">
+      <span
+        onClick={play}
+        title={btnTitle}
+        className={className}
+        role="button"
+      >
         {loading ? "..." : label ?? "🔊"}
       </span>
     );
