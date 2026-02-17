@@ -44,10 +44,16 @@ export default function SpeakButton({
   const lastKey = useRef<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // ✅ id кожного запуску play, щоб старі async не лізли в state
+  const playIdRef = useRef(0);
+
   function stop() {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    const a = audioRef.current;
+    if (a) {
+      try {
+        a.pause();
+      } catch {}
+      a.currentTime = 0;
       audioRef.current = null;
     }
   }
@@ -56,19 +62,31 @@ export default function SpeakButton({
     const clean = text?.trim();
     if (!clean) return;
 
+    const myPlayId = ++playIdRef.current;
+
     stop();
     setLoading(true);
 
     try {
       const url = await buildLocalUrl(clean);
+
+      // якщо поки будували url вже стартанув інший play — виходимо
+      if (myPlayId !== playIdRef.current) return;
+
       const a = new Audio(url);
       audioRef.current = a;
 
-      await a.play(); // ✅ прямий play без setTimeout
-    } catch (e) {
+      await a.play();
+    } catch (e: any) {
+      // ✅ НЕ логати "нормальні" AbortError (коли користувач пішов далі/stop())
+      if (e?.name === "AbortError") return;
+      const msg = String(e?.message ?? "");
+      if (msg.includes("interrupted") || msg.includes("pause()")) return;
+
       console.error("Audio play failed:", e);
     } finally {
-      setLoading(false);
+      // ✅ loading знімаємо тільки якщо це останній play
+      if (myPlayId === playIdRef.current) setLoading(false);
     }
   }
 
@@ -78,11 +96,9 @@ export default function SpeakButton({
     if (!text?.trim()) return;
 
     const key = `${autoPlayKey}:${text}`;
-
     if (lastKey.current === key) return;
     lastKey.current = key;
 
-    // ⚡ без setTimeout
     play().catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlayKey, text]);

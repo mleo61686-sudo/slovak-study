@@ -1,4 +1,6 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local" });
+
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -6,18 +8,20 @@ import pLimit from "p-limit";
 
 import { A0_REAL_SOURCE } from "../app/learning/data";
 import { A1_ALL } from "../app/learning/levels/a1";
-import { A2_ALL } from "../app/learning/levels/a2";
-import { B1_ALL } from "../app/learning/levels/b1";
+
+
 import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
 import { WORDS } from "../app/data/words";
+import { audioPhraseKey } from "../app/learning/phrases/audioKey";
 
 type Item = { kind: "word" | "phrase"; text: string };
 
 const API_KEY = process.env.ELEVENLABS_API_KEY;
 const VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 
-if (!API_KEY) throw new Error("Missing ELEVENLABS_API_KEY in .env.local");
+if (!API_KEY)
+  throw new Error("Missing ELEVENLABS_API_KEY in .env.local");
 if (!VOICE_ID) throw new Error("Missing ELEVENLABS_VOICE_ID in .env.local");
 
 const XI_KEY: string = API_KEY;
@@ -35,9 +39,17 @@ function sha1(input: string) {
 }
 
 function outPath(kind: Item["kind"], text: string) {
-  const hash = sha1(`${kind}:${text.trim()}`);
   const folder = kind === "word" ? WORDS_DIR : PHRASES_DIR;
-  return path.join(folder, `${hash}.mp3`);
+
+  // ✅ слова лишаємо як було (sha1)
+  if (kind === "word") {
+    const hash = sha1(`${kind}:${text.trim()}`);
+    return path.join(folder, `${hash}.mp3`);
+  }
+
+  // ✅ фрази — ТІЛЬКИ phraseKey (щоб збігалось з фронтом)
+  const key = audioPhraseKey(text.trim());
+  return path.join(folder, `${key}.mp3`);
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -107,8 +119,6 @@ function collectPhrases(): string[] {
 
 const ALL_LESSONS: any[] = [
   ...(A1_ALL as any[]),
-  ...(A2_ALL as any[]),
-  ...(B1_ALL as any[]),
 ];
 
 function collect(): Item[] {

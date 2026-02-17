@@ -83,20 +83,6 @@ function normalizeSentence(s: string) {
 
 const trWord = (w: Word, lang: Lang) => (lang === "ru" ? w.ru ?? w.ua : w.ua);
 
-function getImgFit(word?: Word) {
-  return word?.imgCredit ? "cover" : "contain";
-}
-
-function getImgPos(word?: Word) {
-  return word?.imgCredit ? "object-top" : "object-center";
-}
-
-function getImgAspect(word?: Word) {
-  return word?.imgCredit
-    ? "aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/4]"
-    : "aspect-[3/4]";
-}
-
 function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
   // 1) якщо фраза прямо в слові
   if (word.phrase) {
@@ -189,6 +175,16 @@ export default function LevelClient({
   // ✅ ключ для автоплею (залишаємо для 1 та 4 вправ, як було)
   const [quizAutoKey, setQuizAutoKey] = useState(0);
 
+  // ✅ IMPORTANT: unlock autoplay тільки після першої взаємодії
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
+  const unlockedRef = useMemo(() => ({ v: false }), []);
+
+  function unlockInsideLesson() {
+    if (unlockedRef.v) return;
+    unlockedRef.v = true;
+    setAudioUnlocked(true);
+  }
+
   const router = useRouter();
   const nextLevelId = getNextLevelId(levelId);
   const { lang } = useLanguage();
@@ -216,7 +212,10 @@ export default function LevelClient({
     const word = words[wordIndex];
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-6"
+        onPointerDownCapture={unlockInsideLesson}
+        onKeyDownCapture={unlockInsideLesson}>
+
         <div className="sticky top-2 z-10 rounded-xl border bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold">
           Переглянуто: {wordIndex + 1}/{words.length}
         </div>
@@ -224,25 +223,16 @@ export default function LevelClient({
         <div className="mx-auto w-full max-w-[720px] rounded-2xl border bg-white p-6 text-center space-y-3">
           {word?.img ? (
             <div className="flex flex-col items-center gap-2">
-              <div className="mx-auto w-full max-w-[260px] sm:max-w-[320px] md:max-w-[420px] lg:max-w-[270px]">
-                <div
-                  className={[
-                    "relative overflow-hidden rounded-2xl border bg-slate-50",
-                    getImgAspect(word),
-                  ].join(" ")}
-                >
+              {/* ✅ трохи збільшив фото */}
+              <div className="mx-auto w-full max-w-[340px] sm:max-w-[460px] md:max-w-[560px] lg:max-w-[520px]">
+                {/* ✅ ОЦЕ ВАЖЛИВО: rounded + overflow-hidden на контейнері */}
+                <div className="mx-auto w-full max-w-[360px] sm:max-w-[480px] md:max-w-[600px] lg:max-w-[360px]">
                   <Image
                     src={word.img}
                     alt={word.sk}
-                    fill
-                    sizes="(max-width: 640px) 260px, (max-width: 768px) 320px, (max-width: 1024px) 340px, 360px"
-                    className={[
-                      getImgFit(word) === "cover"
-                        ? "object-cover"
-                        : "object-contain",
-                      getImgPos(word),
-                      getImgFit(word) === "contain" ? "p-2" : "",
-                    ].join(" ")}
+                    width={1200}
+                    height={900}
+                    className="w-full h-auto rounded-2xl bg-white"
                     priority={wordIndex === 0}
                   />
                 </div>
@@ -262,7 +252,11 @@ export default function LevelClient({
           <div className="text-slate-600">{trWord(word, lang)}</div>
 
           <div className="flex justify-center">
-            <SpeakButton text={word.sk} autoPlayKey={word.sk} />
+            {/* ✅ autoplay тільки після unlock */}
+            <SpeakButton
+              text={word.sk}
+              autoPlayKey={audioUnlocked ? word.sk : undefined}
+            />
           </div>
         </div>
 
@@ -316,7 +310,7 @@ export default function LevelClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ levelId }),
-      }).catch(() => {});
+      }).catch(() => { });
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -454,11 +448,17 @@ export default function LevelClient({
           lang={lang}
           onNext={nextPerWord}
           quizAutoKey={quizAutoKey}
+          audioUnlocked={audioUnlocked}
         />
       )}
 
       {exercise.kind === "chooseSlovak" && (
-        <ChooseSlovak word={currentWord} words={words} lang={lang} onNext={nextPerWord} />
+        <ChooseSlovak
+          word={currentWord}
+          words={words}
+          lang={lang}
+          onNext={nextPerWord}
+        />
       )}
 
       {exercise.kind === "writeWord" && (
@@ -471,6 +471,7 @@ export default function LevelClient({
           words={words}
           onNext={nextPerWord}
           quizAutoKey={quizAutoKey}
+          audioUnlocked={audioUnlocked}
         />
       )}
 
@@ -515,33 +516,26 @@ function WordImage({
 
   const widthClass =
     size === "large"
-      ? "w-[260px] sm:w-[320px] md:w-[340px] lg:w-[360px]"
+      ? "w-[280px] sm:w-[360px] md:w-[420px] lg:w-[440px]"
       : size === "small"
-      ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
-      : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
+        ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
+        : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div className={["mx-auto", widthClass].join(" ")}>
-        <div
-          className={[
-            "relative overflow-hidden rounded-2xl border bg-slate-50",
-            getImgAspect(word),
-          ].join(" ")}
-        >
-          {!ready && <div className="absolute inset-0 animate-pulse bg-black/10" />}
+        {/* ✅ тут теж: rounded + overflow-hidden на контейнері */}
+        <div className="mx-auto w-full">
+          {!ready && <div className="h-[1px]" />}
 
           <Image
             key={word.img}
             src={word.img}
             alt={word.sk}
-            fill
-            sizes="(max-width: 640px) 240px, (max-width: 768px) 300px, 340px"
+            width={1200}
+            height={900}
             className={[
-              getImgFit(word) === "cover" ? "object-cover" : "object-contain",
-              getImgPos(word),
-              getImgFit(word) === "contain" ? "p-2" : "",
-              "transition-opacity duration-200",
+              "w-full h-auto rounded-2xl bg-white transition-opacity duration-200",
               ready ? "opacity-100" : "opacity-0",
             ].join(" ")}
             onLoadingComplete={() => setReady(true)}
@@ -557,19 +551,21 @@ function WordImage({
   );
 }
 
-// 1️⃣ вибір перекладу (залишаємо autoplay як було)
+// 1️⃣ вибір перекладу (залишаємо autoplay, але тільки після unlock)
 function ChooseTranslation({
   word,
   words,
   onNext,
   lang,
   quizAutoKey,
+  audioUnlocked,
 }: {
   word: Word;
   words: Word[];
   onNext: (c: boolean) => void;
   lang: Lang;
   quizAutoKey: number;
+  audioUnlocked: boolean;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -578,6 +574,7 @@ function ChooseTranslation({
   }, [word, words, lang]);
 
   const correctText = trWord(word, lang);
+
 
   return (
     <>
@@ -588,7 +585,11 @@ function ChooseTranslation({
       </div>
 
       <div className="flex justify-center">
-        <SpeakButton text={word.sk} autoPlayKey={`${quizAutoKey}:${word.sk}`} />
+        <SpeakButton
+          text={word.sk}
+          autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+        />
+
       </div>
 
       <div className="grid gap-3">
@@ -626,7 +627,7 @@ function ChooseSlovak({
 
   return (
     <>
-      <WordImage word={word} />
+      
 
       <div className="text-lg font-semibold">
         Обери слово словацькою:{" "}
@@ -644,7 +645,6 @@ function ChooseSlovak({
             key={opt}
             onClick={async () => {
               const correct = opt === word.sk;
-              // ✅ після вибору відповіді — вимовляємо слово (gesture)
               await playLocal(word.sk);
               onNext(correct);
             }}
@@ -658,7 +658,7 @@ function ChooseSlovak({
   );
 }
 
-// 3️⃣ введення слова — ✅ вимовляємо ПІСЛЯ "Перевірити"
+// 3️⃣ введення слова — ✅ фото прибрано
 function WriteWord({
   word,
   onNext,
@@ -686,8 +686,6 @@ function WriteWord({
     const ok = normalize(value) === normalize(word.sk);
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
-
-    // ✅ після вводу/перевірки — вимовляємо (gesture)
     await playLocal(word.sk);
   }
 
@@ -699,13 +697,11 @@ function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-      ? "border-red-500"
-      : "border-slate-300";
+        ? "border-red-500"
+        : "border-slate-300";
 
   return (
     <>
-      <WordImage word={word} />
-
       <div className="text-lg font-semibold">
         Напиши словацькою: <span className="font-bold">{trWord(word, lang)}</span>
       </div>
@@ -738,9 +734,7 @@ function WriteWord({
             )}
 
             <div className="flex gap-2 items-center">
-              {/* ✅ тільки кнопка, без autoplay */}
               <SpeakButton text={word.sk} />
-
               <button
                 onClick={next}
                 className="px-4 py-2 rounded-xl bg-black text-white"
@@ -755,17 +749,19 @@ function WriteWord({
   );
 }
 
-// 4️⃣ аудіо-вправа (залишаємо autoplay як було)
+// 4️⃣ аудіо-вправа (autoplay тільки після unlock)
 function AudioQuiz({
   word,
   words,
   onNext,
   quizAutoKey,
+  audioUnlocked,
 }: {
   word: Word;
   words: Word[];
   onNext: (c: boolean) => void;
   quizAutoKey: number;
+  audioUnlocked: boolean;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -775,10 +771,16 @@ function AudioQuiz({
 
   return (
     <>
-      <div className="text-lg font-semibold">Прослухай слово і обери правильне:</div>
+      <div className="text-lg font-semibold">
+        Прослухай слово і обери правильне:
+      </div>
 
       <div className="flex justify-center">
-        <SpeakButton text={word.sk} autoPlayKey={`${quizAutoKey}:${word.sk}`} />
+        <SpeakButton
+          text={word.sk}
+          autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+        />
+
       </div>
 
       <div className="grid gap-3">
@@ -1081,7 +1083,6 @@ function BuildSentence({
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
 
-    // ✅ після "Перевірити" — програємо фразу (gesture)
     await playLocal(phrase.sk);
   }
 
@@ -1102,7 +1103,6 @@ function BuildSentence({
             <span className="text-slate-800 font-medium">{phrase.target}</span>
           </div>
 
-          {/* ✅ тільки кнопка, без autoplay */}
           <div className="mt-2 flex justify-center">
             <SpeakButton text={phrase.sk} />
           </div>
@@ -1122,7 +1122,10 @@ function BuildSentence({
               Перевірити
             </button>
           ) : (
-            <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
+            <button
+              onClick={next}
+              className="px-4 py-2 rounded-xl bg-black text-white"
+            >
               Наступне →
             </button>
           )}
