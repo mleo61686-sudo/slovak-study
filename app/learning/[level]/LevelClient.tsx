@@ -212,10 +212,11 @@ export default function LevelClient({
     const word = words[wordIndex];
 
     return (
-      <div className="space-y-6"
+      <div
+        className="space-y-6"
         onPointerDownCapture={unlockInsideLesson}
-        onKeyDownCapture={unlockInsideLesson}>
-
+        onKeyDownCapture={unlockInsideLesson}
+      >
         <div className="sticky top-2 z-10 rounded-xl border bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold">
           Переглянуто: {wordIndex + 1}/{words.length}
         </div>
@@ -223,9 +224,7 @@ export default function LevelClient({
         <div className="mx-auto w-full max-w-[720px] rounded-2xl border bg-white p-6 text-center space-y-3">
           {word?.img ? (
             <div className="flex flex-col items-center gap-2">
-              {/* ✅ трохи збільшив фото */}
               <div className="mx-auto w-full max-w-[340px] sm:max-w-[460px] md:max-w-[560px] lg:max-w-[520px]">
-                {/* ✅ ОЦЕ ВАЖЛИВО: rounded + overflow-hidden на контейнері */}
                 <div className="mx-auto w-full max-w-[360px] sm:max-w-[480px] md:max-w-[600px] lg:max-w-[360px]">
                   <Image
                     src={word.img}
@@ -252,7 +251,6 @@ export default function LevelClient({
           <div className="text-slate-600">{trWord(word, lang)}</div>
 
           <div className="flex justify-center">
-            {/* ✅ autoplay тільки після unlock */}
             <SpeakButton
               text={word.sk}
               autoPlayKey={audioUnlocked ? word.sk : undefined}
@@ -310,7 +308,7 @@ export default function LevelClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ levelId }),
-      }).catch(() => { });
+      }).catch(() => {});
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -414,7 +412,11 @@ export default function LevelClient({
   }
 
   return (
-    <div className="rounded-2xl border bg-white p-6 space-y-4">
+    <div
+      className="rounded-2xl border bg-white p-6 space-y-4"
+      onPointerDownCapture={unlockInsideLesson}
+      onKeyDownCapture={unlockInsideLesson}
+    >
       <div className="text-sm text-slate-500">
         Вправа {exerciseIndex + 1} / {EXERCISES.length} •{" "}
         {exercise.mode === "perWord" ? (
@@ -453,12 +455,7 @@ export default function LevelClient({
       )}
 
       {exercise.kind === "chooseSlovak" && (
-        <ChooseSlovak
-          word={currentWord}
-          words={words}
-          lang={lang}
-          onNext={nextPerWord}
-        />
+        <ChooseSlovak word={currentWord} words={words} lang={lang} onNext={nextPerWord} />
       )}
 
       {exercise.kind === "writeWord" && (
@@ -472,6 +469,7 @@ export default function LevelClient({
           onNext={nextPerWord}
           quizAutoKey={quizAutoKey}
           audioUnlocked={audioUnlocked}
+          lang={lang}
         />
       )}
 
@@ -480,12 +478,7 @@ export default function LevelClient({
       )}
 
       {exercise.kind === "buildSentence" && (
-        <BuildSentence
-          word={currentWord}
-          lang={lang}
-          levelId={levelId}
-          onNext={nextPerWord}
-        />
+        <BuildSentence word={currentWord} lang={lang} levelId={levelId} onNext={nextPerWord} />
       )}
     </div>
   );
@@ -518,13 +511,12 @@ function WordImage({
     size === "large"
       ? "w-[280px] sm:w-[360px] md:w-[420px] lg:w-[440px]"
       : size === "small"
-        ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
-        : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
+      ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
+      : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div className={["mx-auto", widthClass].join(" ")}>
-        {/* ✅ тут теж: rounded + overflow-hidden на контейнері */}
         <div className="mx-auto w-full">
           {!ready && <div className="h-[1px]" />}
 
@@ -551,7 +543,54 @@ function WordImage({
   );
 }
 
-// 1️⃣ вибір перекладу (залишаємо autoplay, але тільки після unlock)
+const RESULT_I18N = {
+  ua: {
+    correct: "✅ Правильно!",
+    wrong: "❌ Неправильно.",
+    next: "Далі →",
+    correctAnswer: "Правильна відповідь:",
+    correctWord: "Правильно:",
+  },
+  ru: {
+    correct: "✅ Правильно!",
+    wrong: "❌ Неправильно.",
+    next: "Далее →",
+    correctAnswer: "Правильный ответ:",
+    correctWord: "Правильно:",
+  },
+} satisfies Record<Lang, any>;
+
+function ResultBox({
+  correct,
+  onNext,
+  lang,
+  extra,
+}: {
+  correct: boolean;
+  onNext: () => void;
+  lang: Lang;
+  extra?: React.ReactNode;
+}) {
+  const T = RESULT_I18N[lang];
+
+  return (
+    <div className="rounded-2xl border bg-slate-50 p-4 space-y-3">
+      {correct ? (
+        <div className="font-semibold text-green-700">{T.correct}</div>
+      ) : (
+        <div className="font-semibold text-red-600">{T.wrong}</div>
+      )}
+
+      {extra ? <div>{extra}</div> : null}
+
+      <button onClick={onNext} className="px-4 py-2 rounded-xl bg-black text-white">
+        {T.next}
+      </button>
+    </div>
+  );
+}
+
+// 1️⃣ вибір перекладу — ✅ результат + кнопка Далі + без подвійного звуку
 function ChooseTranslation({
   word,
   words,
@@ -575,6 +614,16 @@ function ChooseTranslation({
 
   const correctText = trWord(word, lang);
 
+  const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
+  const [picked, setPicked] = useState<string | null>(null);
+
+  useEffect(() => {
+    setStatus("idle");
+    setPicked(null);
+  }, [word.sk, lang]);
+
+  const answered = status !== "idle";
+  const T = RESULT_I18N[lang];
 
   return (
     <>
@@ -589,25 +638,55 @@ function ChooseTranslation({
           text={word.sk}
           autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
         />
-
       </div>
 
       <div className="grid gap-3">
         {options.map((opt) => (
           <button
             key={opt}
-            onClick={() => onNext(opt === correctText)}
-            className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
+            disabled={answered}
+            onClick={async () => {
+              if (answered) return;
+
+              const ok = opt === correctText;
+              setPicked(opt);
+              setStatus(ok ? "correct" : "wrong");
+
+              // ✅ якщо autoplay вимкнений — програємо після вибору (інакше буде 2 рази)
+              if (!audioUnlocked) {
+                await playLocal(word.sk);
+              }
+            }}
+            className={[
+              "rounded-xl border px-4 py-3 text-left transition",
+              answered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50",
+              picked === opt ? "border-black ring-2 ring-black/10" : "",
+            ].join(" ")}
           >
             {opt}
           </button>
         ))}
       </div>
+
+      {answered && (
+        <ResultBox
+          correct={status === "correct"}
+          onNext={() => onNext(status === "correct")}
+          lang={lang}
+          extra={
+            status === "wrong" ? (
+              <div className="text-sm text-slate-700">
+                {T.correctAnswer} <b>{correctText}</b>
+              </div>
+            ) : null
+          }
+        />
+      )}
     </>
   );
 }
 
-// 2️⃣ вибір словацького слова — ✅ вимовляємо ПІСЛЯ вибору відповіді
+// 2️⃣ вибір словацького слова — ✅ результат + кнопка Далі + i18n
 function ChooseSlovak({
   word,
   words,
@@ -625,16 +704,24 @@ function ChooseSlovak({
     return variants.map((w) => w.sk);
   }, [word, words]);
 
+  const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
+  const [picked, setPicked] = useState<string | null>(null);
+
+  useEffect(() => {
+    setStatus("idle");
+    setPicked(null);
+  }, [word.sk, lang]);
+
+  const answered = status !== "idle";
+  const T = RESULT_I18N[lang];
+
   return (
     <>
-      
-
       <div className="text-lg font-semibold">
         Обери слово словацькою:{" "}
         <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
-      {/* ✅ тільки кнопка, без autoplay */}
       <div className="flex justify-center">
         <SpeakButton text={word.sk} kind="word" />
       </div>
@@ -643,22 +730,47 @@ function ChooseSlovak({
         {options.map((opt) => (
           <button
             key={opt}
+            disabled={answered}
             onClick={async () => {
-              const correct = opt === word.sk;
+              if (answered) return;
+
+              const ok = opt === word.sk;
+              setPicked(opt);
+              setStatus(ok ? "correct" : "wrong");
+
+              // ✅ тут autoplay немає — сміливо програємо після вибору
               await playLocal(word.sk);
-              onNext(correct);
             }}
-            className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
+            className={[
+              "rounded-xl border px-4 py-3 text-left transition",
+              answered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50",
+              picked === opt ? "border-black ring-2 ring-black/10" : "",
+            ].join(" ")}
           >
             {opt}
           </button>
         ))}
       </div>
+
+      {answered && (
+        <ResultBox
+          correct={status === "correct"}
+          onNext={() => onNext(status === "correct")}
+          lang={lang}
+          extra={
+            status === "wrong" ? (
+              <div className="text-sm text-slate-700">
+                {T.correctWord} <b>{word.sk}</b>
+              </div>
+            ) : null
+          }
+        />
+      )}
     </>
   );
 }
 
-// 3️⃣ введення слова — ✅ фото прибрано
+// 3️⃣ введення слова — ✅ як було
 function WriteWord({
   word,
   onNext,
@@ -697,8 +809,8 @@ function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-        ? "border-red-500"
-        : "border-slate-300";
+      ? "border-red-500"
+      : "border-slate-300";
 
   return (
     <>
@@ -749,25 +861,38 @@ function WriteWord({
   );
 }
 
-// 4️⃣ аудіо-вправа (autoplay тільки після unlock)
+// 4️⃣ аудіо-вправа — ✅ результат + кнопка Далі + без подвійного звуку + i18n
 function AudioQuiz({
   word,
   words,
   onNext,
   quizAutoKey,
   audioUnlocked,
+  lang,
 }: {
   word: Word;
   words: Word[];
   onNext: (c: boolean) => void;
   quizAutoKey: number;
   audioUnlocked: boolean;
+  lang: Lang;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
     const variants = shuffle([word, ...shuffle(others).slice(0, 3)]);
     return variants.map((w) => w.sk);
   }, [word, words]);
+
+  const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
+  const [picked, setPicked] = useState<string | null>(null);
+
+  useEffect(() => {
+    setStatus("idle");
+    setPicked(null);
+  }, [word.sk]);
+
+  const answered = status !== "idle";
+  const T = RESULT_I18N[lang];
 
   return (
     <>
@@ -780,25 +905,55 @@ function AudioQuiz({
           text={word.sk}
           autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
         />
-
       </div>
 
       <div className="grid gap-3">
         {options.map((opt) => (
           <button
             key={opt}
-            onClick={() => onNext(opt === word.sk)}
-            className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
+            disabled={answered}
+            onClick={async () => {
+              if (answered) return;
+
+              const ok = opt === word.sk;
+              setPicked(opt);
+              setStatus(ok ? "correct" : "wrong");
+
+              // ✅ якщо autoplay вимкнений — програємо після вибору (інакше буде 2 рази)
+              if (!audioUnlocked) {
+                await playLocal(word.sk);
+              }
+            }}
+            className={[
+              "rounded-xl border px-4 py-3 text-left transition",
+              answered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50",
+              picked === opt ? "border-black ring-2 ring-black/10" : "",
+            ].join(" ")}
           >
             {opt}
           </button>
         ))}
       </div>
+
+      {answered && (
+        <ResultBox
+          correct={status === "correct"}
+          onNext={() => onNext(status === "correct")}
+          lang={lang}
+          extra={
+            status === "wrong" ? (
+              <div className="text-sm text-slate-700">
+                {T.correctWord} <b>{word.sk}</b>
+              </div>
+            ) : null
+          }
+        />
+      )}
     </>
   );
 }
 
-// 5️⃣ ПАРИ В 2 КОЛОНКИ (whole) — без змін
+// 5️⃣ ПАРИ В 2 КОЛОНКИ — без змін
 function MatchColumns({
   words,
   lang,
@@ -1027,7 +1182,7 @@ function MatchColumns({
   );
 }
 
-// 6️⃣ ЗБЕРИ РЕЧЕННЯ (perWord) — ✅ вимовляємо ТІЛЬКИ після "Перевірити"
+// 6️⃣ ЗБЕРИ РЕЧЕННЯ — як було
 function BuildSentence({
   word,
   lang,
@@ -1082,7 +1237,6 @@ function BuildSentence({
     const target = baseTokens.join(" ");
     const ok = normalizeSentence(built) === normalizeSentence(target);
     setStatus(ok ? "correct" : "wrong");
-
     await playLocal(phrase.sk);
   }
 
