@@ -1,114 +1,116 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
-import { useLanguage } from "@/lib/src/useLanguage";
+import React, { useRef, useState } from "react";
 
 type Props = {
   text: string;
-  lang?: string; // sk-SK by default
+  lang?: string;
   className?: string;
   title?: string;
   label?: string;
   asChild?: boolean;
 };
 
+async function sha1Hex(input: string) {
+  const data = new TextEncoder().encode(input);
+  const hash = await crypto.subtle.digest("SHA-1", data);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function guessKind(text: string): "word" | "phrase" {
+  const t = text.trim();
+  if (/[ ,.!?;:]/.test(t)) return "phrase";
+  return "word";
+}
+
+async function buildLocalUrl(text: string, forcedKind?: "word" | "phrase") {
+  const clean = text.trim();
+  const kind = forcedKind ?? guessKind(clean);
+  const h = await sha1Hex(`${kind}:${clean}`);
+  return kind === "word" ? `/audio/words/${h}.mp3` : `/audio/phrases/${h}.mp3`;
+}
+
+async function headOk(url: string) {
+  const r = await fetch(url, { method: "HEAD", cache: "force-cache" });
+  return r.ok;
+}
+
 export default function SpeakButton({
   text,
-  lang = "sk-SK",
-  className = "inline-flex items-center justify-center rounded-xl border bg-white px-3 py-2 text-sm font-semibold hover:bg-slate-50 active:scale-[0.99] transition",
+  className = "rounded-xl border bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50 active:scale-[0.98]",
   title,
   label,
-  asChild = false,
+  asChild,
 }: Props) {
-  const { lang: uiLang } = useLanguage();
-
-  const computedTitle = useMemo(
-    () =>
-      title ??
-      (uiLang === "ru" ? "Прослушать произношение" : "Прослухати вимову"),
-    [title, uiLang]
-  );
-
-  const computedLabel = useMemo(
-    () => label ?? (uiLang === "ru" ? "🔊 Прослушать" : "🔊 Прослухати"),
-    [label, uiLang]
-  );
-
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [loading, setLoading] = useState(false);
-  const lastTextRef = useRef<string>("");
 
-  function speakBrowserTts() {
-    const t = (text ?? "").trim();
-    if (!t) return;
+  function stopNow() {
+    const a = audioRef.current;
+    if (a) {
+      a.pause();
+      a.currentTime = 0;
+      audioRef.current = null;
+    }
+  }
 
-    // якщо API нема — SpeechSynthesis єдиний варіант
-    const synth = window.speechSynthesis;
-    if (!synth) {
-      console.warn("speechSynthesis not supported");
+  async function play() {
+    const clean = (text ?? "").trim();
+    if (!clean) return;
+
+    // Якщо вже грає — другий клік зупиняє
+    if (audioRef.current) {
+      stopNow();
       return;
     }
 
-    // ✅ stop previous
-    try {
-      synth.cancel();
-    } catch {}
-
     setLoading(true);
-
-    const u = new SpeechSynthesisUtterance(t);
-    u.lang = lang;
-
-    // спроба вибрати словацький голос якщо є
     try {
-      const voices = synth.getVoices?.() ?? [];
-      const v =
-        voices.find((x) => (x.lang || "").toLowerCase().startsWith("sk")) ??
-        voices.find((x) => (x.lang || "").toLowerCase().includes("sk"));
-      if (v) u.voice = v;
-    } catch {}
+      // 1) пробуємо “вгаданий” kind
+      const kind = guessKind(clean);
+      const url = await buildLocalUrl(clean, kind);
 
-    u.onend = () => setLoading(false);
-    u.onerror = () => setLoading(false);
+      if (await headOk(url)) {
+        const a = new Audio(url);
+        a.preload = "auto";
+        audioRef.current = a;
+        a.onended = () => (audioRef.current = null);
+        await a.play();
+        return;
+      }
 
-    lastTextRef.current = t;
+      // 2) fallback: інший kind (інколи слово/фраза може плутатись)
+      const otherKind: "word" | "phrase" = kind === "word" ? "phrase" : "word";
+      const url2 = await buildLocalUrl(clean, otherKind);
 
-    // ✅ iOS інколи не стартує з першого разу — але з кліку має
-    try {
-      synth.speak(u);
+      if (await headOk(url2)) {
+        const a2 = new Audio(url2);
+        a2.preload = "auto";
+        audioRef.current = a2;
+        a2.onended = () => (audioRef.current = null);
+        await a2.play();
+        return;
+      }
+
+      // ✅ 3) НІЯКОГО throw — просто warning і вихід (щоб сторінка не падала)
+      console.warn(`No local mp3 for "${clean}". Tried: ${url} and ${url2}`);
+      return;
     } catch (e) {
-      console.error("TTS speak error:", e);
+      console.error("TTS play failed:", e);
+      return;
+    } finally {
       setLoading(false);
     }
   }
 
-  const onClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    speakBrowserTts();
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      e.stopPropagation();
-      speakBrowserTts();
-    }
-  };
-
-  const content = loading ? "⏳" : computedLabel;
+  const btnTitle = title ?? (audioRef.current ? "Stop" : "Play");
 
   if (asChild) {
     return (
-      <span
-        role="button"
-        tabIndex={0}
-        onClick={onClick}
-        onKeyDown={onKeyDown}
-        className={className}
-        title={computedTitle}
-        aria-label={computedTitle}
-      >
-        {content}
+      <span onClick={play} title={btnTitle} className={className} role="button">
+        {loading ? "..." : label ?? "🔊"}
       </span>
     );
   }
@@ -116,13 +118,12 @@ export default function SpeakButton({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={play}
+      title={btnTitle}
       className={className}
-      title={computedTitle}
-      aria-label={computedTitle}
       disabled={loading}
     >
-      {content}
+      {loading ? "..." : label ?? "🔊"}
     </button>
   );
 }

@@ -189,7 +189,7 @@ function fillTo10(words: Word[], lessonNum: number): Word[] {
 // =============================
 // 1) ТВОЇ РЕАЛЬНІ УРОКИ A0 (1..30)
 // =============================
-const A0_REAL_SOURCE: LessonSource[] = [
+export const A0_REAL_SOURCE: LessonSource[] = [
   {
     id: "1",
     title: { ua: "Урок 1 — Базові слова", ru: "Урок 1 — Базовые слова" },
