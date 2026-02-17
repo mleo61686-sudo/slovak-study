@@ -22,7 +22,7 @@ export default function DictionaryClient() {
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-lg">{word.sk}</span>
-                  <SpeakButton text={word.sk} />
+                  <SpeakButton text={word.sk} kind="word" />
                 </div>
 
                 {word.ipa && (

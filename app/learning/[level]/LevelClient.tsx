@@ -636,7 +636,7 @@ function ChooseSlovak({
 
       {/* ✅ тільки кнопка, без autoplay */}
       <div className="flex justify-center">
-        <SpeakButton text={word.sk} />
+        <SpeakButton text={word.sk} kind="word" />
       </div>
 
       <div className="grid gap-3">
@@ -734,7 +734,7 @@ function WriteWord({
             )}
 
             <div className="flex gap-2 items-center">
-              <SpeakButton text={word.sk} />
+              <SpeakButton text={word.sk} kind="word" />
               <button
                 onClick={next}
                 className="px-4 py-2 rounded-xl bg-black text-white"
@@ -1104,7 +1104,7 @@ function BuildSentence({
           </div>
 
           <div className="mt-2 flex justify-center">
-            <SpeakButton text={phrase.sk} />
+            <SpeakButton text={phrase.sk} kind="phrase" />
           </div>
         </div>
 
