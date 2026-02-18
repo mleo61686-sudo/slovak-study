@@ -12,20 +12,20 @@ type SessionMode = "mixed" | "mcq" | "typing";
 
 type SessionQuestionBase =
   | {
-      id: string;
-      mode: "mcq";
-      sk: string;
-      ua: string;
-      ru: string;
-      options: string[];
-    }
+    id: string;
+    mode: "mcq";
+    sk: string;
+    ua: string;
+    ru: string;
+    options: string[];
+  }
   | {
-      id: string;
-      mode: "typing";
-      sk: string;
-      ua: string;
-      ru: string;
-    };
+    id: string;
+    mode: "typing";
+    sk: string;
+    ua: string;
+    ru: string;
+  };
 
 const UI = {
   ua: {
@@ -135,7 +135,7 @@ function loadStats(): PracticeStats {
 function saveStats(next: PracticeStats) {
   try {
     window.localStorage.setItem(LS_KEY, JSON.stringify(next));
-  } catch {}
+  } catch { }
 }
 
 function norm(s: string) {
@@ -584,7 +584,7 @@ export default function PracticePage() {
                         <div className="font-medium">
                           {m.sk} — <span className="text-slate-700">{tr}</span>
                         </div>
-                        <SpeakButton text={m.sk}  />
+                        <SpeakButton text={m.sk} />
                       </div>
                       {m.your ? (
                         <div className="mt-1 text-sm text-slate-600">
@@ -645,7 +645,7 @@ export default function PracticePage() {
 
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span>{t.listen}</span>
-                    <SpeakButton text={qBase.sk}  />
+                    <SpeakButton text={qBase.sk} />
                   </div>
                 </div>
 
@@ -671,7 +671,7 @@ ${!selected ? "hover:bg-slate-50" : "opacity-95"}
 
                             <SpeakButton
                               text={option}
-                              
+
                               asChild
                               label="🔊"
                               className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
@@ -717,11 +717,10 @@ ${!selected ? "hover:bg-slate-50" : "opacity-95"}
                       ) : (
                         <div className="space-y-3">
                           <div
-                            className={`rounded-xl border px-4 py-3 text-sm ${
-                              typedChecked.ok
-                                ? "bg-green-100 border-green-400"
-                                : "bg-red-100 border-red-400"
-                            }`}
+                            className={`rounded-xl border px-4 py-3 text-sm ${typedChecked.ok
+                              ? "bg-green-100 border-green-400"
+                              : "bg-red-100 border-red-400"
+                              }`}
                           >
                             {typedChecked.ok
                               ? t.correct

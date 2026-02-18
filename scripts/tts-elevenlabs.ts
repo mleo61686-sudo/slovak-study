@@ -49,6 +49,9 @@ const VOICE2_WORDS = new Set<string>([
   "tréning",
   "zahriať sa",
   "natiahnuť sa",
+  "PIN kód",
+  "recept",
+  "argument",
 ]);
 
 function pickVoiceId(kind: Item["kind"], text: string) {
