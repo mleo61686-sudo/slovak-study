@@ -279,7 +279,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
       { sk: "ulica", ua: "вулиця", ru: "улица", img: "/words/ulica.jpg" },
       { sk: "námestie", ua: "площа", ru: "площадь", img: "/words/námestie.jpg" },
       { sk: "dom", ua: "будинок", ru: "дом", img: "/words/dom.jpg" },
-      { sk: "byt", ua: "квартира", ru: "квартира", img: "/words/byt.jpg" },
+      { sk: "byt", ua: "квартира", ru: "квартира", img: "/words/bytt.jpg" },
       { sk: "škola", ua: "школа", ru: "школа", img: "/words/school.jpg" },
       { sk: "nemocnica", ua: "лікарня", ru: "больница", img: "/words/nemocnica.jpg" },
       { sk: "zastávka", ua: "зупинка", ru: "остановка", img: "/words/zastávka.jpg" },
