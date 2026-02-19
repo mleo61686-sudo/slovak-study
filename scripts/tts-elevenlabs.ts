@@ -86,6 +86,27 @@ const VOICE2_WORDS = new Set<string>([
   "pripraviť",
 ]);
 
+const VOICE2_PHRASES = new Set<string>([
+  // сюди додаєш тільки фрази, які хочеш другим голосом
+  "Oblečenie je v skrini.",
+  "Dám si studený nápoj.",
+  "Ten dom je nový.",
+  "Mám novú prácu.",
+  "Mám unavené oko.",
+  "Mám bolesť.",
+  "Mám teplotu.",
+  "Fúka vietor.",
+  "Idem do lesa.",
+  "Tu je jazero.",
+  "Čo je to?",
+  "Nie , ďakujem.",
+  "Láska je krásna.",
+  "Rozumiem všetko.",
+  "Ty si môj priateľ.",
+  "Na trhu kupujem ovocie.",
+  
+]);
+
 /**
  * ✅ TTS overrides (коли ElevenLabs криво читає слово)
  * Ключ = як у даних (що показуємо користувачу)
@@ -119,8 +140,19 @@ function ttsText(kind: Item["kind"], text: string) {
 }
 
 function pickVoiceId(kind: Item["kind"], text: string) {
-  if (kind !== "word") return VOICE1;
-  return VOICE2_WORDS.has(text.trim()) ? VOICE2 : VOICE1;
+  const clean = text.trim();
+
+  // ✅ слова — лишаємо ТОЧНО як було
+  if (kind === "word") {
+    return VOICE2_WORDS.has(clean) ? VOICE2 : VOICE1;
+  }
+
+  // ✅ фрази — окремий список, не впливає на слова
+  if (kind === "phrase") {
+    return VOICE2_PHRASES.has(clean) ? VOICE2 : VOICE1;
+  }
+
+  return VOICE1;
 }
 
 function sha1(input: string) {
@@ -137,8 +169,8 @@ function outPath(kind: Item["kind"], text: string) {
     return path.join(folder, `${hash}.mp3`);
   }
 
-  const key = audioPhraseKey(text.trim());
-  return path.join(folder, `${key}.mp3`);
+  const hash = sha1(`phrase:${text.trim()}`);
+  return path.join(folder, `${hash}.mp3`);
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

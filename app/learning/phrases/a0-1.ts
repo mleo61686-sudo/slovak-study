@@ -310,6 +310,12 @@ export const A0_PHRASES_1: Record<string, Phrase> = {
     ru: "Я возьму холодный напиток.",
     tokens: ["Dám", "si", "studený", "nápoj", "."],
   },
+  [phraseKey("chlieb", "хліб", "a0-5")]: {
+    sk: "To je chlieb.",
+    ua: "Це хліб.",
+    ru: "Это хлеб.",
+    tokens: ["To", "je", "chlieb", "."],
+  },
 
   [phraseKey("mäso", "м'ясо", "a0-5")]: {
     sk: "Nejem mäso každý deň.",
@@ -337,6 +343,12 @@ export const A0_PHRASES_1: Record<string, Phrase> = {
     ua: "Овочі корисні.",
     ru: "Овощи полезные.",
     tokens: ["Zelenina", "je", "zdravá", "."],
+  },
+  [phraseKey("voda", "вода", "a0-5")]: {
+    sk: "To je voda.",
+    ua: "Це вода.",
+    ru: "Это вода.",
+    tokens: ["To", "je", "voda", "."],
   },
 
   [phraseKey("káva", "кава", "a0-5")]: {

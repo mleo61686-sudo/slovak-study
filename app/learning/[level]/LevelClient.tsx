@@ -308,7 +308,7 @@ export default function LevelClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ levelId }),
-      }).catch(() => {});
+      }).catch(() => { });
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -511,8 +511,8 @@ function WordImage({
     size === "large"
       ? "w-[280px] sm:w-[360px] md:w-[420px] lg:w-[440px]"
       : size === "small"
-      ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
-      : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
+        ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
+        : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -809,8 +809,8 @@ function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-      ? "border-red-500"
-      : "border-slate-300";
+        ? "border-red-500"
+        : "border-slate-300";
 
   return (
     <>

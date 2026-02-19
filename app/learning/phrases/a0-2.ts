@@ -43,22 +43,23 @@ export const A0_PHRASES_2: Record<string, Phrase> = {
     tokens: ["Je", "päť", "eur", "."],
   },
   [phraseKey("šesť", "шість", "a0-11")]: {
-    sk: "Vstávam o šesť.",
+    sk: "Vstávam o šiestej.",
     ua: "Я встаю о шостій.",
     ru: "Я встаю в шесть.",
-    tokens: ["Vstávam", "o", "šesť", "."],
+    tokens: ["Vstávam", "o", "šiestej", "."],
+
   },
   [phraseKey("sedem", "сім", "a0-11")]: {
-    sk: "Sú sedem dní v týždni.",
+    sk: "V týždni je sedem dní.",
     ua: "У тижні сім днів.",
     ru: "В неделе семь дней.",
-    tokens: ["Sú", "sedem", "dní", "v", "týždni", "."],
+    tokens: ["V", "týždni", "je", "sedem", "dní", "."],
   },
   [phraseKey("osem", "вісім", "a0-11")]: {
-    sk: "Prídem o osem.",
+    sk: "Prídem o ôsmej.",
     ua: "Я прийду о восьмій.",
     ru: "Я приду в восемь.",
-    tokens: ["Prídem", "o", "osem", "."],
+    tokens: ["Prídem", "o", "ôsmej", "."],
   },
   [phraseKey("deväť", "дев’ять", "a0-11")]: {
     sk: "Je deväť hodín.",
@@ -378,9 +379,14 @@ export const A0_PHRASES_2: Record<string, Phrase> = {
     sk: "Je búrka.",
     ua: "Буря / гроза.",
     ru: "Буря / гроза.",
-    tokens: ["Je", "búrka", "."],
+    tokens: ["Je", "búrka", "."]
   },
-
+  [phraseKey("teplota", "температура", "a0-16")]: {
+    sk: "To je teplota.",
+    ua: "Це температура.",
+    ru: "Это температура.",
+    tokens: ["To", "je", "teplota", "."],
+  },
   // =========================
   // LESSON 17 — Природа
   // =========================
