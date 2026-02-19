@@ -39,6 +39,10 @@ const PHRASES_DIR = path.join(OUT_DIR, "phrases");
 fs.mkdirSync(WORDS_DIR, { recursive: true });
 fs.mkdirSync(PHRASES_DIR, { recursive: true });
 
+function norm(s: string) {
+  return s.trim().normalize("NFC");
+}
+
 /**
  * ✅ слова для 2-го голосу (точний збіг)
  */
@@ -52,7 +56,49 @@ const VOICE2_WORDS = new Set<string>([
   "PIN kód",
   "recept",
   "argument",
+  "čašník/čašníčka",
+  "poslať e-mail",
+  "ambícia",
+  "zablúdiť",
+  "lenivý",
+  "článok",
+  "chránená oblasť",
+  "hmla",
+  "auto",
+  "stôl",
+  "karta",
+  "park",
+  "test",
+  "rok",
+  "nos",
+  "brucho",
+  "jazero",
+  "polícia",
+  "tanec",
 ]);
+
+/**
+ * ✅ TTS overrides (коли ElevenLabs криво читає слово)
+ * Ключ = як у даних (що показуємо користувачу)
+ * Значення = що відправляємо в ElevenLabs (користувачу не видно)
+ */
+const TTS_OVERRIDES = new Map<string, string>([
+  // "brucho" інколи читає як "бручо" через "ch" -> "ч"
+  // Трюк: розбити на склади, щоб вийшло "брухо"
+  ["brucho", "bru ho"],
+  ["jazero", "ja ze ro"],
+  ["tanec", "ta nec"],
+
+]);
+
+function ttsText(kind: Item["kind"], text: string) {
+  if (kind !== "word") return text;
+  const key = norm(text);
+  for (const [k, v] of TTS_OVERRIDES.entries()) {
+    if (norm(k) === key) return v;
+  }
+  return text;
+}
 
 function pickVoiceId(kind: Item["kind"], text: string) {
   if (kind !== "word") return VOICE1;
@@ -67,6 +113,8 @@ function outPath(kind: Item["kind"], text: string) {
   const folder = kind === "word" ? WORDS_DIR : PHRASES_DIR;
 
   if (kind === "word") {
+    // ❗️ВАЖЛИВО: хешуємо ОРИГІНАЛЬНИЙ text (а не override),
+    // щоб файл мав стабільний шлях для цього слова.
     const hash = sha1(`word:${text.trim()}`);
     return path.join(folder, `${hash}.mp3`);
   }
@@ -79,8 +127,13 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function ttsToFile(kind: Item["kind"], text: string, file: string) {
   const voiceId = pickVoiceId(kind, text);
+  const sentText = ttsText(kind, text);
+
   console.log(`[TTS] kind=${kind} text="${text}" voice=${voiceId}`);
-  console.log("OUT FILE =", file);   // <-- ВСТАВИТИ СЮДИ
+  if (sentText !== text) {
+    console.log(`[TTS-TEXT] override: "${text}" -> "${sentText}"`);
+  }
+  console.log("OUT FILE =", file);
 
   const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
 
@@ -93,7 +146,7 @@ async function ttsToFile(kind: Item["kind"], text: string, file: string) {
         Accept: "audio/mpeg",
       },
       body: JSON.stringify({
-        text,
+        text: sentText,
         model_id: "eleven_multilingual_v2",
         voice_settings: {
           stability: 0.35,
@@ -144,10 +197,7 @@ function collectPhrases(): string[] {
   return list;
 }
 
-const ALL_LESSONS: any[] = [
-  ...(A1_ALL as any[]),
-  ...(A2_ALL as any[]),
-];
+const ALL_LESSONS: any[] = [...(A1_ALL as any[]), ...(A2_ALL as any[])];
 
 function collect(): Item[] {
   const items: Item[] = [];
@@ -155,16 +205,14 @@ function collect(): Item[] {
   for (const lesson of ALL_LESSONS) {
     for (const w of lesson.words ?? []) {
       if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
-      if (w?.phrase?.sk)
-        items.push({ kind: "phrase", text: String(w.phrase.sk) });
+      if (w?.phrase?.sk) items.push({ kind: "phrase", text: String(w.phrase.sk) });
     }
   }
 
   for (const lesson of A0_REAL_SOURCE as any[]) {
     for (const w of lesson.words ?? []) {
       if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
-      if (w?.phrase?.sk)
-        items.push({ kind: "phrase", text: String(w.phrase.sk) });
+      if (w?.phrase?.sk) items.push({ kind: "phrase", text: String(w.phrase.sk) });
     }
   }
 
@@ -174,18 +222,6 @@ function collect(): Item[] {
 
   for (const phrase of collectPhrases()) {
     items.push({ kind: "phrase", text: phrase });
-  }
-
-  // 🔍 DEBUG для polo
-  const hasPolo = items.some(
-    (x) => x.kind === "word" && x.text.toLowerCase().includes("polo")
-  );
-  console.log("HAS POLO?", hasPolo);
-
-  for (const x of items) {
-    if (x.kind === "word" && x.text.toLowerCase().includes("polo")) {
-      console.log("POLO WORD RAW:", JSON.stringify(x.text));
-    }
   }
 
   const uniq = new Map<string, Item>();
@@ -199,10 +235,6 @@ function collect(): Item[] {
 
 const ONLY =
   process.argv.find((a) => a.startsWith("--only="))?.split("=")[1] ?? "";
-
-function norm(s: string) {
-  return s.trim().normalize("NFC");
-}
 
 const FORCE = process.argv.includes("--force");
 

@@ -226,7 +226,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
     id: "3",
     title: { ua: "Урок 3 — дім", ru: "Урок 3 — дом" },
     words: [
-      { sk: "byt", ua: "квартира", ru: "квартира", img: "/words/byt.jpg" },
+      { sk: "byt", ua: "квартира", ru: "квартира", img: "/words/byt2.jpg" },
       { sk: "izba", ua: "кімната", ru: "комната", img: "/words/izba.jpg" },
       { sk: "kuchyňa", ua: "кухня", ru: "кухня", img: "/words/kuchyňa.jpg" },
       { sk: "kúpeľňa", ua: "ванна кімната", ru: "ванная", img: "/words/kúpeľňa.jpg" },
@@ -346,7 +346,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
       { sk: "predmet", ua: "предмет", ru: "предмет", img: "/words/predmet.jpg" },
       { sk: "hodina", ua: "урок", ru: "урок", img: "/words/hodina.jpg" },
       { sk: "úloha", ua: "завдання / домашня робота", ru: "задание / домашняя работа", img: "/words/úloha.jpg" },
-      { sk: "test", ua: "тест", ru: "тест", img: "/words/zošit.jpg" },
+      { sk: "test", ua: "тест", ru: "тест", img: "/words/test.jpg" },
       { sk: "zošit", ua: "зошит", ru: "тетрадь", img: "/words/zoshit.jpg" },
       { sk: "učebnica", ua: "підручник", ru: "учебник", img: "/words/učebnica.jpg" },
     ],
