@@ -75,6 +75,15 @@ const VOICE2_WORDS = new Set<string>([
   "jazero",
   "polícia",
   "tanec",
+  "menu",
+  "môžete",
+  "smutný",
+  "mladý",
+  "schody",
+  "odpoveď",
+  "dole",
+  "dlh",
+  "pripraviť",
 ]);
 
 /**
@@ -88,6 +97,15 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["brucho", "bru ho"],
   ["jazero", "ja ze ro"],
   ["tanec", "ta nec"],
+  ["euro", "eu ro"],
+  ["my", "mi"],
+  ["niet za čo", "niet za čo"],
+  ["kino", "ki no"],
+  ["trh", "tr̩h"],
+  ["balenie", "ba le nie"],
+  ["dnes", "dnes"],
+  ["výťah", "vý ťah"],
+  ["hory", "ho ry"],
 
 ]);
 
