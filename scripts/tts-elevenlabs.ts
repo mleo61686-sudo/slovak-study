@@ -104,6 +104,8 @@ const VOICE2_PHRASES = new Set<string>([
   "Rozumiem všetko.",
   "Ty si môj priateľ.",
   "Na trhu kupujem ovocie.",
+  "Nie je to ďaleko.",
+  "Aký je termín?",
   
 ]);
 

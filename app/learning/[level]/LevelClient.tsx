@@ -67,6 +67,7 @@ const EXERCISES: ExerciseDef[] = [
   { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
 ];
 
+
 // ------------------ helpers ------------------
 
 function shuffle<T>(arr: T[]) {
@@ -1181,6 +1182,9 @@ function MatchColumns({
     </div>
   );
 }
+function tokensToSentence(tokens: string[]) {
+  return tokens.join(" ").replace(/\s+([.,!?;:])/g, "$1").trim();
+}
 
 // 6️⃣ ЗБЕРИ РЕЧЕННЯ — як було
 function BuildSentence({
@@ -1199,7 +1203,7 @@ function BuildSentence({
     [word, lang, levelId]
   );
 
-  const baseTokens = useMemo(() => phrase.tokens, [phrase.tokens]);
+  const baseTokens = useMemo(() => [...phrase.tokens], [phrase.tokens.join("|")]);
   const [available, setAvailable] = useState<string[]>(() => shuffle(baseTokens));
   const [picked, setPicked] = useState<string[]>([]);
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
@@ -1233,9 +1237,11 @@ function BuildSentence({
   }
 
   async function check() {
-    const built = picked.join(" ");
-    const target = baseTokens.join(" ");
+    const built = tokensToSentence(picked);
+    const target = tokensToSentence(baseTokens);
     const ok = normalizeSentence(built) === normalizeSentence(target);
+
+
     setStatus(ok ? "correct" : "wrong");
     await playLocal(phrase.sk);
   }
@@ -1319,7 +1325,7 @@ function BuildSentence({
       )}
       {status === "wrong" && (
         <div className="font-semibold text-red-600">
-          ❌ Неправильно. Правильно: <b>{baseTokens.join(" ")}</b>
+          ❌ Неправильно. Правильно: <b>{tokensToSentence(baseTokens)}</b>
         </div>
       )}
     </div>

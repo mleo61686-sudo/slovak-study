@@ -619,7 +619,7 @@ export const A1_PHRASES_3: Record<string, Phrase> = {
     tokens: ["Hotovo", "."],
   },
 
-  [phraseKey("môžem?", "можна?", "a1-29")]: {
+  [phraseKey("môžem", "можна", "a1-29")]: {
     sk: "Môžem?",
     ua: "Можна?",
     ru: "Можно?",
