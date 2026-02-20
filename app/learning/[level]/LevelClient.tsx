@@ -11,6 +11,7 @@ import ReportErrorButton from "@/app/components/ReportErrorButton";
 
 // ✅ беремо фрази з централізованого словника
 import { A0_PHRASES, phraseKey } from "@/app/learning/phrases/a0";
+import { A2_PHRASES } from "@/app/learning/phrases/a2";
 
 export type Word = {
   sk: string;
@@ -94,7 +95,10 @@ function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
 
   // 2) шукаємо в A0_PHRASES по ключу
   const k = phraseKey(word.sk, word.ua, levelId);
-  const p = A0_PHRASES[k];
+
+  const dict = levelId.startsWith("a2-") ? A2_PHRASES : A0_PHRASES;
+
+  const p = dict[k];
   if (p) {
     const target = lang === "ru" ? p.ru ?? p.ua : p.ua;
     return { sk: p.sk, target, tokens: p.tokens };
