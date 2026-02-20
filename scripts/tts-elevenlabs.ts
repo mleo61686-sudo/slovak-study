@@ -85,6 +85,7 @@ const VOICE2_WORDS = new Set<string>([
   "dole",
   "dlh",
   "pripraviť",
+  "platba kartou",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -108,7 +109,17 @@ const VOICE2_PHRASES = new Set<string>([
   "Nie je to ďaleko.",
   "Aký je termín?",
   "Správny poplatok je desať eur.",
-
+  "Môžeme posunúť stretnutie na pondelok?",
+  "Chcem sa zúčastniť školenia.",
+  "Chcel by som reklamovať tento výrobok.",
+  "Po tréningu sa vždy natiahnem.",
+  "Chcem vymazať staré súbory.",
+  "Tu je môj podpis.",
+  "Aký je termín stretnutia?",
+  "Doručenie bolo rýchlejšie, než som čakal.",
+  "Chcem spiatočný lístok, prosím.",
+  "Kde si môžem kúpiť cestovný lístok?",
+  "Chcem uverejniť nový článok.",
 ]);
 
 /**

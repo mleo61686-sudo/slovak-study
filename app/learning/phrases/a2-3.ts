@@ -367,6 +367,79 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
     ru: "Где я могу купить билет?",
     tokens: ["Kde", "si", "môžem", "kúpiť", "cestovný", "lístok", "?"],
   },
+  // =========================
+  // LESSON 26 — Komunikácia a informácie
+  // =========================
+
+  [phraseKey("správa", "повідомлення", "a2-26")]: {
+    sk: "Dostal som dôležitú správu.",
+    ua: "Я отримав важливе повідомлення.",
+    ru: "Я получил важное сообщение.",
+    tokens: ["Dostal", "som", "dôležitú", "správu", "."],
+  },
+
+  [phraseKey("oznámenie", "оголошення", "a2-26")]: {
+    sk: "Prečítal som si oznámenie na nástenke.",
+    ua: "Я прочитав оголошення на дошці.",
+    ru: "Я прочитал объявление на доске.",
+    tokens: ["Prečítal", "som", "si", "oznámenie", "na", "nástenke", "."],
+  },
+
+  [phraseKey("článok", "стаття", "a2-26")]: {
+    sk: "Ten článok bol veľmi zaujímavý.",
+    ua: "Та стаття була дуже цікава.",
+    ru: "Та статья была очень интересной.",
+    tokens: ["Ten", "článok", "bol", "veľmi", "zaujímavý", "."],
+  },
+
+  [phraseKey("zdroj informácií", "джерело інформації", "a2-26")]: {
+    sk: "Internet je hlavný zdroj informácií.",
+    ua: "Інтернет є головним джерелом інформації.",
+    ru: "Интернет — главный источник информации.",
+    tokens: ["Internet", "je", "hlavný", "zdroj", "informácií", "."],
+  },
+
+  [phraseKey("uverejniť", "опублікувати", "a2-26")]: {
+    sk: "Chcem uverejniť nový článok.",
+    ua: "Я хочу опублікувати нову статтю.",
+    ru: "Я хочу опубликовать новую статью.",
+    tokens: ["Chcem", "uverejniť", "nový", "článok", "."],
+  },
+
+  [phraseKey("zverejniť", "оприлюднити", "a2-26")]: {
+    sk: "Spoločnosť zverejnila výsledky.",
+    ua: "Компанія оприлюднила результати.",
+    ru: "Компания обнародовала результаты.",
+    tokens: ["Spoločnosť", "zverejnila", "výsledky", "."],
+  },
+
+  [phraseKey("reagovať", "реагувати", "a2-26")]: {
+    sk: "Musíme rýchlo reagovať na situáciu.",
+    ua: "Ми повинні швидко реагувати на ситуацію.",
+    ru: "Мы должны быстро реагировать на ситуацию.",
+    tokens: ["Musíme", "rýchlo", "reagovať", "na", "situáciu", "."],
+  },
+
+  [phraseKey("diskusia", "дискусія", "a2-26")]: {
+    sk: "Diskusia bola veľmi užitočná.",
+    ua: "Дискусія була дуже корисною.",
+    ru: "Дискуссия была очень полезной.",
+    tokens: ["Diskusia", "bola", "veľmi", "užitočná", "."],
+  },
+
+  [phraseKey("názor", "думка", "a2-26")]: {
+    sk: "Mám na to iný názor.",
+    ua: "Я маю іншу думку щодо цього.",
+    ru: "У меня другое мнение по этому поводу.",
+    tokens: ["Mám", "na", "to", "iný", "názor", "."],
+  },
+
+  [phraseKey("vplyv", "вплив", "a2-26")]: {
+    sk: "To má veľký vplyv na výsledok.",
+    ua: "Це має великий вплив на результат.",
+    ru: "Это оказывает большое влияние на результат.",
+    tokens: ["To", "má", "veľký", "vplyv", "na", "výsledok", "."],
+  },
 
   // =========================
   // LESSON 27 — Komunikácia (námietky a argumenty)
