@@ -60,11 +60,12 @@ type ExerciseDef = {
 };
 
 const EXERCISES: ExerciseDef[] = [
-  { kind: "chooseTranslation", title: "Обери переклад", mode: "perWord" },
-  { kind: "chooseSlovak", title: "Обери словацьке слово", mode: "perWord" },
-  { kind: "writeWord", title: "Введи слово", mode: "perWord" },
+
+  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
+  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
+  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
   { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-  { kind: "matchColumns", title: "Зʼєднай пари", mode: "perWord" },
+  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
   { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
 ];
 

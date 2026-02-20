@@ -15,6 +15,7 @@ import { A2_ALL } from "../app/learning/levels/a2";
 
 import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
+import { A2_PHRASES } from "../app/learning/phrases/a2";
 import { WORDS } from "../app/data/words";
 import { audioPhraseKey } from "../app/learning/phrases/audioKey";
 
@@ -106,7 +107,8 @@ const VOICE2_PHRASES = new Set<string>([
   "Na trhu kupujem ovocie.",
   "Nie je to ďaleko.",
   "Aký je termín?",
-  
+  "Správny poplatok je desať eur.",
+
 ]);
 
 /**
@@ -229,7 +231,7 @@ async function ttsToFile(kind: Item["kind"], text: string, file: string) {
 
 function collectPhrases(): string[] {
   const list: string[] = [];
-  const sources: any[] = [A0_PHRASES, A1_PHRASES];
+  const sources: any[] = [A0_PHRASES, A1_PHRASES, A2_PHRASES];
 
   for (const src of sources) {
     if (!src) continue;
