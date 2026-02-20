@@ -60,10 +60,10 @@ type ExerciseDef = {
 
 const EXERCISES: ExerciseDef[] = [
   { kind: "chooseTranslation", title: "Обери переклад", mode: "perWord" },
-  { kind: "chooseSlovak", title: "Обери слово словацькою", mode: "perWord" },
-  { kind: "writeWord", title: "Напиши словацькою", mode: "perWord" },
+  { kind: "chooseSlovak", title: "Обери словацьке слово", mode: "perWord" },
+  { kind: "writeWord", title: "Введи слово", mode: "perWord" },
   { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-  { kind: "matchColumns", title: "Пари в 2 колонки", mode: "whole" },
+  { kind: "matchColumns", title: "Зʼєднай пари", mode: "perWord" },
   { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
 ];
 

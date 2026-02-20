@@ -669,7 +669,7 @@ export const A2_ALL: Lesson[] = [
     words: [
       { sk: "zvyk", ua: "звичка", ru: "привычка", img: "/words_a2/zvyk.jpg" },
       { sk: "rutina", ua: "рутина", ru: "рутина", img: "/words_a2/rutina.jpg" },
-      { sk: "zvyknúť si", ua: "звикнути", ru: "привыкнуть", img: "/words_a2/zákaz.jpg" },
+      { sk: "zvyknúť si", ua: "звикнути", ru: "привыкнуть", img: "/words_a2/zvyknúť si.jpg" },
       { sk: "odvyknúť si", ua: "відвикнути", ru: "отвыкнуть", img: "/words_a2/odvyknúť si.jpg" },
       { sk: "pravidelne", ua: "регулярно", ru: "регулярно", img: "/words_a2/pravidelne.jpg" },
       { sk: "výnimka", ua: "виняток", ru: "исключение", img: "/words_a2/výnimka.jpg" },
