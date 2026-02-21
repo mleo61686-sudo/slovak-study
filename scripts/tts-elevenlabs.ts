@@ -1,3 +1,4 @@
+// scripts/tts-elevenlabs.ts
 console.log("### RUNNING scripts/tts-elevenlabs.ts ###");
 console.log("FILE =", import.meta.url);
 
@@ -121,12 +122,12 @@ const VOICE2_PHRASES = new Set<string>([
   " Kedy bude upratovanie izby?",
   "Chcem si odvyknúť od sladkého.",
   "Je to miestny zvyk.",
+  "On neučí dnes.",
 ]);
 
 /**
  * ✅ TTS overrides (коли ElevenLabs криво читає слово)
- * Ключ = як у даних (що показуємо користувачу)
- * Значення = що відправляємо в ElevenLabs (користувачу не видно)
+ * Зараз overrides зроблені для WORDS (kind="word").
  */
 const TTS_OVERRIDES = new Map<string, string>([
   ["brucho", "bru ho"],
@@ -143,7 +144,6 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["hory", "ho ry"],
   ["vírus", "ví rus"],
   ["argument", "ar gu ment"],
-
   // ✅ alphabet fix
   ["ňho", "ň ho"],
 ]);
@@ -160,12 +160,10 @@ function ttsText(kind: Item["kind"], text: string) {
 function pickVoiceId(kind: Item["kind"], text: string) {
   const clean = text.trim();
 
-  // ✅ слова — лишаємо ТОЧНО як було
   if (kind === "word") {
     return VOICE2_WORDS.has(clean) ? VOICE2 : VOICE1;
   }
 
-  // ✅ фрази — окремий список, не впливає на слова
   if (kind === "phrase") {
     return VOICE2_PHRASES.has(clean) ? VOICE2 : VOICE1;
   }
@@ -177,18 +175,19 @@ function sha1(input: string) {
   return crypto.createHash("sha1").update(input, "utf8").digest("hex");
 }
 
+// ✅ MUST match SpeakButton.tsx:
+// - words: sha1("word:<text>") full hex
+// - phrases: sha1("<text>") slice(0,13)
 function outPath(kind: Item["kind"], text: string) {
   const folder = kind === "word" ? WORDS_DIR : PHRASES_DIR;
 
   if (kind === "word") {
-    // ❗️ВАЖЛИВО: хешуємо ОРИГІНАЛЬНИЙ text (а не override),
-    // щоб файл мав стабільний шлях для цього слова.
     const hash = sha1(`word:${text.trim()}`);
     return path.join(folder, `${hash}.mp3`);
   }
 
-  const hash = sha1(`phrase:${text.trim()}`);
-  return path.join(folder, `${hash}.mp3`);
+  const key13 = sha1(text.trim()).slice(0, 13);
+  return path.join(folder, `${key13}.mp3`);
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -267,14 +266,8 @@ function collectPhrases(): string[] {
 
 const ALL_LESSONS: any[] = [...(A1_ALL as any[]), ...(A2_ALL as any[])];
 
-/**
- * ✅ Alphabet-only items (page: /grammar/alphabet)
- * Беремо тільки те, що реально відтворюється через SpeakButton на сторінці.
- * Диктант-рандом зі словника НЕ включаємо.
- */
 function collectAlphabetItems(): Item[] {
   const words = [
-    // vowels examples
     "auto",
     "máš",
     "mesto",
@@ -287,8 +280,6 @@ function collectAlphabetItems(): Item[] {
     "dúfať",
     "syn",
     "býva",
-
-    // consonants examples
     "čaj",
     "škola",
     "žena",
@@ -299,11 +290,7 @@ function collectAlphabetItems(): Item[] {
     "chlieb",
     "medzi",
     "džús",
-
-    // stress example
     "práca",
-
-    // practiceWords
     "človek",
     "život",
     "učiteľ",
@@ -311,6 +298,394 @@ function collectAlphabetItems(): Item[] {
 
   const unique = Array.from(new Set(words.map((w) => w.trim()).filter(Boolean)));
   return unique.map((text) => ({ kind: "word" as const, text }));
+}
+
+// ✅ /grammar/cases (усі звучалки там — це phrases)
+function collectCasesItems(): Item[] {
+  const phrases = [
+    // questions
+    "Kto? Čo?",
+    "Koho? Čoho?",
+    "Komu? Čomu?",
+    "Koho? Čo?",
+    "O kom? O čom? Kde?",
+    "S kým? S čím?",
+
+    // examples
+    "Ja som študent.",
+    "Toto je auto.",
+    "Brat pracuje.",
+
+    "Nemám čas.",
+    "Som z Ukrajiny.",
+    "Idem do práce.",
+
+    "Pomáham kamarátovi.",
+    "Volám mame.",
+    "Ďakujem ti.",
+
+    "Vidím auto.",
+    "Mám otázku.",
+    "Idem na poštu.",
+
+    "Som v práci.",
+    "Hovoríme o škole.",
+    "Bývam v meste.",
+
+    "Idem s kamarátom.",
+    "Píšem perom.",
+    "Som sám/sama.",
+  ];
+
+  const unique = Array.from(new Set(phrases.map((p) => p.trim()).filter(Boolean)));
+  return unique.map((text) => ({ kind: "phrase" as const, text }));
+}
+
+/* =========================================================
+   ✅ NEW: negation + question generator (must match page.tsx logic)
+   ========================================================= */
+
+const IST_NEG: Record<string, string> = {
+  idem: "nejdem",
+  ideš: "nejdeš",
+  ide: "nejde",
+  ideme: "nejdeme",
+  idete: "nejdete",
+  idú: "nejdú",
+
+  Idem: "Nejdem",
+  Ideš: "Nejdeš",
+  Ide: "Nejde",
+  Ideme: "Nejdeme",
+  Idete: "Nejdete",
+  Idú: "Nejdú",
+};
+
+const BYT_NEG: Record<string, string> = {
+  som: "nie som",
+  si: "nie si",
+  je: "nie je",
+  sme: "nie sme",
+  ste: "nie ste",
+  sú: "nie sú",
+
+  Som: "Nie som",
+  Si: "Nie si",
+  Je: "Nie je",
+  Sme: "Nie sme",
+  Ste: "Nie ste",
+  Sú: "Nie sú",
+};
+
+function negateSentence(sentence: string) {
+  const s = sentence.trim();
+  if (!s) return s;
+
+  const hasEnd = /[.!?]$/.test(s);
+  const end = hasEnd ? s.slice(-1) : "";
+  const core = hasEnd ? s.slice(0, -1) : s;
+
+  const parts = core.split(/\s+/);
+
+  const finish = (txt: string) => txt + (hasEnd ? end : "");
+
+  const PRON = new Set([
+    "Ja",
+    "Ty",
+    "On",
+    "Ona",
+    "Ono",
+    "My",
+    "Vy",
+    "Oni",
+    "ja",
+    "ty",
+    "on",
+    "ona",
+    "ono",
+    "my",
+    "vy",
+    "oni",
+  ]);
+
+  // 0) Якщо є "Ja učím sa" → "Ja sa učím"
+  if (
+    parts.length >= 3 &&
+    PRON.has(parts[0]) &&
+    (parts[2] === "sa" || parts[2] === "si") &&
+    parts[1] !== "sa" &&
+    parts[1] !== "si"
+  ) {
+    const clitic = parts[2];
+    parts.splice(2, 1);
+    parts.splice(1, 0, clitic);
+  }
+
+  // 1) ísť
+  for (let i = 0; i < Math.min(2, parts.length); i++) {
+    if (IST_NEG[parts[i]]) {
+      parts[i] = IST_NEG[parts[i]];
+      return finish(parts.join(" "));
+    }
+  }
+
+  // 2) byť
+  for (let i = 0; i < Math.min(2, parts.length); i++) {
+    if (BYT_NEG[parts[i]]) {
+      parts[i] = BYT_NEG[parts[i]];
+      return finish(parts.join(" "));
+    }
+  }
+
+  // 3) Загальне правило: ne- + дієслово
+  let verbIndex = 0;
+
+  if (PRON.has(parts[0])) {
+    if (parts[1] === "sa" || parts[1] === "si") verbIndex = 2; // Ja sa učím
+    else verbIndex = 1; // Ja pracujem
+  } else {
+    verbIndex = 0; // Pracujem doma
+  }
+
+  if (verbIndex >= parts.length) return finish("Ne " + core);
+
+  const verb = parts[verbIndex];
+
+  // якщо вже заперечено
+  if (/^ne/i.test(verb) || /^nie$/i.test(verb)) return finish(parts.join(" "));
+
+  const negVerb =
+    verb[0] === verb[0].toUpperCase()
+      ? "Ne" + verb[0].toLowerCase() + verb.slice(1)
+      : "ne" + verb;
+
+  parts[verbIndex] = negVerb;
+  return finish(parts.join(" "));
+}
+
+function makeQuestion(sentence: string) {
+  const s = sentence.trim().replace(/[.!]$/, "");
+  return s.endsWith("?") ? s : s + "?";
+}
+
+// Беремо лише "приклади" типу "... ." або "... !" і робимо derived варіанти:
+// - заперечення (.) / (!) / (?) зберігаємо
+// - питання -> "?"
+function expandDerivedPhrases(items: Item[]): Item[] {
+  const out: Item[] = [...items];
+
+  for (const it of items) {
+    if (it.kind !== "phrase") continue;
+
+    const base = it.text.trim();
+    if (!base) continue;
+
+    // ✅ На verbs-present приклади завжди з крапкою.
+    // Робимо derived для фраз, які виглядають як речення.
+    const looksLikeSentence = /[.!]$/.test(base) || (base.includes(" ") && !base.endsWith("?"));
+    if (!looksLikeSentence) continue;
+
+    const neg = negateSentence(base);
+    const q = makeQuestion(base);
+
+    if (neg && neg !== base) out.push({ kind: "phrase", text: neg });
+    if (q && q !== base) out.push({ kind: "phrase", text: q });
+  }
+
+  // unique
+  const uniq = new Map<string, Item>();
+  for (const it of out) {
+    const key = `${it.kind}:${it.text.trim()}`;
+    if (!uniq.has(key)) uniq.set(key, it);
+  }
+  return [...uniq.values()];
+}
+
+/**
+ * ✅ /grammar/verbs-present (майже все — phrases)
+ * Тут важливо: приклади мають "." (бо у UI заперечення/питання
+ * утворюються з них на льоту).
+ */
+function collectVerbsPresentItems(): Item[] {
+  const phrases = [
+    // 3) conjugation (row.full)
+    "ja pracujem",
+    "ty pracuješ",
+    "on pracuje",
+    "ona pracuje",
+    "ono pracuje",
+    "my pracujeme",
+    "vy pracujete",
+    "oni pracujú",
+
+    "ja robím",
+    "ty robíš",
+    "on robí",
+    "ona robí",
+    "ono robí",
+    "my robíme",
+    "vy robíte",
+    "oni robia",
+
+    "ja som",
+    "ty si",
+    "on je",
+    "ona je",
+    "ono je",
+    "my sme",
+    "vy ste",
+    "oni sú",
+
+    "ja bývam",
+    "ty bývaš",
+    "on býva",
+    "ona býva",
+    "ono býva",
+    "my bývame",
+    "vy bývate",
+    "oni bývajú",
+
+    "ja chodím",
+    "ty chodíš",
+    "on chodí",
+    "ona chodí",
+    "ono chodí",
+    "my chodíme",
+    "vy chodíte",
+    "oni chodia",
+
+    "ja učím",
+    "ty učíš",
+    "on učí",
+    "ona učí",
+    "ono učí",
+    "my učíme",
+    "vy učíte",
+    "oni učia",
+
+    "ja sa učím",
+    "ty sa učíš",
+    "on sa učí",
+    "ona sa učí",
+    "ono sa učí",
+    "my sa učíme",
+    "vy sa učíte",
+    "oni sa učia",
+
+    "ja hľadám",
+    "ty hľadáš",
+    "on hľadá",
+    "ona hľadá",
+    "ono hľadá",
+    "my hľadáme",
+    "vy hľadáte",
+    "oni hľadajú",
+
+    "ja mám",
+    "ty máš",
+    "on má",
+    "ona má",
+    "ono má",
+    "my máme",
+    "vy máte",
+    "oni majú",
+
+    "ja idem",
+    "ty ideš",
+    "on ide",
+    "ona ide",
+    "ono ide",
+    "my ideme",
+    "vy idete",
+    "oni idú",
+
+    // 4) examples (основні)
+    "Ja pracujem v práci.",
+    "Ty pracuješ dnes.",
+    "On pracuje v Bratislave.",
+    "Ona pracuje ráno.",
+    "My pracujeme v práci.",
+    "Vy pracujete dnes.",
+    "Oni pracujú v Bratislave.",
+
+    "Ja robím doma.",
+    "Ty robíš úlohu.",
+    "On robí to teraz.",
+    "Ona robí v práci.",
+    "My robíme doma.",
+    "Vy robíte úlohu.",
+    "Oni robia to teraz.",
+
+    "Ja som doma.",
+    "Ty si tu.",
+    "On je v meste.",
+    "Ona je v práci.",
+    "My sme doma.",
+    "Vy ste tu.",
+    "Oni sú v meste.",
+
+    "Ja bývam v Bratislave.",
+    "Ty bývaš tu.",
+    "On býva v meste.",
+    "Ona býva doma.",
+    "My bývame v Bratislave.",
+    "Vy bývate tu.",
+    "Oni bývajú v meste.",
+
+    "Ja chodím do práce.",
+    "Ty chodíš do školy.",
+    "On chodí pešo.",
+    "Ona chodí každý deň.",
+    "My chodíme do práce.",
+    "Vy chodíte do školy.",
+    "Oni chodia pešo.",
+
+    "Ja učím deti.",
+    "Ty učíš po slovensky.",
+    "On učí dnes.",
+    "Ona učí v škole.",
+    "My učíme deti.",
+    "Vy učíte po slovensky.",
+    "Oni učia dnes.",
+
+    "Ja sa učím po slovensky.",
+    "Ty sa učíš doma.",
+    "On sa učí dnes.",
+    "Ona sa učí v práci.",
+    "My sa učíme po slovensky.",
+    "Vy sa učíte doma.",
+    "Oni sa učia dnes.",
+
+    "Ja hľadám prácu.",
+    "Ty hľadáš byt.",
+    "On hľadá kľúč.",
+    "Ona hľadá teraz.",
+    "My hľadáme prácu.",
+    "Vy hľadáte byt.",
+    "Oni hľadajú kľúč.",
+
+    "Ja mám čas.",
+    "Ty máš prácu.",
+    "On má lístok.",
+    "Ona má otázku.",
+    "My máme čas.",
+    "Vy máte prácu.",
+    "Oni majú lístok.",
+
+    "Ja idem do práce.",
+    "Ty ideš domov.",
+    "On ide do mesta.",
+    "Ona ide do obchodu.",
+    "My ideme do práce.",
+    "Vy idete domov.",
+    "Oni idú do mesta.",
+  ];
+
+  const unique = Array.from(new Set(phrases.map((p) => p.trim()).filter(Boolean)));
+  const base = unique.map((text) => ({ kind: "phrase" as const, text }));
+
+  // ✅ ВАЖЛИВО: тут же додаємо neg/question, бо UI їх генерує на льоту.
+  return expandDerivedPhrases(base);
 }
 
 function collect(): Item[] {
@@ -349,19 +724,35 @@ function collect(): Item[] {
 
 const ONLY = process.argv.find((a) => a.startsWith("--only="))?.split("=")[1] ?? "";
 const FORCE = process.argv.includes("--force");
+
 const ALPHABET_ONLY = process.argv.includes("--alphabet");
+const CASES_ONLY = process.argv.includes("--cases");
+const VERBS_PRESENT_ONLY = process.argv.includes("--verbs-present");
 
 async function main() {
   console.log("VOICE1 =", VOICE1);
   console.log("VOICE2 =", VOICE2);
   console.log("VOICE2 enabled? =", VOICE2 !== VOICE1);
+
   console.log("ALPHABET_ONLY =", ALPHABET_ONLY);
+  console.log("CASES_ONLY =", CASES_ONLY);
+  console.log("VERBS_PRESENT_ONLY =", VERBS_PRESENT_ONLY);
   console.log("FORCE =", FORCE);
 
-  // ✅ головне: щоб --only знаходив alphabet слова навіть без --alphabet
-  let items = ALPHABET_ONLY ? collectAlphabetItems() : [...collect(), ...collectAlphabetItems()];
+  let items: Item[] = VERBS_PRESENT_ONLY
+    ? collectVerbsPresentItems()
+    : CASES_ONLY
+      ? collectCasesItems()
+      : ALPHABET_ONLY
+        ? collectAlphabetItems()
+        : [
+          ...collect(),
+          ...collectAlphabetItems(),
+          ...collectCasesItems(),
+          ...collectVerbsPresentItems(), // ✅ тут вже включено neg/question
+        ];
 
-  // ✅ unique після додавання alphabet items
+  // ✅ unique після додавання
   {
     const uniq = new Map<string, Item>();
     for (const it of items) {

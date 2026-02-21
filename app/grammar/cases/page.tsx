@@ -16,10 +16,6 @@ function shuffle<T>(arr: T[]) {
   return a;
 }
 
-function capFirst(s: string) {
-  return s ? s[0].toUpperCase() + s.slice(1) : s;
-}
-
 function makeSentenceParts(example: string) {
   return shuffle(example.replace(/[.!?]$/, "").split(" "));
 }
@@ -28,11 +24,11 @@ type CaseId = "nom" | "gen" | "dat" | "acc" | "loc" | "ins";
 
 type CaseBlock = {
   id: CaseId;
-  name: W;        // назва відмінка
-  questions: W;   // питання
-  use: W;         // коли використовуємо
-  rule: W;        // коротко про прийменники/логіку
-  examples: W[];  // приклади (sk + ua + ru)
+  name: W; // назва відмінка
+  questions: W; // питання
+  use: W; // коли використовуємо
+  rule: W; // коротко про прийменники/логіку
+  examples: W[]; // приклади (sk + ua + ru)
 };
 
 const CASES: CaseBlock[] = [
@@ -165,13 +161,12 @@ const CASES: CaseBlock[] = [
 
 type QuizQ = {
   caseId: CaseId;
-  prompt: W; // питання/опис
-  correct: string; // правильний приклад
+  prompt: W;
+  correct: string;
   options: string[];
 };
 
-function makeCaseQuiz(lang: "ua" | "ru") : QuizQ[] {
-  // беремо по 1 запитанню для 4 випадків
+function makeCaseQuiz(lang: "ua" | "ru"): QuizQ[] {
   const picks = shuffle(CASES).slice(0, 4);
 
   return picks.map((c) => {
@@ -205,7 +200,6 @@ export default function CasesPage() {
 
   // Quiz B (build sentence)
   const buildSamples = useMemo(() => {
-    // 6 “дуже типових” речень
     return [
       { sk: "Som v práci.", ua: "Я на роботі.", ru: "Я на работе." },
       { sk: "Idem do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу." },
@@ -273,7 +267,9 @@ export default function CasesPage() {
                     <span className="text-slate-500">({t(c.questions.ua, c.questions.ru ?? c.questions.ua)})</span>
                   </div>
                 </div>
-                <SpeakButton text={`${c.questions.sk}`} />
+
+                {/* ✅ це фраза */}
+                <SpeakButton text={c.questions.sk} kind="phrase" />
               </div>
 
               <div className="text-sm text-slate-700">{t(c.use.ua, c.use.ru ?? c.use.ua)}</div>
@@ -301,7 +297,9 @@ export default function CasesPage() {
                       <div className="font-medium">{ex.sk}</div>
                       <div className="text-sm text-slate-500">{trWord(ex, lang)}</div>
                     </div>
-                    <SpeakButton text={ex.sk} />
+
+                    {/* ✅ це фраза */}
+                    <SpeakButton text={ex.sk} kind="phrase" />
                   </div>
                 ))}
               </div>
@@ -341,9 +339,7 @@ export default function CasesPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             {quiz.map((q) => (
               <div key={q.caseId} className="rounded-xl border p-4 space-y-2">
-                <div className="text-sm text-slate-500">
-                  {lang === "ru" ? q.prompt.ru : q.prompt.ua}
-                </div>
+                <div className="text-sm text-slate-500">{lang === "ru" ? q.prompt.ru : q.prompt.ua}</div>
 
                 <div className="flex flex-wrap gap-2">
                   {q.options.map((opt) => {
@@ -394,8 +390,7 @@ export default function CasesPage() {
             <div>
               <div className="font-semibold">{t("B) Збери речення", "B) Собери предложение")}</div>
               <div className="text-sm text-slate-500">
-                {t("Ціль:", "Цель:")}{" "}
-                <span className="font-medium text-slate-900">{targetTr}</span>
+                {t("Ціль:", "Цель:")} <span className="font-medium text-slate-900">{targetTr}</span>
               </div>
             </div>
 
@@ -427,7 +422,9 @@ export default function CasesPage() {
             <div className="text-sm text-slate-500 mb-2">{t("Твоє речення:", "Твое предложение:")}</div>
             <div className="flex items-center justify-between gap-3">
               <div className="font-medium">{builtSentence || "—"}</div>
-              {builtSentence ? <SpeakButton text={builtSentence + "."} /> : null}
+
+              {/* ✅ це фраза */}
+              {builtSentence ? <SpeakButton text={builtSentence + "."} kind="phrase" /> : null}
             </div>
 
             <div className="mt-3 text-sm">
@@ -460,12 +457,7 @@ export default function CasesPage() {
         <h2 className="text-xl font-semibold">{t("4) Шпаргалка", "4) Шпаргалка")}</h2>
         <div className="rounded-2xl border bg-white p-5 text-slate-700">
           <ul className="list-disc pl-5 space-y-2">
-            <li>
-              {t(
-                "Lokál завжди з прийменником: v/vo, na, o, po.",
-                "Lokál всегда с предлогом: v/vo, na, o, po."
-              )}
-            </li>
+            <li>{t("Lokál завжди з прийменником: v/vo, na, o, po.", "Lokál всегда с предлогом: v/vo, na, o, po.")}</li>
             <li>
               {t(
                 "Genitív часто після bez, do, z/zo: bez vody, do práce, z domu.",

@@ -10,18 +10,18 @@ type W = { sk: string; ua: string; ru?: string };
 type PersonKey = "ja" | "ty" | "on" | "ona" | "ono" | "my" | "vy" | "oni";
 type ConjugationRow = {
   person: PersonKey;
-  form: string; // форма, яка відображається поруч із займенником
-  full: string; // що читаємо через TTS
-  tr: W; // переклад форми
+  form: string; // форма (показуємо поруч, але тепер UI беремо з full)
+  full: string; // ✅ що читаємо + що показуємо як канонічну форму
+  tr: W;
 };
 
 type VerbBlock = {
   id: string;
   infinitive: string;
   meaning: W;
-  note?: W; // ✅ тепер реально W (UA/RU)
+  note?: W;
   rows: ConjugationRow[];
-  examples: W[]; // залишимо для сумісності
+  examples: W[];
 };
 
 const PRONOUNS: Record<PersonKey, W> = {
@@ -41,14 +41,8 @@ function capFirst(s: string) {
 type UiLang = "ua" | "ru";
 
 const UI: Record<UiLang, { infinitive: string; hint: string }> = {
-  ua: {
-    infinitive: "Інфінітив",
-    hint: "Підказка",
-  },
-  ru: {
-    infinitive: "Инфинитив",
-    hint: "Подсказка",
-  },
+  ua: { infinitive: "Інфінітив", hint: "Підказка" },
+  ru: { infinitive: "Инфинитив", hint: "Подсказка" },
 };
 
 function shuffle<T>(arr: T[]) {
@@ -136,7 +130,7 @@ function negateSentence(sentence: string) {
     parts.splice(1, 0, clitic);
   }
 
-  // 1) ísť (враховуємо перші 2 токени)
+  // 1) ísť
   for (let i = 0; i < Math.min(2, parts.length); i++) {
     if (IST_NEG[parts[i]]) {
       parts[i] = IST_NEG[parts[i]];
@@ -327,6 +321,7 @@ const VERBS: VerbBlock[] = [
       ru: "Возвратное: učím sa/učiš sa… (sa обычно после местоимения)",
     },
     rows: [
+      // ✅ form для UI лишаємо як "učím sa", але канонічне — full ("ja sa učím")
       { person: "ja", form: "učím sa", full: "ja sa učím", tr: { sk: "ja sa učím", ua: "я вчуся", ru: "я учусь" } },
       { person: "ty", form: "učíš sa", full: "ty sa učíš", tr: { sk: "ty sa učíš", ua: "ти вчишся", ru: "ты учишься" } },
       { person: "on", form: "učí sa", full: "on sa učí", tr: { sk: "on sa učí", ua: "він вчиться", ru: "он учится" } },
@@ -424,7 +419,7 @@ function makeSentenceParts(example: string) {
   return shuffle(example.replace(/[.!?]$/, "").split(" "));
 }
 
-// ✅ Стабільні приклади
+// ✅ Стабільні приклади (ВАЖЛИВО: беремо row.full!)
 function genExamplesFromRows(active: VerbBlock): W[] {
   const tailsByVerb: Record<string, { sk: string[]; ua: string[]; ru: string[] }> = {
     pracovat: {
@@ -495,7 +490,8 @@ function genExamplesFromRows(active: VerbBlock): W[] {
     const tailUa = tails.ua[idx % tails.ua.length];
     const tailRu = tails.ru[idx % tails.ru.length];
 
-    const sk = `${capFirst(PRONOUNS[p].sk)} ${row.form} ${tailSk}.`.replace(/\s+/g, " ");
+    // ✅ тут головна правка
+    const sk = `${capFirst(row.full)} ${tailSk}.`.replace(/\s+/g, " ");
     const ua = `${capFirst(row.tr.ua)} ${tailUa}.`.replace(/\s+/g, " ");
     const ru = `${capFirst(row.tr.ru ?? row.tr.ua)} ${tailRu}.`.replace(/\s+/g, " ");
 
@@ -507,7 +503,10 @@ export default function VerbsPresentPage() {
   const { lang } = useLanguage();
 
   const [activeVerbId, setActiveVerbId] = useState(VERBS[0].id);
-  const active = useMemo(() => VERBS.find((v) => v.id === activeVerbId) ?? VERBS[0], [activeVerbId]);
+  const active = useMemo(
+    () => VERBS.find((v) => v.id === activeVerbId) ?? VERBS[0],
+    [activeVerbId]
+  );
 
   const [mounted, setMounted] = useState(false);
   const [quiz, setQuiz] = useState<{ person: PersonKey; correct: string; options: string[] }[]>([]);
@@ -611,12 +610,9 @@ export default function VerbsPresentPage() {
               <div className="text-sm text-slate-500">
                 {UI[(lang as UiLang) ?? "ua"].hint}
               </div>
-              <div className="text-slate-700">
-                {active.note ? trWord(active.note, lang) : "—"}
-              </div>
+              <div className="text-slate-700">{active.note ? trWord(active.note, lang) : "—"}</div>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -627,12 +623,13 @@ export default function VerbsPresentPage() {
           {active.rows.map((row, i) => (
             <div key={i} className="flex items-center justify-between border-b px-5 py-3 last:border-b-0">
               <div className="min-w-0">
+                {/* ✅ показуємо канонічне речення */}
                 <div className="font-medium">
-                  {PRONOUNS[row.person].sk} <span className="text-slate-900">{row.form}</span>
+                  <span className="text-slate-900">{capFirst(row.full)}</span>
                 </div>
                 <div className="text-sm text-slate-500">{trWord(row.tr, lang)}</div>
               </div>
-              <SpeakButton text={row.full} />
+              <SpeakButton text={row.full} kind="phrase" />
             </div>
           ))}
         </div>
@@ -654,7 +651,7 @@ export default function VerbsPresentPage() {
                     <div className="font-medium">{ex.sk}</div>
                     <div className="text-sm text-slate-500">{trWord(ex, lang)}</div>
                   </div>
-                  <SpeakButton text={ex.sk} />
+                  <SpeakButton text={ex.sk} kind="phrase" />
                 </div>
 
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -662,7 +659,7 @@ export default function VerbsPresentPage() {
                     <div className="text-xs text-slate-500 mb-1">Заперечення</div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="font-medium">{neg}</div>
-                      <SpeakButton text={neg} />
+                      <SpeakButton text={neg} kind="phrase" />
                     </div>
                   </div>
 
@@ -670,7 +667,7 @@ export default function VerbsPresentPage() {
                     <div className="text-xs text-slate-500 mb-1">Питання</div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="font-medium">{q}</div>
-                      <SpeakButton text={q} />
+                      <SpeakButton text={q} kind="phrase" />
                     </div>
                   </div>
                 </div>
@@ -794,7 +791,7 @@ export default function VerbsPresentPage() {
             <div className="text-sm text-slate-500 mb-2">Твоє речення:</div>
             <div className="flex items-center justify-between gap-3">
               <div className="font-medium">{builtSentence || "—"}</div>
-              {builtSentence ? <SpeakButton text={builtSentence + "."} /> : null}
+              {builtSentence ? <SpeakButton text={builtSentence + "."} kind="phrase" /> : null}
             </div>
 
             <div className="mt-3 text-sm">
