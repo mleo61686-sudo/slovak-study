@@ -43,7 +43,7 @@ export async function generateMetadata({
     description: meta.description,
     // ✅ canonical 100% на .com
     alternates: {
-      canonical: canonicalUrl,
+      canonical: meta.path,
     },
     openGraph: {
       title: meta.title,
