@@ -120,6 +120,9 @@ const VOICE2_PHRASES = new Set<string>([
   "Chcem spiatočný lístok, prosím.",
   "Kde si môžem kúpiť cestovný lístok?",
   "Chcem uverejniť nový článok.",
+  " Kedy bude upratovanie izby?",
+  "Chcem si odvyknúť od sladkého.",
+  "Je to miestny zvyk.",
 ]);
 
 /**
@@ -142,7 +145,8 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["dnes", "dnes"],
   ["výťah", "vý ťah"],
   ["hory", "ho ry"],
-
+  ["vírus", "ví rus"],
+  ["argument", "ar gu ment"],
 ]);
 
 function ttsText(kind: Item["kind"], text: string) {

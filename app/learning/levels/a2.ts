@@ -450,7 +450,7 @@ export const A2_ALL: Lesson[] = [
       { sk: "stiahnuť súbor", ua: "завантажити файл", ru: "скачать файл", img: "/words_a2/stiahnuť súbor.jpg" },
       { sk: "vírus", ua: "вірус", ru: "вирус", img: "/words_a2/vírus.jpg" },
       { sk: "zablokovať", ua: "заблокувати", ru: "заблокировать", img: "/words_a2/zablokovať.jpg" },
-      { sk: "obnoviť heslo", ua: "відновити пароль", ru: "восстановить пароль", img: "/words_a2/obnoviť heslo" },
+      { sk: "obnoviť heslo", ua: "відновити пароль", ru: "восстановить пароль", img: "/words_a2/obnoviť heslo.jpg" },
     ],
   },
   {
