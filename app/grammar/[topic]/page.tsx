@@ -27,41 +27,43 @@ const TOPICS: Record<string, { title: string; description: string; path: string 
   },
 };
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
 }: {
-  params: Promise<{ topic: string }>;
-}): Promise<Metadata> {
-  const { topic } = await params;
-  const meta = TOPICS[topic];
+  params: { topic: string };
+}): Metadata {
+  const meta = TOPICS[params.topic];
   if (!meta) return {};
 
-  const canonicalUrl = `${SITE_URL}${meta.path}`;
+  const canonical = `${SITE_URL}${meta.path}`;
 
   return {
     title: meta.title,
     description: meta.description,
-    // ✅ canonical 100% на .com
+
+    // ✅ як у learning/dictionary: абсолютний URL
     alternates: {
-      canonical: meta.path,
+      canonical,
     },
+
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: canonicalUrl,
+      url: canonical,
       siteName: "Slovak Study",
       type: "article",
     },
+
     robots: { index: true, follow: true },
   };
 }
 
-export default async function GrammarTopicPage({
+export default function GrammarTopicPage({
   params,
 }: {
-  params: Promise<{ topic: string }>;
+  params: { topic: string };
 }) {
-  const { topic } = await params;
+  const topic = params.topic;
 
   switch (topic) {
     case "alphabet":
