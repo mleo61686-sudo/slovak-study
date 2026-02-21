@@ -10,10 +10,6 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://slovak-study.com"),
   title: "Slovak Study — вивчення словацької",
   description: "Граматика, словник і тренажер для україномовних.",
-
-  alternates: {
-    canonical: "/",
-  },
 };
 
 export default function RootLayout({
