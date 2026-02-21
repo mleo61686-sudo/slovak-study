@@ -37,11 +37,16 @@ export default function AudioQuiz({
 
   const answered = status !== "idle";
 
+  const title =
+    lang === "ru"
+      ? "Прослушай слово и выбери правильное:"
+      : "Прослухай слово і обери правильне:";
+
+  const correctLabel = lang === "ru" ? "Правильно:" : "Правильно:";
+
   return (
     <>
-      <div className="text-lg font-semibold">
-        Прослухай слово і обери правильне:
-      </div>
+      <div className="text-lg font-semibold">{title}</div>
 
       <SpeakCentered
         text={word.sk}
@@ -85,7 +90,7 @@ export default function AudioQuiz({
           extra={
             status === "wrong" ? (
               <div className="text-sm text-slate-700">
-                Правильно: <b>{word.sk}</b>
+                {correctLabel} <b>{word.sk}</b>
               </div>
             ) : null
           }

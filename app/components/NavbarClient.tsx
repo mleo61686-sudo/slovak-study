@@ -5,8 +5,9 @@ import Link from "next/link";
 import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 import UserMenu from "@/app/components/UserMenu";
 import PremiumButton from "@/app/components/PremiumButton";
+import NavLabel, { type NavKey } from "@/app/components/NavLabel";
 
-type NavItem = { href: string; label: string };
+type NavItem = { href: string; key: NavKey };
 
 export default function NavbarClient({
   nav,
@@ -66,7 +67,7 @@ export default function NavbarClient({
             href="/login"
             className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
           >
-            Login
+            <NavLabel k="login" />
           </Link>
         )}
 
@@ -97,7 +98,7 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                {item.label}
+                <NavLabel k={item.key} />
               </Link>
             ))}
 
@@ -107,7 +108,7 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-semibold border border-slate-300 hover:bg-slate-100 mt-1"
                 onClick={() => setOpen(false)}
               >
-                🛠️ Reports
+                🛠️ <NavLabel k="reports" />
               </Link>
             )}
           </nav>
@@ -132,7 +133,7 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                Login
+                <NavLabel k="login" />
               </Link>
             )}
 

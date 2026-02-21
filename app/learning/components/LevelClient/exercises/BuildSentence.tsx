@@ -4,7 +4,45 @@ import { useEffect, useMemo, useState } from "react";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { getPhraseForWord, normalizeSentence, playLocal, shuffle, tokensToSentence } from "../helpers";
-import SpeakButton from "@/app/components/SpeakButton";
+
+type UiLang = "ua" | "ru";
+
+function uiLangFrom(lang: Lang): UiLang {
+  return (lang === "ru" ? "ru" : "ua") as UiLang;
+}
+
+const UI = {
+  ua: {
+    title: "Збери речення",
+    targetLabel: "Ціль",
+    yourSentence: "Твоє речення:",
+    hint: "Натискай слова нижче.",
+    clear: "Очистити",
+    check: "Перевірити",
+    next: "Наступне →",
+    back: "← Назад",
+    correct: "✅ Правильно!",
+    wrongPrefix: "❌ Неправильно. Правильно:",
+    listenAgain: "🔊 Прослухати ще раз",
+    reportBug: "Повідомити про помилку",
+    dash: "—",
+  },
+  ru: {
+    title: "Собери предложение",
+    targetLabel: "Цель",
+    yourSentence: "Твоё предложение:",
+    hint: "Нажимай слова ниже.",
+    clear: "Очистить",
+    check: "Проверить",
+    next: "Далее →",
+    back: "← Назад",
+    correct: "✅ Правильно!",
+    wrongPrefix: "❌ Неправильно. Правильно:",
+    listenAgain: "🔊 Прослушать ещё раз",
+    reportBug: "Сообщить об ошибке",
+    dash: "—",
+  },
+} as const;
 
 export default function BuildSentence({
   word,
@@ -17,6 +55,8 @@ export default function BuildSentence({
   levelId: string;
   onNext: (c: boolean) => void;
 }) {
+  const ui = UI[uiLangFrom(lang)];
+
   const phrase = useMemo(() => getPhraseForWord(word, lang, levelId), [word, lang, levelId]);
 
   const baseTokens = useMemo(() => [...phrase.tokens], [phrase.tokens.join("|")]);
@@ -28,7 +68,8 @@ export default function BuildSentence({
     setAvailable(shuffle(baseTokens));
     setPicked([]);
     setStatus("idle");
-  }, [word.sk, lang, baseTokens.join("|")]);
+    // не ресетимо на зміну мови, щоб не можна було "перезібрати" після wrong
+  }, [word.sk, baseTokens.join("|")]);
 
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
@@ -52,6 +93,10 @@ export default function BuildSentence({
     setAvailable(shuffle(baseTokens));
   }
 
+  async function replay() {
+    await playLocal(phrase.sk);
+  }
+
   async function check() {
     const built = tokensToSentence(picked);
     const target = tokensToSentence(baseTokens);
@@ -71,20 +116,22 @@ export default function BuildSentence({
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="font-semibold">B) Збери речення</div>
+          <div className="font-semibold">{ui.title}</div>
 
           <div className="text-sm text-slate-500">
-            Ціль: <span className="text-slate-800 font-medium">{phrase.target}</span>
+            {ui.targetLabel}: <span className="text-slate-800 font-medium">{phrase.target}</span>
           </div>
 
-          <div className="mt-2 flex justify-center">
-            <SpeakButton text={phrase.sk} kind="phrase" />
+          <div className="mt-2">
+            <button className="text-xs px-3 py-1 border rounded-lg text-slate-600 hover:bg-slate-50">
+              {ui.reportBug}
+            </button>
           </div>
         </div>
 
         <div className="flex gap-2">
           <button onClick={clear} className="px-4 py-2 border rounded-xl">
-            Очистити
+            {ui.clear}
           </button>
 
           {status === "idle" ? (
@@ -93,20 +140,20 @@ export default function BuildSentence({
               disabled={picked.length === 0}
               className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
             >
-              Перевірити
+              {ui.check}
             </button>
           ) : (
             <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
-              Наступне →
+              {ui.next}
             </button>
           )}
         </div>
       </div>
 
       <div className="rounded-2xl border bg-white p-4 space-y-2">
-        <div className="text-sm text-slate-500">Твоє речення:</div>
-        <div className="text-lg">{picked.length ? builtPretty : "—"}</div>
-        <div className="text-sm text-slate-500">Натискай слова нижче.</div>
+        <div className="text-sm text-slate-500">{ui.yourSentence}</div>
+        <div className="text-lg">{picked.length ? builtPretty : ui.dash}</div>
+        <div className="text-sm text-slate-500">{ui.hint}</div>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -127,14 +174,31 @@ export default function BuildSentence({
           disabled={picked.length === 0 || status !== "idle"}
           className="px-3 py-2 border rounded-xl disabled:opacity-50"
         >
-          ← Назад
+          {ui.back}
         </button>
       </div>
 
-      {status === "correct" && <div className="font-semibold text-green-600">✅ Правильно!</div>}
+      {status === "correct" && (
+        <div className="font-semibold text-green-600 flex items-center justify-between gap-3">
+          <span>{ui.correct}</span>
+
+          <button onClick={replay} className="px-3 py-2 border rounded-xl">
+            {ui.listenAgain}
+          </button>
+        </div>
+      )}
+
       {status === "wrong" && (
-        <div className="font-semibold text-red-600">
-          ❌ Неправильно. Правильно: <b>{tokensToSentence(baseTokens)}</b>
+        <div className="font-semibold text-red-600 space-y-2">
+          <div>
+            {ui.wrongPrefix} <b>{tokensToSentence(baseTokens)}</b>
+          </div>
+
+          <div className="flex gap-2">
+            <button onClick={replay} className="px-3 py-2 border rounded-xl">
+              {ui.listenAgain}
+            </button>
+          </div>
         </div>
       )}
     </div>

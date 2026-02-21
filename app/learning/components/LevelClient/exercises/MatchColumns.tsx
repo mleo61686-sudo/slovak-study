@@ -14,7 +14,19 @@ export default function MatchColumns({
   lang: Lang;
   onDone: (correctCount: number) => void;
 }) {
+  const t = {
+    title: lang === "ru" ? "Подбери пары" : "Підбери пари",
+    correct: lang === "ru" ? "✅ Правильно" : "✅ Правильно",
+    wrongs: lang === "ru" ? "❌ Ошибки" : "❌ Помилки",
+    limitReached: lang === "ru" ? "Лимит ошибок исчерпан — можно перейти дальше." : "Ліміт помилок вичерпано — можна перейти далі.",
+    allDone: lang === "ru" ? "Все пары собраны — можно перейти дальше." : "Усі пари зібрано — можна перейти далі.",
+    clear: lang === "ru" ? "Очистить" : "Очистити",
+    next: lang === "ru" ? "Далее →" : "Наступне →",
+  };
+
   const left = useMemo(() => shuffle(words.map((w) => w.sk)), [words]);
+
+  // right тексти залежні від мови — це ок
   const right = useMemo(() => shuffle(words.map((w) => trWord(w, lang))), [words, lang]);
 
   const mapSkToTr = useMemo(() => {
@@ -37,6 +49,7 @@ export default function MatchColumns({
 
   const MAX_WRONG = 3;
 
+  // ❗ НЕ скидаємо прогрес на зміну мови
   useEffect(() => {
     setSelectedLeft(null);
     setSelectedRight(null);
@@ -46,7 +59,7 @@ export default function MatchColumns({
     setWrongCount(0);
     setShakeWrong(false);
     setWrongPair(null);
-  }, [words, lang]);
+  }, [words]);
 
   const doneAll = matchedLeft.size >= words.length;
   const doneByWrong = wrongCount >= MAX_WRONG;
@@ -81,14 +94,14 @@ export default function MatchColumns({
     setWrongPair({ l: selectedLeft, r: selectedRight });
     setShakeWrong(true);
 
-    const t = setTimeout(() => {
+    const tm = setTimeout(() => {
       setSelectedLeft(null);
       setSelectedRight(null);
       setWrongPair(null);
       setShakeWrong(false);
     }, 700);
 
-    return () => clearTimeout(t);
+    return () => clearTimeout(tm);
   }, [selectedLeft, selectedRight, mapSkToTr, locked]);
 
   function leftBtnClass(sk: string) {
@@ -123,22 +136,22 @@ export default function MatchColumns({
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-lg font-semibold">Підбери пари</div>
+          <div className="text-lg font-semibold">{t.title}</div>
           <div className="text-sm text-slate-500">
-            ✅ Правильно: {correctCount} / {words.length}
+            {t.correct}: {correctCount} / {words.length}
             <span className="mx-2">•</span>
-            ❌ Помилки: {wrongCount} / {MAX_WRONG}
+            {t.wrongs}: {wrongCount} / {MAX_WRONG}
           </div>
 
           {doneByWrong && (
             <div className="text-sm text-red-600 font-semibold mt-1">
-              Ліміт помилок вичерпано — можна перейти далі.
+              {t.limitReached}
             </div>
           )}
 
           {doneAll && (
             <div className="text-sm text-green-700 font-semibold mt-1">
-              Усі пари зібрано — можна перейти далі.
+              {t.allDone}
             </div>
           )}
         </div>
@@ -149,7 +162,7 @@ export default function MatchColumns({
             disabled={locked}
             className="px-4 py-2 border rounded-xl disabled:opacity-50"
           >
-            Очистити
+            {t.clear}
           </button>
 
           <button
@@ -157,7 +170,7 @@ export default function MatchColumns({
             onClick={() => onDone(correctCount)}
             className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
           >
-            Наступне →
+            {t.next}
           </button>
         </div>
       </div>
@@ -185,17 +198,17 @@ export default function MatchColumns({
         </div>
 
         <div className="space-y-2">
-          {right.map((t) => (
+          {right.map((r) => (
             <button
-              key={t}
-              disabled={locked || matchedRight.has(t)}
+              key={r}
+              disabled={locked || matchedRight.has(r)}
               onClick={() => {
                 if (locked) return;
-                setSelectedRight(t);
+                setSelectedRight(r);
               }}
-              className={rightBtnClass(t)}
+              className={rightBtnClass(r)}
             >
-              {t}
+              {r}
             </button>
           ))}
         </div>
@@ -203,21 +216,11 @@ export default function MatchColumns({
 
       <style jsx>{`
         @keyframes shake {
-          0% {
-            transform: translateX(0);
-          }
-          25% {
-            transform: translateX(-6px);
-          }
-          50% {
-            transform: translateX(6px);
-          }
-          75% {
-            transform: translateX(-6px);
-          }
-          100% {
-            transform: translateX(0);
-          }
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-6px); }
+          50% { transform: translateX(6px); }
+          75% { transform: translateX(-6px); }
+          100% { transform: translateX(0); }
         }
       `}</style>
     </div>

@@ -32,17 +32,24 @@ export default function ChooseTranslation({
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
 
+  // ❗ НЕ ресетимо при зміні мови
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
-  }, [word.sk, lang]);
+  }, [word.sk]);
 
   const answered = status !== "idle";
+
+  const correctLabel =
+    lang === "ru" ? "Правильный ответ:" : "Правильна відповідь:";
+
+  const chooseLabel =
+    lang === "ru" ? "Выбери перевод:" : "Обери переклад:";
 
   return (
     <>
       <div className="text-lg font-semibold">
-        Обери переклад: <span className="font-bold">{word.sk}</span>
+        {chooseLabel} <span className="font-bold">{word.sk}</span>
       </div>
 
       <SpeakCentered
@@ -86,7 +93,7 @@ export default function ChooseTranslation({
           extra={
             status === "wrong" ? (
               <div className="text-sm text-slate-700">
-                Правильна відповідь: <b>{correctText}</b>
+                {correctLabel} <b>{correctText}</b>
               </div>
             ) : null
           }

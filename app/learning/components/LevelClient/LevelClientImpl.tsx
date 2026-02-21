@@ -19,6 +19,59 @@ import AudioQuiz from "@/app/learning/components/LevelClient/exercises/AudioQuiz
 import MatchColumns from "@/app/learning/components/LevelClient/exercises/MatchColumns";
 import BuildSentence from "@/app/learning/components/LevelClient/exercises/BuildSentence";
 
+// ===== UI i18n (local) =====
+type UiLang = "ua" | "ru";
+function uiLangFrom(lang: string): UiLang {
+  return lang === "ru" ? "ru" : "ua";
+}
+
+const UI = {
+  ua: {
+    viewed: "Переглянуто",
+    back: "← Назад",
+    next: "Далі →",
+    startExercises: "Почати вправи 🧠",
+
+    // quiz header
+    exercise: "Вправа",
+    word: "Слово",
+    lesson: "Урок",
+
+    // finished
+    levelDone: "Рівень пройдено 🎉",
+    result: "Результат",
+    nextLockedTitle: "Наступний урок зараз закритий 🔒",
+    nextLockedDefault:
+      "У безкоштовній версії є ліміт/послідовність рівнів. Повернись до списку уроків.",
+    reviewAgain: "Переглянути слова знову",
+    goNextLevel: "Перейти до наступного рівня →",
+    toLessonsList: "До списку уроків",
+    notAvailableFree: "Недоступно у free",
+  },
+  ru: {
+    viewed: "Просмотрено",
+    back: "← Назад",
+    next: "Далее →",
+    startExercises: "Начать упражнения 🧠",
+
+    // quiz header
+    exercise: "Упражнение",
+    word: "Слово",
+    lesson: "Урок",
+
+    // finished
+    levelDone: "Уровень пройден 🎉",
+    result: "Результат",
+    nextLockedTitle: "Следующий урок сейчас закрыт 🔒",
+    nextLockedDefault:
+      "В бесплатной версии есть лимит/последовательность уроков. Вернись к списку уроков.",
+    reviewAgain: "Посмотреть слова снова",
+    goNextLevel: "Перейти к следующему уровню →",
+    toLessonsList: "К списку уроков",
+    notAvailableFree: "Недоступно в free",
+  },
+} as const;
+
 function getNextLevelId(levelId: string) {
   const m = /^([a-z]\d)-(\d+)$/.exec(levelId);
   if (m) {
@@ -80,6 +133,7 @@ export default function LevelClient({
   const router = useRouter();
   const nextLevelId = getNextLevelId(levelId);
   const { lang } = useLanguage();
+  const t = UI[uiLangFrom(lang)];
 
   // preload наступного зображення
   useEffect(() => {
@@ -110,7 +164,7 @@ export default function LevelClient({
         onKeyDownCapture={unlockInsideLesson}
       >
         <div className="sticky top-2 z-10 rounded-xl border bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold">
-          Переглянуто: {wordIndex + 1}/{words.length}
+          {t.viewed}: {wordIndex + 1}/{words.length}
         </div>
 
         <div className="mx-auto w-full max-w-[720px] rounded-2xl border bg-white p-6 text-center space-y-3">
@@ -129,9 +183,7 @@ export default function LevelClient({
                 </div>
               </div>
 
-              {word.imgCredit && (
-                <div className="text-xs text-slate-500">{word.imgCredit}</div>
-              )}
+              {word.imgCredit && <div className="text-xs text-slate-500">{word.imgCredit}</div>}
             </div>
           ) : (
             <div className="mx-auto h-40 w-40 rounded-2xl border bg-slate-50 flex items-center justify-center text-slate-400">
@@ -153,12 +205,12 @@ export default function LevelClient({
             onClick={() => setWordIndex((i) => i - 1)}
             className="px-4 py-2 border rounded-xl disabled:opacity-50"
           >
-            ← Назад
+            {t.back}
           </button>
 
           {wordIndex < words.length - 1 ? (
             <button onClick={() => setWordIndex((i) => i + 1)} className="px-4 py-2 border rounded-xl">
-              Далі →
+              {t.next}
             </button>
           ) : (
             <button
@@ -174,7 +226,7 @@ export default function LevelClient({
               }}
               className="px-4 py-2 rounded-xl bg-black text-white"
             >
-              Почати вправи 🧠
+              {t.startExercises}
             </button>
           )}
         </div>
@@ -194,7 +246,7 @@ export default function LevelClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ levelId }),
-      }).catch(() => {});
+      }).catch(() => { });
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -237,18 +289,15 @@ export default function LevelClient({
   if (finished) {
     return (
       <div className="rounded-2xl border bg-white p-6 space-y-3">
-        <div className="text-xl font-semibold">Рівень пройдено 🎉</div>
+        <div className="text-xl font-semibold">{t.levelDone}</div>
         <div className="text-slate-600">
-          Результат: <b>{score}</b> / <b>{totalQuestions}</b>
+          {t.result}: <b>{score}</b> / <b>{totalQuestions}</b>
         </div>
 
         {!canGoNext && (
           <div className="rounded-xl border bg-slate-50 p-3 text-sm text-slate-700">
-            <div className="font-semibold">Наступний урок зараз закритий 🔒</div>
-            <div className="mt-1">
-              {lockedReason ??
-                "У безкоштовній версії є ліміт/послідовність рівнів. Повернись до списку уроків."}
-            </div>
+            <div className="font-semibold">{t.nextLockedTitle}</div>
+            <div className="mt-1">{lockedReason ?? t.nextLockedDefault}</div>
           </div>
         )}
 
@@ -263,7 +312,7 @@ export default function LevelClient({
             }}
             className="px-4 py-2 border rounded-xl"
           >
-            Переглянути слова знову
+            {t.reviewAgain}
           </button>
 
           <button
@@ -279,14 +328,14 @@ export default function LevelClient({
               canGoNext ? "bg-black" : "bg-black/40 cursor-not-allowed",
             ].join(" ")}
             disabled={!canGoNext}
-            title={!canGoNext ? "Недоступно у free" : undefined}
+            title={!canGoNext ? t.notAvailableFree : undefined}
           >
-            Перейти до наступного рівня →
+            {t.goNextLevel}
           </button>
 
           {!canGoNext && (
             <button onClick={() => router.push(onLockedNextRedirect)} className="px-4 py-2 border rounded-xl">
-              До списку уроків
+              {t.toLessonsList}
             </button>
           )}
         </div>
@@ -301,17 +350,18 @@ export default function LevelClient({
       onKeyDownCapture={unlockInsideLesson}
     >
       <div className="text-sm text-slate-500">
-        Вправа {exerciseIndex + 1} / {EXERCISES.length} •{" "}
+        {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} •{" "}
         {exercise.mode === "perWord" ? (
           <>
-            Слово {wordIndex + 1} / {words.length}
+            {t.word} {wordIndex + 1} / {words.length}
           </>
         ) : (
-          <>Урок</>
+          <>{t.lesson}</>
         )}
       </div>
 
       <ReportErrorButton
+        lang={lang}
         context={{
           lessonId: levelId,
           exercise: `${mode}:${exercise.kind}`,
@@ -354,9 +404,7 @@ export default function LevelClient({
         />
       )}
 
-      {exercise.kind === "matchColumns" && (
-        <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
-      )}
+      {exercise.kind === "matchColumns" && <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />}
 
       {exercise.kind === "buildSentence" && (
         <BuildSentence word={currentWord} lang={lang} levelId={levelId} onNext={nextPerWord} />

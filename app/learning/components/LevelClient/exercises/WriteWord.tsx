@@ -44,14 +44,22 @@ export default function WriteWord({
     status === "correct"
       ? "border-green-500"
       : status === "wrong"
-      ? "border-red-500"
-      : "border-slate-300";
+        ? "border-red-500"
+        : "border-slate-300";
+
+  const t = {
+    title: lang === "ru" ? "Напиши по-словацки:" : "Напиши словацькою:",
+    placeholder: lang === "ru" ? "Введи слово..." : "Введи слово...",
+    check: lang === "ru" ? "Проверить" : "Перевірити",
+    correct: lang === "ru" ? "✅ Правильно!" : "✅ Правильно!",
+    wrongPrefix: lang === "ru" ? "❌ Неправильно. Правильно:" : "❌ Неправильно. Правильно:",
+    next: lang === "ru" ? "Далее →" : "Далі →",
+  };
 
   return (
     <>
       <div className="text-lg font-semibold">
-        Напиши словацькою:{" "}
-        <span className="font-bold">{trWord(word, lang)}</span>
+        {t.title} <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
       <div className="space-y-3">
@@ -60,7 +68,7 @@ export default function WriteWord({
           onChange={(e) => setValue(e.target.value)}
           disabled={status !== "idle"}
           className={`w-full border rounded-xl px-3 py-2 ${inputClass}`}
-          placeholder="Введи слово..."
+          placeholder={t.placeholder}
         />
 
         {status === "idle" ? (
@@ -69,27 +77,22 @@ export default function WriteWord({
             className="px-4 py-2 rounded-xl bg-black text-white"
             disabled={!value.trim()}
           >
-            Перевірити
+            {t.check}
           </button>
         ) : (
           <div className="space-y-2">
             {status === "correct" ? (
-              <div className="font-semibold text-green-600">
-                ✅ Правильно!
-              </div>
+              <div className="font-semibold text-green-600">{t.correct}</div>
             ) : (
               <div className="font-semibold text-red-600">
-                ❌ Неправильно. Правильно: <b>{correctAnswer}</b>
+                {t.wrongPrefix} <b>{correctAnswer}</b>
               </div>
             )}
 
             <div className="flex gap-2 items-center">
               <SpeakButton text={word.sk} kind="word" />
-              <button
-                onClick={next}
-                className="px-4 py-2 rounded-xl bg-black text-white"
-              >
-                Далі →
+              <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
+                {t.next}
               </button>
             </div>
           </div>

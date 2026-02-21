@@ -26,18 +26,23 @@ export default function ChooseSlovak({
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
 
+  // ❗ НЕ ресетимо при зміні мови
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
-  }, [word.sk, lang]);
+  }, [word.sk]);
 
   const answered = status !== "idle";
+
+  const title =
+    lang === "ru" ? "Выбери слово по-словацки:" : "Обери слово словацькою:";
+  const correctLabel = lang === "ru" ? "Правильно:" : "Правильно:"; // можна лишити однаково
+  // якщо хочеш прям ідеально: UA "Правильно:", RU "Правильно:"
 
   return (
     <>
       <div className="text-lg font-semibold">
-        Обери слово словацькою:{" "}
-        <span className="font-bold">{trWord(word, lang)}</span>
+        {title} <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
       <SpeakCentered text={word.sk} kind="word" />
@@ -76,7 +81,7 @@ export default function ChooseSlovak({
           extra={
             status === "wrong" ? (
               <div className="text-sm text-slate-700">
-                Правильно: <b>{word.sk}</b>
+                {correctLabel} <b>{word.sk}</b>
               </div>
             ) : null
           }
