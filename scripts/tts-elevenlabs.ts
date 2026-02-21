@@ -17,7 +17,6 @@ import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
 import { A2_PHRASES } from "../app/learning/phrases/a2";
 import { WORDS } from "../app/data/words";
-import { audioPhraseKey } from "../app/learning/phrases/audioKey";
 
 type Item = { kind: "word" | "phrase"; text: string };
 
@@ -30,8 +29,7 @@ if (!VOICE_ID) throw new Error("Missing ELEVENLABS_VOICE_ID in .env.local");
 
 const XI_KEY: string = API_KEY;
 const VOICE1: string = VOICE_ID;
-const VOICE2: string =
-  VOICE_ID_2 && VOICE_ID_2.trim() ? VOICE_ID_2 : VOICE_ID;
+const VOICE2: string = VOICE_ID_2 && VOICE_ID_2.trim() ? VOICE_ID_2 : VOICE_ID;
 
 const OUT_DIR = path.join(process.cwd(), "public", "audio");
 const WORDS_DIR = path.join(OUT_DIR, "words");
@@ -131,8 +129,6 @@ const VOICE2_PHRASES = new Set<string>([
  * Значення = що відправляємо в ElevenLabs (користувачу не видно)
  */
 const TTS_OVERRIDES = new Map<string, string>([
-  // "brucho" інколи читає як "бручо" через "ch" -> "ч"
-  // Трюк: розбити на склади, щоб вийшло "брухо"
   ["brucho", "bru ho"],
   ["jazero", "ja ze ro"],
   ["tanec", "ta nec"],
@@ -147,6 +143,9 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["hory", "ho ry"],
   ["vírus", "ví rus"],
   ["argument", "ar gu ment"],
+
+  // ✅ alphabet fix
+  ["ňho", "ň ho"],
 ]);
 
 function ttsText(kind: Item["kind"], text: string) {
@@ -268,6 +267,52 @@ function collectPhrases(): string[] {
 
 const ALL_LESSONS: any[] = [...(A1_ALL as any[]), ...(A2_ALL as any[])];
 
+/**
+ * ✅ Alphabet-only items (page: /grammar/alphabet)
+ * Беремо тільки те, що реально відтворюється через SpeakButton на сторінці.
+ * Диктант-рандом зі словника НЕ включаємо.
+ */
+function collectAlphabetItems(): Item[] {
+  const words = [
+    // vowels examples
+    "auto",
+    "máš",
+    "mesto",
+    "méso",
+    "lista",
+    "píše",
+    "dom",
+    "stôl",
+    "ulica",
+    "dúfať",
+    "syn",
+    "býva",
+
+    // consonants examples
+    "čaj",
+    "škola",
+    "žena",
+    "ďakujem",
+    "ťa",
+    "ňho",
+    "ľudia",
+    "chlieb",
+    "medzi",
+    "džús",
+
+    // stress example
+    "práca",
+
+    // practiceWords
+    "človek",
+    "život",
+    "učiteľ",
+  ];
+
+  const unique = Array.from(new Set(words.map((w) => w.trim()).filter(Boolean)));
+  return unique.map((text) => ({ kind: "word" as const, text }));
+}
+
 function collect(): Item[] {
   const items: Item[] = [];
 
@@ -302,17 +347,29 @@ function collect(): Item[] {
   return [...uniq.values()];
 }
 
-const ONLY =
-  process.argv.find((a) => a.startsWith("--only="))?.split("=")[1] ?? "";
-
+const ONLY = process.argv.find((a) => a.startsWith("--only="))?.split("=")[1] ?? "";
 const FORCE = process.argv.includes("--force");
+const ALPHABET_ONLY = process.argv.includes("--alphabet");
 
 async function main() {
   console.log("VOICE1 =", VOICE1);
   console.log("VOICE2 =", VOICE2);
   console.log("VOICE2 enabled? =", VOICE2 !== VOICE1);
+  console.log("ALPHABET_ONLY =", ALPHABET_ONLY);
+  console.log("FORCE =", FORCE);
 
-  let items = collect();
+  // ✅ головне: щоб --only знаходив alphabet слова навіть без --alphabet
+  let items = ALPHABET_ONLY ? collectAlphabetItems() : [...collect(), ...collectAlphabetItems()];
+
+  // ✅ unique після додавання alphabet items
+  {
+    const uniq = new Map<string, Item>();
+    for (const it of items) {
+      const key = `${it.kind}:${it.text.trim()}`;
+      if (!uniq.has(key)) uniq.set(key, it);
+    }
+    items = [...uniq.values()];
+  }
 
   if (ONLY) {
     items = items.filter((i) => norm(i.text) === norm(ONLY));
@@ -328,6 +385,7 @@ async function main() {
       limit(async () => {
         const file = outPath(it.kind, it.text);
 
+        // ✅ не чіпаємо вже згенероване (якщо немає --force)
         if (!FORCE && fs.existsSync(file) && fs.statSync(file).size > 1000) {
           return;
         }

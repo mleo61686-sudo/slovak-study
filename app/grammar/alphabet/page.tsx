@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { WORDS_RU } from "@/app/data/words";
@@ -95,8 +95,6 @@ function normalize(s: string) {
 }
 
 function isGoodForDictation(sk: string) {
-  // Для диктанту краще брати однослівні, без пробілів/тире,
-  // не надто короткі і не надто довгі
   if (!sk) return false;
   if (sk.includes(" ")) return false;
   if (sk.includes("-")) return false;
@@ -106,12 +104,18 @@ function isGoodForDictation(sk: string) {
 }
 
 function pickRandomDictationWords(count: number) {
-  const pool = WORDS_RU
-    .map((w) => w.sk)
-    .filter((sk) => isGoodForDictation(sk));
-
+  const pool = WORDS_RU.map((w) => w.sk).filter((sk) => isGoodForDictation(sk));
   const unique = Array.from(new Set(pool));
   return shuffle(unique).slice(0, Math.min(count, unique.length));
+}
+
+// ===== Audio helpers =====
+
+async function sha1Hex(input: string) {
+  const data = new TextEncoder().encode(input);
+  const hashBuf = await crypto.subtle.digest("SHA-1", data);
+  const hashArr = Array.from(new Uint8Array(hashBuf));
+  return hashArr.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export default function AlphabetPage() {
@@ -153,31 +157,71 @@ export default function AlphabetPage() {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
 
+  // keep only one autoplay audio at a time
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const stopAnyAudio = () => {
+    if (audioRef.current) {
+      try {
+        audioRef.current.pause();
+      } catch { }
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+  };
+
+  const autoplayDictationWord = async (word: string) => {
+    stopAnyAudio();
+
+    // ✅ MUST match SpeakButton: sha1("word:<text>")
+    const clean = word.trim();
+    const key = await sha1Hex(`word:${clean}`);
+    const src = `/audio/words/${key}.mp3`;
+
+    const audio = new Audio(src);
+    audioRef.current = audio;
+
+    // NOTE: autoplay can be blocked by browser until user gesture.
+    // We intentionally DO NOT fallback to speechSynthesis (old voice).
+    try {
+      await audio.play();
+    } catch {
+      // do nothing (no old TTS)
+    }
+  };
+
   useEffect(() => {
     // when switching tabs, reset small UI states
     setStatus("idle");
     setInput("");
+    stopAnyAudio();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
 
-  // autoplay the current dictation word when tab is "type"
   useEffect(() => {
     if (tab !== "type") return;
+    if (tDone) return; // ✅ щоб не програвало після останнього слова
+
     const word = typeWords[tIndex];
     if (!word) return;
+    if (status !== "idle") return;
 
-    if (typeof window === "undefined") return;
-    const synth = window.speechSynthesis;
-    if (!synth) return;
+    let cancelled = false;
 
-    synth.cancel();
-    const utter = new SpeechSynthesisUtterance(word);
-    utter.lang = "sk-SK";
-    utter.rate = 1;
-    utter.pitch = 1;
-    synth.speak(utter);
-  }, [tab, tIndex, typeWords]);
+    (async () => {
+      if (cancelled) return;
+      await autoplayDictationWord(word);
+    })();
+
+    return () => {
+      cancelled = true;
+      stopAnyAudio();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, tIndex, typeWords, status, tDone]);
 
   const resetDictationWithNewWords = () => {
+    stopAnyAudio();
     setDictationWords(pickRandomDictationWords(6));
     setTIndex(0);
     setTScore(0);
@@ -189,9 +233,7 @@ export default function AlphabetPage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-semibold">
-          {t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}
-        </h1>
+        <h1 className="text-2xl font-semibold">{t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}</h1>
         <p className="text-slate-700 mt-2">
           {t(
             "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
@@ -204,7 +246,8 @@ export default function AlphabetPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{t("1) Алфавіт", "1) Алфавит")}</h2>
         <div className="rounded-xl border bg-white p-4 text-sm leading-relaxed">
-          a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o, ó, ô, p, q, r, ŕ, s, š, t, ť, u, ú, v, w, x, y, ý, z, ž
+          a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o, ó, ô, p, q, r, ŕ, s, š, t, ť, u,
+          ú, v, w, x, y, ý, z, ž
         </div>
       </section>
 
@@ -298,7 +341,8 @@ export default function AlphabetPage() {
             </button>
             <button
               onClick={() => setTab("listen")}
-              className={`px-3 py-2 rounded-xl border text-sm ${tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"}`}
+              className={`px-3 py-2 rounded-xl border text-sm ${tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {t("Слухання", "Слушание")}
             </button>
@@ -321,9 +365,7 @@ export default function AlphabetPage() {
                 </div>
 
                 <div className="rounded-2xl border p-4">
-                  <div className="font-semibold">
-                    {lang === "ru" ? quiz[qIndex].questionRu : quiz[qIndex].questionUa}
-                  </div>
+                  <div className="font-semibold">{lang === "ru" ? quiz[qIndex].questionRu : quiz[qIndex].questionUa}</div>
 
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
                     {quiz[qIndex].options.map((opt) => (
@@ -428,7 +470,7 @@ export default function AlphabetPage() {
                   }}
                   className="px-4 py-2 rounded-xl border hover:bg-slate-50"
                 >
-                  {t("Почати заново", "Начать заново")}
+                  {t("Почати заново", "Начать zanово")}
                 </button>
               </>
             ) : (
@@ -473,9 +515,8 @@ export default function AlphabetPage() {
                     onChange={(e) => setInput(e.target.value)}
                     disabled={status !== "idle"}
                     placeholder={t("Введи слово...", "Введи слово...")}
-                    className={`w-full rounded-xl border px-3 py-2 ${
-                      status === "correct" ? "border-green-500" : status === "wrong" ? "border-red-500" : "border-slate-300"
-                    }`}
+                    className={`w-full rounded-xl border px-3 py-2 ${status === "correct" ? "border-green-500" : status === "wrong" ? "border-red-500" : "border-slate-300"
+                      }`}
                   />
 
                   {status === "idle" ? (
