@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import type { Lang } from "@/lib/src/language";
 
 type ReportPayload = {
   lessonId?: string;
@@ -14,26 +15,71 @@ type ReportPayload = {
   key?: string;
 };
 
-const CATEGORIES = [
-  { id: "spelling", label: "Орфографія" },
-  { id: "translation", label: "Переклад" },
-  { id: "grammar", label: "Граматика" },
-  { id: "other", label: "Інше" },
-] as const;
+type UiLang = "ua" | "ru";
+function uiLangFrom(lang: Lang): UiLang {
+  return (lang === "ru" ? "ru" : "ua") as UiLang;
+}
+
+const UI = {
+  ua: {
+    button: "Повідомити про помилку",
+    title: "Повідомити про помилку",
+    subtitle: "Напиши, що саме не так (слово/фраза/переклад/граматика).",
+    category: "Категорія",
+    description: "Опис",
+    placeholder: "Наприклад: 'правильно має бути ...' або 'переклад невірний, краще ...'",
+    sent: "Відправлено ✅",
+    failed: "Не вийшло 😕",
+    cancel: "Скасувати",
+    sending: "Відправка...",
+    send: "Надіслати",
+    categories: {
+      spelling: "Орфографія",
+      translation: "Переклад",
+      grammar: "Граматика",
+      other: "Інше",
+    },
+  },
+  ru: {
+    button: "Сообщить об ошибке",
+    title: "Сообщить об ошибке",
+    subtitle: "Напиши, что именно не так (слово/фраза/перевод/грамматика).",
+    category: "Категория",
+    description: "Описание",
+    placeholder: "Например: 'правильно должно быть ...' или 'перевод неверный, лучше ...'",
+    sent: "Отправлено ✅",
+    failed: "Не получилось 😕",
+    cancel: "Отмена",
+    sending: "Отправка...",
+    send: "Отправить",
+    categories: {
+      spelling: "Орфография",
+      translation: "Перевод",
+      grammar: "Грамматика",
+      other: "Другое",
+    },
+  },
+} as const;
+
+const CATEGORY_IDS = ["spelling", "translation", "grammar", "other"] as const;
+type CategoryId = (typeof CATEGORY_IDS)[number];
 
 export default function ReportErrorButton({
   context,
-  label = "Повідомити про помилку",
+  lang,
+  label,
   className = "",
 }: {
   context: ReportPayload;
+  lang: Lang;
   label?: string;
   className?: string;
 }) {
+  const ui = UI[uiLangFrom(lang)];
+
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [category, setCategory] =
-    useState<(typeof CATEGORIES)[number]["id"]>("grammar");
+  const [category, setCategory] = useState<CategoryId>("grammar");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "bad">("idle");
 
@@ -59,8 +105,7 @@ export default function ReportErrorButton({
           ...context,
           category,
           message: message.trim(),
-          userAgent:
-            typeof navigator !== "undefined" ? navigator.userAgent : undefined,
+          userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
         }),
       });
 
@@ -86,26 +131,20 @@ export default function ReportErrorButton({
         type="button"
         onClick={() => setOpen(true)}
         className={
-          "text-xs px-2 py-1 rounded-md border border-slate-300 hover:bg-slate-50 " +
-          className
+          "text-xs px-2 py-1 rounded-md border border-slate-300 hover:bg-slate-50 " + className
         }
       >
-        {label}
+        {label ?? ui.button}
       </button>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <div className="relative w-full max-w-lg rounded-2xl bg-white shadow-xl p-4 md:p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-lg font-semibold">Повідомити про помилку</div>
-                <div className="text-sm text-slate-600">
-                  Напиши, що саме не так (слово/фраза/переклад/граматика).
-                </div>
+                <div className="text-lg font-semibold">{ui.title}</div>
+                <div className="text-sm text-slate-600">{ui.subtitle}</div>
               </div>
               <button
                 type="button"
@@ -124,45 +163,41 @@ export default function ReportErrorButton({
             )}
 
             <div className="mt-3">
-              <div className="text-sm font-medium mb-1">Категорія</div>
+              <div className="text-sm font-medium mb-1">{ui.category}</div>
               <div className="flex flex-wrap gap-2">
-                {CATEGORIES.map((c) => (
+                {CATEGORY_IDS.map((id) => (
                   <button
-                    key={c.id}
+                    key={id}
                     type="button"
-                    onClick={() => setCategory(c.id)}
+                    onClick={() => setCategory(id)}
                     className={
                       "text-xs px-2 py-1 rounded-full border " +
-                      (category === c.id
+                      (category === id
                         ? "border-slate-900 bg-slate-900 text-white"
                         : "border-slate-300 hover:bg-slate-50")
                     }
                   >
-                    {c.label}
+                    {ui.categories[id]}
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="mt-3">
-              <div className="text-sm font-medium mb-1">Опис</div>
+              <div className="text-sm font-medium mb-1">{ui.description}</div>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={4}
-                placeholder="Наприклад: 'правильно має бути ...' або 'переклад невірний, краще ...'"
+                placeholder={ui.placeholder}
                 className="w-full rounded-xl border border-slate-300 p-2 text-sm outline-none focus:ring-2 focus:ring-slate-300"
               />
             </div>
 
             <div className="mt-4 flex items-center justify-between gap-3">
               <div className="text-xs text-slate-600">
-                {status === "ok" && (
-                  <span className="text-green-600">Відправлено ✅</span>
-                )}
-                {status === "bad" && (
-                  <span className="text-red-600">Не вийшло 😕</span>
-                )}
+                {status === "ok" && <span className="text-green-600">{ui.sent}</span>}
+                {status === "bad" && <span className="text-red-600">{ui.failed}</span>}
               </div>
 
               <div className="flex gap-2">
@@ -171,7 +206,7 @@ export default function ReportErrorButton({
                   onClick={() => setOpen(false)}
                   className="text-sm px-3 py-2 rounded-xl border border-slate-300 hover:bg-slate-50"
                 >
-                  Скасувати
+                  {ui.cancel}
                 </button>
                 <button
                   type="button"
@@ -179,7 +214,7 @@ export default function ReportErrorButton({
                   onClick={submit}
                   className="text-sm px-3 py-2 rounded-xl bg-slate-900 text-white disabled:opacity-50"
                 >
-                  {status === "sending" ? "Відправка..." : "Надіслати"}
+                  {status === "sending" ? ui.sending : ui.send}
                 </button>
               </div>
             </div>

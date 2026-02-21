@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import SyncBadge from "@/app/components/SyncBadge";
 import NavbarClient from "./NavbarClient";
+import NavLabel from "@/app/components/NavLabel";
 
 function isAdmin(email?: string | null) {
   if (!email) return false;
@@ -21,14 +22,13 @@ export default async function Navbar() {
   const isPremium = !!session?.user?.isPremium;
 
   const nav = [
-    { href: "/grammar", label: "Граматика" },
-    { href: "/dictionary", label: "Словник" },
+    { href: "/grammar", key: "grammar" as const },
+    { href: "/dictionary", key: "dictionary" as const },
     {
       href: isPremium ? "/practice" : "/premium",
-      label: isPremium ? "Тренажер" : "Тренажер 🔒",
+      key: isPremium ? ("practice" as const) : ("practiceLocked" as const),
     },
-    // ✅ NEW: Support
-    { href: "/support", label: "Підтримка" },
+    { href: "/support", key: "support" as const },
   ];
 
   return (
@@ -51,7 +51,7 @@ export default async function Navbar() {
                   href={item.href}
                   className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
                 >
-                  {item.label}
+                  <NavLabel k={item.key} />
                 </Link>
               ))}
 
@@ -61,7 +61,7 @@ export default async function Navbar() {
                   className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-900 border border-slate-300 hover:bg-slate-100"
                   title="Bug reports"
                 >
-                  🛠️ Reports
+                  🛠️ <NavLabel k="reports" />
                 </Link>
               )}
             </nav>
