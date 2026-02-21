@@ -1,28 +1,30 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://slovak-study.vercel.app";
+  const baseUrl = "https://slovak-study.com";
+
+  const now = new Date();
 
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: now,
     },
     {
       url: `${baseUrl}/grammar`,
-      lastModified: new Date(),
+      lastModified: now,
     },
     {
       url: `${baseUrl}/dictionary`,
-      lastModified: new Date(),
+      lastModified: now,
     },
     {
       url: `${baseUrl}/practice`,
-      lastModified: new Date(),
+      lastModified: now,
     },
     {
       url: `${baseUrl}/learning/a0`,
-      lastModified: new Date(),
+      lastModified: now,
     },
   ];
 }
