@@ -1,33 +1,32 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { SITE_URL } from "@/lib/site";
 
 import AlphabetPage from "../alphabet/page";
 import VerbsPresentPage from "../verbs-present/page";
 import CasesPage from "../cases/page";
 
-const baseUrl = "https://slovak-study.vercel.app";
-
 const TOPICS: Record<
   string,
-  { title: string; description: string; canonical: string }
+  { title: string; description: string; path: string }
 > = {
   alphabet: {
     title: "Алфавіт і вимова словацької мови | Slovak Study",
     description:
       "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
-    canonical: `${baseUrl}/grammar/alphabet`,
+    path: "/grammar/alphabet",
   },
   "verbs-present": {
     title: "Дієслова теперішнього часу в словацькій | Slovak Study",
     description:
       "Як відмінюються словацькі дієслова в теперішньому часі: таблиці, приклади та міні-вправа.",
-    canonical: `${baseUrl}/grammar/verbs-present`,
+    path: "/grammar/verbs-present",
   },
   cases: {
     title: "Відмінки в словацькій мові з прикладами | Slovak Study",
     description:
       "6 відмінків у словацькій мові: питання, закінчення та приклади речень. Просте пояснення для українців.",
-    canonical: `${baseUrl}/grammar/cases`,
+    path: "/grammar/cases",
   },
 };
 
@@ -41,14 +40,16 @@ export async function generateMetadata({
 
   if (!meta) return {};
 
+  const canonicalUrl = `${SITE_URL}${meta.path}`;
+
   return {
     title: meta.title,
     description: meta.description,
-    alternates: { canonical: meta.canonical },
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: meta.canonical,
+      url: canonicalUrl,
       siteName: "Slovak Study",
       type: "article",
     },
