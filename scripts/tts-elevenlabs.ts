@@ -85,6 +85,7 @@ const VOICE2_WORDS = new Set<string>([
   "dlh",
   "pripraviť",
   "platba kartou",
+  "okamih",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([

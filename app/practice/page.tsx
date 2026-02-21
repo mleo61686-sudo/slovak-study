@@ -60,7 +60,7 @@ const UI = {
     questionLabel: "Питання",
     mcqBadge: "Вибір відповіді",
     typingBadge: "Ввід слова",
-    listen: "Слухати словацьке слово:",
+    listen: "Слухати правильну відповідь (після відповіді):",
     next: "Далі →",
     check: "Перевірити ✓",
     placeholder: "Введи словацьке слово...",
@@ -99,7 +99,7 @@ const UI = {
     questionLabel: "Вопрос",
     mcqBadge: "Выбор ответа",
     typingBadge: "Ввод слова",
-    listen: "Слушать словацкое слово:",
+    listen: "Слушать правильный ответ (после ответа):",
     next: "Далее →",
     check: "Проверить ✓",
     placeholder: "Введи словацкое слово...",
@@ -295,6 +295,12 @@ export default function PracticePage() {
 
   const progressPct = session.length ? Math.round((current / session.length) * 100) : 0;
   const accuracyPct = session.length ? Math.round((score / session.length) * 100) : 0;
+
+  const canRevealAnswer = useMemo(() => {
+    if (!qBase) return false;
+    if (qBase.mode === "mcq") return !!selected;        // після вибору варіанту
+    return !!typedChecked;                              // після "Перевірити"
+  }, [qBase, selected, typedChecked]);
 
   function startNew(customSkList?: string[]) {
     const built = buildSessionBase(
@@ -645,7 +651,19 @@ export default function PracticePage() {
 
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span>{t.listen}</span>
-                    <SpeakButton text={qBase.sk} />
+
+                    {canRevealAnswer ? (
+                      <SpeakButton text={qBase.sk} />
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="rounded-lg border bg-white px-2 py-1 text-xs opacity-50 cursor-not-allowed"
+                        title={uiLang === "ua" ? "Відповідай, щоб відкрити озвучку" : "Ответь, чтобы открыть озвучку"}
+                      >
+                        🔒
+                      </button>
+                    )}
                   </div>
                 </div>
 

@@ -114,7 +114,10 @@ function getDailyState(): { date: string; count: number } {
 }
 
 function setDailyState(count: number) {
-  localStorage.setItem(DAILY_KEY, JSON.stringify({ date: getTodayKey(), count }));
+  localStorage.setItem(
+    DAILY_KEY,
+    JSON.stringify({ date: getTodayKey(), count })
+  );
 }
 
 // ✅ “Порція повторення на день” (щоб не було 60, якщо пропустив день)
@@ -133,7 +136,20 @@ function getDailySession(): DailySession | null {
 }
 
 function setDailySession(ids: string[]) {
-  localStorage.setItem(DAILY_SESSION_KEY, JSON.stringify({ date: getTodayKey(), ids }));
+  localStorage.setItem(
+    DAILY_SESSION_KEY,
+    JSON.stringify({ date: getTodayKey(), ids })
+  );
+}
+
+// ✅ видаляємо слово з сьогоднішнього списку (щоб F5 не “рефілив”)
+function removeFromDailySession(id: string) {
+  const saved = getDailySession();
+  if (!saved) return;
+  if (saved.date !== getTodayKey()) return;
+
+  const nextIds = saved.ids.filter((x) => x !== id);
+  setDailySession(nextIds);
 }
 
 function loadDb(): Record<string, SrsState> {
@@ -259,6 +275,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
   function startNewSession(nextDb?: Record<string, SrsState>) {
     const updated = nextDb ?? loadDb();
+    const now = Date.now();
+
     const dueAll = getDueSorted(allWords, updated);
     const dueIds = dueAll.map((w) => w.sk);
 
@@ -270,22 +288,11 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     let ids: string[] = [];
 
     if (saved?.date === today) {
-      // 1) лишаємо тільки реально due з того, що було в saved
-      const dueSet = new Set(dueIds);
-      ids = saved.ids.filter((id) => dueSet.has(id));
+      // ✅ Відновлюємо ТІЛЬКИ те, що було у “сьогоднішній порції”
+      // ✅ Але прибираємо те, що вже не due (на випадок, якщо щось лишилось у saved після крашу)
+      ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
 
-      // 2) ✅ якщо з’явилися нові due (напр. після "Додати 30") — дозаповнюємо
-      if (ids.length < target) {
-        const picked = new Set(ids);
-        for (const id of dueIds) {
-          if (picked.has(id)) continue;
-          ids.push(id);
-          picked.add(id);
-          if (ids.length >= target) break;
-        }
-      }
-
-      // 3) якщо ids змінилися — оновлюємо saved session
+      // ✅ важливо: НЕ дозаповнюємо новими due — інакше F5 = чіти
       setDailySession(ids);
     } else {
       ids = dueIds.slice(0, target);
@@ -337,7 +344,9 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     saveDb(updated);
     setDailyState(daily.count + toAdd.length);
 
-    // ✅ тепер startNewSession сам “дозаповнить” сьогоднішню порцію новими due
+    // ✅ важливо: НЕ дозаповнюємо сьогоднішню “порцію” автоматом
+    // щоб не було “взяти 30 → зробив 1 → F5 → знов 30”.
+    // Користувач сам натисне “Взяти наступні”, коли захоче.
     startNewSession(updated);
   }
 
@@ -396,6 +405,9 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
         setIsGrading(false);
         return;
       }
+
+      // ✅ слово “з’їдається” з сьогоднішньої порції → F5 не відновить його і не дозаповнить новими
+      removeFromDailySession(curWord.sk);
 
       goNext();
     }, 900);
