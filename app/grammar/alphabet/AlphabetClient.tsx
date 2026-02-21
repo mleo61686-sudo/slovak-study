@@ -36,9 +36,24 @@ const consonants = [
 ];
 
 // Пару простих слів для секції “Тренування вимови”
-const practiceWords = ["práca", "škola", "človek", "život", "ďakujem", "chlieb", "mesto", "učiteľ"];
+const practiceWords = [
+  "práca",
+  "škola",
+  "človek",
+  "život",
+  "ďakujem",
+  "chlieb",
+  "mesto",
+  "učiteľ",
+];
 
 // ===== Mini trainer data =====
+
+type ForcedLang = "ua" | "ru";
+
+type Props = {
+  forcedLang?: ForcedLang;
+};
 
 type Q = {
   questionUa: string;
@@ -118,9 +133,10 @@ async function sha1Hex(input: string) {
   return hashArr.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-export default function AlphabetPage() {
+export default function AlphabetPage({ forcedLang }: Props) {
   const { lang } = useLanguage();
-  const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
+  const uiLang = forcedLang ?? lang;
+  const t = (ua: string, ru: string) => (uiLang === "ru" ? ru : ua);
 
   // ===== Trainer tab =====
   const [tab, setTab] = useState<"quiz" | "listen" | "type">("quiz");
@@ -148,7 +164,9 @@ export default function AlphabetPage() {
   const [lDone, setLDone] = useState(false);
 
   // 3) dictation (6 random words from dictionary)
-  const [dictationWords, setDictationWords] = useState<string[]>(() => pickRandomDictationWords(6));
+  const [dictationWords, setDictationWords] = useState<string[]>(() =>
+    pickRandomDictationWords(6)
+  );
   const typeWords = dictationWords;
 
   const [tIndex, setTIndex] = useState(0);
@@ -164,7 +182,7 @@ export default function AlphabetPage() {
     if (audioRef.current) {
       try {
         audioRef.current.pause();
-      } catch { }
+      } catch {}
       audioRef.current.currentTime = 0;
       audioRef.current = null;
     }
@@ -233,7 +251,9 @@ export default function AlphabetPage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-semibold">{t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}</h1>
+        <h1 className="text-2xl font-semibold">
+          {t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}
+        </h1>
         <p className="text-slate-700 mt-2">
           {t(
             "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
@@ -246,8 +266,8 @@ export default function AlphabetPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{t("1) Алфавіт", "1) Алфавит")}</h2>
         <div className="rounded-xl border bg-white p-4 text-sm leading-relaxed">
-          a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o, ó, ô, p, q, r, ŕ, s, š, t, ť, u,
-          ú, v, w, x, y, ý, z, ž
+          a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o,
+          ó, ô, p, q, r, ŕ, s, š, t, ť, u, ú, v, w, x, y, ý, z, ž
         </div>
       </section>
 
@@ -256,10 +276,13 @@ export default function AlphabetPage() {
         <h2 className="text-xl font-semibold">{t("2) Голосні", "2) Гласные")}</h2>
         <div className="rounded-2xl border bg-white">
           {vowels.map((v, i) => (
-            <div key={i} className="flex justify-between border-b px-5 py-3 last:border-b-0">
+            <div
+              key={i}
+              className="flex justify-between border-b px-5 py-3 last:border-b-0"
+            >
               <div>
                 <div className="font-medium text-lg">
-                  {v.sk} — {lang === "ru" ? v.label.ru : v.label.ua}
+                  {v.sk} — {uiLang === "ru" ? v.label.ru : v.label.ua}
                 </div>
                 <div className="text-sm text-slate-500">
                   {t("Приклад:", "Пример:")} {v.example}
@@ -273,13 +296,18 @@ export default function AlphabetPage() {
 
       {/* Приголосні */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{t("3) Особливі приголосні", "3) Особые согласные")}</h2>
+        <h2 className="text-xl font-semibold">
+          {t("3) Особливі приголосні", "3) Особые согласные")}
+        </h2>
         <div className="rounded-2xl border bg-white">
           {consonants.map((c, i) => (
-            <div key={i} className="flex justify-between border-b px-5 py-3 last:border-b-0">
+            <div
+              key={i}
+              className="flex justify-between border-b px-5 py-3 last:border-b-0"
+            >
               <div>
                 <div className="font-medium text-lg">
-                  {c.sk} — {lang === "ru" ? c.label.ru : c.label.ua}
+                  {c.sk} — {uiLang === "ru" ? c.label.ru : c.label.ua}
                 </div>
                 <div className="text-sm text-slate-500">
                   {t("Приклад:", "Пример:")} {c.example}
@@ -308,10 +336,15 @@ export default function AlphabetPage() {
 
       {/* Тренування слова */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{t("5) Тренування вимови 🧠", "5) Тренировка произношения 🧠")}</h2>
+        <h2 className="text-xl font-semibold">
+          {t("5) Тренування вимови 🧠", "5) Тренировка произношения 🧠")}
+        </h2>
         <div className="rounded-2xl border bg-white">
           {practiceWords.map((w) => (
-            <div key={w} className="flex justify-between border-b px-5 py-3 last:border-b-0">
+            <div
+              key={w}
+              className="flex justify-between border-b px-5 py-3 last:border-b-0"
+            >
               <span className="font-medium">{w}</span>
               <SpeakButton text={w} />
             </div>
@@ -323,7 +356,9 @@ export default function AlphabetPage() {
       <section className="rounded-3xl border bg-white p-4 sm:p-6 shadow-sm space-y-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h2 className="text-xl font-semibold">{t("6) Міні-тренажер 🔥", "6) Мини-тренажёр 🔥")}</h2>
+            <h2 className="text-xl font-semibold">
+              {t("6) Міні-тренажер 🔥", "6) Мини-тренажёр 🔥")}
+            </h2>
             <p className="text-sm text-slate-700 mt-1">
               {t(
                 "Тут можна реально потренуватись: тести + слухання + диктант.",
@@ -335,20 +370,25 @@ export default function AlphabetPage() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setTab("quiz")}
-              className={`px-3 py-2 rounded-xl border text-sm ${tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"}`}
+              className={`px-3 py-2 rounded-xl border text-sm ${
+                tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"
+              }`}
             >
               {t("Тест", "Тест")}
             </button>
             <button
               onClick={() => setTab("listen")}
-              className={`px-3 py-2 rounded-xl border text-sm ${tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
-                }`}
+              className={`px-3 py-2 rounded-xl border text-sm ${
+                tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
+              }`}
             >
               {t("Слухання", "Слушание")}
             </button>
             <button
               onClick={() => setTab("type")}
-              className={`px-3 py-2 rounded-xl border text-sm ${tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"}`}
+              className={`px-3 py-2 rounded-xl border text-sm ${
+                tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"
+              }`}
             >
               {t("Диктант", "Диктант")}
             </button>
@@ -361,11 +401,14 @@ export default function AlphabetPage() {
             {!qDone ? (
               <>
                 <div className="text-sm text-slate-500">
-                  {t("Питання", "Вопрос")} {qIndex + 1} / {quiz.length} • {t("Рахунок", "Счёт")}: {qScore}
+                  {t("Питання", "Вопрос")} {qIndex + 1} / {quiz.length} •{" "}
+                  {t("Рахунок", "Счёт")}: {qScore}
                 </div>
 
                 <div className="rounded-2xl border p-4">
-                  <div className="font-semibold">{lang === "ru" ? quiz[qIndex].questionRu : quiz[qIndex].questionUa}</div>
+                  <div className="font-semibold">
+                    {uiLang === "ru" ? quiz[qIndex].questionRu : quiz[qIndex].questionUa}
+                  </div>
 
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
                     {quiz[qIndex].options.map((opt) => (
@@ -425,7 +468,8 @@ export default function AlphabetPage() {
             {!lDone ? (
               <>
                 <div className="text-sm text-slate-500">
-                  {t("Раунд", "Раунд")} {lIndex + 1} / {listenRounds.length} • {t("Рахунок", "Счёт")}: {lScore}
+                  {t("Раунд", "Раунд")} {lIndex + 1} / {listenRounds.length} •{" "}
+                  {t("Рахунок", "Счёт")}: {lScore}
                 </div>
 
                 <div className="rounded-2xl border p-4 space-y-3">
@@ -470,14 +514,15 @@ export default function AlphabetPage() {
                   }}
                   className="px-4 py-2 rounded-xl border hover:bg-slate-50"
                 >
-                  {t("Почати заново", "Начать zanово")}
+                  {t("Почати заново", "Начать заново")}
                 </button>
               </>
             ) : (
               <div className="rounded-2xl border p-4 space-y-3">
                 <div className="text-lg font-semibold">{t("Готово! 🎉", "Готово! 🎉")}</div>
                 <div className="text-slate-700">
-                  {t("Результат", "Результат")}: <b>{lScore}</b> / <b>{listenRounds.length}</b>
+                  {t("Результат", "Результат")}: <b>{lScore}</b> /{" "}
+                  <b>{listenRounds.length}</b>
                 </div>
                 <button
                   onClick={() => {
@@ -500,11 +545,14 @@ export default function AlphabetPage() {
             {!tDone ? (
               <>
                 <div className="text-sm text-slate-500">
-                  {t("Слово", "Слово")} {tIndex + 1} / {typeWords.length} • {t("Рахунок", "Счёт")}: {tScore}
+                  {t("Слово", "Слово")} {tIndex + 1} / {typeWords.length} •{" "}
+                  {t("Рахунок", "Счёт")}: {tScore}
                 </div>
 
                 <div className="rounded-2xl border p-4 space-y-3">
-                  <div className="font-semibold">{t("Прослухай і напиши слово:", "Прослушай и напиши слово:")}</div>
+                  <div className="font-semibold">
+                    {t("Прослухай і напиши слово:", "Прослушай и напиши слово:")}
+                  </div>
 
                   <div className="flex justify-center">
                     <SpeakButton text={typeWords[tIndex]} />
@@ -515,8 +563,13 @@ export default function AlphabetPage() {
                     onChange={(e) => setInput(e.target.value)}
                     disabled={status !== "idle"}
                     placeholder={t("Введи слово...", "Введи слово...")}
-                    className={`w-full rounded-xl border px-3 py-2 ${status === "correct" ? "border-green-500" : status === "wrong" ? "border-red-500" : "border-slate-300"
-                      }`}
+                    className={`w-full rounded-xl border px-3 py-2 ${
+                      status === "correct"
+                        ? "border-green-500"
+                        : status === "wrong"
+                        ? "border-red-500"
+                        : "border-slate-300"
+                    }`}
                   />
 
                   {status === "idle" ? (
@@ -534,10 +587,13 @@ export default function AlphabetPage() {
                   ) : (
                     <div className="space-y-2">
                       {status === "correct" ? (
-                        <div className="font-semibold text-green-600">✅ {t("Правильно!", "Правильно!")}</div>
+                        <div className="font-semibold text-green-600">
+                          ✅ {t("Правильно!", "Правильно!")}
+                        </div>
                       ) : (
                         <div className="font-semibold text-red-600">
-                          ❌ {t("Неправильно. Правильно:", "Неправильно. Правильно:")} <b>{typeWords[tIndex]}</b>
+                          ❌ {t("Неправильно. Правильно:", "Неправильно. Правильно:")}{" "}
+                          <b>{typeWords[tIndex]}</b>
                         </div>
                       )}
 
@@ -569,7 +625,10 @@ export default function AlphabetPage() {
                   )}
                 </div>
 
-                <button onClick={resetDictationWithNewWords} className="px-4 py-2 rounded-xl border hover:bg-slate-50">
+                <button
+                  onClick={resetDictationWithNewWords}
+                  className="px-4 py-2 rounded-xl border hover:bg-slate-50"
+                >
                   {t("Почати заново", "Начать заново")}
                 </button>
               </>
@@ -577,9 +636,13 @@ export default function AlphabetPage() {
               <div className="rounded-2xl border p-4 space-y-3">
                 <div className="text-lg font-semibold">{t("Готово! 🎉", "Готово! 🎉")}</div>
                 <div className="text-slate-700">
-                  {t("Результат", "Результат")}: <b>{tScore}</b> / <b>{typeWords.length}</b>
+                  {t("Результат", "Результат")}: <b>{tScore}</b> /{" "}
+                  <b>{typeWords.length}</b>
                 </div>
-                <button onClick={resetDictationWithNewWords} className="px-4 py-2 rounded-xl bg-black text-white">
+                <button
+                  onClick={resetDictationWithNewWords}
+                  className="px-4 py-2 rounded-xl bg-black text-white"
+                >
                   {t("Пройти ще раз", "Пройти ещё раз")}
                 </button>
               </div>

@@ -1,17 +1,17 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { trWord } from "@/lib/src/tr";
-import { useEffect, useMemo, useState } from "react";
 
 type W = { sk: string; ua: string; ru?: string };
 
 type PersonKey = "ja" | "ty" | "on" | "ona" | "ono" | "my" | "vy" | "oni";
 type ConjugationRow = {
   person: PersonKey;
-  form: string; // форма (показуємо поруч, але тепер UI беремо з full)
-  full: string; // ✅ що читаємо + що показуємо як канонічну форму
+  form: string; // форма для вправ/варіантів
+  full: string; // ✅ канонічне речення: що показуємо і що читаємо
   tr: W;
 };
 
@@ -38,11 +38,143 @@ const PRONOUNS: Record<PersonKey, W> = {
 function capFirst(s: string) {
   return s ? s[0].toUpperCase() + s.slice(1) : s;
 }
+
 type UiLang = "ua" | "ru";
 
-const UI: Record<UiLang, { infinitive: string; hint: string }> = {
-  ua: { infinitive: "Інфінітив", hint: "Підказка" },
-  ru: { infinitive: "Инфинитив", hint: "Подсказка" },
+const UI: Record<
+  UiLang,
+  {
+    loading: string;
+
+    title: string;
+    subtitle: string;
+
+    s1: string;
+    s2: string;
+    s3: string;
+    s4: string;
+    s5: string;
+    s6: string;
+
+    infinitive: string;
+    hint: string;
+
+    negation: string;
+    question: string;
+
+    reset: string;
+    clear: string;
+    next: string;
+
+    quizA: string;
+    quizB: string;
+
+    score: string;
+    target: string;
+
+    yourSentence: string;
+    correct: string;
+    wrongHint: string;
+    clickWords: string;
+
+    correctYes: string;
+    correctNo: string;
+    correctForm: string;
+
+    cheatItems: string[];
+  }
+> = {
+  ua: {
+    loading: "Завантаження…",
+
+    title: "Дієслова теперішнього часу",
+    subtitle:
+      "Дієслова в словацькій змінюються за особами (ja/ty/on…). Нижче — таблички + звук + вправи.",
+
+    s1: "1) Особові займенники",
+    s2: "2) Вибери дієслово",
+    s3: "3) Дієвідмінювання",
+    s4: "4) Приклади + запитання + заперечення",
+    s5: "5) Практика 🧠",
+    s6: "6) Шпаргалка",
+
+    infinitive: "Інфінітив",
+    hint: "Підказка",
+
+    negation: "Заперечення",
+    question: "Питання",
+
+    reset: "Скинути",
+    clear: "Очистити",
+    next: "Наступне",
+
+    quizA: "A) Обери правильну форму",
+    quizB: "B) Збери речення",
+
+    score: "Рахунок",
+    target: "Ціль",
+
+    yourSentence: "Твоє речення:",
+    correct: "✅ Правильно!",
+    wrongHint: "Порівняй із ціллю 👆",
+    clickWords: "Натискай слова нижче.",
+
+    correctYes: "✅ Правильно",
+    correctNo: "❌ Неправильно.",
+    correctForm: "Правильно",
+
+    cheatItems: [
+      "Часто закінчення підказує особу: -m (ja), -š (ty), -me (my), -te (vy).",
+      "Заперечення: зазвичай ne- разом з дієсловом: robím → nerobím. Для ísť: idem → nejdem.",
+      "Питання: часто достатньо знака питання: Idete do mesta?",
+    ],
+  },
+
+  ru: {
+    loading: "Загрузка…",
+
+    title: "Глаголы настоящего времени",
+    subtitle:
+      "Глаголы в словацком меняются по лицам (ja/ty/on…). Ниже — таблицы + звук + упражнения.",
+
+    s1: "1) Личные местоимения",
+    s2: "2) Выбери глагол",
+    s3: "3) Спряжение",
+    s4: "4) Примеры + вопрос + отрицание",
+    s5: "5) Практика 🧠",
+    s6: "6) Шпаргалка",
+
+    infinitive: "Инфинитив",
+    hint: "Подсказка",
+
+    negation: "Отрицание",
+    question: "Вопрос",
+
+    reset: "Сбросить",
+    clear: "Очистить",
+    next: "Следующее",
+
+    quizA: "A) Выбери правильную форму",
+    quizB: "B) Собери предложение",
+
+    score: "Счёт",
+    target: "Цель",
+
+    yourSentence: "Твоё предложение:",
+    correct: "✅ Правильно!",
+    wrongHint: "Сравни с целью 👆",
+    clickWords: "Нажимай слова ниже.",
+
+    correctYes: "✅ Правильно",
+    correctNo: "❌ Неправильно.",
+    correctForm: "Правильно",
+
+    cheatItems: [
+      "Часто окончание подсказывает лицо: -m (ja), -š (ty), -me (my), -te (vy).",
+      "Отрицание: обычно ne- вместе с глаголом: robím → nerobím. Для ísť: idem → nejdem.",
+      "Вопрос: часто достаточно знака вопроса: Idete do mesta?",
+    ],
+  },
 };
 
 function shuffle<T>(arr: T[]) {
@@ -95,7 +227,6 @@ function negateSentence(sentence: string) {
   const core = hasEnd ? s.slice(0, -1) : s;
 
   const parts = core.split(/\s+/);
-
   const finish = (txt: string) => txt + (hasEnd ? end : "");
 
   const PRON = new Set([
@@ -321,7 +452,6 @@ const VERBS: VerbBlock[] = [
       ru: "Возвратное: učím sa/učiš sa… (sa обычно после местоимения)",
     },
     rows: [
-      // ✅ form для UI лишаємо як "učím sa", але канонічне — full ("ja sa učím")
       { person: "ja", form: "učím sa", full: "ja sa učím", tr: { sk: "ja sa učím", ua: "я вчуся", ru: "я учусь" } },
       { person: "ty", form: "učíš sa", full: "ty sa učíš", tr: { sk: "ty sa učíš", ua: "ти вчишся", ru: "ты учишься" } },
       { person: "on", form: "učí sa", full: "on sa učí", tr: { sk: "on sa učí", ua: "він вчиться", ru: "он учится" } },
@@ -490,7 +620,6 @@ function genExamplesFromRows(active: VerbBlock): W[] {
     const tailUa = tails.ua[idx % tails.ua.length];
     const tailRu = tails.ru[idx % tails.ru.length];
 
-    // ✅ тут головна правка
     const sk = `${capFirst(row.full)} ${tailSk}.`.replace(/\s+/g, " ");
     const ua = `${capFirst(row.tr.ua)} ${tailUa}.`.replace(/\s+/g, " ");
     const ru = `${capFirst(row.tr.ru ?? row.tr.ua)} ${tailRu}.`.replace(/\s+/g, " ");
@@ -501,6 +630,7 @@ function genExamplesFromRows(active: VerbBlock): W[] {
 
 export default function VerbsPresentPage() {
   const { lang } = useLanguage();
+  const ui = UI[lang === "ru" ? "ru" : "ua"];
 
   const [activeVerbId, setActiveVerbId] = useState(VERBS[0].id);
   const active = useMemo(
@@ -549,22 +679,19 @@ export default function VerbsPresentPage() {
   const targetSk = (currentEx?.sk ?? "Ja pracujem.").replace(/[.!?]$/, "");
   const targetUa = (currentEx?.ua ?? "Я працюю.").replace(/[.!?]$/, "");
 
-  if (!mounted) return <div className="space-y-10">Loading…</div>;
+  if (!mounted) return <div className="space-y-10">{ui.loading}</div>;
 
   return (
     <div className="space-y-10">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">Дієслова теперішнього часу</h1>
-        <p className="text-slate-700">
-          Дієслова в словацькій змінюються за особами (ja/ty/on…).
-          Нижче — таблички + звук + вправи.
-        </p>
+        <h1 className="text-2xl font-semibold">{ui.title}</h1>
+        <p className="text-slate-700">{ui.subtitle}</p>
       </div>
 
       {/* Pronouns */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">1) Особові займенники</h2>
+        <h2 className="text-xl font-semibold">{ui.s1}</h2>
         <div className="rounded-2xl border bg-white">
           {(Object.keys(PRONOUNS) as PersonKey[]).map((k, i) => (
             <div key={i} className="flex justify-between border-b px-5 py-3 last:border-b-0">
@@ -577,7 +704,8 @@ export default function VerbsPresentPage() {
 
       {/* Verb selector */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">2) Вибери дієслово</h2>
+        <h2 className="text-xl font-semibold">{ui.s2}</h2>
+
         <div className="rounded-2xl border bg-white p-3">
           <div className="flex flex-wrap gap-2">
             {VERBS.map((v) => {
@@ -599,18 +727,16 @@ export default function VerbsPresentPage() {
 
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             <div className="rounded-xl border p-4">
-              <div className="text-sm text-slate-500">
-                {UI[(lang as UiLang) ?? "ua"].infinitive}
-              </div>
+              <div className="text-sm text-slate-500">{ui.infinitive}</div>
               <div className="text-lg font-semibold">{active.infinitive}</div>
               <div className="text-slate-600 mt-1">{trWord(active.meaning, lang)}</div>
             </div>
 
             <div className="rounded-xl border p-4">
-              <div className="text-sm text-slate-500">
-                {UI[(lang as UiLang) ?? "ua"].hint}
+              <div className="text-sm text-slate-500">{ui.hint}</div>
+              <div className="text-slate-700">
+                {active.note ? trWord(active.note, lang) : "—"}
               </div>
-              <div className="text-slate-700">{active.note ? trWord(active.note, lang) : "—"}</div>
             </div>
           </div>
         </div>
@@ -618,12 +744,11 @@ export default function VerbsPresentPage() {
 
       {/* Conjugation */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">3) Дієвідмінювання</h2>
+        <h2 className="text-xl font-semibold">{ui.s3}</h2>
         <div className="rounded-2xl border bg-white">
           {active.rows.map((row, i) => (
             <div key={i} className="flex items-center justify-between border-b px-5 py-3 last:border-b-0">
               <div className="min-w-0">
-                {/* ✅ показуємо канонічне речення */}
                 <div className="font-medium">
                   <span className="text-slate-900">{capFirst(row.full)}</span>
                 </div>
@@ -637,7 +762,7 @@ export default function VerbsPresentPage() {
 
       {/* Examples + negation + question */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">4) Приклади + запитання + заперечення</h2>
+        <h2 className="text-xl font-semibold">{ui.s4}</h2>
 
         <div className="rounded-2xl border bg-white">
           {examplesForSection4.map((ex, i) => {
@@ -656,7 +781,7 @@ export default function VerbsPresentPage() {
 
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div className="rounded-xl border px-4 py-3">
-                    <div className="text-xs text-slate-500 mb-1">Заперечення</div>
+                    <div className="text-xs text-slate-500 mb-1">{ui.negation}</div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="font-medium">{neg}</div>
                       <SpeakButton text={neg} kind="phrase" />
@@ -664,7 +789,7 @@ export default function VerbsPresentPage() {
                   </div>
 
                   <div className="rounded-xl border px-4 py-3">
-                    <div className="text-xs text-slate-500 mb-1">Питання</div>
+                    <div className="text-xs text-slate-500 mb-1">{ui.question}</div>
                     <div className="flex items-center justify-between gap-3">
                       <div className="font-medium">{q}</div>
                       <SpeakButton text={q} kind="phrase" />
@@ -679,15 +804,16 @@ export default function VerbsPresentPage() {
 
       {/* Practice */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">5) Практика 🧠</h2>
+        <h2 className="text-xl font-semibold">{ui.s5}</h2>
 
         {/* Quiz A */}
         <div className="rounded-2xl border bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="font-semibold">A) Обери правильну форму</div>
+              <div className="font-semibold">{ui.quizA}</div>
               <div className="text-sm text-slate-500">
-                Рахунок: <span className="font-medium text-slate-900">{correctCount}</span> / {quiz.length}
+                {ui.score}:{" "}
+                <span className="font-medium text-slate-900">{correctCount}</span> / {quiz.length}
               </div>
             </div>
             <button
@@ -699,7 +825,7 @@ export default function VerbsPresentPage() {
               }}
               className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
             >
-              Скинути
+              {ui.reset}
             </button>
           </div>
 
@@ -737,10 +863,11 @@ export default function VerbsPresentPage() {
                 {checked[q.person] && (
                   <div className="text-xs mt-1">
                     {answers[q.person] === q.correct ? (
-                      <span className="text-emerald-600 font-medium">✅ Правильно</span>
+                      <span className="text-emerald-600 font-medium">{ui.correctYes}</span>
                     ) : (
                       <span className="text-rose-600">
-                        ❌ Неправильно. Правильно: <span className="font-medium">{q.correct}</span>
+                        {ui.correctNo} {ui.correctForm}:{" "}
+                        <span className="font-medium">{q.correct}</span>
                       </span>
                     )}
                   </div>
@@ -754,9 +881,9 @@ export default function VerbsPresentPage() {
         <div className="rounded-2xl border bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="font-semibold">B) Збери речення</div>
+              <div className="font-semibold">{ui.quizB}</div>
               <div className="text-sm text-slate-500">
-                Ціль: <span className="font-medium text-slate-900">{targetUa}</span>
+                {ui.target}: <span className="font-medium text-slate-900">{targetUa}</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -765,7 +892,7 @@ export default function VerbsPresentPage() {
                 onClick={() => setBuild([])}
                 className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
               >
-                Очистити
+                {ui.clear}
               </button>
 
               <button
@@ -777,18 +904,21 @@ export default function VerbsPresentPage() {
                   setExIndex(next);
                   setBuild([]);
 
-                  const sk = examplesForSection4[next]?.sk ?? examplesForSection4[0]?.sk ?? "Ja pracujem.";
+                  const sk =
+                    examplesForSection4[next]?.sk ??
+                    examplesForSection4[0]?.sk ??
+                    "Ja pracujem.";
                   setSentenceParts(makeSentenceParts(sk));
                 }}
                 className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
               >
-                Наступне
+                {ui.next}
               </button>
             </div>
           </div>
 
           <div className="rounded-xl border p-4">
-            <div className="text-sm text-slate-500 mb-2">Твоє речення:</div>
+            <div className="text-sm text-slate-500 mb-2">{ui.yourSentence}</div>
             <div className="flex items-center justify-between gap-3">
               <div className="font-medium">{builtSentence || "—"}</div>
               {builtSentence ? <SpeakButton text={builtSentence + "."} kind="phrase" /> : null}
@@ -796,11 +926,11 @@ export default function VerbsPresentPage() {
 
             <div className="mt-3 text-sm">
               {builtSentence === targetSk ? (
-                <span className="text-emerald-600 font-medium">✅ Правильно!</span>
+                <span className="text-emerald-600 font-medium">{ui.correct}</span>
               ) : builtSentence.length > 0 ? (
-                <span className="text-slate-500">Порівняй із ціллю 👆</span>
+                <span className="text-slate-500">{ui.wrongHint}</span>
               ) : (
-                <span className="text-slate-500">Натискай слова нижче.</span>
+                <span className="text-slate-500">{ui.clickWords}</span>
               )}
             </div>
           </div>
@@ -821,23 +951,12 @@ export default function VerbsPresentPage() {
 
       {/* Tips */}
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold">6) Шпаргалка</h2>
+        <h2 className="text-xl font-semibold">{ui.s6}</h2>
         <div className="rounded-2xl border bg-white p-5 text-slate-700">
           <ul className="list-disc pl-5 space-y-2">
-            <li>
-              Часто закінчення підказує особу: <span className="font-medium">-m</span> (ja),
-              <span className="font-medium"> -š</span> (ty),
-              <span className="font-medium"> -me</span> (my),
-              <span className="font-medium"> -te</span> (vy).
-            </li>
-            <li>
-              Заперечення: зазвичай <span className="font-medium">ne-</span> разом з дієсловом:
-              <span className="font-medium"> robím → nerobím</span>. Для <span className="font-medium">ísť</span>:
-              <span className="font-medium"> idem → nejdem</span>.
-            </li>
-            <li>
-              Питання: часто достатньо знака питання: <span className="font-medium">Idete do mesta?</span>
-            </li>
+            {ui.cheatItems.map((t, i) => (
+              <li key={i}>{t}</li>
+            ))}
           </ul>
         </div>
       </section>

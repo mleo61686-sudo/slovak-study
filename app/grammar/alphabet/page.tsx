@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AlphabetClient from "./AlphabetClient";
+import AlphabetSeo from "./AlphabetSeo";
 
 export const metadata: Metadata = {
   title: "Алфавіт і вимова словацької мови | Slovak Study",
@@ -7,6 +8,10 @@ export const metadata: Metadata = {
     "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
   alternates: {
     canonical: "/grammar/alphabet",
+    languages: {
+      uk: "/grammar/alphabet",
+      ru: "/ru/grammar/alphabet",
+    },
   },
   openGraph: {
     title: "Алфавіт і вимова словацької мови | Slovak Study",
@@ -20,5 +25,10 @@ export const metadata: Metadata = {
 };
 
 export default function AlphabetPage() {
-  return <AlphabetClient />;
+  return (
+    <div className="space-y-10">
+      <AlphabetSeo />
+      <AlphabetClient />
+    </div>
+  );
 }

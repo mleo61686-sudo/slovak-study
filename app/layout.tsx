@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
+import { headers } from "next/headers";
+
 import Navbar from "./components/Navbar";
 import ProgressSync from "./components/ProgressSync";
 import SessionProviderClient from "./components/SessionProviderClient";
@@ -12,19 +14,43 @@ export const metadata: Metadata = {
   description: "Граматика, словник і тренажер для україномовних.",
 };
 
-export default function RootLayout({
+async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
+  try {
+    const h = await headers();
+
+    const url =
+      h.get("x-url") ||
+      h.get("x-original-url") ||
+      h.get("x-forwarded-uri") ||
+      h.get("x-forwarded-path") ||
+      "";
+
+    if (url.startsWith("/ru")) return "ru";
+
+    const ref = h.get("referer") || "";
+    try {
+      const u = new URL(ref);
+      if (u.pathname.startsWith("/ru")) return "ru";
+    } catch {}
+
+    return "uk";
+  } catch {
+    return "uk";
+  }
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const htmlLang = await detectLangFromHeaders();
+
   return (
-    <html lang="uk">
+    <html lang={htmlLang} suppressHydrationWarning>
       <head>
         {/* ✅ AdSense meta verification */}
-        <meta
-          name="google-adsense-account"
-          content="ca-pub-1760161415033749"
-        />
+        <meta name="google-adsense-account" content="ca-pub-1760161415033749" />
 
         <Script
           async
