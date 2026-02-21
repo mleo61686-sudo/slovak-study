@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Script from "next/script";
 import Navbar from "./components/Navbar";
 import ProgressSync from "./components/ProgressSync";
 import SessionProviderClient from "./components/SessionProviderClient";
@@ -18,13 +19,28 @@ export default function RootLayout({
 }) {
   return (
     <html lang="uk">
-      <body className="min-h-screen flex flex-col">
+      <head>
+        {/* ✅ AdSense meta verification */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-1760161415033749"
+        />
+
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1760161415033749"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
+      </head>
+
+      <body>
         <TopBanner />
         <Navbar />
 
         <SessionProviderClient>
           <ProgressSync />
-          <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12 flex-1">
+          <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
             {children}
           </main>
         </SessionProviderClient>
