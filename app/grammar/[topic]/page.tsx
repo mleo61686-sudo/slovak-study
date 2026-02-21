@@ -1,34 +1,31 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { SITE_URL } from "@/lib/site";
 
 import AlphabetPage from "../alphabet/page";
 import VerbsPresentPage from "../verbs-present/page";
 import CasesPage from "../cases/page";
 
-const TOPICS: Record<
-  string,
-  { title: string; description: string; path: string }
-> = {
-  alphabet: {
-    title: "Алфавіт і вимова словацької мови | Slovak Study",
-    description:
-      "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
-    path: "/grammar/alphabet",
-  },
-  "verbs-present": {
-    title: "Дієслова теперішнього часу в словацькій | Slovak Study",
-    description:
-      "Як відмінюються словацькі дієслова в теперішньому часі: таблиці, приклади та міні-вправа.",
-    path: "/grammar/verbs-present",
-  },
-  cases: {
-    title: "Відмінки в словацькій мові з прикладами | Slovak Study",
-    description:
-      "6 відмінків у словацькій мові: питання, закінчення та приклади речень. Просте пояснення для українців.",
-    path: "/grammar/cases",
-  },
-};
+const TOPICS: Record<string, { title: string; description: string; path: string }> =
+  {
+    alphabet: {
+      title: "Алфавіт і вимова словацької мови | Slovak Study",
+      description:
+        "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
+      path: "/grammar/alphabet",
+    },
+    "verbs-present": {
+      title: "Дієслова теперішнього часу в словацькій | Slovak Study",
+      description:
+        "Як відмінюються словацькі дієслова в теперішньому часі: таблиці, приклади та міні-вправа.",
+      path: "/grammar/verbs-present",
+    },
+    cases: {
+      title: "Відмінки в словацькій мові з прикладами | Slovak Study",
+      description:
+        "6 відмінків у словацькій мові: питання, закінчення та приклади речень. Просте пояснення для українців.",
+      path: "/grammar/cases",
+    },
+  };
 
 export async function generateMetadata({
   params,
@@ -40,8 +37,6 @@ export async function generateMetadata({
 
   if (!meta) return {};
 
-  const canonicalUrl = `${SITE_URL}${meta.path}`;
-
   return {
     title: meta.title,
     description: meta.description,
@@ -51,7 +46,7 @@ export async function generateMetadata({
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: canonicalUrl,
+      url: meta.path,
       siteName: "Slovak Study",
       type: "article",
     },

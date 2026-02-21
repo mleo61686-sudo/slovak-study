@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import LearningClient from "./LearningClient";
-import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Вивчення словацької мови по рівнях A0–B2 | Slovak Study",
@@ -8,14 +7,14 @@ export const metadata: Metadata = {
     "Навчання словацької мови онлайн для українців: рівні A0–B2, уроки по 10 слів, вправи та прогрес. Почни з A0.",
 
   alternates: {
-    canonical: `${SITE_URL}/learning`,
+    canonical: "/learning",
   },
 
   openGraph: {
     title: "Навчання словацької — рівні A0–B2 | Slovak Study",
     description:
       "Уроки по рівнях A0–B2, вправи та прогрес. Вивчай словацьку системно.",
-    url: `${SITE_URL}/learning`,
+    url: "/learning",
     siteName: "Slovak Study",
     type: "website",
   },
