@@ -47,6 +47,7 @@ const UI = {
     goNextLevel: "Перейти до наступного рівня →",
     toLessonsList: "До списку уроків",
     notAvailableFree: "Недоступно у free",
+    saving: "Зберігаю прогрес…",
   },
   ru: {
     viewed: "Просмотрено",
@@ -69,6 +70,7 @@ const UI = {
     goNextLevel: "Перейти к следующему уровню →",
     toLessonsList: "К списку уроков",
     notAvailableFree: "Недоступно в free",
+    saving: "Сохраняю прогресс…",
   },
 } as const;
 
@@ -135,6 +137,19 @@ export default function LevelClient({
   const { lang } = useLanguage();
   const t = UI[uiLangFrom(lang)];
 
+  // ✅ NEW: локально перераховуємо доступність "Next" після збереження прогресу
+  const [savingNext, setSavingNext] = useState(false);
+  const [canGoNextNow, setCanGoNextNow] = useState<boolean>(canGoNext);
+  const [lockedReasonNow, setLockedReasonNow] = useState<string | undefined>(
+    lockedReason
+  );
+
+  // якщо серверний проп зміниться (наприклад після refresh) — синхронізуємо
+  useEffect(() => {
+    setCanGoNextNow(canGoNext);
+    setLockedReasonNow(lockedReason);
+  }, [canGoNext, lockedReason]);
+
   // ✅ PRELOAD: 2–4 наступних зображення (щоб гортання було миттєве)
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -185,7 +200,6 @@ export default function LevelClient({
                     className="w-full h-auto rounded-2xl bg-white"
                     priority={wordIndex === 0}
                     fetchPriority={wordIndex === 0 ? "high" : "auto"}
-                    // ✅ важливо: підказує браузеру який розмір реально потрібен
                     sizes="(max-width: 640px) 92vw, (max-width: 1024px) 600px, 600px"
                   />
                 </div>
@@ -231,7 +245,6 @@ export default function LevelClient({
           ) : (
             <button
               onClick={() => {
-                // ✅ gesture тут!
                 setQuizAutoKey((k) => k + 1);
 
                 setMode("quiz");
@@ -256,16 +269,54 @@ export default function LevelClient({
 
   function finishLesson(finalScore: number) {
     setFinished(true);
+
+    // ✅ локально — одразу
     try {
       finishLessonQuiz(levelId, finalScore, totalQuestions);
-      fetch("/api/progress/lesson-done", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ levelId }),
-      }).catch(() => {});
     } catch (e) {
-      console.error("Save progress error", e);
+      console.error("Save local progress error", e);
     }
+
+    // ✅ сервер — чекаємо і тоді відкриваємо Next (або показуємо lock)
+    (async () => {
+      setSavingNext(true);
+      try {
+        const res = await fetch("/api/progress/lesson-done", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ levelId }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        // якщо сервер ок — можемо вирішити, чи можна Next для free
+        if (res.ok && data?.ok) {
+          const dailyCount = typeof data?.dailyCount === "number" ? data.dailyCount : 0;
+
+          // ✅ правило free: 2 нові уроки/день (як у тебе в бекенді)
+          // Після 1-го уроку dailyCount=1 -> можна
+          // Після 2-го dailyCount=2 -> вже не можна
+          const freeCanGoNext = dailyCount < 2;
+
+          // Якщо раніше canGoNext був false (через те що сервер ще не знав про done),
+          // то тут відкриваємо, якщо ліміт не вибраний.
+          if (!canGoNext && freeCanGoNext) {
+            setCanGoNextNow(true);
+            setLockedReasonNow(undefined);
+          } else {
+            // залишаємо як є (або якщо ліміт вибраний — хай буде lock)
+            setCanGoNextNow(canGoNext || freeCanGoNext);
+          }
+
+          // ✅ обновимо серверні сторінки/кеш
+          router.refresh();
+        }
+      } catch (e) {
+        console.error("Save server progress error", e);
+      } finally {
+        setSavingNext(false);
+      }
+    })();
   }
 
   function nextPerWord(correct: boolean) {
@@ -310,10 +361,14 @@ export default function LevelClient({
           {t.result}: <b>{score}</b> / <b>{totalQuestions}</b>
         </div>
 
-        {!canGoNext && (
+        {savingNext ? (
+          <div className="text-sm text-slate-500">{t.saving}</div>
+        ) : null}
+
+        {!canGoNextNow && (
           <div className="rounded-xl border bg-slate-50 p-3 text-sm text-slate-700">
             <div className="font-semibold">{t.nextLockedTitle}</div>
-            <div className="mt-1">{lockedReason ?? t.nextLockedDefault}</div>
+            <div className="mt-1">{lockedReasonNow ?? t.nextLockedDefault}</div>
           </div>
         )}
 
@@ -333,7 +388,7 @@ export default function LevelClient({
 
           <button
             onClick={() => {
-              if (!canGoNext) {
+              if (!canGoNextNow) {
                 router.push(onLockedNextRedirect);
                 return;
               }
@@ -341,15 +396,17 @@ export default function LevelClient({
             }}
             className={[
               "px-4 py-2 rounded-xl text-white",
-              canGoNext ? "bg-black" : "bg-black/40 cursor-not-allowed",
+              canGoNextNow && !savingNext
+                ? "bg-black"
+                : "bg-black/40 cursor-not-allowed",
             ].join(" ")}
-            disabled={!canGoNext}
-            title={!canGoNext ? t.notAvailableFree : undefined}
+            disabled={!canGoNextNow || savingNext}
+            title={!canGoNextNow ? t.notAvailableFree : undefined}
           >
             {t.goNextLevel}
           </button>
 
-          {!canGoNext && (
+          {!canGoNextNow && (
             <button
               onClick={() => router.push(onLockedNextRedirect)}
               className="px-4 py-2 border rounded-xl"
