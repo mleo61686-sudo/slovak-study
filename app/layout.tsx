@@ -73,9 +73,21 @@ export default async function RootLayout({
           </main>
         </SessionProviderClient>
 
-        <footer className="mt-auto">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
-            © {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.
+        {/* 🔥 ОНОВЛЕНИЙ FOOTER З SEO-ЛІНКАМИ */}
+        <footer className="mt-auto border-t">
+          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              © {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <a className="hover:underline" href="/slovak-for-ukrainians">
+                Словацька для українців
+              </a>
+              <a className="hover:underline" href="/ru/slovak-for-ukrainians">
+                Словацкий для украинцев
+              </a>
+            </div>
           </div>
         </footer>
 
