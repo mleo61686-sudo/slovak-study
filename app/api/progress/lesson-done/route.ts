@@ -10,6 +10,10 @@ function isSameDay(a: Date, b: Date) {
   );
 }
 
+function toDayKey(d: Date) {
+  return d.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
 export async function POST(req: Request) {
   const session = await auth();
   const email = session?.user?.email;
@@ -29,6 +33,8 @@ export async function POST(req: Request) {
     !!user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
   const today = new Date();
+  const todayKey = toDayKey(today);
+  const nowIso = new Date().toISOString();
 
   const row = await prisma.userProgress.upsert({
     where: { userId: user.id },
@@ -51,7 +57,8 @@ export async function POST(req: Request) {
   const lp = (row.lessonsProgress ?? {}) as Record<string, any>;
 
   const wasDone =
-    lp?.[id] === true || (lp?.[id] && typeof lp[id] === "object" && lp[id].done === true);
+    lp?.[id] === true ||
+    (lp?.[id] && typeof lp[id] === "object" && lp[id].done === true);
 
   // ✅ якщо вже було done — нічого не рахуємо, просто повертаємо стан
   if (wasDone) {
@@ -68,11 +75,22 @@ export async function POST(req: Request) {
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
 
   // ✅ FREE: збільшуємо ліміт тільки для нових уроків
-  // ✅ PREMIUM: ліміт не важливий, але можемо теж вести лічильник — не шкодить
+  // ✅ PREMIUM: ліміт не важливий
   const nextCount = currentCount + (hasPremium ? 0 : 1);
 
-  // ✅ позначаємо урок як done (мінімально), щоб наступний раз не рахувався
-  const nextLp = { ...lp, [id]: { ...(typeof lp[id] === "object" ? lp[id] : {}), done: true } };
+  // ✅ позначаємо урок як done + фіксуємо дату (для streak/records)
+  const prevObj =
+    typeof lp[id] === "object" && lp[id] ? lp[id] : (lp[id] === true ? { done: true } : {});
+
+  const nextLp = {
+    ...lp,
+    [id]: {
+      ...prevObj,
+      done: true,
+      doneAt: todayKey,   // ✅ ключ для streak
+      updatedAt: nowIso,  // ✅ на всякий
+    },
+  };
 
   await prisma.userProgress.update({
     where: { userId: user.id },
@@ -80,7 +98,6 @@ export async function POST(req: Request) {
       lessonsProgress: nextLp,
       dailyDate: today,
       dailyCount: hasPremium ? currentCount : nextCount,
-      // lastUnlockedLevel можна оновлювати на максимум — але навіть без цього ліміт працюватиме
       lastUnlockedLevel: id,
     },
   });

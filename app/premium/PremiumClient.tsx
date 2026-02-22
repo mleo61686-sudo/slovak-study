@@ -1,11 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Lang = "ua" | "ru";
 type Currency = "eur" | "usd" | "uah";
+type Interval = "month" | "year";
+
+const YEARLY_DISPLAY_PRICE: Record<Currency, string> = {
+  eur: "€79",
+  usd: "$89",
+  uah: "₴3490",
+};
+
+const MONTHLY_DISPLAY_PRICE: Record<Currency, string> = {
+  eur: "€7.99",
+  usd: "$8.99",
+  uah: "₴349",
+};
 
 const T = {
   ua: {
@@ -23,10 +36,21 @@ const T = {
       "🔁 Повторення тільки помилок",
       "📊 Статистика, серії та рекорди",
     ],
-    price: "Обери валюту: EUR / USD / UAH • можна скасувати будь-коли",
-    buyEur: "Оформити Premium — €7.99 (EUR) →",
-    buyUsd: "Оформити Premium — $8.99 (USD) →",
-    buyUah: "Оформити Premium — ₴349 (UAH) →",
+
+    planTitle: "Обери план:",
+    planMonth: "Місячний",
+    planYear: "Річний",
+    planYearBadge: "вигідніше",
+    planHint: "Можна скасувати будь-коли.",
+
+    priceNote:
+      "Обери валюту: EUR / USD / UAH • Оплата через Stripe • можна скасувати будь-коли",
+
+    buy: (currencyLabel: string, price: string, interval: Interval) =>
+      interval === "year"
+        ? `Оформити Premium — ${price} / рік (${currencyLabel}) →`
+        : `Оформити Premium — ${price} / місяць (${currencyLabel}) →`,
+
     manage: "Керувати підпискою →",
     secondary: "Подивитись тренажер →",
     lockedTrainer: "Тренажер 🔒",
@@ -48,10 +72,21 @@ const T = {
       "🔁 Повторять только ошибки",
       "📊 Статистика, серии и рекорды",
     ],
-    price: "Выбери валюту: EUR / USD / UAH • можно отменить в любой момент",
-    buyEur: "Оформить Premium — €7.99 (EUR) →",
-    buyUsd: "Оформить Premium — $8.99 (USD) →",
-    buyUah: "Оформить Premium — ₴349 (UAH) →",
+
+    planTitle: "Выбери план:",
+    planMonth: "Месячный",
+    planYear: "Годовой",
+    planYearBadge: "выгоднее",
+    planHint: "Можно отменить в любой момент.",
+
+    priceNote:
+      "Выбери валюту: EUR / USD / UAH • Оплата через Stripe • можно отменить в любой момент",
+
+    buy: (currencyLabel: string, price: string, interval: Interval) =>
+      interval === "year"
+        ? `Оформить Premium — ${price} / год (${currencyLabel}) →`
+        : `Оформить Premium — ${price} / месяц (${currencyLabel}) →`,
+
     manage: "Управлять подпиской →",
     secondary: "Посмотреть тренажёр →",
     lockedTrainer: "Тренажёр 🔒",
@@ -59,6 +94,12 @@ const T = {
     opening: "Открываю Stripe…",
   },
 } satisfies Record<Lang, any>;
+
+const CURRENCY_LABEL: Record<Currency, string> = {
+  eur: "EUR",
+  usd: "USD",
+  uah: "UAH",
+};
 
 export default function PremiumClient() {
   const { lang } = useLanguage();
@@ -71,14 +112,20 @@ export default function PremiumClient() {
   const isPremium = !!session?.user?.isPremium;
 
   const [loading, setLoading] = useState<Currency | "portal" | null>(null);
+  const [interval, setInterval] = useState<Interval>("month");
+
+  const displayPrice = useMemo(() => {
+    return interval === "year" ? YEARLY_DISPLAY_PRICE : MONTHLY_DISPLAY_PRICE;
+  }, [interval]);
 
   async function handleCheckout(currency: Currency) {
     setLoading(currency);
     try {
-      const res = await fetch("/api/stripe/checkout",{
+      const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currency }),
+        // ✅ NEW: interval
+        body: JSON.stringify({ currency, interval }),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -115,7 +162,7 @@ export default function PremiumClient() {
 
   return (
     <div className="space-y-6">
-      <header className="text-center space-y-2">
+      <header className="space-y-2 text-center">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           {t.topTitle}
         </h1>
@@ -132,6 +179,48 @@ export default function PremiumClient() {
             <h2 className="text-2xl font-semibold">{t.title}</h2>
             <p className="max-w-2xl text-white/80">{t.subtitle}</p>
 
+            {/* ✅ Plan toggle */}
+            <div className="space-y-2">
+              <div className="text-sm font-semibold text-white/90">
+                {t.planTitle}
+              </div>
+
+              <div className="inline-flex rounded-2xl border border-white/15 bg-white/5 p-1">
+                <button
+                  type="button"
+                  onClick={() => setInterval("month")}
+                  className={[
+                    "h-9 rounded-xl px-4 text-sm font-semibold transition",
+                    interval === "month"
+                      ? "bg-white text-slate-900"
+                      : "text-white/85 hover:bg-white/10",
+                  ].join(" ")}
+                >
+                  {t.planMonth}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setInterval("year")}
+                  className={[
+                    "relative h-9 rounded-xl px-4 text-sm font-semibold transition",
+                    interval === "year"
+                      ? "bg-white text-slate-900"
+                      : "text-white/85 hover:bg-white/10",
+                  ].join(" ")}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    {t.planYear}
+                    <span className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-bold text-black">
+                      {t.planYearBadge}
+                    </span>
+                  </span>
+                </button>
+              </div>
+
+              <div className="text-xs text-white/65">{t.planHint}</div>
+            </div>
+
             <ul className="grid gap-2 sm:grid-cols-2">
               {t.bullets.map((item: string) => (
                 <li
@@ -143,7 +232,7 @@ export default function PremiumClient() {
               ))}
             </ul>
 
-            <div className="text-sm text-white/70">{t.price}</div>
+            <div className="text-sm text-white/70">{t.priceNote}</div>
           </div>
 
           <div className="flex flex-col gap-3 sm:pt-2">
@@ -158,7 +247,9 @@ export default function PremiumClient() {
                   disabled={!!loading}
                   className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
                 >
-                  {loading === "eur" ? t.opening : t.buyEur}
+                  {loading === "eur"
+                    ? t.opening
+                    : t.buy("EUR", displayPrice.eur, interval)}
                 </button>
 
                 <button
@@ -166,7 +257,9 @@ export default function PremiumClient() {
                   disabled={!!loading}
                   className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
                 >
-                  {loading === "usd" ? t.opening : t.buyUsd}
+                  {loading === "usd"
+                    ? t.opening
+                    : t.buy("USD", displayPrice.usd, interval)}
                 </button>
 
                 <button
@@ -174,7 +267,9 @@ export default function PremiumClient() {
                   disabled={!!loading}
                   className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
                 >
-                  {loading === "uah" ? t.opening : t.buyUah}
+                  {loading === "uah"
+                    ? t.opening
+                    : t.buy("UAH", displayPrice.uah, interval)}
                 </button>
               </>
             ) : (
@@ -193,6 +288,19 @@ export default function PremiumClient() {
             >
               {isPremium ? t.secondary : t.lockedTrainer}
             </a>
+
+            {/* small note under buttons */}
+            {!isPremium ? (
+              <div className="pt-1 text-center text-xs text-white/55">
+                {interval === "year"
+                  ? L === "ru"
+                    ? "Годовой план — лучший выбор, если учишься всерьёз."
+                    : "Річний план — найкращий вибір, якщо вчишся серйозно."
+                  : L === "ru"
+                  ? "Можно перейти на годовой план в любое время."
+                  : "Можна перейти на річний план у будь-який момент."}
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

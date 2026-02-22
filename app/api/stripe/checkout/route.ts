@@ -19,21 +19,38 @@ export async function POST(req: Request) {
 
     const body = await req.json().catch(() => ({}));
     const currency = (body?.currency ?? "eur").toLowerCase();
+    const interval = (body?.interval ?? "month").toLowerCase(); // ✅ NEW
 
-    const PRICE_BY_CURRENCY: Record<string, string | undefined> = {
-      eur: process.env.STRIPE_PRICE_EUR,
-      usd: process.env.STRIPE_PRICE_USD,
-      uah: process.env.STRIPE_PRICE_UAH,
+    // ✅ PRICE MAP
+    const PRICE_MAP: Record<
+      string,
+      { month?: string; year?: string }
+    > = {
+      eur: {
+        month: process.env.STRIPE_PRICE_EUR,
+        year: process.env.STRIPE_PRICE_EUR_YEAR,
+      },
+      usd: {
+        month: process.env.STRIPE_PRICE_USD,
+        year: process.env.STRIPE_PRICE_USD_YEAR,
+      },
+      uah: {
+        month: process.env.STRIPE_PRICE_UAH,
+        year: process.env.STRIPE_PRICE_UAH_YEAR,
+      },
     };
 
+    const currencyMap = PRICE_MAP[currency] ?? PRICE_MAP.eur;
     const priceId =
-      PRICE_BY_CURRENCY[currency] ?? process.env.STRIPE_PRICE_EUR;
+      interval === "year"
+        ? currencyMap.year
+        : currencyMap.month;
 
     if (!priceId) {
       return NextResponse.json(
         {
           error:
-            "Price not configured: set STRIPE_PRICE_EUR / USD / UAH in Vercel env",
+            "Price not configured: check STRIPE_PRICE_* env variables",
         },
         { status: 500 }
       );

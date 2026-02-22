@@ -4,6 +4,9 @@
 export type LessonProgressObj = {
   done?: boolean;
 
+  // ✅ NEW: дата завершення уроку (для streak/records)
+  doneAt?: string; // "YYYY-MM-DD"
+
   lastCorrect?: number;
   lastWrong?: number;
   lastTotal?: number;
@@ -43,7 +46,7 @@ function safeDispatchStorage() {
   try {
     // storage event не спрацьовує в цій же вкладці сам по собі
     window.dispatchEvent(new Event("storage"));
-  } catch { }
+  } catch {}
 }
 
 function getActiveUserId(): string | null {
@@ -62,7 +65,7 @@ export function setActiveUserId(userId: string | null) {
   try {
     if (!userId) localStorage.removeItem(ACTIVE_USER_KEY);
     else localStorage.setItem(ACTIVE_USER_KEY, userId);
-  } catch { }
+  } catch {}
   // 🔥 важливо: повідомляємо UI одразу
   safeDispatchStorage();
 }
@@ -140,7 +143,7 @@ export function saveProgress(p: AppProgress) {
       key,
       JSON.stringify({ ...p, version: 1, updatedAt: Date.now() })
     );
-  } catch { }
+  } catch {}
 
   // 🔥 щоб UI оновився
   safeDispatchStorage();
@@ -148,7 +151,7 @@ export function saveProgress(p: AppProgress) {
   // 🔥 щоб ProgressSync знав, що треба відправити на сервер
   try {
     window.dispatchEvent(new Event("slovakStudy:progressChanged"));
-  } catch { }
+  } catch {}
 }
 
 // ===== Lesson helpers =====
@@ -169,8 +172,8 @@ export function patchLessonProgress(lessonId: string, patch: LessonProgressObj) 
     prev === true
       ? { done: true }
       : typeof prev === "object" && prev
-        ? (prev as LessonProgressObj)
-        : {};
+      ? (prev as LessonProgressObj)
+      : {};
 
   const next: LessonProgressObj = { ...prevObj, ...patch };
   setLessonsProgress({ ...lessons, [lessonId]: next });
@@ -188,22 +191,26 @@ export function finishLessonQuiz(
     prev === true
       ? { done: true }
       : typeof prev === "object" && prev
-        ? (prev as LessonProgressObj)
-        : {};
+      ? (prev as LessonProgressObj)
+      : {};
 
   const attempts = (prevObj.attempts ?? 0) + 1;
   const bestCorrect = Math.max(prevObj.bestCorrect ?? 0, finalScore);
 
+  const now = new Date();
+  const dayKey = now.toISOString().slice(0, 10);
+
   const next: LessonProgressObj = {
     ...prevObj,
     done: true,
+    doneAt: prevObj.doneAt ?? dayKey, // ✅ якщо вже було — не перезатираємо
     lastCorrect: finalScore,
     lastTotal: total,
     lastWrong: Math.max(0, total - finalScore),
     bestCorrect,
     bestTotal: total,
     attempts,
-    updatedAt: new Date().toISOString(),
+    updatedAt: now.toISOString(),
   };
 
   setLessonsProgress({ ...lessons, [lessonId]: next });
