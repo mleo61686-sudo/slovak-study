@@ -41,6 +41,11 @@ const dict = {
   },
 } satisfies Record<Lang, any>;
 
+// ✅ Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
+const LESSONS_LIMITS: Partial<Record<string, number>> = {
+  b1: 35, // ✅ було 60 → стало 35
+};
+
 // ===== Глобальна логіка порядку (як у server) =====
 
 function parseLevelId(id: string) {
@@ -79,7 +84,10 @@ function nextLevelId(id: string) {
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= 30) return "a1-1";
   if (p.band === "a1" && Number.isFinite(p.n) && p.n >= 40) return "a2-1";
   if (p.band === "a2" && Number.isFinite(p.n) && p.n >= 50) return "b1-1";
-  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= 50) return "b2-1"; // на майбутнє, якщо треба
+
+  // ✅ B1 тепер 35 уроків → після 35 переходимо на B2
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= 35) return "b2-1";
+
   return `${p.band}-${p.n + 1}`;
 }
 
@@ -103,6 +111,7 @@ function getLastDone(progress: LessonsProgress) {
 
   return best;
 }
+
 function isDoneId(progress: LessonsProgress, id: string) {
   const key = id.toLowerCase();
   const v: LessonProgressValue | undefined =
@@ -131,6 +140,22 @@ export default function LearningPage() {
   const { data: session } = useSession();
   const isPremium = (session?.user as any)?.isPremium === true;
 
+  // ✅ Адмін по email (через env)
+  const adminEmails = useMemo(() => {
+    return (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean);
+  }, []);
+
+  const myEmail = (session?.user?.email ?? "").toLowerCase();
+  const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
+
+  // ✅ B1 закритий для всіх, крім адміна
+  const DISABLED_BANDS = useMemo(
+    () => new Set<string>(isAdmin ? [] : ["b1"]),
+    [isAdmin]
+  );
 
   const [progress, setProgress] = useState<LessonsProgress>({});
   const { lang } = useLanguage() as { lang: Lang };
@@ -150,6 +175,7 @@ export default function LearningPage() {
   }, []);
 
   const isDone = (id: string) => isDoneId(progress, id);
+
   const getStats = (id: string) => {
     const v = progress[id];
     if (!v || v === true || typeof v !== "object") return null;
@@ -174,16 +200,17 @@ export default function LearningPage() {
       ).length,
     [progress]
   );
+
   const allowed = useMemo(() => {
     // Premium — все можна, але "доступний зараз" хай показує перший непройдений
     return getAllowedSequential(progress);
   }, [progress]);
 
-
   function isLessonUnlockedGlobal(lessonId: string) {
     if (isPremium) return true;
     return compareLevel(lessonId, allowed) <= 0;
   }
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-3xl font-bold">{t.title}</h1>
@@ -192,6 +219,7 @@ export default function LearningPage() {
       <p className="mt-3 text-sm text-slate-500">
         {t.done} <span className="font-medium">{completedCount}</span>
       </p>
+
       {isPremium && (
         <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
           ⭐ Premium активний — безліміт доступу
@@ -203,106 +231,123 @@ export default function LearningPage() {
       </div>
 
       <div className="mt-8 space-y-8">
-        {CEFR_LEVELS.map((band) => (
-          <section
-            key={band.id}
-            className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-md"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-semibold">{band.title[lang]}</h2>
-                <p className="mt-1 text-sm text-slate-600">
-                  {band.subtitle[lang]}
-                </p>
+        {CEFR_LEVELS.map((band) => {
+          // ✅ для UI-статистики обмежуємо B1 до 35
+          const limit = LESSONS_LIMITS[band.id] ?? band.lessons.length;
+          const lessonsTotal = Math.min(band.lessons.length, limit);
+          const wordsTotal = lessonsTotal * 10;
 
-                <p className="mt-2 text-xs text-slate-500">
-                  {t.lessons} {band.lessons.length} · {t.words}{" "}
-                  {band.lessons.length * 10}
-                </p>
-              </div>
+          const isBandDisabled = DISABLED_BANDS.has(band.id);
 
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/learning/levels/${band.id}`}
-                  className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50"
-                >
-                  {t.allLessons}
-                </Link>
+          return (
+            <section
+              key={band.id}
+              className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-md"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-semibold">{band.title[lang]}</h2>
+                  <p className="mt-1 text-sm text-slate-600">
+                    {band.subtitle[lang]}
+                  </p>
 
-                <span className="rounded-full border px-3 py-1 text-xs text-slate-600">
-                  {band.id.toUpperCase()}
-                </span>
-              </div>
-            </div>
+                  <p className="mt-2 text-xs text-slate-500">
+                    {t.lessons} {lessonsTotal} · {t.words} {wordsTotal}
+                  </p>
+                </div>
 
-            {band.lessons.length === 0 ? (
-              <div className="mt-5 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-600">
-                {t.soon}
-              </div>
-            ) : (
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                {band.lessons.slice(0, 4).map((lesson) => {
-                  const unlocked = isLessonUnlockedGlobal(lesson.id);
-                  const done = isDone(lesson.id);
-                  const stats = getStats(lesson.id);
-
-                  const isStart = lesson.id === allowed && !done;
-
-                  return (
-                    <div
-                      key={lesson.id}
-                      className={`rounded-2xl border p-4 ${unlocked ? "hover:bg-slate-50" : "opacity-60"
-                        }`}
+                <div className="flex items-center gap-2">
+                  {isBandDisabled ? (
+                    <span className="cursor-not-allowed rounded-xl border px-3 py-1 text-xs font-medium text-slate-400">
+                      {t.allLessons}
+                    </span>
+                  ) : (
+                    <Link
+                      href={`/learning/levels/${band.id}`}
+                      className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="font-medium">
-                          {lesson.title[lang]} {done ? "✅" : ""}
-                        </div>
-                        <div className="text-sm text-slate-500">
-                          {t.wordsCount(lesson.wordsCount)}
-                        </div>
-                      </div>
+                      {t.allLessons}
+                    </Link>
+                  )}
 
-                      {stats && (
-                        <div className="mt-1 text-xs text-slate-500">
-                          ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
-                          {stats.lastTotal}
-                        </div>
-                      )}
-
-                      <div className="mt-3 flex justify-end">
-                        {unlocked ? (
-                          isStart ? (
-                            <button
-                              onClick={() => router.push(`/learning/${lesson.id}`)}
-                              className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
-                            >
-                              {t.start}
-                            </button>
-                          ) : (
-                            <Link
-                              href={`/learning/${lesson.id}`}
-                              className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
-                            >
-                              {t.repeat}
-                            </Link>
-                          )
-                        ) : (
-                          <button
-                            disabled
-                            className="rounded-xl border px-4 py-2 text-sm text-slate-600"
-                          >
-                            {t.locked}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                  <span className="rounded-full border px-3 py-1 text-xs text-slate-600">
+                    {band.id.toUpperCase()}
+                  </span>
+                </div>
               </div>
-            )}
-          </section>
-        ))}
+
+              {band.lessons.length === 0 || isBandDisabled ? (
+                <div className="mt-5 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-600">
+                  {t.soon}
+                </div>
+              ) : (
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {band.lessons.slice(0, 4).map((lesson) => {
+                    const unlocked = isLessonUnlockedGlobal(lesson.id);
+                    const done = isDone(lesson.id);
+                    const stats = getStats(lesson.id);
+
+                    const isStart = lesson.id === allowed && !done;
+
+                    return (
+                      <div
+                        key={lesson.id}
+                        className={`rounded-2xl border p-4 ${
+                          unlocked ? "hover:bg-slate-50" : "opacity-60"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="font-medium">
+                            {lesson.title[lang]} {done ? "✅" : ""}
+                          </div>
+                          <div className="text-sm text-slate-500">
+                            {t.wordsCount(lesson.wordsCount)}
+                          </div>
+                        </div>
+
+                        {stats && (
+                          <div className="mt-1 text-xs text-slate-500">
+                            ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
+                            {stats.lastTotal}
+                          </div>
+                        )}
+
+                        <div className="mt-3 flex justify-end">
+                          {unlocked ? (
+                            isStart ? (
+                              <button
+                                onClick={() =>
+                                  router.push(`/learning/${lesson.id}`)
+                                }
+                                className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
+                              >
+                                {t.start}
+                              </button>
+                            ) : (
+                              <Link
+                                href={`/learning/${lesson.id}`}
+                                className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
+                              >
+                                {t.repeat}
+                              </Link>
+                            )
+                          ) : (
+                            <button
+                              disabled
+                              className="rounded-xl border px-4 py-2 text-sm text-slate-600"
+                            >
+                              {t.locked}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          );
+        })}
       </div>
     </div>
   );
