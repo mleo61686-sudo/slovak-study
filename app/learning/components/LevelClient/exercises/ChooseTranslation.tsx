@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { shuffle, trWord, playLocal } from "../helpers";
@@ -32,7 +33,6 @@ export default function ChooseTranslation({
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
 
-  // ❗ НЕ ресетимо при зміні мови
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
@@ -52,13 +52,39 @@ export default function ChooseTranslation({
         {chooseLabel} <span className="font-bold">{word.sk}</span>
       </div>
 
-      <SpeakCentered
-        text={word.sk}
-        kind="word"
-        autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
-      />
+      {/* ✅ Фото */}
+      {word.img ? (
+        <div className="mt-2 flex flex-col items-center gap-2">
+          <div className="mx-auto w-full max-w-[320px]">
+            <Image
+              src={word.img}
+              alt={word.sk}
+              width={1200}
+              height={900}
+              className="w-full h-auto rounded-2xl bg-white"
+            />
+          </div>
 
-      <div className="grid gap-3">
+          {word.imgCredit && (
+            <div className="text-xs text-slate-500">
+              {word.imgCredit}
+            </div>
+          )}
+        </div>
+      ) : null}
+
+      {/* ✅ Мішкер тепер ПІД фото */}
+      <div className="mt-2">
+        <SpeakCentered
+          text={word.sk}
+          kind="word"
+          autoPlayKey={
+            audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined
+          }
+        />
+      </div>
+
+      <div className="grid gap-3 mt-3">
         {options.map((opt) => (
           <button
             key={opt}

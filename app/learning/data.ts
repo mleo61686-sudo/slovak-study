@@ -226,7 +226,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
     id: "3",
     title: { ua: "Урок 3 — дім", ru: "Урок 3 — дом" },
     words: [
-      { sk: "byt", ua: "квартира", ru: "квартира", img: "/words/byt2.jpg" },
+      { sk: "byt", ua: "квартира", ru: "квартира", img: "/words/bytt.jpg" },
       { sk: "izba", ua: "кімната", ru: "комната", img: "/words/izba.jpg" },
       { sk: "kuchyňa", ua: "кухня", ru: "кухня", img: "/words/kuchyňa.jpg" },
       { sk: "kúpeľňa", ua: "ванна кімната", ru: "ванная", img: "/words/kúpeľňa.jpg" },
