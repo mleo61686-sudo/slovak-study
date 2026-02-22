@@ -135,15 +135,20 @@ export default function LevelClient({
   const { lang } = useLanguage();
   const t = UI[uiLangFrom(lang)];
 
-  // preload наступного зображення
+  // ✅ PRELOAD: 2–4 наступних зображення (щоб гортання було миттєве)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const nextImg = words[wordIndex + 1]?.img;
-    if (!nextImg) return;
+    const lookahead = 4; // 2..4 оптимально
+    for (let k = 1; k <= lookahead; k++) {
+      const src = words[wordIndex + k]?.img;
+      if (!src) continue;
 
-    const pre = new window.Image();
-    pre.src = nextImg;
+      const img = new window.Image();
+      img.decoding = "async";
+      img.loading = "eager";
+      img.src = src;
+    }
   }, [words, wordIndex]);
 
   const totalQuestions = useMemo(() => {
@@ -179,11 +184,16 @@ export default function LevelClient({
                     height={900}
                     className="w-full h-auto rounded-2xl bg-white"
                     priority={wordIndex === 0}
+                    fetchPriority={wordIndex === 0 ? "high" : "auto"}
+                    // ✅ важливо: підказує браузеру який розмір реально потрібен
+                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 600px, 600px"
                   />
                 </div>
               </div>
 
-              {word.imgCredit && <div className="text-xs text-slate-500">{word.imgCredit}</div>}
+              {word.imgCredit && (
+                <div className="text-xs text-slate-500">{word.imgCredit}</div>
+              )}
             </div>
           ) : (
             <div className="mx-auto h-40 w-40 rounded-2xl border bg-slate-50 flex items-center justify-center text-slate-400">
@@ -195,7 +205,10 @@ export default function LevelClient({
           <div className="text-slate-600">{trWord(word, lang)}</div>
 
           <div className="flex justify-center">
-            <SpeakButton text={word.sk} autoPlayKey={audioUnlocked ? word.sk : undefined} />
+            <SpeakButton
+              text={word.sk}
+              autoPlayKey={audioUnlocked ? word.sk : undefined}
+            />
           </div>
         </div>
 
@@ -209,7 +222,10 @@ export default function LevelClient({
           </button>
 
           {wordIndex < words.length - 1 ? (
-            <button onClick={() => setWordIndex((i) => i + 1)} className="px-4 py-2 border rounded-xl">
+            <button
+              onClick={() => setWordIndex((i) => i + 1)}
+              className="px-4 py-2 border rounded-xl"
+            >
               {t.next}
             </button>
           ) : (
@@ -246,7 +262,7 @@ export default function LevelClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ levelId }),
-      }).catch(() => { });
+      }).catch(() => {});
     } catch (e) {
       console.error("Save progress error", e);
     }
@@ -334,7 +350,10 @@ export default function LevelClient({
           </button>
 
           {!canGoNext && (
-            <button onClick={() => router.push(onLockedNextRedirect)} className="px-4 py-2 border rounded-xl">
+            <button
+              onClick={() => router.push(onLockedNextRedirect)}
+              className="px-4 py-2 border rounded-xl"
+            >
               {t.toLessonsList}
             </button>
           )}
@@ -388,10 +407,17 @@ export default function LevelClient({
       )}
 
       {exercise.kind === "chooseSlovak" && (
-        <ChooseSlovak word={currentWord} words={words} lang={lang} onNext={nextPerWord} />
+        <ChooseSlovak
+          word={currentWord}
+          words={words}
+          lang={lang}
+          onNext={nextPerWord}
+        />
       )}
 
-      {exercise.kind === "writeWord" && <WriteWord word={currentWord} lang={lang} onNext={nextPerWord} />}
+      {exercise.kind === "writeWord" && (
+        <WriteWord word={currentWord} lang={lang} onNext={nextPerWord} />
+      )}
 
       {exercise.kind === "audioQuiz" && (
         <AudioQuiz
@@ -404,10 +430,17 @@ export default function LevelClient({
         />
       )}
 
-      {exercise.kind === "matchColumns" && <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />}
+      {exercise.kind === "matchColumns" && (
+        <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
+      )}
 
       {exercise.kind === "buildSentence" && (
-        <BuildSentence word={currentWord} lang={lang} levelId={levelId} onNext={nextPerWord} />
+        <BuildSentence
+          word={currentWord}
+          lang={lang}
+          levelId={levelId}
+          onNext={nextPerWord}
+        />
       )}
     </div>
   );

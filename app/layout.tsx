@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { headers } from "next/headers";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import Navbar from "./components/Navbar";
 import ProgressSync from "./components/ProgressSync";
 import SessionProviderClient from "./components/SessionProviderClient";
@@ -76,6 +78,9 @@ export default async function RootLayout({
             © {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.
           </div>
         </footer>
+
+        {/* ✅ Vercel Speed Insights (RUM metrics) */}
+        <SpeedInsights />
       </body>
     </html>
   );
