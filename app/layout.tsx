@@ -33,7 +33,7 @@ async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
     try {
       const u = new URL(ref);
       if (u.pathname.startsWith("/ru")) return "ru";
-    } catch {}
+    } catch { }
 
     return "uk";
   } catch {
@@ -84,8 +84,17 @@ export default async function RootLayout({
               <a className="hover:underline" href="/slovak-for-ukrainians">
                 Словацька для українців
               </a>
+
+              <a className="hover:underline" href="/vyvchennia-slovatskoi-movy-online">
+                Вивчення словацької онлайн
+              </a>
+
               <a className="hover:underline" href="/ru/slovak-for-ukrainians">
                 Словацкий для украинцев
+              </a>
+
+              <a className="hover:underline" href="/ru/vyvchennia-slovatskoi-movy-online">
+                Изучение словацкого онлайн
               </a>
             </div>
           </div>

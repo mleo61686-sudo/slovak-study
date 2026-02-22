@@ -19,7 +19,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/ru/slovak-for-ukrainians`,
       lastModified: now,
     },
-
+    {
+      url: `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
+      lastModified: now,
+    },
     {
       url: `${baseUrl}/grammar`,
       lastModified: now,
