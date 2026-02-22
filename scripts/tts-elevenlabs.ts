@@ -86,6 +86,19 @@ const VOICE2_WORDS = new Set<string>([
   "pripraviť",
   "platba kartou",
   "okamih",
+  "čas",
+  "dobrý",
+  "okno",
+  "dom",
+  "kolega",
+  "trieda",
+  "tri",
+  "päť",
+  "osem",
+  "bunda",
+  "teplota",
+  "les",
+
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -145,8 +158,12 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["hory", "ho ry"],
   ["vírus", "ví rus"],
   ["argument", "ar gu ment"],
-  // ✅ alphabet fix
   ["ňho", "ň ho"],
+  ["park", "par k"],
+  ["rok","ro k"],
+  ["nos","nos"],
+  ["les", "l es"],
+  ["hora","ho ra"],
 ]);
 
 function ttsText(kind: Item["kind"], text: string) {

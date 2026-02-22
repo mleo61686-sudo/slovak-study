@@ -117,11 +117,7 @@ export default function AlphabetSeo() {
                   Відмінки в словацькій мові
                 </Link>
               </li>
-              <li>
-                <Link href="/learning/a0" className="underline">
-                  Рівень A0 — базові слова
-                </Link>
-              </li>
+
             </ul>
 
             <p>
