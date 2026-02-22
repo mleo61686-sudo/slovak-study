@@ -9,6 +9,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: baseUrl,
       lastModified: now,
     },
+
+    // ✅ SEO landing pages
+    {
+      url: `${baseUrl}/slovak-for-ukrainians`,
+      lastModified: now,
+    },
+    {
+      url: `${baseUrl}/ru/slovak-for-ukrainians`,
+      lastModified: now,
+    },
+
     {
       url: `${baseUrl}/grammar`,
       lastModified: now,
