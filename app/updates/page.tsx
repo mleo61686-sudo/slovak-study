@@ -120,9 +120,8 @@ export default function UpdatesPage() {
 
     return (
         <div className="w-full py-8">
-            {/* НЕ центруємо mx-auto — тримаємо реально зліва */}
-            <div className="max-w-6xl">
-                <div className="grid gap-8 lg:grid-cols-[340px_1fr] items-start">
+            <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div className="grid gap-8 lg:grid-cols-[340px_minmax(0,1fr)] items-start">
                     {/* LEFT SIDEBAR */}
                     <aside className="space-y-5 lg:sticky lg:top-24">
                         {/* title + subtitle + back */}
@@ -185,7 +184,7 @@ export default function UpdatesPage() {
                                                                 </div>
                                                                 <div
                                                                     className={[
-                                                                        "mt-0.5 truncate text-sm font-semibold",
+                                                                        "mt-0.5 whitespace-normal break-words text-sm font-semibold leading-snug",
                                                                         isActive ? "text-white" : "text-slate-900",
                                                                     ].join(" ")}
                                                                 >
@@ -215,9 +214,9 @@ export default function UpdatesPage() {
                     </aside>
 
                     {/* RIGHT CONTENT */}
-                    <main className="space-y-4">
+                    <main className="min-w-0 space-y-4">
                         {active && (
-                            <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                            <article className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
                                 <div className="flex flex-wrap items-start justify-between gap-3">
                                     <div>
                                         <div className="text-sm text-slate-500">
