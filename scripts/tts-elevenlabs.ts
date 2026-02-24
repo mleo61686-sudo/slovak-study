@@ -106,6 +106,9 @@ const VOICE2_WORDS = new Set<string>([
   "zotavenie",
   "hádka",
   "odpustiť",
+  "porcia",
+  "vkus",
+  "recenzia",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -169,6 +172,10 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["nos", "nos"],
   ["les", "l es"],
   ["hora", "ho ra"],
+  ["sucho", "suho"],
+  ["porcia", "por-tsia"],
+  ["recenzia", "retsenzia"],
+  
 ]);
 
 function ttsText(kind: Item["kind"], text: string) {
@@ -787,11 +794,11 @@ async function main() {
       : ALPHABET_ONLY
         ? collectAlphabetItems()
         : [
-            ...collect(),
-            ...collectAlphabetItems(),
-            ...collectCasesItems(),
-            ...collectVerbsPresentItems(),
-          ];
+          ...collect(),
+          ...collectAlphabetItems(),
+          ...collectCasesItems(),
+          ...collectVerbsPresentItems(),
+        ];
 
   // ✅ band mode: тільки вибраний рівень
   if (BAND) {

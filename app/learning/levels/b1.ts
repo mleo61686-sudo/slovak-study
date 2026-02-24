@@ -253,7 +253,7 @@ export const B1_ALL: Lesson[] = [
       { sk: "voľný čas", ua: "вільний час", ru: "свободное время", img: "/words_b1/voľný čas.jpg" },
       { sk: "účinkovať", ua: "виступати (брати участь)", ru: "выступать (принимать участие)", img: "/words_b1/účinkovať.jpg" },
       { sk: "navštíviť", ua: "відвідати", ru: "посетить", img: "/words_b1/navštíviť.jpg" },
-      { sk: "premiéra", ua: "прем’єра", ru: "премьера", img: "/words_b1/premiéra.jpg" },
+      { sk: "premiéra", ua: "прем’єра", ru: "премьера", img: "/words_b1/výstava.jpg" },
       { sk: "program podujatia", ua: "програма заходу", ru: "программа мероприятия", img: "/words_b1/program podujatia.jpg" },
       { sk: "rezervácia miesta", ua: "бронювання місця", ru: "бронирование места", img: "/words_b1/rezervácia miesta.jpg" },
     ],
