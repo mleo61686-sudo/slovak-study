@@ -11,7 +11,7 @@ export const B1_ALL: Lesson[] = [
       { sk: "pracovný pomer", ua: "трудові відносини", ru: "трудовые отношения", img: "/words_b1/pracovný pomer.jpg" },
       { sk: "výplata", ua: "виплата зарплати", ru: "выплата зарплаты", img: "/words_b1/výplata.jpg" },
       { sk: "príspevok", ua: "внесок/доплата", ru: "взнос/доплата", img: "/words_b1/príspevok.jpg" },
-      { sk: "dochádzka", ua: "відвідуваність/табель", ru: "посещаемость/табель", img: "/words_b1/dochádzka.jpg" },
+      { sk: "dochádzka", ua: "відвідуваність/табель", ru: "посещаемость/табель", img: "/words_b1/dochádzkaa.jpg" },
       { sk: "benefit", ua: "бонус / соціальна пільга", ru: "бонус / социальная льгота", img: "/words_b1/benefit.jpg" },
       { sk: "nadriadený", ua: "керівник / начальник", ru: "руководитель / начальник", img: "/words_b1/nadriadený.jpg" },
       { sk: "podriadený", ua: "підлеглий", ru: "подчинённый", img: "/words_b1/podriadený.jpg" },

@@ -94,7 +94,7 @@ export default function BuildSentence({
   }
 
   async function replay() {
-    await playLocal(phrase.sk);
+    await playLocal(phrase.sk, "phrase");
   }
 
   async function check() {
@@ -103,7 +103,7 @@ export default function BuildSentence({
     const ok = normalizeSentence(built) === normalizeSentence(target);
 
     setStatus(ok ? "correct" : "wrong");
-    await playLocal(phrase.sk);
+    await playLocal(phrase.sk, "phrase");
   }
 
   function next() {

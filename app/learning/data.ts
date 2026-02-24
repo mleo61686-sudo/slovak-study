@@ -5,6 +5,7 @@ import { A2_ALL } from "./levels/a2";
 import { B1_ALL } from "./levels/b1";
 import { A0_PHRASES } from "./phrases/a0";
 import { A1_PHRASES } from "./phrases/a1";
+import { B1_PHRASES } from "./phrases/b1";
 import { phraseKey } from "./phrases/phraseKey";
 
 export type Lang = "ua" | "ru";
@@ -54,7 +55,7 @@ const LESSONS_PER_BAND: Record<CefrBandId, number> = {
   a0: 30,
   a1: 40,
   a2: 50,
-  b1: 60,
+  b1: 35,
   b2: 60,
 };
 
@@ -779,6 +780,7 @@ const B1_LIST = normalizeLessonList(B1_ALL as any);
 const PHRASES_BY_BAND: Partial<Record<CefrBandId, Record<string, any>>> = {
   a0: A0_PHRASES,
   a1: A1_PHRASES,
+  b1: B1_PHRASES,
 };
 
 // =============================

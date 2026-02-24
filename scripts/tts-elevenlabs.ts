@@ -13,10 +13,13 @@ import pLimit from "p-limit";
 import { A0_REAL_SOURCE } from "../app/learning/data";
 import { A1_ALL } from "../app/learning/levels/a1";
 import { A2_ALL } from "../app/learning/levels/a2";
+import { B1_ALL } from "../app/learning/levels/b1";
 
 import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
 import { A2_PHRASES } from "../app/learning/phrases/a2";
+import { B1_PHRASES } from "../app/learning/phrases/b1";
+
 import { WORDS } from "../app/data/words";
 
 type Item = { kind: "word" | "phrase"; text: string };
@@ -98,11 +101,10 @@ const VOICE2_WORDS = new Set<string>([
   "bunda",
   "teplota",
   "les",
-
+  "benefit",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
-  // сюди додаєш тільки фрази, які хочеш другим голосом
   "Oblečenie je v skrini.",
   "Dám si studený nápoj.",
   "Ten dom je nový.",
@@ -141,7 +143,6 @@ const VOICE2_PHRASES = new Set<string>([
 
 /**
  * ✅ TTS overrides (коли ElevenLabs криво читає слово)
- * Зараз overrides зроблені для WORDS (kind="word").
  */
 const TTS_OVERRIDES = new Map<string, string>([
   ["brucho", "bru ho"],
@@ -160,10 +161,10 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["argument", "ar gu ment"],
   ["ňho", "ň ho"],
   ["park", "par k"],
-  ["rok","ro k"],
-  ["nos","nos"],
+  ["rok", "ro k"],
+  ["nos", "nos"],
   ["les", "l es"],
-  ["hora","ho ra"],
+  ["hora", "ho ra"],
 ]);
 
 function ttsText(kind: Item["kind"], text: string) {
@@ -218,7 +219,6 @@ async function ttsToFile(kind: Item["kind"], text: string, file: string) {
   if (sentText !== text) {
     console.log(`[TTS-TEXT] override: "${text}" -> "${sentText}"`);
   }
-  console.log("OUT FILE =", file);
 
   const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
 
@@ -262,7 +262,7 @@ async function ttsToFile(kind: Item["kind"], text: string, file: string) {
 
 function collectPhrases(): string[] {
   const list: string[] = [];
-  const sources: any[] = [A0_PHRASES, A1_PHRASES, A2_PHRASES];
+  const sources: any[] = [A0_PHRASES, A1_PHRASES, A2_PHRASES, B1_PHRASES];
 
   for (const src of sources) {
     if (!src) continue;
@@ -282,7 +282,11 @@ function collectPhrases(): string[] {
   return list;
 }
 
-const ALL_LESSONS: any[] = [...(A1_ALL as any[]), ...(A2_ALL as any[])];
+const ALL_LESSONS: any[] = [
+  ...(A1_ALL as any[]),
+  ...(A2_ALL as any[]),
+  ...(B1_ALL as any[]),
+];
 
 function collectAlphabetItems(): Item[] {
   const words = [
@@ -318,10 +322,8 @@ function collectAlphabetItems(): Item[] {
   return unique.map((text) => ({ kind: "word" as const, text }));
 }
 
-// ✅ /grammar/cases (усі звучалки там — це phrases)
 function collectCasesItems(): Item[] {
   const phrases = [
-    // questions
     "Kto? Čo?",
     "Koho? Čoho?",
     "Komu? Čomu?",
@@ -329,7 +331,6 @@ function collectCasesItems(): Item[] {
     "O kom? O čom? Kde?",
     "S kým? S čím?",
 
-    // examples
     "Ja som študent.",
     "Toto je auto.",
     "Brat pracuje.",
@@ -360,7 +361,7 @@ function collectCasesItems(): Item[] {
 }
 
 /* =========================================================
-   ✅ NEW: negation + question generator (must match page.tsx logic)
+   ✅ negation + question generator (must match page.tsx logic)
    ========================================================= */
 
 const IST_NEG: Record<string, string> = {
@@ -426,7 +427,6 @@ function negateSentence(sentence: string) {
     "oni",
   ]);
 
-  // 0) Якщо є "Ja učím sa" → "Ja sa učím"
   if (
     parts.length >= 3 &&
     PRON.has(parts[0]) &&
@@ -439,7 +439,6 @@ function negateSentence(sentence: string) {
     parts.splice(1, 0, clitic);
   }
 
-  // 1) ísť
   for (let i = 0; i < Math.min(2, parts.length); i++) {
     if (IST_NEG[parts[i]]) {
       parts[i] = IST_NEG[parts[i]];
@@ -447,7 +446,6 @@ function negateSentence(sentence: string) {
     }
   }
 
-  // 2) byť
   for (let i = 0; i < Math.min(2, parts.length); i++) {
     if (BYT_NEG[parts[i]]) {
       parts[i] = BYT_NEG[parts[i]];
@@ -455,21 +453,19 @@ function negateSentence(sentence: string) {
     }
   }
 
-  // 3) Загальне правило: ne- + дієслово
   let verbIndex = 0;
 
   if (PRON.has(parts[0])) {
-    if (parts[1] === "sa" || parts[1] === "si") verbIndex = 2; // Ja sa učím
-    else verbIndex = 1; // Ja pracujem
+    if (parts[1] === "sa" || parts[1] === "si") verbIndex = 2;
+    else verbIndex = 1;
   } else {
-    verbIndex = 0; // Pracujem doma
+    verbIndex = 0;
   }
 
   if (verbIndex >= parts.length) return finish("Ne " + core);
 
   const verb = parts[verbIndex];
 
-  // якщо вже заперечено
   if (/^ne/i.test(verb) || /^nie$/i.test(verb)) return finish(parts.join(" "));
 
   const negVerb =
@@ -486,9 +482,6 @@ function makeQuestion(sentence: string) {
   return s.endsWith("?") ? s : s + "?";
 }
 
-// Беремо лише "приклади" типу "... ." або "... !" і робимо derived варіанти:
-// - заперечення (.) / (!) / (?) зберігаємо
-// - питання -> "?"
 function expandDerivedPhrases(items: Item[]): Item[] {
   const out: Item[] = [...items];
 
@@ -498,9 +491,8 @@ function expandDerivedPhrases(items: Item[]): Item[] {
     const base = it.text.trim();
     if (!base) continue;
 
-    // ✅ На verbs-present приклади завжди з крапкою.
-    // Робимо derived для фраз, які виглядають як речення.
-    const looksLikeSentence = /[.!]$/.test(base) || (base.includes(" ") && !base.endsWith("?"));
+    const looksLikeSentence =
+      /[.!]$/.test(base) || (base.includes(" ") && !base.endsWith("?"));
     if (!looksLikeSentence) continue;
 
     const neg = negateSentence(base);
@@ -510,7 +502,6 @@ function expandDerivedPhrases(items: Item[]): Item[] {
     if (q && q !== base) out.push({ kind: "phrase", text: q });
   }
 
-  // unique
   const uniq = new Map<string, Item>();
   for (const it of out) {
     const key = `${it.kind}:${it.text.trim()}`;
@@ -519,14 +510,8 @@ function expandDerivedPhrases(items: Item[]): Item[] {
   return [...uniq.values()];
 }
 
-/**
- * ✅ /grammar/verbs-present (майже все — phrases)
- * Тут важливо: приклади мають "." (бо у UI заперечення/питання
- * утворюються з них на льоту).
- */
 function collectVerbsPresentItems(): Item[] {
   const phrases = [
-    // 3) conjugation (row.full)
     "ja pracujem",
     "ty pracuješ",
     "on pracuje",
@@ -617,7 +602,6 @@ function collectVerbsPresentItems(): Item[] {
     "vy idete",
     "oni idú",
 
-    // 4) examples (основні)
     "Ja pracujem v práci.",
     "Ty pracuješ dnes.",
     "On pracuje v Bratislave.",
@@ -702,7 +686,6 @@ function collectVerbsPresentItems(): Item[] {
   const unique = Array.from(new Set(phrases.map((p) => p.trim()).filter(Boolean)));
   const base = unique.map((text) => ({ kind: "phrase" as const, text }));
 
-  // ✅ ВАЖЛИВО: тут же додаємо neg/question, бо UI їх генерує на льоту.
   return expandDerivedPhrases(base);
 }
 
@@ -740,12 +723,47 @@ function collect(): Item[] {
   return [...uniq.values()];
 }
 
+function collectFromLessons(lessons: any[]): Item[] {
+  const items: Item[] = [];
+  for (const lesson of lessons ?? []) {
+    for (const w of lesson.words ?? []) {
+      if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
+      if (w?.phrase?.sk) items.push({ kind: "phrase", text: String(w.phrase.sk) });
+    }
+  }
+  return items;
+}
+
+function collectFromPhraseDict(dict: any): Item[] {
+  const items: Item[] = [];
+  if (!dict) return items;
+
+  if (Array.isArray(dict)) {
+    for (const p of dict) if (p?.sk) items.push({ kind: "phrase", text: String(p.sk) });
+    return items;
+  }
+
+  if (typeof dict === "object") {
+    for (const v of Object.values(dict)) {
+      if ((v as any)?.sk) items.push({ kind: "phrase", text: String((v as any).sk) });
+    }
+  }
+
+  return items;
+}
+
+/* =====================
+   CLI flags
+   ===================== */
+
 const ONLY = process.argv.find((a) => a.startsWith("--only="))?.split("=")[1] ?? "";
 const FORCE = process.argv.includes("--force");
 
 const ALPHABET_ONLY = process.argv.includes("--alphabet");
 const CASES_ONLY = process.argv.includes("--cases");
 const VERBS_PRESENT_ONLY = process.argv.includes("--verbs-present");
+
+const BAND = process.argv.find((a) => a.startsWith("--band="))?.split("=")[1] ?? "";
 
 async function main() {
   console.log("VOICE1 =", VOICE1);
@@ -755,6 +773,7 @@ async function main() {
   console.log("ALPHABET_ONLY =", ALPHABET_ONLY);
   console.log("CASES_ONLY =", CASES_ONLY);
   console.log("VERBS_PRESENT_ONLY =", VERBS_PRESENT_ONLY);
+  console.log("BAND =", BAND || "(none)");
   console.log("FORCE =", FORCE);
 
   let items: Item[] = VERBS_PRESENT_ONLY
@@ -764,13 +783,58 @@ async function main() {
       : ALPHABET_ONLY
         ? collectAlphabetItems()
         : [
-          ...collect(),
-          ...collectAlphabetItems(),
-          ...collectCasesItems(),
-          ...collectVerbsPresentItems(), // ✅ тут вже включено neg/question
-        ];
+            ...collect(),
+            ...collectAlphabetItems(),
+            ...collectCasesItems(),
+            ...collectVerbsPresentItems(),
+          ];
 
-  // ✅ unique після додавання
+  // ✅ band mode: тільки вибраний рівень
+  if (BAND) {
+    const b = BAND.trim().toLowerCase();
+
+    let bandItems: Item[] = [];
+
+    if (b === "b1") {
+      bandItems = [
+        ...collectFromLessons(B1_ALL as any[]),
+        ...collectFromPhraseDict(B1_PHRASES as any),
+      ];
+    } else if (b === "a2") {
+      bandItems = [
+        ...collectFromLessons(A2_ALL as any[]),
+        ...collectFromPhraseDict(A2_PHRASES as any),
+      ];
+    } else if (b === "a1") {
+      bandItems = [
+        ...collectFromLessons(A1_ALL as any[]),
+        ...collectFromPhraseDict(A1_PHRASES as any),
+      ];
+    } else if (b === "a0") {
+      bandItems = [
+        ...collectFromLessons(A0_REAL_SOURCE as any[]),
+        ...collectFromPhraseDict(A0_PHRASES as any),
+      ];
+    } else if (b === "all") {
+      // лишаємо як є
+      bandItems = items;
+    } else {
+      console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|all`);
+      bandItems = items;
+    }
+
+    // unique
+    const uniq = new Map<string, Item>();
+    for (const it of bandItems) {
+      const key = `${it.kind}:${it.text.trim()}`;
+      if (!uniq.has(key)) uniq.set(key, it);
+    }
+    items = [...uniq.values()];
+
+    console.log(`BAND mode applied: "${BAND}" -> ${items.length} item(s)`);
+  }
+
+  // ✅ unique після всіх додавань
   {
     const uniq = new Map<string, Item>();
     for (const it of items) {
@@ -789,23 +853,28 @@ async function main() {
 
   const limit = pLimit(4);
 
+  let skipped = 0;
+  let generated = 0;
+
   await Promise.all(
     items.map((it) =>
       limit(async () => {
         const file = outPath(it.kind, it.text);
 
-        // ✅ не чіпаємо вже згенероване (якщо немає --force)
         if (!FORCE && fs.existsSync(file) && fs.statSync(file).size > 1000) {
+          skipped++;
           return;
         }
 
         await ttsToFile(it.kind, it.text, file);
+        generated++;
       })
     )
   );
 
   console.log("✅ DONE");
   console.log(`Saved in: ${OUT_DIR}`);
+  console.log(`Stats: generated=${generated} skipped=${skipped} total=${items.length}`);
 }
 
 main().catch((e) => {

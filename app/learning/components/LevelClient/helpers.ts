@@ -2,8 +2,10 @@
 
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "./types";
+
 import { A0_PHRASES, phraseKey } from "@/app/learning/phrases/a0";
 import { A2_PHRASES } from "@/app/learning/phrases/a2";
+import { B1_PHRASES } from "@/app/learning/phrases/b1";
 
 export function shuffle<T>(arr: T[]) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -26,7 +28,11 @@ export function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
   }
 
   const k = phraseKey(word.sk, word.ua, levelId);
-  const dict = levelId.startsWith("a2-") ? A2_PHRASES : A0_PHRASES;
+
+  const dict =
+    levelId.startsWith("a2-") ? A2_PHRASES :
+      levelId.startsWith("b1-") ? B1_PHRASES :
+        A0_PHRASES;
 
   const p = dict[k];
   if (p) {
@@ -52,31 +58,51 @@ export function guessKind(text: string): "word" | "phrase" {
   return /[ ,.!?;:]/.test(text.trim()) ? "phrase" : "word";
 }
 
-export async function buildLocalUrl(text: string, forcedKind?: "word" | "phrase") {
-  const clean = (text ?? "").trim();
+/**
+ * Build local mp3 url.
+ *
+ * We support:
+ *  - legacy: sha1(text)
+ *  - kinded: sha1(`${kind}:${text}`)
+ *  - short filename: first 13 chars of sha1 (because your public/audio/phrases contains many 13-char names)
+ */
+export async function buildLocalUrl(
+  text: string,
+  forcedKind?: "word" | "phrase",
+  mode: "legacy" | "kinded" = "legacy",
+  hashLen: "full" | "short" = "full"
+) {
+  const clean = (text ?? "").normalize("NFC").trim();
   const kind = forcedKind ?? guessKind(clean);
-  const h = await sha1Hex(`${kind}:${clean}`);
+
+  const key = mode === "kinded" ? `${kind}:${clean}` : clean;
+
+  let h = await sha1Hex(key);
+  if (hashLen === "short") h = h.slice(0, 13);
+
   return kind === "word" ? `/audio/words/${h}.mp3` : `/audio/phrases/${h}.mp3`;
 }
 
-export async function playLocal(text: string) {
-  const clean = (text ?? "").trim();
+export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
+  const clean = (text ?? "").normalize("NFC").trim();
   if (!clean) return;
 
-  const kind = guessKind(clean);
-  const url1 = await buildLocalUrl(clean, kind);
-  const otherKind: "word" | "phrase" = kind === "word" ? "phrase" : "word";
-  const url2 = await buildLocalUrl(clean, otherKind);
+  const kind = forcedKind ?? guessKind(clean);
+
+  // ✅ 1) B1 формат: short(13)
+  const urlShort = await buildLocalUrl(clean, kind, "legacy", "short");
+  // ✅ 2) старі рівні: full(40)
+  const urlFull = await buildLocalUrl(clean, kind, "legacy", "full");
 
   try {
-    await new Audio(url1).play();
-  } catch {
-    try {
-      await new Audio(url2).play();
-    } catch {
-      // ignore
-    }
-  }
+    await new Audio(urlShort).play();
+    return;
+  } catch { }
+
+  try {
+    await new Audio(urlFull).play();
+    return;
+  } catch { }
 }
 
 export function tokensToSentence(tokens: string[]) {
