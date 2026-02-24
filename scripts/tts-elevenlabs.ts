@@ -102,6 +102,10 @@ const VOICE2_WORDS = new Set<string>([
   "teplota",
   "les",
   "benefit",
+  "zhoršiť sa",
+  "zotavenie",
+  "hádka",
+  "odpustiť",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
