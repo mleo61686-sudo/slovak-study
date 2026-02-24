@@ -152,10 +152,7 @@ export default function LearningPage() {
   const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
 
   // ✅ B1 закритий для всіх, крім адміна
-  const DISABLED_BANDS = useMemo(
-    () => new Set<string>(isAdmin ? [] : ["b1"]),
-    [isAdmin]
-  );
+  const DISABLED_BANDS = new Set<string>();
 
   const [progress, setProgress] = useState<LessonsProgress>({});
   const { lang } = useLanguage() as { lang: Lang };
@@ -292,9 +289,8 @@ export default function LearningPage() {
                     return (
                       <div
                         key={lesson.id}
-                        className={`rounded-2xl border p-4 ${
-                          unlocked ? "hover:bg-slate-50" : "opacity-60"
-                        }`}
+                        className={`rounded-2xl border p-4 ${unlocked ? "hover:bg-slate-50" : "opacity-60"
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-medium">
