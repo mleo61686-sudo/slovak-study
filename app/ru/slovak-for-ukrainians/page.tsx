@@ -64,9 +64,8 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
-      {/* ✅ FAQ Schema (JSON-LD) */}
       <Script
-        id="faq-schema-ru"
+        id="faq-schema-ru-slovak-for-ukrainians"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

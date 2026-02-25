@@ -5,9 +5,9 @@ import Script from "next/script";
 const SITE_URL = "https://slovak-study.com";
 
 export const metadata: Metadata = {
-  title: "Словацька мова для українців — безкоштовне навчання A0–B2 | Slovak Study",
+  title: "Словацька мова для українців — навчання онлайн A0–B2 | Slovak Study",
   description:
-    "Вивчення словацької мови для українців: уроки A0–B2, словник, граматика, вправи та прогрес. Почни з нуля онлайн.",
+    "Словацька мова для українців: навчання онлайн A0–B2, уроки, словник, граматика, вправи та прогрес. Підійде для життя і роботи в Словаччині.",
   alternates: {
     canonical: `${SITE_URL}/slovak-for-ukrainians`,
     languages: {
@@ -27,24 +27,24 @@ export const metadata: Metadata = {
 
 const FAQ = [
   {
-    q: "Чи можна вчити словацьку мову з нуля?",
-    a: "Так. Почни з рівня A0: короткі уроки по 10 слів, озвучка та прості вправи. Далі переходь на A1 та A2.",
+    q: "Чи підходить Slovak Study, якщо я живу/планую жити у Словаччині?",
+    a: "Так. Тут фокус на практичній лексиці та граматиці для життя, роботи й документів: короткі уроки, вправи та озвучка.",
   },
   {
-    q: "Скільки часу потрібно, щоб заговорити словацькою?",
-    a: "Зазвичай базовий рівень A1 досягають за 4–8 тижнів регулярних занять. Важлива щоденна практика 10–20 хвилин.",
+    q: "З чого краще почати?",
+    a: "Почни з рівня A0: пройди 5–10 уроків і роби вправи щодня по 10–20 хвилин.",
   },
   {
-    q: "Чим Slovak Study відрізняється від підручників?",
-    a: "Тут є інтерактивні вправи, озвучка, прогрес і повторення. Ти вчишся не лише читати, а й одразу тренуєш навички.",
+    q: "Чи є переклад українською?",
+    a: "Так, усі слова мають український переклад, а в словнику можна швидко шукати й слухати вимову.",
   },
   {
-    q: "Де знайти граматику словацької?",
-    a: "На сторінці граматики є теми з прикладами та озвучкою.",
+    q: "Чи є граматика з прикладами?",
+    a: "Так. У розділі граматики є теми з прикладами, озвучкою і міні-вправами.",
   },
   {
-    q: "Чи є словник словацької з перекладом українською?",
-    a: "Так, у словнику можна шукати слова й слухати вимову.",
+    q: "Чи зберігається прогрес?",
+    a: "Так, прогрес уроків зберігається, щоб ти бачив що пройдено і що повторити.",
   },
 ];
 
@@ -64,9 +64,8 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
-      {/* ✅ FAQ Schema (JSON-LD) */}
       <Script
-        id="faq-schema-uk"
+        id="faq-schema-uk-slovak-for-ukrainians"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -77,20 +76,23 @@ export default function Page() {
           Словацька мова для українців — навчання онлайн (A0–B2)
         </h1>
         <p className="text-slate-700">
-          Slovak Study — це тренажер для системного вивчення словацької: короткі уроки,
-          озвучка, вправи, словник та граматика. Підійде, якщо ти живеш/плануєш жити у
-          Словаччині та хочеш швидко підтягнути мову.
+          Slovak Study — тренажер для системного вивчення словацької: короткі уроки,
+          озвучка, вправи, словник та граматика. Підійде, якщо ти живеш/плануєш
+          жити у Словаччині та хочеш швидко підтягнути мову.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
           <Link className="px-4 py-2 rounded-xl bg-black text-white" href="/learning">
             Почати навчання
           </Link>
+          <Link className="px-4 py-2 rounded-xl border" href="/learning/levels/a0">
+            Старт з A0 →
+          </Link>
           <Link className="px-4 py-2 rounded-xl border" href="/dictionary">
-            Відкрити словник
+            Словник
           </Link>
           <Link className="px-4 py-2 rounded-xl border" href="/grammar">
-            Перейти до граматики
+            Граматика
           </Link>
 
           <Link
@@ -105,38 +107,39 @@ export default function Page() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">1) Рівні A0–B2</h2>
+          <h2 className="font-bold text-lg">1) Практика для життя</h2>
           <p className="mt-2 text-slate-700">
-            Вчи слова по уроках і одразу закріплюй вправами. Прогрес зберігається.
+            Лексика і теми, які реально потрібні у Словаччині: робота, документи, побут.
           </p>
         </div>
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">2) Озвучка</h2>
+          <h2 className="font-bold text-lg">2) Короткі уроки</h2>
           <p className="mt-2 text-slate-700">
-            Слухай вимову та тренуй сприйняття на слух у вправах.
+            По 10 слів на урок + вправи — легко займатися щодня без вигорання.
           </p>
         </div>
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">3) Словник</h2>
+          <h2 className="font-bold text-lg">3) Озвучка</h2>
           <p className="mt-2 text-slate-700">
-            Швидкий пошук слів + переклад українською та приклади.
+            Слухай вимову слів і фраз та повторюй — це швидко прокачує “на слух”.
           </p>
         </div>
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">4) Граматика</h2>
+          <h2 className="font-bold text-lg">4) Словник + граматика</h2>
           <p className="mt-2 text-slate-700">
-            Пояснення тем з прикладами: від алфавіту до відмінків і дієслів.
+            Швидкий пошук слів і теми граматики з прикладами — все в одному місці.
           </p>
         </div>
       </section>
 
       <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Як почати (простий план)</h2>
+        <h2 className="text-2xl font-bold">Як почати (план на 7 днів)</h2>
         <ol className="list-decimal pl-5 space-y-2 text-slate-700">
-          <li>Почни з рівня A0 і пройди 5–10 уроків.</li>
-          <li>Щодня роби 10–20 хвилин вправ.</li>
-          <li>Паралельно відкривай граматику тем, які трапляються в уроках.</li>
-          <li>Слухай озвучку слів і повторюй уголос.</li>
+          <li>День 1: пройди 2 уроки A0.</li>
+          <li>День 2–3: ще 2–4 уроки + вправи.</li>
+          <li>День 4: відкрий граматику (алфавіт/вимова) і повтори слова.</li>
+          <li>День 5–6: продовжуй A0 + слухай озвучку і повторюй уголос.</li>
+          <li>День 7: закріпи — пройди вправи по попередніх уроках.</li>
         </ol>
       </section>
 
