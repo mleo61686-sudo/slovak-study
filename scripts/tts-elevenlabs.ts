@@ -116,6 +116,7 @@ const VOICE2_WORDS = new Set<string>([
   "sklamanie",
   "Londýn",
   "Ottawa",
+  "had",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -157,6 +158,8 @@ const VOICE2_PHRASES = new Set<string>([
   "Na druhej strane je to dobrá príležitosť, ktorú nechcem premárniť.",
   "Belgicko je malé, ale má veľa zaujímavých miest na návštevu.",
   "Je normálne sklamať sa, keď veci nejdú podľa plánu.",
+  "Chcem byť doma.",
+  "Chcem to zmeniť.",
 
 ]);
 

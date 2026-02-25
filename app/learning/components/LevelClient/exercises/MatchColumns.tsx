@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { shuffle, trWord } from "../helpers";
@@ -18,16 +18,23 @@ export default function MatchColumns({
     title: lang === "ru" ? "Подбери пары" : "Підбери пари",
     correct: lang === "ru" ? "✅ Правильно" : "✅ Правильно",
     wrongs: lang === "ru" ? "❌ Ошибки" : "❌ Помилки",
-    limitReached: lang === "ru" ? "Лимит ошибок исчерпан — можно перейти дальше." : "Ліміт помилок вичерпано — можна перейти далі.",
-    allDone: lang === "ru" ? "Все пары собраны — можно перейти дальше." : "Усі пари зібрано — можна перейти далі.",
+    limitReached:
+      lang === "ru"
+        ? "Лимит ошибок исчерпан — можно перейти дальше."
+        : "Ліміт помилок вичерпано — можна перейти далі.",
+    allDone:
+      lang === "ru"
+        ? "Все пары собраны — можно перейти дальше."
+        : "Усі пари зібрано — можна перейти далі.",
     clear: lang === "ru" ? "Очистить" : "Очистити",
     next: lang === "ru" ? "Далее →" : "Наступне →",
   };
 
   const left = useMemo(() => shuffle(words.map((w) => w.sk)), [words]);
-
-  // right тексти залежні від мови — це ок
-  const right = useMemo(() => shuffle(words.map((w) => trWord(w, lang))), [words, lang]);
+  const right = useMemo(
+    () => shuffle(words.map((w) => trWord(w, lang))),
+    [words, lang]
+  );
 
   const mapSkToTr = useMemo(() => {
     const m = new Map<string, string>();
@@ -45,11 +52,15 @@ export default function MatchColumns({
   const [wrongCount, setWrongCount] = useState(0);
 
   const [shakeWrong, setShakeWrong] = useState(false);
-  const [wrongPair, setWrongPair] = useState<{ l: string; r: string } | null>(null);
+  const [wrongPair, setWrongPair] = useState<{ l: string; r: string } | null>(
+    null
+  );
 
   const MAX_WRONG = 3;
 
-  // ❗ НЕ скидаємо прогрес на зміну мови
+  // 🔒 захист від подвійного спрацювання
+  const resolvingRef = useRef(false);
+
   useEffect(() => {
     setSelectedLeft(null);
     setSelectedRight(null);
@@ -59,6 +70,7 @@ export default function MatchColumns({
     setWrongCount(0);
     setShakeWrong(false);
     setWrongPair(null);
+    resolvingRef.current = false;
   }, [words]);
 
   const doneAll = matchedLeft.size >= words.length;
@@ -77,6 +89,9 @@ export default function MatchColumns({
     if (locked) return;
     if (!selectedLeft || !selectedRight) return;
 
+    if (resolvingRef.current) return; // ✅ не даємо обробити двічі
+    resolvingRef.current = true;
+
     const correct = mapSkToTr.get(selectedLeft) === selectedRight;
 
     if (correct) {
@@ -87,6 +102,7 @@ export default function MatchColumns({
       setSelectedRight(null);
       setWrongPair(null);
       setShakeWrong(false);
+      resolvingRef.current = false;
       return;
     }
 
@@ -99,9 +115,13 @@ export default function MatchColumns({
       setSelectedRight(null);
       setWrongPair(null);
       setShakeWrong(false);
+      resolvingRef.current = false;
     }, 700);
 
-    return () => clearTimeout(tm);
+    return () => {
+      clearTimeout(tm);
+      resolvingRef.current = false;
+    };
   }, [selectedLeft, selectedRight, mapSkToTr, locked]);
 
   function leftBtnClass(sk: string) {
@@ -111,7 +131,9 @@ export default function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched ? "opacity-50 cursor-not-allowed bg-slate-50" : "hover:bg-slate-50",
+      locked || isMatched
+        ? "opacity-50 cursor-not-allowed bg-slate-50"
+        : "hover:bg-slate-50",
       isSelected ? "border-green-600 ring-4 ring-green-200 bg-green-50" : "",
       isWrong ? "border-red-500 bg-red-50" : "",
     ].join(" ");
@@ -124,7 +146,9 @@ export default function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched ? "opacity-50 cursor-not-allowed bg-slate-50" : "hover:bg-slate-50",
+      locked || isMatched
+        ? "opacity-50 cursor-not-allowed bg-slate-50"
+        : "hover:bg-slate-50",
       isSelected ? "border-black ring-2 ring-black/10 bg-slate-50" : "",
       isWrong ? "border-red-500 bg-red-50" : "",
     ].join(" ");

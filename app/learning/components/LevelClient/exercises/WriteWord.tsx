@@ -10,10 +10,14 @@ export default function WriteWord({
   word,
   onNext,
   lang,
+  quizAutoKey,
+  audioUnlocked,
 }: {
   word: Word;
   onNext: (c: boolean) => void;
   lang: Lang;
+  quizAutoKey: number;
+  audioUnlocked: boolean;
 }) {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
@@ -33,7 +37,11 @@ export default function WriteWord({
     const ok = normalize(value) === normalize(word.sk);
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
-    await playLocal(word.sk);
+
+    // ✅ якщо autoplay ще заблокований — програємо після кліку (перевірки)
+    if (!audioUnlocked) {
+      await playLocal(word.sk);
+    }
   }
 
   function next() {
@@ -52,7 +60,10 @@ export default function WriteWord({
     placeholder: lang === "ru" ? "Введи слово..." : "Введи слово...",
     check: lang === "ru" ? "Проверить" : "Перевірити",
     correct: lang === "ru" ? "✅ Правильно!" : "✅ Правильно!",
-    wrongPrefix: lang === "ru" ? "❌ Неправильно. Правильно:" : "❌ Неправильно. Правильно:",
+    wrongPrefix:
+      lang === "ru"
+        ? "❌ Неправильно. Правильно:"
+        : "❌ Неправильно. Правильно:",
     next: lang === "ru" ? "Далее →" : "Далі →",
   };
 
@@ -62,7 +73,16 @@ export default function WriteWord({
         {t.title} <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
-      <div className="space-y-3">
+      {/* ✅ AUTOPLAY як у вправі 1 */}
+      <div className="mt-2">
+        <SpeakButton
+          text={word.sk}
+          kind="word"
+          autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+        />
+      </div>
+
+      <div className="space-y-3 mt-3">
         <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -90,8 +110,10 @@ export default function WriteWord({
             )}
 
             <div className="flex gap-2 items-center">
-              <SpeakButton text={word.sk} kind="word" />
-              <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
+              <button
+                onClick={next}
+                className="px-4 py-2 rounded-xl bg-black text-white"
+              >
                 {t.next}
               </button>
             </div>

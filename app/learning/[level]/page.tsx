@@ -12,6 +12,7 @@ const BAND_LIMITS: Record<string, number> = {
   "a0": 30,
   "a1": 40,
   "a2": 50,
+  "b1": 35,
   // далі можна додати: b1, b2...
 };
 
@@ -61,8 +62,9 @@ function nextLevelId(id: string) {
     return "a2-1";
   if (p.band === "a2" && Number.isFinite(p.n) && p.n >= (limit ?? 50))
     return "b1-1";
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) return "b2-1";
 
-  return `${p.band}-${p.n + 1}`;
+  return `${p.band}-${p.n + 1}`
 }
 
 function isSameDay(a: Date, b: Date) {
@@ -203,6 +205,36 @@ export default async function Page({
   // ✅ урок існує?
   const lesson = getLesson(levelId);
   if (!lesson) {
+    const p = parseLevelId(levelId);
+
+    // ✅ Якщо користувач дійшов до B2 (або вище) — показуємо "ще не готово"
+    const isB2OrHigher =
+      !!p && bandOrder(p.band) >= bandOrder("b2"); // b2=12
+
+    if (isB2OrHigher) {
+      return (
+        <div className="space-y-4">
+          <h1 className="text-2xl font-semibold">Рівень B2 ще не готовий 🛠️</h1>
+          <p className="text-slate-600">
+            Ми над ним працюємо. Скоро додамо уроки для B2 ✅
+          </p>
+
+          <div className="flex gap-3">
+            <Link href="/learning" className="underline">
+              ← Назад до рівнів
+            </Link>
+
+            <Link href="/learning/b1-35" className="underline">
+              Повторити останній урок B1 →
+            </Link>
+          </div>
+
+          <p className="text-xs text-slate-400">id = {levelId}</p>
+        </div>
+      );
+    }
+
+    // інакше — реально якийсь битий id
     return (
       <div className="space-y-4">
         <h1 className="text-2xl font-semibold">Урок не знайдено 😢</h1>

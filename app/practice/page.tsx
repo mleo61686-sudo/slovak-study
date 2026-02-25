@@ -267,6 +267,7 @@ export default function PracticePage() {
   const [selected, setSelected] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
   const [typedChecked, setTypedChecked] = useState<null | { ok: boolean }>(null);
+  const [revealAutoKey, setRevealAutoKey] = useState(0);
 
   // mistakes
   const [mistakes, setMistakes] = useState<
@@ -298,9 +299,13 @@ export default function PracticePage() {
 
   const canRevealAnswer = useMemo(() => {
     if (!qBase) return false;
-    if (qBase.mode === "mcq") return !!selected;        // після вибору варіанту
-    return !!typedChecked;                              // після "Перевірити"
-  }, [qBase, selected, typedChecked]);
+
+    // ✅ typing: слухати можна одразу (але тільки вручну по кліку)
+    if (qBase.mode === "typing") return true;
+
+    // mcq: як було — після вибору
+    return !!selected;
+  }, [qBase, selected]);
 
   function startNew(customSkList?: string[]) {
     const built = buildSessionBase(
@@ -377,6 +382,9 @@ export default function PracticePage() {
 
     setSelected(option);
 
+    // ✅ Автоматично програємо ПРАВИЛЬНЕ слово після вибору
+    setRevealAutoKey((k) => k + 1);
+
     const ok = option === qBase.sk;
     onAnswered(ok);
 
@@ -387,7 +395,6 @@ export default function PracticePage() {
       ]);
     }
   }
-
   function checkTyping() {
     if (!qBase || qBase.mode !== "typing") return;
 
@@ -653,13 +660,20 @@ export default function PracticePage() {
                     <span>{t.listen}</span>
 
                     {canRevealAnswer ? (
-                      <SpeakButton text={qBase.sk} />
+                      <SpeakButton
+                        text={qBase.sk}
+                        autoPlayKey={qBase.mode === "mcq" ? revealAutoKey : undefined}
+                      />
                     ) : (
                       <button
                         type="button"
                         disabled
                         className="rounded-lg border bg-white px-2 py-1 text-xs opacity-50 cursor-not-allowed"
-                        title={uiLang === "ua" ? "Відповідай, щоб відкрити озвучку" : "Ответь, чтобы открыть озвучку"}
+                        title={
+                          uiLang === "ua"
+                            ? "Відповідай, щоб відкрити озвучку"
+                            : "Ответь, чтобы открыть озвучку"
+                        }
                       >
                         🔒
                       </button>
@@ -675,26 +689,48 @@ export default function PracticePage() {
                         const isWrong = selected === option && option !== qBase.sk;
 
                         return (
-                          <button
+                          <div
                             key={option}
-                            onClick={() => checkMcq(option)}
-                            disabled={!!selected}
+                            role="button"
+                            tabIndex={selected ? -1 : 0}
+                            aria-disabled={!!selected}
+                            onClick={() => {
+                              if (selected) return;
+                              checkMcq(option);
+                            }}
+                            onKeyDown={(e) => {
+                              if (selected) return;
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                checkMcq(option);
+                              }
+                            }}
                             className={`w-full rounded-xl border px-4 py-3 text-left transition flex items-center justify-between
 ${isCorrect ? "bg-green-100 border-green-400" : ""}
 ${isWrong ? "bg-red-100 border-red-400" : ""}
-${!selected ? "hover:bg-slate-50" : "opacity-95"}
+${!selected ? "hover:bg-slate-50 cursor-pointer" : "opacity-95 cursor-default"}
 `}
                           >
                             <span className="font-medium">{option}</span>
 
-                            <SpeakButton
-                              text={option}
-
-                              asChild
-                              label="🔊"
-                              className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
-                            />
-                          </button>
+                            <span
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                              onPointerDown={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                            >
+                              <SpeakButton
+                                text={option}
+                                asChild
+                                label="🔊"
+                                className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
+                              />
+                            </span>
+                          </div>
                         );
                       })}
                     </div>

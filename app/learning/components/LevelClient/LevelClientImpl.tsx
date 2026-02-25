@@ -75,12 +75,18 @@ const UI = {
 } as const;
 
 function getNextLevelId(levelId: string) {
-  const m = /^([a-z]\d)-(\d+)$/.exec(levelId);
+  const m = /^([a-z]\d)-(\d+)$/.exec(levelId.toLowerCase());
   if (m) {
     const band = m[1];
     const n = Number(m[2]);
 
     if (band === "a0" && Number.isFinite(n) && n >= 30) return "a1-1";
+    if (band === "a1" && Number.isFinite(n) && n >= 40) return "a2-1";
+    if (band === "a2" && Number.isFinite(n) && n >= 50) return "b1-1";
+
+    // ✅ NEW: кінець B1 (35 уроків) -> B2
+    if (band === "b1" && Number.isFinite(n) && n >= 35) return "b2-1";
+
     if (Number.isFinite(n)) return `${band}-${n + 1}`;
   }
 
@@ -88,13 +94,12 @@ function getNextLevelId(levelId: string) {
   if (Number.isFinite(n)) return String(n + 1);
   return levelId;
 }
-
 const EXERCISES: ExerciseDef[] = [
-  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
-  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
-  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
-  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
+  //  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
+  //  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
+  //  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
+  //  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
+  //  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
   { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
 ];
 
@@ -469,11 +474,19 @@ export default function LevelClient({
           words={words}
           lang={lang}
           onNext={nextPerWord}
+          quizAutoKey={quizAutoKey}
+          audioUnlocked={audioUnlocked}
         />
       )}
 
       {exercise.kind === "writeWord" && (
-        <WriteWord word={currentWord} lang={lang} onNext={nextPerWord} />
+        <WriteWord
+          word={currentWord}
+          lang={lang}
+          onNext={nextPerWord}
+          quizAutoKey={quizAutoKey}
+          audioUnlocked={audioUnlocked}
+        />
       )}
 
       {exercise.kind === "audioQuiz" && (

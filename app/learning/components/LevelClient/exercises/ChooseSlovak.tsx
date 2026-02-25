@@ -11,11 +11,15 @@ export default function ChooseSlovak({
   words,
   onNext,
   lang,
+  quizAutoKey,
+  audioUnlocked,
 }: {
   word: Word;
   words: Word[];
   onNext: (c: boolean) => void;
   lang: Lang;
+  quizAutoKey: number;
+  audioUnlocked: boolean;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -26,7 +30,6 @@ export default function ChooseSlovak({
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
 
-  // ❗ НЕ ресетимо при зміні мови
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
@@ -36,8 +39,7 @@ export default function ChooseSlovak({
 
   const title =
     lang === "ru" ? "Выбери слово по-словацки:" : "Обери слово словацькою:";
-  const correctLabel = lang === "ru" ? "Правильно:" : "Правильно:"; // можна лишити однаково
-  // якщо хочеш прям ідеально: UA "Правильно:", RU "Правильно:"
+  const correctLabel = lang === "ru" ? "Правильно:" : "Правильно:";
 
   return (
     <>
@@ -45,7 +47,12 @@ export default function ChooseSlovak({
         {title} <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
-      <SpeakCentered text={word.sk} kind="word" />
+      {/* ✅ autoplay як у вправі 1 */}
+      <SpeakCentered
+        text={word.sk}
+        kind="word"
+        autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+      />
 
       <div className="grid gap-3">
         {options.map((opt) => (
@@ -59,8 +66,10 @@ export default function ChooseSlovak({
               setPicked(opt);
               setStatus(ok ? "correct" : "wrong");
 
-              // ✅ тут autoplay немає — сміливо програємо після вибору
-              await playLocal(word.sk);
+              // ✅ якщо autoplay ще не дозволений браузером — програємо після кліку
+              if (!audioUnlocked) {
+                await playLocal(word.sk);
+              }
             }}
             className={[
               "rounded-xl border px-4 py-3 text-left transition",
