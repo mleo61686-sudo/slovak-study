@@ -114,6 +114,8 @@ const VOICE2_WORDS = new Set<string>([
   "označiť",
   "hosť",
   "sklamanie",
+  "Londýn",
+  "Ottawa",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -151,7 +153,13 @@ const VOICE2_PHRASES = new Set<string>([
   "Chcem si odvyknúť od sladkého.",
   "Je to miestny zvyk.",
   "On neučí dnes.",
+  "Chcem sa vyjadriť pokojne, aby sme sa pochopili.",
+  "Na druhej strane je to dobrá príležitosť, ktorú nechcem premárniť.",
+  "Belgicko je malé, ale má veľa zaujímavých miest na návštevu.",
+  "Je normálne sklamať sa, keď veci nejdú podľa plánu.",
+
 ]);
+
 
 /**
  * ✅ TTS overrides (коли ElevenLabs криво читає слово)
@@ -180,8 +188,8 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["sucho", "suho"],
   ["porcia", "por-tsia"],
   ["recenzia", "retsenzia"],
-  ["percento", "pertsento"]
-  
+  ["percento", "pertsento"],
+  ["Ottawa", "otava"]
 ]);
 
 function ttsText(kind: Item["kind"], text: string) {
