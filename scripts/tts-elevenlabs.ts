@@ -109,6 +109,11 @@ const VOICE2_WORDS = new Set<string>([
   "porcia",
   "vkus",
   "recenzia",
+  "rozhodca",
+  "deliť",
+  "označiť",
+  "hosť",
+  "sklamanie",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -175,6 +180,7 @@ const TTS_OVERRIDES = new Map<string, string>([
   ["sucho", "suho"],
   ["porcia", "por-tsia"],
   ["recenzia", "retsenzia"],
+  ["percento", "pertsento"]
   
 ]);
 
