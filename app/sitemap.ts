@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/slovak-for-ukrainians`,
     `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
     `${baseUrl}/learn-slovak`, // ⭐ NEW
+    `${baseUrl}/slovak-grammar`,
 
 
     // ✅ Main app pages (UA)
