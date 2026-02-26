@@ -34,6 +34,7 @@ export async function POST(req: Request) {
     }
 
     const allowed = new Set(["new", "fixed", "ignored"]);
+
     if (typeof data.status !== "string" || !allowed.has(data.status)) {
       return NextResponse.json({ ok: false }, { status: 400 });
     }

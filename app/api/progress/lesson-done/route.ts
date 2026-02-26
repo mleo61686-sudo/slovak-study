@@ -74,6 +74,11 @@ export async function POST(req: Request) {
   const currentCount =
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
 
+  // ✅ Серверний ліміт для FREE (преміум байпас)
+  if (!hasPremium && currentCount >= 2) {
+    return NextResponse.json({ ok: false, code: "DAILY_LIMIT", limit: 2 }, { status: 429 });
+  }
+
   // ✅ FREE: збільшуємо ліміт тільки для нових уроків
   // ✅ PREMIUM: ліміт не важливий
   const nextCount = currentCount + (hasPremium ? 0 : 1);

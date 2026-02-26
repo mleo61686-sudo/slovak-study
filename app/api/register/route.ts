@@ -8,7 +8,11 @@ function isValidEmail(email: string) {
 
 function isStrongPassword(password: string) {
   // мінімум: 8 символів + 1 цифра + 1 велика літера
-  return password.length >= 8 && /\d/.test(password) && /[A-Z]/.test(password);
+  return (
+    password.length >= 8 &&
+    /\d/.test(password) &&
+    /[A-ZÀ-Ý]/.test(password) // базово для латиниці з діакритикою
+  );
 }
 
 export async function POST(req: Request) {

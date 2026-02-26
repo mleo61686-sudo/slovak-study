@@ -22,7 +22,12 @@ type Body = {
 export async function POST(req: Request) {
     try {
         const session = await auth().catch(() => null);
-        const data = (await req.json()) as Body;
+        let data: Body;
+        try {
+            data = (await req.json()) as Body;
+        } catch {
+            return NextResponse.json({ ok: false, error: "INVALID_JSON" }, { status: 400 });
+        }
 
         if (!data?.message || data.message.trim().length < 3) {
             return NextResponse.json(
@@ -54,9 +59,11 @@ export async function POST(req: Request) {
         const to = process.env.REPORT_TO_EMAIL;
         const from = process.env.REPORT_FROM_EMAIL;
 
-        if (to && from) {
+        const apiKey = process.env.RESEND_API_KEY;
+
+        if (to && from && apiKey) {
             try {
-                const resend = new Resend(process.env.RESEND_API_KEY);
+                const resend = new Resend(apiKey);
 
                 const subject = `🛠️ Bug report: ${data.lessonId ?? "unknown"} • ${data.exercise ?? "unknown"}`;
 
