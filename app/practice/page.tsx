@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import SpeakButton from "@/app/components/SpeakButton";
-import { WORDS } from "@/app/data/words";
+import { getSrsWordsFromLessons } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Lang = "ua" | "ru";
@@ -237,6 +237,7 @@ export default function PracticePage() {
   const t = UI[uiLang];
 
   const [ready, setReady] = useState(false);
+  const words = useMemo(() => getSrsWordsFromLessons(), []);
 
   // setup
   const [sessionMode, setSessionMode] = useState<SessionMode>("mixed");
@@ -276,7 +277,7 @@ export default function PracticePage() {
 
   // pool check
   const poolCount = useMemo(() => {
-    const pool = (WORDS as any[])
+    const pool = (words as any[])
       .map((w) => ({
         sk: w.sk,
         ua: getTrans(w, "ua"),
@@ -309,7 +310,7 @@ export default function PracticePage() {
 
   function startNew(customSkList?: string[]) {
     const built = buildSessionBase(
-      WORDS as any[],
+      words as any[],
       questionCount,
       sessionMode,
       customSkList
