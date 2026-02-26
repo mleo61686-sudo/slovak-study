@@ -34,17 +34,25 @@ export async function POST(req: Request) {
     }
 
     const allowed = new Set(["new", "fixed", "ignored"]);
-    if (!allowed.has(data.status)) {
+    if (typeof data.status !== "string" || !allowed.has(data.status)) {
       return NextResponse.json({ ok: false }, { status: 400 });
     }
 
-    const updated = await prisma.errorReport.update({
+    const res = await prisma.errorReport.updateMany({
       where: { id: data.id },
       data: { status: data.status },
-      select: { id: true, status: true },
     });
 
-    return NextResponse.json({ ok: true, report: updated });
+    if (res.count === 0) {
+      return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      ok: true,
+      report: { id: data.id, status: data.status },
+    });
+
+
   } catch (e) {
     console.error("update-report-status error:", e);
     return NextResponse.json({ ok: false }, { status: 500 });

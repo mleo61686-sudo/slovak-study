@@ -25,6 +25,8 @@ const dict = {
     repeat: "Повторити",
     start: "Почати",
     locked: "Закрито 🔒",
+    premiumOnly: "Доступно лише для Premium ⭐",
+    buyPremium: "Купити Premium",
   },
   ru: {
     title: "Обучение 📚",
@@ -38,6 +40,8 @@ const dict = {
     repeat: "Повторить",
     start: "Начать",
     locked: "Закрыто 🔒",
+    premiumOnly: "Доступно только для Premium ⭐",
+    buyPremium: "Купить Premium",
   },
 } satisfies Record<Lang, any>;
 
@@ -139,6 +143,7 @@ export default function LearningPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const isPremium = (session?.user as any)?.isPremium === true;
+  const isB1Locked = !isPremium; // B1 тільки для Premium
 
   // ✅ Адмін по email (через env)
   const adminEmails = useMemo(() => {
@@ -152,7 +157,15 @@ export default function LearningPage() {
   const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
 
   // ✅ B1 закритий для всіх, крім адміна
-  const DISABLED_BANDS = new Set<string>();
+  const DISABLED_BANDS = useMemo(() => {
+    const s = new Set<string>();
+
+    if (isB1Locked) {
+      s.add("b1");
+    }
+
+    return s;
+  }, [isB1Locked]);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
   const { lang } = useLanguage() as { lang: Lang };
@@ -255,16 +268,23 @@ export default function LearningPage() {
 
                 <div className="flex items-center gap-2">
                   {isBandDisabled ? (
-                    <span className="cursor-not-allowed rounded-xl border px-3 py-1 text-xs font-medium text-slate-400">
-                      {t.allLessons}
-                    </span>
+
+                    <Link
+                      href="/premium"
+                      className="rounded-xl bg-black px-3 py-1 text-xs font-medium text-white"
+                    >
+                      {t.buyPremium}
+                    </Link>
+
                   ) : (
+
                     <Link
                       href={`/learning/levels/${band.id}`}
                       className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50"
                     >
                       {t.allLessons}
                     </Link>
+
                   )}
 
                   <span className="rounded-full border px-3 py-1 text-xs text-slate-600">
@@ -273,10 +293,29 @@ export default function LearningPage() {
                 </div>
               </div>
 
-              {band.lessons.length === 0 || isBandDisabled ? (
+              {band.lessons.length === 0 ? (
+
                 <div className="mt-5 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-600">
                   {t.soon}
                 </div>
+
+              ) : isBandDisabled ? (
+
+                <div className="mt-5 rounded-2xl border bg-slate-50 p-4 flex items-center justify-between">
+
+                  <div className="text-sm font-medium">
+                    🔒 {t.premiumOnly}
+                  </div>
+
+                  <Link
+                    href="/premium"
+                    className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
+                  >
+                    {t.buyPremium}
+                  </Link>
+
+                </div>
+
               ) : (
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {band.lessons.slice(0, 4).map((lesson) => {

@@ -18,7 +18,7 @@ export default function StatusPills({
         if (busy) return;
         setBusy(true);
         try {
-            const res = await fetch("/api/admin/update-report-status/", {
+            const res = await fetch("/api/admin/update-report-status", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id, status: next }),
@@ -52,7 +52,13 @@ export default function StatusPills({
             (busy ? " opacity-60 pointer-events-none" : "");
 
         return (
-            <button key={value} type="button" onClick={() => set(value)} className={cls}>
+            <button
+                key={value}
+                type="button"
+                onClick={() => set(value)}
+                className={cls}
+                disabled={busy || status === value}
+            >
                 {label}
             </button>
         );

@@ -7,8 +7,8 @@ export default function TopBanner() {
 
   const text =
     lang === "ru"
-      ? "✅ Уровни A0–A1-A2 полностью готовы • 🔄 Сайт обновляется ежедневно"
-      : "✅ Рівні A0–A1-A2 повністю готові • 🔄 Сайт оновлюється щоденно";
+      ? "✅ Уровни A0–A1-A2-B1 полностью готовы • 🔄 Сайт обновляется ежедневно"
+      : "✅ Рівні A0–A1-A2-B1 повністю готові • 🔄 Сайт оновлюється щоденно";
 
   return (
     <div className="w-full overflow-hidden bg-gradient-to-r from-emerald-500 to-blue-600 text-white">

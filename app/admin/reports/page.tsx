@@ -61,7 +61,11 @@ export default async function AdminReportsPage() {
                         {reports.map((r) => (
                             <tr key={r.id} className="align-top">
                                 <td className="p-3 border-b whitespace-nowrap text-slate-600">
-                                    {new Date(r.createdAt).toLocaleString()}
+                                    {new Intl.DateTimeFormat("sk-SK", {
+                                        timeZone: "Europe/Bratislava",
+                                        dateStyle: "medium",
+                                        timeStyle: "short",
+                                    }).format(new Date(r.createdAt))}
                                 </td>
 
                                 <td className="p-3 border-b whitespace-nowrap">
