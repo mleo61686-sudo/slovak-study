@@ -3,18 +3,19 @@ import HomeClient from "./HomeClient";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Вивчення словацької мови онлайн для українців | Slovak Study",
+  title: "Slovak Study — словацька мова онлайн (A0–B2)",
+
   description:
-    "Slovak Study — граматика з прикладами, словник і вправи для практики. Системне навчання по рівнях A0–B2. Інтерфейс українською.",
+    "Slovak Study — онлайн навчання словацької мови: уроки A0–B2, словник, граматика з прикладами, вправи та озвучка. Вивчайте словацьку мову з нуля онлайн.",
 
   alternates: {
     canonical: `${SITE_URL}/`,
   },
 
   openGraph: {
-    title: "Slovak Study — вивчення словацької онлайн",
+    title: "Slovak Study — словацька мова онлайн",
     description:
-      "Граматика, словник і тренажер вправ. Системне навчання по рівнях A0–B2 для україномовних.",
+      "Уроки A0–B2, словник, граматика з прикладами та вправи для практики. Онлайн навчання словацької мови.",
     url: `${SITE_URL}/`,
     siteName: "Slovak Study",
     type: "website",

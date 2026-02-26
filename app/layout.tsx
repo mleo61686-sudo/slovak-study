@@ -12,8 +12,29 @@ import TopBanner from "./components/TopBanner";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://slovak-study.com"),
-  title: "Slovak Study — вивчення словацької",
-  description: "Граматика, словник і тренажер для україномовних.",
+
+  title: {
+    default: "Slovak Study — словацька мова онлайн",
+    template: "%s | Slovak Study",
+  },
+
+  description:
+    "Slovak Study — онлайн навчання словацької мови: уроки A0–B2, граматика з прикладами, словник, вправи та озвучка.",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    title: "Slovak Study — словацька мова онлайн",
+    description:
+      "Уроки A0–B2, граматика з прикладами, словник та вправи для практики. Онлайн навчання словацької мови.",
+    url: "/",
+    siteName: "Slovak Study",
+    type: "website",
+  },
+
+  robots: { index: true, follow: true },
 };
 
 async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
@@ -33,7 +54,7 @@ async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
     try {
       const u = new URL(ref);
       if (u.pathname.startsWith("/ru")) return "ru";
-    } catch { }
+    } catch {}
 
     return "uk";
   } catch {
@@ -51,8 +72,49 @@ export default async function RootLayout({
   return (
     <html lang={htmlLang} suppressHydrationWarning>
       <head>
-        {/* ✅ AdSense meta verification */}
+
+        {/* Google AdSense */}
         <meta name="google-adsense-account" content="ca-pub-1760161415033749" />
+
+        {/* hreflang */}
+        <link rel="alternate" hrefLang="uk" href="https://slovak-study.com/" />
+        <link rel="alternate" hrefLang="ru" href="https://slovak-study.com/ru/" />
+        <link rel="alternate" hrefLang="x-default" href="https://slovak-study.com/" />
+
+        {/* ⭐ Schema.org (Brand + Website) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://slovak-study.com/#organization",
+                  name: "Slovak Study",
+                  url: "https://slovak-study.com/",
+                  logo: "https://slovak-study.com/opengraph-image.png",
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://slovak-study.com/#website",
+                  url: "https://slovak-study.com/",
+                  name: "Slovak Study",
+                  publisher: {
+                    "@id": "https://slovak-study.com/#organization",
+                  },
+                  inLanguage: ["uk", "ru"],
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target:
+                      "https://slovak-study.com/dictionary?q={search_term_string}",
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
 
         <Script
           async
@@ -60,6 +122,7 @@ export default async function RootLayout({
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
+
       </head>
 
       <body>
@@ -73,19 +136,23 @@ export default async function RootLayout({
           </main>
         </SessionProviderClient>
 
-        {/* 🔥 ОНОВЛЕНИЙ FOOTER З SEO-ЛІНКАМИ */}
         <footer className="mt-auto border-t">
           <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
             <div>
               © {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.
             </div>
 
             <div className="flex flex-wrap gap-4">
+
               <a className="hover:underline" href="/slovak-for-ukrainians">
                 Словацька для українців
               </a>
 
-              <a className="hover:underline" href="/vyvchennia-slovatskoi-movy-online">
+              <a
+                className="hover:underline"
+                href="/vyvchennia-slovatskoi-movy-online"
+              >
                 Вивчення словацької онлайн
               </a>
 
@@ -93,15 +160,20 @@ export default async function RootLayout({
                 Словацкий для украинцев
               </a>
 
-              <a className="hover:underline" href="/ru/vyvchennia-slovatskoi-movy-online">
+              <a
+                className="hover:underline"
+                href="/ru/vyvchennia-slovatskoi-movy-online"
+              >
                 Изучение словацкого онлайн
               </a>
+
             </div>
+
           </div>
         </footer>
 
-        {/* ✅ Vercel Speed Insights (RUM metrics) */}
         <SpeedInsights />
+
       </body>
     </html>
   );

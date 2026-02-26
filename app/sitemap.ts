@@ -4,59 +4,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://slovak-study.com";
   const now = new Date();
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: now,
-    },
+  const urls: string[] = [
+    // ✅ Home (IMPORTANT: with trailing slash)
+    `${baseUrl}/`,
 
-    // ✅ SEO landing pages
-    {
-      url: `${baseUrl}/slovak-for-ukrainians`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/ru/slovak-for-ukrainians`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/grammar`,
-      lastModified: now,
-    },
+    // ✅ SEO landing pages (UA)
+    `${baseUrl}/slovak-for-ukrainians`,
+    `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
 
-    // 🔹 Grammar topics
-    {
-      url: `${baseUrl}/grammar/alphabet`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/grammar/verbs-present`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/grammar/cases`,
-      lastModified: now,
-    },
+    // ✅ Main app pages (UA)
+    `${baseUrl}/learning`,
+    `${baseUrl}/learning/a0`,
+    `${baseUrl}/learning/a1`,
+    `${baseUrl}/learning/a2`,
+    `${baseUrl}/learning/b1`,
+    `${baseUrl}/grammar`,
+    `${baseUrl}/dictionary`,
+    `${baseUrl}/practice`,
 
-    {
-      url: `${baseUrl}/dictionary`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/practice`,
-      lastModified: now,
-    },
-    {
-      url: `${baseUrl}/learning/a0`,
-      lastModified: now,
-    },
+    // ✅ Grammar topics (UA)
+    `${baseUrl}/grammar/alphabet`,
+    `${baseUrl}/grammar/verbs-present`,
+    `${baseUrl}/grammar/cases`,
+
+    // ✅ RU versions (if these routes exist)
+    `${baseUrl}/ru/slovak-for-ukrainians`,
+    `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
+    `${baseUrl}/ru/learning`,
+    `${baseUrl}/ru/grammar`,
+    `${baseUrl}/ru/dictionary`,
+    `${baseUrl}/ru/practice`,
   ];
+
+  return urls.map((url) => ({
+    url,
+    lastModified: now,
+  }));
 }
