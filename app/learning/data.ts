@@ -856,3 +856,80 @@ export function getLesson(id: string) {
     words: attachPhrases(withRu, A0_PHRASES, `a0-${raw}`),
   };
 }
+
+// =============================
+// 8) Dictionary index from lessons
+// =============================
+
+export const LESSONS_BY_BAND: Record<CefrBandId, Lesson[]> = {
+  a0: A0_ALL,
+  a1: A1_LIST,
+  a2: A2_LIST,
+  b1: B1_LIST,
+  b2: B2_ALL,
+};
+
+export type DictionaryEntry = Word & {
+  key: string;
+  refs: {
+    band: CefrBandId;
+    lessonId: string;
+    lessonTitle: Record<Lang, string>;
+  }[];
+};
+
+function dictKey(w: Word) {
+  return String(w.sk).trim().toLowerCase();
+}
+
+export function getDictionaryFromLessons(): DictionaryEntry[] {
+  const map = new Map<string, DictionaryEntry>();
+
+  (Object.keys(LESSONS_BY_BAND) as CefrBandId[]).forEach((band) => {
+    const lessons = LESSONS_BY_BAND[band];
+
+    lessons.forEach((lesson, idx) => {
+      const lessonId = `${band}-${idx + 1}`;
+
+      lesson.words.forEach((w) => {
+        if (!w?.sk || !w?.ua) return;
+
+        const key = dictKey(w);
+        const existing = map.get(key);
+
+        const ref = {
+          band,
+          lessonId,
+          lessonTitle: lesson.title,
+        };
+
+        if (!existing) {
+          map.set(key, {
+            ...addRu([w])[0],
+            key,
+            refs: [ref],
+          });
+          return;
+        }
+
+        const already = existing.refs.some((r) => r.lessonId === ref.lessonId);
+        if (!already) existing.refs.push(ref);
+
+        if (!existing.img && w.img) existing.img = w.img;
+        if (!existing.ipa && w.ipa) existing.ipa = w.ipa;
+        if (!existing.imgCredit && w.imgCredit) existing.imgCredit = w.imgCredit;
+
+        if (!existing.ua && w.ua) existing.ua = w.ua;
+        if (!existing.ru && w.ru) existing.ru = w.ru;
+      });
+    });
+  });
+
+  return Array.from(map.values()).sort((a, b) =>
+    a.sk.localeCompare(b.sk, "sk")
+  );
+}
+// ✅ для SRS нам потрібен просто список Word[]
+export function getSrsWordsFromLessons(): Word[] {
+  return getDictionaryFromLessons().map(({ key, refs, ...w }) => w);
+}

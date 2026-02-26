@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
-import { WORDS, type Word } from "@/app/data/words";
+import { getSrsWordsFromLessons, type Word } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
 import {
   isLearned as _isLearned,
@@ -250,7 +250,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   const { lang } = useLanguage();
   const t = I18N[lang];
 
-  const allWords = useMemo(() => WORDS, []);
+  const allWords = useMemo(() => getSrsWordsFromLessons(), []);
   const [db, setDb] = useState<Record<string, SrsState>>({});
 
   const [queue, setQueue] = useState<Word[]>([]);
@@ -429,7 +429,11 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   const left = current ? queue.length : 0;
 
   const translation =
-    !current ? "" : lang === "ru" ? current.ru || current.ua || "" : current.ua || "";
+    !current
+      ? ""
+      : lang === "ru"
+      ? current.ru || current.ua || ""
+      : current.ua || "";
 
   return (
     <main className="mx-auto max-w-3xl p-4 space-y-6">

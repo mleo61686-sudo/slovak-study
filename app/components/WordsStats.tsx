@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { WORDS } from "@/app/data/words";
+import { getSrsWordsFromLessons } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { SrsState } from "@/lib/srs/srsWords";
 import { isLearned, isMastered } from "@/lib/srs/srsWords";
@@ -185,24 +185,15 @@ function computeLessonAnalytics(): LessonAnalytics {
   let currentStreak = 0;
 
   if (hasToday || lastInt === todayInt - 1) {
-    // count backwards from lastInt
-    currentStreak = 1;
-    let cursor = lastInt;
-    while (dateSet.has(new Date(cursor * 86400000).toISOString().slice(0, 10))) {
-      // this while is tricky due to ISO from epoch; проще: перевіримо через int set
-      break;
-    }
-
     // Build int set for fast check
     const intSet = new Set(days);
+
     currentStreak = 1;
-    cursor = lastInt;
+    let cursor = lastInt;
     while (intSet.has(cursor - 1)) {
       currentStreak += 1;
       cursor -= 1;
     }
-
-    // if hasToday false and lastInt == yesterday, current streak still valid
   } else {
     currentStreak = 0;
   }
@@ -230,8 +221,11 @@ export default function WordsStats() {
 
   const isPremium = !!session?.user?.isPremium;
 
+  // ✅ тепер беремо загальну кількість слів із уроків, а не з WORDS
+  const allWords = useMemo(() => getSrsWordsFromLessons(), []);
+
   const [stats, setStats] = useState<Stats>({
-    total: WORDS.length,
+    total: allWords.length,
     learned: 0,
     mastered: 0,
     due: 0,
@@ -247,7 +241,7 @@ export default function WordsStats() {
   useEffect(() => {
     const update = () => {
       const db = loadDb();
-      setStats(computeStats(db, WORDS.length));
+      setStats(computeStats(db, allWords.length));
 
       // ✅ premium analytics (lightweight)
       setLessonA(computeLessonAnalytics());
@@ -261,7 +255,7 @@ export default function WordsStats() {
       window.removeEventListener("focus", update);
       window.removeEventListener("storage", update);
     };
-  }, []);
+  }, [allWords.length]);
 
   const progress =
     stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);
@@ -317,9 +311,7 @@ export default function WordsStats() {
       {showPremiumBlock ? (
         <div className="pt-2 space-y-3">
           <div className="flex items-center justify-between gap-3">
-            <div className="text-sm font-semibold">
-              ⭐ {t.premiumTitle}
-            </div>
+            <div className="text-sm font-semibold">⭐ {t.premiumTitle}</div>
 
             {!isPremium ? (
               <Link
