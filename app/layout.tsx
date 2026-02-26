@@ -25,6 +25,16 @@ export const metadata: Metadata = {
     canonical: "/",
   },
 
+  // ✅ Дуже важливо, щоб Google бачив бренд (а не “Vercel”)
+  // Переконайся, що ці файли існують у /public
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png" }],
+  },
+
   openGraph: {
     title: "Slovak Study — словацька мова онлайн",
     description:
@@ -34,7 +44,18 @@ export const metadata: Metadata = {
     type: "website",
   },
 
+  twitter: {
+    card: "summary_large_image",
+    title: "Slovak Study — словацька мова онлайн",
+    description:
+      "Уроки A0–B2, граматика, словник та вправи. Вчи словацьку системно.",
+    images: ["/opengraph-image.png"],
+  },
+
   robots: { index: true, follow: true },
+
+  // не обов’язково, але нормально
+  themeColor: "#ffffff",
 };
 
 async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
@@ -69,10 +90,37 @@ export default async function RootLayout({
 }) {
   const htmlLang = await detectLangFromHeaders();
 
+  const schemaOrg = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://slovak-study.com/#organization",
+        name: "Slovak Study",
+        url: "https://slovak-study.com/",
+        // Якщо в тебе є справжній логотип у public, краще вказати його:
+        // logo: "https://slovak-study.com/logo.png",
+        logo: "https://slovak-study.com/opengraph-image.png",
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://slovak-study.com/#website",
+        url: "https://slovak-study.com/",
+        name: "Slovak Study",
+        publisher: { "@id": "https://slovak-study.com/#organization" },
+        inLanguage: ["uk", "ru"],
+        potentialAction: {
+          "@type": "SearchAction",
+          target: "https://slovak-study.com/dictionary?q={search_term_string}",
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
+
   return (
     <html lang={htmlLang} suppressHydrationWarning>
       <head>
-
         {/* Google AdSense */}
         <meta name="google-adsense-account" content="ca-pub-1760161415033749" />
 
@@ -81,39 +129,12 @@ export default async function RootLayout({
         <link rel="alternate" hrefLang="ru" href="https://slovak-study.com/ru/" />
         <link rel="alternate" hrefLang="x-default" href="https://slovak-study.com/" />
 
-        {/* ⭐ Schema.org (Brand + Website) */}
-        <script
+        {/* ✅ Schema.org через Next Script (стабільніше) */}
+        <Script
+          id="schema-org"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  "@id": "https://slovak-study.com/#organization",
-                  name: "Slovak Study",
-                  url: "https://slovak-study.com/",
-                  logo: "https://slovak-study.com/opengraph-image.png",
-                },
-                {
-                  "@type": "WebSite",
-                  "@id": "https://slovak-study.com/#website",
-                  url: "https://slovak-study.com/",
-                  name: "Slovak Study",
-                  publisher: {
-                    "@id": "https://slovak-study.com/#organization",
-                  },
-                  inLanguage: ["uk", "ru"],
-                  potentialAction: {
-                    "@type": "SearchAction",
-                    target:
-                      "https://slovak-study.com/dictionary?q={search_term_string}",
-                    "query-input": "required name=search_term_string",
-                  },
-                },
-              ],
-            }),
-          }}
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
         />
 
         <Script
@@ -122,7 +143,6 @@ export default async function RootLayout({
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
-
       </head>
 
       <body>
@@ -131,28 +151,19 @@ export default async function RootLayout({
 
         <SessionProviderClient>
           <ProgressSync />
-          <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
-            {children}
-          </main>
+          <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">{children}</main>
         </SessionProviderClient>
 
         <footer className="mt-auto border-t">
           <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-            <div>
-              © {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.
-            </div>
+            <div>© {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.</div>
 
             <div className="flex flex-wrap gap-4">
-
               <a className="hover:underline" href="/slovak-for-ukrainians">
                 Словацька для українців
               </a>
 
-              <a
-                className="hover:underline"
-                href="/vyvchennia-slovatskoi-movy-online"
-              >
+              <a className="hover:underline" href="/vyvchennia-slovatskoi-movy-online">
                 Вивчення словацької онлайн
               </a>
 
@@ -160,20 +171,14 @@ export default async function RootLayout({
                 Словацкий для украинцев
               </a>
 
-              <a
-                className="hover:underline"
-                href="/ru/vyvchennia-slovatskoi-movy-online"
-              >
+              <a className="hover:underline" href="/ru/vyvchennia-slovatskoi-movy-online">
                 Изучение словацкого онлайн
               </a>
-
             </div>
-
           </div>
         </footer>
 
         <SpeedInsights />
-
       </body>
     </html>
   );
