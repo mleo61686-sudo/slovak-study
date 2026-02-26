@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ✅ SEO landing pages (UA)
     `${baseUrl}/slovak-for-ukrainians`,
     `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
+    `${baseUrl}/learn-slovak`, // ⭐ NEW
+
 
     // ✅ Main app pages (UA)
     `${baseUrl}/learning`,
