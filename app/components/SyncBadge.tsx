@@ -6,7 +6,7 @@ type SyncState = "idle" | "syncing" | "error";
 const SYNC_EVENT = "slovakStudy:syncState";
 
 export default function SyncBadge() {
-  const [state, setState] = useState<SyncState>("syncing");
+  const [state, setState] = useState<SyncState>("idle");
 
 
   useEffect(() => {

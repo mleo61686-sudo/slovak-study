@@ -3,7 +3,19 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const KEY = "slovakStudy.progress";
+const ACTIVE_USER_KEY = "slovakStudy.activeUserId";
+const GUEST_ID = "guest";
+const BASE = "progress";
+
+function activeProgressKey() {
+  try {
+    const uid = localStorage.getItem(ACTIVE_USER_KEY);
+    const safe = uid && uid.trim() ? uid.trim() : GUEST_ID;
+    return `slovakStudy.${safe}.${BASE}`;
+  } catch {
+    return `slovakStudy.${GUEST_ID}.${BASE}`;
+  }
+}
 
 const TOPIC_TITLES: Record<string, string> = {
   "present-tense": "Present tense (теперішній час)",
@@ -16,9 +28,9 @@ const TOPIC_TITLES: Record<string, string> = {
 type TopicData =
   | boolean
   | {
-      done?: boolean;
-      lastStudied?: string;
-    };
+    done?: boolean;
+    lastStudied?: string;
+  };
 
 type TopicItem = {
   id: string;
@@ -38,7 +50,7 @@ export default function ReviewPage() {
   const [total, setTotal] = useState(0);
 
   function reload() {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(activeProgressKey());
 
     if (!raw) {
       setItems([]);
@@ -88,7 +100,8 @@ export default function ReviewPage() {
     reload();
 
     const onStorage = (e: StorageEvent) => {
-      if (e.key === KEY) reload();
+      if (e.key && e.key.startsWith("slovakStudy.") && e.key.endsWith(".progress")) reload();
+      if (e.key === ACTIVE_USER_KEY) reload();
     };
 
     window.addEventListener("storage", onStorage);

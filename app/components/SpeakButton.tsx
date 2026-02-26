@@ -60,7 +60,7 @@ export default function SpeakButton({
     if (a) {
       try {
         a.pause();
-      } catch {}
+      } catch { }
       a.currentTime = 0;
       audioRef.current = null;
     }
@@ -103,7 +103,7 @@ export default function SpeakButton({
     if (lastKey.current === key) return;
     lastKey.current = key;
 
-    play().catch(() => {});
+    play().catch(() => { });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlayKey, text, kind]);
 
@@ -112,10 +112,18 @@ export default function SpeakButton({
   if (asChild) {
     return (
       <span
-        onClick={play}
+        onClick={() => play()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            play();
+          }
+        }}
         title={btnTitle}
         className={className}
         role="button"
+        tabIndex={0}
+        aria-disabled={loading}
       >
         {loading ? "..." : label ?? "🔊"}
       </span>

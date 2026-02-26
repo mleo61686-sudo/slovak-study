@@ -7,7 +7,19 @@ type Props = {
   passedSignal?: number;
 };
 
-const KEY = "slovakStudy.progress";
+const ACTIVE_USER_KEY = "slovakStudy.activeUserId";
+const GUEST_ID = "guest";
+const TOPICS_BASE = "topicsProgress";
+
+function topicsKey() {
+  try {
+    const uid = localStorage.getItem(ACTIVE_USER_KEY);
+    const safe = uid && uid.trim() ? uid.trim() : GUEST_ID;
+    return `slovakStudy.${safe}.${TOPICS_BASE}`;
+  } catch {
+    return `slovakStudy.${GUEST_ID}.${TOPICS_BASE}`;
+  }
+}
 
 export default function TopicProgress({ topicId, passedSignal }: Props) {
   const [mounted, setMounted] = useState(false);
@@ -23,7 +35,7 @@ export default function TopicProgress({ topicId, passedSignal }: Props) {
     if (!mounted) return;
 
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(topicsKey());
       if (raw) setDoneTopics(JSON.parse(raw));
     } catch {
       setDoneTopics({});
@@ -35,7 +47,7 @@ export default function TopicProgress({ topicId, passedSignal }: Props) {
   function markDone() {
     const next = { ...doneTopics, [topicId]: true };
     setDoneTopics(next);
-    localStorage.setItem(KEY, JSON.stringify(next));
+    localStorage.setItem(topicsKey(), JSON.stringify(next));
   }
 
   // авто-позначення після правильного проходження

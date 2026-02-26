@@ -11,7 +11,7 @@ type Props = {
     answer: string;
     explanation?: string;
     onPassed?: () => void;
-    progressKey?: string;
+    
 };
 
 export default function QuizCard({
@@ -38,13 +38,13 @@ export default function QuizCard({
             <p className="font-medium">{question}</p>
 
             <div className="space-y-2">
-                {options.map((opt) => {
+                {options.map((opt, idx) => {
                     const correct = showResult && opt === answer;
                     const wrong = showResult && opt === selected && opt !== answer;
 
                     return (
                         <button
-                            key={opt}
+                            key={`${opt}-${idx}`}
                             type="button"
                             disabled={showResult}
                             onClick={() => {
