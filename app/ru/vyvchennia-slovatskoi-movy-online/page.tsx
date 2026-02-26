@@ -64,7 +64,7 @@ export default function Page() {
       <Script
         id="faq-schema-ru-online"
         type="application/ld+json"
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
@@ -72,10 +72,20 @@ export default function Page() {
         <h1 className="text-3xl sm:text-4xl font-extrabold">
           Изучение словацкого языка онлайн — курс A0–B2
         </h1>
+
         <p className="text-slate-700">
           Slovak Study — онлайн-тренажёр для системного изучения словацкого:
           короткие уроки, озвучка, упражнения, словарь и грамматика. Подойдёт для
           жизни, работы и учёбы в Словакии: учишься по шагам и видишь прогресс.
+        </p>
+
+        {/* ✅ SEO internal link (RU) */}
+        <p className="text-slate-700">
+          Если ты живёшь или планируешь жить в Словакии, смотри также страницу{" "}
+          <Link href="/ru/slovak-for-ukrainians" className="underline">
+            «Словацкий язык для украинцев»
+          </Link>
+          .
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
@@ -92,7 +102,10 @@ export default function Page() {
             Грамматика
           </Link>
 
-          <Link className="px-4 py-2 rounded-xl border" href="/vyvchennia-slovatskoi-movy-online">
+          <Link
+            className="px-4 py-2 rounded-xl border"
+            href="/vyvchennia-slovatskoi-movy-online"
+          >
             Українська версія →
           </Link>
         </div>

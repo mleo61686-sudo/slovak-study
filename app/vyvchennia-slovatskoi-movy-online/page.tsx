@@ -64,31 +64,46 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
+
       <Script
         id="faq-schema-uk-online"
         type="application/ld+json"
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <section className="space-y-3">
+
         <h1 className="text-3xl sm:text-4xl font-extrabold">
           Вивчення словацької мови онлайн — навчання (A0–B2)
         </h1>
+
         <p className="text-slate-700">
           Slovak Study — це тренажер для системного вивчення словацької: короткі
           уроки, озвучка, вправи, словник та граматика. Підійде, якщо ти хочеш
-          впевнено користуватися словацькою в повсякденних ситуаціях: робота,
-          документи, побут, навчання.
+          впевнено користуватися словацькою в повсякденних ситуаціях:
+          робота, документи, побут, навчання.
+        </p>
+
+        {/* SEO internal link */}
+        <p className="text-slate-700">
+          Якщо ти з України і плануєш життя або роботу у Словаччині —
+          дивись сторінку{" "}
+          <Link href="/slovak-for-ukrainians" className="underline">
+            словацька мова для українців
+          </Link>.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
+
           <Link className="px-4 py-2 rounded-xl bg-black text-white" href="/learning">
             Почати навчання
           </Link>
+
           <Link className="px-4 py-2 rounded-xl border" href="/dictionary">
             Відкрити словник
           </Link>
+
           <Link className="px-4 py-2 rounded-xl border" href="/grammar">
             Перейти до граматики
           </Link>
@@ -99,57 +114,43 @@ export default function Page() {
           >
             Русская версия →
           </Link>
+
         </div>
+
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
+
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="font-bold text-lg">1) Рівні A0–B2</h2>
           <p className="mt-2 text-slate-700">
             Вчи слова по уроках і одразу закріплюй вправами. Прогрес зберігається.
           </p>
         </div>
+
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="font-bold text-lg">2) Озвучка</h2>
           <p className="mt-2 text-slate-700">
             Слухай вимову та тренуй сприйняття на слух у вправах.
           </p>
         </div>
+
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="font-bold text-lg">3) Словник</h2>
           <p className="mt-2 text-slate-700">
             Швидкий пошук слів + переклад і приклади.
           </p>
         </div>
+
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="font-bold text-lg">4) Граматика</h2>
           <p className="mt-2 text-slate-700">
             Пояснення тем з прикладами: від алфавіту до відмінків і дієслів.
           </p>
         </div>
+
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Як почати (простий план)</h2>
-        <ol className="list-decimal pl-5 space-y-2 text-slate-700">
-          <li>Почни з рівня A0 і пройди 5–10 уроків.</li>
-          <li>Щодня роби 10–20 хвилин вправ.</li>
-          <li>Паралельно відкривай граматику тем, які трапляються в уроках.</li>
-          <li>Слухай озвучку слів і повторюй уголос.</li>
-        </ol>
-      </section>
-
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">FAQ</h2>
-        <div className="space-y-4">
-          {FAQ.map((item) => (
-            <div key={item.q} className="rounded-xl border p-4">
-              <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-slate-700">{item.a}</div>
-            </div>
-          ))}
-        </div>
-      </section>
     </main>
   );
 }

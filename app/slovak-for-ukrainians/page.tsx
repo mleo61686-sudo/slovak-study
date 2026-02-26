@@ -49,6 +49,7 @@ const FAQ = [
 ];
 
 export default function Page() {
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -64,92 +65,182 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
+
       <Script
         id="faq-schema-uk-slovak-for-ukrainians"
         type="application/ld+json"
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <section className="space-y-3">
+
         <h1 className="text-3xl sm:text-4xl font-extrabold">
           Словацька мова — навчання онлайн (A0–B2)
         </h1>
+
         <p className="text-slate-700">
-          Slovak Study — тренажер для системного вивчення словацької: короткі
-          уроки, озвучка, вправи, словник та граматика. Підійде, якщо ти
-          живеш/плануєш жити у Словаччині та хочеш швидко підтягнути мову.
+          Slovak Study — тренажер для системного вивчення словацької:
+          короткі уроки, озвучка, вправи, словник та граматика.
+          Підійде, якщо ти живеш або плануєш жити у Словаччині
+          та хочеш швидко підтягнути мову.
+        </p>
+
+        {/* ⭐ SEO internal link */}
+        <p className="text-slate-700">
+          Детальний опис формату навчання дивись на сторінці{" "}
+          <Link href="/vyvchennia-slovatskoi-movy-online" className="underline">
+            вивчення словацької мови онлайн
+          </Link>.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
-          <Link className="px-4 py-2 rounded-xl bg-black text-white" href="/learning">
+
+          <Link
+            className="px-4 py-2 rounded-xl bg-black text-white"
+            href="/learning"
+          >
             Почати навчання
           </Link>
-          <Link className="px-4 py-2 rounded-xl border" href="/learning/levels/a0">
+
+          <Link
+            className="px-4 py-2 rounded-xl border"
+            href="/learning/levels/a0"
+          >
             Старт з A0 →
           </Link>
-          <Link className="px-4 py-2 rounded-xl border" href="/dictionary">
+
+          <Link
+            className="px-4 py-2 rounded-xl border"
+            href="/dictionary"
+          >
             Словник
           </Link>
-          <Link className="px-4 py-2 rounded-xl border" href="/grammar">
+
+          <Link
+            className="px-4 py-2 rounded-xl border"
+            href="/grammar"
+          >
             Граматика
           </Link>
 
-          <Link className="px-4 py-2 rounded-xl border" href="/ru/slovak-for-ukrainians">
+          <Link
+            className="px-4 py-2 rounded-xl border"
+            href="/ru/slovak-for-ukrainians"
+          >
             Русская версия →
           </Link>
+
         </div>
+
       </section>
+
 
       <section className="grid gap-4 sm:grid-cols-2">
+
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">1) Практика для життя</h2>
+          <h2 className="font-bold text-lg">
+            1) Практика для життя
+          </h2>
           <p className="mt-2 text-slate-700">
-            Лексика і теми, які реально потрібні у Словаччині: робота, документи, побут.
+            Лексика і теми, які реально потрібні у Словаччині:
+            робота, документи, побут.
           </p>
         </div>
+
+
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">2) Короткі уроки</h2>
+          <h2 className="font-bold text-lg">
+            2) Короткі уроки
+          </h2>
           <p className="mt-2 text-slate-700">
-            По 10 слів на урок + вправи — легко займатися щодня без вигорання.
+            По 10 слів на урок + вправи —
+            легко займатися щодня без вигорання.
           </p>
         </div>
+
+
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">3) Озвучка</h2>
+          <h2 className="font-bold text-lg">
+            3) Озвучка
+          </h2>
           <p className="mt-2 text-slate-700">
-            Слухай вимову слів і фраз та повторюй — це швидко прокачує “на слух”.
+            Слухай вимову слів і фраз та повторюй —
+            це швидко прокачує слух.
           </p>
         </div>
+
+
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">4) Словник + граматика</h2>
+          <h2 className="font-bold text-lg">
+            4) Словник + граматика
+          </h2>
           <p className="mt-2 text-slate-700">
-            Швидкий пошук слів і теми граматики з прикладами — все в одному місці.
+            Швидкий пошук слів і теми граматики з прикладами —
+            все в одному місці.
           </p>
         </div>
+
       </section>
 
+
       <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Як почати (план на 7 днів)</h2>
+
+        <h2 className="text-2xl font-bold">
+          Як почати (план на 7 днів)
+        </h2>
+
         <ol className="list-decimal pl-5 space-y-2 text-slate-700">
+
           <li>День 1: пройди 2 уроки A0.</li>
+
           <li>День 2–3: ще 2–4 уроки + вправи.</li>
-          <li>День 4: відкрий граматику (алфавіт/вимова) і повтори слова.</li>
-          <li>День 5–6: продовжуй A0 + слухай озвучку і повторюй уголос.</li>
-          <li>День 7: закріпи — пройди вправи по попередніх уроках.</li>
+
+          <li>
+            День 4: відкрий граматику і повтори слова.
+          </li>
+
+          <li>
+            День 5–6: продовжуй A0 +
+            слухай озвучку і повторюй уголос.
+          </li>
+
+          <li>
+            День 7: закріпи —
+            пройди вправи по попередніх уроках.
+          </li>
+
         </ol>
+
       </section>
 
+
       <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">FAQ</h2>
+
+        <h2 className="text-2xl font-bold">
+          FAQ
+        </h2>
+
         <div className="space-y-4">
+
           {FAQ.map((item) => (
             <div key={item.q} className="rounded-xl border p-4">
-              <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-slate-700">{item.a}</div>
+
+              <div className="font-semibold">
+                {item.q}
+              </div>
+
+              <div className="mt-2 text-slate-700">
+                {item.a}
+              </div>
+
             </div>
           ))}
+
         </div>
+
       </section>
+
     </main>
   );
 }
