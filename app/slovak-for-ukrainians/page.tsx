@@ -5,24 +5,24 @@ import Script from "next/script";
 const SITE_URL = "https://slovak-study.com";
 
 export const metadata: Metadata = {
-  title: "Словацька мова для українців — навчання онлайн A0–B2 | Slovak Study",
+  title: "Словацька мова: навчання онлайн A0–B2 | Slovak Study",
   description:
-    "Словацька мова для українців: навчання онлайн A0–B2, уроки, словник, граматика, вправи та прогрес. Підійде для життя і роботи в Словаччині.",
+    "Словацька мова онлайн: навчання A0–B2, уроки, словник, граматика, вправи та прогрес. Підійде для життя, роботи й навчання у Словаччині.",
+
   alternates: {
     canonical: `${SITE_URL}/slovak-for-ukrainians`,
-    languages: {
-      uk: `${SITE_URL}/slovak-for-ukrainians`,
-      ru: `${SITE_URL}/ru/slovak-for-ukrainians`,
-    },
   },
+
   openGraph: {
-    title: "Словацька мова для українців | Slovak Study",
+    title: "Словацька мова онлайн (A0–B2) | Slovak Study",
     description:
       "Уроки A0–B2, словник і граматика — вчи словацьку системно, з вправами та прогресом.",
     url: `${SITE_URL}/slovak-for-ukrainians`,
     siteName: "Slovak Study",
     type: "website",
   },
+
+  robots: { index: true, follow: true },
 };
 
 const FAQ = [
@@ -73,12 +73,12 @@ export default function Page() {
 
       <section className="space-y-3">
         <h1 className="text-3xl sm:text-4xl font-extrabold">
-          Словацька мова для українців — навчання онлайн (A0–B2)
+          Словацька мова — навчання онлайн (A0–B2)
         </h1>
         <p className="text-slate-700">
-          Slovak Study — тренажер для системного вивчення словацької: короткі уроки,
-          озвучка, вправи, словник та граматика. Підійде, якщо ти живеш/плануєш
-          жити у Словаччині та хочеш швидко підтягнути мову.
+          Slovak Study — тренажер для системного вивчення словацької: короткі
+          уроки, озвучка, вправи, словник та граматика. Підійде, якщо ти
+          живеш/плануєш жити у Словаччині та хочеш швидко підтягнути мову.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
@@ -95,11 +95,7 @@ export default function Page() {
             Граматика
           </Link>
 
-          <Link
-            className="px-4 py-2 rounded-xl border"
-            href="/ru/slovak-for-ukrainians"
-            hrefLang="ru"
-          >
+          <Link className="px-4 py-2 rounded-xl border" href="/ru/slovak-for-ukrainians">
             Русская версия →
           </Link>
         </div>

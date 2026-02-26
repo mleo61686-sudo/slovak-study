@@ -5,25 +5,24 @@ import Script from "next/script";
 const SITE_URL = "https://slovak-study.com";
 
 export const metadata: Metadata = {
-  title:
-    "Словацька мова для українців — безкоштовне навчання A0–B2 | Slovak Study",
+  title: "Вивчення словацької мови онлайн — уроки A0–B2 | Slovak Study",
   description:
-    "Вивчення словацької мови для українців: уроки A0–B2, словник, граматика, вправи та прогрес. Почни з нуля онлайн.",
+    "Онлайн навчання словацької мови: рівні A0–B2, словник, граматика з прикладами, вправи та прогрес. Почни з нуля і вчи словацьку системно.",
+
   alternates: {
     canonical: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
-    languages: {
-      uk: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
-      ru: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
-    },
   },
+
   openGraph: {
-    title: "Вивчення словацької мови онлайн | Slovak Study",
+    title: "Вивчення словацької мови онлайн (A0–B2) | Slovak Study",
     description:
       "Уроки A0–B2, словник і граматика — вчи словацьку системно, з вправами та прогресом.",
     url: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
     siteName: "Slovak Study",
     type: "website",
   },
+
+  robots: { index: true, follow: true },
 };
 
 const FAQ = [
@@ -44,7 +43,7 @@ const FAQ = [
     a: "На сторінці граматики є теми з прикладами та озвучкою.",
   },
   {
-    q: "Чи є словник словацької з перекладом українською?",
+    q: "Чи є словник словацької з перекладом?",
     a: "Так, у словнику можна шукати слова й слухати вимову.",
   },
 ];
@@ -78,8 +77,9 @@ export default function Page() {
         </h1>
         <p className="text-slate-700">
           Slovak Study — це тренажер для системного вивчення словацької: короткі
-          уроки, озвучка, вправи, словник та граматика. Підійде, якщо ти
-          живеш/плануєш жити у Словаччині та хочеш швидко підтягнути мову.
+          уроки, озвучка, вправи, словник та граматика. Підійде, якщо ти хочеш
+          впевнено користуватися словацькою в повсякденних ситуаціях: робота,
+          документи, побут, навчання.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
@@ -96,7 +96,6 @@ export default function Page() {
           <Link
             className="px-4 py-2 rounded-xl border"
             href="/ru/vyvchennia-slovatskoi-movy-online"
-            hrefLang="ru"
           >
             Русская версия →
           </Link>
@@ -119,7 +118,7 @@ export default function Page() {
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="font-bold text-lg">3) Словник</h2>
           <p className="mt-2 text-slate-700">
-            Швидкий пошук слів + переклад українською та приклади.
+            Швидкий пошук слів + переклад і приклади.
           </p>
         </div>
         <div className="rounded-2xl border bg-white p-5">

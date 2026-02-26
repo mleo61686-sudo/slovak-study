@@ -5,24 +5,24 @@ import Script from "next/script";
 const SITE_URL = "https://slovak-study.com";
 
 export const metadata: Metadata = {
-  title: "Словацкий язык для украинцев — обучение онлайн A0–B2 | Slovak Study",
+  title: "Словацкий язык: обучение онлайн A0–B2 | Slovak Study",
   description:
-    "Изучение словацкого языка для украинцев: уровни A0–B2, словарь, грамматика, упражнения и прогресс. Начни с нуля онлайн.",
+    "Словацкий язык онлайн: уровни A0–B2, словарь, грамматика, упражнения и прогресс. Начни с нуля и учись системно.",
+
   alternates: {
     canonical: `${SITE_URL}/ru/slovak-for-ukrainians`,
-    languages: {
-      uk: `${SITE_URL}/slovak-for-ukrainians`,
-      ru: `${SITE_URL}/ru/slovak-for-ukrainians`,
-    },
   },
+
   openGraph: {
-    title: "Словацкий язык для украинцев | Slovak Study",
+    title: "Словацкий язык онлайн (A0–B2) | Slovak Study",
     description:
       "Уроки A0–B2, словарь и грамматика — учи словацкий системно, с упражнениями и прогрессом.",
     url: `${SITE_URL}/ru/slovak-for-ukrainians`,
     siteName: "Slovak Study",
     type: "website",
   },
+
+  robots: { index: true, follow: true },
 };
 
 const FAQ = [
@@ -73,7 +73,7 @@ export default function Page() {
 
       <section className="space-y-3">
         <h1 className="text-3xl sm:text-4xl font-extrabold">
-          Словацкий язык для украинцев — обучение онлайн (A0–B2)
+          Словацкий язык — обучение онлайн (A0–B2)
         </h1>
         <p className="text-slate-700">
           Slovak Study — тренажёр для системного изучения словацкого: короткие уроки,
@@ -92,11 +92,7 @@ export default function Page() {
             Перейти к грамматике
           </Link>
 
-          <Link
-            className="px-4 py-2 rounded-xl border"
-            href="/slovak-for-ukrainians"
-            hrefLang="uk"
-          >
+          <Link className="px-4 py-2 rounded-xl border" href="/slovak-for-ukrainians">
             Українська версія →
           </Link>
         </div>

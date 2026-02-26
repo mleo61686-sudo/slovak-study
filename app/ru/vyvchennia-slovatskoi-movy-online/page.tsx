@@ -5,25 +5,24 @@ import Script from "next/script";
 const SITE_URL = "https://slovak-study.com";
 
 export const metadata: Metadata = {
-  title:
-    "Изучение словацкого языка онлайн — курс A0–B2, упражнения, словарь | Slovak Study",
+  title: "Изучение словацкого языка онлайн — курс A0–B2 | Slovak Study",
   description:
-    "Изучение словацкого языка онлайн для украинцев: уровни A0–B2, упражнения, озвучка, словарь и грамматика. Начни с нуля и отслеживай прогресс.",
+    "Онлайн обучение словацкому языку: уровни A0–B2, упражнения, озвучка, словарь и грамматика. Начни с нуля и отслеживай прогресс.",
+
   alternates: {
     canonical: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
-    languages: {
-      uk: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
-      ru: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
-    },
   },
+
   openGraph: {
-    title: "Изучение словацкого языка онлайн | Slovak Study",
+    title: "Изучение словацкого языка онлайн (A0–B2) | Slovak Study",
     description:
       "Онлайн-курс словацкого: A0–B2, упражнения, словарь, грамматика и прогресс. Начни обучение с нуля.",
     url: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
     siteName: "Slovak Study",
     type: "website",
   },
+
+  robots: { index: true, follow: true },
 };
 
 const FAQ = [
@@ -74,9 +73,9 @@ export default function Page() {
           Изучение словацкого языка онлайн — курс A0–B2
         </h1>
         <p className="text-slate-700">
-          Slovak Study — онлайн-тренажёр для украинцев: короткие уроки, озвучка,
-          упражнения, словарь и грамматика. Подойдёт для жизни и работы в
-          Словакии: учишься системно и видишь прогресс.
+          Slovak Study — онлайн-тренажёр для системного изучения словацкого:
+          короткие уроки, озвучка, упражнения, словарь и грамматика. Подойдёт для
+          жизни, работы и учёбы в Словакии: учишься по шагам и видишь прогресс.
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
@@ -93,11 +92,7 @@ export default function Page() {
             Грамматика
           </Link>
 
-          <Link
-            className="px-4 py-2 rounded-xl border"
-            href="/vyvchennia-slovatskoi-movy-online"
-            hrefLang="uk"
-          >
+          <Link className="px-4 py-2 rounded-xl border" href="/vyvchennia-slovatskoi-movy-online">
             Українська версія →
           </Link>
         </div>
@@ -133,18 +128,16 @@ export default function Page() {
       <section className="rounded-2xl border bg-white p-6 space-y-4">
         <h2 className="text-2xl font-bold">Как начать учиться онлайн (план на 7 дней)</h2>
         <ol className="list-decimal pl-5 space-y-2 text-slate-700">
-          <li>День 1: стартуй с A0 и пройди 2 урока.</li>
+          <li>День 1: начни с A0 и пройди 2 урока.</li>
           <li>День 2–3: ещё 2–4 урока + упражнения.</li>
           <li>День 4: открой грамматику (алфавит/произношение) и повтори слова.</li>
           <li>День 5–6: продолжай A0 + слушай озвучку и повторяй вслух.</li>
           <li>День 7: закрепи — пройди упражнения по предыдущим урокам.</li>
         </ol>
+
         <div className="pt-2">
-          <Link
-            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
-            href="/learning/levels/a0"
-          >
-            Почати з A0 →
+          <Link className="inline-flex rounded-xl bg-black px-4 py-2 text-white" href="/learning/a0">
+            Начать с A0 →
           </Link>
         </div>
       </section>
