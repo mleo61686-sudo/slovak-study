@@ -117,6 +117,8 @@ const VOICE2_WORDS = new Set<string>([
   "Londýn",
   "Ottawa",
   "had",
+  "most",
+  "semafor",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
