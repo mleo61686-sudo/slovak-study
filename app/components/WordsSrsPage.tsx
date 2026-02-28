@@ -179,8 +179,8 @@ function loadDb(userId: string): Record<string, SrsState> {
 
 function saveDb(userId: string, db: Record<string, SrsState>) {
   localStorage.setItem(srsKey(userId), JSON.stringify(db));
+  window.dispatchEvent(new CustomEvent("slovakStudy:srsChanged"));
 }
-
 function initState(id: string): SrsState {
   return { id, dueAt: Date.now(), interval: 0, ease: 2.5, reps: 0 };
 }
@@ -457,8 +457,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     !current
       ? ""
       : lang === "ru"
-      ? current.ru || current.ua || ""
-      : current.ua || "";
+        ? current.ru || current.ua || ""
+        : current.ua || "";
 
   return (
     <main className="mx-auto max-w-3xl p-4 space-y-6">

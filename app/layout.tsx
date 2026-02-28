@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Navbar from "./components/Navbar";
 import ProgressSync from "./components/ProgressSync";
+import SrsSync from "./components/SrsSync";
 import SessionProviderClient from "./components/SessionProviderClient";
 import TopBanner from "./components/TopBanner";
 
@@ -75,7 +76,7 @@ async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
     try {
       const u = new URL(ref);
       if (u.pathname.startsWith("/ru")) return "ru";
-    } catch {}
+    } catch { }
 
     return "uk";
   } catch {
@@ -141,7 +142,7 @@ export default async function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1760161415033749"
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
       </head>
 
@@ -151,6 +152,7 @@ export default async function RootLayout({
 
         <SessionProviderClient>
           <ProgressSync />
+          <SrsSync />
           <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">{children}</main>
         </SessionProviderClient>
 

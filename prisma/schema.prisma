@@ -21,6 +21,7 @@ model User {
 
   // ✅ зворотній зв'язок для прогресу
   progress     UserProgress?
+  srsProgress  SrsProgress?
   errorReports ErrorReport[]
 }
 
@@ -87,4 +88,16 @@ model TtsAudio {
   url       String
   voice     String
   createdAt DateTime @default(now())
+}
+
+model SrsProgress {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  data Json
+
+  dailySession Json?
+  dailyNewWords Json?
+
+  updatedAt DateTime @updatedAt
 }
