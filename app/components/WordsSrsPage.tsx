@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { getSrsWordsFromLessons, type Word } from "@/app/learning/data";
@@ -8,6 +9,7 @@ import { useLanguage } from "@/lib/src/useLanguage";
 import {
   isLearned as _isLearned,
   isMastered as _isMastered,
+  migrateSrsIfNeeded,
 } from "@/lib/srs/srsWords";
 
 type SrsState = {
@@ -25,12 +27,12 @@ type Stats = {
   due: number;
 };
 
-const KEY = "slovakStudy.srsWords";
+const KEY_BASE = "slovakStudy.srsWords";
 const DAY = 1000 * 60 * 60 * 24;
 
 // ✅ Хочеш 30 нових слів на день
 const DAILY_NEW_LIMIT = 30;
-const DAILY_KEY = "slovakStudy.dailyNewWords";
+const DAILY_KEY_BASE = "slovakStudy.dailyNewWords";
 
 // ✅ Сеанс повторення (скільки показувати за один раз)
 const SESSION_SIZE = 30;
@@ -40,7 +42,7 @@ const FORGOT_MINUTES = 10;
 
 // ✅ НЕ НАКОПИЧУЄМО БОРГ: максимум 30 повторень на день
 const DAILY_REVIEW_LIMIT = 30;
-const DAILY_SESSION_KEY = "slovakStudy.srsDailySession";
+const DAILY_SESSION_KEY_BASE = "slovakStudy.srsDailySession";
 
 const I18N = {
   ua: {
@@ -67,6 +69,10 @@ const I18N = {
     noNew: "Немає нових слів 🙂",
     nextIn: (days: number) => `📆 Наступне повторення через ${days} днів`,
     nextSoon: `⏳ Наступне повторення через ${FORGOT_MINUTES} хв`,
+    needLoginTitle: "Потрібен вхід",
+    needLoginText:
+      "SRS-прогрес зберігається по акаунту. Увійди, щоб продовжити.",
+    login: "Увійти →",
   },
   ru: {
     title: "Слова (SRS)",
@@ -92,6 +98,10 @@ const I18N = {
     noNew: "Нет новых слов 🙂",
     nextIn: (days: number) => `📆 Следующее повторение через ${days} дней`,
     nextSoon: `⏳ Следующее повторение через ${FORGOT_MINUTES} мин`,
+    needLoginTitle: "Нужен вход",
+    needLoginText:
+      "SRS-прогресс сохраняется по аккаунту. Войдите, чтобы продолжить.",
+    login: "Войти →",
   },
 } as const;
 
@@ -99,8 +109,18 @@ function getTodayKey() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 }
 
-function getDailyState(): { date: string; count: number } {
-  const raw = localStorage.getItem(DAILY_KEY);
+function srsKey(userId: string) {
+  return `${KEY_BASE}:${userId}`;
+}
+function dailyKey(userId: string) {
+  return `${DAILY_KEY_BASE}:${userId}`;
+}
+function dailySessionKey(userId: string) {
+  return `${DAILY_SESSION_KEY_BASE}:${userId}`;
+}
+
+function getDailyState(userId: string): { date: string; count: number } {
+  const raw = localStorage.getItem(dailyKey(userId));
   if (!raw) return { date: getTodayKey(), count: 0 };
   try {
     const parsed = JSON.parse(raw);
@@ -113,18 +133,15 @@ function getDailyState(): { date: string; count: number } {
   }
 }
 
-function setDailyState(count: number) {
-  localStorage.setItem(
-    DAILY_KEY,
-    JSON.stringify({ date: getTodayKey(), count })
-  );
+function setDailyState(userId: string, count: number) {
+  localStorage.setItem(dailyKey(userId), JSON.stringify({ date: getTodayKey(), count }));
 }
 
 // ✅ “Порція повторення на день” (щоб не було 60, якщо пропустив день)
 type DailySession = { date: string; ids: string[] };
 
-function getDailySession(): DailySession | null {
-  const raw = localStorage.getItem(DAILY_SESSION_KEY);
+function getDailySession(userId: string): DailySession | null {
+  const raw = localStorage.getItem(dailySessionKey(userId));
   if (!raw) return null;
   try {
     const s = JSON.parse(raw);
@@ -135,33 +152,33 @@ function getDailySession(): DailySession | null {
   }
 }
 
-function setDailySession(ids: string[]) {
+function setDailySession(userId: string, ids: string[]) {
   localStorage.setItem(
-    DAILY_SESSION_KEY,
+    dailySessionKey(userId),
     JSON.stringify({ date: getTodayKey(), ids })
   );
 }
 
 // ✅ видаляємо слово з сьогоднішнього списку (щоб F5 не “рефілив”)
-function removeFromDailySession(id: string) {
-  const saved = getDailySession();
+function removeFromDailySession(userId: string, id: string) {
+  const saved = getDailySession(userId);
   if (!saved) return;
   if (saved.date !== getTodayKey()) return;
 
   const nextIds = saved.ids.filter((x) => x !== id);
-  setDailySession(nextIds);
+  setDailySession(userId, nextIds);
 }
 
-function loadDb(): Record<string, SrsState> {
+function loadDb(userId: string): Record<string, SrsState> {
   try {
-    return JSON.parse(localStorage.getItem(KEY) || "{}");
+    return JSON.parse(localStorage.getItem(srsKey(userId)) || "{}");
   } catch {
     return {};
   }
 }
 
-function saveDb(db: Record<string, SrsState>) {
-  localStorage.setItem(KEY, JSON.stringify(db));
+function saveDb(userId: string, db: Record<string, SrsState>) {
+  localStorage.setItem(srsKey(userId), JSON.stringify(db));
 }
 
 function initState(id: string): SrsState {
@@ -250,6 +267,28 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   const { lang } = useLanguage();
   const t = I18N[lang];
 
+  const { data: session, status } = useSession();
+  const userId = String(session?.user?.id ?? "");
+
+  if (status !== "authenticated") {
+    return (
+      <main className="mx-auto max-w-3xl p-4">
+        <div className="rounded-2xl border bg-white p-6">
+          <div className="text-lg font-semibold">{t.needLoginTitle}</div>
+          <div className="mt-2 text-sm text-slate-600">{t.needLoginText}</div>
+          <div className="mt-4">
+            <Link
+              href="/login"
+              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm text-white hover:opacity-90"
+            >
+              {t.login}
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   const allWords = useMemo(() => getSrsWordsFromLessons(), []);
   const [db, setDb] = useState<Record<string, SrsState>>({});
 
@@ -268,41 +307,40 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   });
 
   useEffect(() => {
-    const initial = loadDb();
+    // ✅ переносимо старий ключ (без userId) у userId-ключ один раз
+    migrateSrsIfNeeded(userId);
+
+    const initial = loadDb(userId);
     startNewSession(initial);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allWords]);
+  }, [allWords, userId]);
 
   function startNewSession(nextDb?: Record<string, SrsState>) {
-    const updated = nextDb ?? loadDb();
+    const updated = nextDb ?? loadDb(userId);
     const now = Date.now();
 
     const dueAll = getDueSorted(allWords, updated);
     const dueIds = dueAll.map((w) => w.sk);
 
     const today = getTodayKey();
-    const saved = getDailySession();
+    const saved = getDailySession(userId);
 
     const target = Math.min(DAILY_REVIEW_LIMIT, dueIds.length);
 
     let ids: string[] = [];
 
     if (saved?.date === today) {
-      // ✅ Відновлюємо ТІЛЬКИ те, що було у “сьогоднішній порції”
-      // ✅ Але прибираємо те, що вже не due (на випадок, якщо щось лишилось у saved після крашу)
       ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
-
-      // ✅ важливо: НЕ дозаповнюємо новими due — інакше F5 = чіти
-      setDailySession(ids);
+      setDailySession(userId, ids);
     } else {
       ids = dueIds.slice(0, target);
-      setDailySession(ids);
+      setDailySession(userId, ids);
     }
 
     const byId = new Map(allWords.map((w) => [w.sk, w]));
-    const session = ids.map((id) => byId.get(id)).filter(Boolean) as Word[];
+    const sessionWords = ids.map((id) => byId.get(id)).filter(Boolean) as Word[];
 
-    const limited = session.slice(0, SESSION_SIZE);
+    const limited = sessionWords.slice(0, SESSION_SIZE);
 
     setDb(updated);
     setQueue(limited);
@@ -315,7 +353,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   }
 
   function addNewWordsRandom(count: number) {
-    const daily = getDailyState();
+    const daily = getDailyState(userId);
 
     if (daily.date !== getTodayKey()) {
       daily.count = 0;
@@ -327,7 +365,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
       return;
     }
 
-    const updated = loadDb();
+    const updated = loadDb(userId);
 
     const pool = allWords.filter((w) => !updated[w.sk]);
     const toAdd = shuffle(pool).slice(0, Math.min(count, remaining));
@@ -341,12 +379,9 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
       updated[w.sk] = initState(w.sk);
     }
 
-    saveDb(updated);
-    setDailyState(daily.count + toAdd.length);
+    saveDb(userId, updated);
+    setDailyState(userId, daily.count + toAdd.length);
 
-    // ✅ важливо: НЕ дозаповнюємо сьогоднішню “порцію” автоматом
-    // щоб не було “взяти 30 → зробив 1 → F5 → знов 30”.
-    // Користувач сам натисне “Взяти наступні”, коли захоче.
     startNewSession(updated);
   }
 
@@ -372,22 +407,14 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     updated[curWord.sk] = next;
 
     if (g === 0) {
-      setLastInfo(
-        lang === "ua"
-          ? "🔁 Повторимо ще раз у цьому сеансі"
-          : "🔁 Повторим ещё раз в этом сеансе"
-      );
+      setLastInfo(lang === "ua" ? "🔁 Повторимо ще раз у цьому сеансі" : "🔁 Повторим ещё раз в этом сеансе");
     } else if (next.interval <= 1) {
-      setLastInfo(
-        lang === "ua"
-          ? "⏳ Наступне повторення — завтра"
-          : "⏳ Следующее повторение — завтра"
-      );
+      setLastInfo(lang === "ua" ? "⏳ Наступне повторення — завтра" : "⏳ Следующее повторение — завтра");
     } else {
       setLastInfo(t.nextIn(next.interval));
     }
 
-    saveDb(updated);
+    saveDb(userId, updated);
     setDb(updated);
     setStats(computeStats(updated, allWords.length));
 
@@ -406,9 +433,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
         return;
       }
 
-      // ✅ слово “з’їдається” з сьогоднішньої порції → F5 не відновить його і не дозаповнить новими
-      removeFromDailySession(curWord.sk);
-
+      removeFromDailySession(userId, curWord.sk);
       goNext();
     }, 900);
   }

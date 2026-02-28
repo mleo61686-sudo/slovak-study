@@ -12,16 +12,43 @@ export type WordLike = { sk: string; ua?: string; ru?: string };
 
 export const SRS_KEY = "slovakStudy.srsWords";
 
-export function loadDb(): Record<string, SrsState> {
+export function getSrsKey(userId: string) {
+  return `${SRS_KEY}:${userId}`;
+}
+
+export function loadDb(userId: string): Record<string, SrsState> {
   try {
-    return JSON.parse(localStorage.getItem(SRS_KEY) || "{}");
+    return JSON.parse(localStorage.getItem(getSrsKey(userId)) || "{}");
   } catch {
     return {};
   }
 }
 
-export function saveDb(db: Record<string, SrsState>) {
-  localStorage.setItem(SRS_KEY, JSON.stringify(db));
+export function saveDb(userId: string, db: Record<string, SrsState>) {
+  localStorage.setItem(getSrsKey(userId), JSON.stringify(db));
+}
+
+/**
+ * ✅ Міграція зі старого ключа (без userId) на userId-ключ.
+ * Викликаємо один раз після логіну.
+ */
+export function migrateSrsIfNeeded(userId: string) {
+  try {
+    const newKey = getSrsKey(userId);
+    const hasNew = !!localStorage.getItem(newKey);
+    if (hasNew) return;
+
+    const oldRaw = localStorage.getItem(SRS_KEY);
+    if (!oldRaw) return;
+
+    // переносимо стару базу в userId ключ
+    localStorage.setItem(newKey, oldRaw);
+
+    // опціонально прибрати старий ключ, щоб не плутав
+    localStorage.removeItem(SRS_KEY);
+  } catch {
+    // ignore
+  }
 }
 
 export function nowMs() {

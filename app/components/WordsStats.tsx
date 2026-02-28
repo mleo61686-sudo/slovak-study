@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { getSrsWordsFromLessons } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { SrsState } from "@/lib/srs/srsWords";
-import { isLearned, isMastered } from "@/lib/srs/srsWords";
+import { isLearned, isMastered, loadDb as loadSrsDb, migrateSrsIfNeeded } from "@/lib/srs/srsWords";
 import { getLessonsProgress } from "@/lib/src/progress";
 
 type Stats = {
@@ -23,9 +23,9 @@ type LessonAnalytics = {
   bestStreak: number;
 };
 
-const KEY = "slovakStudy.srsWords";
+
 const DAILY_REVIEW_LIMIT = 30;
-const DAILY_SESSION_KEY = "slovakStudy.srsDailySession";
+
 
 const I18N = {
   ua: {
@@ -72,9 +72,9 @@ function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function getDailySession(): { date: string; ids: string[] } | null {
+function getDailySession(userId: string): { date: string; ids: string[] } | null {
   try {
-    const raw = localStorage.getItem(DAILY_SESSION_KEY);
+    const raw = localStorage.getItem(`slovakStudy.srsDailySession:${userId}`);
     if (!raw) return null;
     const s = JSON.parse(raw);
     if (s?.date === getTodayKey() && Array.isArray(s?.ids)) return s;
@@ -84,15 +84,13 @@ function getDailySession(): { date: string; ids: string[] } | null {
   }
 }
 
-function loadDb(): Record<string, SrsState> {
-  try {
-    return JSON.parse(localStorage.getItem(KEY) || "{}");
-  } catch {
-    return {};
-  }
-}
 
-function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
+
+function computeStats(
+  db: Record<string, SrsState>,
+  totalWords: number,
+  userId: string
+): Stats {
   const now = Date.now();
   const all = Object.values(db);
 
@@ -101,7 +99,7 @@ function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
 
   const realDue = all.filter((s) => s.dueAt <= now).length;
 
-  const daily = getDailySession();
+  const daily = getDailySession(userId);
   const due =
     daily && daily.ids.length > 0
       ? daily.ids.length
@@ -240,8 +238,32 @@ export default function WordsStats() {
 
   useEffect(() => {
     const update = () => {
-      const db = loadDb();
-      setStats(computeStats(db, allWords.length));
+      // ✅ якщо не залогінений — не показуємо чужий localStorage прогрес
+      if (status !== "authenticated") {
+        setStats({
+          total: allWords.length,
+          learned: 0,
+          mastered: 0,
+          due: 0,
+        });
+
+        setLessonA({
+          lessonsDone: 0,
+          studyDays: 0,
+          currentStreak: 0,
+          bestStreak: 0,
+        });
+
+        return;
+      }
+
+      const userId = String(session?.user?.id ?? "");
+      if (!userId) return;
+
+      migrateSrsIfNeeded(userId);
+
+      const db = loadSrsDb(userId);
+      setStats(computeStats(db, allWords.length, userId));
 
       // ✅ premium analytics (lightweight)
       setLessonA(computeLessonAnalytics());
@@ -255,8 +277,7 @@ export default function WordsStats() {
       window.removeEventListener("focus", update);
       window.removeEventListener("storage", update);
     };
-  }, [allWords.length]);
-
+  }, [allWords.length, status, session]);
   const progress =
     stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);
 
