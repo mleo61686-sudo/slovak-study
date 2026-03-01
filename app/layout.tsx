@@ -29,12 +29,8 @@ export const metadata: Metadata = {
   // ✅ Дуже важливо, щоб Google бачив бренд (а не “Vercel”)
   // Переконайся, що ці файли існують у /public
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon.png", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png" }],
-  },
+  icon: [{ url: "/favicon.ico" }],
+},
 
   openGraph: {
     title: "Slovak Study — словацька мова онлайн",
@@ -48,11 +44,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Slovak Study — словацька мова онлайн",
-    description:
-      "Уроки A0–B2, граматика, словник та вправи. Вчи словацьку системно.",
-    images: ["/opengraph-image.png"],
+    description: "Уроки A0–B2, граматика, словник та вправи. Вчи словацьку системно.",
+    images: ["/opengraph-image"],
   },
-
   robots: { index: true, follow: true },
 
   // не обов’язково, але нормально
@@ -101,7 +95,7 @@ export default async function RootLayout({
         url: "https://slovak-study.com/",
         // Якщо в тебе є справжній логотип у public, краще вказати його:
         // logo: "https://slovak-study.com/logo.png",
-        logo: "https://slovak-study.com/opengraph-image.png",
+        logo: "https://slovak-study.com/logo.png",
       },
       {
         "@type": "WebSite",
