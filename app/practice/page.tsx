@@ -5,6 +5,7 @@ import Link from "next/link";
 import SpeakButton from "@/app/components/SpeakButton";
 import { getSrsWordsFromLessons } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
+import { SLANG } from "@/data/slang";
 
 type Lang = "ua" | "ru";
 type Mode = "mcq" | "typing";
@@ -238,6 +239,15 @@ export default function PracticePage() {
 
   const [ready, setReady] = useState(false);
   const words = useMemo(() => getSrsWordsFromLessons(), []);
+    // ---- URL params: /practice?pack=slang&level=A1&cat=friends
+  const urlParams = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    return new URLSearchParams(window.location.search);
+  }, [ready]); // після ready вже є window
+
+  const pack = urlParams?.get("pack"); // "slang" | null
+  const slangLevel = urlParams?.get("level"); // "A1" | "A2" | "B1" | null
+  const slangCat = urlParams?.get("cat"); // category string | null
 
   // setup
   const [sessionMode, setSessionMode] = useState<SessionMode>("mixed");
@@ -289,6 +299,17 @@ export default function PracticePage() {
 
   const notEnough = poolCount < 4;
 
+   const slangSkList = useMemo(() => {
+    if (pack !== "slang") return null;
+
+    const list = SLANG.filter((x) => {
+      const okLevel = !slangLevel || x.level === slangLevel;
+      const okCat = !slangCat || x.category === slangCat;
+      return okLevel && okCat;
+    }).map((x) => x.sk);
+
+    return list;
+  }, [pack, slangLevel, slangCat]);
   const qBase = useMemo(() => {
     if (phase !== "quiz") return null;
     if (!session.length) return null;

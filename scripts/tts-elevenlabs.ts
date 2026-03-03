@@ -21,6 +21,7 @@ import { A2_PHRASES } from "../app/learning/phrases/a2";
 import { B1_PHRASES } from "../app/learning/phrases/b1";
 
 import { WORDS } from "../app/data/words";
+import { SLANG } from "../data/slang";
 
 type Item = { kind: "word" | "phrase"; text: string };
 
@@ -119,6 +120,9 @@ const VOICE2_WORDS = new Set<string>([
   "had",
   "most",
   "semafor",
+  "Koľko ešte?",
+  "Nejde to",
+  "To je jedno",
 ]);
 
 const VOICE2_PHRASES = new Set<string>([
@@ -162,6 +166,7 @@ const VOICE2_PHRASES = new Set<string>([
   "Je normálne sklamať sa, keď veci nejdú podľa plánu.",
   "Chcem byť doma.",
   "Chcem to zmeniť.",
+  "Paráda, tak ideme!",
 
 ]);
 
@@ -310,6 +315,22 @@ function collectPhrases(): string[] {
   }
 
   return list;
+}
+function collectSlangItems(): Item[] {
+  const items: Item[] = [];
+
+  for (const s of SLANG as any[]) {
+    if (s?.sk) items.push({ kind: "word", text: String(s.sk) });
+    if (s?.exampleSk) items.push({ kind: "phrase", text: String(s.exampleSk) });
+  }
+
+  // unique
+  const uniq = new Map<string, Item>();
+  for (const it of items) {
+    const key = `${it.kind}:${it.text.trim()}`;
+    if (!uniq.has(key)) uniq.set(key, it);
+  }
+  return [...uniq.values()];
 }
 
 const ALL_LESSONS: any[] = [
@@ -817,8 +838,8 @@ async function main() {
           ...collectAlphabetItems(),
           ...collectCasesItems(),
           ...collectVerbsPresentItems(),
+          ...collectSlangItems(),
         ];
-
   // ✅ band mode: тільки вибраний рівень
   if (BAND) {
     const b = BAND.trim().toLowerCase();
@@ -845,11 +866,13 @@ async function main() {
         ...collectFromLessons(A0_REAL_SOURCE as any[]),
         ...collectFromPhraseDict(A0_PHRASES as any),
       ];
+    } else if (b === "slang") {
+      bandItems = collectSlangItems();
     } else if (b === "all") {
       // лишаємо як є
       bandItems = items;
     } else {
-      console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|all`);
+      console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|slang|all`);
       bandItems = items;
     }
 
