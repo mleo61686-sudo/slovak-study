@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 
-import { A0_REAL_SOURCE } from "../app/learning/data";
+import { A0_REAL_SOURCE } from "../app/learning/levels/a0";
 import { A1_ALL } from "../app/learning/levels/a1";
 import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
