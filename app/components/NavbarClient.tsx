@@ -67,7 +67,9 @@ export default function NavbarClient({
             href="/login"
             className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
           >
-            <NavLabel k="login" />
+            <span className="inline-block min-w-[60px] text-center">
+              <NavLabel k="login" />
+            </span>
           </Link>
         )}
 
@@ -98,7 +100,9 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                <NavLabel k={item.key} />
+                <span className="inline-block min-w-[88px]">
+                  <NavLabel k={item.key} />
+                </span>
               </Link>
             ))}
 
@@ -133,7 +137,9 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                <NavLabel k="login" />
+                <span className="inline-block min-w-[60px] text-center">
+                  <NavLabel k="login" />
+                </span>
               </Link>
             )}
 

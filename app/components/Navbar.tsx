@@ -51,7 +51,9 @@ export default async function Navbar() {
                   href={item.href}
                   className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
                 >
-                  <NavLabel k={item.key} />
+                  <span className="inline-block min-w-[88px] text-center">
+                    <NavLabel k={item.key} />
+                  </span>
                 </Link>
               ))}
 
@@ -75,10 +77,10 @@ export default async function Navbar() {
               session={
                 session
                   ? {
-                      name: session.user?.name ?? null,
-                      email: session.user?.email ?? null,
-                      isPremium: !!session.user?.isPremium,
-                    }
+                    name: session.user?.name ?? null,
+                    email: session.user?.email ?? null,
+                    isPremium: !!session.user?.isPremium,
+                  }
                   : null
               }
             />
@@ -92,10 +94,10 @@ export default async function Navbar() {
               session={
                 session
                   ? {
-                      name: session.user?.name ?? null,
-                      email: session.user?.email ?? null,
-                      isPremium: !!session.user?.isPremium,
-                    }
+                    name: session.user?.name ?? null,
+                    email: session.user?.email ?? null,
+                    isPremium: !!session.user?.isPremium,
+                  }
                   : null
               }
               mobile

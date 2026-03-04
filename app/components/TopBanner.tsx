@@ -11,7 +11,7 @@ export default function TopBanner() {
       : "✅ Рівні A0–A1-A2-B1 повністю готові • 🔄 Сайт оновлюється щоденно";
 
   return (
-    <div className="w-full overflow-hidden bg-gradient-to-r from-emerald-500 to-blue-600 text-white">
+    <div className="w-full overflow-hidden bg-gradient-to-r from-emerald-500 to-blue-600 text-white h-9 sm:h-10 flex items-center">
       <div className="marquee">
         <div className="marquee__track">
           <div className="marquee__group">
