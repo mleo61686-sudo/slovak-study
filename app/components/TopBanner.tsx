@@ -15,9 +15,9 @@ export default function TopBanner() {
       <div className="marquee">
         <div className="marquee__track">
           <div className="marquee__group">
-            <span className="marquee__item">{text}</span>
-            <span className="marquee__item">{text}</span>
-            <span className="marquee__item">{text}</span>
+            <span className="marquee__item" role="presentation">{text}</span>
+            <span className="marquee__item" role="presentation">{text}</span>
+            <span className="marquee__item" role="presentation">{text}</span>
           </div>
 
           <div className="marquee__group" aria-hidden="true">
