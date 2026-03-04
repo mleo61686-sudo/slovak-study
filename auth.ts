@@ -34,32 +34,40 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
-      // 1) при логіні записуємо id
-      if (user) {
-        token.id = user.id;
-      }
+  async jwt({ token, user }) {
+  if (user) token.id = user.id;
 
-      // 2) якщо є id — підтягнути premium з БД
-      if (token.id) {
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: {
-            isPremium: true,
-            premiumUntil: true,
-          },
-        });
+  // якщо нема id — гість
+  if (!token.id) {
+    token.isPremium = false;
+    token.premiumUntil = null;
+    return token;
+  }
 
-        token.isPremium = dbUser?.isPremium ?? false;
-        token.premiumUntil = dbUser?.premiumUntil ?? null;
-      } else {
-        token.isPremium = false;
-        token.premiumUntil = null;
-      }
+  const now = Date.now();
+  const last = (token.premiumCheckedAt as number | undefined) ?? 0;
+  const REFRESH_EVERY_MS = 15 * 60 * 1000; // 15 хв
 
-      return token;
-    },
+  // ✅ не ліземо в БД кожного разу
+  if (last && now - last < REFRESH_EVERY_MS) return token;
 
+  try {
+    const dbUser = await prisma.user.findUnique({
+      where: { id: token.id as string },
+      select: { isPremium: true, premiumUntil: true },
+    });
+
+    token.isPremium = dbUser?.isPremium ?? false;
+    token.premiumUntil = dbUser?.premiumUntil ?? null;
+    token.premiumCheckedAt = now;
+  } catch (e) {
+    // ✅ якщо БД недоступна — не валимо сесію
+    token.isPremium = Boolean(token.isPremium);
+    token.premiumUntil = (token.premiumUntil as any) ?? null;
+  }
+
+  return token;
+},
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;

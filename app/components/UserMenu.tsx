@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
+import { CourseSwitcher } from "./CourseSwitcher";
 
 type Props = {
   name?: string | null;
@@ -17,6 +18,7 @@ type Lang = "ua" | "ru";
 const T: Record<Lang, any> = {
   ua: {
     profile: "Профіль",
+    chooseLanguage: "Обрати мову",
     manageSub: "Керувати підпискою",
     manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
@@ -25,6 +27,7 @@ const T: Record<Lang, any> = {
 
   ru: {
     profile: "Профиль",
+    chooseLanguage: "Выбрать язык",
     manageSub: "Управлять подпиской",
     manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
@@ -138,12 +141,16 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
           <div className="border-t" />
 
+          <CourseSwitcher />
+
+          <div className="border-t" />
+
           <Link
-            href="/profile"
+            href="/learn"
             className="block px-4 py-2 text-sm hover:bg-slate-50"
             onClick={() => setOpen(false)}
           >
-            {t.profile}
+            {t.chooseLanguage}
           </Link>
 
           <button

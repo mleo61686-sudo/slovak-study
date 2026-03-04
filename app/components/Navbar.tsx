@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import SyncBadge from "@/app/components/SyncBadge";
 import NavbarClient from "./NavbarClient";
 import NavLabel from "@/app/components/NavLabel";
+import CourseBadge from "@/app/components/CourseBadge";
 
 function isAdmin(email?: string | null) {
   if (!email) return false;
@@ -37,7 +38,7 @@ export default async function Navbar() {
         {/* TOP ROW */}
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-semibold">
-            <span className="text-xl">🇸🇰</span>
+            <CourseBadge />
             <span>Slovak Study</span>
           </Link>
 

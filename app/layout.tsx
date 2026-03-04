@@ -10,6 +10,7 @@ import ProgressSync from "./components/ProgressSync";
 import SrsSync from "./components/SrsSync";
 import SessionProviderClient from "./components/SessionProviderClient";
 import TopBanner from "./components/TopBanner";
+import CourseBootstrap from "@/app/components/CourseBootstrap";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://slovak-study.com"),
@@ -145,13 +146,17 @@ export default async function RootLayout({
       </head>
 
       <body suppressHydrationWarning className="min-h-screen flex flex-col">
+        <CourseBootstrap />
+
         <TopBanner />
         <Navbar />
 
         <SessionProviderClient>
           <ProgressSync />
           <SrsSync />
-          <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:py-12">{children}</main>
+          <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:py-12">
+            {children}
+          </main>
         </SessionProviderClient>
 
         <footer className="border-t">
