@@ -23,12 +23,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/learning/b1`,
     `${baseUrl}/grammar`,
     `${baseUrl}/dictionary`,
-    `${baseUrl}/practice`,
+    
 
     // ✅ Grammar topics (UA)
     `${baseUrl}/grammar/alphabet`,
     `${baseUrl}/grammar/verbs-present`,
     `${baseUrl}/grammar/cases`,
+    `${baseUrl}/grammar/slovak-slang`, // ✅ NEW
 
     // ✅ RU versions (if these routes exist)
     `${baseUrl}/ru/slovak-for-ukrainians`,
@@ -36,7 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/ru/learning`,
     `${baseUrl}/ru/grammar`,
     `${baseUrl}/ru/dictionary`,
-    `${baseUrl}/ru/practice`,
+    
   ];
 
   return urls.map((url) => ({

@@ -1,13 +1,15 @@
 "use client";
+
 import { useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { getDictionaryFromLessons } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-
 export default function DictionaryClient() {
   const { lang } = useLanguage();
   const [q, setQ] = useState("");
+  const STEP = 80;
+  const [limit, setLimit] = useState(STEP);
 
   const dict = useMemo(() => getDictionaryFromLessons(), []);
 
@@ -20,56 +22,86 @@ export default function DictionaryClient() {
       const ua = String(w.ua ?? "").toLowerCase();
       const ru = String(w.ru ?? "").toLowerCase();
       const ipa = String(w.ipa ?? "").toLowerCase();
-      return (
-        sk.includes(s) ||
-        ua.includes(s) ||
-        ru.includes(s) ||
-        ipa.includes(s)
-      );
+      return sk.includes(s) || ua.includes(s) || ru.includes(s) || ipa.includes(s);
     });
   }, [q, dict]);
-  
+
+  const visible = useMemo(() => filtered.slice(0, limit), [filtered, limit]);
+  const canLoadMore = visible.length < filtered.length;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto w-[min(100vw-2rem,56rem)] space-y-6">
       <h1 className="text-2xl font-semibold">Словник 📚</h1>
-      <div className="space-y-2">
+
+      <div className="space-y-2 w-full self-stretch">
         <input
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setLimit(STEP);
+          }}
           placeholder="Пошук: slovensky / українська / русский…"
           className="w-full rounded-2xl border bg-white px-4 py-3 outline-none focus:ring-2"
         />
-        <div className="text-sm text-slate-500">
-          Знайдено: {filtered.length}
-        </div>
+        <div className="text-sm text-slate-500">Знайдено: {filtered.length}</div>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {filtered.map((word: any) => (
-          <div
-            key={word.key}
-            className="rounded-2xl border bg-white p-4"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-lg">{word.sk}</span>
-                  <SpeakButton text={word.sk} kind="word" />
-                </div>
-
-                {word.ipa && (
-                  <span className="text-xs text-slate-500">{word.ipa}</span>
-                )}
-
-                <span className="text-slate-700">
-                  {lang === "ua" ? word.ua : word.ru ?? word.ua}
-                </span>
+      {/* Якщо 1 результат — не використовуємо grid */}
+      {visible.length === 1 ? (
+        <div className="rounded-2xl border bg-white p-4 w-full self-stretch">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-lg">{visible[0].sk}</span>
+                <SpeakButton text={visible[0].sk} kind="word" />
               </div>
+
+              {visible[0].ipa && (
+                <span className="text-xs text-slate-500">{visible[0].ipa}</span>
+              )}
+
+              <span className="text-slate-700">
+                {lang === "ua" ? visible[0].ua : visible[0].ru ?? visible[0].ua}
+              </span>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 w-full self-stretch">
+          {visible.map((word: any) => (
+            <div key={word.key} className="rounded-2xl border bg-white p-4 w-full">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-lg">{word.sk}</span>
+                    <SpeakButton text={word.sk} kind="word" />
+                  </div>
+
+                  {word.ipa && (
+                    <span className="text-xs text-slate-500">{word.ipa}</span>
+                  )}
+
+                  <span className="text-slate-700">
+                    {lang === "ua" ? word.ua : word.ru ?? word.ua}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {canLoadMore && (
+        <div className="flex justify-center w-full self-stretch">
+          <button
+            type="button"
+            onClick={() => setLimit((v) => v + STEP)}
+            className="rounded-2xl border bg-white px-5 py-3 text-sm font-medium hover:bg-slate-50"
+          >
+            Показати ще ({filtered.length - visible.length})
+          </button>
+        </div>
+      )}
     </div>
   );
 }
