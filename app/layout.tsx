@@ -144,17 +144,17 @@ export default async function RootLayout({
         />
       </head>
 
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className="min-h-screen flex flex-col">
         <TopBanner />
         <Navbar />
 
         <SessionProviderClient>
           <ProgressSync />
           <SrsSync />
-          <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">{children}</main>
+          <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:py-12">{children}</main>
         </SessionProviderClient>
 
-        <footer className="mt-auto border-t">
+        <footer className="border-t">
           <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>© {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.</div>
 
