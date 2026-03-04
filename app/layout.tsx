@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   // ✅ Дуже важливо, щоб Google бачив бренд (а не “Vercel”)
   // Переконайся, що ці файли існують у /public
   icons: {
-  icon: [{ url: "/favicon.ico" }],
-},
+    icon: [{ url: "/favicon.ico" }],
+  },
 
   openGraph: {
     title: "Slovak Study — словацька мова онлайн",
@@ -49,9 +49,13 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
 
-  // не обов’язково, але нормально
+
+};
+
+export const viewport = {
   themeColor: "#ffffff",
 };
+export const revalidate = 3600; // 1 година
 
 async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
   try {
@@ -140,7 +144,7 @@ export default async function RootLayout({
         />
       </head>
 
-      <body>
+      <body suppressHydrationWarning>
         <TopBanner />
         <Navbar />
 
