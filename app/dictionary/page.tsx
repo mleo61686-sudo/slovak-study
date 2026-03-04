@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import DictionaryClient from "./DictionaryClient";
 import { SITE_URL } from "@/lib/site";
+import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
   title: "Словацький словник онлайн | Slovak Study",
@@ -24,5 +25,9 @@ export const metadata: Metadata = {
 };
 
 export default function DictionaryPage() {
-  return <DictionaryClient />;
+  return (
+    <CourseGate>
+      <DictionaryClient />
+    </CourseGate>
+  );
 }

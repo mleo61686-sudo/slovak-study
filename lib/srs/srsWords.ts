@@ -1,5 +1,5 @@
 export type SrsState = {
-  id: string;        // word.sk
+  id: string;        // word.id (term || sk)
   dueAt: number;     // timestamp
   interval: number;  // days
   ease: number;      // 1.3..2.7
@@ -8,7 +8,8 @@ export type SrsState = {
   lastGrade?: "again" | "hard" | "good" | "easy";
 };
 
-export type WordLike = { sk: string; ua?: string; ru?: string };
+// ✅ тепер може приходити або {term}, або {sk}, або обидва
+export type WordLike = { term?: string; sk?: string; ua?: string; ru?: string };
 
 export const SRS_KEY = "slovakStudy.srsWords";
 
@@ -57,6 +58,15 @@ export function nowMs() {
 
 function daysToMs(days: number) {
   return Math.round(days * 24 * 60 * 60 * 1000);
+}
+
+// ✅ єдиний спосіб отримати id слова для SRS
+export function getWordId(w: WordLike): string {
+  const term = typeof w.term === "string" ? w.term.trim() : "";
+  if (term) return term;
+
+  const sk = typeof w.sk === "string" ? w.sk.trim() : "";
+  return sk;
 }
 
 /**
@@ -143,9 +153,12 @@ export function ensureWord(
   id: string,
   now = nowMs()
 ) {
-  if (!db[id]) {
-    db[id] = {
-      id,
+  const key = String(id || "").trim();
+  if (!key) return;
+
+  if (!db[key]) {
+    db[key] = {
+      id: key,
       dueAt: now, // одразу на повторення
       interval: 0,
       ease: 2.3,
@@ -162,9 +175,9 @@ export function addRandomWords(
   n: number
 ) {
   const pool = words
-    .map((w) => w.sk)
+    .map((w) => getWordId(w))
     .filter(Boolean)
-    .filter((sk) => !db[sk]);
+    .filter((id) => !db[id]);
 
   // перемішати
   for (let i = pool.length - 1; i > 0; i--) {

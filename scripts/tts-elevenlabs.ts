@@ -10,7 +10,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import pLimit from "p-limit";
 
-import { A0_REAL_SOURCE } from "../app/learning/data";
+import { A0_REAL_SOURCE } from "../app/learning/levels/a0";
 import { A1_ALL } from "../app/learning/levels/a1";
 import { A2_ALL } from "../app/learning/levels/a2";
 import { B1_ALL } from "../app/learning/levels/b1";
@@ -24,6 +24,12 @@ import { WORDS } from "../app/data/words";
 import { SLANG } from "../data/slang";
 
 type Item = { kind: "word" | "phrase"; text: string };
+
+type WordLike = { sk?: string; term?: string; phrase?: { sk?: string } };
+
+function wordText(w: WordLike) {
+  return String((w as any)?.term ?? (w as any)?.sk ?? "").trim();
+}
 
 const API_KEY = process.env.ELEVENLABS_API_KEY;
 const VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
@@ -320,7 +326,8 @@ function collectSlangItems(): Item[] {
   const items: Item[] = [];
 
   for (const s of SLANG as any[]) {
-    if (s?.sk) items.push({ kind: "word", text: String(s.sk) });
+    const wt = wordText(s);
+    if (wt) items.push({ kind: "word", text: wt });
     if (s?.exampleSk) items.push({ kind: "phrase", text: String(s.exampleSk) });
   }
 
@@ -745,20 +752,23 @@ function collect(): Item[] {
 
   for (const lesson of ALL_LESSONS) {
     for (const w of lesson.words ?? []) {
-      if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
+      const wt = wordText(w);
+      if (wt) items.push({ kind: "word", text: wt });
       if (w?.phrase?.sk) items.push({ kind: "phrase", text: String(w.phrase.sk) });
     }
   }
 
   for (const lesson of A0_REAL_SOURCE as any[]) {
     for (const w of lesson.words ?? []) {
-      if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
+      const wt = wordText(w);
+      if (wt) items.push({ kind: "word", text: wt });
       if (w?.phrase?.sk) items.push({ kind: "phrase", text: String(w.phrase.sk) });
     }
   }
 
   for (const w of WORDS as any[]) {
-    if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
+    const wt = wordText(w);
+    if (wt) items.push({ kind: "word", text: wt });
   }
 
   for (const phrase of collectPhrases()) {
@@ -778,7 +788,8 @@ function collectFromLessons(lessons: any[]): Item[] {
   const items: Item[] = [];
   for (const lesson of lessons ?? []) {
     for (const w of lesson.words ?? []) {
-      if (w?.sk) items.push({ kind: "word", text: String(w.sk) });
+      const wt = wordText(w);
+      if (wt) items.push({ kind: "word", text: wt });
       if (w?.phrase?.sk) items.push({ kind: "phrase", text: String(w.phrase.sk) });
     }
   }

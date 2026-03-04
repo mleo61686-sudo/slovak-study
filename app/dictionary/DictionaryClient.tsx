@@ -18,11 +18,11 @@ export default function DictionaryClient() {
     if (!s) return dict;
 
     return dict.filter((w: any) => {
-      const sk = String(w.sk ?? "").toLowerCase();
+      const term = String(w.term ?? w.sk ?? "").toLowerCase();
       const ua = String(w.ua ?? "").toLowerCase();
       const ru = String(w.ru ?? "").toLowerCase();
       const ipa = String(w.ipa ?? "").toLowerCase();
-      return sk.includes(s) || ua.includes(s) || ru.includes(s) || ipa.includes(s);
+      return term.includes(s) || ua.includes(s) || ru.includes(s) || ipa.includes(s);
     });
   }, [q, dict]);
 
@@ -52,8 +52,10 @@ export default function DictionaryClient() {
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-lg">{visible[0].sk}</span>
-                <SpeakButton text={visible[0].sk} kind="word" />
+                <span className="font-semibold text-lg">
+                  {visible[0].term ?? visible[0].sk}
+                </span>
+                <SpeakButton text={visible[0].term ?? visible[0].sk} kind="word" />
               </div>
 
               {visible[0].ipa && (
@@ -69,11 +71,16 @@ export default function DictionaryClient() {
       ) : (
         <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 w-full self-stretch">
           {visible.map((word: any) => (
-            <div key={word.key} className="rounded-2xl border bg-white p-4 w-full">
+            <div
+              key={word.key ?? (word.term ?? word.sk)}
+              className="rounded-2xl border bg-white p-4 w-full"
+            >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-lg">{word.sk}</span>
+                    <span className="font-semibold text-lg">
+                      {word.term ?? word.sk}
+                    </span>
                     <SpeakButton text={word.sk} kind="word" />
                   </div>
 

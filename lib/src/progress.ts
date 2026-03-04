@@ -1,4 +1,5 @@
 // lib/src/progress.ts
+import { COURSE_STORAGE_KEY, getDefaultCourse, type CourseId } from "@/lib/course";
 
 // ===== Lessons progress =====
 export type LessonProgressObj = {
@@ -59,6 +60,16 @@ function getActiveUserId(): string | null {
   }
 }
 
+function getActiveCourseId(): CourseId {
+  if (typeof window === "undefined") return getDefaultCourse();
+  try {
+    const raw = localStorage.getItem(COURSE_STORAGE_KEY) as CourseId | null;
+    return raw ?? getDefaultCourse();
+  } catch {
+    return getDefaultCourse();
+  }
+}
+
 // ✅ ВИКЛИКАЙ ЦЕ з ProgressSync після того як отримав userId з /api/progress
 export function setActiveUserId(userId: string | null) {
   if (typeof window === "undefined") return;
@@ -70,9 +81,15 @@ export function setActiveUserId(userId: string | null) {
   safeDispatchStorage();
 }
 
-function storageKeyFor(userId?: string | null) {
+function storageKeyFor(userId?: string | null, courseId?: CourseId) {
   const uid = userId && userId.trim() ? userId.trim() : GUEST_ID;
-  return `slovakStudy.${uid}.${BASE}`; // slovakStudy.<uid>.progress
+  const c = courseId ?? getActiveCourseId();
+  return `slovakStudy.${uid}.${BASE}.${c}`; // slovakStudy.<uid>.progress.<course>
+}
+
+function legacyStorageKeyFor(userId?: string | null) {
+  const uid = userId && userId.trim() ? userId.trim() : GUEST_ID;
+  return `slovakStudy.${uid}.${BASE}`; // старий ключ без курсу
 }
 
 export function emptyProgress(): AppProgress {
@@ -90,8 +107,10 @@ function normalizeLoaded(parsed: any): AppProgress {
   if (parsed && typeof parsed === "object" && "lessons" in parsed) {
     return {
       version: 1,
-      updatedAt: typeof parsed?.updatedAt === "number" ? parsed.updatedAt : Date.now(),
-      lessons: typeof parsed?.lessons === "object" && parsed.lessons ? parsed.lessons : {},
+      updatedAt:
+        typeof parsed?.updatedAt === "number" ? parsed.updatedAt : Date.now(),
+      lessons:
+        typeof parsed?.lessons === "object" && parsed.lessons ? parsed.lessons : {},
       srs: typeof parsed?.srs === "object" && parsed.srs ? parsed.srs : {},
     };
   }
@@ -113,7 +132,38 @@ export function loadProgress(): AppProgress {
   if (typeof window === "undefined") return emptyProgress();
 
   const uid = getActiveUserId();
-  const key = storageKeyFor(uid);
+  const courseId = getActiveCourseId();
+  const key = storageKeyFor(uid, courseId);
+
+  // ✅ міграція: якщо ми на sk і нового ключа ще нема, але є старий — переносимо
+  if (courseId === "sk") {
+    const legacyKey = legacyStorageKeyFor(uid);
+
+    const hasNew = (() => {
+      try {
+        return !!localStorage.getItem(key);
+      } catch {
+        return false;
+      }
+    })();
+
+    if (!hasNew) {
+      const legacyRaw = (() => {
+        try {
+          return localStorage.getItem(legacyKey);
+        } catch {
+          return null;
+        }
+      })();
+
+      if (legacyRaw) {
+        try {
+          localStorage.setItem(key, legacyRaw);
+          localStorage.removeItem(legacyKey);
+        } catch {}
+      }
+    }
+  }
 
   const raw = (() => {
     try {
@@ -136,7 +186,7 @@ export function saveProgress(p: AppProgress) {
   if (typeof window === "undefined") return;
 
   const uid = getActiveUserId();
-  const key = storageKeyFor(uid);
+  const key = storageKeyFor(uid, getActiveCourseId());
 
   try {
     localStorage.setItem(

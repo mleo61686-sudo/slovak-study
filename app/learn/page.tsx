@@ -1,7 +1,7 @@
 "use client";
 
-import { COURSES, COURSE_STORAGE_KEY } from "@/lib/course";
 import { useRouter } from "next/navigation";
+import { COURSES, COURSE_STORAGE_KEY } from "@/lib/course";
 
 export default function LearnPage() {
   const router = useRouter();
@@ -10,6 +10,9 @@ export default function LearnPage() {
     if (!enabled) return;
 
     localStorage.setItem(COURSE_STORAGE_KEY, id);
+    window.dispatchEvent(
+      new CustomEvent("slovakStudy:courseChanged", { detail: id })
+    );
 
     router.push("/learning");
   }
@@ -17,22 +20,31 @@ export default function LearnPage() {
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
       <h1 className="text-2xl font-semibold">Choose a language</h1>
+      <p className="mt-2 text-slate-600">
+        Pick what you want to learn. You can change it anytime.
+      </p>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         {COURSES.map((c) => (
           <button
             key={c.id}
             onClick={() => chooseCourse(c.id, c.enabled)}
-            className="rounded-2xl border bg-white p-4 text-left hover:shadow-sm"
+            className="rounded-2xl border bg-white p-4 text-left hover:shadow-sm disabled:opacity-60"
+            disabled={!c.enabled}
+            type="button"
           >
-            <div className="text-lg font-semibold">{c.title}</div>
-            <div className="text-sm text-slate-500">{c.subtitle}</div>
-
-            {!c.enabled && (
-              <div className="mt-2 text-xs text-slate-400">
-                Coming soon
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-lg font-semibold">{c.title}</div>
+                <div className="text-sm text-slate-500">{c.subtitle}</div>
               </div>
-            )}
+
+              {!c.enabled && (
+                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
+                  Coming soon
+                </span>
+              )}
+            </div>
           </button>
         ))}
       </div>

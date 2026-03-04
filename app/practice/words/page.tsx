@@ -1,5 +1,10 @@
 import WordsSrsPage from "@/app/components/WordsSrsPage";
+import CourseGate from "@/app/components/CourseGate";
 
 export default function PracticeWordsPage() {
-  return <WordsSrsPage backHref="/practice" />;
+  return (
+    <CourseGate>
+      <WordsSrsPage backHref="/practice" />
+    </CourseGate>
+  );
 }

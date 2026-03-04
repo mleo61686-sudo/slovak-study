@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import LearningClient from "./LearningClient";
 import { SITE_URL } from "@/lib/site";
+import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
   title: "Вивчення словацької мови по рівнях A0–B2 | Slovak Study",
@@ -24,5 +25,9 @@ export const metadata: Metadata = {
 };
 
 export default function LearningPage() {
-  return <LearningClient />;
+  return (
+    <CourseGate>
+      <LearningClient />
+    </CourseGate>
+  );
 }

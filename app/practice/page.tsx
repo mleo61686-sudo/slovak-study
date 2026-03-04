@@ -6,6 +6,7 @@ import SpeakButton from "@/app/components/SpeakButton";
 import { getSrsWordsFromLessons } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { SLANG } from "@/data/slang";
+import CourseGate from "@/app/components/CourseGate";
 
 type Lang = "ua" | "ru";
 type Mode = "mcq" | "typing";
@@ -13,20 +14,20 @@ type SessionMode = "mixed" | "mcq" | "typing";
 
 type SessionQuestionBase =
   | {
-    id: string;
-    mode: "mcq";
-    sk: string;
-    ua: string;
-    ru: string;
-    options: string[];
-  }
+      id: string;
+      mode: "mcq";
+      sk: string; // ✅ тепер тут term (fallback sk)
+      ua: string;
+      ru: string;
+      options: string[]; // ✅ теж term (fallback sk)
+    }
   | {
-    id: string;
-    mode: "typing";
-    sk: string;
-    ua: string;
-    ru: string;
-  };
+      id: string;
+      mode: "typing";
+      sk: string; // ✅ term (fallback sk)
+      ua: string;
+      ru: string;
+    };
 
 const UI = {
   ua: {
@@ -118,7 +119,8 @@ type PracticeStats = {
 };
 
 function loadStats(): PracticeStats {
-  if (typeof window === "undefined") return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
+  if (typeof window === "undefined")
+    return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
   try {
     const raw = window.localStorage.getItem(LS_KEY);
     if (!raw) return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
@@ -136,7 +138,7 @@ function loadStats(): PracticeStats {
 function saveStats(next: PracticeStats) {
   try {
     window.localStorage.setItem(LS_KEY, JSON.stringify(next));
-  } catch { }
+  } catch {}
 }
 
 function norm(s: string) {
@@ -153,6 +155,12 @@ function shuffle<T>(arr: T[]) {
 function sample<T>(arr: T[], n: number) {
   return shuffle(arr).slice(0, Math.min(n, arr.length));
 }
+
+function getTerm(word: any): string {
+  const t = String(word?.term ?? word?.sk ?? "").trim();
+  return t;
+}
+
 function getTrans(word: any, lang: Lang): string | null {
   const t = lang === "ua" ? word.ua : word.ru;
   return typeof t === "string" && t.trim() ? t : null;
@@ -162,21 +170,25 @@ function buildSessionBase(
   words: any[],
   count: number,
   sessionMode: SessionMode,
-  sourceSkList?: string[]
+  sourceTermList?: string[]
 ): SessionQuestionBase[] {
   const pool = words
-    .map((w, idx) => ({
-      ...w,
-      __id: `${w.sk}-${idx}`,
-      __ua: getTrans(w, "ua"),
-      __ru: getTrans(w, "ru"),
-    }))
-    .filter((w) => w.sk && w.__ua && w.__ru);
+    .map((w, idx) => {
+      const term = getTerm(w);
+      return {
+        ...w,
+        __term: term,
+        __id: `${term || "x"}-${idx}`,
+        __ua: getTrans(w, "ua"),
+        __ru: getTrans(w, "ru"),
+      };
+    })
+    .filter((w) => w.__term && w.__ua && w.__ru);
 
   if (pool.length < 4) return [];
 
-  const filteredPool = sourceSkList?.length
-    ? pool.filter((w) => sourceSkList.includes(w.sk))
+  const filteredPool = sourceTermList?.length
+    ? pool.filter((w) => sourceTermList.includes(w.__term))
     : pool;
 
   const picked = sample(filteredPool, count);
@@ -192,23 +204,23 @@ function buildSessionBase(
       return {
         id: `${w.__id}-typing`,
         mode: "typing",
-        sk: w.sk,
+        sk: w.__term,
         ua: w.__ua!,
         ru: w.__ru!,
       };
     }
 
     const distractors = sample(
-      pool.filter((x) => x.sk !== w.sk).map((x) => x.sk),
+      pool.filter((x) => x.__term !== w.__term).map((x) => x.__term),
       3
     );
 
-    const options = shuffle([w.sk, ...distractors]).slice(0, 4);
+    const options = shuffle([w.__term, ...distractors]).slice(0, 4);
 
     return {
       id: `${w.__id}-mcq`,
       mode: "mcq",
-      sk: w.sk,
+      sk: w.__term,
       ua: w.__ua!,
       ru: w.__ru!,
       options,
@@ -239,7 +251,8 @@ export default function PracticePage() {
 
   const [ready, setReady] = useState(false);
   const words = useMemo(() => getSrsWordsFromLessons(), []);
-    // ---- URL params: /practice?pack=slang&level=A1&cat=friends
+
+  // ---- URL params: /practice?pack=slang&level=A1&cat=friends
   const urlParams = useMemo(() => {
     if (typeof window === "undefined") return null;
     return new URLSearchParams(window.location.search);
@@ -262,7 +275,11 @@ export default function PracticePage() {
   }, []);
 
   // stats (persisted)
-  const [stats, setStats] = useState<PracticeStats>({ bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 });
+  const [stats, setStats] = useState<PracticeStats>({
+    bestAccuracyPct: 0,
+    bestStreak: 0,
+    bestScore: 0,
+  });
 
   useEffect(() => {
     setStats(loadStats());
@@ -289,35 +306,40 @@ export default function PracticePage() {
   const poolCount = useMemo(() => {
     const pool = (words as any[])
       .map((w) => ({
-        sk: w.sk,
+        term: getTerm(w),
         ua: getTrans(w, "ua"),
         ru: getTrans(w, "ru"),
       }))
-      .filter((w) => w.sk && w.ua && w.ru);
+      .filter((w) => w.term && w.ua && w.ru);
     return pool.length;
-  }, []);
+  }, [words]);
 
   const notEnough = poolCount < 4;
 
-   const slangSkList = useMemo(() => {
+  const slangTermList = useMemo(() => {
     if (pack !== "slang") return null;
 
     const list = SLANG.filter((x) => {
       const okLevel = !slangLevel || x.level === slangLevel;
       const okCat = !slangCat || x.category === slangCat;
       return okLevel && okCat;
-    }).map((x) => x.sk);
+    }).map((x) => x.sk); // у SLANG це вже готовий “term”
 
     return list;
   }, [pack, slangLevel, slangCat]);
+
   const qBase = useMemo(() => {
     if (phase !== "quiz") return null;
     if (!session.length) return null;
     return session[Math.min(current, session.length - 1)];
   }, [phase, session, current]);
 
-  const progressPct = session.length ? Math.round((current / session.length) * 100) : 0;
-  const accuracyPct = session.length ? Math.round((score / session.length) * 100) : 0;
+  const progressPct = session.length
+    ? Math.round((current / session.length) * 100)
+    : 0;
+  const accuracyPct = session.length
+    ? Math.round((score / session.length) * 100)
+    : 0;
 
   const canRevealAnswer = useMemo(() => {
     if (!qBase) return false;
@@ -329,12 +351,12 @@ export default function PracticePage() {
     return !!selected;
   }, [qBase, selected]);
 
-  function startNew(customSkList?: string[]) {
+  function startNew(customTermList?: string[]) {
     const built = buildSessionBase(
       words as any[],
       questionCount,
       sessionMode,
-      customSkList
+      customTermList
     );
 
     setSession(built);
@@ -417,6 +439,7 @@ export default function PracticePage() {
       ]);
     }
   }
+
   function checkTyping() {
     if (!qBase || qBase.mode !== "typing") return;
 
@@ -434,10 +457,11 @@ export default function PracticePage() {
   }
 
   function finalizeRecords() {
-    // викликаємо коли сесія закінчилась
     const finalScore = score;
     const finalBestStreak = bestStreakSession;
-    const finalAccuracy = session.length ? Math.round((finalScore / session.length) * 100) : 0;
+    const finalAccuracy = session.length
+      ? Math.round((finalScore / session.length) * 100)
+      : 0;
 
     setStats((prev) => {
       const next: PracticeStats = {
@@ -450,20 +474,14 @@ export default function PracticePage() {
     });
   }
 
-  // якщо score/bestStreakSession змінюються вже на останньому питанні — гарантуємо, що рекорди не зіб’ються:
   useEffect(() => {
     if (phase !== "quiz") return;
     if (!session.length) return;
     if (current < session.length) return;
-    // fallback: якщо дійшли сюди (навіть не через goNext)
     setPhase("result");
     finalizeRecords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, current, session.length]);
-
-  // -------------------------
-  // RENDERS
-  // -------------------------
 
   if (!ready) {
     return (
@@ -474,339 +492,313 @@ export default function PracticePage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl p-4 space-y-6">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">{t.title}</h1>
+    <CourseGate>
+      <main className="mx-auto max-w-3xl p-4 space-y-6">
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl font-semibold">{t.title}</h1>
 
-        <div className="flex gap-2">
-          <Link
-            href="/practice/words"
-            className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
-          >
-            {t.wordsSrs}
-          </Link>
-        </div>
-      </div>
-
-      {notEnough ? (
-        <div className="rounded-2xl border bg-white p-6 space-y-3">
-          <p className="font-medium">{t.notEnoughTitle}</p>
-          <p className="text-sm text-gray-600">{t.notEnoughHint}</p>
-        </div>
-      ) : null}
-
-      {phase === "setup" ? (
-        <section className="rounded-2xl border bg-white p-6 space-y-4">
-          <h2 className="text-lg font-semibold">{t.setupTitle}</h2>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-slate-700">{t.setupCount}</div>
-              <select
-                value={questionCount}
-                onChange={(e) => setQuestionCount(Number(e.target.value))}
-                className="w-full rounded-xl border px-3 py-2"
-              >
-                <option value={8}>8</option>
-                <option value={12}>12</option>
-                <option value={16}>16</option>
-                <option value={20}>20</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-slate-700">{t.setupMode}</div>
-              <select
-                value={sessionMode}
-                onChange={(e) => setSessionMode(e.target.value as SessionMode)}
-                className="w-full rounded-xl border px-3 py-2"
-              >
-                <option value="mixed">{t.modeMixed}</option>
-                <option value="mcq">{t.modeMcq}</option>
-                <option value="typing">{t.modeTyping}</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
-            <div className="font-semibold mb-2">{t.record}</div>
-            <div className="flex flex-wrap gap-2">
-              <div className="rounded-xl border bg-white px-3 py-2">
-                {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
-              </div>
-              <div className="rounded-xl border bg-white px-3 py-2">
-                {t.bestStreak}: <b>{stats.bestStreak}</b>
-              </div>
-              <div className="rounded-xl border bg-white px-3 py-2">
-                Best score: <b>{stats.bestScore}</b>
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => startNew()}
-            disabled={notEnough}
-            className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90 disabled:opacity-40"
-          >
-            {t.start}
-          </button>
-        </section>
-      ) : null}
-
-      {phase === "result" ? (
-        <section className="rounded-2xl border bg-white p-6 space-y-4">
-          <h2 className="text-xl font-semibold">{t.resultTitle}</h2>
-
-          <div className="flex flex-wrap gap-3 text-sm">
-            <div className="rounded-xl border bg-slate-50 px-3 py-2">
-              {t.yourResult}: <b>{score}</b> / {session.length}
-            </div>
-            <div className="rounded-xl border bg-slate-50 px-3 py-2">
-              {t.accuracy}: <b>{accuracyPct}%</b>
-            </div>
-            <div className="rounded-xl border bg-slate-50 px-3 py-2">
-              {t.bestStreak}: <b>{bestStreakSession}</b>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
-            <div className="font-semibold mb-2">{t.record}</div>
-            <div className="flex flex-wrap gap-2">
-              <div className="rounded-xl border bg-white px-3 py-2">
-                {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
-              </div>
-              <div className="rounded-xl border bg-white px-3 py-2">
-                {t.bestStreak}: <b>{stats.bestStreak}</b>
-              </div>
-              <div className="rounded-xl border bg-white px-3 py-2">
-                Best score: <b>{stats.bestScore}</b>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => {
-                setPhase("setup");
-                setSession([]);
-              }}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+          <div className="flex gap-2">
+            <Link
+              href="/practice/words"
+              className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
             >
-              {t.tryAgain}
-            </button>
-
-            <button
-              onClick={() => startNew(mistakes.map((m) => m.sk))}
-              disabled={mistakes.length === 0}
-              className="rounded-xl border px-4 py-2 hover:bg-slate-50 disabled:opacity-40"
-            >
-              {t.retryMistakes}
-            </button>
+              {t.wordsSrs}
+            </Link>
           </div>
+        </div>
 
-          <div className="pt-2 space-y-2">
-            <div className="text-sm font-semibold">{t.mistakesTitle}</div>
+        {notEnough ? (
+          <div className="rounded-2xl border bg-white p-6 space-y-3">
+            <p className="font-medium">{t.notEnoughTitle}</p>
+            <p className="text-sm text-gray-600">{t.notEnoughHint}</p>
+          </div>
+        ) : null}
 
-            {mistakes.length === 0 ? (
-              <div className="text-sm text-slate-700">{t.noMistakes}</div>
-            ) : (
+        {phase === "setup" ? (
+          <section className="rounded-2xl border bg-white p-6 space-y-4">
+            <h2 className="text-lg font-semibold">{t.setupTitle}</h2>
+
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                {mistakes.slice(0, 20).map((m, idx) => {
-                  const tr = uiLang === "ua" ? m.ua : m.ru;
-                  return (
-                    <div key={`${m.sk}-${idx}`} className="rounded-xl border bg-white p-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="font-medium">
-                          {m.sk} — <span className="text-slate-700">{tr}</span>
-                        </div>
-                        <SpeakButton text={m.sk} />
-                      </div>
-                      {m.your ? (
-                        <div className="mt-1 text-sm text-slate-600">
-                          Your: <span className="font-medium">{m.your}</span>
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </section>
-      ) : null}
-
-      {phase === "quiz" && qBase ? (
-        <section className="rounded-2xl border bg-white p-6 space-y-4">
-          {/* top bar */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm text-gray-500">
-              <div>
-                {t.questionLabel} {current + 1} / {session.length}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="rounded-full border px-3 py-1">
-                  {qBase.mode === "mcq" ? t.mcqBadge : t.typingBadge}
+                <div className="text-sm font-medium text-slate-700">
+                  {t.setupCount}
                 </div>
-
-                <button
-                  onClick={skip}
-                  className="rounded-full border px-3 py-1 hover:bg-slate-50"
+                <select
+                  value={questionCount}
+                  onChange={(e) => setQuestionCount(Number(e.target.value))}
+                  className="w-full rounded-xl border px-3 py-2"
                 >
-                  {t.skip}
-                </button>
+                  <option value={8}>8</option>
+                  <option value={12}>12</option>
+                  <option value={16}>16</option>
+                  <option value={20}>20</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <div className="text-sm font-medium text-slate-700">
+                  {t.setupMode}
+                </div>
+                <select
+                  value={sessionMode}
+                  onChange={(e) => setSessionMode(e.target.value as SessionMode)}
+                  className="w-full rounded-xl border px-3 py-2"
+                >
+                  <option value="mixed">{t.modeMixed}</option>
+                  <option value="mcq">{t.modeMcq}</option>
+                  <option value="typing">{t.modeTyping}</option>
+                </select>
               </div>
             </div>
 
-            {/* progress bar */}
-            <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-              <div className="h-2 bg-slate-900" style={{ width: `${progressPct}%` }} />
+            <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
+              <div className="font-semibold mb-2">{t.record}</div>
+              <div className="flex flex-wrap gap-2">
+                <div className="rounded-xl border bg-white px-3 py-2">
+                  {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
+                </div>
+                <div className="rounded-xl border bg-white px-3 py-2">
+                  {t.bestStreak}: <b>{stats.bestStreak}</b>
+                </div>
+                <div className="rounded-xl border bg-white px-3 py-2">
+                  Best score: <b>{stats.bestScore}</b>
+                </div>
+              </div>
             </div>
 
-            <div className="text-xs text-slate-600">
-              {t.progress}: {progressPct}% • {t.accuracy}: {accuracyPct}% • {t.streak}:{" "}
-              <b>{streak}</b> • {t.bestStreak}: <b>{bestStreakSession}</b>
+            <button
+              onClick={() => startNew(slangTermList ?? undefined)}
+              disabled={notEnough}
+              className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90 disabled:opacity-40"
+            >
+              {t.start}
+            </button>
+          </section>
+        ) : null}
+
+        {phase === "result" ? (
+          <section className="rounded-2xl border bg-white p-6 space-y-4">
+            <h2 className="text-xl font-semibold">{t.resultTitle}</h2>
+
+            <div className="flex flex-wrap gap-3 text-sm">
+              <div className="rounded-xl border bg-slate-50 px-3 py-2">
+                {t.yourResult}: <b>{score}</b> / {session.length}
+              </div>
+              <div className="rounded-xl border bg-slate-50 px-3 py-2">
+                {t.accuracy}: <b>{accuracyPct}%</b>
+              </div>
+              <div className="rounded-xl border bg-slate-50 px-3 py-2">
+                {t.bestStreak}: <b>{bestStreakSession}</b>
+              </div>
             </div>
-          </div>
 
-          {/* prompt */}
-          {(() => {
-            const { prompt, helper } = makePromptAndHelper(qBase, uiLang);
+            <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
+              <div className="font-semibold mb-2">{t.record}</div>
+              <div className="flex flex-wrap gap-2">
+                <div className="rounded-xl border bg-white px-3 py-2">
+                  {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
+                </div>
+                <div className="rounded-xl border bg-white px-3 py-2">
+                  {t.bestStreak}: <b>{stats.bestStreak}</b>
+                </div>
+                <div className="rounded-xl border bg-white px-3 py-2">
+                  Best score: <b>{stats.bestScore}</b>
+                </div>
+              </div>
+            </div>
 
-            return (
-              <>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => {
+                  setPhase("setup");
+                  setSession([]);
+                }}
+                className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+              >
+                {t.tryAgain}
+              </button>
+
+              <button
+                onClick={() => startNew(mistakes.map((m) => m.sk))}
+                disabled={mistakes.length === 0}
+                className="rounded-xl border px-4 py-2 hover:bg-slate-50 disabled:opacity-40"
+              >
+                {t.retryMistakes}
+              </button>
+            </div>
+
+            <div className="pt-2 space-y-2">
+              <div className="text-sm font-semibold">{t.mistakesTitle}</div>
+
+              {mistakes.length === 0 ? (
+                <div className="text-sm text-slate-700">{t.noMistakes}</div>
+              ) : (
                 <div className="space-y-2">
-                  <p className="font-medium text-lg">{prompt}</p>
-
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>{t.listen}</span>
-
-                    {canRevealAnswer ? (
-                      <SpeakButton
-                        text={qBase.sk}
-                        autoPlayKey={qBase.mode === "mcq" ? revealAutoKey : undefined}
-                      />
-                    ) : (
-                      <button
-                        type="button"
-                        disabled
-                        className="rounded-lg border bg-white px-2 py-1 text-xs opacity-50 cursor-not-allowed"
-                        title={
-                          uiLang === "ua"
-                            ? "Відповідай, щоб відкрити озвучку"
-                            : "Ответь, чтобы открыть озвучку"
-                        }
+                  {mistakes.slice(0, 20).map((m, idx) => {
+                    const tr = uiLang === "ua" ? m.ua : m.ru;
+                    return (
+                      <div
+                        key={`${m.sk}-${idx}`}
+                        className="rounded-xl border bg-white p-3"
                       >
-                        🔒
-                      </button>
-                    )}
-                  </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="font-medium">
+                            {m.sk} — <span className="text-slate-700">{tr}</span>
+                          </div>
+                          <SpeakButton text={m.sk} />
+                        </div>
+                        {m.your ? (
+                          <div className="mt-1 text-sm text-slate-600">
+                            Your: <span className="font-medium">{m.your}</span>
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </section>
+        ) : null}
+
+        {phase === "quiz" && qBase ? (
+          <section className="rounded-2xl border bg-white p-6 space-y-4">
+            {/* top bar */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <div>
+                  {t.questionLabel} {current + 1} / {session.length}
                 </div>
 
-                {qBase.mode === "mcq" ? (
-                  <>
-                    <div className="space-y-2">
-                      {qBase.options.map((option) => {
-                        const isCorrect = selected && option === qBase.sk;
-                        const isWrong = selected === option && option !== qBase.sk;
+                <div className="flex items-center gap-2">
+                  <div className="rounded-full border px-3 py-1">
+                    {qBase.mode === "mcq" ? t.mcqBadge : t.typingBadge}
+                  </div>
 
-                        return (
-                          <div
-                            key={option}
-                            role="button"
-                            tabIndex={selected ? -1 : 0}
-                            aria-disabled={!!selected}
-                            onClick={() => {
-                              if (selected) return;
-                              checkMcq(option);
-                            }}
-                            onKeyDown={(e) => {
-                              if (selected) return;
-                              if (e.key === "Enter" || e.key === " ") {
-                                e.preventDefault();
+                  <button
+                    onClick={skip}
+                    className="rounded-full border px-3 py-1 hover:bg-slate-50"
+                  >
+                    {t.skip}
+                  </button>
+                </div>
+              </div>
+
+              {/* progress bar */}
+              <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className="h-2 bg-slate-900"
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
+
+              <div className="text-xs text-slate-600">
+                {t.progress}: {progressPct}% • {t.accuracy}: {accuracyPct}% •{" "}
+                {t.streak}: <b>{streak}</b> • {t.bestStreak}:{" "}
+                <b>{bestStreakSession}</b>
+              </div>
+            </div>
+
+            {/* prompt */}
+            {(() => {
+              const { prompt, helper } = makePromptAndHelper(qBase, uiLang);
+
+              return (
+                <>
+                  <div className="space-y-2">
+                    <p className="font-medium text-lg">{prompt}</p>
+
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <span>{t.listen}</span>
+
+                      {canRevealAnswer ? (
+                        <SpeakButton
+                          text={qBase.sk}
+                          autoPlayKey={
+                            qBase.mode === "mcq" ? revealAutoKey : undefined
+                          }
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          disabled
+                          className="rounded-lg border bg-white px-2 py-1 text-xs opacity-50 cursor-not-allowed"
+                          title={
+                            uiLang === "ua"
+                              ? "Відповідай, щоб відкрити озвучку"
+                              : "Ответь, чтобы открыть озвучку"
+                          }
+                        >
+                          🔒
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {qBase.mode === "mcq" ? (
+                    <>
+                      <div className="space-y-2">
+                        {qBase.options.map((option) => {
+                          const isCorrect = selected && option === qBase.sk;
+                          const isWrong =
+                            selected === option && option !== qBase.sk;
+
+                          return (
+                            <div
+                              key={option}
+                              role="button"
+                              tabIndex={selected ? -1 : 0}
+                              aria-disabled={!!selected}
+                              onClick={() => {
+                                if (selected) return;
                                 checkMcq(option);
-                              }
-                            }}
-                            className={`w-full rounded-xl border px-4 py-3 text-left transition flex items-center justify-between
+                              }}
+                              onKeyDown={(e) => {
+                                if (selected) return;
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  checkMcq(option);
+                                }
+                              }}
+                              className={`w-full rounded-xl border px-4 py-3 text-left transition flex items-center justify-between
 ${isCorrect ? "bg-green-100 border-green-400" : ""}
 ${isWrong ? "bg-red-100 border-red-400" : ""}
-${!selected ? "hover:bg-slate-50 cursor-pointer" : "opacity-95 cursor-default"}
+${
+  !selected
+    ? "hover:bg-slate-50 cursor-pointer"
+    : "opacity-95 cursor-default"
+}
 `}
-                          >
-                            <span className="font-medium">{option}</span>
-
-                            <span
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                              }}
-                              onPointerDown={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                              }}
                             >
-                              <SpeakButton
-                                text={option}
-                                asChild
-                                label="🔊"
-                                className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
-                              />
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
+                              <span className="font-medium">{option}</span>
 
-                    {selected && (
-                      <div className="space-y-3">
-                        <div className="rounded-xl border bg-slate-50 px-4 py-3 text-sm text-gray-700">
-                          {helper}
-                        </div>
-                        <button
-                          onClick={goNext}
-                          className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
-                        >
-                          {t.next}
-                        </button>
+                              <span
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }}
+                                onPointerDown={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }}
+                              >
+                                <SpeakButton
+                                  text={option}
+                                  asChild
+                                  label="🔊"
+                                  className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
+                                />
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <div className="space-y-2">
-                      <input
-                        value={typed}
-                        onChange={(e) => setTyped(e.target.value)}
-                        placeholder={t.placeholder}
-                        className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-slate-200"
-                        disabled={!!typedChecked}
-                      />
 
-                      {!typedChecked ? (
-                        <button
-                          onClick={checkTyping}
-                          disabled={!typed.trim()}
-                          className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90 disabled:opacity-40"
-                        >
-                          {t.check}
-                        </button>
-                      ) : (
+                      {selected && (
                         <div className="space-y-3">
-                          <div
-                            className={`rounded-xl border px-4 py-3 text-sm ${typedChecked.ok
-                              ? "bg-green-100 border-green-400"
-                              : "bg-red-100 border-red-400"
-                              }`}
-                          >
-                            {typedChecked.ok
-                              ? t.correct
-                              : `${t.wrongPrefix} ${qBase.sk}`}
-                          </div>
-
                           <div className="rounded-xl border bg-slate-50 px-4 py-3 text-sm text-gray-700">
                             {helper}
                           </div>
-
                           <button
                             onClick={goNext}
                             className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
@@ -815,14 +807,61 @@ ${!selected ? "hover:bg-slate-50 cursor-pointer" : "opacity-95 cursor-default"}
                           </button>
                         </div>
                       )}
-                    </div>
-                  </>
-                )}
-              </>
-            );
-          })()}
-        </section>
-      ) : null}
-    </main>
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-2">
+                        <input
+                          value={typed}
+                          onChange={(e) => setTyped(e.target.value)}
+                          placeholder={t.placeholder}
+                          className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2 focus:ring-slate-200"
+                          disabled={!!typedChecked}
+                        />
+
+                        {!typedChecked ? (
+                          <button
+                            onClick={checkTyping}
+                            disabled={!typed.trim()}
+                            className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90 disabled:opacity-40"
+                          >
+                            {t.check}
+                          </button>
+                        ) : (
+                          <div className="space-y-3">
+                            <div
+                              className={`rounded-xl border px-4 py-3 text-sm ${
+                                typedChecked.ok
+                                  ? "bg-green-100 border-green-400"
+                                  : "bg-red-100 border-red-400"
+                              }`}
+                            >
+                              {typedChecked.ok
+                                ? t.correct
+                                : `${t.wrongPrefix} ${qBase.sk}`}
+                            </div>
+
+                            <div className="rounded-xl border bg-slate-50 px-4 py-3 text-sm text-gray-700">
+                              {helper}
+                            </div>
+
+                            <button
+                              onClick={goNext}
+                              className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+                            >
+                              {t.next}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </>
+              );
+            })()}
+          </section>
+        ) : null}
+      </main>
+    </CourseGate>
   );
 }

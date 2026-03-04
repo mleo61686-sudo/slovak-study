@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import GrammarClient from "./GrammarClient";
+import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
   title: "Граматика словацької мови з прикладами | Slovak Study",
@@ -23,5 +24,9 @@ export const metadata: Metadata = {
 };
 
 export default function GrammarPage() {
-  return <GrammarClient />;
+  return (
+    <CourseGate>
+      <GrammarClient />
+    </CourseGate>
+  );
 }

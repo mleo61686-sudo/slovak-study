@@ -6,11 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { getSrsWordsFromLessons, type Word } from "@/app/learning/data";
 import { useLanguage } from "@/lib/src/useLanguage";
-import {
-  isLearned as _isLearned,
-  isMastered as _isMastered,
-  migrateSrsIfNeeded,
-} from "@/lib/srs/srsWords";
+import { isLearned as _isLearned, isMastered as _isMastered } from "@/lib/srs/srsWords";
+import { COURSE_STORAGE_KEY, getDefaultCourse, type CourseId } from "@/lib/course";
 
 type SrsState = {
   id: string; // word.sk
@@ -109,18 +106,42 @@ function getTodayKey() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 }
 
-function srsKey(userId: string) {
+function getActiveCourseId(): CourseId {
+  if (typeof window === "undefined") return getDefaultCourse();
+  try {
+    const raw = localStorage.getItem(COURSE_STORAGE_KEY) as CourseId | null;
+    return raw ?? getDefaultCourse();
+  } catch {
+    return getDefaultCourse();
+  }
+}
+
+function srsKey(userId: string, courseId: CourseId) {
+  return `${KEY_BASE}:${userId}:${courseId}`;
+}
+function dailyKey(userId: string, courseId: CourseId) {
+  return `${DAILY_KEY_BASE}:${userId}:${courseId}`;
+}
+function dailySessionKey(userId: string, courseId: CourseId) {
+  return `${DAILY_SESSION_KEY_BASE}:${userId}:${courseId}`;
+}
+
+// legacy keys (до курсів)
+function legacySrsKey(userId: string) {
   return `${KEY_BASE}:${userId}`;
 }
-function dailyKey(userId: string) {
+function legacyDailyKey(userId: string) {
   return `${DAILY_KEY_BASE}:${userId}`;
 }
-function dailySessionKey(userId: string) {
+function legacyDailySessionKey(userId: string) {
   return `${DAILY_SESSION_KEY_BASE}:${userId}`;
 }
 
-function getDailyState(userId: string): { date: string; count: number } {
-  const raw = localStorage.getItem(dailyKey(userId));
+function getDailyState(
+  userId: string,
+  courseId: CourseId
+): { date: string; count: number } {
+  const raw = localStorage.getItem(dailyKey(userId, courseId));
   if (!raw) return { date: getTodayKey(), count: 0 };
   try {
     const parsed = JSON.parse(raw);
@@ -133,15 +154,18 @@ function getDailyState(userId: string): { date: string; count: number } {
   }
 }
 
-function setDailyState(userId: string, count: number) {
-  localStorage.setItem(dailyKey(userId), JSON.stringify({ date: getTodayKey(), count }));
+function setDailyState(userId: string, courseId: CourseId, count: number) {
+  localStorage.setItem(
+    dailyKey(userId, courseId),
+    JSON.stringify({ date: getTodayKey(), count })
+  );
 }
 
 // ✅ “Порція повторення на день” (щоб не було 60, якщо пропустив день)
 type DailySession = { date: string; ids: string[] };
 
-function getDailySession(userId: string): DailySession | null {
-  const raw = localStorage.getItem(dailySessionKey(userId));
+function getDailySession(userId: string, courseId: CourseId): DailySession | null {
+  const raw = localStorage.getItem(dailySessionKey(userId, courseId));
   if (!raw) return null;
   try {
     const s = JSON.parse(raw);
@@ -152,35 +176,72 @@ function getDailySession(userId: string): DailySession | null {
   }
 }
 
-function setDailySession(userId: string, ids: string[]) {
+function setDailySession(userId: string, courseId: CourseId, ids: string[]) {
   localStorage.setItem(
-    dailySessionKey(userId),
+    dailySessionKey(userId, courseId),
     JSON.stringify({ date: getTodayKey(), ids })
   );
 }
 
 // ✅ видаляємо слово з сьогоднішнього списку (щоб F5 не “рефілив”)
-function removeFromDailySession(userId: string, id: string) {
-  const saved = getDailySession(userId);
+function removeFromDailySession(userId: string, courseId: CourseId, id: string) {
+  const saved = getDailySession(userId, courseId);
   if (!saved) return;
   if (saved.date !== getTodayKey()) return;
 
   const nextIds = saved.ids.filter((x) => x !== id);
-  setDailySession(userId, nextIds);
+  setDailySession(userId, courseId, nextIds);
 }
 
-function loadDb(userId: string): Record<string, SrsState> {
+function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
+  // ✅ міграція: тільки для sk — переносимо legacy ключі в :sk один раз
+  if (courseId === "sk") {
+    try {
+      const newKey = srsKey(userId, courseId);
+      const hasNew = !!localStorage.getItem(newKey);
+      if (!hasNew) {
+        const legacyRaw = localStorage.getItem(legacySrsKey(userId));
+        if (legacyRaw) {
+          localStorage.setItem(newKey, legacyRaw);
+          localStorage.removeItem(legacySrsKey(userId));
+        }
+      }
+
+      const newDailyKey = dailyKey(userId, courseId);
+      const hasDailyNew = !!localStorage.getItem(newDailyKey);
+      if (!hasDailyNew) {
+        const legacyRaw = localStorage.getItem(legacyDailyKey(userId));
+        if (legacyRaw) {
+          localStorage.setItem(newDailyKey, legacyRaw);
+          localStorage.removeItem(legacyDailyKey(userId));
+        }
+      }
+
+      const newSessionKey = dailySessionKey(userId, courseId);
+      const hasSessionNew = !!localStorage.getItem(newSessionKey);
+      if (!hasSessionNew) {
+        const legacyRaw = localStorage.getItem(legacyDailySessionKey(userId));
+        if (legacyRaw) {
+          localStorage.setItem(newSessionKey, legacyRaw);
+          localStorage.removeItem(legacyDailySessionKey(userId));
+        }
+      }
+    } catch {}
+  }
+
   try {
-    return JSON.parse(localStorage.getItem(srsKey(userId)) || "{}");
+    return JSON.parse(localStorage.getItem(srsKey(userId, courseId)) || "{}");
   } catch {
     return {};
   }
 }
 
-function saveDb(userId: string, db: Record<string, SrsState>) {
-  localStorage.setItem(srsKey(userId), JSON.stringify(db));
+function saveDb(userId: string, courseId: CourseId, db: Record<string, SrsState>) {
+  localStorage.setItem(srsKey(userId, courseId), JSON.stringify(db));
   window.dispatchEvent(new CustomEvent("slovakStudy:srsChanged"));
+  window.dispatchEvent(new Event("storage"));
 }
+
 function initState(id: string): SrsState {
   return { id, dueAt: Date.now(), interval: 0, ease: 2.5, reps: 0 };
 }
@@ -252,12 +313,20 @@ function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
   return { total: totalWords, learned, mastered, due };
 }
 
+function getTerm(w: any): string {
+  return String(w?.term ?? w?.sk ?? "").trim();
+}
+
 function getDueSorted(words: Word[], db: Record<string, SrsState>): Word[] {
   const now = Date.now();
 
   return words
-    .filter((w) => !!db[w.sk]) // тільки активовані
-    .map((w) => ({ w, dueAt: db[w.sk]!.dueAt }))
+    .map((w) => {
+      const id = getTerm(w);
+      return { w, id };
+    })
+    .filter((x) => !!x.id && !!db[x.id]) // тільки активовані
+    .map((x) => ({ w: x.w, id: x.id, dueAt: db[x.id]!.dueAt }))
     .filter((x) => x.dueAt <= now)
     .sort((a, b) => a.dueAt - b.dueAt)
     .map((x) => x.w);
@@ -269,6 +338,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
   const { data: session, status } = useSession();
   const userId = String(session?.user?.id ?? "");
+  const courseId = getActiveCourseId();
 
   if (status !== "authenticated") {
     return (
@@ -307,23 +377,20 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   });
 
   useEffect(() => {
-    // ✅ переносимо старий ключ (без userId) у userId-ключ один раз
-    migrateSrsIfNeeded(userId);
-
-    const initial = loadDb(userId);
+    const initial = loadDb(userId, courseId);
     startNewSession(initial);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allWords, userId]);
+  }, [allWords, userId, courseId]);
 
   function startNewSession(nextDb?: Record<string, SrsState>) {
-    const updated = nextDb ?? loadDb(userId);
+    const updated = nextDb ?? loadDb(userId, courseId);
     const now = Date.now();
 
     const dueAll = getDueSorted(allWords, updated);
-    const dueIds = dueAll.map((w) => w.sk);
+    const dueIds = dueAll.map((w) => getTerm(w));
 
     const today = getTodayKey();
-    const saved = getDailySession(userId);
+    const saved = getDailySession(userId, courseId);
 
     const target = Math.min(DAILY_REVIEW_LIMIT, dueIds.length);
 
@@ -331,13 +398,13 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
     if (saved?.date === today) {
       ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
-      setDailySession(userId, ids);
+      setDailySession(userId, courseId, ids);
     } else {
       ids = dueIds.slice(0, target);
-      setDailySession(userId, ids);
+      setDailySession(userId, courseId, ids);
     }
 
-    const byId = new Map(allWords.map((w) => [w.sk, w]));
+    const byId = new Map(allWords.map((w) => [getTerm(w), w]));
     const sessionWords = ids.map((id) => byId.get(id)).filter(Boolean) as Word[];
 
     const limited = sessionWords.slice(0, SESSION_SIZE);
@@ -353,7 +420,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   }
 
   function addNewWordsRandom(count: number) {
-    const daily = getDailyState(userId);
+    const daily = getDailyState(userId, courseId);
 
     if (daily.date !== getTodayKey()) {
       daily.count = 0;
@@ -365,9 +432,13 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
       return;
     }
 
-    const updated = loadDb(userId);
+    const updated = loadDb(userId, courseId);
 
-    const pool = allWords.filter((w) => !updated[w.sk]);
+    const pool = allWords.filter((w) => {
+      const id = getTerm(w);
+      return id && !updated[id];
+    });
+
     const toAdd = shuffle(pool).slice(0, Math.min(count, remaining));
 
     if (toAdd.length === 0) {
@@ -376,17 +447,20 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     }
 
     for (const w of toAdd) {
-      updated[w.sk] = initState(w.sk);
+      const id = getTerm(w);
+      if (!id) continue;
+      updated[id] = initState(id);
     }
 
-    saveDb(userId, updated);
-    setDailyState(userId, daily.count + toAdd.length);
+    saveDb(userId, courseId, updated);
+    setDailyState(userId, courseId, daily.count + toAdd.length);
 
     startNewSession(updated);
   }
 
   function goNext() {
-    const rest = queue.filter((w) => w.sk !== current?.sk);
+    const curId = current ? getTerm(current) : "";
+    const rest = queue.filter((w) => getTerm(w) !== curId);
     setQueue(rest);
     setCurrent(rest[0] || null);
     setShow(false);
@@ -400,28 +474,41 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
     setIsGrading(true);
     const curWord = current;
+    const curId = getTerm(curWord);
+    if (!curId) {
+      setIsGrading(false);
+      return;
+    }
 
     const updated = { ...db };
-    const prev = updated[curWord.sk] ?? initState(curWord.sk);
+    const prev = updated[curId] ?? initState(curId);
     const next = applyReview(prev, g);
-    updated[curWord.sk] = next;
+    updated[curId] = next;
 
     if (g === 0) {
-      setLastInfo(lang === "ua" ? "🔁 Повторимо ще раз у цьому сеансі" : "🔁 Повторим ещё раз в этом сеансе");
+      setLastInfo(
+        lang === "ua"
+          ? "🔁 Повторимо ще раз у цьому сеансі"
+          : "🔁 Повторим ещё раз в этом сеансе"
+      );
     } else if (next.interval <= 1) {
-      setLastInfo(lang === "ua" ? "⏳ Наступне повторення — завтра" : "⏳ Следующее повторение — завтра");
+      setLastInfo(
+        lang === "ua"
+          ? "⏳ Наступне повторення — завтра"
+          : "⏳ Следующее повторение — завтра"
+      );
     } else {
       setLastInfo(t.nextIn(next.interval));
     }
 
-    saveDb(userId, updated);
+    saveDb(userId, courseId, updated);
     setDb(updated);
     setStats(computeStats(updated, allWords.length));
 
     setTimeout(() => {
       if (g === 0) {
         setQueue((q) => {
-          const rest = q.filter((w) => w.sk !== curWord.sk);
+          const rest = q.filter((w) => getTerm(w) !== curId);
           const nextQueue = [...rest, curWord];
           setCurrent(nextQueue[0] || null);
           return nextQueue;
@@ -433,7 +520,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
         return;
       }
 
-      removeFromDailySession(userId, curWord.sk);
+      removeFromDailySession(userId, courseId, curId);
       goNext();
     }, 900);
   }
@@ -442,7 +529,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     if (!current) return;
     if (isGrading) return;
 
-    const rest = queue.filter((w) => w.sk !== current.sk);
+    const curId = getTerm(current);
+    const rest = queue.filter((w) => getTerm(w) !== curId);
     const next = [...rest, current];
 
     setQueue(next);
@@ -457,8 +545,10 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     !current
       ? ""
       : lang === "ru"
-        ? current.ru || current.ua || ""
-        : current.ua || "";
+      ? current.ru || current.ua || ""
+      : current.ua || "";
+
+  const term = current ? getTerm(current) : "";
 
   return (
     <main className="mx-auto max-w-3xl p-4 space-y-6">
@@ -535,8 +625,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="text-3xl font-bold">{current.sk}</div>
-            <SpeakButton text={current.sk} />
+            <div className="text-3xl font-bold">{term}</div>
+            <SpeakButton text={term} />
             {show && (current as any).ipa && (
               <span className="text-sm text-slate-500">
                 {(current as any).ipa}
