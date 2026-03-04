@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { getSrsWordsFromLessons } from "@/app/learning/data";
+import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { SrsState } from "@/lib/srs/srsWords";
 import { isLearned, isMastered, loadDb as loadSrsDb, migrateSrsIfNeeded } from "@/lib/srs/srsWords";
@@ -218,9 +219,10 @@ export default function WordsStats() {
   const { data: session, status } = useSession();
 
   const isPremium = !!session?.user?.isPremium;
+  const { courseId } = useActiveCourse();
 
   // ✅ тепер беремо загальну кількість слів із уроків, а не з WORDS
-  const allWords = useMemo(() => getSrsWordsFromLessons(), []);
+  const allWords = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
 
   const [stats, setStats] = useState<Stats>({
     total: allWords.length,

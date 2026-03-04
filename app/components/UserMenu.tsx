@@ -141,7 +141,7 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
           <div className="border-t" />
 
-          <CourseSwitcher />
+          <CourseSwitcher onChanged={() => setOpen(false)} />
 
           <div className="border-t" />
 

@@ -8,11 +8,8 @@ import { A0_PHRASES } from "./phrases/a0";
 import { A1_PHRASES } from "./phrases/a1";
 import { B1_PHRASES } from "./phrases/b1";
 import { phraseKey } from "./phrases/phraseKey";
-import type { CourseId } from "@/lib/course";
-
 
 export type Lang = "ua" | "ru";
-
 
 export type Word = {
   // 🔑 універсальне слово курсу (Slovak / Czech / Polish)
@@ -164,10 +161,8 @@ const RU_OVERRIDES: Record<string, string> = {
 function addRu(words: Word[]): Word[] {
   return words.map((w) => ({
     ...w,
-
     // 🔑 якщо term не заданий — використовуємо sk
     term: w.term ?? w.sk,
-
     ru: w.ru ?? RU_OVERRIDES[w.ua] ?? w.ua,
   }));
 }
@@ -203,9 +198,8 @@ function fillTo10(words: Word[], lessonNum: number): Word[] {
 // 1) ТВОЇ РЕАЛЬНІ УРОКИ A0 (1..30)
 // =============================
 
-
 // ✅ нормалізуємо A0_REAL: title -> {ua,ru} + додаємо ru у слова
-const A0_REAL: Lesson[] = A0_REAL_SOURCE.map((l) => ({
+const A0_REAL: Lesson[] = (A0_REAL_SOURCE as LessonSource[]).map((l) => ({
   ...l,
   title: toTitle(l.title),
   words: addRu(l.words),
@@ -269,13 +263,7 @@ function normalizeLessonList(list: any[]): Lesson[] {
   }));
 }
 
-
-function findPhrase(
-  dict: Record<string, any>,
-  sk: string,
-  ua: string,
-  lessonId: string
-) {
+function findPhrase(dict: Record<string, any>, sk: string, ua: string, lessonId: string) {
   // 1) exact match (як було)
   const exact = dict[phraseKey(sk, ua, lessonId)];
   if (exact) return exact;
@@ -287,10 +275,7 @@ function findPhrase(
   const prefix = `${skNorm}||`;
   const suffix = `||${lid}`;
 
-  const hitKey = Object.keys(dict).find(
-    (k) => k.startsWith(prefix) && k.endsWith(suffix)
-  );
-
+  const hitKey = Object.keys(dict).find((k) => k.startsWith(prefix) && k.endsWith(suffix));
   return hitKey ? dict[hitKey] : undefined;
 }
 
@@ -305,8 +290,6 @@ const A1_LIST = normalizeLessonList(A1_ALL as any);
 const A2_LIST = normalizeLessonList(A2_ALL as any);
 const B1_LIST = normalizeLessonList(B1_ALL as any);
 
-
-
 const PHRASES_BY_BAND: Partial<Record<CefrBandId, Record<string, any>>> = {
   a0: A0_PHRASES,
   a1: A1_PHRASES,
@@ -316,31 +299,36 @@ const PHRASES_BY_BAND: Partial<Record<CefrBandId, Record<string, any>>> = {
 // =============================
 // 6) CEFR_LEVELS
 // =============================
-export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBandId[]).map((id) => {
-  const meta = BAND_META[id];
+export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBandId[]).map(
+  (id) => {
+    const meta = BAND_META[id];
 
-  const lessonsSource: Lesson[] =
-    id === "a0" ? A0_ALL :
-      id === "a1" ? A1_LIST :
-        id === "a2" ? A2_LIST :
-          id === "b1" ? B1_LIST :
-            B2_ALL;
+    const lessonsSource: Lesson[] =
+      id === "a0"
+        ? A0_ALL
+        : id === "a1"
+        ? A1_LIST
+        : id === "a2"
+        ? A2_LIST
+        : id === "b1"
+        ? B1_LIST
+        : B2_ALL;
 
-  return {
-    id,
-    title: meta.title,
-    subtitle: meta.subtitle,
-    lessons: lessonsSource.map((l, idx) => {
-      const n = idx + 1;
-      return {
-        id: `${id}-${n}`,
-        title: l.title,
-        wordsCount: l.words.length > 0 ? l.words.length : WORDS_PER_LESSON,
-      };
-    }),
-  };
-});
-
+    return {
+      id,
+      title: meta.title,
+      subtitle: meta.subtitle,
+      lessons: lessonsSource.map((l, idx) => {
+        const n = idx + 1;
+        return {
+          id: `${id}-${n}`,
+          title: l.title,
+          wordsCount: l.words.length > 0 ? l.words.length : WORDS_PER_LESSON,
+        };
+      }),
+    };
+  }
+);
 
 // =============================
 // 7) getLesson: "a0-1" / "a1-3" / ...
@@ -365,14 +353,12 @@ export function getLesson(id: string) {
     if (!lesson) return null;
 
     const withRu = addRu(lesson.words);
-
     const dict = PHRASES_BY_BAND[band];
 
     return {
       ...lesson,
       words: dict ? attachPhrases(withRu, dict, raw) : withRu,
     };
-
   }
 
   // старий формат "1" (підтримка A0)
@@ -388,9 +374,8 @@ export function getLesson(id: string) {
 }
 
 // =============================
-// 8) Dictionary index from lessons
+// 8) Lessons by band (SK) – лишаємо як було (це база для sk-lessons-by-band.ts)
 // =============================
-
 export const LESSONS_BY_BAND: Record<CefrBandId, Lesson[]> = {
   a0: A0_ALL,
   a1: A1_LIST,
@@ -412,24 +397,12 @@ function dictKey(w: Word) {
   return String(w.sk).trim().toLowerCase();
 }
 
-// ✅ Поки що у нас реальні дані є тільки для Slovak.
-// Для cs/pl робимо fallback на Slovak, щоб нічого не ламалось.
-function normalizeCourse(courseId?: CourseId): CourseId {
-  const c = courseId ?? "sk";
-  return c === "cs" || c === "pl" ? "sk" : "sk";
-}
-
-/**
- * ✅ Курс-орієнтований словник.
- * Поки що повертає словацький словник для всіх курсів (fallback).
- * Коли додамо Czech/Polish — тут просто підставимо LESSONS_BY_BAND_CS / _PL
- */
-export function getDictionaryFromLessons(courseId?: CourseId): DictionaryEntry[] {
-  const course = normalizeCourse(courseId);
-
-  // зараз тільки sk
-  const lessonsByBand = LESSONS_BY_BAND;
-
+// =============================
+// 9) Course-agnostic dictionary / SRS builders
+// =============================
+export function buildDictionaryFromLessonsByBand(
+  lessonsByBand: Record<CefrBandId, Lesson[]>
+): DictionaryEntry[] {
   const map = new Map<string, DictionaryEntry>();
 
   (Object.keys(lessonsByBand) as CefrBandId[]).forEach((band) => {
@@ -444,11 +417,7 @@ export function getDictionaryFromLessons(courseId?: CourseId): DictionaryEntry[]
         const key = dictKey(w);
         const existing = map.get(key);
 
-        const ref = {
-          band,
-          lessonId,
-          lessonTitle: lesson.title,
-        };
+        const ref = { band, lessonId, lessonTitle: lesson.title };
 
         if (!existing) {
           map.set(key, {
@@ -475,7 +444,8 @@ export function getDictionaryFromLessons(courseId?: CourseId): DictionaryEntry[]
   return Array.from(map.values()).sort((a, b) => a.sk.localeCompare(b.sk, "sk"));
 }
 
-// ✅ для SRS нам потрібен просто список Word[]
-export function getSrsWordsFromLessons(courseId?: CourseId): Word[] {
-  return getDictionaryFromLessons(courseId).map(({ key, refs, ...w }) => w);
+export function buildSrsWordsFromLessonsByBand(
+  lessonsByBand: Record<CefrBandId, Lesson[]>
+): Word[] {
+  return buildDictionaryFromLessonsByBand(lessonsByBand).map(({ key, refs, ...w }) => w);
 }

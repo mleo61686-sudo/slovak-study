@@ -27,9 +27,9 @@ export const COURSES: CourseDefinition[] = [
     id: "cs",
     title: "Czech",
     subtitle: "Čeština",
-    enabled: false,
-    status: "comingSoon",
-    features: { learn: false, grammar: false, dictionary: false, practice: false },
+    enabled: true,
+    status: "active",
+    features: { learn: true, grammar: true, dictionary: true, practice: true },
   },
   {
     id: "pl",

@@ -4,13 +4,15 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
-import { getSrsWordsFromLessons, type Word } from "@/app/learning/data";
+import type { Word } from "@/app/learning/data";
+import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
+import type { CourseId } from "@/app/learning/courses/registry";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { isLearned as _isLearned, isMastered as _isMastered } from "@/lib/srs/srsWords";
-import { COURSE_STORAGE_KEY, getDefaultCourse, type CourseId } from "@/lib/course";
 
 type SrsState = {
-  id: string; // word.sk
+  id: string; // word.term або word.sk
   dueAt: number;
   interval: number; // days
   ease: number;
@@ -104,16 +106,6 @@ const I18N = {
 
 function getTodayKey() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-}
-
-function getActiveCourseId(): CourseId {
-  if (typeof window === "undefined") return getDefaultCourse();
-  try {
-    const raw = localStorage.getItem(COURSE_STORAGE_KEY) as CourseId | null;
-    return raw ?? getDefaultCourse();
-  } catch {
-    return getDefaultCourse();
-  }
 }
 
 function srsKey(userId: string, courseId: CourseId) {
@@ -338,7 +330,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
   const { data: session, status } = useSession();
   const userId = String(session?.user?.id ?? "");
-  const courseId = getActiveCourseId();
+
+  const { courseId } = useActiveCourse();
 
   if (status !== "authenticated") {
     return (
@@ -359,7 +352,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     );
   }
 
-  const allWords = useMemo(() => getSrsWordsFromLessons(), []);
+  const allWords = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
   const [db, setDb] = useState<Record<string, SrsState>>({});
 
   const [queue, setQueue] = useState<Word[]>([]);
@@ -380,7 +373,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     const initial = loadDb(userId, courseId);
     startNewSession(initial);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allWords, userId, courseId]);
+  }, [allWords.length, userId, courseId]);
 
   function startNewSession(nextDb?: Record<string, SrsState>) {
     const updated = nextDb ?? loadDb(userId, courseId);

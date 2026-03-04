@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import SpeakButton from "@/app/components/SpeakButton";
-import { getSrsWordsFromLessons } from "@/app/learning/data";
+import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { SLANG } from "@/data/slang";
 import CourseGate from "@/app/components/CourseGate";
@@ -16,10 +17,10 @@ type SessionQuestionBase =
   | {
       id: string;
       mode: "mcq";
-      sk: string; // ✅ тепер тут term (fallback sk)
+      sk: string; // ✅ term (fallback sk)
       ua: string;
       ru: string;
-      options: string[]; // ✅ теж term (fallback sk)
+      options: string[]; // ✅ term (fallback sk)
     }
   | {
       id: string;
@@ -157,8 +158,7 @@ function sample<T>(arr: T[], n: number) {
 }
 
 function getTerm(word: any): string {
-  const t = String(word?.term ?? word?.sk ?? "").trim();
-  return t;
+  return String(word?.term ?? word?.sk ?? "").trim();
 }
 
 function getTrans(word: any, lang: Lang): string | null {
@@ -249,8 +249,10 @@ export default function PracticePage() {
   const uiLang: Lang = lang === "ru" ? "ru" : "ua";
   const t = UI[uiLang];
 
+  const { courseId } = useActiveCourse();
+
   const [ready, setReady] = useState(false);
-  const words = useMemo(() => getSrsWordsFromLessons(), []);
+  const words = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
 
   // ---- URL params: /practice?pack=slang&level=A1&cat=friends
   const urlParams = useMemo(() => {
@@ -323,7 +325,7 @@ export default function PracticePage() {
       const okLevel = !slangLevel || x.level === slangLevel;
       const okCat = !slangCat || x.category === slangCat;
       return okLevel && okCat;
-    }).map((x) => x.sk); // у SLANG це вже готовий “term”
+    }).map((x) => x.sk);
 
     return list;
   }, [pack, slangLevel, slangCat]);
@@ -343,11 +345,7 @@ export default function PracticePage() {
 
   const canRevealAnswer = useMemo(() => {
     if (!qBase) return false;
-
-    // ✅ typing: слухати можна одразу (але тільки вручну по кліку)
     if (qBase.mode === "typing") return true;
-
-    // mcq: як було — після вибору
     return !!selected;
   }, [qBase, selected]);
 
@@ -393,7 +391,6 @@ export default function PracticePage() {
   }
 
   function skip() {
-    // пропуск = вважаємо як "неправильно" і streak обнуляємо
     setStreak(0);
 
     const next = current + 1;
@@ -425,8 +422,6 @@ export default function PracticePage() {
     if (!qBase || qBase.mode !== "mcq") return;
 
     setSelected(option);
-
-    // ✅ Автоматично програємо ПРАВИЛЬНЕ слово після вибору
     setRevealAutoKey((k) => k + 1);
 
     const ok = option === qBase.sk;
@@ -740,8 +735,7 @@ export default function PracticePage() {
                       <div className="space-y-2">
                         {qBase.options.map((option) => {
                           const isCorrect = selected && option === qBase.sk;
-                          const isWrong =
-                            selected === option && option !== qBase.sk;
+                          const isWrong = selected === option && option !== qBase.sk;
 
                           return (
                             <div
