@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { COURSE_REGISTRY } from "./registry";
 
 const LS_KEY = "slovakStudy.activeCourse";
+const COOKIE_KEY = "slovakStudyActiveCourse";
 
 // CourseId автоматично береться з ключів COURSE_REGISTRY
 export type CourseId = keyof typeof COURSE_REGISTRY;
@@ -28,6 +29,7 @@ export function getStoredCourseId(): CourseId {
 export function setStoredCourseId(courseId: CourseId) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(LS_KEY, courseId);
+  document.cookie = `${COOKIE_KEY}=${encodeURIComponent(courseId)}; path=/; max-age=31536000; samesite=lax`;
   window.dispatchEvent(
     new CustomEvent("slovakStudy:courseChanged", { detail: { courseId } })
   );
