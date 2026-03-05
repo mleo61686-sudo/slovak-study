@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
+import type { CourseId } from "@/app/learning/courses/registry";
 
 const KEY_BASE = "slovakStudy.srsWords";
 const EVENT_NAME = "slovakStudy:srsChanged";
 
-function keyFor(userId: string) {
-  return `${KEY_BASE}:${userId}`;
+function keyFor(userId: string, courseId: CourseId) {
+  return `${KEY_BASE}:${userId}:${courseId}`;
 }
 
 function safeParse(raw: string | null) {
@@ -19,23 +21,24 @@ function safeParse(raw: string | null) {
   }
 }
 
-async function apiGet() {
-  const res = await fetch("/api/srs", { method: "GET" });
-  if (!res.ok) return null;
-  const json = await res.json();
-  return json?.ok ? json : null; // очікуємо { ok:true, srs, dailySession, dailyNewWords, updatedAt }
+function getDailySessionKey(userId: string, courseId: CourseId) {
+  return `slovakStudy.srsDailySession:${userId}:${courseId}`;
+}
+function getDailyNewWordsKey(userId: string, courseId: CourseId) {
+  return `slovakStudy.dailyNewWords:${userId}:${courseId}`;
 }
 
-async function apiPut(srs: any, userId: string) {
-  const dailySession = safeParse(
-    localStorage.getItem(`slovakStudy.srsDailySession:${userId}`)
-  );
+async function apiGet(courseId: CourseId) {
+  const res = await fetch(`/api/srs?courseId=${encodeURIComponent(courseId)}`, {
+    method: "GET",
+  });
+  if (!res.ok) return null;
+  const json = await res.json();
+  return json?.ok ? json : null; // { ok:true, srs, dailySession, dailyNewWords, updatedAt }
+}
 
-  const dailyNewWords = safeParse(
-    localStorage.getItem(`slovakStudy.dailyNewWords:${userId}`)
-  );
-
-  const res = await fetch("/api/srs", {
+async function apiPut(courseId: CourseId, srs: any, dailySession: any, dailyNewWords: any) {
+  const res = await fetch(`/api/srs?courseId=${encodeURIComponent(courseId)}`, {
     method: "PUT",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -52,22 +55,26 @@ export default function SrsSync() {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
 
+  const { courseId } = useActiveCourse();
+
   const [ready, setReady] = useState(false);
 
   const pushing = useRef(false);
-  const pullDoneForUser = useRef<string | null>(null);
+  const pullDoneKey = useRef<string | null>(null); // userId:courseId
   const lastPushedHash = useRef<string>("");
   const t = useRef<any>(null); // debounce timer
 
-  // 1) PULL (1 раз на user)
+  // 1) PULL (1 раз на userId+courseId)
   useEffect(() => {
     if (status !== "authenticated" || !userId) return;
+    if (!courseId) return;
 
-    if (pullDoneForUser.current === userId) return;
-    pullDoneForUser.current = userId;
+    const pullKey = `${userId}:${courseId}`;
+    if (pullDoneKey.current === pullKey) return;
+    pullDoneKey.current = pullKey;
 
     (async () => {
-      const server = await apiGet();
+      const server = await apiGet(courseId);
 
       // якщо на сервері пусто — просто ready
       if (!server?.srs) {
@@ -75,7 +82,7 @@ export default function SrsSync() {
         return;
       }
 
-      const localKey = keyFor(userId);
+      const localKey = keyFor(userId, courseId);
       const local = safeParse(localStorage.getItem(localKey));
 
       // якщо локально пусто — ставимо сервер (SRS + daily keys)
@@ -84,14 +91,14 @@ export default function SrsSync() {
 
         if (server.dailySession) {
           localStorage.setItem(
-            `slovakStudy.srsDailySession:${userId}`,
+            getDailySessionKey(userId, courseId),
             JSON.stringify(server.dailySession)
           );
         }
 
         if (server.dailyNewWords) {
           localStorage.setItem(
-            `slovakStudy.dailyNewWords:${userId}`,
+            getDailyNewWordsKey(userId, courseId),
             JSON.stringify(server.dailyNewWords)
           );
         }
@@ -102,38 +109,39 @@ export default function SrsSync() {
       }
 
       // якщо локально вже є — НЕ перетираємо SRS
-      // але можемо підкинути daily keys, якщо їх локально немає (це безпечно)
+      // але можемо підкинути daily keys, якщо їх локально немає
       const localDailySession = safeParse(
-        localStorage.getItem(`slovakStudy.srsDailySession:${userId}`)
+        localStorage.getItem(getDailySessionKey(userId, courseId))
       );
       const localDailyNewWords = safeParse(
-        localStorage.getItem(`slovakStudy.dailyNewWords:${userId}`)
+        localStorage.getItem(getDailyNewWordsKey(userId, courseId))
       );
 
       if (!localDailySession && server.dailySession) {
         localStorage.setItem(
-          `slovakStudy.srsDailySession:${userId}`,
+          getDailySessionKey(userId, courseId),
           JSON.stringify(server.dailySession)
         );
       }
 
       if (!localDailyNewWords && server.dailyNewWords) {
         localStorage.setItem(
-          `slovakStudy.dailyNewWords:${userId}`,
+          getDailyNewWordsKey(userId, courseId),
           JSON.stringify(server.dailyNewWords)
         );
       }
 
       setReady(true);
     })();
-  }, [status, userId]);
+  }, [status, userId, courseId]);
 
   // 2) PUSH (debounced) при подіях
   useEffect(() => {
     if (status !== "authenticated" || !userId) return;
+    if (!courseId) return;
     if (!ready) return;
 
-    const localKey = keyFor(userId);
+    const localKey = keyFor(userId, courseId);
 
     const schedulePush = () => {
       if (t.current) clearTimeout(t.current);
@@ -142,15 +150,22 @@ export default function SrsSync() {
         const raw = localStorage.getItem(localKey);
         const srs = safeParse(raw) ?? {};
 
-        const hash = JSON.stringify(srs);
+        const dailySession = safeParse(
+          localStorage.getItem(getDailySessionKey(userId, courseId))
+        );
+
+        const dailyNewWords = safeParse(
+          localStorage.getItem(getDailyNewWordsKey(userId, courseId))
+        );
+
+        const hash = JSON.stringify({ srs, dailySession, dailyNewWords });
         if (hash === lastPushedHash.current) return;
 
         if (pushing.current) return;
         pushing.current = true;
 
         try {
-          // ✅ ВАЖЛИВО: тут треба передати userId
-          const ok = await apiPut(srs, userId);
+          const ok = await apiPut(courseId, srs, dailySession, dailyNewWords);
           if (ok) lastPushedHash.current = hash;
         } finally {
           pushing.current = false;
@@ -159,7 +174,10 @@ export default function SrsSync() {
     };
 
     const onStorage = (e: StorageEvent) => {
+      // ✅ пушимо, якщо змінився будь-який з ключів цього курсу
       if (e.key === localKey) schedulePush();
+      if (e.key === getDailySessionKey(userId, courseId)) schedulePush();
+      if (e.key === getDailyNewWordsKey(userId, courseId)) schedulePush();
     };
 
     const onCustom = () => schedulePush();
@@ -172,7 +190,7 @@ export default function SrsSync() {
       window.removeEventListener(EVENT_NAME, onCustom as any);
       if (t.current) clearTimeout(t.current);
     };
-  }, [status, userId, ready]);
+  }, [status, userId, courseId, ready]);
 
   return null;
 }

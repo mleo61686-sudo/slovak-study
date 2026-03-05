@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -22,7 +21,7 @@ model User {
 
   // ✅ зворотній зв'язок для прогресу
   progress     UserProgress?
-  srsProgress  SrsProgress?
+  srsProgress  SrsProgress[]
   errorReports ErrorReport[]
 }
 
@@ -92,8 +91,10 @@ model TtsAudio {
 }
 
 model SrsProgress {
-  userId String @id
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  courseId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   data Json
 
@@ -101,4 +102,7 @@ model SrsProgress {
   dailyNewWords Json?
 
   updatedAt DateTime @updatedAt
+
+  @@id([userId, courseId])
+  @@index([userId])
 }

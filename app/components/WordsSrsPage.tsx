@@ -9,7 +9,10 @@ import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import type { CourseId } from "@/app/learning/courses/registry";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { isLearned as _isLearned, isMastered as _isMastered } from "@/lib/srs/srsWords";
+import {
+  isLearned as _isLearned,
+  isMastered as _isMastered,
+} from "@/lib/srs/srsWords";
 
 type SrsState = {
   id: string; // word.term або word.sk
@@ -153,7 +156,7 @@ function setDailyState(userId: string, courseId: CourseId, count: number) {
   );
 }
 
-// ✅ “Порція повторення на день” (щоб не було 60, якщо пропустив день)
+// ✅ “Порція повторення на день”
 type DailySession = { date: string; ids: string[] };
 
 function getDailySession(userId: string, courseId: CourseId): DailySession | null {
@@ -175,7 +178,6 @@ function setDailySession(userId: string, courseId: CourseId, ids: string[]) {
   );
 }
 
-// ✅ видаляємо слово з сьогоднішнього списку (щоб F5 не “рефілив”)
 function removeFromDailySession(userId: string, courseId: CourseId, id: string) {
   const saved = getDailySession(userId, courseId);
   if (!saved) return;
@@ -218,7 +220,7 @@ function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
           localStorage.removeItem(legacyDailySessionKey(userId));
         }
       }
-    } catch {}
+    } catch { }
   }
 
   try {
@@ -250,7 +252,6 @@ function shuffle<T>(arr: T[]) {
 function applyReview(prev: SrsState, grade: 0 | 1 | 2 | 3): SrsState {
   let { ease, interval, reps } = prev;
 
-  // ✅ forgot → швидко повертаємо (10 хв)
   if (grade === 0) {
     return {
       ...prev,
@@ -317,7 +318,7 @@ function getDueSorted(words: Word[], db: Record<string, SrsState>): Word[] {
       const id = getTerm(w);
       return { w, id };
     })
-    .filter((x) => !!x.id && !!db[x.id]) // тільки активовані
+    .filter((x) => !!x.id && !!db[x.id])
     .map((x) => ({ w: x.w, id: x.id, dueAt: db[x.id]!.dueAt }))
     .filter((x) => x.dueAt <= now)
     .sort((a, b) => a.dueAt - b.dueAt)
@@ -333,24 +334,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
   const { courseId } = useActiveCourse();
 
-  if (status !== "authenticated") {
-    return (
-      <main className="mx-auto max-w-3xl p-4">
-        <div className="rounded-2xl border bg-white p-6">
-          <div className="text-lg font-semibold">{t.needLoginTitle}</div>
-          <div className="mt-2 text-sm text-slate-600">{t.needLoginText}</div>
-          <div className="mt-4">
-            <Link
-              href="/login"
-              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm text-white hover:opacity-90"
-            >
-              {t.login}
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  // ✅ важливо: НІЯКИХ ранніх return ДО хуків
+  const needLogin = status !== "authenticated";
 
   const allWords = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
   const [db, setDb] = useState<Record<string, SrsState>>({});
@@ -370,12 +355,18 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   });
 
   useEffect(() => {
+    if (needLogin) return;
+    if (!userId) return;
+
     const initial = loadDb(userId, courseId);
     startNewSession(initial);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allWords.length, userId, courseId]);
+  }, [needLogin, allWords.length, userId, courseId]);
 
   function startNewSession(nextDb?: Record<string, SrsState>) {
+    if (needLogin) return;
+    if (!userId) return;
+
     const updated = nextDb ?? loadDb(userId, courseId);
     const now = Date.now();
 
@@ -391,12 +382,17 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
 
     if (saved?.date === today) {
       ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
+
+      // ✅ якщо saved.ids вичерпались/порожні — генеруємо нову порцію з due
+      if (ids.length === 0) {
+        ids = dueIds.slice(0, target);
+      }
+
       setDailySession(userId, courseId, ids);
     } else {
       ids = dueIds.slice(0, target);
       setDailySession(userId, courseId, ids);
     }
-
     const byId = new Map(allWords.map((w) => [getTerm(w), w]));
     const sessionWords = ids.map((id) => byId.get(id)).filter(Boolean) as Word[];
 
@@ -413,6 +409,9 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   }
 
   function addNewWordsRandom(count: number) {
+    if (needLogin) return;
+    if (!userId) return;
+
     const daily = getDailyState(userId, courseId);
 
     if (daily.date !== getTodayKey()) {
@@ -464,6 +463,8 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   function grade(g: 0 | 1 | 2 | 3) {
     if (!current) return;
     if (isGrading) return;
+    if (needLogin) return;
+    if (!userId) return;
 
     setIsGrading(true);
     const curWord = current;
@@ -538,10 +539,30 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     !current
       ? ""
       : lang === "ru"
-      ? current.ru || current.ua || ""
-      : current.ua || "";
+        ? current.ru || current.ua || ""
+        : current.ua || "";
 
   const term = current ? getTerm(current) : "";
+
+  // ✅ Login UI після хуків (правильно для React)
+  if (needLogin) {
+    return (
+      <main className="mx-auto max-w-3xl p-4">
+        <div className="rounded-2xl border bg-white p-6">
+          <div className="text-lg font-semibold">{t.needLoginTitle}</div>
+          <div className="mt-2 text-sm text-slate-600">{t.needLoginText}</div>
+          <div className="mt-4">
+            <Link
+              href="/login"
+              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm text-white hover:opacity-90"
+            >
+              {t.login}
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-3xl p-4 space-y-6">
