@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import { CEFR_LEVELS } from "./data";
+import type { CefrBand } from "./data";
 import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
@@ -47,10 +47,10 @@ const dict = {
 
 // ✅ Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
 const LESSONS_LIMITS: Partial<Record<string, number>> = {
-  b1: 35, // ✅ було 60 → стало 35
+  b1: 35,
 };
 
-// ===== Глобальна логіка порядку (як у server) =====
+// ===== Глобальна логіка порядку =====
 
 function parseLevelId(id: string) {
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(String(id).toLowerCase());
@@ -88,8 +88,6 @@ function nextLevelId(id: string) {
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= 30) return "a1-1";
   if (p.band === "a1" && Number.isFinite(p.n) && p.n >= 40) return "a2-1";
   if (p.band === "a2" && Number.isFinite(p.n) && p.n >= 50) return "b1-1";
-
-  // ✅ B1 тепер 35 уроків → після 35 переходимо на B2
   if (p.band === "b1" && Number.isFinite(p.n) && p.n >= 35) return "b2-1";
 
   return `${p.band}-${p.n + 1}`;
@@ -124,28 +122,25 @@ function isDoneId(progress: LessonsProgress, id: string) {
   return v === true || (typeof v === "object" && v?.done === true);
 }
 
-function getAllowedSequential(progress: LessonsProgress) {
-  // беремо всі уроки з CEFR_LEVELS, сортуємо глобально
-  const allIds = CEFR_LEVELS.flatMap((b) => b.lessons.map((l) => l.id)).sort(
-    (a, b) => compareLevel(a, b)
-  );
+function getAllowedSequential(progress: LessonsProgress, bands: CefrBand[]) {
+  const allIds = bands
+    .flatMap((b) => b.lessons.map((l) => l.id))
+    .sort((a, b) => compareLevel(a, b));
 
   for (const id of allIds) {
     if (!isDoneId(progress, id)) return id.toLowerCase();
   }
 
-  // якщо все пройдено — дозволяємо "наступний" після останнього
   const last = allIds[allIds.length - 1];
   return last ? nextLevelId(last).toLowerCase() : "a0-1";
 }
 
-export default function LearningPage() {
+export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const router = useRouter();
   const { data: session } = useSession();
   const isPremium = (session?.user as any)?.isPremium === true;
-  const isB1Locked = !isPremium; // B1 тільки для Premium
+  const isB1Locked = !isPremium;
 
-  // ✅ Адмін по email (через env)
   const adminEmails = useMemo(() => {
     return (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
       .split(",")
@@ -156,16 +151,15 @@ export default function LearningPage() {
   const myEmail = (session?.user?.email ?? "").toLowerCase();
   const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
 
-  // ✅ B1 закритий для всіх, крім адміна
   const DISABLED_BANDS = useMemo(() => {
     const s = new Set<string>();
 
-    if (isB1Locked) {
+    if (isB1Locked && !isAdmin) {
       s.add("b1");
     }
 
     return s;
-  }, [isB1Locked]);
+  }, [isB1Locked, isAdmin]);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
   const { lang } = useLanguage() as { lang: Lang };
@@ -187,7 +181,8 @@ export default function LearningPage() {
   const isDone = (id: string) => isDoneId(progress, id);
 
   const getStats = (id: string) => {
-    const v = progress[id];
+    const key = id.toLowerCase();
+    const v = (progress as any)[key] ?? (progress as any)[id];
     if (!v || v === true || typeof v !== "object") return null;
 
     if (typeof v.lastTotal === "number" && v.lastTotal > 0) {
@@ -212,9 +207,10 @@ export default function LearningPage() {
   );
 
   const allowed = useMemo(() => {
-    // Premium — все можна, але "доступний зараз" хай показує перший непройдений
-    return getAllowedSequential(progress);
-  }, [progress]);
+    return getAllowedSequential(progress, bands);
+  }, [progress, bands]);
+
+  const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
   function isLessonUnlockedGlobal(lessonId: string) {
     if (isPremium) return true;
@@ -238,11 +234,13 @@ export default function LearningPage() {
 
       <div className="mt-2 text-xs text-slate-500">
         Доступний зараз: <span className="font-medium">{allowed}</span>
+        {lastDone ? (
+          <span className="ml-2 text-slate-400">· Last done: {lastDone}</span>
+        ) : null}
       </div>
 
       <div className="mt-8 space-y-8">
-        {CEFR_LEVELS.map((band) => {
-          // ✅ для UI-статистики обмежуємо B1 до 35
+        {bands.map((band) => {
           const limit = LESSONS_LIMITS[band.id] ?? band.lessons.length;
           const lessonsTotal = Math.min(band.lessons.length, limit);
           const wordsTotal = lessonsTotal * 10;
@@ -268,23 +266,19 @@ export default function LearningPage() {
 
                 <div className="flex items-center gap-2">
                   {isBandDisabled ? (
-
                     <Link
                       href="/premium"
                       className="rounded-xl bg-black px-3 py-1 text-xs font-medium text-white"
                     >
                       {t.buyPremium}
                     </Link>
-
                   ) : (
-
                     <Link
                       href={`/learning/levels/${band.id}`}
                       className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50"
                     >
                       {t.allLessons}
                     </Link>
-
                   )}
 
                   <span className="rounded-full border px-3 py-1 text-xs text-slate-600">
@@ -294,18 +288,12 @@ export default function LearningPage() {
               </div>
 
               {band.lessons.length === 0 ? (
-
                 <div className="mt-5 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-600">
                   {t.soon}
                 </div>
-
               ) : isBandDisabled ? (
-
-                <div className="mt-5 rounded-2xl border bg-slate-50 p-4 flex items-center justify-between">
-
-                  <div className="text-sm font-medium">
-                    🔒 {t.premiumOnly}
-                  </div>
+                <div className="mt-5 flex items-center justify-between rounded-2xl border bg-slate-50 p-4">
+                  <div className="text-sm font-medium">🔒 {t.premiumOnly}</div>
 
                   <Link
                     href="/premium"
@@ -313,9 +301,7 @@ export default function LearningPage() {
                   >
                     {t.buyPremium}
                   </Link>
-
                 </div>
-
               ) : (
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {band.lessons.slice(0, 4).map((lesson) => {
@@ -328,8 +314,9 @@ export default function LearningPage() {
                     return (
                       <div
                         key={lesson.id}
-                        className={`rounded-2xl border p-4 ${unlocked ? "hover:bg-slate-50" : "opacity-60"
-                          }`}
+                        className={`rounded-2xl border p-4 ${
+                          unlocked ? "hover:bg-slate-50" : "opacity-60"
+                        }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-medium">
@@ -351,9 +338,7 @@ export default function LearningPage() {
                           {unlocked ? (
                             isStart ? (
                               <button
-                                onClick={() =>
-                                  router.push(`/learning/${lesson.id}`)
-                                }
+                                onClick={() => router.push(`/learning/${lesson.id}`)}
                                 className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
                               >
                                 {t.start}

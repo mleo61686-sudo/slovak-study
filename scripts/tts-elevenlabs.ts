@@ -173,6 +173,7 @@ const VOICE2_PHRASES = new Set<string>([
   "Chcem byť doma.",
   "Chcem to zmeniť.",
   "Paráda, tak ideme!",
+  "Všetko je v poriadku.",
 
 ]);
 

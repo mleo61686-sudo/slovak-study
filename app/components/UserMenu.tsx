@@ -5,7 +5,6 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { CourseSwitcher } from "./CourseSwitcher";
 
 type Props = {
   name?: string | null;
@@ -18,7 +17,7 @@ type Lang = "ua" | "ru";
 const T: Record<Lang, any> = {
   ua: {
     profile: "Профіль",
-    chooseLanguage: "Обрати мову",
+    chooseLanguage: "Обрати курс",
     manageSub: "Керувати підпискою",
     manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
@@ -27,7 +26,7 @@ const T: Record<Lang, any> = {
 
   ru: {
     profile: "Профиль",
-    chooseLanguage: "Выбрать язык",
+    chooseLanguage: "Выбрать курс",
     manageSub: "Управлять подпиской",
     manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
@@ -48,7 +47,6 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
   const initial = (name || email || "?").charAt(0).toUpperCase();
 
-  // Закриття при кліку поза меню
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -64,7 +62,6 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  // Закриття по Escape
   useEffect(() => {
     function handleEsc(event: KeyboardEvent) {
       if (event.key === "Escape") setOpen(false);
@@ -75,14 +72,12 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
   }, []);
 
   async function openPortal() {
-    // ✅ Якщо НЕ Premium — редірект на /premium
     if (!isPremium) {
       setOpen(false);
       router.push("/premium");
       return;
     }
 
-    // ✅ Якщо Premium — відкриваємо Stripe Portal
     try {
       setLoadingPortal(true);
 
@@ -138,10 +133,6 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
             <div className="font-medium">{name || t.userFallback}</div>
             <div className="text-slate-500 truncate">{email}</div>
           </div>
-
-          <div className="border-t" />
-
-          <CourseSwitcher onChanged={() => setOpen(false)} />
 
           <div className="border-t" />
 

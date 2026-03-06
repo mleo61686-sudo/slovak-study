@@ -107,14 +107,14 @@ export const A1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Niet", "za", "čo", ",", "rád", "pomôžem", "."],
     },
 
-    [phraseKey("môžem", "можна?", "a1-2")]: {
+    [phraseKey("môžem", "можна", "a1-2")]: {
         sk: "Môžem sa opýtať?",
         ua: "Можна запитати?",
         ru: "Можно спросить?",
         tokens: ["Môžem", "sa", "opýtať", "?"],
     },
 
-    [phraseKey("môžete", "можете?", "a1-2")]: {
+    [phraseKey("môžete", "можете", "a1-2")]: {
         sk: "Môžete mi pomôcť?",
         ua: "Можете мені допомогти?",
         ru: "Можете мне помочь?",

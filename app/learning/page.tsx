@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+
 import LearningClient from "./LearningClient";
+import { CEFR_LEVELS, type CefrBand, type CefrBandId } from "./data";
+import { getLessonsByBand } from "@/app/learning/courses/registry";
 import { SITE_URL } from "@/lib/site";
 import CourseGate from "@/app/components/CourseGate";
 
@@ -24,10 +28,34 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function LearningPage() {
+const COURSE_COOKIE_KEY = "slovakStudyActiveCourse";
+
+function toCourseBands(courseId: string): CefrBand[] {
+  const safeCourseId = courseId === "cs" || courseId === "pl" ? courseId : "sk";
+  const lessonsByBand = getLessonsByBand(safeCourseId);
+
+  return CEFR_LEVELS.map((band) => {
+    const lessons = lessonsByBand[band.id as CefrBandId] ?? [];
+
+    return {
+      ...band,
+      lessons: lessons.map((lesson, idx) => ({
+        id: `${band.id}-${idx + 1}`,
+        title: lesson.title,
+        wordsCount: lesson.words.length > 0 ? lesson.words.length : 10,
+      })),
+    };
+  });
+}
+
+export default async function LearningPage() {
+  const cookieStore = await cookies();
+  const activeCourse = cookieStore.get(COURSE_COOKIE_KEY)?.value ?? "sk";
+  const bands = toCourseBands(activeCourse);
+
   return (
     <CourseGate>
-      <LearningClient />
+      <LearningClient bands={bands} />
     </CourseGate>
   );
 }

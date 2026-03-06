@@ -1,20 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { COURSES, COURSE_STORAGE_KEY } from "@/lib/course";
+
+import { COURSES } from "@/lib/course";
+import {
+  setStoredCourseId,
+  type CourseId,
+} from "@/app/learning/courses/useActiveCourse";
 
 export default function LearnPage() {
-  const router = useRouter();
+
 
   function chooseCourse(id: string, enabled: boolean) {
     if (!enabled) return;
 
-    localStorage.setItem(COURSE_STORAGE_KEY, id);
-    window.dispatchEvent(
-      new CustomEvent("slovakStudy:courseChanged", { detail: id })
-    );
-
-    router.push("/learning");
+    setStoredCourseId(id as CourseId);
+    window.location.href = "/learning";
   }
 
   return (

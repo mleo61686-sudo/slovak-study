@@ -8,7 +8,7 @@ import { LESSONS_BY_BAND_CS } from "./cs";
  */
 export const COURSE_REGISTRY = {
   sk: { id: "sk", title: "Slovak", emoji: "🇸🇰", status: "live" as const },
-  cs: { id: "cs", title: "Czech", emoji: "🇨🇿", status: "soon" as const },
+  cs: { id: "cs", title: "Czech", emoji: "🇨🇿", status: "live" as const },
   pl: { id: "pl", title: "Polish", emoji: "🇵🇱", status: "soon" as const },
 } as const;
 
