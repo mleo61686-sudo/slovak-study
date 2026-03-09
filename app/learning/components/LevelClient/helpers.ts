@@ -1,12 +1,15 @@
+// D:\slovak-study\slovak-study\app\learning\components\LevelClient\helpers.ts
 "use client";
 
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "./types";
 
-import { A0_PHRASES, phraseKey } from "@/app/learning/phrases/a0";
-import { A1_PHRASES } from "@/app/learning/phrases/a1";
-import { A2_PHRASES } from "@/app/learning/phrases/a2";
-import { B1_PHRASES } from "@/app/learning/phrases/b1";
+import { phraseKey } from "@/app/learning/phrases/phraseKey";
+import {
+  getPhrasesForLevel,
+  type Phrase,
+  type PhraseDict,
+} from "@/app/learning/phrases/registry";
 
 export function shuffle<T>(arr: T[]) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -23,33 +26,61 @@ export function normalizeSentence(s: string) {
 export const trWord = (w: Word, lang: Lang) =>
   lang === "ru" ? w.ru ?? w.ua : w.ua;
 
-export function getPhraseForWord(word: Word, lang: Lang, levelId: string) {
+function findPhraseInDict(
+  dict: PhraseDict,
+  sk: string,
+  ua: string,
+  levelId: string
+): Phrase | undefined {
+  // 1) exact match
+  const exact = dict[phraseKey(sk, ua, levelId)];
+  if (exact) return exact;
+
+  // 2) fallback by sk + lessonId, якщо переклад змінювався
+  const skNorm = String(sk).trim().toLowerCase();
+  const lessonNorm = String(levelId).trim().toLowerCase();
+
+  const prefix = `${skNorm}||`;
+  const suffix = `||${lessonNorm}`;
+
+  const hitKey = Object.keys(dict).find(
+    (k) => k.startsWith(prefix) && k.endsWith(suffix)
+  );
+
+  return hitKey ? dict[hitKey] : undefined;
+}
+
+export function getPhraseForWord(
+  word: Word,
+  lang: Lang,
+  levelId: string,
+  courseId: string = "sk"
+) {
   if (word.phrase) {
     const target =
       lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
+
     return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
   }
 
-  const k = phraseKey(word.sk, word.ua, levelId);
+  const dict = getPhrasesForLevel(courseId, levelId);
 
-  const dict =
-    levelId.startsWith("b1-")
-      ? B1_PHRASES
-      : levelId.startsWith("a2-")
-        ? A2_PHRASES
-        : levelId.startsWith("a1-")
-          ? A1_PHRASES
-          : A0_PHRASES;
+  if (dict) {
+    const p = findPhraseInDict(dict, word.sk, word.ua, levelId);
 
-  const p = (dict as any)[k];
-  if (p) {
-    const target = lang === "ru" ? p.ru ?? p.ua : p.ua;
-    return { sk: p.sk, target, tokens: p.tokens };
+    if (p) {
+      const target = lang === "ru" ? p.ru ?? p.ua : p.ua;
+      return { sk: p.sk, target, tokens: p.tokens };
+    }
   }
 
   const sk = `To je ${word.sk}.`;
-  const target = lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
+  const target =
+    lang === "ru"
+      ? `Это ${word.ru ?? word.ua}.`
+      : `Це ${word.ua}.`;
   const tokens = ["To", "je", word.sk, "."];
+
   return { sk, target, tokens };
 }
 
@@ -66,7 +97,6 @@ export function guessKind(text: string): "word" | "phrase" {
 }
 
 function normalizePunctSpacing(s: string) {
-  // важливо: НЕ lowerCase, тільки пробіли/пунктуація
   return s
     .trim()
     .replace(/\s+/g, " ")
@@ -107,34 +137,26 @@ async function tryPlay(url: string) {
 
 /**
  * ✅ Robust local play:
- *  - words: tries sha1("word:<text>") first (your generator format), then fallbacks
+ *  - words: tries sha1("word:<text>") first, then fallbacks
  *  - phrases: tries short(13) + full(40) for exact and normalized-spacing variants
  */
 export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
-  const raw = (text ?? "");
+  const raw = text ?? "";
   const clean = raw.normalize("NFC").trim();
   if (!clean) return;
 
   const kind = forcedKind ?? guessKind(clean);
-
-  // ВАЖЛИВО: часто ламається через "Nie , ďakujem." vs "Nie, ďakujem."
   const alt = normalizePunctSpacing(clean);
-
-  const candidates = Array.from(
-    new Set([clean, alt].filter(Boolean))
-  );
+  const candidates = Array.from(new Set([clean, alt].filter(Boolean)));
 
   const urls: string[] = [];
 
   if (kind === "word") {
-    // ✅ correct current format in scripts/tts-elevenlabs.ts:
-    // outPath(word) = sha1(`word:${text.trim()}`) FULL
     for (const c of candidates) {
       const hWord = await sha1Hex(`word:${c}`);
       urls.push(`/audio/words/${hWord}.mp3`);
     }
 
-    // fallbacks (якщо десь залишилися старі файли)
     for (const c of candidates) {
       const hLegacyFull = await sha1Hex(c);
       const hLegacyShort = hLegacyFull.slice(0, 13);
@@ -142,14 +164,12 @@ export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
       urls.push(`/audio/words/${hLegacyShort}.mp3`);
     }
   } else {
-    // phrases: generator uses sha1(text).slice(0,13) (B1) але інколи є full(40) старі
     for (const c of candidates) {
       const hFull = await sha1Hex(c);
       urls.push(`/audio/phrases/${hFull.slice(0, 13)}.mp3`);
       urls.push(`/audio/phrases/${hFull}.mp3`);
     }
 
-    // додатково: якщо колись було kinded
     for (const c of candidates) {
       const hKinded = await sha1Hex(`phrase:${c}`);
       urls.push(`/audio/phrases/${hKinded.slice(0, 13)}.mp3`);
@@ -157,7 +177,6 @@ export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
     }
   }
 
-  // пробуємо по черзі
   for (const url of urls) {
     try {
       await tryPlay(url);

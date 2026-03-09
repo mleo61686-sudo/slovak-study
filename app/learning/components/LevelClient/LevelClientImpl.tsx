@@ -1,3 +1,4 @@
+// D:\slovak-study\slovak-study\app\learning\components\LevelClient\LevelClientImpl.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -10,7 +11,7 @@ import ReportErrorButton from "@/app/components/ReportErrorButton";
 
 import type { Word, ExerciseDef } from "./types";
 import { trWord } from "./helpers";
-import { phraseKey } from "@/app/learning/phrases/a0";
+import { phraseKey } from "@/app/learning/phrases/phraseKey";
 
 import ChooseTranslation from "@/app/learning/components/LevelClient/exercises/ChooseTranslation";
 import ChooseSlovak from "@/app/learning/components/LevelClient/exercises/ChooseSlovak";
@@ -21,6 +22,8 @@ import BuildSentence from "@/app/learning/components/LevelClient/exercises/Build
 
 // ===== UI i18n (local) =====
 type UiLang = "ua" | "ru";
+type CourseId = "sk" | "cs" | "pl";
+
 function uiLangFrom(lang: string): UiLang {
   return lang === "ru" ? "ru" : "ua";
 }
@@ -50,6 +53,19 @@ const UI = {
     saving: "Зберігаю прогрес…",
   },
   ru: {
+    title: "Обучение 📚",
+    subtitle: "Выбирай уровень (A0 → B2) и проходи уроки по 10 слов.",
+    done: "Пройдено уроков:",
+    lessons: "Уроков:",
+    words: "Слов:",
+    allLessons: "Все уроки →",
+    soon: "Скоро добавим уроки для этого уровня ✅",
+    wordsCount: (n: number) => `${n} слов`,
+    repeat: "Повторить",
+    start: "Начать",
+    locked: "Закрыто 🔒",
+    premiumOnly: "Доступно только для Premium ⭐",
+    buyPremium: "Купить Premium",
     viewed: "Просмотрено",
     back: "← Назад",
     next: "Далее →",
@@ -94,6 +110,7 @@ function getNextLevelId(levelId: string) {
   if (Number.isFinite(n)) return String(n + 1);
   return levelId;
 }
+
 const EXERCISES: ExerciseDef[] = [
   { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
   { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
@@ -109,12 +126,14 @@ export default function LevelClient({
   canGoNext = true,
   lockedReason,
   onLockedNextRedirect = "/learning",
+  courseId = "sk",
 }: {
   levelId: string;
   words: Word[];
   canGoNext?: boolean;
   lockedReason?: string;
   onLockedNextRedirect?: string;
+  courseId?: CourseId;
 }) {
   const [mode, setMode] = useState<"learn" | "quiz">("learn");
 
@@ -509,6 +528,7 @@ export default function LevelClient({
           word={currentWord}
           lang={lang}
           levelId={levelId}
+          courseId={courseId}
           onNext={nextPerWord}
         />
       )}

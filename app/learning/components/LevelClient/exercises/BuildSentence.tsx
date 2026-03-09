@@ -1,11 +1,19 @@
+// D:\slovak-study\slovak-study\app\learning\components\LevelClient\exercises\BuildSentence.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
-import { getPhraseForWord, normalizeSentence, playLocal, shuffle, tokensToSentence } from "../helpers";
+import {
+  getPhraseForWord,
+  normalizeSentence,
+  playLocal,
+  shuffle,
+  tokensToSentence,
+} from "../helpers";
 
 type UiLang = "ua" | "ru";
+type CourseId = "sk" | "cs" | "pl";
 
 function uiLangFrom(lang: Lang): UiLang {
   return (lang === "ru" ? "ru" : "ua") as UiLang;
@@ -48,16 +56,21 @@ export default function BuildSentence({
   word,
   lang,
   levelId,
+  courseId = "sk",
   onNext,
 }: {
   word: Word;
   lang: Lang;
   levelId: string;
+  courseId?: CourseId;
   onNext: (c: boolean) => void;
 }) {
   const ui = UI[uiLangFrom(lang)];
 
-  const phrase = useMemo(() => getPhraseForWord(word, lang, levelId), [word, lang, levelId]);
+  const phrase = useMemo(
+    () => getPhraseForWord(word, lang, levelId, courseId),
+    [word, lang, levelId, courseId]
+  );
 
   const baseTokens = useMemo(() => [...phrase.tokens], [phrase.tokens.join("|")]);
   const [available, setAvailable] = useState<string[]>(() => shuffle(baseTokens));
@@ -119,7 +132,8 @@ export default function BuildSentence({
           <div className="font-semibold">{ui.title}</div>
 
           <div className="text-sm text-slate-500">
-            {ui.targetLabel}: <span className="text-slate-800 font-medium">{phrase.target}</span>
+            {ui.targetLabel}:{" "}
+            <span className="text-slate-800 font-medium">{phrase.target}</span>
           </div>
 
           <div className="mt-2">

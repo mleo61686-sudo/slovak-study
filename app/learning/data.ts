@@ -4,10 +4,11 @@ import { A0_REAL_SOURCE } from "./levels/a0";
 import { A1_ALL } from "./levels/a1";
 import { A2_ALL } from "./levels/a2";
 import { B1_ALL } from "./levels/b1";
-import { A0_PHRASES } from "./phrases/a0";
-import { A1_PHRASES } from "./phrases/a1";
-import { B1_PHRASES } from "./phrases/b1";
 import { phraseKey } from "./phrases/phraseKey";
+import {
+  getPhrasesByBand,
+  type PhraseDict,
+} from "./phrases/registry";
 
 export type Lang = "ua" | "ru";
 
@@ -263,7 +264,12 @@ function normalizeLessonList(list: any[]): Lesson[] {
   }));
 }
 
-function findPhrase(dict: Record<string, any>, sk: string, ua: string, lessonId: string) {
+function findPhrase(
+  dict: PhraseDict,
+  sk: string,
+  ua: string,
+  lessonId: string
+) {
   // 1) exact match (як було)
   const exact = dict[phraseKey(sk, ua, lessonId)];
   if (exact) return exact;
@@ -279,7 +285,7 @@ function findPhrase(dict: Record<string, any>, sk: string, ua: string, lessonId:
   return hitKey ? dict[hitKey] : undefined;
 }
 
-function attachPhrases(words: Word[], dict: Record<string, any>, lessonId: string) {
+function attachPhrases(words: Word[], dict: PhraseDict, lessonId: string) {
   return words.map((w) => {
     const p = findPhrase(dict, w.sk, w.ua, lessonId);
     return { ...w, phrase: p ?? undefined };
@@ -289,12 +295,6 @@ function attachPhrases(words: Word[], dict: Record<string, any>, lessonId: strin
 const A1_LIST = normalizeLessonList(A1_ALL as any);
 const A2_LIST = normalizeLessonList(A2_ALL as any);
 const B1_LIST = normalizeLessonList(B1_ALL as any);
-
-const PHRASES_BY_BAND: Partial<Record<CefrBandId, Record<string, any>>> = {
-  a0: A0_PHRASES,
-  a1: A1_PHRASES,
-  b1: B1_PHRASES,
-};
 
 // =============================
 // 6) CEFR_LEVELS
@@ -353,7 +353,7 @@ export function getLesson(id: string) {
     if (!lesson) return null;
 
     const withRu = addRu(lesson.words);
-    const dict = PHRASES_BY_BAND[band];
+    const dict = getPhrasesByBand("sk", band);
 
     return {
       ...lesson,
@@ -366,10 +366,11 @@ export function getLesson(id: string) {
   if (!lesson) return null;
 
   const withRu = addRu(lesson.words);
+  const a0Dict = getPhrasesByBand("sk", "a0");
 
   return {
     ...lesson,
-    words: attachPhrases(withRu, A0_PHRASES, `a0-${raw}`),
+    words: a0Dict ? attachPhrases(withRu, a0Dict, `a0-${raw}`) : withRu,
   };
 }
 
