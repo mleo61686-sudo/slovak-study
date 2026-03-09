@@ -4,39 +4,67 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { WORDS_RU } from "@/app/data/words";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 // ===== Data =====
 
-const vowels = [
-  { sk: "a", label: { ua: "а", ru: "а" }, example: "auto" },
-  { sk: "á", label: { ua: "а (довга)", ru: "а (долгая)" }, example: "máš" },
-  { sk: "e", label: { ua: "е", ru: "е" }, example: "mesto" },
-  { sk: "é", label: { ua: "е (довга)", ru: "е (долгая)" }, example: "méso" },
-  { sk: "i", label: { ua: "і", ru: "и" }, example: "lista" },
-  { sk: "í", label: { ua: "і (довга)", ru: "и (долгая)" }, example: "píše" },
-  { sk: "o", label: { ua: "о", ru: "о" }, example: "dom" },
-  { sk: "ó", label: { ua: "о (довга)", ru: "о (долгая)" }, example: "stôl" },
-  { sk: "u", label: { ua: "у", ru: "у" }, example: "ulica" },
-  { sk: "ú", label: { ua: "у (довга)", ru: "у (долгая)" }, example: "dúfať" },
-  { sk: "y", label: { ua: "и", ru: "ы" }, example: "syn" },
-  { sk: "ý", label: { ua: "и (довга)", ru: "ы (долгая)" }, example: "býva" },
+const SK_VOWELS = [
+  { value: "a", label: { ua: "а", ru: "а" }, example: "auto" },
+  { value: "á", label: { ua: "а (довга)", ru: "а (долгая)" }, example: "máš" },
+  { value: "e", label: { ua: "е", ru: "е" }, example: "mesto" },
+  { value: "é", label: { ua: "е (довга)", ru: "е (долгая)" }, example: "méso" },
+  { value: "i", label: { ua: "і", ru: "и" }, example: "lista" },
+  { value: "í", label: { ua: "і (довга)", ru: "и (долгая)" }, example: "píše" },
+  { value: "o", label: { ua: "о", ru: "о" }, example: "dom" },
+  { value: "ó", label: { ua: "о (довга)", ru: "о (долгая)" }, example: "stôl" },
+  { value: "u", label: { ua: "у", ru: "у" }, example: "ulica" },
+  { value: "ú", label: { ua: "у (довга)", ru: "у (долгая)" }, example: "dúfať" },
+  { value: "y", label: { ua: "и", ru: "ы" }, example: "syn" },
+  { value: "ý", label: { ua: "и (довга)", ru: "ы (долгая)" }, example: "býva" },
 ];
 
-const consonants = [
-  { sk: "č", label: { ua: "ч", ru: "ч" }, example: "čaj" },
-  { sk: "š", label: { ua: "ш", ru: "ш" }, example: "škola" },
-  { sk: "ž", label: { ua: "ж", ru: "ж" }, example: "žena" },
-  { sk: "ď", label: { ua: "дь", ru: "дь" }, example: "ďakujem" },
-  { sk: "ť", label: { ua: "ть", ru: "ть" }, example: "ťa" },
-  { sk: "ň", label: { ua: "нь", ru: "нь" }, example: "ňho" },
-  { sk: "ľ", label: { ua: "ль", ru: "ль" }, example: "ľudia" },
-  { sk: "ch", label: { ua: "х", ru: "х" }, example: "chlieb" },
-  { sk: "dz", label: { ua: "дз", ru: "дз" }, example: "medzi" },
-  { sk: "dž", label: { ua: "дж", ru: "дж" }, example: "džús" },
+const CS_VOWELS = [
+  { value: "a", label: { ua: "а", ru: "а" }, example: "auto" },
+  { value: "á", label: { ua: "а (довга)", ru: "а (долгая)" }, example: "mám" },
+  { value: "e", label: { ua: "е", ru: "е" }, example: "ten" },
+  { value: "é", label: { ua: "е (довга)", ru: "е (долгая)" }, example: "mléko" },
+  { value: "i", label: { ua: "і", ru: "и" }, example: "kino" },
+  { value: "í", label: { ua: "і (довга)", ru: "и (долгая)" }, example: "bílý" },
+  { value: "o", label: { ua: "о", ru: "о" }, example: "okno" },
+  { value: "ó", label: { ua: "о (довга)", ru: "о (долгая)" }, example: "móda" },
+  { value: "u", label: { ua: "у", ru: "у" }, example: "ulice" },
+  { value: "ú", label: { ua: "у (довга)", ru: "у (долгая)" }, example: "úkol" },
+  { value: "ů", label: { ua: "у (довга, з кружечком)", ru: "у (долгая, с кружком)" }, example: "dům" },
+  { value: "y", label: { ua: "и", ru: "ы" }, example: "syn" },
+  { value: "ý", label: { ua: "и (довга)", ru: "ы (долгая)" }, example: "dobrý" },
+  { value: "ě", label: { ua: "є / пом’якшує попередній звук", ru: "е / смягчает предыдущий звук" }, example: "město" },
 ];
 
-// Пару простих слів для секції “Тренування вимови”
-const practiceWords = [
+const SK_CONSONANTS = [
+  { value: "č", label: { ua: "ч", ru: "ч" }, example: "čaj" },
+  { value: "š", label: { ua: "ш", ru: "ш" }, example: "škola" },
+  { value: "ž", label: { ua: "ж", ru: "ж" }, example: "žena" },
+  { value: "ď", label: { ua: "дь", ru: "дь" }, example: "ďakujem" },
+  { value: "ť", label: { ua: "ть", ru: "ть" }, example: "ťa" },
+  { value: "ň", label: { ua: "нь", ru: "нь" }, example: "ňho" },
+  { value: "ľ", label: { ua: "ль", ru: "ль" }, example: "ľudia" },
+  { value: "ch", label: { ua: "х", ru: "х" }, example: "chlieb" },
+  { value: "dz", label: { ua: "дз", ru: "дз" }, example: "medzi" },
+  { value: "dž", label: { ua: "дж", ru: "дж" }, example: "džús" },
+];
+
+const CS_CONSONANTS = [
+  { value: "č", label: { ua: "ч", ru: "ч" }, example: "čaj" },
+  { value: "š", label: { ua: "ш", ru: "ш" }, example: "škola" },
+  { value: "ž", label: { ua: "ж", ru: "ж" }, example: "žena" },
+  { value: "ď", label: { ua: "дь", ru: "дь" }, example: "ďábel" },
+  { value: "ť", label: { ua: "ть", ru: "ть" }, example: "ťuknout" },
+  { value: "ň", label: { ua: "нь", ru: "нь" }, example: "kůň" },
+  { value: "ř", label: { ua: "особливий звук ř", ru: "особый звук ř" }, example: "řeka" },
+  { value: "ch", label: { ua: "х", ru: "х" }, example: "chléb" },
+];
+
+const SK_PRACTICE_WORDS = [
   "práca",
   "škola",
   "človek",
@@ -45,6 +73,17 @@ const practiceWords = [
   "chlieb",
   "mesto",
   "učiteľ",
+];
+
+const CS_PRACTICE_WORDS = [
+  "práce",
+  "škola",
+  "člověk",
+  "život",
+  "děkuju",
+  "chléb",
+  "město",
+  "učitel",
 ];
 
 // ===== Mini trainer data =====
@@ -62,7 +101,7 @@ type Q = {
   correct: string;
 };
 
-const letterQuestions: Q[] = [
+const SK_LETTER_QUESTIONS: Q[] = [
   {
     questionUa: "Обери букву для звука «ч»",
     questionRu: "Выбери букву для звука «ч»",
@@ -82,7 +121,7 @@ const letterQuestions: Q[] = [
     correct: "ž",
   },
   {
-    questionUa: "Як пишеться звук «х» в словацькій?",
+    questionUa: "Як пишеться звук «х» у словацькій?",
     questionRu: "Как пишется звук «х» в словацком?",
     options: ["h", "ch", "x", "kh"],
     correct: "ch",
@@ -98,6 +137,45 @@ const letterQuestions: Q[] = [
     questionRu: "Выбери ‘dž’ (как в слове ‘džús’)",
     options: ["dz", "dž", "ď", "ž"],
     correct: "dž",
+  },
+];
+
+const CS_LETTER_QUESTIONS: Q[] = [
+  {
+    questionUa: "Обери букву для звука «ч»",
+    questionRu: "Выбери букву для звука «ч»",
+    options: ["č", "š", "ž", "ch"],
+    correct: "č",
+  },
+  {
+    questionUa: "Обери букву для звука «ш»",
+    questionRu: "Выбери букву для звука «ш»",
+    options: ["č", "š", "ž", "ř"],
+    correct: "š",
+  },
+  {
+    questionUa: "Обери букву для звука «ж»",
+    questionRu: "Выбери букву для звука «ж»",
+    options: ["ž", "š", "ď", "ť"],
+    correct: "ž",
+  },
+  {
+    questionUa: "Як пишеться звук «х» у чеській?",
+    questionRu: "Как пишется звук «х» в чешском?",
+    options: ["h", "ch", "x", "kh"],
+    correct: "ch",
+  },
+  {
+    questionUa: "Яка літера є особливою для чеської мови?",
+    questionRu: "Какая буква является особой для чешского языка?",
+    options: ["ľ", "ř", "dz", "dž"],
+    correct: "ř",
+  },
+  {
+    questionUa: "Яка літера часто пом’якшує попередній звук?",
+    questionRu: "Какая буква часто смягчает предыдущий звук?",
+    options: ["ě", "ô", "ä", "ľ"],
+    correct: "ě",
   },
 ];
 
@@ -135,8 +213,15 @@ async function sha1Hex(input: string) {
 
 export default function AlphabetPage({ forcedLang }: Props) {
   const { lang } = useLanguage();
+  const { courseId } = useActiveCourse();
+
   const uiLang = forcedLang ?? lang;
+  const isCzech = courseId === "cs";
   const t = (ua: string, ru: string) => (uiLang === "ru" ? ru : ua);
+
+  const vowels = isCzech ? CS_VOWELS : SK_VOWELS;
+  const consonants = isCzech ? CS_CONSONANTS : SK_CONSONANTS;
+  const practiceWords = isCzech ? CS_PRACTICE_WORDS : SK_PRACTICE_WORDS;
 
   // ===== Trainer tab =====
   const [tab, setTab] = useState<"quiz" | "listen" | "type">("quiz");
@@ -145,29 +230,45 @@ export default function AlphabetPage({ forcedLang }: Props) {
   const [qIndex, setQIndex] = useState(0);
   const [qScore, setQScore] = useState(0);
   const [qDone, setQDone] = useState(false);
-  const quiz = useMemo(() => shuffle(letterQuestions).slice(0, 6), []);
+  const quiz = useMemo(
+    () => shuffle(isCzech ? CS_LETTER_QUESTIONS : SK_LETTER_QUESTIONS).slice(0, 6),
+    [isCzech]
+  );
 
   // 2) listen
   const listenRounds = useMemo(() => {
-    const rounds = [
-      { target: "č", words: ["človek", "škola", "život", "mesto"] },
-      { target: "š", words: ["škola", "učiteľ", "chlieb", "život"] },
-      { target: "ž", words: ["život", "človek", "mesto", "práca"] },
-      { target: "ď", words: ["ďakujem", "mesto", "škola", "chlieb"] },
-      { target: "ch", words: ["chlieb", "práca", "život", "učiteľ"] },
-    ];
+    const rounds = isCzech
+      ? [
+          { target: "č", words: ["člověk", "škola", "život", "město"] },
+          { target: "š", words: ["škola", "učitel", "chléb", "život"] },
+          { target: "ž", words: ["život", "člověk", "město", "práce"] },
+          { target: "ř", words: ["řeka", "město", "škola", "chléb"] },
+          { target: "ch", words: ["chléb", "práce", "život", "učitel"] },
+        ]
+      : [
+          { target: "č", words: ["človek", "škola", "život", "mesto"] },
+          { target: "š", words: ["škola", "učiteľ", "chlieb", "život"] },
+          { target: "ž", words: ["život", "človek", "mesto", "práca"] },
+          { target: "ď", words: ["ďakujem", "mesto", "škola", "chlieb"] },
+          { target: "ch", words: ["chlieb", "práca", "život", "učiteľ"] },
+        ];
+
     return shuffle(rounds);
-  }, []);
+  }, [isCzech]);
 
   const [lIndex, setLIndex] = useState(0);
   const [lScore, setLScore] = useState(0);
   const [lDone, setLDone] = useState(false);
 
-  // 3) dictation (6 random words from dictionary)
+  // 3) dictation
   const [dictationWords, setDictationWords] = useState<string[]>(() =>
     pickRandomDictationWords(6)
   );
   const typeWords = dictationWords;
+
+  useEffect(() => {
+    setDictationWords(pickRandomDictationWords(6));
+  }, [isCzech]);
 
   const [tIndex, setTIndex] = useState(0);
   const [tScore, setTScore] = useState(0);
@@ -175,7 +276,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
 
-  // keep only one autoplay audio at a time
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const stopAnyAudio = () => {
@@ -191,7 +291,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
   const autoplayDictationWord = async (word: string) => {
     stopAnyAudio();
 
-    // ✅ MUST match SpeakButton: sha1("word:<text>")
     const clean = word.trim();
     const key = await sha1Hex(`word:${clean}`);
     const src = `/audio/words/${key}.mp3`;
@@ -199,17 +298,12 @@ export default function AlphabetPage({ forcedLang }: Props) {
     const audio = new Audio(src);
     audioRef.current = audio;
 
-    // NOTE: autoplay can be blocked by browser until user gesture.
-    // We intentionally DO NOT fallback to speechSynthesis (old voice).
     try {
       await audio.play();
-    } catch {
-      // do nothing (no old TTS)
-    }
+    } catch {}
   };
 
   useEffect(() => {
-    // when switching tabs, reset small UI states
     setStatus("idle");
     setInput("");
     stopAnyAudio();
@@ -218,7 +312,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
   useEffect(() => {
     if (tab !== "type") return;
-    if (tDone) return; // ✅ щоб не програвало після останнього слова
+    if (tDone) return;
 
     const word = typeWords[tIndex];
     if (!word) return;
@@ -252,26 +346,32 @@ export default function AlphabetPage({ forcedLang }: Props) {
     <div className="space-y-10">
       <div>
         <h1 className="text-2xl font-semibold">
-          {t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}
+          {isCzech
+            ? t("Чеський алфавіт і вимова 🔤", "Чешский алфавит и произношение 🔤")
+            : t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}
         </h1>
         <p className="text-slate-700 mt-2">
-          {t(
-            "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
-            "Словацкий язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
-          )}
+          {isCzech
+            ? t(
+                "Чеська мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
+                "Чешский язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
+              )
+            : t(
+                "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
+                "Словацкий язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
+              )}
         </p>
       </div>
 
-      {/* Алфавіт */}
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{t("1) Алфавіт", "1) Алфавит")}</h2>
         <div className="rounded-xl border bg-white p-4 text-sm leading-relaxed">
-          a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o,
-          ó, ô, p, q, r, ŕ, s, š, t, ť, u, ú, v, w, x, y, ý, z, ž
+          {!isCzech
+            ? "a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o, ó, ô, p, q, r, ŕ, s, š, t, ť, u, ú, v, w, x, y, ý, z, ž"
+            : "a, á, b, c, č, d, ď, e, é, ě, f, g, h, ch, i, í, j, k, l, m, n, ň, o, ó, p, q, r, ř, s, š, t, ť, u, ú, ů, v, w, x, y, ý, z, ž"}
         </div>
       </section>
 
-      {/* Голосні */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{t("2) Голосні", "2) Гласные")}</h2>
         <div className="rounded-2xl border bg-white">
@@ -282,7 +382,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
             >
               <div>
                 <div className="font-medium text-lg">
-                  {v.sk} — {uiLang === "ru" ? v.label.ru : v.label.ua}
+                  {v.value} — {uiLang === "ru" ? v.label.ru : v.label.ua}
                 </div>
                 <div className="text-sm text-slate-500">
                   {t("Приклад:", "Пример:")} {v.example}
@@ -294,7 +394,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
         </div>
       </section>
 
-      {/* Приголосні */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           {t("3) Особливі приголосні", "3) Особые согласные")}
@@ -307,7 +406,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
             >
               <div>
                 <div className="font-medium text-lg">
-                  {c.sk} — {uiLang === "ru" ? c.label.ru : c.label.ua}
+                  {c.value} — {uiLang === "ru" ? c.label.ru : c.label.ua}
                 </div>
                 <div className="text-sm text-slate-500">
                   {t("Приклад:", "Пример:")} {c.example}
@@ -319,22 +418,25 @@ export default function AlphabetPage({ forcedLang }: Props) {
         </div>
       </section>
 
-      {/* Наголос */}
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{t("4) Наголос", "4) Ударение")}</h2>
         <div className="rounded-xl border bg-white p-4">
-          {t(
-            "У словацькій мові наголос майже завжди на першому складі:",
-            "В словацком языке ударение почти всегда на первом слоге:"
-          )}
+          {isCzech
+            ? t(
+                "У чеській мові наголос майже завжди на першому складі:",
+                "В чешском языке ударение почти всегда на первом слоге:"
+              )
+            : t(
+                "У словацькій мові наголос майже завжди на першому складі:",
+                "В словацком языке ударение почти всегда на первом слоге:"
+              )}
           <div className="mt-2 flex items-center gap-2">
-            <b>PRÁ-ca</b>
-            <SpeakButton text="práca" />
+            <b>{isCzech ? "PRA-ha" : "PRÁ-ca"}</b>
+            <SpeakButton text={isCzech ? "Praha" : "práca"} />
           </div>
         </div>
       </section>
 
-      {/* Тренування слова */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           {t("5) Тренування вимови 🧠", "5) Тренировка произношения 🧠")}
@@ -352,7 +454,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
         </div>
       </section>
 
-      {/* ===== MINI TRAINER ===== */}
       <section className="rounded-3xl border bg-white p-4 sm:p-6 shadow-sm space-y-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
@@ -395,7 +496,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
           </div>
         </div>
 
-        {/* TAB: QUIZ */}
         {tab === "quiz" && (
           <div className="space-y-4">
             {!qDone ? (
@@ -462,7 +562,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
           </div>
         )}
 
-        {/* TAB: LISTEN */}
         {tab === "listen" && (
           <div className="space-y-4">
             {!lDone ? (
@@ -539,7 +638,6 @@ export default function AlphabetPage({ forcedLang }: Props) {
           </div>
         )}
 
-        {/* TAB: TYPE (DICTATION) */}
         {tab === "type" && (
           <div className="space-y-4">
             {!tDone ? (

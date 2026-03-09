@@ -4,14 +4,15 @@ import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { trWord } from "@/lib/src/tr";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 type W = { sk: string; ua: string; ru?: string };
 
 type PersonKey = "ja" | "ty" | "on" | "ona" | "ono" | "my" | "vy" | "oni";
 type ConjugationRow = {
   person: PersonKey;
-  form: string; // форма для вправ/варіантів
-  full: string; // ✅ канонічне речення: що показуємо і що читаємо
+  form: string;
+  full: string;
   tr: W;
 };
 
@@ -45,9 +46,10 @@ const UI: Record<
   UiLang,
   {
     loading: string;
-
-    title: string;
-    subtitle: string;
+    titleSk: string;
+    titleCs: string;
+    subtitleSk: string;
+    subtitleCs: string;
 
     s1: string;
     s2: string;
@@ -81,15 +83,19 @@ const UI: Record<
     correctNo: string;
     correctForm: string;
 
-    cheatItems: string[];
+    cheatItemsSk: string[];
+    cheatItemsCs: string[];
   }
 > = {
   ua: {
     loading: "Завантаження…",
 
-    title: "Дієслова теперішнього часу",
-    subtitle:
+    titleSk: "Дієслова теперішнього часу",
+    titleCs: "Дієслова теперішнього часу",
+    subtitleSk:
       "Дієслова в словацькій змінюються за особами (ja/ty/on…). Нижче — таблички + звук + вправи.",
+    subtitleCs:
+      "Дієслова в чеській змінюються за особами (já/ty/on…). Нижче — таблички + звук + вправи.",
 
     s1: "1) Особові займенники",
     s2: "2) Вибери дієслово",
@@ -123,19 +129,27 @@ const UI: Record<
     correctNo: "❌ Неправильно.",
     correctForm: "Правильно",
 
-    cheatItems: [
+    cheatItemsSk: [
       "Часто закінчення підказує особу: -m (ja), -š (ty), -me (my), -te (vy).",
       "Заперечення: зазвичай ne- разом з дієсловом: robím → nerobím. Для ísť: idem → nejdem.",
       "Питання: часто достатньо знака питання: Idete do mesta?",
+    ],
+    cheatItemsCs: [
+      "У чеській часто видно особу по закінченню: -m (já), -š (ty), -me (my), -te (vy).",
+      "Заперечення: зазвичай ne- разом з дієсловом: dělám → nedělám. Для jít: jdu → nejdu.",
+      "Питання: часто достатньо інтонації або знака питання: Jdete do města?",
     ],
   },
 
   ru: {
     loading: "Загрузка…",
 
-    title: "Глаголы настоящего времени",
-    subtitle:
+    titleSk: "Глаголы настоящего времени",
+    titleCs: "Глаголы настоящего времени",
+    subtitleSk:
       "Глаголы в словацком меняются по лицам (ja/ty/on…). Ниже — таблицы + звук + упражнения.",
+    subtitleCs:
+      "Глаголы в чешском меняются по лицам (já/ty/on…). Ниже — таблицы + звук + упражнения.",
 
     s1: "1) Личные местоимения",
     s2: "2) Выбери глагол",
@@ -169,10 +183,15 @@ const UI: Record<
     correctNo: "❌ Неправильно.",
     correctForm: "Правильно",
 
-    cheatItems: [
+    cheatItemsSk: [
       "Часто окончание подсказывает лицо: -m (ja), -š (ty), -me (my), -te (vy).",
       "Отрицание: обычно ne- вместе с глаголом: robím → nerobím. Для ísť: idem → nejdem.",
       "Вопрос: часто достаточно знака вопроса: Idete do mesta?",
+    ],
+    cheatItemsCs: [
+      "В чешском лицо часто видно по окончанию: -m (já), -š (ty), -me (my), -te (vy).",
+      "Отрицание: обычно ne- вместе с глаголом: dělám → nedělám. Для jít: jdu → nejdu.",
+      "Вопрос: часто достаточно интонации или знака вопроса: Jdete do města?",
     ],
   },
 };
@@ -186,7 +205,7 @@ function shuffle<T>(arr: T[]) {
   return a;
 }
 
-const IST_NEG: Record<string, string> = {
+const IST_NEG_SK: Record<string, string> = {
   idem: "nejdem",
   ideš: "nejdeš",
   ide: "nejde",
@@ -202,7 +221,7 @@ const IST_NEG: Record<string, string> = {
   Idú: "Nejdú",
 };
 
-const BYT_NEG: Record<string, string> = {
+const BYT_NEG_SK: Record<string, string> = {
   som: "nie som",
   si: "nie si",
   je: "nie je",
@@ -218,7 +237,39 @@ const BYT_NEG: Record<string, string> = {
   Sú: "Nie sú",
 };
 
-function negateSentence(sentence: string) {
+const JIT_NEG_CS: Record<string, string> = {
+  jdu: "nejdu",
+  jdeš: "nejdeš",
+  jde: "nejde",
+  jdeme: "nejdeme",
+  jdete: "nejdete",
+  jdou: "nejdou",
+
+  Jdu: "Nejdu",
+  Jdeš: "Nejdeš",
+  Jde: "Nejde",
+  Jdeme: "Nejdeme",
+  Jdete: "Nejdete",
+  Jdou: "Nejdou",
+};
+
+const BYT_NEG_CS: Record<string, string> = {
+  jsem: "nejsem",
+  jsi: "nejsi",
+  je: "není",
+  jsme: "nejsme",
+  jste: "nejste",
+  jsou: "nejsou",
+
+  Jsem: "Nejsem",
+  Jsi: "Nejsi",
+  Je: "Není",
+  Jsme: "Nejsme",
+  Jste: "Nejste",
+  Jsou: "Nejsou",
+};
+
+function negateSentence(sentence: string, isCzech: boolean) {
   const s = sentence.trim();
   if (!s) return s;
 
@@ -246,52 +297,65 @@ function negateSentence(sentence: string) {
     "my",
     "vy",
     "oni",
+    "Já",
+    "já",
   ]);
 
-  // 0) Якщо є "Ja učím sa" → "Ja sa učím"
-  if (
-    parts.length >= 3 &&
-    PRON.has(parts[0]) &&
-    (parts[2] === "sa" || parts[2] === "si") &&
-    parts[1] !== "sa" &&
-    parts[1] !== "si"
-  ) {
-    const clitic = parts[2];
-    parts.splice(2, 1);
-    parts.splice(1, 0, clitic);
-  }
+  if (!isCzech) {
+    if (
+      parts.length >= 3 &&
+      PRON.has(parts[0]) &&
+      (parts[2] === "sa" || parts[2] === "si") &&
+      parts[1] !== "sa" &&
+      parts[1] !== "si"
+    ) {
+      const clitic = parts[2];
+      parts.splice(2, 1);
+      parts.splice(1, 0, clitic);
+    }
 
-  // 1) ísť
-  for (let i = 0; i < Math.min(2, parts.length); i++) {
-    if (IST_NEG[parts[i]]) {
-      parts[i] = IST_NEG[parts[i]];
-      return finish(parts.join(" "));
+    for (let i = 0; i < Math.min(2, parts.length); i++) {
+      if (IST_NEG_SK[parts[i]]) {
+        parts[i] = IST_NEG_SK[parts[i]];
+        return finish(parts.join(" "));
+      }
+    }
+
+    for (let i = 0; i < Math.min(2, parts.length); i++) {
+      if (BYT_NEG_SK[parts[i]]) {
+        parts[i] = BYT_NEG_SK[parts[i]];
+        return finish(parts.join(" "));
+      }
+    }
+  } else {
+    for (let i = 0; i < Math.min(2, parts.length); i++) {
+      if (JIT_NEG_CS[parts[i]]) {
+        parts[i] = JIT_NEG_CS[parts[i]];
+        return finish(parts.join(" "));
+      }
+    }
+
+    for (let i = 0; i < Math.min(2, parts.length); i++) {
+      if (BYT_NEG_CS[parts[i]]) {
+        parts[i] = BYT_NEG_CS[parts[i]];
+        return finish(parts.join(" "));
+      }
     }
   }
 
-  // 2) byť
-  for (let i = 0; i < Math.min(2, parts.length); i++) {
-    if (BYT_NEG[parts[i]]) {
-      parts[i] = BYT_NEG[parts[i]];
-      return finish(parts.join(" "));
-    }
-  }
-
-  // 3) Загальне правило: ne- + дієслово
   let verbIndex = 0;
 
   if (PRON.has(parts[0])) {
-    if (parts[1] === "sa" || parts[1] === "si") verbIndex = 2; // Ja sa učím
-    else verbIndex = 1; // Ja pracujem
+    if (!isCzech && (parts[1] === "sa" || parts[1] === "si")) verbIndex = 2;
+    else verbIndex = 1;
   } else {
-    verbIndex = 0; // Pracujem doma
+    verbIndex = 0;
   }
 
-  if (verbIndex >= parts.length) return finish("Ne " + core);
+  if (verbIndex >= parts.length) return finish((isCzech ? "Ne " : "Ne ") + core);
 
   const verb = parts[verbIndex];
 
-  // якщо вже заперечено
   if (/^ne/i.test(verb) || /^nie$/i.test(verb)) return finish(parts.join(" "));
 
   const negVerb =
@@ -308,8 +372,7 @@ function makeQuestion(sentence: string) {
   return s.endsWith("?") ? s : s + "?";
 }
 
-// ===== DATA =====
-const VERBS: VerbBlock[] = [
+const VERBS_SK: VerbBlock[] = [
   {
     id: "pracovat",
     infinitive: "pracovať",
@@ -331,7 +394,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Ja pracujem dnes.", ua: "Я працюю сьогодні.", ru: "Я работаю сегодня." }],
   },
-
   {
     id: "robit",
     infinitive: "robiť",
@@ -353,7 +415,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Ja robím úlohu.", ua: "Я роблю завдання.", ru: "Я делаю задание." }],
   },
-
   {
     id: "byt",
     infinitive: "byť",
@@ -364,8 +425,8 @@ const VERBS: VerbBlock[] = [
       ru: "Нерегулярное: som/si/je…",
     },
     rows: [
-      { person: "ja", form: "som", full: "ja som", tr: { sk: "ja som", ua: "я є / я (…)", ru: "я (есть) / я (…)" } },
-      { person: "ty", form: "si", full: "ty si", tr: { sk: "ty si", ua: "ти є / ти (…)", ru: "ты (есть) / ты (…)" } },
+      { person: "ja", form: "som", full: "ja som", tr: { sk: "ja som", ua: "я є / я (...)", ru: "я (есть) / я (...)" } },
+      { person: "ty", form: "si", full: "ty si", tr: { sk: "ty si", ua: "ти є / ти (...)", ru: "ты (есть) / ты (...)" } },
       { person: "on", form: "je", full: "on je", tr: { sk: "on je", ua: "він є", ru: "он есть" } },
       { person: "ona", form: "je", full: "ona je", tr: { sk: "ona je", ua: "вона є", ru: "она есть" } },
       { person: "ono", form: "je", full: "ono je", tr: { sk: "ono je", ua: "воно є", ru: "оно есть" } },
@@ -375,7 +436,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Ja som doma.", ua: "Я вдома.", ru: "Я дома." }],
   },
-
   {
     id: "byvat",
     infinitive: "bývať",
@@ -397,7 +457,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Ja bývam v Bratislave.", ua: "Я живу в Братиславі.", ru: "Я живу в Братиславе." }],
   },
-
   {
     id: "chodit",
     infinitive: "chodiť",
@@ -419,14 +478,13 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Chodím do práce.", ua: "Я ходжу на роботу.", ru: "Я хожу на работу." }],
   },
-
   {
     id: "ucit",
     infinitive: "učiť",
     meaning: { sk: "učiť", ua: "вчити / навчати", ru: "учить / обучать" },
     note: {
       sk: "Tip: učím/učíš",
-      ua: "Навчання: učím/učiš…",
+      ua: "Навчання: učím/učíš…",
       ru: "Обучение: učím/učíš…",
     },
     rows: [
@@ -441,7 +499,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Učím deti.", ua: "Я навчаю дітей.", ru: "Я учу детей." }],
   },
-
   {
     id: "ucitsa",
     infinitive: "učiť sa",
@@ -463,7 +520,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Učím sa po slovensky.", ua: "Я вчу словацьку.", ru: "Я учу словацкий." }],
   },
-
   {
     id: "hladat",
     infinitive: "hľadať",
@@ -485,7 +541,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Hľadám prácu.", ua: "Я шукаю роботу.", ru: "Я ищу работу." }],
   },
-
   {
     id: "mat",
     infinitive: "mať",
@@ -507,7 +562,6 @@ const VERBS: VerbBlock[] = [
     ],
     examples: [{ sk: "Ja mám čas.", ua: "Я маю час.", ru: "У меня есть время." }],
   },
-
   {
     id: "ist",
     infinitive: "ísť",
@@ -531,6 +585,219 @@ const VERBS: VerbBlock[] = [
   },
 ];
 
+const VERBS_CS: VerbBlock[] = [
+  {
+    id: "pracovat",
+    infinitive: "pracovat",
+    meaning: { sk: "pracovat", ua: "працювати", ru: "работать" },
+    note: {
+      sk: "Tip: pracuji/pracuješ",
+      ua: "Типове чеське дієслово: pracuji, pracuješ, pracuje…",
+      ru: "Типичный чешский глагол: pracuji, pracuješ, pracuje…",
+    },
+    rows: [
+      { person: "ja", form: "pracuji", full: "já pracuji", tr: { sk: "já pracuji", ua: "я працюю", ru: "я работаю" } },
+      { person: "ty", form: "pracuješ", full: "ty pracuješ", tr: { sk: "ty pracuješ", ua: "ти працюєш", ru: "ты работаешь" } },
+      { person: "on", form: "pracuje", full: "on pracuje", tr: { sk: "on pracuje", ua: "він працює", ru: "он работает" } },
+      { person: "ona", form: "pracuje", full: "ona pracuje", tr: { sk: "ona pracuje", ua: "вона працює", ru: "она работает" } },
+      { person: "ono", form: "pracuje", full: "ono pracuje", tr: { sk: "ono pracuje", ua: "воно працює", ru: "оно работает" } },
+      { person: "my", form: "pracujeme", full: "my pracujeme", tr: { sk: "my pracujeme", ua: "ми працюємо", ru: "мы работаем" } },
+      { person: "vy", form: "pracujete", full: "vy pracujete", tr: { sk: "vy pracujete", ua: "ви працюєте", ru: "вы работаете" } },
+      { person: "oni", form: "pracují", full: "oni pracují", tr: { sk: "oni pracují", ua: "вони працюють", ru: "они работают" } },
+    ],
+    examples: [{ sk: "Já pracuji dnes.", ua: "Я працюю сьогодні.", ru: "Я работаю сегодня." }],
+  },
+  {
+    id: "delat",
+    infinitive: "dělat",
+    meaning: { sk: "dělat", ua: "робити", ru: "делать" },
+    note: {
+      sk: "Tip: dělám/děláš",
+      ua: "Дуже часте дієслово: dělám, děláš, dělá…",
+      ru: "Очень частый глагол: dělám, děláš, dělá…",
+    },
+    rows: [
+      { person: "ja", form: "dělám", full: "já dělám", tr: { sk: "já dělám", ua: "я роблю", ru: "я делаю" } },
+      { person: "ty", form: "děláš", full: "ty děláš", tr: { sk: "ty děláš", ua: "ти робиш", ru: "ты делаешь" } },
+      { person: "on", form: "dělá", full: "on dělá", tr: { sk: "on dělá", ua: "він робить", ru: "он делает" } },
+      { person: "ona", form: "dělá", full: "ona dělá", tr: { sk: "ona dělá", ua: "вона робить", ru: "она делает" } },
+      { person: "ono", form: "dělá", full: "ono dělá", tr: { sk: "ono dělá", ua: "воно робить", ru: "оно делает" } },
+      { person: "my", form: "děláme", full: "my děláme", tr: { sk: "my děláme", ua: "ми робимо", ru: "мы делаем" } },
+      { person: "vy", form: "děláte", full: "vy děláte", tr: { sk: "vy děláte", ua: "ви робите", ru: "вы делаете" } },
+      { person: "oni", form: "dělají", full: "oni dělají", tr: { sk: "oni dělají", ua: "вони роблять", ru: "они делают" } },
+    ],
+    examples: [{ sk: "Já dělám úkol.", ua: "Я роблю завдання.", ru: "Я делаю задание." }],
+  },
+  {
+    id: "byt",
+    infinitive: "být",
+    meaning: { sk: "být", ua: "бути", ru: "быть" },
+    note: {
+      sk: "Tip: jsem/jsi/je",
+      ua: "Нерегулярне: jsem, jsi, je…",
+      ru: "Нерегулярный: jsem, jsi, je…",
+    },
+    rows: [
+      { person: "ja", form: "jsem", full: "já jsem", tr: { sk: "já jsem", ua: "я є / я (...)", ru: "я (есть) / я (...)" } },
+      { person: "ty", form: "jsi", full: "ty jsi", tr: { sk: "ty jsi", ua: "ти є / ти (...)", ru: "ты (есть) / ты (...)" } },
+      { person: "on", form: "je", full: "on je", tr: { sk: "on je", ua: "він є", ru: "он есть" } },
+      { person: "ona", form: "je", full: "ona je", tr: { sk: "ona je", ua: "вона є", ru: "она есть" } },
+      { person: "ono", form: "je", full: "ono je", tr: { sk: "ono je", ua: "воно є", ru: "оно есть" } },
+      { person: "my", form: "jsme", full: "my jsme", tr: { sk: "my jsme", ua: "ми є", ru: "мы есть" } },
+      { person: "vy", form: "jste", full: "vy jste", tr: { sk: "vy jste", ua: "ви є", ru: "вы есть" } },
+      { person: "oni", form: "jsou", full: "oni jsou", tr: { sk: "oni jsou", ua: "вони є", ru: "они есть" } },
+    ],
+    examples: [{ sk: "Já jsem doma.", ua: "Я вдома.", ru: "Я дома." }],
+  },
+  {
+    id: "bydlet",
+    infinitive: "bydlet",
+    meaning: { sk: "bydlet", ua: "жити (мешкати)", ru: "жить (проживать)" },
+    note: {
+      sk: "Tip: bydlím/bydlíš",
+      ua: "Про місце проживання: bydlím, bydlíš…",
+      ru: "Про место проживания: bydlím, bydlíš…",
+    },
+    rows: [
+      { person: "ja", form: "bydlím", full: "já bydlím", tr: { sk: "já bydlím", ua: "я живу", ru: "я живу" } },
+      { person: "ty", form: "bydlíš", full: "ty bydlíš", tr: { sk: "ty bydlíš", ua: "ти живеш", ru: "ты живёшь" } },
+      { person: "on", form: "bydlí", full: "on bydlí", tr: { sk: "on bydlí", ua: "він живе", ru: "он живёт" } },
+      { person: "ona", form: "bydlí", full: "ona bydlí", tr: { sk: "ona bydlí", ua: "вона живе", ru: "она живёт" } },
+      { person: "ono", form: "bydlí", full: "ono bydlí", tr: { sk: "ono bydlí", ua: "воно живе", ru: "оно живёт" } },
+      { person: "my", form: "bydlíme", full: "my bydlíme", tr: { sk: "my bydlíme", ua: "ми живемо", ru: "мы живём" } },
+      { person: "vy", form: "bydlíte", full: "vy bydlíte", tr: { sk: "vy bydlíte", ua: "ви живете", ru: "вы живёте" } },
+      { person: "oni", form: "bydlí", full: "oni bydlí", tr: { sk: "oni bydlí", ua: "вони живуть", ru: "они живут" } },
+    ],
+    examples: [{ sk: "Já bydlím v Praze.", ua: "Я живу в Празі.", ru: "Я живу в Праге." }],
+  },
+  {
+    id: "chodit",
+    infinitive: "chodit",
+    meaning: { sk: "chodit", ua: "ходити", ru: "ходить" },
+    note: {
+      sk: "Tip: chodím/chodíš",
+      ua: "Регулярний рух: chodím, chodíš…",
+      ru: "Регулярное движение: chodím, chodíš…",
+    },
+    rows: [
+      { person: "ja", form: "chodím", full: "já chodím", tr: { sk: "já chodím", ua: "я ходжу", ru: "я хожу" } },
+      { person: "ty", form: "chodíš", full: "ty chodíš", tr: { sk: "ty chodíš", ua: "ти ходиш", ru: "ты ходишь" } },
+      { person: "on", form: "chodí", full: "on chodí", tr: { sk: "on chodí", ua: "він ходить", ru: "он ходит" } },
+      { person: "ona", form: "chodí", full: "ona chodí", tr: { sk: "ona chodí", ua: "вона ходить", ru: "она ходит" } },
+      { person: "ono", form: "chodí", full: "ono chodí", tr: { sk: "ono chodí", ua: "воно ходить", ru: "оно ходит" } },
+      { person: "my", form: "chodíme", full: "my chodíme", tr: { sk: "my chodíme", ua: "ми ходимо", ru: "мы ходим" } },
+      { person: "vy", form: "chodíte", full: "vy chodíte", tr: { sk: "vy chodíte", ua: "ви ходите", ru: "вы ходите" } },
+      { person: "oni", form: "chodí", full: "oni chodí", tr: { sk: "oni chodí", ua: "вони ходять", ru: "они ходят" } },
+    ],
+    examples: [{ sk: "Chodím do práce.", ua: "Я ходжу на роботу.", ru: "Я хожу на работу." }],
+  },
+  {
+    id: "ucit",
+    infinitive: "učit",
+    meaning: { sk: "učit", ua: "вчити / навчати", ru: "учить / обучать" },
+    note: {
+      sk: "Tip: učím/učíš",
+      ua: "Навчання: učím, učíš…",
+      ru: "Обучение: učím, učíš…",
+    },
+    rows: [
+      { person: "ja", form: "učím", full: "já učím", tr: { sk: "já učím", ua: "я вчу", ru: "я учу" } },
+      { person: "ty", form: "učíš", full: "ty učíš", tr: { sk: "ty učíš", ua: "ти вчиш", ru: "ты учишь" } },
+      { person: "on", form: "učí", full: "on učí", tr: { sk: "on učí", ua: "він вчить", ru: "он учит" } },
+      { person: "ona", form: "učí", full: "ona učí", tr: { sk: "ona učí", ua: "вона вчить", ru: "она учит" } },
+      { person: "ono", form: "učí", full: "ono učí", tr: { sk: "ono učí", ua: "воно вчить", ru: "оно учит" } },
+      { person: "my", form: "učíme", full: "my učíme", tr: { sk: "my učíme", ua: "ми вчимо", ru: "мы учим" } },
+      { person: "vy", form: "učíte", full: "vy učíte", tr: { sk: "vy učíte", ua: "ви вчите", ru: "вы учите" } },
+      { person: "oni", form: "učí", full: "oni učí", tr: { sk: "oni učí", ua: "вони вчать", ru: "они учат" } },
+    ],
+    examples: [{ sk: "Učím děti.", ua: "Я навчаю дітей.", ru: "Я учу детей." }],
+  },
+  {
+    id: "ucitse",
+    infinitive: "učit se",
+    meaning: { sk: "učit se", ua: "вчитися", ru: "учиться" },
+    note: {
+      sk: "Tip: se",
+      ua: "Зворотне: učím se, učíš se…",
+      ru: "Возвратное: učím se, učíš se…",
+    },
+    rows: [
+      { person: "ja", form: "učím se", full: "já se učím", tr: { sk: "já se učím", ua: "я вчуся", ru: "я учусь" } },
+      { person: "ty", form: "učíš se", full: "ty se učíš", tr: { sk: "ty se učíš", ua: "ти вчишся", ru: "ты учишься" } },
+      { person: "on", form: "učí se", full: "on se učí", tr: { sk: "on se učí", ua: "він вчиться", ru: "он учится" } },
+      { person: "ona", form: "učí se", full: "ona se učí", tr: { sk: "ona se učí", ua: "вона вчиться", ru: "она учится" } },
+      { person: "ono", form: "učí se", full: "ono se učí", tr: { sk: "ono se učí", ua: "воно вчиться", ru: "оно учится" } },
+      { person: "my", form: "učíme se", full: "my se učíme", tr: { sk: "my se učíme", ua: "ми вчимося", ru: "мы учимся" } },
+      { person: "vy", form: "učíte se", full: "vy se učíte", tr: { sk: "vy se učíte", ua: "ви вчитеся", ru: "вы учитесь" } },
+      { person: "oni", form: "učí se", full: "oni se učí", tr: { sk: "oni se učí", ua: "вони вчаться", ru: "они учатся" } },
+    ],
+    examples: [{ sk: "Učím se česky.", ua: "Я вчу чеську.", ru: "Я учу чешский." }],
+  },
+  {
+    id: "hledat",
+    infinitive: "hledat",
+    meaning: { sk: "hledat", ua: "шукати", ru: "искать" },
+    note: {
+      sk: "Tip: hledám/hledáš",
+      ua: "Пошук: hledám, hledáš…",
+      ru: "Поиск: hledám, hledáš…",
+    },
+    rows: [
+      { person: "ja", form: "hledám", full: "já hledám", tr: { sk: "já hledám", ua: "я шукаю", ru: "я ищу" } },
+      { person: "ty", form: "hledáš", full: "ty hledáš", tr: { sk: "ty hledáš", ua: "ти шукаєш", ru: "ты ищешь" } },
+      { person: "on", form: "hledá", full: "on hledá", tr: { sk: "on hledá", ua: "він шукає", ru: "он ищет" } },
+      { person: "ona", form: "hledá", full: "ona hledá", tr: { sk: "ona hledá", ua: "вона шукає", ru: "она ищет" } },
+      { person: "ono", form: "hledá", full: "ono hledá", tr: { sk: "ono hledá", ua: "воно шукає", ru: "оно ищет" } },
+      { person: "my", form: "hledáme", full: "my hledáme", tr: { sk: "my hledáme", ua: "ми шукаємо", ru: "мы ищем" } },
+      { person: "vy", form: "hledáte", full: "vy hledáte", tr: { sk: "vy hledáte", ua: "ви шукаєте", ru: "вы ищете" } },
+      { person: "oni", form: "hledají", full: "oni hledají", tr: { sk: "oni hledají", ua: "вони шукають", ru: "они ищут" } },
+    ],
+    examples: [{ sk: "Hledám práci.", ua: "Я шукаю роботу.", ru: "Я ищу работу." }],
+  },
+  {
+    id: "mit",
+    infinitive: "mít",
+    meaning: { sk: "mít", ua: "мати", ru: "иметь" },
+    note: {
+      sk: "Tip: mám/máš/má",
+      ua: "Корисне щодня: mám, máš, má…",
+      ru: "Нужно каждый день: mám, máš, má…",
+    },
+    rows: [
+      { person: "ja", form: "mám", full: "já mám", tr: { sk: "já mám", ua: "я маю", ru: "у меня есть" } },
+      { person: "ty", form: "máš", full: "ty máš", tr: { sk: "ty máš", ua: "ти маєш", ru: "у тебя есть" } },
+      { person: "on", form: "má", full: "on má", tr: { sk: "on má", ua: "він має", ru: "у него есть" } },
+      { person: "ona", form: "má", full: "ona má", tr: { sk: "ona má", ua: "вона має", ru: "у неё есть" } },
+      { person: "ono", form: "má", full: "ono má", tr: { sk: "ono má", ua: "воно має", ru: "у него/неё есть" } },
+      { person: "my", form: "máme", full: "my máme", tr: { sk: "my máme", ua: "ми маємо", ru: "у нас есть" } },
+      { person: "vy", form: "máte", full: "vy máte", tr: { sk: "vy máte", ua: "ви маєте", ru: "у вас есть" } },
+      { person: "oni", form: "mají", full: "oni mají", tr: { sk: "oni mají", ua: "вони мають", ru: "у них есть" } },
+    ],
+    examples: [{ sk: "Já mám čas.", ua: "Я маю час.", ru: "У меня есть время." }],
+  },
+  {
+    id: "jit",
+    infinitive: "jít",
+    meaning: { sk: "jít", ua: "йти", ru: "идти" },
+    note: {
+      sk: "Tip: nejdu…",
+      ua: "Рух: jdu, jdeš, jde… (заперечення: nejdu, nejdeš…).",
+      ru: "Движение: jdu, jdeš, jde… (отрицание: nejdu, nejdeš…).",
+    },
+    rows: [
+      { person: "ja", form: "jdu", full: "já jdu", tr: { sk: "já jdu", ua: "я йду", ru: "я иду" } },
+      { person: "ty", form: "jdeš", full: "ty jdeš", tr: { sk: "ty jdeš", ua: "ти йдеш", ru: "ты идёшь" } },
+      { person: "on", form: "jde", full: "on jde", tr: { sk: "on jde", ua: "він йде", ru: "он идёт" } },
+      { person: "ona", form: "jde", full: "ona jde", tr: { sk: "ona jde", ua: "вона йде", ru: "она идёт" } },
+      { person: "ono", form: "jde", full: "ono jde", tr: { sk: "ono jde", ua: "воно йде", ru: "оно идёт" } },
+      { person: "my", form: "jdeme", full: "my jdeme", tr: { sk: "my jdeme", ua: "ми йдемо", ru: "мы идём" } },
+      { person: "vy", form: "jdete", full: "vy jdete", tr: { sk: "vy jdete", ua: "ви йдете", ru: "вы идёте" } },
+      { person: "oni", form: "jdou", full: "oni jdou", tr: { sk: "oni jdou", ua: "вони йдуть", ru: "они идут" } },
+    ],
+    examples: [{ sk: "Jdu do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу." }],
+  },
+];
+
 function makeQuiz(active: VerbBlock) {
   const rows = shuffle(active.rows).slice(0, 4);
 
@@ -549,9 +816,8 @@ function makeSentenceParts(example: string) {
   return shuffle(example.replace(/[.!?]$/, "").split(" "));
 }
 
-// ✅ Стабільні приклади (ВАЖЛИВО: беремо row.full!)
-function genExamplesFromRows(active: VerbBlock): W[] {
-  const tailsByVerb: Record<string, { sk: string[]; ua: string[]; ru: string[] }> = {
+function genExamplesFromRows(active: VerbBlock, isCzech: boolean): W[] {
+  const tailsByVerbSk: Record<string, { sk: string[]; ua: string[]; ru: string[] }> = {
     pracovat: {
       sk: ["v práci", "dnes", "v Bratislave", "ráno"],
       ua: ["на роботі", "сьогодні", "в Братиславі", "зранку"],
@@ -609,6 +875,65 @@ function genExamplesFromRows(active: VerbBlock): W[] {
     },
   };
 
+  const tailsByVerbCs: Record<string, { sk: string[]; ua: string[]; ru: string[] }> = {
+    pracovat: {
+      sk: ["v práci", "dnes", "v Praze", "ráno"],
+      ua: ["на роботі", "сьогодні", "у Празі", "зранку"],
+      ru: ["на работе", "сегодня", "в Праге", "утром"],
+    },
+    delat: {
+      sk: ["doma", "úkol", "to teď", "v práci"],
+      ua: ["вдома", "завдання", "це зараз", "на роботі"],
+      ru: ["дома", "задание", "это сейчас", "на работе"],
+    },
+    byt: {
+      sk: ["doma", "tady", "ve městě", "v práci"],
+      ua: ["вдома", "тут", "у місті", "на роботі"],
+      ru: ["дома", "здесь", "в городе", "на работе"],
+    },
+    bydlet: {
+      sk: ["v Praze", "tady", "ve městě", "doma"],
+      ua: ["у Празі", "тут", "у місті", "вдома"],
+      ru: ["в Праге", "здесь", "в городе", "дома"],
+    },
+    chodit: {
+      sk: ["do práce", "do školy", "pěšky", "každý den"],
+      ua: ["на роботу", "до школи", "пішки", "щодня"],
+      ru: ["на работу", "в школу", "пешком", "каждый день"],
+    },
+    ucit: {
+      sk: ["děti", "česky", "dnes", "ve škole"],
+      ua: ["дітей", "чеської", "сьогодні", "у школі"],
+      ru: ["детей", "чешскому", "сегодня", "в школе"],
+    },
+    ucitse: {
+      sk: ["česky", "doma", "dnes", "v práci"],
+      ua: ["чеської", "вдома", "сьогодні", "на роботі"],
+      ru: ["чешский", "дома", "сегодня", "на работе"],
+    },
+    hledat: {
+      sk: ["práci", "byt", "klíč", "teď"],
+      ua: ["роботу", "квартиру", "ключ", "зараз"],
+      ru: ["работу", "квартиру", "ключ", "сейчас"],
+    },
+    mit: {
+      sk: ["čas", "práci", "lístek", "otázku"],
+      ua: ["час", "роботу", "квиток", "питання"],
+      ru: ["время", "работу", "билет", "вопрос"],
+    },
+    jit: {
+      sk: ["do práce", "domů", "do města", "do obchodu"],
+      ua: ["на роботу", "додому", "у місто", "в магазин"],
+      ru: ["на работу", "домой", "в город", "в магазин"],
+    },
+    default: {
+      sk: ["dnes", "teď", "doma", "v práci"],
+      ua: ["сьогодні", "зараз", "вдома", "на роботі"],
+      ru: ["сегодня", "сейчас", "дома", "на работе"],
+    },
+  };
+
+  const tailsByVerb = isCzech ? tailsByVerbCs : tailsByVerbSk;
   const tails = tailsByVerb[active.id] ?? tailsByVerb.default;
   const wanted: PersonKey[] = ["ja", "ty", "on", "ona", "my", "vy", "oni"];
 
@@ -630,12 +955,16 @@ function genExamplesFromRows(active: VerbBlock): W[] {
 
 export default function VerbsPresentPage() {
   const { lang } = useLanguage();
-  const ui = UI[lang === "ru" ? "ru" : "ua"];
+  const { courseId } = useActiveCourse();
 
-  const [activeVerbId, setActiveVerbId] = useState(VERBS[0].id);
+  const ui = UI[lang === "ru" ? "ru" : "ua"];
+  const isCzech = courseId === "cs";
+  const verbs = isCzech ? VERBS_CS : VERBS_SK;
+
+  const [activeVerbId, setActiveVerbId] = useState(verbs[0].id);
   const active = useMemo(
-    () => VERBS.find((v) => v.id === activeVerbId) ?? VERBS[0],
-    [activeVerbId]
+    () => verbs.find((v) => v.id === activeVerbId) ?? verbs[0],
+    [activeVerbId, verbs]
   );
 
   const [mounted, setMounted] = useState(false);
@@ -649,7 +978,14 @@ export default function VerbsPresentPage() {
 
   useEffect(() => setMounted(true), []);
 
-  const examplesForSection4 = useMemo(() => genExamplesFromRows(active), [active.id]);
+  useEffect(() => {
+    setActiveVerbId(verbs[0].id);
+  }, [courseId, verbs]);
+
+  const examplesForSection4 = useMemo(
+    () => genExamplesFromRows(active, isCzech),
+    [active, isCzech]
+  );
 
   useEffect(() => {
     if (!mounted) return;
@@ -657,13 +993,13 @@ export default function VerbsPresentPage() {
     setQuiz(makeQuiz(active));
 
     setExIndex(0);
-    const ex = examplesForSection4[0]?.sk ?? "Ja pracujem.";
+    const ex = examplesForSection4[0]?.sk ?? (isCzech ? "Já pracuji." : "Ja pracujem.");
     setSentenceParts(makeSentenceParts(ex));
 
     setAnswers({});
     setChecked({});
     setBuild([]);
-  }, [mounted, active.id, examplesForSection4]);
+  }, [mounted, active, examplesForSection4, isCzech]);
 
   const correctCount = useMemo(() => {
     let c = 0;
@@ -676,20 +1012,22 @@ export default function VerbsPresentPage() {
   const builtSentence = build.join(" ");
   const currentEx = examplesForSection4[exIndex] ?? examplesForSection4[0];
 
-  const targetSk = (currentEx?.sk ?? "Ja pracujem.").replace(/[.!?]$/, "");
+  const targetSk = (currentEx?.sk ?? (isCzech ? "Já pracuji." : "Ja pracujem.")).replace(/[.!?]$/, "");
   const targetUa = (currentEx?.ua ?? "Я працюю.").replace(/[.!?]$/, "");
 
   if (!mounted) return <div className="space-y-10">{ui.loading}</div>;
 
   return (
     <div className="space-y-10">
-      {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">{ui.title}</h1>
-        <p className="text-slate-700">{ui.subtitle}</p>
+        <h1 className="text-2xl font-semibold">
+          {isCzech ? ui.titleCs : ui.titleSk}
+        </h1>
+        <p className="text-slate-700">
+          {isCzech ? ui.subtitleCs : ui.subtitleSk}
+        </p>
       </div>
 
-      {/* Pronouns */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s1}</h2>
         <div className="rounded-2xl border bg-white">
@@ -702,13 +1040,12 @@ export default function VerbsPresentPage() {
         </div>
       </section>
 
-      {/* Verb selector */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s2}</h2>
 
         <div className="rounded-2xl border bg-white p-3">
           <div className="flex flex-wrap gap-2">
-            {VERBS.map((v) => {
+            {verbs.map((v) => {
               const activeTab = v.id === activeVerbId;
               return (
                 <button
@@ -742,7 +1079,6 @@ export default function VerbsPresentPage() {
         </div>
       </section>
 
-      {/* Conjugation */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s3}</h2>
         <div className="rounded-2xl border bg-white">
@@ -760,13 +1096,12 @@ export default function VerbsPresentPage() {
         </div>
       </section>
 
-      {/* Examples + negation + question */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s4}</h2>
 
         <div className="rounded-2xl border bg-white">
           {examplesForSection4.map((ex, i) => {
-            const neg = negateSentence(ex.sk);
+            const neg = negateSentence(ex.sk, isCzech);
             const q = makeQuestion(ex.sk);
 
             return (
@@ -802,11 +1137,9 @@ export default function VerbsPresentPage() {
         </div>
       </section>
 
-      {/* Practice */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s5}</h2>
 
-        {/* Quiz A */}
         <div className="rounded-2xl border bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -877,7 +1210,6 @@ export default function VerbsPresentPage() {
           </div>
         </div>
 
-        {/* Quiz B */}
         <div className="rounded-2xl border bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -907,7 +1239,7 @@ export default function VerbsPresentPage() {
                   const sk =
                     examplesForSection4[next]?.sk ??
                     examplesForSection4[0]?.sk ??
-                    "Ja pracujem.";
+                    (isCzech ? "Já pracuji." : "Ja pracujem.");
                   setSentenceParts(makeSentenceParts(sk));
                 }}
                 className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
@@ -949,12 +1281,11 @@ export default function VerbsPresentPage() {
         </div>
       </section>
 
-      {/* Tips */}
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{ui.s6}</h2>
         <div className="rounded-2xl border bg-white p-5 text-slate-700">
           <ul className="list-disc pl-5 space-y-2">
-            {ui.cheatItems.map((t, i) => (
+            {(isCzech ? ui.cheatItemsCs : ui.cheatItemsSk).map((t, i) => (
               <li key={i}>{t}</li>
             ))}
           </ul>

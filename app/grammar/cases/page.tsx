@@ -4,6 +4,7 @@ import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { trWord } from "@/lib/src/tr";
 import { useEffect, useMemo, useState } from "react";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 type W = { sk: string; ua: string; ru?: string };
 
@@ -24,14 +25,14 @@ type CaseId = "nom" | "gen" | "dat" | "acc" | "loc" | "ins";
 
 type CaseBlock = {
   id: CaseId;
-  name: W; // назва відмінка
-  questions: W; // питання
-  use: W; // коли використовуємо
-  rule: W; // коротко про прийменники/логіку
-  examples: W[]; // приклади (sk + ua + ru)
+  name: W;
+  questions: W;
+  use: W;
+  rule: W;
+  examples: W[];
 };
 
-const CASES: CaseBlock[] = [
+const CASES_SK: CaseBlock[] = [
   {
     id: "nom",
     name: { sk: "Nominatív", ua: "Називний", ru: "Именительный" },
@@ -159,6 +160,134 @@ const CASES: CaseBlock[] = [
   },
 ];
 
+const CASES_CS: CaseBlock[] = [
+  {
+    id: "nom",
+    name: { sk: "Nominativ", ua: "Називний", ru: "Именительный" },
+    questions: { sk: "Kdo? Co?", ua: "Хто? Що?", ru: "Кто? Что?" },
+    use: {
+      sk: "Podmět (хто/що робить дію) + словникова форма.",
+      ua: "Підмет (хто/що робить дію) + словникова форма.",
+      ru: "Подлежащее (кто/что делает) + словарная форма.",
+    },
+    rule: {
+      sk: "Bez předložek. Часто з дієсловом být: On je lékař.",
+      ua: "Без прийменників. Часто з дієсловом být: On je lékař.",
+      ru: "Без предлогов. Часто с глаголом být: On je lékař.",
+    },
+    examples: [
+      { sk: "Já jsem student.", ua: "Я студент.", ru: "Я студент." },
+      { sk: "To je auto.", ua: "Це авто.", ru: "Это машина." },
+      { sk: "Bratr pracuje.", ua: "Брат працює.", ru: "Брат работает." },
+    ],
+  },
+
+  {
+    id: "gen",
+    name: { sk: "Genitiv", ua: "Родовий", ru: "Родительный" },
+    questions: { sk: "Koho? Čeho?", ua: "Кого? Чого?", ru: "Кого? Чего?" },
+    use: {
+      sk: "Vlastnictví, „без/немає“, část něčeho.",
+      ua: "Належність, «немає/без», частина чогось.",
+      ru: "Принадлежность, «нет/без», часть чего-то.",
+    },
+    rule: {
+      sk: "Často s: bez, od, do, z/ze, u. (bez vody, do práce, z domu).",
+      ua: "Часто з: bez, od, do, z/ze, u. (bez vody, do práce, z domu).",
+      ru: "Часто с: bez, od, do, z/ze, u. (bez vody, do práce, z domu).",
+    },
+    examples: [
+      { sk: "Nemám čas.", ua: "Я не маю часу.", ru: "У меня нет времени." },
+      { sk: "Jsem z Ukrajiny.", ua: "Я з України.", ru: "Я из Украины." },
+      { sk: "Jdu do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу." },
+    ],
+  },
+
+  {
+    id: "dat",
+    name: { sk: "Dativ", ua: "Давальний", ru: "Дательный" },
+    questions: { sk: "Komu? Čemu?", ua: "Кому? Чому?", ru: "Кому? Чему?" },
+    use: {
+      sk: "Komu/čemu dáváme, pomáháme, voláme.",
+      ua: "Кому/чому даємо, допомагаємо, телефонуємо.",
+      ru: "Кому/чему даём, помогаем, звоним.",
+    },
+    rule: {
+      sk: "Často s: k/ke (k lékaři). Také: děkuji, pomáhám, volám.",
+      ua: "Часто з: k/ke (k lékaři). Також: děkuji, pomáhám, volám.",
+      ru: "Часто с: k/ke (k lékaři). Также: děkuji, pomáhám, volám.",
+    },
+    examples: [
+      { sk: "Pomáhám kamarádovi.", ua: "Я допомагаю другу.", ru: "Я помогаю другу." },
+      { sk: "Volám mámě.", ua: "Я телефоную мамі.", ru: "Я звоню маме." },
+      { sk: "Děkuji ti.", ua: "Дякую тобі.", ru: "Спасибо тебе." },
+    ],
+  },
+
+  {
+    id: "acc",
+    name: { sk: "Akuzativ", ua: "Знахідний", ru: "Винительный" },
+    questions: { sk: "Koho? Co?", ua: "Кого? Що?", ru: "Кого? Что?" },
+    use: {
+      sk: "Přímý objekt děje (vidím/mám/dělám).",
+      ua: "Прямий додаток (бачу/маю/роблю).",
+      ru: "Прямое дополнение (вижу/имею/делаю).",
+    },
+    rule: {
+      sk: "Často po: vidím, mám, dělám, kupuji. Také pohyb „na“: jdu na poštu.",
+      ua: "Часто після: vidím, mám, dělám, kupuji. Також рух „na“: jdu na poštu.",
+      ru: "Часто после: vidím, mám, dělám, kupuji. Также движение „na“: jdu na poštu.",
+    },
+    examples: [
+      { sk: "Vidím auto.", ua: "Я бачу авто.", ru: "Я вижу машину." },
+      { sk: "Mám otázku.", ua: "У мене є питання.", ru: "У меня есть вопрос." },
+      { sk: "Jdu na poštu.", ua: "Я йду на пошту.", ru: "Я иду на почту." },
+    ],
+  },
+
+  {
+    id: "loc",
+    name: { sk: "Lokál", ua: "Місцевий", ru: "Предложный (местный)" },
+    questions: { sk: "O kom? O čem? Kde?", ua: "Про кого? Про що? Де?", ru: "О ком? О чём? Где?" },
+    use: {
+      sk: "Mluvíme o něčem + kde se nacházíme (v/na).",
+      ua: "Говоримо про щось + де знаходимось (у/на).",
+      ru: "Говорим о чём-то + где находимся (в/на).",
+    },
+    rule: {
+      sk: "Vždy s předložkou: v/ve, na, o, po (ve městě, o práci).",
+      ua: "Завжди з прийменником: v/ve, na, o, po (ve městě, o práci).",
+      ru: "Всегда с предлогом: v/ve, na, o, po (ve městě, o práci).",
+    },
+    examples: [
+      { sk: "Jsem v práci.", ua: "Я на роботі.", ru: "Я на работе." },
+      { sk: "Mluvíme o škole.", ua: "Ми говоримо про школу.", ru: "Мы говорим о школе." },
+      { sk: "Bydlím ve městě.", ua: "Я живу в місті.", ru: "Я живу в городе." },
+    ],
+  },
+
+  {
+    id: "ins",
+    name: { sk: "Instrumentál", ua: "Орудний", ru: "Творительный" },
+    questions: { sk: "S kým? S čím?", ua: "З ким? З чим?", ru: "С кем? С чем?" },
+    use: {
+      sk: "S kým/čím (společně), někdy také role/profese.",
+      ua: "З ким/чим (разом), інколи також роль/професія.",
+      ru: "С кем/чем (вместе), иногда также роль/профессия.",
+    },
+    rule: {
+      sk: "Často s: s/se (s kamarádem), před (před domem).",
+      ua: "Часто з: s/se (s kamarádem), před (před domem).",
+      ru: "Часто с: s/se (s kamarádem), před (před domem).",
+    },
+    examples: [
+      { sk: "Jdu s kamarádem.", ua: "Я йду з другом.", ru: "Я иду с другом." },
+      { sk: "Píšu perem.", ua: "Я пишу ручкою.", ru: "Я пишу ручкой." },
+      { sk: "Jsem sám/sama.", ua: "Я сам/сама.", ru: "Я один/одна." },
+    ],
+  },
+];
+
 type QuizQ = {
   caseId: CaseId;
   prompt: W;
@@ -166,14 +295,14 @@ type QuizQ = {
   options: string[];
 };
 
-function makeCaseQuiz(lang: "ua" | "ru"): QuizQ[] {
-  const picks = shuffle(CASES).slice(0, 4);
+function makeCaseQuiz(cases: CaseBlock[], lang: "ua" | "ru"): QuizQ[] {
+  const picks = shuffle(cases).slice(0, 4);
 
   return picks.map((c) => {
     const correct = c.examples[0].sk;
     const opts = new Set<string>([correct]);
     while (opts.size < 4) {
-      const anyCase = CASES[Math.floor(Math.random() * CASES.length)];
+      const anyCase = cases[Math.floor(Math.random() * cases.length)];
       const ex = anyCase.examples[Math.floor(Math.random() * anyCase.examples.length)].sk;
       opts.add(ex);
     }
@@ -188,27 +317,38 @@ function makeCaseQuiz(lang: "ua" | "ru"): QuizQ[] {
 
 export default function CasesPage() {
   const { lang } = useLanguage();
+  const { courseId } = useActiveCourse();
   const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
+  const isCzech = courseId === "cs";
+
+  const cases = isCzech ? CASES_CS : CASES_SK;
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Quiz A
   const [quiz, setQuiz] = useState<QuizQ[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState<Record<string, boolean>>({});
 
-  // Quiz B (build sentence)
   const buildSamples = useMemo(() => {
-    return [
-      { sk: "Som v práci.", ua: "Я на роботі.", ru: "Я на работе." },
-      { sk: "Idem do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу." },
-      { sk: "Idem s kamarátom.", ua: "Я йду з другом.", ru: "Я иду с другом." },
-      { sk: "Hovoríme o škole.", ua: "Ми говоримо про школу.", ru: "Мы говорим о школе." },
-      { sk: "Vidím auto.", ua: "Я бачу авто.", ru: "Я вижу машину." },
-      { sk: "Pomáham kamarátovi.", ua: "Я допомагаю другу.", ru: "Я помогаю другу." },
-    ];
-  }, []);
+    return isCzech
+      ? [
+          { sk: "Jsem v práci.", ua: "Я на роботі.", ru: "Я на работе." },
+          { sk: "Jdu do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу." },
+          { sk: "Jdu s kamarádem.", ua: "Я йду з другом.", ru: "Я иду с другом." },
+          { sk: "Mluvíme o škole.", ua: "Ми говоримо про школу.", ru: "Мы говорим о школе." },
+          { sk: "Vidím auto.", ua: "Я бачу авто.", ru: "Я вижу машину." },
+          { sk: "Pomáhám kamarádovi.", ua: "Я допомагаю другу.", ru: "Я помогаю другу." },
+        ]
+      : [
+          { sk: "Som v práci.", ua: "Я на роботі.", ru: "Я на работе." },
+          { sk: "Idem do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу." },
+          { sk: "Idem s kamarátom.", ua: "Я йду з другом.", ru: "Я иду с другом." },
+          { sk: "Hovoríme o škole.", ua: "Ми говоримо про школу.", ru: "Мы говорим о школе." },
+          { sk: "Vidím auto.", ua: "Я бачу авто.", ru: "Я вижу машину." },
+          { sk: "Pomáham kamarátovi.", ua: "Я допомагаю другу.", ru: "Я помогаю другу." },
+        ];
+  }, [isCzech]);
 
   const [exIndex, setExIndex] = useState(0);
   const current = buildSamples[exIndex] ?? buildSamples[0];
@@ -217,14 +357,14 @@ export default function CasesPage() {
 
   useEffect(() => {
     if (!mounted) return;
-    setQuiz(makeCaseQuiz(lang));
+    setQuiz(makeCaseQuiz(cases, lang));
     setAnswers({});
     setChecked({});
 
     setExIndex(0);
     setBuild([]);
     setSentenceParts(makeSentenceParts(buildSamples[0].sk));
-  }, [mounted, lang, buildSamples]);
+  }, [mounted, lang, cases, buildSamples]);
 
   const correctCount = useMemo(() => {
     let c = 0;
@@ -240,22 +380,29 @@ export default function CasesPage() {
 
   return (
     <div className="space-y-10">
-      {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">{t("Відмінки (6 падежів)", "Падежи (6 падежей)")}</h1>
+        <h1 className="text-2xl font-semibold">
+          {isCzech
+            ? t("Відмінки (7 падежів у чеській)", "Падежи (7 падежей в чешском)")
+            : t("Відмінки (6 падежів)", "Падежи (6 падежей)")}
+        </h1>
         <p className="text-slate-700">
-          {t(
-            "У словацькій 6 відмінків. Вони відповідають на питання (Kto? Čo? / Koho? Čoho? …) і змінюють закінчення слів.",
-            "В словацком 6 падежей. Они отвечают на вопросы (Kto? Čo? / Koho? Čoho? …) и меняют окончания слов."
-          )}
+          {isCzech
+            ? t(
+                "У чеській 7 відмінків. Вони відповідають на питання (Kdo? Co? / Koho? Čeho? …) і змінюють закінчення слів.",
+                "В чешском 7 падежей. Они отвечают на вопросы (Kdo? Co? / Koho? Čeho? …) и меняют окончания слов."
+              )
+            : t(
+                "У словацькій 6 відмінків. Вони відповідають на питання (Kto? Čo? / Koho? Čoho? …) і змінюють закінчення слів.",
+                "В словацком 6 падежей. Они отвечают на вопросы (Kto? Čo? / Koho? Čoho? …) и меняют окончания слов."
+              )}
         </p>
       </div>
 
-      {/* 1) Quick table */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{t("1) Швидка таблиця", "1) Быстрая таблица")}</h2>
         <div className="rounded-2xl border bg-white">
-          {CASES.map((c) => (
+          {cases.map((c) => (
             <div key={c.id} className="border-b px-5 py-4 last:border-b-0 space-y-2">
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
@@ -268,7 +415,6 @@ export default function CasesPage() {
                   </div>
                 </div>
 
-                {/* ✅ це фраза */}
                 <SpeakButton text={c.questions.sk} kind="phrase" />
               </div>
 
@@ -279,12 +425,11 @@ export default function CasesPage() {
         </div>
       </section>
 
-      {/* 2) Examples */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{t("2) Приклади (звучання)", "2) Примеры (озвучка)")}</h2>
 
         <div className="rounded-2xl border bg-white">
-          {CASES.map((c) => (
+          {cases.map((c) => (
             <div key={c.id} className="border-b px-5 py-4 last:border-b-0 space-y-3">
               <div className="font-semibold">
                 {c.name.sk} — {t(c.name.ua, c.name.ru ?? c.name.ua)}
@@ -298,7 +443,6 @@ export default function CasesPage() {
                       <div className="text-sm text-slate-500">{trWord(ex, lang)}</div>
                     </div>
 
-                    {/* ✅ це фраза */}
                     <SpeakButton text={ex.sk} kind="phrase" />
                   </div>
                 ))}
@@ -308,11 +452,9 @@ export default function CasesPage() {
         </div>
       </section>
 
-      {/* 3) Practice */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{t("3) Практика 🧠", "3) Практика 🧠")}</h2>
 
-        {/* Quiz A */}
         <div className="rounded-2xl border bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -326,7 +468,7 @@ export default function CasesPage() {
             <button
               type="button"
               onClick={() => {
-                setQuiz(makeCaseQuiz(lang));
+                setQuiz(makeCaseQuiz(cases, lang));
                 setAnswers({});
                 setChecked({});
               }}
@@ -384,7 +526,6 @@ export default function CasesPage() {
           </div>
         </div>
 
-        {/* Quiz B */}
         <div className="rounded-2xl border bg-white p-5 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -423,7 +564,6 @@ export default function CasesPage() {
             <div className="flex items-center justify-between gap-3">
               <div className="font-medium">{builtSentence || "—"}</div>
 
-              {/* ✅ це фраза */}
               {builtSentence ? <SpeakButton text={builtSentence + "."} kind="phrase" /> : null}
             </div>
 
@@ -452,24 +592,43 @@ export default function CasesPage() {
         </div>
       </section>
 
-      {/* 4) Tips */}
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{t("4) Шпаргалка", "4) Шпаргалка")}</h2>
         <div className="rounded-2xl border bg-white p-5 text-slate-700">
           <ul className="list-disc pl-5 space-y-2">
-            <li>{t("Lokál завжди з прийменником: v/vo, na, o, po.", "Lokál всегда с предлогом: v/vo, na, o, po.")}</li>
-            <li>
-              {t(
-                "Genitív часто після bez, do, z/zo: bez vody, do práce, z domu.",
-                "Genitív часто после bez, do, z/zo: bez vody, do práce, z domu."
-              )}
-            </li>
-            <li>
-              {t(
-                "Inštrumentál часто з s/so: s kamarátom, so sestrou.",
-                "Inštrumentál часто с s/so: s kamarátom, so sestrou."
-              )}
-            </li>
+            {!isCzech ? (
+              <>
+                <li>{t("Lokál завжди з прийменником: v/vo, na, o, po.", "Lokál всегда с предлогом: v/vo, na, o, po.")}</li>
+                <li>
+                  {t(
+                    "Genitív часто після bez, do, z/zo: bez vody, do práce, z domu.",
+                    "Genitív часто после bez, do, z/zo: bez vody, do práce, z domu."
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "Inštrumentál часто з s/so: s kamarátom, so sestrou.",
+                    "Inštrumentál часто с s/so: s kamarátom, so sestrou."
+                  )}
+                </li>
+              </>
+            ) : (
+              <>
+                <li>{t("Lokál у чеській завжди з прийменником: v/ve, na, o, po.", "Lokál в чешском всегда с предлогом: v/ve, na, o, po.")}</li>
+                <li>
+                  {t(
+                    "Genitiv часто після bez, do, z/ze: bez vody, do práce, z domu.",
+                    "Genitiv часто после bez, do, z/ze: bez vody, do práce, z domu."
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "Instrumentál часто з s/se: s kamarádem, se sestrou.",
+                    "Instrumentál часто с s/se: s kamarádem, se sestrou."
+                  )}
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </section>
