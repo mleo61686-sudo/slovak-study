@@ -291,6 +291,7 @@ export default async function Page({ params }: { params: Promise<{ level: string
     <LevelClient
       levelId={levelId}
       words={lesson.words}
+      courseId={activeCourseId}
       canGoNext={canGoNext}
       lockedReason={lockedReason}
       onLockedNextRedirect="/learning"

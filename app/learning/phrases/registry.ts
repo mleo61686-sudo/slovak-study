@@ -3,6 +3,9 @@ import { A1_PHRASES as SK_A1_PHRASES } from "./a1";
 import { A2_PHRASES as SK_A2_PHRASES } from "./a2";
 import { B1_PHRASES as SK_B1_PHRASES } from "./b1";
 import { CS_A0_PHRASES } from "./cs/a0";
+import { CS_A1_PHRASES } from "./cs/a1";
+import { CS_A2_PHRASES } from "./cs/a2";
+import { CS_B1_PHRASES } from "./cs/b1";
 
 export type Phrase = {
   sk: string;
@@ -30,6 +33,9 @@ const SK_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {
 // ====================================
 const CS_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {
   a0: CS_A0_PHRASES,
+  a1: CS_A1_PHRASES,
+  a2: CS_A2_PHRASES,
+  b1: CS_B1_PHRASES,
 };
 
 // ====================================

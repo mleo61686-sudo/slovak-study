@@ -56,13 +56,6 @@ export function getPhraseForWord(
   levelId: string,
   courseId: string = "sk"
 ) {
-  if (word.phrase) {
-    const target =
-      lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
-
-    return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
-  }
-
   const dict = getPhrasesForLevel(courseId, levelId);
 
   if (dict) {
@@ -72,6 +65,13 @@ export function getPhraseForWord(
       const target = lang === "ru" ? p.ru ?? p.ua : p.ua;
       return { sk: p.sk, target, tokens: p.tokens };
     }
+  }
+
+  if (word.phrase) {
+    const target =
+      lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
+
+    return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
   }
 
   const sk = `To je ${word.sk}.`;
@@ -181,7 +181,7 @@ export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
     try {
       await tryPlay(url);
       return;
-    } catch {}
+    } catch { }
   }
 }
 

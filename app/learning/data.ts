@@ -307,12 +307,12 @@ export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBa
       id === "a0"
         ? A0_ALL
         : id === "a1"
-        ? A1_LIST
-        : id === "a2"
-        ? A2_LIST
-        : id === "b1"
-        ? B1_LIST
-        : B2_ALL;
+          ? A1_LIST
+          : id === "a2"
+            ? A2_LIST
+            : id === "b1"
+              ? B1_LIST
+              : B2_ALL;
 
     return {
       id,
@@ -333,7 +333,7 @@ export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBa
 // =============================
 // 7) getLesson: "a0-1" / "a1-3" / ...
 // =============================
-export function getLesson(id: string) {
+export function getLesson(id: string, courseId: string = "sk") {
   const raw = String(id);
 
   const match = raw.match(/^(a0|a1|a2|b1|b2)-(\d+)$/i);
@@ -353,7 +353,7 @@ export function getLesson(id: string) {
     if (!lesson) return null;
 
     const withRu = addRu(lesson.words);
-    const dict = getPhrasesByBand("sk", band);
+    const dict = getPhrasesByBand(courseId, band);
 
     return {
       ...lesson,
@@ -366,7 +366,7 @@ export function getLesson(id: string) {
   if (!lesson) return null;
 
   const withRu = addRu(lesson.words);
-  const a0Dict = getPhrasesByBand("sk", "a0");
+  const a0Dict = getPhrasesByBand(courseId, "a0");
 
   return {
     ...lesson,
