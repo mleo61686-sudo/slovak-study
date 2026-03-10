@@ -5,70 +5,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-21 — Проблеми і ситуації
   // =========================
-  [phraseKey("problém", "проблема", "a1-21")]: {
+  [phraseKey("problém", "a1-21")]: {
     sk: "Máme malý problém.",
     ua: "У нас є маленька проблема.",
     ru: "У нас есть маленькая проблема.",
     tokens: ["Máme", "malý", "problém", "."],
   },
 
-  [phraseKey("pokazený", "зламаний", "a1-21")]: {
+  [phraseKey("pokazený", "a1-21")]: {
     sk: "Můj telefon je pokazený.",
     ua: "Мій телефон зламаний.",
     ru: "Мой телефон сломан.",
     tokens: ["Můj", "telefon", "je", "pokazený", "."],
   },
 
-  [phraseKey("ztratit", "загубити", "a1-21")]: {
+  [phraseKey("ztratit", "a1-21")]: {
     sk: "Nechci ztratit klíče.",
     ua: "Я не хочу загубити ключі.",
     ru: "Я не хочу потерять ключи.",
     tokens: ["Nechci", "ztratit", "klíče", "."],
   },
 
-  [phraseKey("najít", "знайти", "a1-21")]: {
+  [phraseKey("najít", "a1-21")]: {
     sk: "Nemůžu najít peněženku.",
     ua: "Я не можу знайти гаманець.",
     ru: "Я не могу найти кошелёк.",
     tokens: ["Nemůžu", "najít", "peněženku", "."],
   },
 
-  [phraseKey("zpozdit se", "запізнюватися", "a1-21")]: {
+  [phraseKey("zpozdit se", "a1-21")]: {
     sk: "Autobus se může zpozdit.",
     ua: "Автобус може запізнитися.",
     ru: "Автобус может опоздать.",
     tokens: ["Autobus", "se", "může", "zpozdit", "."],
   },
 
-  [phraseKey("zapomenout", "забути", "a1-21")]: {
+  [phraseKey("zapomenout", "a1-21")]: {
     sk: "Nechci zapomenout na schůzku.",
     ua: "Я не хочу забути про зустріч.",
     ru: "Я не хочу забыть о встрече.",
     tokens: ["Nechci", "zapomenout", "na", "schůzku", "."],
   },
 
-  [phraseKey("chyba", "помилка", "a1-21")]: {
+  [phraseKey("chyba", "a1-21")]: {
     sk: "To byla moje chyba.",
     ua: "Це була моя помилка.",
     ru: "Это была моя ошибка.",
     tokens: ["To", "byla", "moje", "chyba", "."],
   },
 
-  [phraseKey("oprava", "ремонт", "a1-21")]: {
+  [phraseKey("oprava", "a1-21")]: {
     sk: "Auto je teď v opravě.",
     ua: "Авто зараз на ремонті.",
     ru: "Машина сейчас в ремонте.",
     tokens: ["Auto", "je", "teď", "v", "opravě", "."],
   },
 
-  [phraseKey("pomoc", "допомога", "a1-21")]: {
+  [phraseKey("pomoc", "a1-21")]: {
     sk: "Potřebuji tvoji pomoc.",
     ua: "Мені потрібна твоя допомога.",
     ru: "Мне нужна твоя помощь.",
     tokens: ["Potřebuji", "tvoji", "pomoc", "."],
   },
 
-  [phraseKey("řešení", "рішення", "a1-21")]: {
+  [phraseKey("řešení", "a1-21")]: {
     sk: "Musíme najít dobré řešení.",
     ua: "Нам треба знайти хороше рішення.",
     ru: "Нам нужно найти хорошее решение.",
@@ -78,70 +78,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-22 — Напрямки
   // =========================
-  [phraseKey("vpravo", "праворуч", "a1-22")]: {
+  [phraseKey("vpravo", "a1-22")]: {
     sk: "Pak zahněte vpravo.",
     ua: "Потім поверніть праворуч.",
     ru: "Потом поверните направо.",
     tokens: ["Pak", "zahněte", "vpravo", "."],
   },
 
-  [phraseKey("vlevo", "ліворуч", "a1-22")]: {
+  [phraseKey("vlevo", "a1-22")]: {
     sk: "Banka je vlevo.",
     ua: "Банк ліворуч.",
     ru: "Банк слева.",
     tokens: ["Banka", "je", "vlevo", "."],
   },
 
-  [phraseKey("rovno", "прямо", "a1-22")]: {
+  [phraseKey("rovno", "a1-22")]: {
     sk: "Jděte pořád rovno.",
     ua: "Ідіть весь час прямо.",
     ru: "Идите всё время прямо.",
     tokens: ["Jděte", "pořád", "rovno", "."],
   },
 
-  [phraseKey("blízko", "близько", "a1-22")]: {
+  [phraseKey("blízko", "a1-22")]: {
     sk: "Bydlím blízko centra.",
     ua: "Я живу близько до центру.",
     ru: "Я живу недалеко от центра.",
     tokens: ["Bydlím", "blízko", "centra", "."],
   },
 
-  [phraseKey("daleko", "далеко", "a1-22")]: {
+  [phraseKey("daleko", "a1-22")]: {
     sk: "To není daleko.",
     ua: "Це не далеко.",
     ru: "Это недалеко.",
     tokens: ["To", "není", "daleko", "."],
   },
 
-  [phraseKey("nahoru", "вгору", "a1-22")]: {
+  [phraseKey("nahoru", "a1-22")]: {
     sk: "Pojďte nahoru po schodech.",
     ua: "Ідіть вгору сходами.",
     ru: "Поднимайтесь вверх по лестнице.",
     tokens: ["Pojďte", "nahoru", "po", "schodech", "."],
   },
 
-  [phraseKey("dole", "вниз", "a1-22")]: {
+  [phraseKey("dole", "a1-22")]: {
     sk: "Děti jsou dole.",
     ua: "Діти внизу.",
     ru: "Дети внизу.",
     tokens: ["Děti", "jsou", "dole", "."],
   },
 
-  [phraseKey("před", "перед", "a1-22")]: {
+  [phraseKey("před", "a1-22")]: {
     sk: "Auto stojí před domem.",
     ua: "Авто стоїть перед будинком.",
     ru: "Машина стоит перед домом.",
     tokens: ["Auto", "stojí", "před", "domem", "."],
   },
 
-  [phraseKey("za", "за", "a1-22")]: {
+  [phraseKey("za", "a1-22")]: {
     sk: "Škola je za parkem.",
     ua: "Школа за парком.",
     ru: "Школа за парком.",
     tokens: ["Škola", "je", "za", "parkem", "."],
   },
 
-  [phraseKey("mezi", "між", "a1-22")]: {
+  [phraseKey("mezi", "a1-22")]: {
     sk: "Sedím mezi kamarády.",
     ua: "Я сиджу між друзями.",
     ru: "Я сижу между друзьями.",
@@ -151,70 +151,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-23 — Характер
   // =========================
-  [phraseKey("dobrý", "добрий", "a1-23")]: {
+  [phraseKey("dobrý", "a1-23")]: {
     sk: "Je to dobrý člověk.",
     ua: "Це добра людина.",
     ru: "Это хороший человек.",
     tokens: ["Je", "to", "dobrý", "člověk", "."],
   },
 
-  [phraseKey("špatný", "поганий", "a1-23")]: {
+  [phraseKey("špatný", "a1-23")]: {
     sk: "To není špatný nápad.",
     ua: "Це не погана ідея.",
     ru: "Это неплохая идея.",
     tokens: ["To", "není", "špatný", "nápad", "."],
   },
 
-  [phraseKey("trpělivý", "терплячий", "a1-23")]: {
+  [phraseKey("trpělivý", "a1-23")]: {
     sk: "Musíš být trpělivý.",
     ua: "Тобі треба бути терплячим.",
     ru: "Тебе нужно быть терпеливым.",
     tokens: ["Musíš", "být", "trpělivý", "."],
   },
 
-  [phraseKey("lenivý", "ледачий", "a1-23")]: {
+  [phraseKey("lenivý", "a1-23")]: {
     sk: "Dnes jsem nějak lenivý.",
     ua: "Сьогодні я якийсь ледачий.",
     ru: "Сегодня я какой-то ленивый.",
     tokens: ["Dnes", "jsem", "nějak", "lenivý", "."],
   },
 
-  [phraseKey("pracovitý", "працьовитий", "a1-23")]: {
+  [phraseKey("pracovitý", "a1-23")]: {
     sk: "Je velmi pracovitý zaměstnanec.",
     ua: "Він дуже працьовитий працівник.",
     ru: "Он очень трудолюбивый работник.",
     tokens: ["Je", "velmi", "pracovitý", "zaměstnanec", "."],
   },
 
-  [phraseKey("upřímný", "щирий", "a1-23")]: {
+  [phraseKey("upřímný", "a1-23")]: {
     sk: "Děkuji za upřímnou odpověď.",
     ua: "Дякую за щиру відповідь.",
     ru: "Спасибо за искренний ответ.",
     tokens: ["Děkuji", "za", "upřímnou", "odpověď", "."],
   },
 
-  [phraseKey("přátelský", "дружній", "a1-23")]: {
+  [phraseKey("přátelský", "a1-23")]: {
     sk: "Byl ke mně velmi přátelský.",
     ua: "Він був до мене дуже дружній.",
     ru: "Он был ко мне очень дружелюбен.",
     tokens: ["Byl", "ke", "mně", "velmi", "přátelský", "."],
   },
 
-  [phraseKey("vážný", "серйозний", "a1-23")]: {
+  [phraseKey("vážný", "a1-23")]: {
     sk: "Dnes má vážný výraz.",
     ua: "Сьогодні в нього серйозний вираз обличчя.",
     ru: "Сегодня у него серьёзное выражение лица.",
     tokens: ["Dnes", "má", "vážný", "výraz", "."],
   },
 
-  [phraseKey("zábavný", "веселий", "a1-23")]: {
+  [phraseKey("zábavný", "a1-23")]: {
     sk: "Ten film byl opravdu zábavný.",
     ua: "Той фільм був справді веселий.",
     ru: "Этот фильм был действительно весёлый.",
     tokens: ["Ten", "film", "byl", "opravdu", "zábavný", "."],
   },
 
-  [phraseKey("tichý", "тихий", "a1-23")]: {
+  [phraseKey("tichý", "a1-23")]: {
     sk: "Potřebuji tiché místo.",
     ua: "Мені потрібне тихе місце.",
     ru: "Мне нужно тихое место.",
@@ -224,70 +224,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-24 — Погода (розширено)
   // =========================
-  [phraseKey("teplo", "тепло", "a1-24")]: {
+  [phraseKey("teplo", "a1-24")]: {
     sk: "Dnes je venku teplo.",
     ua: "Сьогодні надворі тепло.",
     ru: "Сегодня на улице тепло.",
     tokens: ["Dnes", "je", "venku", "teplo", "."],
   },
 
-  [phraseKey("chladno", "холодно", "a1-24")]: {
+  [phraseKey("chladno", "a1-24")]: {
     sk: "Ráno bylo dost chladno.",
     ua: "Вранці було досить холодно.",
     ru: "Утром было довольно холодно.",
     tokens: ["Ráno", "bylo", "dost", "chladno", "."],
   },
 
-  [phraseKey("zamračené", "хмарно", "a1-24")]: {
+  [phraseKey("zamračené", "a1-24")]: {
     sk: "Dnes je celý den zamračeno.",
     ua: "Сьогодні весь день хмарно.",
     ru: "Сегодня весь день пасмурно.",
     tokens: ["Dnes", "je", "celý", "den", "zamračeno", "."],
   },
 
-  [phraseKey("jasno", "ясно", "a1-24")]: {
+  [phraseKey("jasno", "a1-24")]: {
     sk: "Zítra má být jasno.",
     ua: "Завтра має бути ясно.",
     ru: "Завтра должно быть ясно.",
     tokens: ["Zítra", "má", "být", "jasno", "."],
   },
 
-  [phraseKey("pršet", "йде дощ", "a1-24")]: {
+  [phraseKey("pršet", "a1-24")]: {
     sk: "Za chvíli začne pršet.",
     ua: "За хвилину почнеться дощ.",
     ru: "Скоро начнётся дождь.",
     tokens: ["Za", "chvíli", "začne", "pršet", "."],
   },
 
-  [phraseKey("sněžit", "сніжити", "a1-24")]: {
+  [phraseKey("sněžit", "a1-24")]: {
     sk: "V zimě často sněží.",
     ua: "Узимку часто сніжить.",
     ru: "Зимой часто идёт снег.",
     tokens: ["V", "zimě", "často", "sněží", "."],
   },
 
-  [phraseKey("vítr", "вітер", "a1-24")]: {
+  [phraseKey("vítr", "a1-24")]: {
     sk: "Dnes fouká silný vítr.",
     ua: "Сьогодні дме сильний вітер.",
     ru: "Сегодня дует сильный ветер.",
     tokens: ["Dnes", "fouká", "silný", "vítr", "."],
   },
 
-  [phraseKey("mráz", "мороз", "a1-24")]: {
+  [phraseKey("mráz", "a1-24")]: {
     sk: "V noci byl velký mráz.",
     ua: "Уночі був сильний мороз.",
     ru: "Ночью был сильный мороз.",
     tokens: ["V", "noci", "byl", "velký", "mráz", "."],
   },
 
-  [phraseKey("bouře", "буря", "a1-24")]: {
+  [phraseKey("bouře", "a1-24")]: {
     sk: "Večer přišla bouře.",
     ua: "Увечері прийшла буря.",
     ru: "Вечером пришла буря.",
     tokens: ["Večer", "přišla", "bouře", "."],
   },
 
-  [phraseKey("předpověď", "прогноз", "a1-24")]: {
+  [phraseKey("předpověď", "a1-24")]: {
     sk: "Viděl jsi předpověď počasí?",
     ua: "Ти бачив прогноз погоди?",
     ru: "Ты видел прогноз погоды?",
@@ -297,70 +297,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-25 — Їжа (розширено)
   // =========================
-  [phraseKey("snídaně", "сніданок", "a1-25")]: {
+  [phraseKey("snídaně", "a1-25")]: {
     sk: "Snídaně je pro mě důležitá.",
     ua: "Сніданок для мене важливий.",
     ru: "Завтрак для меня важен.",
     tokens: ["Snídaně", "je", "pro", "mě", "důležitá", "."],
   },
 
-  [phraseKey("oběd", "обід", "a1-25")]: {
+  [phraseKey("oběd", "a1-25")]: {
     sk: "Na oběd si dám těstoviny.",
     ua: "На обід я візьму пасту.",
     ru: "На обед я возьму пасту.",
     tokens: ["Na", "oběd", "si", "dám", "těstoviny", "."],
   },
 
-  [phraseKey("večeře", "вечеря", "a1-25")]: {
+  [phraseKey("večeře", "a1-25")]: {
     sk: "Večeři jíme kolem sedmé.",
     ua: "Вечерю ми їмо близько сьомої.",
     ru: "Ужин мы едим около семи.",
     tokens: ["Večeři", "jíme", "kolem", "sedmé", "."],
   },
 
-  [phraseKey("sladký", "солодкий", "a1-25")]: {
+  [phraseKey("sladký", "a1-25")]: {
     sk: "Nemám rád moc sladké věci.",
     ua: "Я не люблю дуже солодкі речі.",
     ru: "Я не люблю слишком сладкие вещи.",
     tokens: ["Nemám", "rád", "moc", "sladké", "věci", "."],
   },
 
-  [phraseKey("slaný", "солоний", "a1-25")]: {
+  [phraseKey("slaný", "a1-25")]: {
     sk: "Ta polévka je trochu slaná.",
     ua: "Той суп трохи солоний.",
     ru: "Этот суп немного солёный.",
     tokens: ["Ta", "polévka", "je", "trochu", "slaná", "."],
   },
 
-  [phraseKey("pikantní", "гострий", "a1-25")]: {
+  [phraseKey("pikantní", "a1-25")]: {
     sk: "Nemůžu jíst moc pikantní jídlo.",
     ua: "Я не можу їсти дуже гостру їжу.",
     ru: "Я не могу есть слишком острую еду.",
     tokens: ["Nemůžu", "jíst", "moc", "pikantní", "jídlo", "."],
   },
 
-  [phraseKey("čerstvý", "свіжий", "a1-25")]: {
+  [phraseKey("čerstvý", "a1-25")]: {
     sk: "Kupujeme jen čerstvé pečivo.",
     ua: "Ми купуємо лише свіжу випічку.",
     ru: "Мы покупаем только свежую выпечку.",
     tokens: ["Kupujeme", "jen", "čerstvé", "pečivo", "."],
   },
 
-  [phraseKey("hlad", "голод", "a1-25")]: {
+  [phraseKey("hlad", "a1-25")]: {
     sk: "Mám velký hlad.",
     ua: "Я дуже голодний.",
     ru: "Я очень голоден.",
     tokens: ["Mám", "velký", "hlad", "."],
   },
 
-  [phraseKey("žízeň", "спрага", "a1-25")]: {
+  [phraseKey("žízeň", "a1-25")]: {
     sk: "Po běhu mám velkou žízeň.",
     ua: "Після бігу я дуже хочу пити.",
     ru: "После бега я очень хочу пить.",
     tokens: ["Po", "běhu", "mám", "velkou", "žízeň", "."],
   },
 
-  [phraseKey("chuť", "смак / бажання", "a1-25")]: {
+  [phraseKey("chuť", "a1-25")]: {
     sk: "Dnes mám chuť na pizzu.",
     ua: "Сьогодні я хочу піцу.",
     ru: "Сегодня мне хочется пиццу.",
@@ -370,70 +370,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-26 — Гроші (розширено)
   // =========================
-  [phraseKey("platit", "платити", "a1-26")]: {
+  [phraseKey("platit", "a1-26")]: {
     sk: "Budu platit kartou.",
     ua: "Я буду платити карткою.",
     ru: "Я буду платить картой.",
     tokens: ["Budu", "platit", "kartou", "."],
   },
 
-  [phraseKey("ušetřit", "зекономити", "a1-26")]: {
+  [phraseKey("ušetřit", "a1-26")]: {
     sk: "Chci ušetřit trochu peněz.",
     ua: "Я хочу зекономити трохи грошей.",
     ru: "Я хочу сэкономить немного денег.",
     tokens: ["Chci", "ušetřit", "trochu", "peněz", "."],
   },
 
-  [phraseKey("minout", "витратити", "a1-26")]: {
+  [phraseKey("minout", "a1-26")]: {
     sk: "Minul jsem moc peněz.",
     ua: "Я витратив забагато грошей.",
     ru: "Я потратил слишком много денег.",
     tokens: ["Minul", "jsem", "moc", "peněz", "."],
   },
 
-  [phraseKey("výplata", "зарплата", "a1-26")]: {
+  [phraseKey("výplata", "a1-26")]: {
     sk: "Výplatu dostanu v pátek.",
     ua: "Зарплату я отримаю в п’ятницю.",
     ru: "Зарплату я получу в пятницу.",
     tokens: ["Výplatu", "dostanu", "v", "pátek", "."],
   },
 
-  [phraseKey("úvěr", "кредит", "a1-26")]: {
+  [phraseKey("úvěr", "a1-26")]: {
     sk: "Nechci si brát úvěr.",
     ua: "Я не хочу брати кредит.",
     ru: "Я не хочу брать кредит.",
     tokens: ["Nechci", "si", "brát", "úvěr", "."],
   },
 
-  [phraseKey("dluh", "борг", "a1-26")]: {
+  [phraseKey("dluh", "a1-26")]: {
     sk: "Nechci mít žádný dluh.",
     ua: "Я не хочу мати жодного боргу.",
     ru: "Я не хочу иметь никаких долгов.",
     tokens: ["Nechci", "mít", "žádný", "dluh", "."],
   },
 
-  [phraseKey("bankomat", "банкомат", "a1-26")]: {
+  [phraseKey("bankomat", "a1-26")]: {
     sk: "Kde je nejbližší bankomat?",
     ua: "Де найближчий банкомат?",
     ru: "Где ближайший банкомат?",
     tokens: ["Kde", "je", "nejbližší", "bankomat", "?"],
   },
 
-  [phraseKey("účet", "рахунок", "a1-26")]: {
+  [phraseKey("účet", "a1-26")]: {
     sk: "Peníze přišly na účet.",
     ua: "Гроші надійшли на рахунок.",
     ru: "Деньги пришли на счёт.",
     tokens: ["Peníze", "přišly", "na", "účet", "."],
   },
 
-  [phraseKey("příjem", "дохід", "a1-26")]: {
+  [phraseKey("příjem", "a1-26")]: {
     sk: "Můj měsíční příjem není vysoký.",
     ua: "Мій місячний дохід не високий.",
     ru: "Мой месячный доход не высокий.",
     tokens: ["Můj", "měsíční", "příjem", "není", "vysoký", "."],
   },
 
-  [phraseKey("výdaj", "витрата", "a1-26")]: {
+  [phraseKey("výdaj", "a1-26")]: {
     sk: "To byl zbytečný výdaj.",
     ua: "Це була зайва витрата.",
     ru: "Это была лишняя трата.",
@@ -443,70 +443,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-27 — Технології (практика)
   // =========================
-  [phraseKey("zapnout", "увімкнути", "a1-27")]: {
+  [phraseKey("zapnout", "a1-27")]: {
     sk: "Můžeš zapnout počítač?",
     ua: "Можеш увімкнути комп’ютер?",
     ru: "Можешь включить компьютер?",
     tokens: ["Můžeš", "zapnout", "počítač", "?"],
   },
 
-  [phraseKey("vypnout", "вимкнути", "a1-27")]: {
+  [phraseKey("vypnout", "a1-27")]: {
     sk: "Nezapomeň vypnout světlo.",
     ua: "Не забудь вимкнути світло.",
     ru: "Не забудь выключить свет.",
     tokens: ["Nezapomeň", "vypnout", "světlo", "."],
   },
 
-  [phraseKey("nabíjet", "заряджати", "a1-27")]: {
+  [phraseKey("nabíjet", "a1-27")]: {
     sk: "Musím nabíjet telefon.",
     ua: "Мені треба зарядити телефон.",
     ru: "Мне нужно зарядить телефон.",
     tokens: ["Musím", "nabíjet", "telefon", "."],
   },
 
-  [phraseKey("přihlásit se", "увійти", "a1-27")]: {
+  [phraseKey("přihlásit se", "a1-27")]: {
     sk: "Nemůžu se přihlásit do účtu.",
     ua: "Я не можу увійти в акаунт.",
     ru: "Я не могу войти в аккаунт.",
     tokens: ["Nemůžu", "se", "přihlásit", "do", "účtu", "."],
   },
 
-  [phraseKey("odhlásit se", "вийти", "a1-27")]: {
+  [phraseKey("odhlásit se", "a1-27")]: {
     sk: "Nezapomeň se odhlásit.",
     ua: "Не забудь вийти з акаунта.",
     ru: "Не забудь выйти из аккаунта.",
     tokens: ["Nezapomeň", "se", "odhlásit", "."],
   },
 
-  [phraseKey("stáhnout", "завантажити", "a1-27")]: {
+  [phraseKey("stáhnout", "a1-27")]: {
     sk: "Chci si stáhnout nový program.",
     ua: "Я хочу завантажити нову програму.",
     ru: "Я хочу скачать новую программу.",
     tokens: ["Chci", "si", "stáhnout", "nový", "program", "."],
   },
 
-  [phraseKey("uložit", "зберегти", "a1-27")]: {
+  [phraseKey("uložit", "a1-27")]: {
     sk: "Musíš uložit změny.",
     ua: "Тобі треба зберегти зміни.",
     ru: "Тебе нужно сохранить изменения.",
     tokens: ["Musíš", "uložit", "změny", "."],
   },
 
-  [phraseKey("vymazat", "видалити", "a1-27")]: {
+  [phraseKey("vymazat", "a1-27")]: {
     sk: "Chci vymazat staré soubory.",
     ua: "Я хочу видалити старі файли.",
     ru: "Я хочу удалить старые файлы.",
     tokens: ["Chci", "vymazat", "staré", "soubory", "."],
   },
 
-  [phraseKey("kliknout", "натиснути", "a1-27")]: {
+  [phraseKey("kliknout", "a1-27")]: {
     sk: "Klikni na to tlačítko.",
     ua: "Натисни на ту кнопку.",
     ru: "Нажми на ту кнопку.",
     tokens: ["Klikni", "na", "to", "tlačítko", "."],
   },
 
-  [phraseKey("nastavení", "налаштування", "a1-27")]: {
+  [phraseKey("nastavení", "a1-27")]: {
     sk: "Otevři nastavení telefonu.",
     ua: "Відкрий налаштування телефону.",
     ru: "Открой настройки телефона.",
@@ -516,70 +516,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-28 — Подорожі (ситуації)
   // =========================
-  [phraseKey("let", "рейс", "a1-28")]: {
+  [phraseKey("let", "a1-28")]: {
     sk: "Náš let je večer.",
     ua: "Наш рейс увечері.",
     ru: "Наш рейс вечером.",
     tokens: ["Náš", "let", "je", "večer", "."],
   },
 
-  [phraseKey("zpoždění", "затримка", "a1-28")]: {
+  [phraseKey("zpoždění", "a1-28")]: {
     sk: "Let má velké zpoždění.",
     ua: "Рейс має велику затримку.",
     ru: "У рейса большая задержка.",
     tokens: ["Let", "má", "velké", "zpoždění", "."],
   },
 
-  [phraseKey("odlet", "виліт", "a1-28")]: {
+  [phraseKey("odlet", "a1-28")]: {
     sk: "Odlet je v osm hodin.",
     ua: "Виліт о восьмій годині.",
     ru: "Вылет в восемь часов.",
     tokens: ["Odlet", "je", "v", "osm", "hodin", "."],
   },
 
-  [phraseKey("přílet", "приліт", "a1-28")]: {
+  [phraseKey("přílet", "a1-28")]: {
     sk: "Přílet je plánovaný na noc.",
     ua: "Приліт запланований на ніч.",
     ru: "Прилёт запланирован на ночь.",
     tokens: ["Přílet", "je", "plánovaný", "na", "noc", "."],
   },
 
-  [phraseKey("pasová kontrola", "паспортний контроль", "a1-28")]: {
+  [phraseKey("pasová kontrola", "a1-28")]: {
     sk: "Pasová kontrola byla rychlá.",
     ua: "Паспортний контроль був швидкий.",
     ru: "Паспортный контроль был быстрым.",
     tokens: ["Pasová", "kontrola", "byla", "rychlá", "."],
   },
 
-  [phraseKey("zavazadlo", "багаж", "a1-28")]: {
+  [phraseKey("zavazadlo", "a1-28")]: {
     sk: "Moje zavazadlo je těžké.",
     ua: "Мій багаж важкий.",
     ru: "Мой багаж тяжёлый.",
     tokens: ["Moje", "zavazadlo", "je", "těžké", "."],
   },
 
-  [phraseKey("rezervace", "бронювання", "a1-28")]: {
+  [phraseKey("rezervace", "a1-28")]: {
     sk: "Máme potvrzenou rezervaci.",
     ua: "У нас підтверджене бронювання.",
     ru: "У нас подтверждённое бронирование.",
     tokens: ["Máme", "potvrzenou", "rezervaci", "."],
   },
 
-  [phraseKey("průvodce", "гід", "a1-28")]: {
+  [phraseKey("průvodce", "a1-28")]: {
     sk: "Průvodce nás čekal na letišti.",
     ua: "Гід чекав нас в аеропорту.",
     ru: "Гид ждал нас в аэропорту.",
     tokens: ["Průvodce", "nás", "čekal", "na", "letišti", "."],
   },
 
-  [phraseKey("mapa", "карта", "a1-28")]: {
+  [phraseKey("mapa", "a1-28")]: {
     sk: "Bez mapy se ztratím.",
     ua: "Без карти я загублюся.",
     ru: "Без карты я потеряюсь.",
     tokens: ["Bez", "mapy", "se", "ztratím", "."],
   },
 
-  [phraseKey("cíl", "ціль", "a1-28")]: {
+  [phraseKey("cíl", "a1-28")]: {
     sk: "Už jsme skoro v cíli.",
     ua: "Ми вже майже біля цілі.",
     ru: "Мы уже почти у цели.",
@@ -589,70 +589,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-29 — Робочі фрази
   // =========================
-  [phraseKey("rozumím", "розумію", "a1-29")]: {
+  [phraseKey("rozumím", "a1-29")]: {
     sk: "Ano, rozumím zadání.",
     ua: "Так, я розумію завдання.",
     ru: "Да, я понимаю задание.",
     tokens: ["Ano", ",", "rozumím", "zadání", "."],
   },
 
-  [phraseKey("nerozumím", "не розумію", "a1-29")]: {
+  [phraseKey("nerozumím", "a1-29")]: {
     sk: "Promiňte, nerozumím tomu.",
     ua: "Перепрошую, я цього не розумію.",
     ru: "Извините, я этого не понимаю.",
     tokens: ["Promiňte", ",", "nerozumím", "tomu", "."],
   },
 
-  [phraseKey("hotovo", "готово", "a1-29")]: {
+  [phraseKey("hotovo", "a1-29")]: {
     sk: "Už je to hotovo.",
     ua: "Уже готово.",
     ru: "Уже готово.",
     tokens: ["Už", "je", "to", "hotovo", "."],
   },
 
-  [phraseKey("mohu", "я можу", "a1-29")]: {
+  [phraseKey("mohu", "a1-29")]: {
     sk: "Mohu začít hned.",
     ua: "Я можу почати зараз.",
     ru: "Я могу начать сейчас.",
     tokens: ["Mohu", "začít", "hned", "."],
   },
 
-  [phraseKey("potřebuji", "мені потрібно", "a1-29")]: {
+  [phraseKey("potřebuji", "a1-29")]: {
     sk: "Potřebuji ještě deset minut.",
     ua: "Мені потрібно ще десять хвилин.",
     ru: "Мне нужно ещё десять минут.",
     tokens: ["Potřebuji", "ještě", "deset", "minut", "."],
   },
 
-  [phraseKey("problém", "проблема", "a1-29")]: {
+  [phraseKey("problém", "a1-29")]: {
     sk: "Máme menší problém.",
     ua: "У нас невелика проблема.",
     ru: "У нас небольшая проблема.",
     tokens: ["Máme", "menší", "problém", "."],
   },
 
-  [phraseKey("v pořádku", "в порядку", "a1-29")]: {
+  [phraseKey("v pořádku", "a1-29")]: {
     sk: "Teď je všechno v pořádku.",
     ua: "Тепер усе в порядку.",
     ru: "Теперь всё в порядке.",
     tokens: ["Teď", "je", "všechno", "v", "pořádku", "."],
   },
 
-  [phraseKey("hned", "зараз", "a1-29")]: {
+  [phraseKey("hned", "a1-29")]: {
     sk: "Udělám to hned.",
     ua: "Я зроблю це зараз.",
     ru: "Я сделаю это сразу.",
     tokens: ["Udělám", "to", "hned", "."],
   },
 
-  [phraseKey("později", "пізніше", "a1-29")]: {
+  [phraseKey("později", "a1-29")]: {
     sk: "Promluvíme si později.",
     ua: "Поговоримо пізніше.",
     ru: "Поговорим позже.",
     tokens: ["Promluvíme", "si", "později", "."],
   },
 
-  [phraseKey("dohodnout se", "домовитись", "a1-29")]: {
+  [phraseKey("dohodnout se", "a1-29")]: {
     sk: "Musíme se nejdřív dohodnout.",
     ua: "Нам треба спочатку домовитися.",
     ru: "Нам нужно сначала договориться.",
@@ -662,70 +662,70 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON A1-30 — Часті дієслова
   // =========================
-  [phraseKey("mít", "мати", "a1-30")]: {
+  [phraseKey("mít", "a1-30")]: {
     sk: "Chci mít víc času.",
     ua: "Я хочу мати більше часу.",
     ru: "Я хочу иметь больше времени.",
     tokens: ["Chci", "mít", "víc", "času", "."],
   },
 
-  [phraseKey("být", "бути", "a1-30")]: {
+  [phraseKey("být", "a1-30")]: {
     sk: "Chci být doma včas.",
     ua: "Я хочу бути вдома вчасно.",
     ru: "Я хочу быть дома вовремя.",
     tokens: ["Chci", "být", "doma", "včas", "."],
   },
 
-  [phraseKey("dělat", "робити", "a1-30")]: {
+  [phraseKey("dělat", "a1-30")]: {
     sk: "Co budeš dnes dělat?",
     ua: "Що ти сьогодні будеш робити?",
     ru: "Что ты сегодня будешь делать?",
     tokens: ["Co", "budeš", "dnes", "dělat", "?"],
   },
 
-  [phraseKey("jít", "йти", "a1-30")]: {
+  [phraseKey("jít", "a1-30")]: {
     sk: "Musím už jít domů.",
     ua: "Мені вже треба йти додому.",
     ru: "Мне уже нужно идти домой.",
     tokens: ["Musím", "už", "jít", "domů", "."],
   },
 
-  [phraseKey("vidět", "бачити", "a1-30")]: {
+  [phraseKey("vidět", "a1-30")]: {
     sk: "Rád tě zase vidím.",
     ua: "Я радий знову тебе бачити.",
     ru: "Я рад снова тебя видеть.",
     tokens: ["Rád", "tě", "zase", "vidím", "."],
   },
 
-  [phraseKey("poslouchat", "слухати", "a1-30")]: {
+  [phraseKey("poslouchat", "a1-30")]: {
     sk: "Musíš mě pozorně poslouchat.",
     ua: "Тобі треба уважно мене слухати.",
     ru: "Тебе нужно внимательно меня слушать.",
     tokens: ["Musíš", "mě", "pozorně", "poslouchat", "."],
   },
 
-  [phraseKey("mluvit", "говорити", "a1-30")]: {
+  [phraseKey("mluvit", "a1-30")]: {
     sk: "Můžeme spolu mluvit česky.",
     ua: "Ми можемо говорити разом чеською.",
     ru: "Мы можем говорить вместе по-чешски.",
     tokens: ["Můžeme", "spolu", "mluvit", "česky", "."],
   },
 
-  [phraseKey("myslet", "думати", "a1-30")]: {
+  [phraseKey("myslet", "a1-30")]: {
     sk: "Často myslím na rodinu.",
     ua: "Я часто думаю про родину.",
     ru: "Я часто думаю о семье.",
     tokens: ["Často", "myslím", "na", "rodinu", "."],
   },
 
-  [phraseKey("chtít", "хотіти", "a1-30")]: {
+  [phraseKey("chtít", "a1-30")]: {
     sk: "Chci se naučit víc.",
     ua: "Я хочу вивчити більше.",
     ru: "Я хочу выучить больше.",
     tokens: ["Chci", "se", "naučit", "víc", "."],
   },
 
-  [phraseKey("moci", "могти", "a1-30")]: {
+  [phraseKey("moci", "a1-30")]: {
     sk: "Dnes nemůžu přijít.",
     ua: "Сьогодні я не можу прийти.",
     ru: "Сегодня я не могу прийти.",
