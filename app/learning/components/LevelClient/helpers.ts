@@ -1,4 +1,3 @@
-// D:\slovak-study\slovak-study\app\learning\components\LevelClient\helpers.ts
 "use client";
 
 import type { Lang } from "@/lib/src/language";
@@ -26,26 +25,50 @@ export function normalizeSentence(s: string) {
 export const trWord = (w: Word, lang: Lang) =>
   lang === "ru" ? w.ru ?? w.ua : w.ua;
 
+function normalizeKeyPart(value: string | number) {
+  return String(value)
+    .normalize("NFC")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/\s+([.,!?;:])/g, "$1");
+}
+
 function findPhraseInDict(
   dict: PhraseDict,
   sk: string,
   ua: string,
   levelId: string
 ): Phrase | undefined {
-  // 1) exact match
-  const exact = dict[phraseKey(sk, ua, levelId)];
-  if (exact) return exact;
+  const lessonNorm = normalizeKeyPart(levelId);
+  const skNorm = normalizeKeyPart(sk);
+  const uaNorm = normalizeKeyPart(ua);
 
-  // 2) fallback by sk + lessonId, якщо переклад змінювався
-  const skNorm = String(sk).trim().toLowerCase();
-  const lessonNorm = String(levelId).trim().toLowerCase();
+  // 1) exact canonical match (new format: sk + lessonId)
+  const canonical = dict[phraseKey(sk, levelId)];
+  if (canonical) return canonical;
 
-  const prefix = `${skNorm}||`;
+  // 2) backward-compatible exact call form
+  //    (works even if some code still calls phraseKey(sk, ua, lessonId))
+  const compat = dict[phraseKey(sk, ua, levelId)];
+  if (compat) return compat;
+
+  // 3) legacy dictionary key match: sk||ua||lessonId
+  const legacyKey = `${skNorm}||${uaNorm}||${lessonNorm}`;
+  const legacy = dict[legacyKey];
+  if (legacy) return legacy;
+
+  // 4) fallback by sk + lessonId, якщо переклад/пунктуація змінювались
   const suffix = `||${lessonNorm}`;
 
-  const hitKey = Object.keys(dict).find(
-    (k) => k.startsWith(prefix) && k.endsWith(suffix)
-  );
+  const hitKey = Object.keys(dict).find((k) => {
+    const key = normalizeKeyPart(k);
+
+    return (
+      key === `${skNorm}||${lessonNorm}` ||
+      key.startsWith(`${skNorm}||`) && key.endsWith(suffix)
+    );
+  });
 
   return hitKey ? dict[hitKey] : undefined;
 }
@@ -181,7 +204,7 @@ export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
     try {
       await tryPlay(url);
       return;
-    } catch { }
+    } catch {}
   }
 }
 

@@ -18,10 +18,12 @@ export type CourseId = "sk" | "cs" | "pl";
 export type PhraseBand = "a0" | "a1" | "a2" | "b1" | "b2";
 export type PhraseDict = Record<string, Phrase>;
 
+type PhraseRegistry = Partial<Record<PhraseBand, PhraseDict>>;
+
 // ====================================
 // Slovak
 // ====================================
-const SK_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {
+const SK_PHRASES_BY_BAND: PhraseRegistry = {
   a0: SK_A0_PHRASES,
   a1: SK_A1_PHRASES,
   a2: SK_A2_PHRASES,
@@ -31,7 +33,7 @@ const SK_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {
 // ====================================
 // Czech
 // ====================================
-const CS_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {
+const CS_PHRASES_BY_BAND: PhraseRegistry = {
   a0: CS_A0_PHRASES,
   a1: CS_A1_PHRASES,
   a2: CS_A2_PHRASES,
@@ -41,7 +43,13 @@ const CS_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {
 // ====================================
 // Polish
 // ====================================
-const PL_PHRASES_BY_BAND: Partial<Record<PhraseBand, PhraseDict>> = {};
+const PL_PHRASES_BY_BAND: PhraseRegistry = {};
+
+const PHRASES_BY_COURSE: Record<CourseId, PhraseRegistry> = {
+  sk: SK_PHRASES_BY_BAND,
+  cs: CS_PHRASES_BY_BAND,
+  pl: PL_PHRASES_BY_BAND,
+};
 
 function normalizeCourseId(courseId?: string): CourseId {
   if (courseId === "cs" || courseId === "pl") return courseId;
@@ -63,16 +71,7 @@ export function getPhrasesByBand(
   band: PhraseBand
 ): PhraseDict | null {
   const safeCourseId = normalizeCourseId(courseId);
-
-  if (safeCourseId === "cs") {
-    return CS_PHRASES_BY_BAND[band] ?? null;
-  }
-
-  if (safeCourseId === "pl") {
-    return PL_PHRASES_BY_BAND[band] ?? null;
-  }
-
-  return SK_PHRASES_BY_BAND[band] ?? null;
+  return PHRASES_BY_COURSE[safeCourseId][band] ?? null;
 }
 
 export function getPhrasesForLevel(
