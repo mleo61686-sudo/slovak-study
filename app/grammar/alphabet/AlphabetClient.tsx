@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { WORDS_RU } from "@/app/data/words";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 // ===== Data =====
@@ -11,12 +10,14 @@ import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 const SK_VOWELS = [
   { value: "a", label: { ua: "а", ru: "а" }, example: "auto" },
   { value: "á", label: { ua: "а (довга)", ru: "а (долгая)" }, example: "máš" },
+  { value: "ä", label: { ua: "я / е (залежно від слова)", ru: "я / е (в зависимости от слова)" }, example: "päť" },
   { value: "e", label: { ua: "е", ru: "е" }, example: "mesto" },
   { value: "é", label: { ua: "е (довга)", ru: "е (долгая)" }, example: "méso" },
   { value: "i", label: { ua: "і", ru: "и" }, example: "lista" },
   { value: "í", label: { ua: "і (довга)", ru: "и (долгая)" }, example: "píše" },
   { value: "o", label: { ua: "о", ru: "о" }, example: "dom" },
-  { value: "ó", label: { ua: "о (довга)", ru: "о (долгая)" }, example: "stôl" },
+  { value: "ó", label: { ua: "о (довга)", ru: "о (долгая)" }, example: "móda" },
+  { value: "ô", label: { ua: "уо", ru: "уо" }, example: "stôl" },
   { value: "u", label: { ua: "у", ru: "у" }, example: "ulica" },
   { value: "ú", label: { ua: "у (довга)", ru: "у (долгая)" }, example: "dúfať" },
   { value: "y", label: { ua: "и", ru: "ы" }, example: "syn" },
@@ -99,6 +100,12 @@ type Q = {
   questionRu: string;
   options: string[];
   correct: string;
+};
+
+type LetterRow = {
+  value: string;
+  label: { ua: string; ru: string };
+  example: string;
 };
 
 const SK_LETTER_QUESTIONS: Q[] = [
@@ -187,18 +194,17 @@ function normalize(s: string) {
   return s.trim().toLowerCase();
 }
 
-function isGoodForDictation(sk: string) {
-  if (!sk) return false;
-  if (sk.includes(" ")) return false;
-  if (sk.includes("-")) return false;
-  if (sk.length < 3) return false;
-  if (sk.length > 14) return false;
+function isGoodForDictation(word: string) {
+  if (!word) return false;
+  if (word.includes(" ")) return false;
+  if (word.includes("-")) return false;
+  if (word.length < 3) return false;
+  if (word.length > 14) return false;
   return true;
 }
 
-function pickRandomDictationWords(count: number) {
-  const pool = WORDS_RU.map((w) => w.sk).filter((sk) => isGoodForDictation(sk));
-  const unique = Array.from(new Set(pool));
+function pickRandomWords(pool: string[], count: number) {
+  const unique = Array.from(new Set(pool.filter(isGoodForDictation)));
   return shuffle(unique).slice(0, Math.min(count, unique.length));
 }
 
@@ -209,6 +215,37 @@ async function sha1Hex(input: string) {
   const hashBuf = await crypto.subtle.digest("SHA-1", data);
   const hashArr = Array.from(new Uint8Array(hashBuf));
   return hashArr.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function LetterList({
+  items,
+  uiLang,
+  t,
+}: {
+  items: LetterRow[];
+  uiLang: "ua" | "ru";
+  t: (ua: string, ru: string) => string;
+}) {
+  return (
+    <div className="rounded-2xl border bg-white">
+      {items.map((item) => (
+        <div
+          key={item.value}
+          className="flex justify-between border-b px-5 py-3 last:border-b-0"
+        >
+          <div>
+            <div className="text-lg font-medium">
+              {item.value} — {uiLang === "ru" ? item.label.ru : item.label.ua}
+            </div>
+            <div className="text-sm text-slate-500">
+              {t("Приклад:", "Пример:")} {item.example}
+            </div>
+          </div>
+          <SpeakButton text={item.example} />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function AlphabetPage({ forcedLang }: Props) {
@@ -222,6 +259,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
   const vowels = isCzech ? CS_VOWELS : SK_VOWELS;
   const consonants = isCzech ? CS_CONSONANTS : SK_CONSONANTS;
   const practiceWords = isCzech ? CS_PRACTICE_WORDS : SK_PRACTICE_WORDS;
+  const dictationPool = useMemo(
+    () => (isCzech ? CS_PRACTICE_WORDS : SK_PRACTICE_WORDS),
+    [isCzech]
+  );
 
   // ===== Trainer tab =====
   const [tab, setTab] = useState<"quiz" | "listen" | "type">("quiz");
@@ -262,13 +303,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
   // 3) dictation
   const [dictationWords, setDictationWords] = useState<string[]>(() =>
-    pickRandomDictationWords(6)
+    pickRandomWords(SK_PRACTICE_WORDS, 6)
   );
   const typeWords = dictationWords;
 
   useEffect(() => {
-    setDictationWords(pickRandomDictationWords(6));
-  }, [isCzech]);
+    setDictationWords(pickRandomWords(dictationPool, 6));
+  }, [dictationPool]);
 
   const [tIndex, setTIndex] = useState(0);
   const [tScore, setTScore] = useState(0);
@@ -332,9 +373,21 @@ export default function AlphabetPage({ forcedLang }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, tIndex, typeWords, status, tDone]);
 
+  const resetQuiz = () => {
+    setQIndex(0);
+    setQScore(0);
+    setQDone(false);
+  };
+
+  const resetListen = () => {
+    setLIndex(0);
+    setLScore(0);
+    setLDone(false);
+  };
+
   const resetDictationWithNewWords = () => {
     stopAnyAudio();
-    setDictationWords(pickRandomDictationWords(6));
+    setDictationWords(pickRandomWords(dictationPool, 6));
     setTIndex(0);
     setTScore(0);
     setTDone(false);
@@ -348,9 +401,9 @@ export default function AlphabetPage({ forcedLang }: Props) {
         <h1 className="text-2xl font-semibold">
           {isCzech
             ? t("Чеський алфавіт і вимова 🔤", "Чешский алфавит и произношение 🔤")
-            : t("Алфавіт і вимова 🔤", "Алфавит и произношение 🔤")}
+            : t("Словацький алфавіт і вимова 🔤", "Словацкий алфавит и произношение 🔤")}
         </h1>
-        <p className="text-slate-700 mt-2">
+        <p className="mt-2 text-slate-700">
           {isCzech
             ? t(
                 "Чеська мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
@@ -374,48 +427,14 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{t("2) Голосні", "2) Гласные")}</h2>
-        <div className="rounded-2xl border bg-white">
-          {vowels.map((v, i) => (
-            <div
-              key={i}
-              className="flex justify-between border-b px-5 py-3 last:border-b-0"
-            >
-              <div>
-                <div className="font-medium text-lg">
-                  {v.value} — {uiLang === "ru" ? v.label.ru : v.label.ua}
-                </div>
-                <div className="text-sm text-slate-500">
-                  {t("Приклад:", "Пример:")} {v.example}
-                </div>
-              </div>
-              <SpeakButton text={v.example} />
-            </div>
-          ))}
-        </div>
+        <LetterList items={vowels} uiLang={uiLang} t={t} />
       </section>
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">
           {t("3) Особливі приголосні", "3) Особые согласные")}
         </h2>
-        <div className="rounded-2xl border bg-white">
-          {consonants.map((c, i) => (
-            <div
-              key={i}
-              className="flex justify-between border-b px-5 py-3 last:border-b-0"
-            >
-              <div>
-                <div className="font-medium text-lg">
-                  {c.value} — {uiLang === "ru" ? c.label.ru : c.label.ua}
-                </div>
-                <div className="text-sm text-slate-500">
-                  {t("Приклад:", "Пример:")} {c.example}
-                </div>
-              </div>
-              <SpeakButton text={c.example} />
-            </div>
-          ))}
-        </div>
+        <LetterList items={consonants} uiLang={uiLang} t={t} />
       </section>
 
       <section className="space-y-3">
@@ -442,25 +461,25 @@ export default function AlphabetPage({ forcedLang }: Props) {
           {t("5) Тренування вимови 🧠", "5) Тренировка произношения 🧠")}
         </h2>
         <div className="rounded-2xl border bg-white">
-          {practiceWords.map((w) => (
+          {practiceWords.map((word) => (
             <div
-              key={w}
+              key={word}
               className="flex justify-between border-b px-5 py-3 last:border-b-0"
             >
-              <span className="font-medium">{w}</span>
-              <SpeakButton text={w} />
+              <span className="font-medium">{word}</span>
+              <SpeakButton text={word} />
             </div>
           ))}
         </div>
       </section>
 
-      <section className="rounded-3xl border bg-white p-4 sm:p-6 shadow-sm space-y-4">
+      <section className="space-y-4 rounded-3xl border bg-white p-4 shadow-sm sm:p-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <h2 className="text-xl font-semibold">
               {t("6) Міні-тренажер 🔥", "6) Мини-тренажёр 🔥")}
             </h2>
-            <p className="text-sm text-slate-700 mt-1">
+            <p className="mt-1 text-sm text-slate-700">
               {t(
                 "Тут можна реально потренуватись: тести + слухання + диктант.",
                 "Тут можно реально потренироваться: тесты + слушание + диктант."
@@ -471,7 +490,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setTab("quiz")}
-              className={`px-3 py-2 rounded-xl border text-sm ${
+              className={`rounded-xl border px-3 py-2 text-sm ${
                 tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"
               }`}
             >
@@ -479,7 +498,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
             </button>
             <button
               onClick={() => setTab("listen")}
-              className={`px-3 py-2 rounded-xl border text-sm ${
+              className={`rounded-xl border px-3 py-2 text-sm ${
                 tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
               }`}
             >
@@ -487,7 +506,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
             </button>
             <button
               onClick={() => setTab("type")}
-              className={`px-3 py-2 rounded-xl border text-sm ${
+              className={`rounded-xl border px-3 py-2 text-sm ${
                 tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"
               }`}
             >
@@ -501,8 +520,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
             {!qDone ? (
               <>
                 <div className="text-sm text-slate-500">
-                  {t("Питання", "Вопрос")} {qIndex + 1} / {quiz.length} •{" "}
-                  {t("Рахунок", "Счёт")}: {qScore}
+                  {t("Питання", "Вопрос")} {qIndex + 1} / {quiz.length} • {t("Рахунок", "Счёт")}: {qScore}
                 </div>
 
                 <div className="rounded-2xl border p-4">
@@ -522,7 +540,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                           if (last) setQDone(true);
                           else setQIndex((i) => i + 1);
                         }}
-                        className="rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
+                        className="rounded-xl border px-4 py-3 text-left hover:bg-slate-50"
                       >
                         {opt}
                       </button>
@@ -531,29 +549,21 @@ export default function AlphabetPage({ forcedLang }: Props) {
                 </div>
 
                 <button
-                  onClick={() => {
-                    setQIndex(0);
-                    setQScore(0);
-                    setQDone(false);
-                  }}
-                  className="px-4 py-2 rounded-xl border hover:bg-slate-50"
+                  onClick={resetQuiz}
+                  className="rounded-xl border px-4 py-2 hover:bg-slate-50"
                 >
                   {t("Почати заново", "Начать заново")}
                 </button>
               </>
             ) : (
-              <div className="rounded-2xl border p-4 space-y-3">
+              <div className="space-y-3 rounded-2xl border p-4">
                 <div className="text-lg font-semibold">{t("Готово! 🎉", "Готово! 🎉")}</div>
                 <div className="text-slate-700">
                   {t("Результат", "Результат")}: <b>{qScore}</b> / <b>{quiz.length}</b>
                 </div>
                 <button
-                  onClick={() => {
-                    setQIndex(0);
-                    setQScore(0);
-                    setQDone(false);
-                  }}
-                  className="px-4 py-2 rounded-xl bg-black text-white"
+                  onClick={resetQuiz}
+                  className="rounded-xl bg-black px-4 py-2 text-white"
                 >
                   {t("Пройти ще раз", "Пройти ещё раз")}
                 </button>
@@ -567,11 +577,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
             {!lDone ? (
               <>
                 <div className="text-sm text-slate-500">
-                  {t("Раунд", "Раунд")} {lIndex + 1} / {listenRounds.length} •{" "}
-                  {t("Рахунок", "Счёт")}: {lScore}
+                  {t("Раунд", "Раунд")} {lIndex + 1} / {listenRounds.length} • {t("Рахунок", "Счёт")}: {lScore}
                 </div>
 
-                <div className="rounded-2xl border p-4 space-y-3">
+                <div className="space-y-3 rounded-2xl border p-4">
                   <div className="font-semibold">
                     {t(
                       `Знайди слово з літерою: "${listenRounds[lIndex].target}"`,
@@ -580,11 +589,11 @@ export default function AlphabetPage({ forcedLang }: Props) {
                   </div>
 
                   <div className="grid gap-2 sm:grid-cols-2">
-                    {listenRounds[lIndex].words.map((w) => {
-                      const ok = w.includes(listenRounds[lIndex].target);
+                    {listenRounds[lIndex].words.map((word) => {
+                      const ok = word.includes(listenRounds[lIndex].target);
 
                       return (
-                        <div key={w} className="flex items-center justify-between gap-2">
+                        <div key={word} className="flex items-center justify-between gap-2">
                           <button
                             onClick={() => {
                               if (ok) setLScore((s) => s + 1);
@@ -592,13 +601,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
                               if (last) setLDone(true);
                               else setLIndex((i) => i + 1);
                             }}
-                            className="flex-1 rounded-xl border px-4 py-3 hover:bg-slate-50 text-left"
+                            className="flex-1 rounded-xl border px-4 py-3 text-left hover:bg-slate-50"
                             type="button"
                           >
-                            <span className="font-medium">{w}</span>
+                            <span className="font-medium">{word}</span>
                           </button>
 
-                          <SpeakButton text={w} />
+                          <SpeakButton text={word} />
                         </div>
                       );
                     })}
@@ -606,30 +615,21 @@ export default function AlphabetPage({ forcedLang }: Props) {
                 </div>
 
                 <button
-                  onClick={() => {
-                    setLIndex(0);
-                    setLScore(0);
-                    setLDone(false);
-                  }}
-                  className="px-4 py-2 rounded-xl border hover:bg-slate-50"
+                  onClick={resetListen}
+                  className="rounded-xl border px-4 py-2 hover:bg-slate-50"
                 >
                   {t("Почати заново", "Начать заново")}
                 </button>
               </>
             ) : (
-              <div className="rounded-2xl border p-4 space-y-3">
+              <div className="space-y-3 rounded-2xl border p-4">
                 <div className="text-lg font-semibold">{t("Готово! 🎉", "Готово! 🎉")}</div>
                 <div className="text-slate-700">
-                  {t("Результат", "Результат")}: <b>{lScore}</b> /{" "}
-                  <b>{listenRounds.length}</b>
+                  {t("Результат", "Результат")}: <b>{lScore}</b> / <b>{listenRounds.length}</b>
                 </div>
                 <button
-                  onClick={() => {
-                    setLIndex(0);
-                    setLScore(0);
-                    setLDone(false);
-                  }}
-                  className="px-4 py-2 rounded-xl bg-black text-white"
+                  onClick={resetListen}
+                  className="rounded-xl bg-black px-4 py-2 text-white"
                 >
                   {t("Пройти ще раз", "Пройти ещё раз")}
                 </button>
@@ -643,11 +643,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
             {!tDone ? (
               <>
                 <div className="text-sm text-slate-500">
-                  {t("Слово", "Слово")} {tIndex + 1} / {typeWords.length} •{" "}
-                  {t("Рахунок", "Счёт")}: {tScore}
+                  {t("Слово", "Слово")} {tIndex + 1} / {typeWords.length} • {t("Рахунок", "Счёт")}: {tScore}
                 </div>
 
-                <div className="rounded-2xl border p-4 space-y-3">
+                <div className="space-y-3 rounded-2xl border p-4">
                   <div className="font-semibold">
                     {t("Прослухай і напиши слово:", "Прослушай и напиши слово:")}
                   </div>
@@ -678,7 +677,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                         if (ok) setTScore((s) => s + 1);
                       }}
                       disabled={!input.trim()}
-                      className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+                      className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
                     >
                       {t("Перевірити", "Проверить")}
                     </button>
@@ -704,7 +703,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                             if (last) setTDone(true);
                             else setTIndex((i) => i + 1);
                           }}
-                          className="px-4 py-2 rounded-xl bg-black text-white"
+                          className="rounded-xl bg-black px-4 py-2 text-white"
                         >
                           {t("Далі →", "Далее →")}
                         </button>
@@ -714,7 +713,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                             setInput("");
                             setStatus("idle");
                           }}
-                          className="px-4 py-2 rounded-xl border hover:bg-slate-50"
+                          className="rounded-xl border px-4 py-2 hover:bg-slate-50"
                         >
                           {t("Спробувати знову", "Попробовать снова")}
                         </button>
@@ -725,21 +724,20 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
                 <button
                   onClick={resetDictationWithNewWords}
-                  className="px-4 py-2 rounded-xl border hover:bg-slate-50"
+                  className="rounded-xl border px-4 py-2 hover:bg-slate-50"
                 >
                   {t("Почати заново", "Начать заново")}
                 </button>
               </>
             ) : (
-              <div className="rounded-2xl border p-4 space-y-3">
+              <div className="space-y-3 rounded-2xl border p-4">
                 <div className="text-lg font-semibold">{t("Готово! 🎉", "Готово! 🎉")}</div>
                 <div className="text-slate-700">
-                  {t("Результат", "Результат")}: <b>{tScore}</b> /{" "}
-                  <b>{typeWords.length}</b>
+                  {t("Результат", "Результат")}: <b>{tScore}</b> / <b>{typeWords.length}</b>
                 </div>
                 <button
                   onClick={resetDictationWithNewWords}
-                  className="px-4 py-2 rounded-xl bg-black text-white"
+                  className="rounded-xl bg-black px-4 py-2 text-white"
                 >
                   {t("Пройти ще раз", "Пройти ещё раз")}
                 </button>

@@ -6,24 +6,34 @@ import AlphabetPage from "../alphabet/page";
 import VerbsPresentPage from "../verbs-present/page";
 import CasesPage from "../cases/page";
 
-const TOPICS: Record<string, { title: string; description: string; path: string }> = {
+type TopicConfig = {
+  title: string;
+  description: string;
+  path: string;
+  render: () => React.ReactElement;
+};
+
+const TOPICS: Record<string, TopicConfig> = {
   alphabet: {
-    title: "Алфавіт і вимова словацької мови | Slovak Study",
+    title: "Алфавіт і вимова | Slovak Study",
     description:
-      "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
+      "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
     path: "/grammar/alphabet",
+    render: () => <AlphabetPage />,
   },
   "verbs-present": {
-    title: "Дієслова теперішнього часу в словацькій | Slovak Study",
+    title: "Дієслова теперішнього часу | Slovak Study",
     description:
-      "Як відмінюються словацькі дієслова в теперішньому часі: таблиці, приклади та міні-вправа.",
+      "Дієслова теперішнього часу у словацькій та чеській мовах: таблиці, приклади та міні-вправи.",
     path: "/grammar/verbs-present",
+    render: () => <VerbsPresentPage />,
   },
   cases: {
-    title: "Відмінки в словацькій мові з прикладами | Slovak Study",
+    title: "Відмінки | Slovak Study",
     description:
-      "6 відмінків у словацькій мові: питання, закінчення та приклади речень. Просте пояснення для українців.",
+      "Відмінки у словацькій та чеській мовах: питання, форми, приклади речень і прості пояснення.",
     path: "/grammar/cases",
+    render: () => <CasesPage />,
   },
 };
 
@@ -33,26 +43,31 @@ export async function generateMetadata({
   params: Promise<{ topic: string }>;
 }): Promise<Metadata> {
   const { topic } = await params;
-  const meta = TOPICS[topic];
-  if (!meta) return {};
+  const config = TOPICS[topic];
 
-  const canonicalUrl = `${SITE_URL}${meta.path}`;
+  if (!config) {
+    return {};
+  }
+
+  const canonicalUrl = `${SITE_URL}${config.path}`;
 
   return {
-    title: meta.title,
-    description: meta.description,
-    // ✅ canonical 100% на .com
+    title: config.title,
+    description: config.description,
     alternates: {
-      canonical: meta.path,
+      canonical: canonicalUrl,
     },
     openGraph: {
-      title: meta.title,
-      description: meta.description,
+      title: config.title,
+      description: config.description,
       url: canonicalUrl,
       siteName: "Slovak Study",
       type: "article",
     },
-    robots: { index: true, follow: true },
+    robots: {
+      index: true,
+      follow: true,
+    },
   };
 }
 
@@ -62,15 +77,11 @@ export default async function GrammarTopicPage({
   params: Promise<{ topic: string }>;
 }) {
   const { topic } = await params;
+  const config = TOPICS[topic];
 
-  switch (topic) {
-    case "alphabet":
-      return <AlphabetPage />;
-    case "verbs-present":
-      return <VerbsPresentPage />;
-    case "cases":
-      return <CasesPage />;
-    default:
-      return notFound();
+  if (!config) {
+    notFound();
   }
+
+  return config.render();
 }

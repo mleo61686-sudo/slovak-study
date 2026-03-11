@@ -3,20 +3,16 @@ import AlphabetClient from "./AlphabetClient";
 import AlphabetSeo from "./AlphabetSeo";
 
 export const metadata: Metadata = {
-  title: "Алфавіт і вимова словацької мови | Slovak Study",
+  title: "Алфавіт і вимова | Slovak Study",
   description:
-    "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
+    "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
   alternates: {
-    canonical: "/grammar/alphabet",
-    languages: {
-      uk: "/grammar/alphabet",
-      ru: "/ru/grammar/alphabet",
-    },
+    canonical: "https://slovak-study.com/grammar/alphabet",
   },
   openGraph: {
-    title: "Алфавіт і вимова словацької мови | Slovak Study",
+    title: "Алфавіт і вимова | Slovak Study",
     description:
-      "Словацький алфавіт і вимова: правила читання, звуки та приклади. Пояснення українською.",
+      "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
     url: "https://slovak-study.com/grammar/alphabet",
     siteName: "Slovak Study",
     type: "article",

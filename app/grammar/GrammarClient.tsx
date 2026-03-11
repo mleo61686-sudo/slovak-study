@@ -4,7 +4,15 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
-const SK_TOPICS = [
+type Topic = {
+  id: string;
+  title: { ua: string; ru: string };
+  description: { ua: string; ru: string };
+  disabled?: boolean;
+  comingSoonText?: { ua: string; ru: string };
+};
+
+const SK_TOPICS: Topic[] = [
   {
     id: "alphabet",
     title: { ua: "Алфавіт і вимова", ru: "Алфавит и произношение" },
@@ -39,7 +47,7 @@ const SK_TOPICS = [
   },
 ];
 
-const CS_TOPICS = [
+const CS_TOPICS: Topic[] = [
   {
     id: "alphabet",
     title: { ua: "Абетка і вимова", ru: "Алфавит и произношение" },
@@ -65,14 +73,68 @@ const CS_TOPICS = [
     },
   },
   {
-    id: "slovak-slang",
+    id: "czech-slang",
     title: { ua: "Сленг і розмовна мова", ru: "Сленг и разговорная речь" },
     description: {
-      ua: "Живі фрази та вирази живої мови. Чеський розділ скоро буде готовий.",
-      ru: "Живые фразы и выражения разговорной речи. Чешский раздел скоро будет готов.",
+      ua: "Живі фрази та вирази живої чеської мови.",
+      ru: "Живые фразы и выражения живой чешской речи.",
+    },
+    disabled: true,
+    comingSoonText: {
+      ua: "Скоро буде доступно",
+      ru: "Скоро будет доступно",
     },
   },
 ];
+
+function TopicCard({
+  topic,
+  lang,
+}: {
+  topic: Topic;
+  lang: "ua" | "ru";
+}) {
+  const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
+
+  const content = (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <h2 className="text-lg font-semibold">
+          {t(topic.title.ua, topic.title.ru)}
+        </h2>
+
+        {topic.disabled ? (
+          <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+            {topic.comingSoonText
+              ? t(topic.comingSoonText.ua, topic.comingSoonText.ru)
+              : t("Скоро", "Скоро")}
+          </span>
+        ) : null}
+      </div>
+
+      <p className="mt-1 text-sm text-slate-600">
+        {t(topic.description.ua, topic.description.ru)}
+      </p>
+    </>
+  );
+
+  if (topic.disabled) {
+    return (
+      <div className="rounded-2xl border bg-slate-50 p-5 shadow-sm opacity-80">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={`/grammar/${topic.id}`}
+      className="rounded-2xl border bg-white p-5 shadow-sm transition hover:bg-slate-50"
+    >
+      {content}
+    </Link>
+  );
+}
 
 export default function GrammarClient() {
   const { lang } = useLanguage();
@@ -94,29 +156,18 @@ export default function GrammarClient() {
       <p className="text-slate-700">
         {isCzech
           ? t(
-            "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
-            "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка."
-          )
+              "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
+              "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка."
+            )
           : t(
-            "Обери тему та відкрий урок з прикладами і міні-вправою.",
-            "Выбери тему и открой урок с примерами и мини-упражнением."
-          )}
+              "Обери тему та відкрий урок з прикладами і міні-вправою.",
+              "Выбери тему и открой урок с примерами и мини-упражнением."
+            )}
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {topics.map((topic) => (
-          <Link
-            key={topic.id}
-            href={`/grammar/${topic.id}`}
-            className="rounded-2xl border bg-white p-5 shadow-sm hover:bg-slate-50 transition"
-          >
-            <h2 className="text-lg font-semibold">
-              {t(topic.title.ua, topic.title.ru)}
-            </h2>
-            <p className="mt-1 text-sm text-slate-600">
-              {t(topic.description.ua, topic.description.ru)}
-            </p>
-          </Link>
+          <TopicCard key={topic.id} topic={topic} lang={lang} />
         ))}
       </div>
     </div>

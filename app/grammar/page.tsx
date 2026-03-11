@@ -3,16 +3,16 @@ import GrammarClient from "./GrammarClient";
 import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
-  title: "Граматика словацької мови з прикладами | Slovak Study",
+  title: "Граматика | Slovak Study",
   description:
-    "Граматика словацької мови для українців: алфавіт, відмінки, дієслова, приклади речень та міні-вправи.",
+    "Граматика словацької та чеської мов для українців: алфавіт, відмінки, дієслова, приклади речень та міні-вправи.",
   alternates: {
     canonical: "https://slovak-study.com/grammar",
   },
   openGraph: {
-    title: "Граматика словацької мови — Slovak Study",
+    title: "Граматика — Slovak Study",
     description:
-      "Алфавіт, відмінки, дієслова та приклади речень. Пояснення українською.",
+      "Алфавіт, відмінки, дієслова та приклади речень для словацької й чеської мов.",
     url: "https://slovak-study.com/grammar",
     siteName: "Slovak Study",
     type: "website",
