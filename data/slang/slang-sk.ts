@@ -1,24 +1,6 @@
-export type SlangCategory =
-    | "daily"
-    | "work"
-    | "friends"
-    | "street"
-    | "reactions";
+import type { SlangItem } from "./index";
 
-export type SlangItem = {
-    id: string;
-    sk: string;
-    ua: string;
-    ru: string;
-    exampleSk: string;
-    exampleUa: string;
-    exampleRu: string;
-    category: SlangCategory;
-    level: "A1" | "A2" | "B1";
-    caution?: { ua: string; ru: string }; // коли не доречно
-};
-
-export const SLANG: SlangItem[] = [
+export const SLANG_SK: SlangItem[] = [
     // -------------------------
     // FRIENDS (друзі)
     // -------------------------

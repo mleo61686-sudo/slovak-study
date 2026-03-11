@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import SlangClient from "./SlangClient";
 
 export const metadata: Metadata = {
-  title: "Словацький сленг і розмовні фрази | Slovak Study",
+  title: "Сленг і розмовні фрази (Slovak & Czech) | Slovak Study",
   description:
-    "Словацький сленг та розмовні вирази: як говорять словаки в реальному житті. Приклади речень і практика.",
+    "Словацький і чеський сленг та розмовні фрази: як реально говорять у Словаччині та Чехії. Приклади речень, переклади та практика.",
   alternates: {
     canonical: "https://slovak-study.com/grammar/slovak-slang",
   },
   openGraph: {
-    title: "Словацький сленг — Slovak Study",
+    title: "Сленг і розмовна мова — Slovak Study",
     description:
-      "Живі фрази та вирази, які використовують словаки щодня.",
+      "Живі словацькі та чеські розмовні фрази, які використовують у реальному житті.",
     url: "https://slovak-study.com/grammar/slovak-slang",
     siteName: "Slovak Study",
     type: "website",

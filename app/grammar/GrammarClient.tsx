@@ -8,8 +8,6 @@ type Topic = {
   id: string;
   title: { ua: string; ru: string };
   description: { ua: string; ru: string };
-  disabled?: boolean;
-  comingSoonText?: { ua: string; ru: string };
 };
 
 const SK_TOPICS: Topic[] = [
@@ -73,16 +71,11 @@ const CS_TOPICS: Topic[] = [
     },
   },
   {
-    id: "czech-slang",
+    id: "slovak-slang",
     title: { ua: "Сленг і розмовна мова", ru: "Сленг и разговорная речь" },
     description: {
       ua: "Живі фрази та вирази живої чеської мови.",
       ru: "Живые фразы и выражения живой чешской речи.",
-    },
-    disabled: true,
-    comingSoonText: {
-      ua: "Скоро буде доступно",
-      ru: "Скоро будет доступно",
     },
   },
 ];
@@ -96,42 +89,20 @@ function TopicCard({
 }) {
   const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
 
-  const content = (
-    <>
-      <div className="flex items-start justify-between gap-3">
-        <h2 className="text-lg font-semibold">
-          {t(topic.title.ua, topic.title.ru)}
-        </h2>
-
-        {topic.disabled ? (
-          <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-            {topic.comingSoonText
-              ? t(topic.comingSoonText.ua, topic.comingSoonText.ru)
-              : t("Скоро", "Скоро")}
-          </span>
-        ) : null}
-      </div>
-
-      <p className="mt-1 text-sm text-slate-600">
-        {t(topic.description.ua, topic.description.ru)}
-      </p>
-    </>
-  );
-
-  if (topic.disabled) {
-    return (
-      <div className="rounded-2xl border bg-slate-50 p-5 shadow-sm opacity-80">
-        {content}
-      </div>
-    );
-  }
-
   return (
     <Link
       href={`/grammar/${topic.id}`}
       className="rounded-2xl border bg-white p-5 shadow-sm transition hover:bg-slate-50"
     >
-      {content}
+      <div className="flex items-start justify-between gap-3">
+        <h2 className="text-lg font-semibold">
+          {t(topic.title.ua, topic.title.ru)}
+        </h2>
+      </div>
+
+      <p className="mt-1 text-sm text-slate-600">
+        {t(topic.description.ua, topic.description.ru)}
+      </p>
     </Link>
   );
 }

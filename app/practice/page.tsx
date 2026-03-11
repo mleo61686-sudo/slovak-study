@@ -6,7 +6,7 @@ import SpeakButton from "@/app/components/SpeakButton";
 import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { SLANG } from "@/data/slang";
+import { SLANG_SK, SLANG_CS } from "@/data/slang";
 import CourseGate from "@/app/components/CourseGate";
 
 type Lang = "ua" | "ru";
@@ -15,20 +15,20 @@ type SessionMode = "mixed" | "mcq" | "typing";
 
 type SessionQuestionBase =
   | {
-      id: string;
-      mode: "mcq";
-      sk: string; // ✅ term (fallback sk)
-      ua: string;
-      ru: string;
-      options: string[]; // ✅ term (fallback sk)
-    }
+    id: string;
+    mode: "mcq";
+    sk: string; // ✅ term (fallback sk)
+    ua: string;
+    ru: string;
+    options: string[]; // ✅ term (fallback sk)
+  }
   | {
-      id: string;
-      mode: "typing";
-      sk: string; // ✅ term (fallback sk)
-      ua: string;
-      ru: string;
-    };
+    id: string;
+    mode: "typing";
+    sk: string; // ✅ term (fallback sk)
+    ua: string;
+    ru: string;
+  };
 
 const UI = {
   ua: {
@@ -139,7 +139,7 @@ function loadStats(): PracticeStats {
 function saveStats(next: PracticeStats) {
   try {
     window.localStorage.setItem(LS_KEY, JSON.stringify(next));
-  } catch {}
+  } catch { }
 }
 
 function norm(s: string) {
@@ -321,14 +321,16 @@ export default function PracticePage() {
   const slangTermList = useMemo(() => {
     if (pack !== "slang") return null;
 
-    const list = SLANG.filter((x) => {
+    const slang = courseId === "cs" ? SLANG_CS : SLANG_SK;
+
+    const list = slang.filter((x) => {
       const okLevel = !slangLevel || x.level === slangLevel;
       const okCat = !slangCat || x.category === slangCat;
       return okLevel && okCat;
     }).map((x) => x.sk);
 
     return list;
-  }, [pack, slangLevel, slangCat]);
+  }, [pack, slangLevel, slangCat, courseId]);
 
   const qBase = useMemo(() => {
     if (phase !== "quiz") return null;
@@ -757,11 +759,10 @@ export default function PracticePage() {
                               className={`w-full rounded-xl border px-4 py-3 text-left transition flex items-center justify-between
 ${isCorrect ? "bg-green-100 border-green-400" : ""}
 ${isWrong ? "bg-red-100 border-red-400" : ""}
-${
-  !selected
-    ? "hover:bg-slate-50 cursor-pointer"
-    : "opacity-95 cursor-default"
-}
+${!selected
+                                  ? "hover:bg-slate-50 cursor-pointer"
+                                  : "opacity-95 cursor-default"
+                                }
 `}
                             >
                               <span className="font-medium">{option}</span>
@@ -824,11 +825,10 @@ ${
                         ) : (
                           <div className="space-y-3">
                             <div
-                              className={`rounded-xl border px-4 py-3 text-sm ${
-                                typedChecked.ok
+                              className={`rounded-xl border px-4 py-3 text-sm ${typedChecked.ok
                                   ? "bg-green-100 border-green-400"
                                   : "bg-red-100 border-red-400"
-                              }`}
+                                }`}
                             >
                               {typedChecked.ok
                                 ? t.correct
