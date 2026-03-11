@@ -7,7 +7,7 @@ dotenv.config({ path: ".env.local", override: true });
 import fs from "node:fs";
 import pLimit from "p-limit";
 
-import { ttsToFile, VOICE1, VOICE2 } from "./tts/elevenlabs-client";
+import { ttsToFile, VOICE1, VOICE2, VOICE_CS } from "./tts/elevenlabs-client";
 import { pickVoiceId, ttsText } from "./tts/voices";
 import { outPath } from "./tts/hashing";
 
@@ -23,8 +23,6 @@ import {
   collectVerbsPresentItems
 } from "./tts/collectors/grammar";
 
-import { expandDerivedPhrases } from "./tts/generators/negation";
-
 import { SLANG_SK, SLANG_CS } from "../data/slang";
 
 import { A0_REAL_SOURCE } from "../app/learning/levels/a0";
@@ -38,6 +36,7 @@ import { A2_PHRASES } from "../app/learning/phrases/a2";
 import { B1_PHRASES } from "../app/learning/phrases/b1";
 
 type Item = { kind: "word" | "phrase"; text: string };
+type CourseId = "sk" | "cs";
 
 function norm(s: string) {
   return s.trim().normalize("NFC");
@@ -53,8 +52,7 @@ function wordText(w: any) {
 
 function collectSlangItems(): Item[] {
   const items: Item[] = [];
-
-  const allSlang = [...SLANG_SK, ...SLANG_CS];
+  const allSlang = COURSE === "cs" ? SLANG_CS : SLANG_SK;
 
   for (const s of allSlang as any[]) {
     const wt = wordText(s);
@@ -91,17 +89,16 @@ const CASES_ONLY = process.argv.includes("--cases");
 const VERBS_PRESENT_ONLY = process.argv.includes("--verbs-present");
 
 const BAND = process.argv.find(a => a.startsWith("--band="))?.split("=")[1] ?? "";
-const COURSE =
-  process.argv.find(a => a.startsWith("--course="))?.split("=")[1] ?? "sk";
+const COURSE = (process.argv.find(a => a.startsWith("--course="))?.split("=")[1] ?? "sk") as CourseId;
 
 /* =======================
    MAIN
 ======================= */
 
 async function main() {
-
   console.log("VOICE1 =", VOICE1);
   console.log("VOICE2 =", VOICE2);
+  console.log("VOICE_CS =", VOICE_CS);
   console.log("VOICE2 enabled? =", VOICE2 !== VOICE1);
   console.log("COURSE =", COURSE);
   console.log("ALPHABET_ONLY =", ALPHABET_ONLY);
@@ -112,16 +109,16 @@ async function main() {
 
   let items: Item[] =
     VERBS_PRESENT_ONLY
-      ? collectVerbsPresentItems()
+      ? collectVerbsPresentItems(COURSE)
       : CASES_ONLY
-        ? collectCasesItems()
+        ? collectCasesItems(COURSE)
         : ALPHABET_ONLY
-          ? collectAlphabetItems()
+          ? collectAlphabetItems(COURSE)
           : [
-            ...collect(),
-            ...collectAlphabetItems(),
-            ...collectCasesItems(),
-            ...collectVerbsPresentItems(),
+            ...collect(COURSE),
+            ...collectAlphabetItems(COURSE),
+            ...collectCasesItems(COURSE),
+            ...collectVerbsPresentItems(COURSE),
             ...collectSlangItems(),
           ];
 
@@ -130,51 +127,36 @@ async function main() {
   ======================= */
 
   if (BAND) {
-
     const b = BAND.trim().toLowerCase();
     let bandItems: Item[] = [];
 
     if (b === "b1") {
-
       bandItems = [
         ...collectFromLessons(B1_ALL as any[]),
         ...collectFromPhraseDict(B1_PHRASES),
       ];
-
     } else if (b === "a2") {
-
       bandItems = [
         ...collectFromLessons(A2_ALL as any[]),
         ...collectFromPhraseDict(A2_PHRASES),
       ];
-
     } else if (b === "a1") {
-
       bandItems = [
         ...collectFromLessons(A1_ALL as any[]),
         ...collectFromPhraseDict(A1_PHRASES),
       ];
-
     } else if (b === "a0") {
-
       bandItems = [
         ...collectFromLessons(A0_REAL_SOURCE as any[]),
         ...collectFromPhraseDict(A0_PHRASES),
       ];
-
     } else if (b === "slang") {
-
       bandItems = collectSlangItems();
-
     } else if (b === "all") {
-
       bandItems = items;
-
     } else {
-
       console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|slang|all`);
       bandItems = items;
-
     }
 
     const uniq = new Map<string, Item>();
@@ -205,47 +187,39 @@ async function main() {
   }
 
   if (ONLY) {
-
     items = items.filter(i => norm(i.text) === norm(ONLY));
-
     console.log(`ONLY mode: "${ONLY}" -> ${items.length} item(s)`);
   }
 
   console.log(`Total unique items: ${items.length}`);
 
-  const limit = pLimit(4);
-
+  const limit = pLimit(1);
   let skipped = 0;
   let generated = 0;
 
   await Promise.all(
-
     items.map(it =>
       limit(async () => {
-
-        const file = outPath(COURSE as any, it.kind, it.text);
+        const file = outPath(COURSE, it.kind, it.text);
 
         if (!FORCE && fs.existsSync(file) && fs.statSync(file).size > 1000) {
           skipped++;
           return;
         }
 
-        const voiceId = pickVoiceId(it.kind, it.text);
+        const voiceId = pickVoiceId(COURSE, it.kind, it.text);
         const sentText = ttsText(it.kind, it.text);
 
         await ttsToFile(it.kind, it.text, file, voiceId, sentText);
 
-        // 🧠 перевірка поганого аудіо
         const size = fs.statSync(file).size;
 
         if (size < 2000) {
           console.log(`⚠️ Suspicious audio size (${size}), regenerating:`, it.text);
-
           await ttsToFile(it.kind, it.text, file, voiceId, sentText);
         }
 
         generated++;
-
       })
     )
   );
@@ -255,8 +229,6 @@ async function main() {
 }
 
 main().catch(e => {
-
   console.error("❌ ERROR:", e);
   process.exit(1);
-
 });

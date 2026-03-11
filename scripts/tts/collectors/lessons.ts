@@ -1,16 +1,25 @@
-import { A0_REAL_SOURCE } from "../../../app/learning/levels/a0";
-import { A1_ALL } from "../../../app/learning/levels/a1";
-import { A2_ALL } from "../../../app/learning/levels/a2";
-import { B1_ALL } from "../../../app/learning/levels/b1";
+import { A0_REAL_SOURCE as A0_SK } from "../../../app/learning/levels/a0";
+import { A1_ALL as A1_SK } from "../../../app/learning/levels/a1";
+import { A2_ALL as A2_SK } from "../../../app/learning/levels/a2";
+import { B1_ALL as B1_SK } from "../../../app/learning/levels/b1";
 
-import { A0_PHRASES } from "../../../app/learning/phrases/a0";
-import { A1_PHRASES } from "../../../app/learning/phrases/a1";
-import { A2_PHRASES } from "../../../app/learning/phrases/a2";
-import { B1_PHRASES } from "../../../app/learning/phrases/b1";
+import { A0_PHRASES as A0_PHRASES_SK } from "../../../app/learning/phrases/a0";
+import { A1_PHRASES as A1_PHRASES_SK } from "../../../app/learning/phrases/a1";
+import { A2_PHRASES as A2_PHRASES_SK } from "../../../app/learning/phrases/a2";
+import { B1_PHRASES as B1_PHRASES_SK } from "../../../app/learning/phrases/b1";
 
-import { WORDS } from "../../../app/data/words";
+import { CS_A0_SOURCE as A0_CS } from "../../../app/learning/levels/cs-a0";
+import { CS_A1_SOURCE as A1_CS } from "../../../app/learning/levels/cs-a1";
+import { CS_A2_SOURCE as A2_CS } from "../../../app/learning/levels/cs-a2";
+import { CS_B1_SOURCE as B1_CS } from "../../../app/learning/levels/cs-b1";
+
+import { CS_A0_PHRASES as A0_PHRASES_CS } from "../../../app/learning/phrases/cs/a0";
+import { CS_A1_PHRASES as A1_PHRASES_CS } from "../../../app/learning/phrases/cs/a1";
+import { CS_A2_PHRASES as A2_PHRASES_CS } from "../../../app/learning/phrases/cs/a2";
+import { CS_B1_PHRASES as B1_PHRASES_CS } from "../../../app/learning/phrases/cs/b1";
 
 export type Item = { kind: "word" | "phrase"; text: string };
+export type CourseId = "sk" | "cs";
 
 type WordLike = {
   sk?: string;
@@ -22,31 +31,53 @@ function wordText(w: WordLike) {
   return String((w as any)?.term ?? (w as any)?.sk ?? "").trim();
 }
 
-export const ALL_LESSONS: any[] = [
-  ...(A1_ALL as any[]),
-  ...(A2_ALL as any[]),
-  ...(B1_ALL as any[]),
-];
+function getCourseSources(course: CourseId) {
+  if (course === "cs") {
+    return {
+      a0Lessons: A0_CS as any[],
+      allLessons: [
+        ...(A1_CS as any[]),
+        ...(A2_CS as any[]),
+        ...(B1_CS as any[]),
+      ],
+      phraseSources: [
+        A0_PHRASES_CS,
+        A1_PHRASES_CS,
+        A2_PHRASES_CS,
+        B1_PHRASES_CS,
+      ],
+    };
+  }
+
+  return {
+    a0Lessons: A0_SK as any[],
+    allLessons: [
+      ...(A1_SK as any[]),
+      ...(A2_SK as any[]),
+      ...(B1_SK as any[]),
+    ],
+    phraseSources: [
+      A0_PHRASES_SK,
+      A1_PHRASES_SK,
+      A2_PHRASES_SK,
+      B1_PHRASES_SK,
+    ],
+  };
+}
 
 /**
  * phrases collector
  */
-export function collectPhrases(): string[] {
+export function collectPhrases(course: CourseId = "sk"): string[] {
   const list: string[] = [];
+  const { phraseSources } = getCourseSources(course);
 
-  const sources: any[] = [
-    A0_PHRASES,
-    A1_PHRASES,
-    A2_PHRASES,
-    B1_PHRASES,
-  ];
-
-  for (const src of sources) {
+  for (const src of phraseSources) {
     if (!src) continue;
 
     if (Array.isArray(src)) {
       for (const p of src) {
-        if (p?.sk) list.push(String(p.sk));
+        if ((p as any)?.sk) list.push(String((p as any).sk));
       }
       continue;
     }
@@ -121,10 +152,11 @@ export function collectFromPhraseDict(dict: any): Item[] {
 /**
  * main collector
  */
-export function collect(): Item[] {
+export function collect(course: CourseId = "sk"): Item[] {
   const items: Item[] = [];
+  const { allLessons, a0Lessons } = getCourseSources(course);
 
-  for (const lesson of ALL_LESSONS) {
+  for (const lesson of allLessons) {
     for (const w of lesson.words ?? []) {
       const wt = wordText(w);
 
@@ -141,7 +173,7 @@ export function collect(): Item[] {
     }
   }
 
-  for (const lesson of A0_REAL_SOURCE as any[]) {
+  for (const lesson of a0Lessons) {
     for (const w of lesson.words ?? []) {
       const wt = wordText(w);
 
@@ -158,15 +190,7 @@ export function collect(): Item[] {
     }
   }
 
-  for (const w of WORDS as any[]) {
-    const wt = wordText(w);
-
-    if (wt) {
-      items.push({ kind: "word", text: wt });
-    }
-  }
-
-  for (const phrase of collectPhrases()) {
+  for (const phrase of collectPhrases(course)) {
     items.push({
       kind: "phrase",
       text: phrase,

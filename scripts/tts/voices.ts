@@ -1,6 +1,7 @@
-import { VOICE1, VOICE2 } from "./elevenlabs-client";
+import { VOICE1, VOICE2, VOICE_CS } from "./elevenlabs-client";
 
 export type ItemKind = "word" | "phrase";
+export type CourseId = "sk" | "cs";
 
 function norm(s: string) {
   return s.trim().normalize("NFC");
@@ -173,9 +174,15 @@ export function ttsText(kind: ItemKind, text: string) {
   return text;
 }
 
-export function pickVoiceId(kind: ItemKind, text: string) {
+export function pickVoiceId(course: CourseId, kind: ItemKind, text: string) {
   const clean = text.trim();
 
+  // увесь чеський курс іде окремим голосом
+  if (course === "cs") {
+    return VOICE_CS;
+  }
+
+  // стара словацька логіка лишається як була
   if (kind === "word") {
     return VOICE2_WORDS.has(clean) ? VOICE2 : VOICE1;
   }
