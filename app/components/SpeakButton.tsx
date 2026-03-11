@@ -26,17 +26,34 @@ async function phraseKey13(text: string) {
   return h.slice(0, 13);
 }
 
-async function buildLocalUrl(text: string, kind: "word" | "phrase") {
+async function buildLocalUrls(text: string, kind: "word" | "phrase") {
   const clean = text.trim();
+
+  const course =
+    typeof document !== "undefined"
+      ? document.cookie
+        .split("; ")
+        .find((c) => c.startsWith("slovakStudyActiveCourse="))
+        ?.split("=")[1] || "sk"
+      : "sk";
 
   if (kind === "phrase") {
     const key = await phraseKey13(clean);
-    return `/audio/phrases/${key}.mp3`;
+
+    if (course === "sk") {
+      return [`/audio/phrases/${key}.mp3`];
+    }
+
+    return [`/audio/${course}/phrases/${key}.mp3`];
   }
 
-  // ✅ words: sha1("word:<text>") full hex (must match generator script)
   const h = await sha1Hex(`word:${clean}`);
-  return `/audio/words/${h}.mp3`;
+
+  if (course === "sk") {
+    return [`/audio/words/${h}.mp3`];
+  }
+
+  return [`/audio/${course}/words/${h}.mp3`];
 }
 
 export default function SpeakButton({
@@ -76,14 +93,29 @@ export default function SpeakButton({
     setLoading(true);
 
     try {
-      const url = await buildLocalUrl(clean, kind);
+      const urls = await buildLocalUrls(clean, kind);
 
       if (myPlayId !== playIdRef.current) return;
 
-      const a = new Audio(url);
-      audioRef.current = a;
+      let lastError: unknown = null;
+      let played = false;
 
-      await a.play();
+      for (const url of urls) {
+        try {
+          const a = new Audio(url);
+          audioRef.current = a;
+
+          await a.play();
+          played = true;
+          break;
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      if (!played && lastError) {
+        throw lastError;
+      }
     } catch (e: any) {
       if (e?.name === "AbortError") return;
       const msg = String(e?.message ?? "");
