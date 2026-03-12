@@ -1,4 +1,3 @@
-// D:\slovak-study\slovak-study\app\learning\components\LevelClient\LevelClientImpl.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -20,7 +19,6 @@ import AudioQuiz from "@/app/learning/components/LevelClient/exercises/AudioQuiz
 import MatchColumns from "@/app/learning/components/LevelClient/exercises/MatchColumns";
 import BuildSentence from "@/app/learning/components/LevelClient/exercises/BuildSentence";
 
-// ===== UI i18n (local) =====
 type UiLang = "ua" | "ru";
 type CourseId = "sk" | "cs" | "pl";
 
@@ -34,13 +32,9 @@ const UI = {
     back: "← Назад",
     next: "Далі →",
     startExercises: "Почати вправи 🧠",
-
-    // quiz header
     exercise: "Вправа",
     word: "Слово",
     lesson: "Урок",
-
-    // finished
     levelDone: "Рівень пройдено 🎉",
     result: "Результат",
     nextLockedTitle: "Наступний урок зараз закритий 🔒",
@@ -53,30 +47,13 @@ const UI = {
     saving: "Зберігаю прогрес…",
   },
   ru: {
-    title: "Обучение 📚",
-    subtitle: "Выбирай уровень (A0 → B2) и проходи уроки по 10 слов.",
-    done: "Пройдено уроков:",
-    lessons: "Уроков:",
-    words: "Слов:",
-    allLessons: "Все уроки →",
-    soon: "Скоро добавим уроки для этого уровня ✅",
-    wordsCount: (n: number) => `${n} слов`,
-    repeat: "Повторить",
-    start: "Начать",
-    locked: "Закрыто 🔒",
-    premiumOnly: "Доступно только для Premium ⭐",
-    buyPremium: "Купить Premium",
     viewed: "Просмотрено",
     back: "← Назад",
     next: "Далее →",
     startExercises: "Начать упражнения 🧠",
-
-    // quiz header
     exercise: "Упражнение",
     word: "Слово",
     lesson: "Урок",
-
-    // finished
     levelDone: "Уровень пройден 🎉",
     result: "Результат",
     nextLockedTitle: "Следующий урок сейчас закрыт 🔒",
@@ -99,8 +76,6 @@ function getNextLevelId(levelId: string) {
     if (band === "a0" && Number.isFinite(n) && n >= 30) return "a1-1";
     if (band === "a1" && Number.isFinite(n) && n >= 40) return "a2-1";
     if (band === "a2" && Number.isFinite(n) && n >= 50) return "b1-1";
-
-    // ✅ NEW: кінець B1 (35 уроків) -> B2
     if (band === "b1" && Number.isFinite(n) && n >= 35) return "b2-1";
 
     if (Number.isFinite(n)) return `${band}-${n + 1}`;
@@ -143,10 +118,8 @@ export default function LevelClient({
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  // ✅ ключ для автоплею (залишаємо для 1 та 4 вправ, як було)
   const [quizAutoKey, setQuizAutoKey] = useState(0);
 
-  // ✅ IMPORTANT: unlock autoplay тільки після першої взаємодії
   const [audioUnlocked, setAudioUnlocked] = useState(false);
   const unlockedRef = useMemo(() => ({ v: false }), []);
 
@@ -161,24 +134,21 @@ export default function LevelClient({
   const { lang } = useLanguage();
   const t = UI[uiLangFrom(lang)];
 
-  // ✅ NEW: локально перераховуємо доступність "Next" після збереження прогресу
   const [savingNext, setSavingNext] = useState(false);
   const [canGoNextNow, setCanGoNextNow] = useState<boolean>(canGoNext);
   const [lockedReasonNow, setLockedReasonNow] = useState<string | undefined>(
     lockedReason
   );
 
-  // якщо серверний проп зміниться (наприклад після refresh) — синхронізуємо
   useEffect(() => {
     setCanGoNextNow(canGoNext);
     setLockedReasonNow(lockedReason);
   }, [canGoNext, lockedReason]);
 
-  // ✅ PRELOAD: 2–4 наступних зображення (щоб гортання було миттєве)
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const lookahead = 4; // 2..4 оптимально
+    const lookahead = 4;
     for (let k = 1; k <= lookahead; k++) {
       const src = words[wordIndex + k]?.img;
       if (!src) continue;
@@ -197,7 +167,6 @@ export default function LevelClient({
     );
   }, [words.length]);
 
-  // =============== LEARN MODE ===============
   if (mode === "learn") {
     const word = words[wordIndex];
 
@@ -287,21 +256,18 @@ export default function LevelClient({
     );
   }
 
-  // =============== QUIZ MODE ===============
   const exercise = EXERCISES[exerciseIndex];
   const currentWord = words[wordIndex];
 
   function finishLesson(finalScore: number) {
     setFinished(true);
 
-    // ✅ локально — одразу
     try {
       finishLessonQuiz(levelId, finalScore, totalQuestions);
     } catch (e) {
       console.error("Save local progress error", e);
     }
 
-    // ✅ сервер — чекаємо і тоді відкриваємо Next (або показуємо lock)
     (async () => {
       setSavingNext(true);
       try {
@@ -313,26 +279,17 @@ export default function LevelClient({
 
         const data = await res.json().catch(() => ({}));
 
-        // якщо сервер ок — можемо вирішити, чи можна Next для free
         if (res.ok && data?.ok) {
           const dailyCount = typeof data?.dailyCount === "number" ? data.dailyCount : 0;
-
-          // ✅ правило free: 2 нові уроки/день (як у тебе в бекенді)
-          // Після 1-го уроку dailyCount=1 -> можна
-          // Після 2-го dailyCount=2 -> вже не можна
           const freeCanGoNext = dailyCount < 2;
 
-          // Якщо раніше canGoNext був false (через те що сервер ще не знав про done),
-          // то тут відкриваємо, якщо ліміт не вибраний.
           if (!canGoNext && freeCanGoNext) {
             setCanGoNextNow(true);
             setLockedReasonNow(undefined);
           } else {
-            // залишаємо як є (або якщо ліміт вибраний — хай буде lock)
             setCanGoNextNow(canGoNext || freeCanGoNext);
           }
 
-          // ✅ обновимо серверні сторінки/кеш
           router.refresh();
         }
       } catch (e) {
