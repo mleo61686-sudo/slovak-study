@@ -11,7 +11,7 @@ export default function LanguageSwitcher() {
         type="button"
         aria-pressed={lang === "ua"}
         onClick={() => setLang("ua")}
-        className={`px-3 py-1 rounded-lg border text-sm font-semibold ${
+        className={`h-9 w-12 rounded-lg border text-sm font-semibold ${
           lang === "ua" ? "bg-black text-white" : "bg-white hover:bg-slate-50"
         }`}
       >
@@ -22,7 +22,7 @@ export default function LanguageSwitcher() {
         type="button"
         aria-pressed={lang === "ru"}
         onClick={() => setLang("ru")}
-        className={`px-3 py-1 rounded-lg border text-sm font-semibold ${
+        className={`h-9 w-12 rounded-lg border text-sm font-semibold ${
           lang === "ru" ? "bg-black text-white" : "bg-white hover:bg-slate-50"
         }`}
       >

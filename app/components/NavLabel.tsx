@@ -37,7 +37,8 @@ function getLabel(lang: "ua" | "ru", key: NavKey) {
 }
 
 export default function NavLabel({ k }: { k: NavKey }) {
-  const { lang } = useLanguage(); // очікуємо "ua" | "ru"
+  const { lang } = useLanguage();
   const safeLang: "ua" | "ru" = lang === "ru" ? "ru" : "ua";
-  return <>{getLabel(safeLang, k)}</>;
+
+  return <span className="whitespace-nowrap">{getLabel(safeLang, k)}</span>;
 }

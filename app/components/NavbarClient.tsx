@@ -23,7 +23,6 @@ export default function NavbarClient({
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // ✅ MOBILE: клік поза меню закриває dropdown
   useEffect(() => {
     if (!mobile) return;
 
@@ -38,7 +37,6 @@ export default function NavbarClient({
     return () => document.removeEventListener("mousedown", handleOutside);
   }, [open, mobile]);
 
-  // ✅ MOBILE: Escape закриває dropdown
   useEffect(() => {
     if (!mobile) return;
 
@@ -50,7 +48,6 @@ export default function NavbarClient({
     return () => document.removeEventListener("keydown", handleEsc);
   }, [mobile]);
 
-  // DESKTOP: просто рендеримо праву частину (без ☰)
   if (!mobile) {
     return (
       <div className="flex items-center gap-2">
@@ -67,7 +64,7 @@ export default function NavbarClient({
             href="/login"
             className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
           >
-            <span className="inline-block min-w-[60px] text-center">
+            <span className="inline-block min-w-[60px] text-center whitespace-nowrap">
               <NavLabel k="login" />
             </span>
           </Link>
@@ -78,12 +75,11 @@ export default function NavbarClient({
     );
   }
 
-  // MOBILE: ☰ + dropdown
   return (
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="rounded-xl px-3 py-2 text-lg hover:bg-slate-100"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-lg hover:bg-slate-100"
         aria-label="Menu"
         type="button"
       >
@@ -91,7 +87,7 @@ export default function NavbarClient({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-[min(92vw,360px)] rounded-2xl border bg-white shadow-lg p-2">
+        <div className="absolute right-0 top-full z-50 mt-2 w-[min(92vw,360px)] rounded-2xl border bg-white p-2 shadow-lg">
           <nav className="flex flex-col">
             {nav.map((item) => (
               <Link
@@ -100,7 +96,7 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                <span className="inline-block min-w-[88px]">
+                <span className="inline-block min-w-[88px] whitespace-nowrap">
                   <NavLabel k={item.key} />
                 </span>
               </Link>
@@ -109,7 +105,7 @@ export default function NavbarClient({
             {admin && (
               <Link
                 href="/admin/reports"
-                className="rounded-xl px-3 py-2 text-sm font-semibold border border-slate-300 hover:bg-slate-100 mt-1"
+                className="mt-1 rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
                 🛠️ <NavLabel k="reports" />
@@ -124,7 +120,6 @@ export default function NavbarClient({
               </div>
             )}
 
-            {/* ✅ НЕ обгортаємо UserMenu onClick, інакше воно не відкривається */}
             {session ? (
               <UserMenu
                 name={session.name}
@@ -137,7 +132,7 @@ export default function NavbarClient({
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                <span className="inline-block min-w-[60px] text-center">
+                <span className="inline-block min-w-[60px] text-center whitespace-nowrap">
                   <NavLabel k="login" />
                 </span>
               </Link>

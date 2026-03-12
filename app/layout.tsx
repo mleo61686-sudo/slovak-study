@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { headers } from "next/headers";
+
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -58,37 +58,13 @@ export const viewport = {
 };
 export const revalidate = 3600; // 1 година
 
-async function detectLangFromHeaders(): Promise<"uk" | "ru"> {
-  try {
-    const h = await headers();
 
-    const url =
-      h.get("x-url") ||
-      h.get("x-original-url") ||
-      h.get("x-forwarded-uri") ||
-      h.get("x-forwarded-path") ||
-      "";
 
-    if (url.startsWith("/ru")) return "ru";
-
-    const ref = h.get("referer") || "";
-    try {
-      const u = new URL(ref);
-      if (u.pathname.startsWith("/ru")) return "ru";
-    } catch { }
-
-    return "uk";
-  } catch {
-    return "uk";
-  }
-}
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const htmlLang = await detectLangFromHeaders();
 
   const schemaOrg = {
     "@context": "https://schema.org",
@@ -119,7 +95,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={htmlLang} suppressHydrationWarning>
+    <html lang="uk" suppressHydrationWarning>
       <head>
         {/* Google AdSense */}
         <meta name="google-adsense-account" content="ca-pub-1760161415033749" />
