@@ -2,15 +2,13 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
 
-
-import { SpeedInsights } from "@vercel/speed-insights/next";
-
 import Navbar from "./components/Navbar";
-import ProgressSync from "./components/ProgressSync";
-import SrsSync from "./components/SrsSync";
 import SessionProviderClient from "./components/SessionProviderClient";
 import TopBanner from "./components/TopBanner";
+import ProgressSync from "./components/ProgressSync";
+import SrsSync from "./components/SrsSync";
 import CourseBootstrap from "@/app/components/CourseBootstrap";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://slovak-study.com"),
@@ -27,8 +25,6 @@ export const metadata: Metadata = {
     canonical: "/",
   },
 
-  // ✅ Дуже важливо, щоб Google бачив бренд (а не “Vercel”)
-  // Переконайся, що ці файли існують у /public
   icons: {
     icon: [{ url: "/favicon.ico" }],
   },
@@ -45,27 +41,25 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Slovak Study — словацька мова онлайн",
-    description: "Уроки A0–B2, граматика, словник та вправи. Вчи словацьку системно.",
+    description:
+      "Уроки A0–B2, граматика, словник та вправи. Вчи словацьку системно.",
     images: ["/opengraph-image"],
   },
+
   robots: { index: true, follow: true },
-
-
 };
 
 export const viewport = {
   themeColor: "#ffffff",
 };
-export const revalidate = 3600; // 1 година
 
-
+export const revalidate = 3600;
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
   const schemaOrg = {
     "@context": "https://schema.org",
     "@graph": [
@@ -74,8 +68,6 @@ export default function RootLayout({
         "@id": "https://slovak-study.com/#organization",
         name: "Slovak Study",
         url: "https://slovak-study.com/",
-        // Якщо в тебе є справжній логотип у public, краще вказати його:
-        // logo: "https://slovak-study.com/logo.png",
         logo: "https://slovak-study.com/logo.png",
       },
       {
@@ -97,15 +89,19 @@ export default function RootLayout({
   return (
     <html lang="uk" suppressHydrationWarning>
       <head>
-        {/* Google AdSense */}
-        <meta name="google-adsense-account" content="ca-pub-1760161415033749" />
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-1760161415033749"
+        />
 
-        {/* hreflang */}
         <link rel="alternate" hrefLang="uk" href="https://slovak-study.com/" />
         <link rel="alternate" hrefLang="ru" href="https://slovak-study.com/ru/" />
-        <link rel="alternate" hrefLang="x-default" href="https://slovak-study.com/" />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://slovak-study.com/"
+        />
 
-        {/* ✅ Schema.org через Next Script (стабільніше) */}
         <Script
           id="schema-org"
           type="application/ld+json"
@@ -117,7 +113,7 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1760161415033749"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </head>
 
@@ -130,6 +126,7 @@ export default function RootLayout({
         <SessionProviderClient>
           <ProgressSync />
           <SrsSync />
+
           <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:py-12">
             {children}
           </main>
@@ -137,14 +134,19 @@ export default function RootLayout({
 
         <footer className="border-t">
           <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>© {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.</div>
+            <div>
+              © {new Date().getFullYear()} Slovak Study — вчи словацьку щодня.
+            </div>
 
             <div className="flex flex-wrap gap-4">
               <a className="hover:underline" href="/slovak-for-ukrainians">
                 Словацька для українців
               </a>
 
-              <a className="hover:underline" href="/vyvchennia-slovatskoi-movy-online">
+              <a
+                className="hover:underline"
+                href="/vyvchennia-slovatskoi-movy-online"
+              >
                 Вивчення словацької онлайн
               </a>
 
@@ -152,7 +154,10 @@ export default function RootLayout({
                 Словацкий для украинцев
               </a>
 
-              <a className="hover:underline" href="/ru/vyvchennia-slovatskoi-movy-online">
+              <a
+                className="hover:underline"
+                href="/ru/vyvchennia-slovatskoi-movy-online"
+              >
                 Изучение словацкого онлайн
               </a>
             </div>
