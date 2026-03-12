@@ -1,11 +1,15 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import WordsStats from "./components/WordsStats";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { UPDATES } from "@/app/updates/updates";
 
 type Lang = "ua" | "ru";
+
+const WordsStats = dynamic(() => import("./components/WordsStats"), {
+  ssr: false,
+  loading: () => <WordsStatsSkeleton />,
+});
 
 const t = {
   ua: {
@@ -16,7 +20,6 @@ const t = {
     ctaDict: "Відкрити словник",
     ctaGrammar: "Перейти до граматики",
 
-    // ✅ FREE BLOCK (UA)
     free: [
       "Рівні A0–A2 безкоштовно",
       "700+ слів і фраз",
@@ -43,7 +46,6 @@ const t = {
     ],
     premiumPriceNote: "7.99€ / місяць • можна скасувати будь-коли",
     premiumCta: "Спробувати Premium →",
-    premiumSecondary: "Подивитись тренажер →",
 
     grammarTitle: "Граматика",
     grammarDesc: "Теми коротко й по суті + приклади та міні-вправи.",
@@ -69,7 +71,6 @@ const t = {
     ctaDict: "Открыть словарь",
     ctaGrammar: "Перейти к грамматике",
 
-    // ✅ FREE BLOCK (RU)
     free: [
       "Уровни A0–A2 бесплатно",
       "700+ слов и фраз",
@@ -96,7 +97,6 @@ const t = {
     ],
     premiumPriceNote: "7.99€ / месяц • можно отменить в любой момент",
     premiumCta: "Попробовать Premium →",
-    premiumSecondary: "Посмотреть тренажёр →",
 
     grammarTitle: "Грамматика",
     grammarDesc: "Темы кратко и по делу + примеры и мини-упражнения.",
@@ -118,25 +118,48 @@ const t = {
 
 function StatPill({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 shadow-sm ring-1 ring-black/5 backdrop-blur">
+    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
       <div className="text-sm font-semibold text-slate-900">{k}</div>
       <div className="text-xs text-slate-600">{v}</div>
     </div>
   );
 }
 
-export default function HomeClient() {
+function WordsStatsSkeleton() {
+  return (
+    <section className="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="animate-pulse space-y-4">
+        <div className="h-6 w-40 rounded bg-slate-200" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="h-20 rounded-2xl bg-slate-100" />
+          <div className="h-20 rounded-2xl bg-slate-100" />
+          <div className="h-20 rounded-2xl bg-slate-100" />
+          <div className="h-20 rounded-2xl bg-slate-100" />
+        </div>
+        <div className="h-2 w-full rounded bg-slate-200" />
+        <div className="grid grid-cols-2 gap-3 pt-2">
+          <div className="h-20 rounded-2xl bg-slate-100" />
+          <div className="h-20 rounded-2xl bg-slate-100" />
+          <div className="h-20 rounded-2xl bg-slate-100" />
+          <div className="h-20 rounded-2xl bg-slate-100" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function HomeClient({
+  latestBadge,
+}: {
+  latestBadge: string | null;
+}) {
   const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const tr = t[L];
-  const latestDate = UPDATES[0]?.date; // "YYYY-MM-DD"
-  const latestBadge = latestDate ? latestDate.slice(5).replace("-", ".") : null; // "MM.DD"
 
   return (
     <div className="space-y-8">
-      {/* HERO */}
-      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 ring-1 ring-black/5">
-        {/* controlled highlights (не лізуть вниз) */}
+      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8">
         <div className="pointer-events-none absolute top-0 right-0 h-40 w-40 rounded-full bg-amber-200/20 blur-2xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-40 rounded-full bg-slate-200/35 blur-2xl" />
 
@@ -152,63 +175,58 @@ export default function HomeClient() {
           <div className="flex flex-wrap gap-3 pt-1">
             <Link
               href="/learning"
-              className="inline-flex h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 text-sm font-semibold text-white hover:bg-black"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-black"
             >
               {tr.ctaLearning}
             </Link>
 
             <Link
               href="/dictionary"
-              className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
               {tr.ctaDict}
             </Link>
 
             <Link
               href="/grammar"
-              className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
             >
               {tr.ctaGrammar}
             </Link>
           </div>
 
-          {/* FREE BLOCK (UA/RU via t.free) */}
-          <div className="mt-4 text-sm text-slate-700 space-y-1">
+          <div className="mt-4 space-y-1 text-sm text-slate-700">
             {tr.free.map((item: string) => (
               <div key={item}>✅ {item}</div>
             ))}
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 min-h-[44px]">
             <Link
               href="/updates"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             >
               ✨ {L === "ru" ? "Что нового" : "Що нового"}
               {latestBadge && (
-                <span className="rounded-full bg-amber-100 px-2 py-0.5 bg-amber-200 font-bold text-amber-900">
-                  {latestBadge.split(".").reverse().join(".")}
+                <span className="rounded-full bg-amber-200 px-2 py-0.5 font-bold text-amber-900">
+                  {latestBadge}
                 </span>
               )}
             </Link>
           </div>
 
-          {/* value strip */}
           <div className="grid gap-3 pt-3 sm:grid-cols-3">
-            {tr.strip.map((it: any) => (
+            {tr.strip.map((it: { k: string; v: string }) => (
               <StatPill key={it.k} k={it.k} v={it.v} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* PREMIUM (без fade і без overlap) */}
       <section className="relative">
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 shadow-sm text-white">
-          {/* glow */}
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm">
           <div className="pointer-events-none absolute -top-24 left-10 h-56 w-56 rounded-full bg-amber-400/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 right-10 h-56 w-56 rounded-full bg-sky-400/10 blur-3xl" />
-          {/* top highlight line */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
@@ -237,14 +255,14 @@ export default function HomeClient() {
             <div className="flex flex-col gap-3 sm:pt-2">
               <Link
                 href="/premium"
-                className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black hover:opacity-90"
               >
                 {tr.premiumCta}
               </Link>
 
               <Link
                 href="/premium"
-                className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white hover:bg-white/15"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15"
               >
                 Тренажер 🔒
               </Link>
@@ -253,7 +271,6 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* MAIN CARDS */}
       <section className="grid gap-4 sm:grid-cols-3">
         <WordsStats />
 
@@ -288,8 +305,7 @@ export default function HomeClient() {
         </Link>
       </section>
 
-      {/* SEO CONTENT */}
-      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm ring-1 ring-black/5">
+      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <h2 className="mb-3 text-xl font-semibold">{tr.seoH2}</h2>
         <p className="mb-3 text-slate-700">{tr.seoP1}</p>
         <p className="text-slate-700">{tr.seoP2}</p>

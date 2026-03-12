@@ -1,15 +1,21 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   text: string;
-  kind?: "word" | "phrase"; // ✅ передаємо явно
+  kind?: "word" | "phrase";
   className?: string;
   title?: string;
   label?: string;
   asChild?: boolean;
   autoPlayKey?: string | number;
+};
+
+const urlCache = new Map<string, string[]>();
+const courseCache = {
+  value: "sk",
+  initialized: false,
 };
 
 async function sha1Hex(input: string) {
@@ -20,40 +26,55 @@ async function sha1Hex(input: string) {
     .join("");
 }
 
-// ✅ same as scripts audioKey.ts: sha1(text).hex.slice(0,13)
 async function phraseKey13(text: string) {
   const h = await sha1Hex(text.trim());
   return h.slice(0, 13);
 }
 
-async function buildLocalUrls(text: string, kind: "word" | "phrase") {
-  const clean = text.trim();
+function getCourseFromCookie() {
+  if (typeof document === "undefined") return "sk";
+  if (courseCache.initialized) return courseCache.value;
 
-  const course =
-    typeof document !== "undefined"
-      ? document.cookie
-        .split("; ")
-        .find((c) => c.startsWith("slovakStudyActiveCourse="))
-        ?.split("=")[1] || "sk"
-      : "sk";
+  const found =
+    document.cookie
+      .split("; ")
+      .find((c) => c.startsWith("slovakStudyActiveCourse="))
+      ?.split("=")[1] || "sk";
+
+  courseCache.value = found;
+  courseCache.initialized = true;
+  return found;
+}
+
+async function buildLocalUrlsCached(
+  text: string,
+  kind: "word" | "phrase",
+  course: string
+) {
+  const clean = text.trim();
+  const cacheKey = `${course}::${kind}::${clean}`;
+
+  const cached = urlCache.get(cacheKey);
+  if (cached) return cached;
+
+  let urls: string[];
 
   if (kind === "phrase") {
     const key = await phraseKey13(clean);
-
-    if (course === "sk") {
-      return [`/audio/phrases/${key}.mp3`];
-    }
-
-    return [`/audio/${course}/phrases/${key}.mp3`];
+    urls =
+      course === "sk"
+        ? [`/audio/phrases/${key}.mp3`]
+        : [`/audio/${course}/phrases/${key}.mp3`];
+  } else {
+    const h = await sha1Hex(`word:${clean}`);
+    urls =
+      course === "sk"
+        ? [`/audio/words/${h}.mp3`]
+        : [`/audio/${course}/words/${h}.mp3`];
   }
 
-  const h = await sha1Hex(`word:${clean}`);
-
-  if (course === "sk") {
-    return [`/audio/words/${h}.mp3`];
-  }
-
-  return [`/audio/${course}/words/${h}.mp3`];
+  urlCache.set(cacheKey, urls);
+  return urls;
 }
 
 export default function SpeakButton({
@@ -66,34 +87,37 @@ export default function SpeakButton({
   autoPlayKey,
 }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const lastKey = useRef<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  // ✅ id кожного запуску play, щоб старі async не лізли в state
+  const lastAutoKeyRef = useRef<string | null>(null);
   const playIdRef = useRef(0);
+  const mountedRef = useRef(true);
 
-  function stop() {
+  const [loading, setLoading] = useState(false);
+  const cleanText = useMemo(() => text?.trim() ?? "", [text]);
+
+  const btnTitle = title ?? "Play";
+
+  const stop = useCallback(() => {
     const a = audioRef.current;
     if (a) {
       try {
         a.pause();
-      } catch { }
+      } catch {}
       a.currentTime = 0;
       audioRef.current = null;
     }
-  }
+  }, []);
 
-  async function play() {
-    const clean = text?.trim();
-    if (!clean) return;
+  const play = useCallback(async () => {
+    if (!cleanText) return;
 
     const myPlayId = ++playIdRef.current;
-
     stop();
-    setLoading(true);
+
+    if (mountedRef.current) setLoading(true);
 
     try {
-      const urls = await buildLocalUrls(clean, kind);
+      const course = getCourseFromCookie();
+      const urls = await buildLocalUrlsCached(cleanText, kind, course);
 
       if (myPlayId !== playIdRef.current) return;
 
@@ -104,6 +128,7 @@ export default function SpeakButton({
         try {
           const a = new Audio(url);
           audioRef.current = a;
+          a.preload = "none";
 
           await a.play();
           played = true;
@@ -118,33 +143,43 @@ export default function SpeakButton({
       }
     } catch (e: any) {
       if (e?.name === "AbortError") return;
+
       const msg = String(e?.message ?? "");
       if (msg.includes("interrupted") || msg.includes("pause()")) return;
 
       console.error("Audio play failed:", e);
     } finally {
-      if (myPlayId === playIdRef.current) setLoading(false);
+      if (myPlayId === playIdRef.current && mountedRef.current) {
+        setLoading(false);
+      }
     }
-  }
+  }, [cleanText, kind, stop]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      stop();
+    };
+  }, [stop]);
 
   useEffect(() => {
     if (autoPlayKey === undefined) return;
-    if (!text?.trim()) return;
+    if (!cleanText) return;
 
-    const key = `${autoPlayKey}:${kind}:${text}`;
-    if (lastKey.current === key) return;
-    lastKey.current = key;
+    const nextKey = `${autoPlayKey}:${kind}:${cleanText}`;
+    if (lastAutoKeyRef.current === nextKey) return;
+    lastAutoKeyRef.current = nextKey;
 
-    play().catch(() => { });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoPlayKey, text, kind]);
-
-  const btnTitle = title ?? "Play";
+    play().catch(() => {});
+  }, [autoPlayKey, cleanText, kind, play]);
 
   if (asChild) {
     return (
       <span
-        onClick={() => play()}
+        onClick={() => {
+          play();
+        }}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();

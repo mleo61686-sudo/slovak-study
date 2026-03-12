@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import HomeClient from "./HomeClient";
 import { SITE_URL } from "@/lib/site";
+import { UPDATES } from "@/app/updates/updates";
 
 export const metadata: Metadata = {
   title: "Slovak Study — словацька мова онлайн (A0–B2)",
@@ -25,5 +26,10 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <HomeClient />;
+  const latestDate = UPDATES[0]?.date;
+  const latestBadge = latestDate
+    ? latestDate.slice(5).replace("-", ".").split(".").reverse().join(".")
+    : null;
+
+  return <HomeClient latestBadge={latestBadge} />;
 }

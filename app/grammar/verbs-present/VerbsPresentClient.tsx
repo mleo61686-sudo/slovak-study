@@ -1,7 +1,7 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { trWord } from "@/lib/src/tr";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
@@ -21,6 +21,20 @@ import {
   negateSentence,
 } from "./verbs-present-helpers";
 
+const SpeakButton = dynamic(() => import("@/app/components/SpeakButton"), {
+  ssr: false,
+  loading: () => null,
+});
+
+type QuizItem = {
+  person: PersonKey;
+  correct: string;
+  options: string[];
+};
+
+const FALLBACK_SK = "Ja pracujem.";
+const FALLBACK_CS = "Já pracuji.";
+
 export default function VerbsPresentClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
@@ -29,45 +43,63 @@ export default function VerbsPresentClient() {
   const isCzech = courseId === "cs";
   const verbs = isCzech ? VERBS_CS : VERBS_SK;
 
-  const [activeVerbId, setActiveVerbId] = useState(verbs[0].id);
-  const active = useMemo(
-    () => verbs.find((v) => v.id === activeVerbId) ?? verbs[0],
-    [activeVerbId, verbs]
-  );
-
-  const [mounted, setMounted] = useState(false);
-  const [quiz, setQuiz] = useState<{ person: PersonKey; correct: string; options: string[] }[]>([]);
-  const [sentenceParts, setSentenceParts] = useState<string[]>([]);
+  const [activeVerbId, setActiveVerbId] = useState(verbs[0]?.id ?? "");
+  const [quizVersion, setQuizVersion] = useState(0);
+  const [sentenceVersion, setSentenceVersion] = useState(0);
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [build, setBuild] = useState<string[]>([]);
   const [exIndex, setExIndex] = useState(0);
 
-  useEffect(() => setMounted(true), []);
-
   useEffect(() => {
-    setActiveVerbId(verbs[0].id);
+    setActiveVerbId(verbs[0]?.id ?? "");
   }, [courseId, verbs]);
 
+  const active =
+    useMemo(
+      () => verbs.find((v) => v.id === activeVerbId) ?? verbs[0],
+      [activeVerbId, verbs]
+    ) ?? verbs[0];
+
+  const pronounKeys = useMemo(
+    () => Object.keys(PRONOUNS) as PersonKey[],
+    []
+  );
+
   const examplesForSection4 = useMemo(
-    () => genExamplesFromRows(active, isCzech),
+    () => (active ? genExamplesFromRows(active, isCzech) : []),
     [active, isCzech]
   );
 
   useEffect(() => {
-    if (!mounted) return;
-
-    setQuiz(makeQuiz(active));
-
+    setQuizVersion((v) => v + 1);
+    setSentenceVersion((v) => v + 1);
     setExIndex(0);
-    const ex = examplesForSection4[0]?.sk ?? (isCzech ? "Já pracuji." : "Ja pracujem.");
-    setSentenceParts(makeSentenceParts(ex));
-
     setAnswers({});
     setChecked({});
     setBuild([]);
-  }, [mounted, active, examplesForSection4, isCzech]);
+  }, [active?.id, isCzech]);
+
+  const quiz: QuizItem[] = useMemo(() => {
+    if (!active) return [];
+    return makeQuiz(active);
+  }, [active, quizVersion]);
+
+  const currentEx =
+    examplesForSection4[exIndex] ??
+    examplesForSection4[0] ?? {
+      sk: isCzech ? FALLBACK_CS : FALLBACK_SK,
+      ua: "Я працюю.",
+      ru: "Я работаю.",
+    };
+
+  const sentenceSource = currentEx.sk || (isCzech ? FALLBACK_CS : FALLBACK_SK);
+
+  const sentenceParts = useMemo(
+    () => makeSentenceParts(sentenceSource),
+    [sentenceSource, sentenceVersion]
+  );
 
   const correctCount = useMemo(() => {
     let c = 0;
@@ -78,12 +110,24 @@ export default function VerbsPresentClient() {
   }, [answers, quiz]);
 
   const builtSentence = build.join(" ");
-  const currentEx = examplesForSection4[exIndex] ?? examplesForSection4[0];
+  const targetSk = sentenceSource.replace(/[.!?]$/, "");
+  const targetUa = (currentEx.ua || "Я працюю.").replace(/[.!?]$/, "");
 
-  const targetSk = (currentEx?.sk ?? (isCzech ? "Já pracuji." : "Ja pracujem.")).replace(/[.!?]$/, "");
-  const targetUa = (currentEx?.ua ?? "Я працюю.").replace(/[.!?]$/, "");
+  const handleResetQuiz = () => {
+    setAnswers({});
+    setChecked({});
+    setQuizVersion((v) => v + 1);
+  };
 
-  if (!mounted) return <div className="space-y-10">{ui.loading}</div>;
+  const handleNextSentence = () => {
+    const len = examplesForSection4.length || 1;
+    const next = (exIndex + 1) % len;
+    setExIndex(next);
+    setBuild([]);
+    setSentenceVersion((v) => v + 1);
+  };
+
+  const cheatItems = isCzech ? ui.cheatItemsCs : ui.cheatItemsSk;
 
   return (
     <div className="space-y-10">
@@ -99,8 +143,11 @@ export default function VerbsPresentClient() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s1}</h2>
         <div className="rounded-2xl border bg-white">
-          {(Object.keys(PRONOUNS) as PersonKey[]).map((k, i) => (
-            <div key={i} className="flex justify-between border-b px-5 py-3 last:border-b-0">
+          {pronounKeys.map((k) => (
+            <div
+              key={k}
+              className="flex justify-between border-b px-5 py-3 last:border-b-0"
+            >
               <span className="font-medium">{PRONOUNS[k].sk}</span>
               <span className="text-slate-600">{trWord(PRONOUNS[k], lang)}</span>
             </div>
@@ -118,10 +165,13 @@ export default function VerbsPresentClient() {
               return (
                 <button
                   key={v.id}
+                  type="button"
                   onClick={() => setActiveVerbId(v.id)}
                   className={[
                     "rounded-xl border px-3 py-2 text-sm",
-                    activeTab ? "border-slate-900 bg-slate-900 text-white" : "hover:bg-slate-50",
+                    activeTab
+                      ? "border-slate-900 bg-slate-900 text-white"
+                      : "hover:bg-slate-50",
                   ].join(" ")}
                 >
                   {v.infinitive}
@@ -133,14 +183,16 @@ export default function VerbsPresentClient() {
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             <div className="rounded-xl border p-4">
               <div className="text-sm text-slate-500">{ui.infinitive}</div>
-              <div className="text-lg font-semibold">{active.infinitive}</div>
-              <div className="mt-1 text-slate-600">{trWord(active.meaning, lang)}</div>
+              <div className="text-lg font-semibold">{active?.infinitive}</div>
+              <div className="mt-1 text-slate-600">
+                {active ? trWord(active.meaning, lang) : "—"}
+              </div>
             </div>
 
             <div className="rounded-xl border p-4">
               <div className="text-sm text-slate-500">{ui.hint}</div>
               <div className="text-slate-700">
-                {active.note ? trWord(active.note, lang) : "—"}
+                {active?.note ? trWord(active.note, lang) : "—"}
               </div>
             </div>
           </div>
@@ -150,8 +202,11 @@ export default function VerbsPresentClient() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">{ui.s3}</h2>
         <div className="rounded-2xl border bg-white">
-          {active.rows.map((row, i) => (
-            <div key={i} className="flex items-center justify-between border-b px-5 py-3 last:border-b-0">
+          {active?.rows.map((row) => (
+            <div
+              key={row.person}
+              className="flex items-center justify-between border-b px-5 py-3 last:border-b-0"
+            >
               <div className="min-w-0">
                 <div className="font-medium">
                   <span className="text-slate-900">{capFirst(row.full)}</span>
@@ -173,7 +228,10 @@ export default function VerbsPresentClient() {
             const q = makeQuestion(ex.sk);
 
             return (
-              <div key={i} className="space-y-2 border-b px-5 py-4 last:border-b-0">
+              <div
+                key={`${active?.id ?? "verb"}-${i}`}
+                className="space-y-2 border-b px-5 py-4 last:border-b-0"
+              >
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="font-medium">{ex.sk}</div>
@@ -214,16 +272,13 @@ export default function VerbsPresentClient() {
               <div className="font-semibold">{ui.quizA}</div>
               <div className="text-sm text-slate-500">
                 {ui.score}:{" "}
-                <span className="font-medium text-slate-900">{correctCount}</span> / {quiz.length}
+                <span className="font-medium text-slate-900">{correctCount}</span> /{" "}
+                {quiz.length}
               </div>
             </div>
             <button
               type="button"
-              onClick={() => {
-                setAnswers({});
-                setChecked({});
-                setQuiz(makeQuiz(active));
-              }}
+              onClick={handleResetQuiz}
               className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
             >
               {ui.reset}
@@ -233,7 +288,9 @@ export default function VerbsPresentClient() {
           <div className="grid gap-3 sm:grid-cols-2">
             {quiz.map((q) => (
               <div key={q.person} className="space-y-2 rounded-xl border p-4">
-                <div className="text-sm text-slate-500">{capFirst(PRONOUNS[q.person].sk)} + …</div>
+                <div className="text-sm text-slate-500">
+                  {capFirst(PRONOUNS[q.person].sk)} + …
+                </div>
 
                 <div className="flex flex-wrap gap-2">
                   {q.options.map((opt) => {
@@ -244,13 +301,16 @@ export default function VerbsPresentClient() {
                     return (
                       <button
                         key={opt}
+                        type="button"
                         onClick={() => {
                           setAnswers((a) => ({ ...a, [q.person]: opt }));
                           setChecked((c) => ({ ...c, [q.person]: true }));
                         }}
                         className={[
                           "rounded-xl border px-3 py-2 text-sm",
-                          picked ? "border-slate-900 bg-slate-900 text-white" : "hover:bg-slate-50",
+                          picked
+                            ? "border-slate-900 bg-slate-900 text-white"
+                            : "hover:bg-slate-50",
                           show && opt === q.correct ? "ring-2 ring-emerald-400" : "",
                           show && picked && !isCorrect ? "ring-2 ring-rose-400" : "",
                         ].join(" ")}
@@ -264,7 +324,9 @@ export default function VerbsPresentClient() {
                 {checked[q.person] && (
                   <div className="mt-1 text-xs">
                     {answers[q.person] === q.correct ? (
-                      <span className="font-medium text-emerald-600">{ui.correctYes}</span>
+                      <span className="font-medium text-emerald-600">
+                        {ui.correctYes}
+                      </span>
                     ) : (
                       <span className="text-rose-600">
                         {ui.correctNo} {ui.correctForm}:{" "}
@@ -286,6 +348,7 @@ export default function VerbsPresentClient() {
                 {ui.target}: <span className="font-medium text-slate-900">{targetUa}</span>
               </div>
             </div>
+
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -297,19 +360,7 @@ export default function VerbsPresentClient() {
 
               <button
                 type="button"
-                onClick={() => {
-                  const len = examplesForSection4.length || 1;
-                  const next = (exIndex + 1) % len;
-
-                  setExIndex(next);
-                  setBuild([]);
-
-                  const sk =
-                    examplesForSection4[next]?.sk ??
-                    examplesForSection4[0]?.sk ??
-                    (isCzech ? "Já pracuji." : "Ja pracujem.");
-                  setSentenceParts(makeSentenceParts(sk));
-                }}
+                onClick={handleNextSentence}
                 className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
               >
                 {ui.next}
@@ -321,7 +372,9 @@ export default function VerbsPresentClient() {
             <div className="mb-2 text-sm text-slate-500">{ui.yourSentence}</div>
             <div className="flex items-center justify-between gap-3">
               <div className="font-medium">{builtSentence || "—"}</div>
-              {builtSentence ? <SpeakButton text={builtSentence + "."} kind="phrase" /> : null}
+              {builtSentence ? (
+                <SpeakButton text={builtSentence + "."} kind="phrase" />
+              ) : null}
             </div>
 
             <div className="mt-3 text-sm">
@@ -338,7 +391,8 @@ export default function VerbsPresentClient() {
           <div className="flex flex-wrap gap-2">
             {sentenceParts.map((w, idx) => (
               <button
-                key={idx}
+                key={`${w}-${idx}`}
+                type="button"
                 onClick={() => setBuild((b) => [...b, w])}
                 className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
               >
@@ -353,8 +407,8 @@ export default function VerbsPresentClient() {
         <h2 className="text-xl font-semibold">{ui.s6}</h2>
         <div className="rounded-2xl border bg-white p-5 text-slate-700">
           <ul className="list-disc space-y-2 pl-5">
-            {(isCzech ? ui.cheatItemsCs : ui.cheatItemsSk).map((t, i) => (
-              <li key={i}>{t}</li>
+            {cheatItems.map((item, i) => (
+              <li key={i}>{item}</li>
             ))}
           </ul>
         </div>
