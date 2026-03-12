@@ -280,19 +280,19 @@ export default function AlphabetPage({ forcedLang }: Props) {
   const listenRounds = useMemo(() => {
     const rounds = isCzech
       ? [
-          { target: "č", words: ["člověk", "škola", "život", "město"] },
-          { target: "š", words: ["škola", "učitel", "chléb", "život"] },
-          { target: "ž", words: ["život", "člověk", "město", "práce"] },
-          { target: "ř", words: ["řeka", "město", "škola", "chléb"] },
-          { target: "ch", words: ["chléb", "práce", "život", "učitel"] },
-        ]
+        { target: "č", words: ["člověk", "škola", "život", "město"] },
+        { target: "š", words: ["škola", "učitel", "chléb", "život"] },
+        { target: "ž", words: ["život", "člověk", "město", "práce"] },
+        { target: "ř", words: ["řeka", "město", "škola", "chléb"] },
+        { target: "ch", words: ["chléb", "práce", "život", "učitel"] },
+      ]
       : [
-          { target: "č", words: ["človek", "škola", "život", "mesto"] },
-          { target: "š", words: ["škola", "učiteľ", "chlieb", "život"] },
-          { target: "ž", words: ["život", "človek", "mesto", "práca"] },
-          { target: "ď", words: ["ďakujem", "mesto", "škola", "chlieb"] },
-          { target: "ch", words: ["chlieb", "práca", "život", "učiteľ"] },
-        ];
+        { target: "č", words: ["človek", "škola", "život", "mesto"] },
+        { target: "š", words: ["škola", "učiteľ", "chlieb", "život"] },
+        { target: "ž", words: ["život", "človek", "mesto", "práca"] },
+        { target: "ď", words: ["ďakujem", "mesto", "škola", "chlieb"] },
+        { target: "ch", words: ["chlieb", "práca", "život", "učiteľ"] },
+      ];
 
     return shuffle(rounds);
   }, [isCzech]);
@@ -323,7 +323,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
     if (audioRef.current) {
       try {
         audioRef.current.pause();
-      } catch {}
+      } catch { }
       audioRef.current.currentTime = 0;
       audioRef.current = null;
     }
@@ -334,14 +334,15 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
     const clean = word.trim();
     const key = await sha1Hex(`word:${clean}`);
-    const src = `/audio/words/${key}.mp3`;
+    const base = isCzech ? "/audio/cs/words" : "/audio/words";
+    const src = `${base}/${key}.mp3`;
 
     const audio = new Audio(src);
     audioRef.current = audio;
 
     try {
       await audio.play();
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
@@ -406,13 +407,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
         <p className="mt-2 text-slate-700">
           {isCzech
             ? t(
-                "Чеська мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
-                "Чешский язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
-              )
+              "Чеська мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
+              "Чешский язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
+            )
             : t(
-                "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
-                "Словацкий язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
-              )}
+              "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
+              "Словацкий язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге."
+            )}
         </p>
       </div>
 
@@ -442,13 +443,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
         <div className="rounded-xl border bg-white p-4">
           {isCzech
             ? t(
-                "У чеській мові наголос майже завжди на першому складі:",
-                "В чешском языке ударение почти всегда на первом слоге:"
-              )
+              "У чеській мові наголос майже завжди на першому складі:",
+              "В чешском языке ударение почти всегда на первом слоге:"
+            )
             : t(
-                "У словацькій мові наголос майже завжди на першому складі:",
-                "В словацком языке ударение почти всегда на первом слоге:"
-              )}
+              "У словацькій мові наголос майже завжди на першому складі:",
+              "В словацком языке ударение почти всегда на первом слоге:"
+            )}
           <div className="mt-2 flex items-center gap-2">
             <b>{isCzech ? "PRA-ha" : "PRÁ-ca"}</b>
             <SpeakButton text={isCzech ? "Praha" : "práca"} />
@@ -490,25 +491,22 @@ export default function AlphabetPage({ forcedLang }: Props) {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setTab("quiz")}
-              className={`rounded-xl border px-3 py-2 text-sm ${
-                tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"
-              }`}
+              className={`rounded-xl border px-3 py-2 text-sm ${tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {t("Тест", "Тест")}
             </button>
             <button
               onClick={() => setTab("listen")}
-              className={`rounded-xl border px-3 py-2 text-sm ${
-                tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
-              }`}
+              className={`rounded-xl border px-3 py-2 text-sm ${tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {t("Слухання", "Слушание")}
             </button>
             <button
               onClick={() => setTab("type")}
-              className={`rounded-xl border px-3 py-2 text-sm ${
-                tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"
-              }`}
+              className={`rounded-xl border px-3 py-2 text-sm ${tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {t("Диктант", "Диктант")}
             </button>
@@ -660,13 +658,12 @@ export default function AlphabetPage({ forcedLang }: Props) {
                     onChange={(e) => setInput(e.target.value)}
                     disabled={status !== "idle"}
                     placeholder={t("Введи слово...", "Введи слово...")}
-                    className={`w-full rounded-xl border px-3 py-2 ${
-                      status === "correct"
-                        ? "border-green-500"
-                        : status === "wrong"
+                    className={`w-full rounded-xl border px-3 py-2 ${status === "correct"
+                      ? "border-green-500"
+                      : status === "wrong"
                         ? "border-red-500"
                         : "border-slate-300"
-                    }`}
+                      }`}
                   />
 
                   {status === "idle" ? (
