@@ -16,7 +16,7 @@ const T: Record<Lang, any> = {
     signIn: "Увійти",
     signingIn: "Вхід...",
     noAccount: "Немає акаунта?",
-    register: "Реєстрація",
+    register: "Регістрація",
     invalid: "Невірний email або пароль",
     show: "Показати",
     hide: "Сховати",

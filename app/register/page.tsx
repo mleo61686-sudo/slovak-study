@@ -16,7 +16,7 @@ type Lang = "ua" | "ru";
 
 const T: Record<Lang, any> = {
   ua: {
-    title: "Реєстрація",
+    title: "Регістрація",
     subtitle: "Спочатку обери курс, який хочеш вивчати.",
     chooseCourse: "Оберіть курс",
     courseHint: "Курс можна буде змінити пізніше в профілі.",

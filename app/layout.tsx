@@ -127,7 +127,7 @@ export default function RootLayout({
           <ProgressSync />
           <SrsSync />
 
-          <main className="flex-1 mx-auto max-w-4xl px-4 py-8 sm:py-12">
+          <main className="flex-1 mx-auto w-full max-w-6xl px-4 py-8 sm:py-12">
             {children}
           </main>
         </SessionProviderClient>

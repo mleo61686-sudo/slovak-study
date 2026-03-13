@@ -34,12 +34,18 @@ export default async function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
-      <div className="mx-auto max-w-5xl px-4 py-2 sm:py-3">
+      <div className="mx-auto max-w-7xl px-4 py-2 sm:py-3">
         {/* TOP ROW */}
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+          <Link href="/" className="flex items-center gap-2 group">
             <CourseBadge />
-            <span>Slovak Study</span>
+
+            <span className="text-lg font-semibold tracking-tight">
+              Slovak
+              <span className="ml-1 text-sky-600 group-hover:text-sky-700 transition">
+                Study
+              </span>
+            </span>
           </Link>
 
           {/* DESKTOP RIGHT */}
