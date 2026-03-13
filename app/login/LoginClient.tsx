@@ -103,9 +103,8 @@ export default function LoginClient() {
           <div className="grid gap-1">
             <label className="text-sm font-medium text-slate-700">{t.email}</label>
             <input
-              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${
-                emailOk ? "" : "border-red-400"
-              }`}
+              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${emailOk ? "" : "border-red-400"
+                }`}
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

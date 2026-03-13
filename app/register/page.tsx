@@ -1,16 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
+import {
+  getStoredCourseId,
+  setStoredCourseId,
+  type CourseId,
+} from "@/app/learning/courses/useActiveCourse";
+import { COURSE_REGISTRY } from "@/app/learning/courses/registry";
 
 type Lang = "ua" | "ru";
 
 const T: Record<Lang, any> = {
   ua: {
     title: "Реєстрація",
+    subtitle: "Спочатку обери курс, який хочеш вивчати.",
+    chooseCourse: "Оберіть курс",
+    courseHint: "Курс можна буде змінити пізніше в профілі.",
     name: "Ім’я (необовʼязково)",
     email: "Email",
     password: "Пароль",
@@ -22,9 +31,14 @@ const T: Record<Lang, any> = {
     show: "Показати",
     hide: "Сховати",
     pwRuleHint: "Мінімум 8 символів • 1 цифра • 1 велика літера",
+    soon: "Скоро",
+    selected: "Обрано",
   },
   ru: {
     title: "Регистрация",
+    subtitle: "Сначала выбери курс, который хочешь изучать.",
+    chooseCourse: "Выберите курс",
+    courseHint: "Курс можно будет изменить позже в профиле.",
     name: "Имя (необязательно)",
     email: "Email",
     password: "Пароль",
@@ -36,6 +50,8 @@ const T: Record<Lang, any> = {
     show: "Показать",
     hide: "Скрыть",
     pwRuleHint: "Минимум 8 символов • 1 цифра • 1 заглавная буква",
+    soon: "Скоро",
+    selected: "Выбрано",
   },
 };
 
@@ -60,12 +76,33 @@ function scorePassword(pw: string) {
   return Math.min(s, 5);
 }
 
+function FlagIcon({ courseId, title }: { courseId: CourseId; title: string }) {
+  const src =
+    courseId === "sk"
+      ? "https://flagcdn.com/w80/sk.png"
+      : courseId === "cs"
+      ? "https://flagcdn.com/w80/cz.png"
+      : "https://flagcdn.com/w80/pl.png";
+
+  return (
+    <img
+      src={src}
+      alt={title}
+      className="h-8 w-12 rounded-md border border-slate-200 object-cover shadow-sm"
+      loading="lazy"
+    />
+  );
+}
+
+const COURSE_ORDER: CourseId[] = ["sk", "cs", "pl"];
+
 export default function RegisterPage() {
   const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
-
   const router = useRouter();
+
+  const [selectedCourse, setSelectedCourse] = useState<CourseId>("sk");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -77,6 +114,10 @@ export default function RegisterPage() {
 
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
+
+  useEffect(() => {
+    setSelectedCourse(getStoredCourseId());
+  }, []);
 
   const emailOk = useMemo(() => {
     const v = email.trim().toLowerCase();
@@ -93,6 +134,11 @@ export default function RegisterPage() {
     if (!errorCode) return null;
     return (ERROR_TEXT[errorCode] ?? ERROR_TEXT.UNKNOWN_ERROR)[L];
   }, [errorCode, L]);
+
+  function onSelectCourse(courseId: CourseId) {
+    setSelectedCourse(courseId);
+    setStoredCourseId(courseId);
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -115,6 +161,7 @@ export default function RegisterPage() {
       return;
     }
 
+    setStoredCourseId(selectedCourse);
     setLoading(true);
 
     const res = await fetch("/api/register", {
@@ -135,12 +182,11 @@ export default function RegisterPage() {
       return;
     }
 
-    // ✅ автологін після реєстрації
     const login = await signIn("credentials", {
       email: e2,
       password: pw,
       redirect: false,
-      callbackUrl: "/", // 🔥 головна
+      callbackUrl: "/",
     });
 
     setLoading(false);
@@ -150,17 +196,78 @@ export default function RegisterPage() {
       return;
     }
 
-    // ✅ завжди кидаємо на головну
     router.push("/");
     router.refresh();
   }
 
   return (
-    <div className="mx-auto max-w-md py-10">
-      <div className="rounded-2xl border bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-extrabold">{t.title}</h1>
+    <div className="mx-auto max-w-2xl py-10">
+      <div className="rounded-3xl border bg-white p-6 shadow-sm sm:p-7">
+        <h1 className="text-3xl font-extrabold tracking-tight">{t.title}</h1>
+        <p className="mt-2 text-sm text-slate-600">{t.subtitle}</p>
 
-        <form onSubmit={onSubmit} className="mt-6 grid gap-4">
+        <div className="mt-7">
+          <div className="text-sm font-semibold text-slate-800">{t.chooseCourse}</div>
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {COURSE_ORDER.map((courseId) => {
+              const course = COURSE_REGISTRY[courseId];
+              if (!course) return null;
+
+              const isActive = selectedCourse === courseId;
+              const isLive = course.status === "live";
+
+              return (
+                <button
+                  key={courseId}
+                  type="button"
+                  onClick={() => onSelectCourse(courseId)}
+                  className={`group relative rounded-2xl border p-4 text-left transition-all duration-200 ${
+                    isActive
+                      ? "border-slate-900 bg-slate-50 shadow-sm ring-2 ring-slate-200"
+                      : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <FlagIcon courseId={courseId} title={course.title} />
+
+                    <div className="flex items-center gap-2">
+                      {!isLive && (
+                        <span className="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-500">
+                          {t.soon}
+                        </span>
+                      )}
+
+                      {isActive && (
+                        <span className="rounded-full bg-slate-900 px-2 py-1 text-[11px] font-medium text-white">
+                          {t.selected}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 text-lg font-bold text-slate-900">
+                    {course.title}
+                  </div>
+
+                  {"nativeTitle" in course && course.nativeTitle ? (
+                    <div className="mt-1 text-sm text-slate-500">
+                      {String(course.nativeTitle)}
+                    </div>
+                  ) : null}
+
+                  <div className="mt-4 text-xs font-medium uppercase tracking-wide text-slate-400">
+                    {courseId.toUpperCase()}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-2 text-xs text-slate-500">{t.courseHint}</div>
+        </div>
+
+        <form onSubmit={onSubmit} className="mt-7 grid gap-4">
           <div className="grid gap-1">
             <label className="text-sm font-medium text-slate-700">{t.name}</label>
             <input
@@ -264,7 +371,7 @@ export default function RegisterPage() {
 
           <button
             disabled={loading}
-            className="h-11 rounded-xl bg-slate-900 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
+            className="h-11 rounded-xl bg-slate-900 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60"
             type="submit"
           >
             {loading ? t.creating : t.create}
