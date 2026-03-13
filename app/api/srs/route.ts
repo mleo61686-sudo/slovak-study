@@ -1,3 +1,24 @@
+/**
+ * API route для синхронізації SRS-прогресу користувача по конкретному курсу.
+ *
+ * Що робить:
+ * GET повертає SRS дані з БД, а PUT зберігає їх у prisma.srsProgress
+ * окремо для кожного courseId (sk / cs / pl).
+ *
+ * Як працює:
+ * Бере userId із auth(), courseId з body або cookie slovakStudyActiveCourse,
+ * нормалізує курс і працює через composite key userId_courseId.
+ *
+ * Що саме зберігає:
+ * srs data, dailySession, dailyNewWords, updatedAt.
+ *
+ * Пов’язані файли:
+ * - SrsSync
+ * - WordsSrsPage
+ * - /practice/review
+ * - Prisma model: srsProgress
+ */
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { auth } from "@/auth";

@@ -1,3 +1,27 @@
+/**
+ * AdminReportsPage – адмінська сторінка перегляду bug-репортів у Slovak Study.
+ *
+ * Що робить:
+ * Показує останні 200 записів із таблиці errorReport (Prisma) у вигляді таблиці.
+ * Доступ дозволено тільки email-адресам із ADMIN_EMAILS (env).
+ *
+ * Як працює:
+ * 1. Отримує сесію через auth()
+ * 2. Перевіряє чи користувач адмін (isAdmin)
+ * 3. Якщо ні → notFound() (сторінка приховується)
+ * 4. Якщо так → читає errorReport через prisma
+ *
+ * Пов’язані файли:
+ * - lib/prisma.ts (Prisma client)
+ * - auth.ts (NextAuth / auth)
+ * - ./StatusPills.tsx (зміна статусу репорту)
+ * - Prisma model: errorReport
+ *
+ * Роль у проєкті:
+ * Внутрішня панель для перегляду та модерації помилок,
+ * які користувачі надсилають із вправ або уроків.
+ */
+
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";

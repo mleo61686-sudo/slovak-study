@@ -1,3 +1,23 @@
+/**
+ * API route для завершення скидання пароля (Reset Password).
+ *
+ * Що робить:
+ * Приймає reset-token і новий пароль, перевіряє валідність токена
+ * і оновлює passwordHash користувача у базі даних.
+ *
+ * Як працює:
+ * 1. Отримує token, password і password2 з body
+ * 2. Перевіряє збіг паролів і їхню складність (isStrongEnough)
+ * 3. Хешує token (sha256) і шукає passwordResetToken у Prisma
+ * 4. Перевіряє: існування, термін дії, чи не використаний
+ * 5. Через Prisma transaction оновлює пароль і видаляє всі reset-токени користувача
+ *
+ * Пов’язані файли:
+ * - lib/src/passwordReset.ts (hashPassword, isStrongEnough)
+ * - app/api/auth/forgot-password/route.ts
+ * - Prisma models: user, passwordResetToken
+ */
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import crypto from "crypto";

@@ -1,3 +1,21 @@
+/**
+ * API route для читання і синхронізації lesson progress користувача.
+ *
+ * Що робить:
+ * GET повертає поточний userProgress із БД, а PUT синхронізує lessonsProgress
+ * з localStorage/клієнта, оновлює unlock наступного уроку і контролює daily limit.
+ *
+ * Як працює:
+ * Через auth() знаходить user, читає/оновлює userProgress у Prisma,
+ * перевіряє allowed lesson, чи урок став done саме зараз, і для free
+ * застосовує ліміт 2 нових уроки на день; для premium діє bypass.
+ *
+ * Пов’язані файли:
+ * - app/api/progress/lesson-done/route.ts
+ * - ProgressSync / saveProgress / LevelClient
+ * - Prisma models: user, userProgress
+ */
+
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";

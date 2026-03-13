@@ -1,3 +1,23 @@
+/**
+ * API route для зміни статусу bug-репорту в адмінці Slovak Study.
+ *
+ * Що робить:
+ * Приймає POST із id репорту та новим статусом (new / fixed / ignored),
+ * перевіряє адмін-доступ через auth + ADMIN_EMAILS і оновлює errorReport у Prisma.
+ *
+ * Як працює:
+ * 1. Перевіряє чи користувач адмін
+ * 2. Валідовує body (id і status)
+ * 3. Оновлює статус у БД через prisma.errorReport.updateMany
+ * 4. Повертає JSON-результат для StatusPills
+ *
+ * Пов’язані файли:
+ * - app/admin/reports/StatusPills.tsx
+ * - app/admin/reports/page.tsx
+ * - lib/prisma.ts
+ * - auth.ts
+ */
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";

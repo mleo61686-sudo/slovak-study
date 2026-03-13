@@ -1,3 +1,23 @@
+/**
+ * StatusPills – клієнтський компонент для зміни статусу bug-репорту в адмінці.
+ *
+ * Що робить:
+ * Показує три кнопки-статуси (new, fixed, ignored) і дозволяє адміну
+ * змінювати статус конкретного errorReport прямо в таблиці.
+ *
+ * Як працює:
+ * При кліку викликає POST /api/admin/update-report-status
+ * і після успіху оновлює локальний state status.
+ *
+ * Пов’язані файли:
+ * - app/admin/reports/page.tsx (де використовується компонент)
+ * - app/api/admin/update-report-status (API для оновлення статусу)
+ * - Prisma model: errorReport
+ *
+ * Роль у Slovak Study:
+ * Частина адмін-панелі для швидкої модерації bug-репортів від користувачів.
+ */
+
 "use client";
 
 import { useState } from "react";

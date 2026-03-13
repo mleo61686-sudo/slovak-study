@@ -1,3 +1,16 @@
+/**
+ * CourseBootstrap – клієнтський bootstrap для активного курсу.
+ * Що робить:
+ * При першому завантаженні перевіряє localStorage і, якщо курс
+ * не встановлений, автоматично ставить default курс (Slovak).
+ * Пов’язані файли:
+ * - lib/course.ts
+ * - CourseSwitcher
+ * - CourseGate
+ * Роль у Slovak Study:
+ * Забезпечує стабільний activeCourse для multi-course системи.
+ */
+
 "use client";
 
 import { useEffect } from "react";

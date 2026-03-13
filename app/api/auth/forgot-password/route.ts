@@ -1,3 +1,27 @@
+/**
+ * API route для ініціювання скидання пароля (Forgot Password).
+ *
+ * Що робить:
+ * Приймає email, створює одноразовий reset-token і відправляє користувачу
+ * лист із посиланням для зміни пароля (/reset-password?token=...).
+ *
+ * Як працює:
+ * 1. Нормалізує email і шукає користувача у Prisma
+ * 2. Видаляє старі passwordResetToken для цього userId
+ * 3. Генерує новий token + tokenHash через makeResetToken()
+ * 4. Зберігає tokenHash і expiresAt (30 хв)
+ * 5. Відправляє email через sendResetEmail()
+ *
+ * Безпека:
+ * Завжди повертає {ok:true}, щоб не розкривати чи існує акаунт.
+ *
+ * Пов’язані файли:
+ * - lib/src/passwordReset.ts
+ * - lib/email.ts
+ * - Prisma models: user, passwordResetToken
+ * - сторінка /reset-password
+ */
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { makeResetToken } from "@/lib/src/passwordReset";

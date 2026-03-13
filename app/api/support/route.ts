@@ -1,3 +1,24 @@
+/**
+ * API route для форми підтримки Slovak Study (contact/support).
+ *
+ * Що робить:
+ * Приймає повідомлення користувача (email, topic, message) і
+ * надсилає його на support email через Resend.
+ *
+ * Як працює:
+ * Читає session через auth() (не обов'язково), визначає IP через headers(),
+ * валідовує email і message, після чого формує лист і відправляє його
+ * на SUPPORT_TO_EMAIL з replyTo = email користувача.
+ *
+ * Що передає в листі:
+ * email, userId (або guest), IP, topic, message, page, user-agent.
+ *
+ * Пов’язані файли:
+ * - сторінка /support або support form
+ * - lib/email / Resend integration
+ * - auth.ts
+ */
+
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { headers } from "next/headers";

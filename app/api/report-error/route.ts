@@ -1,3 +1,22 @@
+/**
+ * API route для надсилання bug-репорту від користувача.
+ *
+ * Що робить:
+ * Приймає дані про помилку з уроку/вправи, зберігає їх у таблицю errorReport
+ * через Prisma і за наявності env налаштувань дублює репорт на email через Resend.
+ *
+ * Як працює:
+ * Читає session через auth(), валідовує message, записує контекст
+ * (page, lessonId, exercise, actionIdx, sk/ua/ru, key, category, userAgent)
+ * у БД, а потім формує текст листа для адміна.
+ *
+ * Пов’язані файли:
+ * - app/admin/reports/page.tsx
+ * - app/admin/reports/StatusPills.tsx
+ * - Prisma model: errorReport
+ * - auth.ts
+ */
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";

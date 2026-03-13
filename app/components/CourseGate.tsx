@@ -1,3 +1,19 @@
+/**
+ * CourseGate – компонент-фільтр для multi-course системи Slovak Study.
+ 
+ * Що робить:
+ * Перевіряє чи активний курс (enabled). Якщо курс ще не доступний —
+ * показує повідомлення “скоро” і пропонує перейти на /learn.
+ * * Використовується:
+ * Для блокування сторінок, коли користувач вибрав курс,
+ * який ще не реалізований.
+ * * Пов’язані файли:
+ * - hooks/useActiveCourse.ts
+ * - lib/course.ts (COURSES registry)
+ * - CourseBootstrap
+ * - сторінка /learn
+ */
+
 "use client";
 
 import Link from "next/link";

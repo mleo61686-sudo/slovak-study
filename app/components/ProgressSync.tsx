@@ -1,3 +1,17 @@
+/**
+ * ProgressSync – синхронізація lesson progress між localStorage і сервером.
+ *
+ * Що робить:
+ * Підтягує userProgress після логіну, записує його в localStorage,
+ * відправляє зміни прогресу на /api/progress і тримає sync state для UI.
+ *
+ * Пов’язані файли:
+ * - app/api/progress/route.ts
+ * - lib/src/progress.ts
+ * - SyncBadge.tsx
+ * - saveProgress / LevelClient / lesson progress components
+ */
+
 "use client";
 
 import { useEffect, useRef } from "react";

@@ -1,3 +1,17 @@
+/**
+ * QuizCard – універсальна картка міні-тесту у Slovak Study.
+ *
+ * Що робить:
+ * Показує питання з варіантами відповіді, перевіряє правильність,
+ * підсвічує результат, може програвати аудіо через SpeakButton
+ * і викликає onPassed після правильної відповіді.
+ *
+ * Пов’язані файли:
+ * - SpeakButton.tsx
+ * - grammar / learning / practice сторінки, де є міні-квізи
+ * - компоненти уроків, які передають title/question/options/answer
+ */
+
 "use client";
 
 import { useState } from "react";

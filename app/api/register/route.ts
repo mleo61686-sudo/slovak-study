@@ -1,3 +1,22 @@
+/**
+ * API route для реєстрації нового користувача у Slovak Study.
+ *
+ * Що робить:
+ * Приймає email, password і optional name, валідовує їх,
+ * перевіряє чи користувач уже існує, хешує пароль і створює user у Prisma.
+ *
+ * Як працює:
+ * Перевіряє content-type, парсить JSON, валідовує email і силу пароля
+ * (мінімум 8 символів, цифра, велика літера), після чого через bcrypt
+ * створює passwordHash і зберігає нового користувача в базі.
+ *
+ * Пов’язані файли:
+ * - сторінка /register і її form submit
+ * - auth.ts / NextAuth credentials login
+ * - lib/prisma.ts
+ * - Prisma model: user
+ */
+
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";

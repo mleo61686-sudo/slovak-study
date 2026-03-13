@@ -1,3 +1,26 @@
+/**
+ * API route для фіксації завершення уроку користувачем.
+ *
+ * Що робить:
+ * Позначає урок (levelId) як done у userProgress, оновлює lessonsProgress,
+ * рахує dailyCount і застосовує ліміт 2 нових уроки/день для FREE користувачів.
+ *
+ * Як працює:
+ * 1. Отримує сесію через auth() і знаходить user у Prisma
+ * 2. Перевіряє чи користувач має Premium (isPremium / premiumUntil)
+ * 3. Через upsert отримує або створює userProgress
+ * 4. Якщо урок уже done → нічого не змінює
+ * 5. Якщо ні → додає done=true, doneAt, updatedAt і збільшує dailyCount
+ *
+ * Пов’язані файли:
+ * - Prisma models: user, userProgress
+ * - клієнтські компоненти learning/LevelClient
+ * - /api/progress (синхронізація прогресу)
+ *
+ * Роль у Slovak Study:
+ * Серверна логіка прогресу уроків і денного ліміту для free-користувачів.
+ */
+
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
