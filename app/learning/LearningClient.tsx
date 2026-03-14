@@ -48,6 +48,7 @@ const dict = {
 // ✅ Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
 const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b1: 35,
+  b2: 50,
 };
 
 // ===== Глобальна логіка порядку =====
@@ -139,7 +140,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const router = useRouter();
   const { data: session } = useSession();
   const isPremium = (session?.user as any)?.isPremium === true;
-  const isB1Locked = !isPremium;
+  const arePremiumBandsLocked = !isPremium;
 
   const adminEmails = useMemo(() => {
     return (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
@@ -154,12 +155,13 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const DISABLED_BANDS = useMemo(() => {
     const s = new Set<string>();
 
-    if (isB1Locked && !isAdmin) {
+    if (arePremiumBandsLocked && !isAdmin) {
       s.add("b1");
+      s.add("b2");
     }
 
     return s;
-  }, [isB1Locked, isAdmin]);
+  }, [arePremiumBandsLocked, isAdmin]);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
   const { lang } = useLanguage() as { lang: Lang };

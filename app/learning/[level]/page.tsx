@@ -25,7 +25,7 @@ const BAND_LIMITS: Record<string, number> = {
   a1: 40,
   a2: 50,
   b1: 35,
-  // далі можна додати: b2...
+  b2: 50,
 };
 
 function parseLevelId(id: string) {

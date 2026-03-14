@@ -14,7 +14,7 @@ export type SlangItem = {
   exampleUa: string;
   exampleRu: string;
   category: SlangCategory;
-  level: "A1" | "A2" | "B1";
+  level: "A1" | "A2" | "B1" | "B2";
   caution?: { ua: string; ru: string };
 };
 

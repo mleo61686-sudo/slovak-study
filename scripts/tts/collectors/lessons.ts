@@ -2,6 +2,7 @@ import { A0_REAL_SOURCE as A0_SK } from "../../../app/learning/levels/a0";
 import { A1_ALL as A1_SK } from "../../../app/learning/levels/a1";
 import { A2_ALL as A2_SK } from "../../../app/learning/levels/a2";
 import { B1_ALL as B1_SK } from "../../../app/learning/levels/b1";
+import { B2_ALL as B2_SK } from "../../../app/learning/levels/b2";
 
 import { A0_PHRASES as A0_PHRASES_SK } from "../../../app/learning/phrases/a0";
 import { A1_PHRASES as A1_PHRASES_SK } from "../../../app/learning/phrases/a1";
@@ -55,6 +56,7 @@ function getCourseSources(course: CourseId) {
       ...(A1_SK as any[]),
       ...(A2_SK as any[]),
       ...(B1_SK as any[]),
+      ...(B2_SK as any[]),
     ],
     phraseSources: [
       A0_PHRASES_SK,

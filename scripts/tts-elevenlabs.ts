@@ -29,6 +29,7 @@ import { A0_REAL_SOURCE } from "../app/learning/levels/a0";
 import { A1_ALL } from "../app/learning/levels/a1";
 import { A2_ALL } from "../app/learning/levels/a2";
 import { B1_ALL } from "../app/learning/levels/b1";
+import { B2_ALL } from "../app/learning/levels/b2";
 
 import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
@@ -130,7 +131,11 @@ async function main() {
     const b = BAND.trim().toLowerCase();
     let bandItems: Item[] = [];
 
-    if (b === "b1") {
+    if (b === "b2") {
+      bandItems = [
+        ...collectFromLessons(B2_ALL as any[]),
+      ];
+    } else if (b === "b1") {
       bandItems = [
         ...collectFromLessons(B1_ALL as any[]),
         ...collectFromPhraseDict(B1_PHRASES),
@@ -155,7 +160,7 @@ async function main() {
     } else if (b === "all") {
       bandItems = items;
     } else {
-      console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|slang|all`);
+      console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|b2|slang|all`);
       bandItems = items;
     }
 

@@ -47,7 +47,7 @@ function main() {
   const outDir = path.join(process.cwd(), "app", "learning", "levels");
   fs.mkdirSync(outDir, { recursive: true });
 
-  const bands: Band[] = ["a0", "a1", "a2", "b1"]; // b2 поки не чіпаємо
+  const bands: Band[] = ["a0", "a1", "a2", "b1", "b2"];
 
   for (const band of bands) {
     const lessons = (SK_LESSONS_BY_BAND as any)[band] as Lesson[];
@@ -97,7 +97,6 @@ function main() {
       lines.push(`    words: [`);
 
       for (const w of l.words) {
-        // зберігаємо лише те, що реально потрібно
         const props: string[] = [];
         props.push(`sk: ${escapeTsString(w.sk)}`);
         props.push(`ua: ${escapeTsString(w.ua)}`);
@@ -120,7 +119,7 @@ function main() {
     console.log(`✅ Wrote ${filePath} (${csLessons.length} lessons)`);
   }
 
-  console.log(`\n👉 Next: connect cs-lessons-by-band.ts to these new sources (cs-a0/a1/a2/b1).`);
+  console.log(`\n👉 Next: connect cs-lessons-by-band.ts to these new sources (cs-a0/a1/a2/b1/b2).`);
 }
 
 main();

@@ -15,7 +15,7 @@ const CAT_LABEL: Record<SlangCategory, { ua: string; ru: string }> = {
   reactions: { ua: "Реакції", ru: "Реакции" },
 };
 
-const LEVELS = ["A1", "A2", "B1"] as const;
+const LEVELS = ["A1", "A2", "B1", "B2"] as const;
 
 export default function SlangClient() {
   const { lang } = useLanguage();

@@ -77,6 +77,7 @@ function getNextLevelId(levelId: string) {
     if (band === "a1" && Number.isFinite(n) && n >= 40) return "a2-1";
     if (band === "a2" && Number.isFinite(n) && n >= 50) return "b1-1";
     if (band === "b1" && Number.isFinite(n) && n >= 35) return "b2-1";
+    if (band === "b2" && Number.isFinite(n) && n >= 50) return "/learning";
 
     if (Number.isFinite(n)) return `${band}-${n + 1}`;
   }
@@ -373,7 +374,7 @@ export default function LevelClient({
                 router.push(onLockedNextRedirect);
                 return;
               }
-              router.push(`/learning/${nextLevelId}`);
+              router.push(nextLevelId);
             }}
             className={[
               "px-4 py-2 rounded-xl text-white",

@@ -79,11 +79,10 @@ export default function Page() {
         </p>
 
         <p className="text-slate-700">
-          You can start from beginner level A0 and continue to A1, A2 and B1.
+          You can start from beginner level A0 and continue to A1, A2, B1 and B2.
           Each lesson contains vocabulary and exercises to help you remember
           words faster.
         </p>
-
         <div className="flex flex-wrap gap-2 pt-2">
 
           <Link

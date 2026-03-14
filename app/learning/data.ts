@@ -4,6 +4,7 @@ import { A0_REAL_SOURCE } from "./levels/a0";
 import { A1_ALL } from "./levels/a1";
 import { A2_ALL } from "./levels/a2";
 import { B1_ALL } from "./levels/b1";
+import { B2_ALL } from "./levels/b2";
 import { phraseKey } from "./phrases/phraseKey";
 import {
   getPhrasesByBand,
@@ -62,7 +63,7 @@ const LESSONS_PER_BAND: Record<CefrBandId, number> = {
   a1: 40,
   a2: 50,
   b1: 35,
-  b2: 60,
+  b2: 50,
 };
 
 const WORDS_PER_LESSON = 10;
@@ -252,10 +253,7 @@ const A0_ALL: Lesson[] = Array.from({ length: LESSONS_PER_BAND.a0 }, (_, i) => {
   };
 });
 
-// ✅ B2 поки порожній
-const B2_ALL: Lesson[] = [];
-
-// ✅ нормалізація A1/A2/B1 (щоб не ламалось, якщо title там string)
+// ✅ нормалізація A1/A2/B1/B2 (щоб не ламалось, якщо title там string)
 function normalizeLessonList(list: any[]): Lesson[] {
   return list.map((l) => ({
     id: String(l.id),
@@ -295,6 +293,7 @@ function attachPhrases(words: Word[], dict: PhraseDict, lessonId: string) {
 const A1_LIST = normalizeLessonList(A1_ALL as any);
 const A2_LIST = normalizeLessonList(A2_ALL as any);
 const B1_LIST = normalizeLessonList(B1_ALL as any);
+const B2_LIST = normalizeLessonList(B2_ALL as any);
 
 // =============================
 // 6) CEFR_LEVELS
@@ -312,7 +311,7 @@ export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBa
             ? A2_LIST
             : id === "b1"
               ? B1_LIST
-              : B2_ALL;
+              : B2_LIST;
 
     return {
       id,
@@ -346,7 +345,7 @@ export function getLesson(id: string, courseId: string = "sk") {
       a1: A1_LIST,
       a2: A2_LIST,
       b1: B1_LIST,
-      b2: B2_ALL,
+      b2: B2_LIST,
     };
 
     const lesson = sources[band][num - 1] ?? null;
@@ -382,7 +381,7 @@ export const LESSONS_BY_BAND: Record<CefrBandId, Lesson[]> = {
   a1: A1_LIST,
   a2: A2_LIST,
   b1: B1_LIST,
-  b2: B2_ALL,
+  b2: B2_LIST,
 };
 
 export type DictionaryEntry = Word & {

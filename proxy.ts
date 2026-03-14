@@ -11,22 +11,24 @@ export default auth((req) => {
       return NextResponse.redirect(new URL("/premium", req.url));
   }
 
-  // 🔒 Premium only — A1, A2, B1 рівні (списки уроків)
+  // 🔒 Premium only — A1, A2, B1, B2 рівні (списки уроків)
   if (
     pathname.startsWith("/learning/levels/a1") ||
     pathname.startsWith("/learning/levels/a2") ||
-    pathname.startsWith("/learning/levels/b1")
+    pathname.startsWith("/learning/levels/b1") ||
+    pathname.startsWith("/learning/levels/b2")
   ) {
     if (!req.auth) return NextResponse.redirect(new URL("/login", req.url));
     if (!req.auth.user?.isPremium)
       return NextResponse.redirect(new URL("/premium", req.url));
   }
 
-  // 🔒 Premium only — A1, A2, B1 уроки (конкретні уроки)
+  // 🔒 Premium only — A1, A2, B1, B2 уроки (конкретні уроки)
   if (
     pathname.startsWith("/learning/a1-") ||
     pathname.startsWith("/learning/a2-") ||
-    pathname.startsWith("/learning/b1-")
+    pathname.startsWith("/learning/b1-") ||
+    pathname.startsWith("/learning/b2-")
   ) {
     if (!req.auth) return NextResponse.redirect(new URL("/login", req.url));
     if (!req.auth.user?.isPremium)
@@ -44,10 +46,12 @@ export const config = {
     "/learning/levels/a1/:path*",
     "/learning/levels/a2/:path*",
     "/learning/levels/b1/:path*",
+    "/learning/levels/b2/:path*",
 
     // Premium protection (lesson pages)
     "/learning/a1-:path*",
     "/learning/a2-:path*",
     "/learning/b1-:path*",
+    "/learning/b2-:path*",
   ],
 };
