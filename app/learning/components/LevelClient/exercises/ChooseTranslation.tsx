@@ -7,6 +7,8 @@ import type { Word } from "../types";
 import { shuffle, trWord, playLocal } from "../helpers";
 import { ResultBox, SpeakCentered } from "./shared";
 
+type CourseId = "sk" | "cs" | "pl";
+
 export default function ChooseTranslation({
   word,
   words,
@@ -14,6 +16,7 @@ export default function ChooseTranslation({
   lang,
   quizAutoKey,
   audioUnlocked,
+  courseId = "sk",
 }: {
   word: Word;
   words: Word[];
@@ -21,6 +24,7 @@ export default function ChooseTranslation({
   lang: Lang;
   quizAutoKey: number;
   audioUnlocked: boolean;
+  courseId?: CourseId;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -52,7 +56,6 @@ export default function ChooseTranslation({
         {chooseLabel} <span className="font-bold">{word.sk}</span>
       </div>
 
-      {/* ✅ Фото */}
       {word.img ? (
         <div className="mt-2 flex flex-col items-center gap-2">
           <div className="mx-auto w-full max-w-[320px]">
@@ -73,7 +76,6 @@ export default function ChooseTranslation({
         </div>
       ) : null}
 
-      {/* ✅ Мішкер тепер ПІД фото */}
       <div className="mt-2">
         <SpeakCentered
           text={word.sk}
@@ -97,7 +99,7 @@ export default function ChooseTranslation({
               setStatus(ok ? "correct" : "wrong");
 
               if (!audioUnlocked) {
-                await playLocal(word.sk);
+                await playLocal(word.sk, "word", courseId);
               }
             }}
             className={[

@@ -1,4 +1,3 @@
-// D:\slovak-study\slovak-study\app\learning\components\LevelClient\exercises\BuildSentence.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -81,7 +80,6 @@ export default function BuildSentence({
     setAvailable(shuffle(baseTokens));
     setPicked([]);
     setStatus("idle");
-    // не ресетимо на зміну мови, щоб не можна було "перезібрати" після wrong
   }, [word.sk, baseTokens.join("|")]);
 
   function pickToken(t: string, idx: number) {
@@ -107,7 +105,7 @@ export default function BuildSentence({
   }
 
   async function replay() {
-    await playLocal(phrase.sk, "phrase");
+    await playLocal(phrase.sk, "phrase", courseId);
   }
 
   async function check() {
@@ -116,7 +114,7 @@ export default function BuildSentence({
     const ok = normalizeSentence(built) === normalizeSentence(target);
 
     setStatus(ok ? "correct" : "wrong");
-    await playLocal(phrase.sk, "phrase");
+    await playLocal(phrase.sk, "phrase", courseId);
   }
 
   function next() {

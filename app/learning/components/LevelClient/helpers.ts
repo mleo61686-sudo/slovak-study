@@ -34,6 +34,10 @@ function normalizeKeyPart(value: string | number) {
     .replace(/\s+([.,!?;:])/g, "$1");
 }
 
+function getAudioBase(courseId: string = "sk") {
+  return courseId === "sk" ? "/audio" : `/audio/${courseId}`;
+}
+
 function findPhraseInDict(
   dict: PhraseDict,
   sk: string,
@@ -49,7 +53,7 @@ function findPhraseInDict(
   if (canonical) return canonical;
 
   // 2) backward-compatible exact call form
-  //    (works even if some code still calls phraseKey(sk, ua, lessonId))
+  //    (works even if some code still calls phraseKey(sk, ua, levelId))
   const compat = dict[phraseKey(sk, ua, levelId)];
   if (compat) return compat;
 
@@ -66,7 +70,7 @@ function findPhraseInDict(
 
     return (
       key === `${skNorm}||${lessonNorm}` ||
-      key.startsWith(`${skNorm}||`) && key.endsWith(suffix)
+      (key.startsWith(`${skNorm}||`) && key.endsWith(suffix))
     );
   });
 
@@ -138,10 +142,12 @@ export async function buildLocalUrl(
   text: string,
   forcedKind?: "word" | "phrase",
   mode: "legacy" | "kinded" = "legacy",
-  hashLen: "full" | "short" = "full"
+  hashLen: "full" | "short" = "full",
+  courseId: string = "sk"
 ) {
   const clean = (text ?? "").normalize("NFC").trim();
   const kind = forcedKind ?? guessKind(clean);
+  const base = getAudioBase(courseId);
 
   const key = mode === "kinded" ? `${kind}:${clean}` : clean;
 
@@ -149,8 +155,8 @@ export async function buildLocalUrl(
   if (hashLen === "short") h = h.slice(0, 13);
 
   return kind === "word"
-    ? `/audio/words/${h}.mp3`
-    : `/audio/phrases/${h}.mp3`;
+    ? `${base}/words/${h}.mp3`
+    : `${base}/phrases/${h}.mp3`;
 }
 
 async function tryPlay(url: string) {
@@ -163,7 +169,11 @@ async function tryPlay(url: string) {
  *  - words: tries sha1("word:<text>") first, then fallbacks
  *  - phrases: tries short(13) + full(40) for exact and normalized-spacing variants
  */
-export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
+export async function playLocal(
+  text: string,
+  forcedKind?: "word" | "phrase",
+  courseId: string = "sk"
+) {
   const raw = text ?? "";
   const clean = raw.normalize("NFC").trim();
   if (!clean) return;
@@ -171,32 +181,33 @@ export async function playLocal(text: string, forcedKind?: "word" | "phrase") {
   const kind = forcedKind ?? guessKind(clean);
   const alt = normalizePunctSpacing(clean);
   const candidates = Array.from(new Set([clean, alt].filter(Boolean)));
+  const base = getAudioBase(courseId);
 
   const urls: string[] = [];
 
   if (kind === "word") {
     for (const c of candidates) {
       const hWord = await sha1Hex(`word:${c}`);
-      urls.push(`/audio/words/${hWord}.mp3`);
+      urls.push(`${base}/words/${hWord}.mp3`);
     }
 
     for (const c of candidates) {
       const hLegacyFull = await sha1Hex(c);
       const hLegacyShort = hLegacyFull.slice(0, 13);
-      urls.push(`/audio/words/${hLegacyFull}.mp3`);
-      urls.push(`/audio/words/${hLegacyShort}.mp3`);
+      urls.push(`${base}/words/${hLegacyFull}.mp3`);
+      urls.push(`${base}/words/${hLegacyShort}.mp3`);
     }
   } else {
     for (const c of candidates) {
       const hFull = await sha1Hex(c);
-      urls.push(`/audio/phrases/${hFull.slice(0, 13)}.mp3`);
-      urls.push(`/audio/phrases/${hFull}.mp3`);
+      urls.push(`${base}/phrases/${hFull.slice(0, 13)}.mp3`);
+      urls.push(`${base}/phrases/${hFull}.mp3`);
     }
 
     for (const c of candidates) {
       const hKinded = await sha1Hex(`phrase:${c}`);
-      urls.push(`/audio/phrases/${hKinded.slice(0, 13)}.mp3`);
-      urls.push(`/audio/phrases/${hKinded}.mp3`);
+      urls.push(`${base}/phrases/${hKinded.slice(0, 13)}.mp3`);
+      urls.push(`${base}/phrases/${hKinded}.mp3`);
     }
   }
 

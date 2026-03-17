@@ -6,18 +6,22 @@ import type { Word } from "../types";
 import { trWord, playLocal } from "../helpers";
 import SpeakButton from "@/app/components/SpeakButton";
 
+type CourseId = "sk" | "cs" | "pl";
+
 export default function WriteWord({
   word,
   onNext,
   lang,
   quizAutoKey,
   audioUnlocked,
+  courseId = "sk",
 }: {
   word: Word;
   onNext: (c: boolean) => void;
   lang: Lang;
   quizAutoKey: number;
   audioUnlocked: boolean;
+  courseId?: CourseId;
 }) {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
@@ -38,9 +42,8 @@ export default function WriteWord({
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
 
-    // ✅ якщо autoplay ще заблокований — програємо після кліку (перевірки)
     if (!audioUnlocked) {
-      await playLocal(word.sk);
+      await playLocal(word.sk, "word", courseId);
     }
   }
 
@@ -73,7 +76,6 @@ export default function WriteWord({
         {t.title} <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
-      {/* ✅ AUTOPLAY як у вправі 1 */}
       <div className="mt-2">
         <SpeakButton
           text={word.sk}

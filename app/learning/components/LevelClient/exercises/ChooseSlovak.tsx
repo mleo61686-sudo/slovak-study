@@ -6,6 +6,8 @@ import type { Word } from "../types";
 import { shuffle, trWord, playLocal } from "../helpers";
 import { ResultBox, SpeakCentered } from "./shared";
 
+type CourseId = "sk" | "cs" | "pl";
+
 export default function ChooseSlovak({
   word,
   words,
@@ -13,6 +15,7 @@ export default function ChooseSlovak({
   lang,
   quizAutoKey,
   audioUnlocked,
+  courseId = "sk",
 }: {
   word: Word;
   words: Word[];
@@ -20,6 +23,7 @@ export default function ChooseSlovak({
   lang: Lang;
   quizAutoKey: number;
   audioUnlocked: boolean;
+  courseId?: CourseId;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -47,7 +51,6 @@ export default function ChooseSlovak({
         {title} <span className="font-bold">{trWord(word, lang)}</span>
       </div>
 
-      {/* ✅ autoplay як у вправі 1 */}
       <SpeakCentered
         text={word.sk}
         kind="word"
@@ -66,9 +69,8 @@ export default function ChooseSlovak({
               setPicked(opt);
               setStatus(ok ? "correct" : "wrong");
 
-              // ✅ якщо autoplay ще не дозволений браузером — програємо після кліку
               if (!audioUnlocked) {
-                await playLocal(word.sk);
+                await playLocal(word.sk, "word", courseId);
               }
             }}
             className={[

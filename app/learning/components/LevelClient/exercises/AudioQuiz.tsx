@@ -6,6 +6,8 @@ import type { Word } from "../types";
 import { shuffle, playLocal } from "../helpers";
 import { ResultBox, SpeakCentered } from "./shared";
 
+type CourseId = "sk" | "cs" | "pl";
+
 export default function AudioQuiz({
   word,
   words,
@@ -13,6 +15,7 @@ export default function AudioQuiz({
   quizAutoKey,
   audioUnlocked,
   lang,
+  courseId = "sk",
 }: {
   word: Word;
   words: Word[];
@@ -20,6 +23,7 @@ export default function AudioQuiz({
   quizAutoKey: number;
   audioUnlocked: boolean;
   lang: Lang;
+  courseId?: CourseId;
 }) {
   const options = useMemo(() => {
     const others = words.filter((w) => w !== word);
@@ -66,9 +70,8 @@ export default function AudioQuiz({
               setPicked(opt);
               setStatus(ok ? "correct" : "wrong");
 
-              // ✅ якщо autoplay вимкнений — програємо після вибору (інакше буде 2 рази)
               if (!audioUnlocked) {
-                await playLocal(word.sk);
+                await playLocal(word.sk, "word", courseId);
               }
             }}
             className={[
