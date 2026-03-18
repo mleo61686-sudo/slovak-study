@@ -506,7 +506,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
     tokens: ["Práce", "probíhala", "pod", "dohledem", "zkušeného", "mistra", "."],
   },
 
-  [phraseKey("upozornění_warning", "b1-27")]: {
+  [phraseKey("upozornění", "b1-27")]: {
     sk: "Na dveřích bylo jasné upozornění.",
     ua: "На дверях було чітке попередження.",
     ru: "На двери было чёткое предупреждение.",
@@ -544,7 +544,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
     tokens: ["Mezitím", "připravila", "něco", "k", "jídlu", "."],
   },
 
-  [phraseKey("nakonec_finally", "b1-28")]: {
+  [phraseKey("nakonec", "b1-28")]: {
     sk: "Nakonec všechno dopadlo dobře.",
     ua: "Врешті все закінчилося добре.",
     ru: "В конце всё закончилось хорошо.",
@@ -558,11 +558,11 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
     tokens: ["Najednou", "se", "otevřely", "dveře", "."],
   },
 
-  [phraseKey("nakonec_eventually", "b1-28")]: {
-    sk: "Nakonec jsme se rozhodli zůstat doma.",
-    ua: "Зрештою ми вирішили залишитися вдома.",
-    ru: "В итоге мы решили остаться дома.",
-    tokens: ["Nakonec", "jsme", "se", "rozhodli", "zůstat", "doma", "."],
+  [phraseKey("nepříjemné", "b1-28")]: {
+    sk: "Bylo mi nepříjemné o tom mluvit.",
+    ua: "Мені було неприємно про це говорити.",
+    ru: "Мне было неприятно об этом говорить.",
+    tokens: ["Bylo", "mi", "nepříjemné", "o", "tom", "mluvit", "."],
   },
 
   [phraseKey("tehdy", "b1-28")]: {
@@ -589,11 +589,11 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
   // =========================
   // LESSON B1-29 — Конфлікти (як говорити спокійно)
   // =========================
-  [phraseKey("nepříjemné", "b1-29")]: {
-    sk: "Bylo mi nepříjemné o tom mluvit.",
-    ua: "Мені було неприємно про це говорити.",
-    ru: "Мне было неприятно об этом говорить.",
-    tokens: ["Bylo", "mi", "nepříjemné", "o", "tom", "mluvit", "."],
+  [phraseKey("nakonec", "b1-29")]: {
+    sk: "Nakonec jsme se rozhodli zůstat doma.",
+    ua: "Зрештою ми вирішили залишитися вдома.",
+    ru: "В итоге мы решили остаться дома.",
+    tokens: ["Nakonec", "jsme", "se", "rozhodli", "zůstat", "doma", "."],
   },
 
   [phraseKey("urazit", "b1-29")]: {

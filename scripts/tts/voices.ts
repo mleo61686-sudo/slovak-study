@@ -83,6 +83,7 @@ export const VOICE2_WORDS = new Set<string>([
   "Koľko ešte?",
   "Nejde to",
   "To je jedno",
+  "zima",
 ]);
 
 /**
@@ -131,6 +132,9 @@ export const VOICE2_PHRASES = new Set<string>([
   "Chcem to zmeniť.",
   "Paráda, tak ideme!",
   "Všetko je v poriadku.",
+  "Môj otec pracuje v meste.",
+  "Bolie ma hlava.",
+  "Zdravie je dôležité.",
 ]);
 
 /**
@@ -169,6 +173,20 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["kurz", "kur z."],
   ["ingredience", "ingredijence"],
   ["virus", "vírus"],
+  ["festival", "festyval"],
+  ["intolerance", "intolerancie"],
+  ["recenze", "retsenze"],
+  ["parlament", "paŕlament."],
+  ["host", "hosť."],
+  ["tolerance", "tolerantse."],
+  ["Rumunsko", "RŔumunsko."],
+  ["Bible", "bíble"],
+  ["Bern", "bérn"],
+  ["Amsterdam", "ámsterdam"],
+  ["Borci", "bortsí"],
+  ["Pecka", "pecká"],
+  
+
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {

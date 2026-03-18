@@ -484,7 +484,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "rozumiem", ua: "розумію", ru: "понимаю", img: "/words/rozumiem.jpg" },
             { sk: "nerozumiem", ua: "не розумію", ru: "не понимаю", img: "/words/nerozumiem.jpg" },
             { sk: "pomôžte", ua: "допоможіть", ru: "помогите", img: "/words/pomôžte.jpg" },
-            { sk: "jasné", ua: "ясно", ru: "ясно", img: "/words/jasné.jpg" },
+            { sk: "jasné", ua: "ясно", ru: "ясно", img: "/words/jasne.jpg" },
             { sk: "dobre", ua: "добре", ru: "хорошо", img: "/words/dobre.jpg" },
         ],
     },

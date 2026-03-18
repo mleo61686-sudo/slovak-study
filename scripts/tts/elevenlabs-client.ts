@@ -3,30 +3,32 @@ dotenv.config({ path: ".env.local" });
 
 import fs from "node:fs";
 
-
 const API_KEY = process.env.ELEVENLABS_API_KEY;
 
-const VOICE_ID_SLOVAK_MALE = process.env.ELEVENLABS_VOICE_ID_Slovak_Male;
 const VOICE_ID_SLOVAK_FEMALE = process.env.ELEVENLABS_VOICE_ID_Slovak_Female;
 const VOICE_ID_CZECH_MALE = process.env.ELEVENLABS_VOICE_ID_Czech_Male;
 
 if (!API_KEY) throw new Error("Missing ELEVENLABS_API_KEY in .env.local");
-if (!VOICE_ID_SLOVAK_MALE) {
-  throw new Error("Missing ELEVENLABS_VOICE_ID_Slovak_Male in .env.local");
+
+if (!VOICE_ID_SLOVAK_FEMALE || !VOICE_ID_SLOVAK_FEMALE.trim()) {
+  throw new Error("Missing ELEVENLABS_VOICE_ID_Slovak_Female in .env.local");
 }
-if (!VOICE_ID_CZECH_MALE) {
+
+if (!VOICE_ID_CZECH_MALE || !VOICE_ID_CZECH_MALE.trim()) {
   throw new Error("Missing ELEVENLABS_VOICE_ID_Czech_Male in .env.local");
 }
 
 export const XI_KEY: string = API_KEY;
 
-export const VOICE1: string = VOICE_ID_SLOVAK_MALE;
+/**
+ * Slovak: female only
+ */
+export const VOICE1: string = VOICE_ID_SLOVAK_FEMALE;
+export const VOICE2: string = VOICE_ID_SLOVAK_FEMALE;
 
-export const VOICE2: string =
-  VOICE_ID_SLOVAK_FEMALE && VOICE_ID_SLOVAK_FEMALE.trim()
-    ? VOICE_ID_SLOVAK_FEMALE
-    : VOICE_ID_SLOVAK_MALE;
-
+/**
+ * Czech voice
+ */
 export const VOICE_CS: string = VOICE_ID_CZECH_MALE;
 
 export const sleep = (ms: number) =>

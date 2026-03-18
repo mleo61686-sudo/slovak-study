@@ -1,10 +1,19 @@
 import { expandDerivedPhrases } from "../generators/negation";
-import { VERBS_CS, VERBS_SK } from "@/app/grammar/verbs-present/verbs-present-data";
+import {
+  VERBS_CS,
+  VERBS_SK,
+} from "../../../app/grammar/verbs-present/verbs-present-data";
 import {
   genExamplesFromRows,
   makeQuestion,
   negateSentence,
-} from "@/app/grammar/verbs-present/verbs-present-helpers";
+} from "../../../app/grammar/verbs-present/verbs-present-helpers";
+import {
+  CASES_CS,
+  CASES_SK,
+  BUILD_SAMPLES_CS,
+  BUILD_SAMPLES_SK,
+} from "../../../app/grammar/cases/cases-data";
 
 export type Item = { kind: "word" | "phrase"; text: string };
 export type CourseId = "sk" | "cs";
@@ -80,87 +89,40 @@ export function collectAlphabetItems(course: CourseId = "sk"): Item[] {
   const unique = Array.from(new Set(words.map((w) => w.trim()).filter(Boolean)));
 
   return unique.map((text) => ({
-    kind: "word",
+    kind: "word" as const,
     text,
   }));
 }
 
 /**
  * Grammar cases phrases
+ * IMPORTANT:
+ * Uses the same source as frontend UI to avoid text/hash mismatch.
  */
 export function collectCasesItems(course: CourseId = "sk"): Item[] {
-  const phrasesSk = [
-    "Kto? Čo?",
-    "Koho? Čoho?",
-    "Komu? Čomu?",
-    "Koho? Čo?",
-    "O kom? O čom? Kde?",
-    "S kým? S čím?",
+  const isCzech = course === "cs";
+  const cases = isCzech ? CASES_CS : CASES_SK;
+  const buildSamples = isCzech ? BUILD_SAMPLES_CS : BUILD_SAMPLES_SK;
 
-    "Ja som študent.",
-    "Toto je auto.",
-    "Brat pracuje.",
+  const collected = new Set<string>();
 
-    "Nemám čas.",
-    "Som z Ukrajiny.",
-    "Idem do práce.",
+  for (const c of cases) {
+    const q = c.questions?.sk?.trim();
+    if (q) collected.add(q);
 
-    "Pomáham kamarátovi.",
-    "Volám mame.",
-    "Ďakujem ti.",
+    for (const ex of c.examples ?? []) {
+      const text = ex.sk?.trim();
+      if (text) collected.add(text);
+    }
+  }
 
-    "Vidím auto.",
-    "Mám otázku.",
-    "Idem na poštu.",
+  for (const sample of buildSamples) {
+    const text = sample.sk?.trim();
+    if (text) collected.add(text);
+  }
 
-    "Som v práci.",
-    "Hovoríme o škole.",
-    "Bývam v meste.",
-
-    "Idem s kamarátom.",
-    "Píšem perom.",
-    "Som sám/sama.",
-  ];
-
-  const phrasesCs = [
-    "Kdo? Co?",
-    "Koho? Čeho?",
-    "Komu? Čemu?",
-    "Koho? Co?",
-    "O kom? O čem? Kde?",
-    "S kým? S čím?",
-
-    "Já jsem student.",
-    "Tohle je auto.",
-    "Bratr pracuje.",
-
-    "Nemám čas.",
-    "Jsem z Ukrajiny.",
-    "Jdu do práce.",
-
-    "Pomáhám kamarádovi.",
-    "Volám mámě.",
-    "Děkuju ti.",
-
-    "Vidím auto.",
-    "Mám otázku.",
-    "Jdu na poštu.",
-
-    "Jsem v práci.",
-    "Mluvíme o škole.",
-    "Bydlím ve městě.",
-
-    "Jdu s kamarádem.",
-    "Píšu perem.",
-    "Jsem sám/sama.",
-  ];
-
-  const phrases = course === "cs" ? phrasesCs : phrasesSk;
-
-  const unique = Array.from(new Set(phrases.map((p) => p.trim()).filter(Boolean)));
-
-  return unique.map((text) => ({
-    kind: "phrase",
+  return Array.from(collected).map((text) => ({
+    kind: "phrase" as const,
     text,
   }));
 }
@@ -205,7 +167,9 @@ export function collectVerbsPresentItems(course: CourseId = "sk"): Item[] {
     }
   }
 
-  const unique = Array.from(collected).map((p) => p.trim()).filter(Boolean);
+  const unique = Array.from(collected)
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   const base = unique.map((text) => ({
     kind: "phrase" as const,
