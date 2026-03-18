@@ -167,6 +167,8 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["energie", "energie."],
   ["recept", "re cept,"],
   ["kurz", "kur z."],
+  ["ingredience", "ingredijence"],
+  ["virus", "vírus"],
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {
