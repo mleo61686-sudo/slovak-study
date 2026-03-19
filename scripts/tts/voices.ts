@@ -169,8 +169,8 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["oddělení", "oddělení."],
   ["balkon", "balkon."],
   ["energie", "energie."],
-  ["recept", "re cept,"],
-  ["kurz", "kur z."],
+  ["recept", "recépt,"],
+  ["kurz", "kúrz."],
   ["ingredience", "ingredijence"],
   ["virus", "vírus"],
   ["festival", "festyval"],
@@ -185,8 +185,10 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["Amsterdam", "ámsterdam"],
   ["Borci", "bortsí"],
   ["Pecka", "pecká"],
-  
-
+  ["most", "mostt"],
+  ["more", "moré"],
+  ["chyba", "chíba"],
+  ["recept (kuchársky)", "recépt"],
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {
