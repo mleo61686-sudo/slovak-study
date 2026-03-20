@@ -189,6 +189,9 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["more", "moré"],
   ["chyba", "chíba"],
   ["recept (kuchársky)", "recépt"],
+  ["hosť", "hhosť."],
+  ["Kyjev", "Kyjév."],
+
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {
