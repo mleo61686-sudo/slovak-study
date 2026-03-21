@@ -81,7 +81,7 @@ export default function RootLayout({
         publisher: { "@id": "https://flunio.com/#organization" },
         inLanguage: ["uk", "ru"],
         description:
-          "Онлайн платформа для вивчення мов зі словамицьким і чеським курсами, граматикою, словником і вправами.",
+          "Онлайн платформа для вивчення мов зі словацьким і чеським курсами, граматикою, словником і вправами.",
         potentialAction: {
           "@type": "SearchAction",
           target: "https://flunio.com/dictionary?q={search_term_string}",
@@ -142,32 +142,24 @@ export default function RootLayout({
         </SessionProviderClient>
 
         <footer className="border-t">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              © {new Date().getFullYear()} Flunio — вивчай мови щодня.
-            </div>
+          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>© {new Date().getFullYear()} Flunio — вивчай мови щодня.</div>
 
-            <div className="flex flex-wrap gap-4">
-              <a className="hover:underline" href="/slovak-for-ukrainians">
-                Словацька для українців
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              <a className="hover:underline" href="/learn">
+                Курси
               </a>
-
-              <a
-                className="hover:underline"
-                href="/vyvchennia-slovatskoi-movy-online"
-              >
-                Вивчення словацької онлайн
+              <a className="hover:underline" href="/grammar">
+                Граматика
               </a>
-
-              <a className="hover:underline" href="/ru/slovak-for-ukrainians">
-                Словацкий для украинцев
+              <a className="hover:underline" href="/dictionary">
+                Словник
               </a>
-
-              <a
-                className="hover:underline"
-                href="/ru/vyvchennia-slovatskoi-movy-online"
-              >
-                Изучение словацкого онлайн
+              <a className="hover:underline" href="/practice">
+                Тренажер
+              </a>
+              <a className="hover:underline" href="/support">
+                Підтримка
               </a>
             </div>
           </div>
