@@ -5,23 +5,23 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Изучение словацкого языка онлайн — курс A0–B2 | Flunio",
+  title: "Изучение чешского языка онлайн — курс A0–B2 | Flunio",
   description:
-    "Онлайн курс словацкого языка во Flunio: уровни A0–B2, уроки, упражнения, словарь, грамматика и озвучка. Начни учить словацкий системно и удобно.",
+    "Онлайн курс чешского языка во Flunio: уровни A0–B2, уроки, упражнения, словарь, грамматика и озвучка. Начни изучать чешский системно и удобно.",
 
   alternates: {
-    canonical: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
+    canonical: `${SITE_URL}/ru/vyvchennia-cheskoi-movy-online`,
     languages: {
-      uk: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
-      ru: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
+      uk: `${SITE_URL}/vyvchennia-cheskoi-movy-online`,
+      ru: `${SITE_URL}/ru/vyvchennia-cheskoi-movy-online`,
     },
   },
 
   openGraph: {
-    title: "Изучение словацкого языка онлайн — курс A0–B2 | Flunio",
+    title: "Изучение чешского языка онлайн — курс A0–B2 | Flunio",
     description:
-      "Уроки словацкого A0–B2, словарь, грамматика, упражнения и озвучка — всё в одной платформе.",
-    url: `${SITE_URL}/ru/vyvchennia-slovatskoi-movy-online`,
+      "Уроки чешского A0–B2, словарь, грамматика, упражнения и озвучка — всё в одной платформе.",
+    url: `${SITE_URL}/ru/vyvchennia-cheskoi-movy-online`,
     siteName: "Flunio",
     type: "website",
   },
@@ -31,20 +31,20 @@ export const metadata: Metadata = {
 
 const FAQ = [
   {
-    q: "Можно ли изучать словацкий онлайн с нуля?",
-    a: "Да. Во Flunio можно начать с уровня A0: короткие уроки, озвучка, базовые слова и упражнения для закрепления материала.",
+    q: "Можно ли изучать чешский онлайн с нуля?",
+    a: "Да. Во Flunio можно начать с уровня A0: короткие уроки, базовые слова, озвучка и упражнения для закрепления.",
   },
   {
     q: "Сколько времени нужно заниматься каждый день?",
-    a: "Оптимально 10–20 минут в день. Лучший результат даёт регулярная практика: уроки, повторение и работа со словарём.",
+    a: "Оптимально 10–20 минут в день. Лучший результат даёт регулярная практика без больших перерывов.",
   },
   {
     q: "Что есть на платформе, кроме уроков?",
-    a: "Кроме уроков, во Flunio есть словарь, страницы грамматики, озвучка слов и фраз, а также упражнения для повторения и тренировки.",
+    a: "Кроме уроков, есть словарь, страницы грамматики, озвучка слов и фраз, а также упражнения для тренировки и повторения.",
   },
   {
-    q: "Подходит ли Flunio для жизни и работы в Словакии?",
-    a: "Да. Платформа помогает изучать повседневную лексику, базовую грамматику и полезные слова для быта, документов, работы и общения.",
+    q: "Подходит ли этот курс для жизни и работы в Чехии?",
+    a: "Да. Платформа помогает изучать повседневную лексику, базовую грамматику и полезные слова для быта, учёбы, документов и общения.",
   },
   {
     q: "Сохраняется ли прогресс обучения?",
@@ -67,9 +67,9 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
+    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10">
       <Script
-        id="faq-schema-ru-online"
+        id="faq-schema-czech-ru"
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -77,43 +77,43 @@ export default function Page() {
 
       <section className="space-y-4">
         <h1 className="text-3xl font-extrabold sm:text-4xl">
-          Изучение словацкого языка онлайн — курс A0–B2
+          Изучение чешского языка онлайн — курс A0–B2
         </h1>
 
         <p className="text-slate-700">
-          Flunio — это онлайн-платформа для системного изучения словацкого
-          языка. Здесь можно проходить уроки по уровням, закреплять слова в
+          Flunio — это онлайн-платформа для системного изучения чешского языка.
+          Здесь можно проходить уроки по уровням, закреплять слова в
           упражнениях, пользоваться словарём и параллельно закрывать грамматику.
         </p>
 
         <p className="text-slate-700">
-          Платформа подойдёт тем, кто хочет учить словацкий для жизни, работы,
-          документов, учёбы или повседневного общения в Словакии.
+          Платформа подойдёт тем, кто хочет учить чешский для жизни, работы,
+          учёбы или повседневного общения в Чехии.
         </p>
 
-        <div className="flex flex-wrap gap-2 pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link
-            className="rounded-xl bg-black px-4 py-2 text-white"
             href="/learning"
+            className="rounded-xl bg-black px-4 py-2 text-white"
           >
             Начать обучение
           </Link>
 
-          <Link className="rounded-xl border px-4 py-2" href="/learning/a0">
+          <Link href="/learning/a0" className="rounded-xl border px-4 py-2">
             Начать с A0 →
           </Link>
 
-          <Link className="rounded-xl border px-4 py-2" href="/dictionary">
+          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
             Словарь
           </Link>
 
-          <Link className="rounded-xl border px-4 py-2" href="/grammar">
+          <Link href="/grammar" className="rounded-xl border px-4 py-2">
             Грамматика
           </Link>
 
           <Link
+            href="/vyvchennia-cheskoi-movy-online"
             className="rounded-xl border px-4 py-2"
-            href="/vyvchennia-slovatskoi-movy-online"
           >
             Українська версія →
           </Link>
@@ -140,7 +140,7 @@ export default function Page() {
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="text-lg font-bold">3) Озвучка слов и фраз</h2>
           <p className="mt-2 text-slate-700">
-            Слушай произношение и тренируй восприятие словацкого языка на слух.
+            Слушай произношение и тренируй восприятие чешского языка на слух.
           </p>
         </div>
 
@@ -154,12 +154,10 @@ export default function Page() {
       </section>
 
       <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
-          Как начать изучать словацкий онлайн
-        </h2>
+        <h2 className="text-2xl font-bold">Как начать изучать чешский онлайн</h2>
 
         <ol className="list-decimal space-y-2 pl-5 text-slate-700">
-          <li>Начни с уровня A0, если учишь словацкий с нуля.</li>
+          <li>Начни с уровня A0, если учишь чешский с нуля.</li>
           <li>Проходи короткие уроки и сразу выполняй упражнения.</li>
           <li>Повторяй слова через словарь и озвучку.</li>
           <li>Параллельно открывай грамматику, когда хочешь лучше понять тему.</li>
@@ -168,8 +166,8 @@ export default function Page() {
 
         <div className="pt-2">
           <Link
-            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
             href="/learning/a0"
+            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
           >
             Перейти к A0 →
           </Link>
@@ -177,24 +175,19 @@ export default function Page() {
       </section>
 
       <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
-          Кому подойдёт онлайн курс словацкого
-        </h2>
+        <h2 className="text-2xl font-bold">Кому подойдёт онлайн курс чешского</h2>
 
         <div className="space-y-3 text-slate-700">
           <p>
-            Flunio подойдёт тем, кто хочет изучать словацкий язык в удобном
-            формате без перегруза. Здесь можно заниматься короткими сессиями,
-            видеть прогресс и возвращаться к материалу в любой момент.
+            Flunio подойдёт тем, кто хочет изучать чешский в удобном формате без
+            перегруза. Здесь можно заниматься короткими сессиями, видеть прогресс
+            и возвращаться к материалу в любой момент.
           </p>
 
           <p>
-            Если тебе нужен отдельный акцент именно на переезд, адаптацию и
-            повседневную жизнь в Словакии, посмотри также страницу{" "}
-            <Link href="/ru/slovak-for-ukrainians" className="underline">
-              «Словацкий для украинцев»
-            </Link>
-            .
+            Это хороший вариант для тех, кто хочет подтянуть базовую лексику,
+            понять грамматику и постепенно перейти к более уверенному общению на
+            чешском языке.
           </p>
         </div>
       </section>

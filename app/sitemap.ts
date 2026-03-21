@@ -5,29 +5,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const urls: string[] = [
+    // основа
     `${baseUrl}/`,
-
-    `${baseUrl}/slovak-for-ukrainians`,
-    `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
-    `${baseUrl}/learn-slovak`,
-    `${baseUrl}/slovak-grammar`,
-
     `${baseUrl}/learning`,
+    `${baseUrl}/dictionary`,
+    `${baseUrl}/grammar`,
+
+    // рівні
     `${baseUrl}/learning/a0`,
     `${baseUrl}/learning/a1`,
     `${baseUrl}/learning/a2`,
     `${baseUrl}/learning/b1`,
     `${baseUrl}/learning/b2`,
-    `${baseUrl}/grammar`,
-    `${baseUrl}/dictionary`,
 
+    // граматика
     `${baseUrl}/grammar/alphabet`,
     `${baseUrl}/grammar/verbs-present`,
     `${baseUrl}/grammar/cases`,
     `${baseUrl}/grammar/slovak-slang`,
 
-    `${baseUrl}/ru/slovak-for-ukrainians`,
+    // словацька SEO
+    `${baseUrl}/learn-slovak`,
+    `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
+
+    // чеська SEO (НОВЕ)
+    `${baseUrl}/learn-czech`,
+    `${baseUrl}/vyvchennia-cheskoi-movy-online`,
+    `${baseUrl}/ru/vyvchennia-cheskoi-movy-online`,
+
+    // RU основні
     `${baseUrl}/ru/learning`,
     `${baseUrl}/ru/grammar`,
     `${baseUrl}/ru/dictionary`,
