@@ -7,7 +7,7 @@ export function middleware(req: NextRequest) {
 
   // 1) Забороняємо індексацію vercel.app і жорстко 301 на основний домен
   if (host.endsWith(".vercel.app")) {
-    const target = new URL(url.pathname + url.search, "https://slovak-study.com");
+    const target = new URL(url.pathname + url.search, "https://flunio.com");
     return NextResponse.redirect(target, 301);
   }
 

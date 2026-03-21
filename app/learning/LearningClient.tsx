@@ -15,7 +15,7 @@ type Lang = "ua" | "ru";
 const dict = {
   ua: {
     title: "Навчання 📚",
-    subtitle: "Обирай рівень (A0 → B2) і проходь уроки по 10 слів.",
+    subtitle: "Обирай рівень (A0 → B1) і проходь уроки по 10 слів.",
     done: "Пройдено уроків:",
     lessons: "Уроків:",
     words: "Слів:",
@@ -30,7 +30,7 @@ const dict = {
   },
   ru: {
     title: "Обучение 📚",
-    subtitle: "Выбирай уровень (A0 → B2) и проходи уроки по 10 слов.",
+    subtitle: "Выбирай уровень (A0 → B1) и проходи уроки по 10 слов.",
     done: "Пройдено уроков:",
     lessons: "Уроков:",
     words: "Слов:",
@@ -50,6 +50,9 @@ const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b1: 35,
   b2: 50,
 };
+
+// ✅ Тимчасово ховаємо недороблені рівні з UI
+const TEMP_HIDDEN_BANDS = new Set<string>(["b2"]);
 
 // ===== Глобальна логіка порядку =====
 
@@ -132,8 +135,9 @@ function getAllowedSequential(progress: LessonsProgress, bands: CefrBand[]) {
     if (!isDoneId(progress, id)) return id.toLowerCase();
   }
 
+  // якщо всі видимі уроки пройдені, просто лишаємо останній доступним
   const last = allIds[allIds.length - 1];
-  return last ? nextLevelId(last).toLowerCase() : "a0-1";
+  return last ? last.toLowerCase() : "a0-1";
 }
 
 export default function LearningPage({ bands }: { bands: CefrBand[] }) {
@@ -208,9 +212,13 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
     [progress]
   );
 
+  const visibleBands = useMemo(() => {
+    return bands.filter((band) => !TEMP_HIDDEN_BANDS.has(band.id));
+  }, [bands]);
+
   const allowed = useMemo(() => {
-    return getAllowedSequential(progress, bands);
-  }, [progress, bands]);
+    return getAllowedSequential(progress, visibleBands);
+  }, [progress, visibleBands]);
 
   const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
@@ -242,7 +250,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
       </div>
 
       <div className="mt-8 space-y-8">
-        {bands.map((band) => {
+        {visibleBands.map((band) => {
           const limit = LESSONS_LIMITS[band.id] ?? band.lessons.length;
           const lessonsTotal = Math.min(band.lessons.length, limit);
           const wordsTotal = lessonsTotal * 10;

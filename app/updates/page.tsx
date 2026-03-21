@@ -11,7 +11,7 @@ const I18N = {
     ua: {
         title: "Оновлення",
         subtitle:
-            "Тут публікуються всі оновлення Slovak Study: нові уроки, слова та покращення навчання.",
+            "Тут публікуються всі оновлення Flunio: нові уроки, слова та покращення навчання.",
         back: "На головну",
         empty: "Поки що немає оновлень.",
         months: "Архів",
@@ -19,7 +19,7 @@ const I18N = {
     },
     ru: {
         title: "Обновления",
-        subtitle: "Здесь публикуются все обновления Slovak Study: новые уроки, слова и улучшения обучения.",
+        subtitle: "Здесь публикуются все обновления Flunio: новые уроки, слова и улучшения обучения.",
         back: "На главную",
         empty: "Пока нет обновлений.",
         months: "Архив",
@@ -28,7 +28,6 @@ const I18N = {
 } satisfies Record<Lang, any>;
 
 function fmtDate(dateISO: string) {
-    // "2026-02-15" -> { day:"15", month:"02", year:"2026" }
     const [y, m, d] = dateISO.split("-");
     return { y, m, d, short: `${d}.${m}`, full: `${d}.${m}.${y}` };
 }
@@ -67,7 +66,7 @@ function monthLabel(m: string, L: Lang) {
 }
 
 type MonthGroup = {
-    key: string; // "2026-02"
+    key: string;
     y: string;
     m: string;
     items: UpdateItem[];
@@ -78,7 +77,6 @@ export default function UpdatesPage() {
     const L: Lang = lang === "ru" ? "ru" : "ua";
     const tr = I18N[L];
 
-    // newest first
     const sorted = useMemo(() => {
         return [...UPDATES].sort((a, b) => (a.date < b.date ? 1 : -1));
     }, []);
@@ -122,9 +120,7 @@ export default function UpdatesPage() {
         <div className="w-full py-8">
             <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
                 <div className="grid gap-8 lg:grid-cols-[340px_minmax(0,1fr)] items-start">
-                    {/* LEFT SIDEBAR */}
                     <aside className="space-y-5 lg:sticky lg:top-24">
-                        {/* title + subtitle + back */}
                         <div className="flex items-start justify-between gap-3">
                             <div>
                                 <h1 className="text-3xl font-bold tracking-tight">{tr.title}</h1>
@@ -139,7 +135,6 @@ export default function UpdatesPage() {
                             </Link>
                         </div>
 
-                        {/* archive */}
                         <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm font-semibold text-slate-900">
@@ -213,7 +208,6 @@ export default function UpdatesPage() {
                         </div>
                     </aside>
 
-                    {/* RIGHT CONTENT */}
                     <main className="min-w-0 space-y-4">
                         {active && (
                             <article className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
@@ -242,7 +236,6 @@ export default function UpdatesPage() {
                                 </ul>
                             </article>
                         )}
-
                     </main>
                 </div>
             </div>

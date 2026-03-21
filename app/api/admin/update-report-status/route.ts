@@ -1,5 +1,5 @@
 /**
- * API route для зміни статусу bug-репорту в адмінці Slovak Study.
+ * API route для зміни статусу bug-репорту в адмінці Flunio.
  *
  * Що робить:
  * Приймає POST із id репорту та новим статусом (new / fixed / ignored),

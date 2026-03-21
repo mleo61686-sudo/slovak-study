@@ -4,22 +4,31 @@ import { SITE_URL } from "@/lib/site";
 import { UPDATES } from "@/app/updates/updates";
 
 export const metadata: Metadata = {
-  title: "Slovak Study — словацька мова онлайн (A0–B2)",
+  title: "Flunio — вивчення мов онлайн (A0–B2)",
 
   description:
-    "Slovak Study — онлайн навчання словацької мови: уроки A0–B2, словник, граматика з прикладами, вправи та озвучка. Вивчайте словацьку мову з нуля онлайн.",
+    "Flunio — онлайн платформа для вивчення мов: словацька та чеська, уроки A0–B2, словник, граматика з прикладами, вправи та озвучка.",
 
   alternates: {
     canonical: `${SITE_URL}/`,
   },
 
   openGraph: {
-    title: "Slovak Study — словацька мова онлайн",
+    title: "Flunio — вивчення мов онлайн",
     description:
-      "Уроки A0–B2, словник, граматика з прикладами та вправи для практики. Онлайн навчання словацької мови.",
+      "Вивчай словацьку та чеську онлайн: уроки A0–B2, словник, граматика з прикладами, вправи та озвучка.",
     url: `${SITE_URL}/`,
-    siteName: "Slovak Study",
+    siteName: "Flunio",
     type: "website",
+    images: ["/opengraph-image"],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Flunio — вивчення мов онлайн",
+    description:
+      "Словацька та чеська онлайн: уроки A0–B2, граматика, словник, вправи та озвучка.",
+    images: ["/opengraph-image"],
   },
 
   robots: { index: true, follow: true },

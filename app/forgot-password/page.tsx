@@ -15,6 +15,7 @@ export default function ForgotPasswordPage() {
       ok: "Якщо акаунт існує — ми надіслали лист.",
       back: "← Назад до входу",
       hint: "Введи email — ми надішлемо посилання для скидання пароля.",
+      footer: "© 2026 Flunio — вивчай мови щодня.",
     },
     ru: {
       title: "Восстановление пароля",
@@ -23,6 +24,7 @@ export default function ForgotPasswordPage() {
       ok: "Если аккаунт существует — мы отправили письмо.",
       back: "← Назад ко входу",
       hint: "Введи email — мы отправим ссылку для сброса пароля.",
+      footer: "© 2026 Flunio — изучай языки каждый день.",
     },
   } as const;
 
@@ -47,10 +49,9 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="h-[calc(100dvh-64px-64px)] overflow-hidden flex items-center justify-center px-4 py-6">
-
+    <div className="flex h-[calc(100dvh-64px-64px)] items-center justify-center overflow-hidden px-4 py-6">
       <div className="w-full max-w-md">
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h1 className="text-2xl font-semibold">{t.title}</h1>
           <p className="mt-2 text-sm text-slate-600">{t.hint}</p>
 
@@ -63,18 +64,18 @@ export default function ForgotPasswordPage() {
               </label>
 
               <input
-                className="w-full border rounded-xl px-3 py-2 bg-white"
+                className="w-full rounded-xl border bg-white px-3 py-2"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
                 autoComplete="email"
               />
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
                 <button
                   onClick={submit}
                   disabled={!email.trim() || loading}
-                  className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+                  className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
                 >
                   {t.btn}
                 </button>
@@ -87,9 +88,7 @@ export default function ForgotPasswordPage() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-500">
-          © 2026 Slovak Study — вчи словацьку щодня.
-        </p>
+        <p className="mt-6 text-center text-xs text-slate-500">{t.footer}</p>
       </div>
     </div>
   );

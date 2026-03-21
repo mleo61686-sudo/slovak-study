@@ -9,6 +9,8 @@ import { auth } from "@/auth";
 
 type LessonsProgress = Record<string, any>;
 
+const TEMP_HIDDEN_BANDS = new Set<string>(["b2"]);
+
 function getLessonFromLessonsByBand(lessonsByBand: Record<string, any[]>, id: string) {
   const raw = String(id).toLowerCase();
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/.exec(raw);
@@ -16,6 +18,9 @@ function getLessonFromLessonsByBand(lessonsByBand: Record<string, any[]>, id: st
 
   const band = m[1];
   const n = Number(m[2]);
+
+  if (TEMP_HIDDEN_BANDS.has(band)) return null;
+
   const list = lessonsByBand[band] ?? [];
   return list[n - 1] ?? null;
 }
@@ -35,20 +40,18 @@ function parseLevelId(id: string) {
 }
 
 function bandOrder(band: string) {
-  // a0->0, a1->1, a2->2, b1->11, b2->12 ...
   const m = /^([ab])(\d)$/.exec(band.toLowerCase());
   if (!m) return 0;
 
   const letter = m[1];
   const n = Number(m[2]);
 
-  if (letter === "a") return n; // a0..a9
-  if (letter === "b") return 10 + n; // b0..b9
+  if (letter === "a") return n;
+  if (letter === "b") return 10 + n;
   return 0;
 }
 
 function compareLevel(a: string, b: string) {
-  // -1 якщо a < b, 0 якщо рівні, 1 якщо a > b
   const pa = parseLevelId(a);
   const pb = parseLevelId(b);
   if (!pa || !pb) return 0;
@@ -67,17 +70,29 @@ function nextLevelId(id: string) {
 
   const limit = BAND_LIMITS[p.band];
 
-  // ✅ якщо дійшли до кінця бенду — переходимо на наступний
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= (limit ?? 30)) return "a1-1";
   if (p.band === "a1" && Number.isFinite(p.n) && p.n >= (limit ?? 40)) return "a2-1";
   if (p.band === "a2" && Number.isFinite(p.n) && p.n >= (limit ?? 50)) return "b1-1";
-  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) return "b2-1";
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) {
+    return TEMP_HIDDEN_BANDS.has("b2") ? "b1-35" : "b2-1";
+  }
 
-  return `${p.band}-${p.n + 1}`;
+  const next = `${p.band}-${p.n + 1}`;
+  const nextParsed = parseLevelId(next);
+
+  if (nextParsed && TEMP_HIDDEN_BANDS.has(nextParsed.band)) {
+    return id;
+  }
+
+  return next;
 }
 
 function isSameDay(a: Date, b: Date) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
 }
 
 function isDone(lp: LessonsProgress | null | undefined, id: string) {
@@ -87,9 +102,9 @@ function isDone(lp: LessonsProgress | null | undefined, id: string) {
 }
 
 /**
- * ✅ SAFE для FREE:
- * Рахуємо прогрес тільки послідовно: a0-1, a0-2, ... поки done.
- * Перший не-done = стоп. Повертаємо останній done.
+ * SAFE для FREE:
+ * рахуємо прогрес тільки послідовно: a0-1, a0-2, ... поки done.
+ * перший не-done = стоп. повертаємо останній done.
  */
 function getLastDoneSequential(
   lp: LessonsProgress | null | undefined,
@@ -105,14 +120,18 @@ function getLastDoneSequential(
     if (!isDone(lp, current)) break;
 
     lastDone = current;
-    current = nextLevelId(current);
+
+    const next = nextLevelId(current);
+    if (next === current) break;
+
+    current = next;
   }
 
   return lastDone;
 }
 
 /**
- * ✅ MAX done (можна лишити для premium / діагностики)
+ * MAX done (можна лишити для premium / діагностики)
  */
 function getLastDoneMax(lp: LessonsProgress | null | undefined) {
   if (!lp || typeof lp !== "object") return null;
@@ -123,6 +142,8 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
     const id = String(idRaw).toLowerCase();
     const p = parseLevelId(id);
     if (!p) continue;
+
+    if (TEMP_HIDDEN_BANDS.has(p.band)) continue;
 
     const done =
       val === true || (val && typeof val === "object" && (val as any).done === true);
@@ -143,8 +164,12 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
 export default async function Page({ params }: { params: Promise<{ level: string }> }) {
   const { level: levelIdRaw } = await params;
   const levelId = String(levelIdRaw).toLowerCase();
+  const parsedLevel = parseLevelId(levelId);
 
-  // ✅ active course from cookie (server-side)
+  if (parsedLevel && TEMP_HIDDEN_BANDS.has(parsedLevel.band)) {
+    redirect("/learning");
+  }
+
   const cookieStore = await cookies();
   const cookieCourse = cookieStore.get("slovakStudyActiveCourse")?.value as CourseId | undefined;
 
@@ -155,12 +180,10 @@ export default async function Page({ params }: { params: Promise<{ level: string
 
   const lessonsByBand = getLessonsByBand(activeCourseId);
 
-  // ✅ session
   const session = await auth();
   const email = session?.user?.email;
   if (!email) redirect("/login");
 
-  // ✅ user (беремо premium поля теж)
   const user = await prisma.user.findUnique({
     where: { email },
     select: {
@@ -175,7 +198,6 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const hasPremium =
     user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
-  // ✅ progress row
   const row = await prisma.userProgress.upsert({
     where: { userId: user.id },
     update: {},
@@ -196,8 +218,15 @@ export default async function Page({ params }: { params: Promise<{ level: string
 
   const lp = (row.lessonsProgress ?? {}) as any;
 
-  // ✅ якщо старий акаунт і lastUnlockedLevel null — відновлюємо
   let lastUnlockedLevel = row.lastUnlockedLevel;
+
+  if (
+    lastUnlockedLevel &&
+    parseLevelId(lastUnlockedLevel) &&
+    TEMP_HIDDEN_BANDS.has(parseLevelId(lastUnlockedLevel)!.band)
+  ) {
+    lastUnlockedLevel = null;
+  }
 
   if (!lastUnlockedLevel) {
     const recovered = hasPremium
@@ -216,34 +245,8 @@ export default async function Page({ params }: { params: Promise<{ level: string
 
   const allowed = lastUnlockedLevel ? nextLevelId(lastUnlockedLevel) : "a0-1";
 
-  // ✅ урок існує?
   const lesson = getLessonFromLessonsByBand(lessonsByBand, levelId);
   if (!lesson) {
-    const p = parseLevelId(levelId);
-
-    const isB2OrHigher = !!p && bandOrder(p.band) >= bandOrder("b2");
-
-    if (isB2OrHigher) {
-      return (
-        <div className="space-y-4">
-          <h1 className="text-2xl font-semibold">Рівень B2 ще не готовий 🛠️</h1>
-          <p className="text-slate-600">Ми над ним працюємо. Скоро додамо уроки для B2 ✅</p>
-
-          <div className="flex gap-3">
-            <Link href="/learning" className="underline">
-              ← Назад до рівнів
-            </Link>
-
-            <Link href="/learning/b1-35" className="underline">
-              Повторити останній урок B1 →
-            </Link>
-          </div>
-
-          <p className="text-xs text-slate-400">id = {levelId}</p>
-        </div>
-      );
-    }
-
     return (
       <div className="space-y-4">
         <h1 className="text-2xl font-semibold">Урок не знайдено 😢</h1>
@@ -255,12 +258,10 @@ export default async function Page({ params }: { params: Promise<{ level: string
     );
   }
 
-  // ✅ строгий порядок: забороняємо ТІЛЬКИ “вперед”
   if (!hasPremium && compareLevel(levelId, allowed) === 1) {
     redirect(`/learning/${allowed}`);
   }
 
-  // ✅ ліміт 2/день — тільки коли користувач заходить саме в "allowed"
   const today = new Date();
   const dailyCount =
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
@@ -269,14 +270,16 @@ export default async function Page({ params }: { params: Promise<{ level: string
     redirect("/learning/limit");
   }
 
-  // ✅ блокування кнопки "далі"
   const nextId = nextLevelId(levelId);
 
   let canGoNext = true;
   let lockedReason: string | undefined = undefined;
 
   if (!hasPremium) {
-    if (compareLevel(nextId, allowed) === 1) {
+    if (nextId === levelId) {
+      canGoNext = false;
+      lockedReason = "Скоро додамо наступний рівень/уроки.";
+    } else if (compareLevel(nextId, allowed) === 1) {
       canGoNext = false;
       lockedReason = "Спочатку пройди попередні уроки/рівні (послідовно).";
     }

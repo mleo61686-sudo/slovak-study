@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 
-const SITE_URL = "https://slovak-study.com";
+const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Словацкий язык: обучение онлайн A0–B2 | Slovak Study",
+  title: "Словацкий язык: обучение онлайн A0–B2 | Flunio",
   description:
     "Словацкий язык онлайн: уровни A0–B2, словарь, грамматика, упражнения и прогресс. Начни с нуля и учись системно.",
 
@@ -14,11 +14,11 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Словацкий язык онлайн (A0–B2) | Slovak Study",
+    title: "Словацкий язык онлайн (A0–B2) | Flunio",
     description:
       "Уроки A0–B2, словарь и грамматика — учи словацкий системно, с упражнениями и прогрессом.",
     url: `${SITE_URL}/ru/slovak-for-ukrainians`,
-    siteName: "Slovak Study",
+    siteName: "Flunio",
     type: "website",
   },
 
@@ -35,7 +35,7 @@ const FAQ = [
     a: "Обычно базовый уровень A1 достигают за 4–8 недель регулярных занятий. Важно заниматься 10–20 минут каждый день.",
   },
   {
-    q: "Чем Slovak Study лучше учебников?",
+    q: "Чем Flunio лучше учебников?",
     a: "Здесь есть интерактивные упражнения, озвучка, прогресс и повторение. Ты не только читаешь, но сразу тренируешь навыки.",
   },
   {
@@ -77,12 +77,11 @@ export default function Page() {
         </h1>
 
         <p className="text-slate-700">
-          Slovak Study — тренажёр для системного изучения словацкого: короткие уроки,
+          Flunio — тренажёр для системного изучения словацкого: короткие уроки,
           озвучка, упражнения, словарь и грамматика. Подойдёт, если ты живёшь/планируешь
           жить в Словакии и хочешь быстро подтянуть язык.
         </p>
 
-        {/* ✅ SEO internal link (RU) */}
         <p className="text-slate-700">
           Подробное описание формата обучения смотри на странице{" "}
           <Link href="/ru/vyvchennia-slovatskoi-movy-online" className="underline">

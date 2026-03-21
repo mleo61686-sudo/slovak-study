@@ -1,13 +1,15 @@
 /**
- * CourseGate – компонент-фільтр для multi-course системи Slovak Study.
- 
+ * CourseGate – компонент-фільтр для multi-course системи Flunio.
+ *
  * Що робить:
  * Перевіряє чи активний курс (enabled). Якщо курс ще не доступний —
  * показує повідомлення “скоро” і пропонує перейти на /learn.
- * * Використовується:
+ *
+ * Використовується:
  * Для блокування сторінок, коли користувач вибрав курс,
  * який ще не реалізований.
- * * Пов’язані файли:
+ *
+ * Пов’язані файли:
  * - hooks/useActiveCourse.ts
  * - lib/course.ts (COURSES registry)
  * - CourseBootstrap
@@ -33,7 +35,7 @@ export default function CourseGate({
   if (!ready) {
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10">
-        <div className="rounded-2xl border bg-white p-6 min-h-[220px]" />
+        <div className="min-h-[220px] rounded-2xl border bg-white p-6" />
       </main>
     );
   }
@@ -41,18 +43,19 @@ export default function CourseGate({
   const def = COURSES.find((c) => c.id === course);
 
   if (!def || !def.enabled) {
-    const name = def?.title ?? "This course";
+    const name = def?.title ?? (lang === "ua" ? "Цей курс" : "Этот курс");
 
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10">
-        <div className="rounded-2xl border bg-white p-6 min-h-[220px]">
+        <div className="min-h-[220px] rounded-2xl border bg-white p-6">
           <div className="text-xl font-semibold">
             {lang === "ua" ? `${name} — скоро` : `${name} — скоро`}
           </div>
+
           <p className="mt-2 text-slate-600">
             {lang === "ua"
-              ? "Цей курс ще недоступний. Перемкнись назад на словацьку."
-              : "Этот курс пока недоступен. Переключись обратно на словацкий."}
+              ? "Цей курс ще недоступний. Вибери іншу доступну мову для навчання."
+              : "Этот курс пока недоступен. Выбери другой доступный язык для обучения."}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2">

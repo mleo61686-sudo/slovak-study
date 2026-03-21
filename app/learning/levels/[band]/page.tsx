@@ -10,19 +10,25 @@ import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
 
+const TEMP_HIDDEN_BANDS = new Set<string>(["b2"]);
+
 export default function BandPage() {
   const params = useParams<{ band?: string }>();
   const bandId = String(params?.band || "").trim().toLowerCase();
 
   const { lang } = useLanguage();
 
-  // ✅ Premium (для відкриття всіх уроків)
   const { data: session } = useSession();
   const isPremium = (session?.user as any)?.isPremium === true;
 
   const band = useMemo(() => {
+    if (TEMP_HIDDEN_BANDS.has(bandId)) return null;
     return CEFR_LEVELS.find((b) => b.id === bandId) ?? null;
   }, [bandId]);
+
+  const visibleBandIds = useMemo(() => {
+    return CEFR_LEVELS.filter((b) => !TEMP_HIDDEN_BANDS.has(b.id)).map((b) => b.id);
+  }, []);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
 
@@ -39,7 +45,6 @@ export default function BandPage() {
     };
   }, []);
 
-  // ✅ case-insensitive + підтримка різних форматів значень
   const isDone = (id: string) => {
     const key = id.toLowerCase();
     const v: LessonProgressValue | undefined =
@@ -86,7 +91,7 @@ export default function BandPage() {
             <span className="font-medium">
               {lang === "ua" ? "Доступні рівні:" : "Доступные уровни:"}
             </span>{" "}
-            {CEFR_LEVELS.map((x) => x.id).join(", ")}
+            {visibleBandIds.join(", ")}
           </div>
         </div>
 
@@ -147,8 +152,6 @@ export default function BandPage() {
           const stats = getStats(lesson.id);
 
           const prev = band.lessons[idx - 1];
-
-          // ✅ Premium: не блокуємо уроки
           const locked = !isPremium && idx > 0 && prev && !isDone(prev.id);
 
           const cardClass = "rounded-2xl border bg-white p-4 hover:bg-slate-50";

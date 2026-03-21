@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   },
 
   async redirects() {
-    const SITE = "https://slovak-study.com";
+    const SITE = "https://flunio.com";
 
     return [
       // ✅ Redirect old Vercel domain → main domain

@@ -20,7 +20,7 @@ export async function sendResetEmail(to: string, link: string) {
   `;
 
   await resend.emails.send({
-    from: "Slovak Study <no-reply@slovak-study.com>",
+    from: "Flunio <support@flunio.com>",
     to,
     subject,
     html,

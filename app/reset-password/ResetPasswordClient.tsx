@@ -83,7 +83,6 @@ export default function ResetPasswordClient() {
     }
   }
 
-  // ❗ якщо токена нема — показуємо акуратно в card
   if (!token) {
     return (
       <main className="min-h-[calc(100vh-64px)] bg-slate-50 flex items-center justify-center px-4 py-10">
@@ -99,7 +98,7 @@ export default function ResetPasswordClient() {
           </div>
 
           <p className="mt-6 text-center text-xs text-slate-500">
-            © 2026 Slovak Study — Вчи словацьку щодня.
+            © 2026 Flunio — вчи словацьку щодня.
           </p>
         </div>
       </main>
@@ -199,7 +198,7 @@ export default function ResetPasswordClient() {
         </div>
 
         <p className="mt-6 text-center text-xs text-slate-500">
-          © 2026 Slovak Study — вчи словацьку щодня.
+          © 2026 Flunio — вчи словацьку щодня.
         </p>
       </div>
     </main>

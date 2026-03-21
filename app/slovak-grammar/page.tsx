@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-
-const SITE_URL = "https://slovak-study.com";
+const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Slovak Grammar Online (Cases, Verbs, Alphabet) | Slovak Study",
+  title: "Slovak Grammar Online (Cases, Verbs, Alphabet) | Flunio",
   description:
     "Slovak grammar online with clear explanations and examples: alphabet, pronunciation, verbs and cases. Learn Slovak step by step with exercises.",
 
@@ -14,11 +13,11 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Slovak Grammar Online | Slovak Study",
+    title: "Slovak Grammar Online | Flunio",
     description:
       "Learn Slovak grammar: alphabet, pronunciation, verbs and cases with examples.",
     url: `${SITE_URL}/slovak-grammar`,
-    siteName: "Slovak Study",
+    siteName: "Flunio",
     type: "website",
   },
 
@@ -35,8 +34,8 @@ const FAQ = [
     a: "Start with the alphabet and pronunciation, then basic verb forms and the most common cases used in everyday speech.",
   },
   {
-    q: "Does Slovak Study include grammar topics with examples?",
-    a: "Yes. Slovak Study provides grammar topics with explanations and examples to help you understand how Slovak works.",
+    q: "Does Flunio include grammar topics with examples?",
+    a: "Yes. Flunio provides grammar topics with explanations and examples to help you understand how Slovak works.",
   },
 ];
 
@@ -64,7 +63,7 @@ export default function Page() {
         </h1>
 
         <p className="text-slate-700">
-          Slovak Study helps you learn Slovak grammar step by step. Start with
+          Flunio helps you learn Slovak grammar step by step. Start with
           the alphabet and pronunciation, then continue with verbs and cases.
           Each topic includes explanations and examples.
         </p>

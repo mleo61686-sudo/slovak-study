@@ -1,5 +1,5 @@
 /**
- * AdminReportsPage – адмінська сторінка перегляду bug-репортів у Slovak Study.
+ * AdminReportsPage – адмінська сторінка перегляду bug-репортів у Flunio.
  *
  * Що робить:
  * Показує останні 200 записів із таблиці errorReport (Prisma) у вигляді таблиці.

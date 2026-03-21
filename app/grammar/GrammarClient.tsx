@@ -120,8 +120,8 @@ export default function GrammarClient() {
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">
         {isCzech
-          ? t("Граматика 🇨🇿", "Грамматика 🇨🇿")
-          : t("Граматика 🇸🇰", "Грамматика 🇸🇰")}
+          ? t("Граматика CZ", "Грамматика CZ")
+          : t("Граматика SK", "Грамматика SK")}
       </h1>
 
       <p className="text-slate-700">

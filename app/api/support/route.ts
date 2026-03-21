@@ -1,5 +1,5 @@
 /**
- * API route для форми підтримки Slovak Study (contact/support).
+ * API route для форми підтримки Flunio (contact/support).
  *
  * Що робить:
  * Приймає повідомлення користувача (email, topic, message) і
@@ -37,13 +37,11 @@ function getIp(h: Headers) {
 }
 
 function isValidEmail(x: string) {
-  // проста перевірка (достатньо для UI+API)
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
 }
 
 export async function POST(req: Request) {
   try {
-    // session не обов’язкова, але корисно для userId
     const session = await auth().catch(() => null);
 
     const h = await headers();
@@ -57,13 +55,13 @@ export async function POST(req: Request) {
     const page = body?.page ? String(body.page).slice(0, 500) : "";
     const ua = body?.ua ? String(body.ua).slice(0, 500) : "";
 
-    // ✅ email ОБОВ’ЯЗКОВИЙ
     if (!email) {
       return NextResponse.json(
         { ok: false, error: "Email is required" },
         { status: 400 }
       );
     }
+
     if (!isValidEmail(email)) {
       return NextResponse.json(
         { ok: false, error: "Invalid email" },
@@ -78,7 +76,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const subject = `Slovak Study — Support: ${topic}`;
+    const subject = `Flunio — Support: ${topic}`;
 
     const text = `New support message
 
@@ -97,13 +95,10 @@ User-Agent: ${ua}
 `;
 
     await resend.emails.send({
-      // ✅ той самий FROM, що й у reset-password
-      from: "Slovak Study <no-reply@slovak-study.com>",
-      // ✅ куди ти хочеш отримувати (Vercel env)
+      from: "Flunio <no-reply@flunio.com>",
       to: [process.env.SUPPORT_TO_EMAIL!],
       subject,
       text,
-      // ✅ щоб ти міг натиснути Reply і відповісти користувачу
       replyTo: email,
     });
 

@@ -14,7 +14,7 @@
  * - app/api/admin/update-report-status (API для оновлення статусу)
  * - Prisma model: errorReport
  *
- * Роль у Slovak Study:
+ * Роль у Flunio:
  * Частина адмін-панелі для швидкої модерації bug-репортів від користувачів.
  */
 

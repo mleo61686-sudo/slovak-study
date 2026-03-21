@@ -1,5 +1,5 @@
 /**
- * API route для реєстрації нового користувача у Slovak Study.
+ * API route для реєстрації нового користувача у Flunio.
  *
  * Що робить:
  * Приймає email, password і optional name, валідовує їх,

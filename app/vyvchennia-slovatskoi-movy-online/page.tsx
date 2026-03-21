@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 
-const SITE_URL = "https://slovak-study.com";
+const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Вивчення словацької мови онлайн — уроки A0–B2 | Slovak Study",
+  title: "Вивчення словацької мови онлайн — уроки A0–B2 | Flunio",
   description:
     "Онлайн навчання словацької мови: рівні A0–B2, словник, граматика з прикладами, вправи та прогрес. Почни з нуля і вчи словацьку системно.",
 
@@ -14,11 +14,11 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Вивчення словацької мови онлайн (A0–B2) | Slovak Study",
+    title: "Вивчення словацької мови онлайн (A0–B2) | Flunio",
     description:
       "Уроки A0–B2, словник і граматика — вчи словацьку системно, з вправами та прогресом.",
     url: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
-    siteName: "Slovak Study",
+    siteName: "Flunio",
     type: "website",
   },
 
@@ -35,7 +35,7 @@ const FAQ = [
     a: "Зазвичай базовий рівень A1 досягають за 4–8 тижнів регулярних занять. Важлива щоденна практика 10–20 хвилин.",
   },
   {
-    q: "Чим Slovak Study відрізняється від підручників?",
+    q: "Чим Flunio відрізняється від підручників?",
     a: "Тут є інтерактивні вправи, озвучка, прогрес і повторення. Ти вчишся не лише читати, а й одразу тренуєш навички.",
   },
   {
@@ -64,7 +64,6 @@ export default function Page() {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
-
       <Script
         id="faq-schema-uk-online"
         type="application/ld+json"
@@ -73,19 +72,17 @@ export default function Page() {
       />
 
       <section className="space-y-3">
-
         <h1 className="text-3xl sm:text-4xl font-extrabold">
           Вивчення словацької мови онлайн — навчання (A0–B2)
         </h1>
 
         <p className="text-slate-700">
-          Slovak Study — це тренажер для системного вивчення словацької: короткі
+          Flunio — це тренажер для системного вивчення словацької: короткі
           уроки, озвучка, вправи, словник та граматика. Підійде, якщо ти хочеш
           впевнено користуватися словацькою в повсякденних ситуаціях:
           робота, документи, побут, навчання.
         </p>
 
-        {/* SEO internal link */}
         <p className="text-slate-700">
           Якщо ти з України і плануєш життя або роботу у Словаччині —
           дивись сторінку{" "}
@@ -95,7 +92,6 @@ export default function Page() {
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
-
           <Link className="px-4 py-2 rounded-xl bg-black text-white" href="/learning">
             Почати навчання
           </Link>
@@ -114,13 +110,10 @@ export default function Page() {
           >
             Русская версия →
           </Link>
-
         </div>
-
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-
         <div className="rounded-2xl border bg-white p-5">
           <h2 className="font-bold text-lg">1) Рівні A0–B2</h2>
           <p className="mt-2 text-slate-700">
@@ -148,9 +141,7 @@ export default function Page() {
             Пояснення тем з прикладами: від алфавіту до відмінків і дієслів.
           </p>
         </div>
-
       </section>
-
     </main>
   );
 }

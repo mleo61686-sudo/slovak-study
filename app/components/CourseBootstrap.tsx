@@ -7,7 +7,7 @@
  * - lib/course.ts
  * - CourseSwitcher
  * - CourseGate
- * Роль у Slovak Study:
+ * Роль у Flunio:
  * Забезпечує стабільний activeCourse для multi-course системи.
  */
 

@@ -25,13 +25,13 @@ export default function OpenGraphImage() {
         }}
       >
         <div style={{ fontSize: 56, fontWeight: 800, lineHeight: 1.1 }}>
-          Slovak Study 🇸🇰
+          Flunio 🇸🇰 🇨🇿
         </div>
         <div style={{ marginTop: 18, fontSize: 34, fontWeight: 600 }}>
-          Вивчення словацької мови онлайн
+          Вивчення мов онлайн
         </div>
         <div style={{ marginTop: 22, fontSize: 26, color: "#334155" }}>
-          Граматика • Словник • Вправи • Рівні A0–B2
+          Словацька • Чеська • Граматика • Словник • Вправи • A0–B2
         </div>
       </div>
     ),

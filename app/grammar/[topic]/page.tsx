@@ -15,21 +15,21 @@ type TopicConfig = {
 
 const TOPICS: Record<string, TopicConfig> = {
   alphabet: {
-    title: "Алфавіт і вимова | Slovak Study",
+    title: "Алфавіт і вимова | Flunio",
     description:
       "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
     path: "/grammar/alphabet",
     render: () => <AlphabetPage />,
   },
   "verbs-present": {
-    title: "Дієслова теперішнього часу | Slovak Study",
+    title: "Дієслова теперішнього часу | Flunio",
     description:
       "Дієслова теперішнього часу у словацькій та чеській мовах: таблиці, приклади та міні-вправи.",
     path: "/grammar/verbs-present",
     render: () => <VerbsPresentPage />,
   },
   cases: {
-    title: "Відмінки | Slovak Study",
+    title: "Відмінки | Flunio",
     description:
       "Відмінки у словацькій та чеській мовах: питання, форми, приклади речень і прості пояснення.",
     path: "/grammar/cases",
@@ -61,7 +61,7 @@ export async function generateMetadata({
       title: config.title,
       description: config.description,
       url: canonicalUrl,
-      siteName: "Slovak Study",
+      siteName: "Flunio",
       type: "article",
     },
     robots: {

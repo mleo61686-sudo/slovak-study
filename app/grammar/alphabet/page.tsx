@@ -3,18 +3,18 @@ import AlphabetClient from "./AlphabetClient";
 import AlphabetSeo from "./AlphabetSeo";
 
 export const metadata: Metadata = {
-  title: "Алфавіт і вимова | Slovak Study",
+  title: "Алфавіт і вимова | Flunio",
   description:
     "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
   alternates: {
-    canonical: "https://slovak-study.com/grammar/alphabet",
+    canonical: "https://flunio.com/grammar/alphabet",
   },
   openGraph: {
-    title: "Алфавіт і вимова | Slovak Study",
+    title: "Алфавіт і вимова | Flunio",
     description:
       "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
-    url: "https://slovak-study.com/grammar/alphabet",
-    siteName: "Slovak Study",
+    url: "https://flunio.com/grammar/alphabet",
+    siteName: "Flunio",
     type: "article",
   },
   robots: { index: true, follow: true },

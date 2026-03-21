@@ -1,14 +1,38 @@
 "use client";
 
-
 import { COURSES } from "@/lib/course";
 import {
   setStoredCourseId,
   type CourseId,
 } from "@/app/learning/courses/useActiveCourse";
+import { useLanguage } from "@/lib/src/useLanguage";
+
+type Lang = "ua" | "ru";
+
+const dict = {
+  ua: {
+    title: "Обери мову",
+    subtitle: "Вибери, що хочеш вивчати. Це можна змінити будь-коли.",
+    comingSoon: "Скоро",
+  },
+  ru: {
+    title: "Выбери язык",
+    subtitle: "Выбери, что хочешь изучать. Это можно изменить в любой момент.",
+    comingSoon: "Скоро",
+  },
+} satisfies Record<
+  Lang,
+  {
+    title: string;
+    subtitle: string;
+    comingSoon: string;
+  }
+>;
 
 export default function LearnPage() {
-
+  const { lang } = useLanguage();
+  const safeLang: Lang = lang === "ru" ? "ru" : "ua";
+  const t = dict[safeLang];
 
   function chooseCourse(id: string, enabled: boolean) {
     if (!enabled) return;
@@ -19,29 +43,36 @@ export default function LearnPage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 className="text-2xl font-semibold">Choose a language</h1>
-      <p className="mt-2 text-slate-600">
-        Pick what you want to learn. You can change it anytime.
-      </p>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          {t.title}
+        </h1>
+        <p className="mt-2 text-base text-slate-600">{t.subtitle}</p>
+      </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         {COURSES.map((c) => (
           <button
             key={c.id}
             onClick={() => chooseCourse(c.id, c.enabled)}
-            className="rounded-2xl border bg-white p-4 text-left hover:shadow-sm disabled:opacity-60"
+            className="rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-[2px] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
             disabled={!c.enabled}
             type="button"
           >
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-lg font-semibold">{c.title}</div>
-                <div className="text-sm text-slate-500">{c.subtitle}</div>
+                <div className="text-xl font-semibold text-slate-900">
+                  {c.title}
+                </div>
+                <div className="mt-1 text-sm text-slate-500">{c.subtitle}</div>
+                <div className="mt-3 text-sm text-slate-600">
+                  {c.description[safeLang]}
+                </div>
               </div>
 
-              {!c.enabled && (
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
-                  Coming soon
+              {c.status === "comingSoon" && (
+                <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                  {t.comingSoon}
                 </span>
               )}
             </div>
