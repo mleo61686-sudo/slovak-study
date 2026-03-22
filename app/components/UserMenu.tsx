@@ -10,6 +10,8 @@ type Props = {
   name?: string | null;
   email?: string | null;
   isPremium?: boolean;
+  mobile?: boolean;
+  onNavigate?: () => void;
 };
 
 type Lang = "ua" | "ru";
@@ -18,15 +20,16 @@ const T: Record<Lang, any> = {
   ua: {
     profile: "Профіль",
     chooseLanguage: "Обрати курс",
+    interfaceLanguage: "Мова інтерфейсу",
     manageSub: "Керувати підпискою",
     manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
     userFallback: "Користувач",
   },
-
   ru: {
     profile: "Профиль",
     chooseLanguage: "Выбрать курс",
+    interfaceLanguage: "Язык интерфейса",
     manageSub: "Управлять подпиской",
     manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
@@ -34,8 +37,14 @@ const T: Record<Lang, any> = {
   },
 };
 
-export default function UserMenu({ name, email, isPremium = false }: Props) {
-  const { lang } = useLanguage();
+export default function UserMenu({
+  name,
+  email,
+  isPremium = false,
+  mobile = false,
+  onNavigate,
+}: Props) {
+  const { lang, setLang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const t = T[L];
 
@@ -49,6 +58,7 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      if (mobile) return;
       if (
         open &&
         menuRef.current &&
@@ -60,19 +70,21 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [open]);
+  }, [open, mobile]);
 
   useEffect(() => {
     function handleEsc(event: KeyboardEvent) {
+      if (mobile) return;
       if (event.key === "Escape") setOpen(false);
     }
 
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
-  }, []);
+  }, [mobile]);
 
   async function openPortal() {
     if (!isPremium) {
+      onNavigate?.();
       setOpen(false);
       router.push("/premium");
       return;
@@ -85,6 +97,7 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
       const text = await res.text();
       let data: any = {};
+
       try {
         data = text ? JSON.parse(text) : {};
       } catch {
@@ -92,21 +105,112 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
       }
 
       if (res.ok && data?.url) {
+        onNavigate?.();
         setOpen(false);
         window.location.href = data.url;
         return;
       }
 
       console.error("Portal error:", { status: res.status, data });
+      onNavigate?.();
       setOpen(false);
       router.push("/premium");
     } catch (e) {
       console.error("Portal exception:", e);
+      onNavigate?.();
       setOpen(false);
       router.push("/premium");
     } finally {
       setLoadingPortal(false);
     }
+  }
+
+  const languageBlock = (
+    <div className="px-4 py-3">
+      <div className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
+        {t.interfaceLanguage}
+      </div>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          aria-pressed={lang === "ua"}
+          onClick={() => setLang("ua")}
+          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
+            lang === "ua"
+              ? "bg-black text-white"
+              : "bg-white text-slate-900 hover:bg-slate-50"
+          }`}
+        >
+          UA
+        </button>
+
+        <button
+          type="button"
+          aria-pressed={lang === "ru"}
+          onClick={() => setLang("ru")}
+          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
+            lang === "ru"
+              ? "bg-black text-white"
+              : "bg-white text-slate-900 hover:bg-slate-50"
+          }`}
+        >
+          RU
+        </button>
+      </div>
+    </div>
+  );
+
+  if (mobile) {
+    return (
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+        <div className="px-4 py-3">
+          <div className="font-medium text-slate-900">
+            {name || t.userFallback}
+          </div>
+          <div className="break-all text-sm text-slate-500">{email}</div>
+        </div>
+
+        <div className="border-t border-slate-200" />
+
+        <Link
+          href="/learn"
+          className="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-100"
+          onClick={() => onNavigate?.()}
+        >
+          {t.chooseLanguage}
+        </Link>
+
+        <button
+          onClick={openPortal}
+          disabled={loadingPortal}
+          className="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+          type="button"
+        >
+          <div className="font-medium">{t.manageSub}</div>
+          <div className="mt-0.5 text-xs text-slate-500">
+            {t.manageSubHint}
+          </div>
+        </button>
+
+        <div className="border-t border-slate-200" />
+
+        {languageBlock}
+
+        <div className="border-t border-slate-200" />
+
+        <button
+          onClick={() => {
+            onNavigate?.();
+            signOut({ callbackUrl: "/login" });
+          }}
+          className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-slate-100"
+          type="button"
+        >
+          {t.logout}
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -122,16 +226,12 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
 
       {open && (
         <div
-          className="
-            absolute top-full mt-2 right-0
-            w-56
-            rounded-xl border bg-white shadow-lg overflow-hidden
-          "
+          className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-xl border bg-white shadow-lg"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="px-4 py-3 text-sm">
             <div className="font-medium">{name || t.userFallback}</div>
-            <div className="text-slate-500 truncate">{email}</div>
+            <div className="truncate text-slate-500">{email}</div>
           </div>
 
           <div className="border-t" />
@@ -153,6 +253,10 @@ export default function UserMenu({ name, email, isPremium = false }: Props) {
             <div className="font-medium">{t.manageSub}</div>
             <div className="text-xs text-slate-500">{t.manageSubHint}</div>
           </button>
+
+          <div className="border-t" />
+
+          {languageBlock}
 
           <div className="border-t" />
 

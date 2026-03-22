@@ -161,6 +161,57 @@ export default function LevelClient({
     }
   }, [words, wordIndex]);
 
+  useEffect(() => {
+    if (mode !== "learn") return;
+
+    function isTypingTarget(target: EventTarget | null) {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+
+      const tag = el.tagName;
+      return (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        el.isContentEditable ||
+        el.getAttribute("role") === "textbox"
+      );
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.repeat) return;
+      if (isTypingTarget(event.target)) return;
+
+      if (event.key === "ArrowLeft") {
+        if (wordIndex > 0) {
+          unlockInsideLesson();
+          event.preventDefault();
+          setWordIndex((i) => Math.max(0, i - 1));
+        }
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        unlockInsideLesson();
+        event.preventDefault();
+
+        if (wordIndex < words.length - 1) {
+          setWordIndex((i) => Math.min(words.length - 1, i + 1));
+          return;
+        }
+
+        setQuizAutoKey((k) => k + 1);
+        setMode("quiz");
+        setExerciseIndex(0);
+        setWordIndex(0);
+        setScore(0);
+        setFinished(false);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mode, wordIndex, words.length]);
+
   const totalQuestions = useMemo(() => {
     return EXERCISES.reduce(
       (sum, ex) => sum + (ex.mode === "perWord" ? words.length : words.length),
@@ -170,88 +221,137 @@ export default function LevelClient({
 
   if (mode === "learn") {
     const word = words[wordIndex];
+    const isFirst = wordIndex === 0;
+    const isLast = wordIndex === words.length - 1;
 
     return (
       <div
-        className="space-y-6"
+        className="space-y-3 sm:space-y-6"
         onPointerDownCapture={unlockInsideLesson}
         onKeyDownCapture={unlockInsideLesson}
       >
-        <div className="sticky top-2 z-10 rounded-xl border bg-white/90 backdrop-blur px-4 py-2 text-sm font-semibold">
+        <div className="sticky top-2 z-10 rounded-xl border bg-white/90 px-4 py-2 text-sm font-semibold backdrop-blur">
           {t.viewed}: {wordIndex + 1}/{words.length}
         </div>
 
-        <div className="mx-auto w-full max-w-[720px] rounded-2xl border bg-white p-6 text-center space-y-3">
-          {word?.img ? (
-            <div className="flex flex-col items-center gap-2">
-              <div className="mx-auto w-full max-w-[340px] sm:max-w-[460px] md:max-w-[560px] lg:max-w-[520px]">
-                <div className="mx-auto w-full max-w-[360px] sm:max-w-[480px] md:max-w-[600px] lg:max-w-[360px]">
-                  <Image
-                    src={word.img}
-                    alt={word.sk}
-                    width={1200}
-                    height={900}
-                    className="w-full h-auto rounded-2xl bg-white"
-                    priority={wordIndex === 0}
-                    fetchPriority={wordIndex === 0 ? "high" : "auto"}
-                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 600px, 600px"
-                  />
+        <div className="mx-auto w-full max-w-[1100px]">
+          <div className="grid grid-cols-1 items-center gap-3 sm:gap-4 lg:grid-cols-[110px_minmax(0,1fr)_110px]">
+            <div className="hidden justify-center lg:flex">
+              <button
+                disabled={isFirst}
+                onClick={() => setWordIndex((i) => i - 1)}
+                className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {t.back}
+              </button>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[760px] rounded-3xl border bg-white px-3 py-3 text-center shadow-sm sm:px-6 sm:py-6">
+              {word?.img ? (
+                <div className="flex flex-col items-center gap-2">
+                  <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl bg-slate-50 px-1 py-1 sm:min-h-[420px]">
+                    <Image
+                      src={word.img}
+                      alt={word.sk}
+                      width={1200}
+                      height={900}
+                      className="max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]"
+                      priority={wordIndex === 0}
+                      fetchPriority={wordIndex === 0 ? "high" : "auto"}
+                      sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
+                    />
+                  </div>
+
+                  {word.imgCredit && (
+                    <div className="text-xs text-slate-500">{word.imgCredit}</div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl border bg-slate-50 text-slate-400 sm:min-h-[420px]">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="text-5xl">📷</div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-4 flex flex-col items-center">
+                <div className="flex items-center justify-center">
+                  <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
+                    {word.sk}
+                  </div>
+
+                  <div className="ml-5 shrink-0 sm:ml-6">
+                    <SpeakButton
+                      text={word.sk}
+                      autoPlayKey={audioUnlocked ? word.sk : undefined}
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-3 text-center text-lg leading-tight text-slate-600 sm:text-xl">
+                  {trWord(word, lang)}
                 </div>
               </div>
+            </div>
 
-              {word.imgCredit && (
-                <div className="text-xs text-slate-500">{word.imgCredit}</div>
+            <div className="hidden justify-center lg:flex">
+              {isLast ? (
+                <button
+                  onClick={() => {
+                    setQuizAutoKey((k) => k + 1);
+                    setMode("quiz");
+                    setExerciseIndex(0);
+                    setWordIndex(0);
+                    setScore(0);
+                    setFinished(false);
+                  }}
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-slate-900"
+                >
+                  {t.startExercises}
+                </button>
+              ) : (
+                <button
+                  onClick={() => setWordIndex((i) => i + 1)}
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50"
+                >
+                  {t.next}
+                </button>
               )}
             </div>
-          ) : (
-            <div className="mx-auto h-40 w-40 rounded-2xl border bg-slate-50 flex items-center justify-center text-slate-400">
-              📷
-            </div>
-          )}
-
-          <div className="text-3xl font-bold">{word.sk}</div>
-          <div className="text-slate-600">{trWord(word, lang)}</div>
-
-          <div className="flex justify-center">
-            <SpeakButton
-              text={word.sk}
-              autoPlayKey={audioUnlocked ? word.sk : undefined}
-            />
           </div>
-        </div>
 
-        <div className="mx-auto flex w-full max-w-[720px] justify-between">
-          <button
-            disabled={wordIndex === 0}
-            onClick={() => setWordIndex((i) => i - 1)}
-            className="px-4 py-2 border rounded-xl disabled:opacity-50"
-          >
-            {t.back}
-          </button>
-
-          {wordIndex < words.length - 1 ? (
+          <div className="mt-2 flex items-center justify-between gap-3 lg:hidden">
             <button
-              onClick={() => setWordIndex((i) => i + 1)}
-              className="px-4 py-2 border rounded-xl"
+              disabled={isFirst}
+              onClick={() => setWordIndex((i) => i - 1)}
+              className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {t.next}
+              {t.back}
             </button>
-          ) : (
-            <button
-              onClick={() => {
-                setQuizAutoKey((k) => k + 1);
 
-                setMode("quiz");
-                setExerciseIndex(0);
-                setWordIndex(0);
-                setScore(0);
-                setFinished(false);
-              }}
-              className="px-4 py-2 rounded-xl bg-black text-white"
-            >
-              {t.startExercises}
-            </button>
-          )}
+            {isLast ? (
+              <button
+                onClick={() => {
+                  setQuizAutoKey((k) => k + 1);
+                  setMode("quiz");
+                  setExerciseIndex(0);
+                  setWordIndex(0);
+                  setScore(0);
+                  setFinished(false);
+                }}
+                className="min-h-[44px] rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-900"
+              >
+                {t.startExercises}
+              </button>
+            ) : (
+              <button
+                onClick={() => setWordIndex((i) => i + 1)}
+                className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
+              >
+                {t.next}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -281,7 +381,8 @@ export default function LevelClient({
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data?.ok) {
-          const dailyCount = typeof data?.dailyCount === "number" ? data.dailyCount : 0;
+          const dailyCount =
+            typeof data?.dailyCount === "number" ? data.dailyCount : 0;
           const freeCanGoNext = dailyCount < 2;
 
           if (!canGoNext && freeCanGoNext) {
@@ -337,7 +438,7 @@ export default function LevelClient({
 
   if (finished) {
     return (
-      <div className="rounded-2xl border bg-white p-6 space-y-3">
+      <div className="space-y-3 rounded-2xl border bg-white p-6">
         <div className="text-xl font-semibold">{t.levelDone}</div>
         <div className="text-slate-600">
           {t.result}: <b>{score}</b> / <b>{totalQuestions}</b>
@@ -363,7 +464,7 @@ export default function LevelClient({
               setScore(0);
               setFinished(false);
             }}
-            className="px-4 py-2 border rounded-xl"
+            className="rounded-xl border px-4 py-2"
           >
             {t.reviewAgain}
           </button>
@@ -377,10 +478,10 @@ export default function LevelClient({
               router.push(nextLevelId);
             }}
             className={[
-              "px-4 py-2 rounded-xl text-white",
+              "rounded-xl px-4 py-2 text-white",
               canGoNextNow && !savingNext
                 ? "bg-black"
-                : "bg-black/40 cursor-not-allowed",
+                : "cursor-not-allowed bg-black/40",
             ].join(" ")}
             disabled={!canGoNextNow || savingNext}
             title={!canGoNextNow ? t.notAvailableFree : undefined}
@@ -391,7 +492,7 @@ export default function LevelClient({
           {!canGoNextNow && (
             <button
               onClick={() => router.push(onLockedNextRedirect)}
-              className="px-4 py-2 border rounded-xl"
+              className="rounded-xl border px-4 py-2"
             >
               {t.toLessonsList}
             </button>
@@ -403,7 +504,7 @@ export default function LevelClient({
 
   return (
     <div
-      className="rounded-2xl border bg-white p-6 space-y-4"
+      className="space-y-4 rounded-2xl border bg-white p-6"
       onPointerDownCapture={unlockInsideLesson}
       onKeyDownCapture={unlockInsideLesson}
     >

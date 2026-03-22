@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 import UserMenu from "@/app/components/UserMenu";
 import PremiumButton from "@/app/components/PremiumButton";
 import NavLabel, { type NavKey } from "@/app/components/NavLabel";
@@ -69,8 +68,6 @@ export default function NavbarClient({
             </span>
           </Link>
         )}
-
-        <LanguageSwitcher />
       </div>
     );
   }
@@ -113,7 +110,7 @@ export default function NavbarClient({
             )}
           </nav>
 
-          <div className="mt-2 flex items-center justify-between gap-2">
+          <div className="mt-3 space-y-2">
             {session && (
               <div onClick={() => setOpen(false)}>
                 <PremiumButton />
@@ -125,22 +122,20 @@ export default function NavbarClient({
                 name={session.name}
                 email={session.email}
                 isPremium={session.isPremium}
+                mobile
+                onNavigate={() => setOpen(false)}
               />
             ) : (
               <Link
                 href="/login"
-                className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className="block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
                 onClick={() => setOpen(false)}
               >
-                <span className="inline-block min-w-[60px] text-center whitespace-nowrap">
+                <span className="inline-block min-w-[60px] whitespace-nowrap">
                   <NavLabel k="login" />
                 </span>
               </Link>
             )}
-
-            <div onClick={() => setOpen(false)}>
-              <LanguageSwitcher />
-            </div>
           </div>
         </div>
       )}
