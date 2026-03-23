@@ -18,6 +18,7 @@ import WriteWord from "@/app/learning/components/LevelClient/exercises/WriteWord
 import AudioQuiz from "@/app/learning/components/LevelClient/exercises/AudioQuiz";
 import MatchColumns from "@/app/learning/components/LevelClient/exercises/MatchColumns";
 import BuildSentence from "@/app/learning/components/LevelClient/exercises/BuildSentence";
+import BuildUaSentence from "@/app/learning/components/LevelClient/exercises/BuildUaSentence";
 
 type UiLang = "ua" | "ru";
 type CourseId = "sk" | "cs" | "pl";
@@ -88,12 +89,13 @@ function getNextLevelId(levelId: string) {
 }
 
 const EXERCISES: ExerciseDef[] = [
-  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
-  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
-  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
-  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
-  { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
+//  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
+//  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
+//  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
+//  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
+//  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
+//  { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
+  { kind: "buildUaSentence", title: "Збери переклад", mode: "perWord" },
 ];
 
 export default function LevelClient({
@@ -483,6 +485,16 @@ export default function LevelClient({
 
       {exercise.kind === "buildSentence" && (
         <BuildSentence
+          word={currentWord}
+          lang={lang}
+          levelId={levelId}
+          courseId={courseId}
+          onNext={nextPerWord}
+        />
+      )}
+
+      {exercise.kind === "buildUaSentence" && (
+        <BuildUaSentence
           word={currentWord}
           lang={lang}
           levelId={levelId}

@@ -1,0 +1,209 @@
+import { A0_BUILD_UA_SENTENCES_1 } from "./a0/a0-1";
+import { A0_BUILD_UA_SENTENCES_2 } from "./a0/a0-2";
+import { A0_BUILD_UA_SENTENCES_3 } from "./a0/a0-3";
+
+import { A1_BUILD_UA_SENTENCES_1 } from "./a1/a1-1";
+import { A1_BUILD_UA_SENTENCES_2 } from "./a1/a1-2";
+import { A1_BUILD_UA_SENTENCES_3 } from "./a1/a1-3";
+import { A1_BUILD_UA_SENTENCES_4 } from "./a1/a1-4";
+import { A1_BUILD_UA_SENTENCES_5 } from "./a1/a1-5";
+import { A1_BUILD_UA_SENTENCES_6 } from "./a1/a1-6";
+import { A1_BUILD_UA_SENTENCES_7 } from "./a1/a1-7";
+import { A1_BUILD_UA_SENTENCES_8 } from "./a1/a1-8";
+
+import { A2_BUILD_UA_SENTENCES_1 } from "./a2/a2-1";
+import { A2_BUILD_UA_SENTENCES_2 } from "./a2/a2-2";
+import { A2_BUILD_UA_SENTENCES_3 } from "./a2/a2-3";
+import { A2_BUILD_UA_SENTENCES_4 } from "./a2/a2-4";
+import { A2_BUILD_UA_SENTENCES_5 } from "./a2/a2-5";
+import { A2_BUILD_UA_SENTENCES_6 } from "./a2/a2-6";
+import { A2_BUILD_UA_SENTENCES_7 } from "./a2/a2-7";
+import { A2_BUILD_UA_SENTENCES_8 } from "./a2/a2-8";
+import { A2_BUILD_UA_SENTENCES_9 } from "./a2/a2-9";
+import { A2_BUILD_UA_SENTENCES_10 } from "./a2/a2-10";
+
+export type BuildSentenceTranslationItem = {
+  sk: string;
+  ua: string;
+  ru?: string;
+  uaTokens: string[];
+  ruTokens?: string[];
+  extraUaTokens: string[];
+  extraRuTokens?: string[];
+};
+
+export type BuildUaSentenceDict = Record<string, BuildSentenceTranslationItem>;
+
+const SK_REGISTRY: Record<string, BuildUaSentenceDict> = {
+  // A0 lessons 1–10 -> file a0-1.ts
+  "a0-1": A0_BUILD_UA_SENTENCES_1,
+  "a0-2": A0_BUILD_UA_SENTENCES_1,
+  "a0-3": A0_BUILD_UA_SENTENCES_1,
+  "a0-4": A0_BUILD_UA_SENTENCES_1,
+  "a0-5": A0_BUILD_UA_SENTENCES_1,
+  "a0-6": A0_BUILD_UA_SENTENCES_1,
+  "a0-7": A0_BUILD_UA_SENTENCES_1,
+  "a0-8": A0_BUILD_UA_SENTENCES_1,
+  "a0-9": A0_BUILD_UA_SENTENCES_1,
+  "a0-10": A0_BUILD_UA_SENTENCES_1,
+
+  // A0 lessons 11–20 -> file a0-2.ts
+  "a0-11": A0_BUILD_UA_SENTENCES_2,
+  "a0-12": A0_BUILD_UA_SENTENCES_2,
+  "a0-13": A0_BUILD_UA_SENTENCES_2,
+  "a0-14": A0_BUILD_UA_SENTENCES_2,
+  "a0-15": A0_BUILD_UA_SENTENCES_2,
+  "a0-16": A0_BUILD_UA_SENTENCES_2,
+  "a0-17": A0_BUILD_UA_SENTENCES_2,
+  "a0-18": A0_BUILD_UA_SENTENCES_2,
+  "a0-19": A0_BUILD_UA_SENTENCES_2,
+  "a0-20": A0_BUILD_UA_SENTENCES_2,
+
+  // A0 lessons 21–30 -> file a0-3.ts
+  "a0-21": A0_BUILD_UA_SENTENCES_3,
+  "a0-22": A0_BUILD_UA_SENTENCES_3,
+  "a0-23": A0_BUILD_UA_SENTENCES_3,
+  "a0-24": A0_BUILD_UA_SENTENCES_3,
+  "a0-25": A0_BUILD_UA_SENTENCES_3,
+  "a0-26": A0_BUILD_UA_SENTENCES_3,
+  "a0-27": A0_BUILD_UA_SENTENCES_3,
+  "a0-28": A0_BUILD_UA_SENTENCES_3,
+  "a0-29": A0_BUILD_UA_SENTENCES_3,
+  "a0-30": A0_BUILD_UA_SENTENCES_3,
+
+  // A1 lessons 1–5 -> file a1-1.ts
+  "a1-1": A1_BUILD_UA_SENTENCES_1,
+  "a1-2": A1_BUILD_UA_SENTENCES_1,
+  "a1-3": A1_BUILD_UA_SENTENCES_1,
+  "a1-4": A1_BUILD_UA_SENTENCES_1,
+  "a1-5": A1_BUILD_UA_SENTENCES_1,
+
+  // A1 lessons 6–10 -> file a1-2.ts
+  "a1-6": A1_BUILD_UA_SENTENCES_2,
+  "a1-7": A1_BUILD_UA_SENTENCES_2,
+  "a1-8": A1_BUILD_UA_SENTENCES_2,
+  "a1-9": A1_BUILD_UA_SENTENCES_2,
+  "a1-10": A1_BUILD_UA_SENTENCES_2,
+
+  // A1 lessons 11–15 -> file a1-3.ts
+  "a1-11": A1_BUILD_UA_SENTENCES_3,
+  "a1-12": A1_BUILD_UA_SENTENCES_3,
+  "a1-13": A1_BUILD_UA_SENTENCES_3,
+  "a1-14": A1_BUILD_UA_SENTENCES_3,
+  "a1-15": A1_BUILD_UA_SENTENCES_3,
+
+  // A1 lessons 16–20 -> file a1-4.ts
+  "a1-16": A1_BUILD_UA_SENTENCES_4,
+  "a1-17": A1_BUILD_UA_SENTENCES_4,
+  "a1-18": A1_BUILD_UA_SENTENCES_4,
+  "a1-19": A1_BUILD_UA_SENTENCES_4,
+  "a1-20": A1_BUILD_UA_SENTENCES_4,
+
+  "a1-21": A1_BUILD_UA_SENTENCES_5,
+  "a1-22": A1_BUILD_UA_SENTENCES_5,
+  "a1-23": A1_BUILD_UA_SENTENCES_5,
+  "a1-24": A1_BUILD_UA_SENTENCES_5,
+  "a1-25": A1_BUILD_UA_SENTENCES_5,
+
+  "a1-26": A1_BUILD_UA_SENTENCES_6,
+  "a1-27": A1_BUILD_UA_SENTENCES_6,
+  "a1-28": A1_BUILD_UA_SENTENCES_6,
+  "a1-29": A1_BUILD_UA_SENTENCES_6,
+  "a1-30": A1_BUILD_UA_SENTENCES_6,
+
+  "a1-31": A1_BUILD_UA_SENTENCES_7,
+  "a1-32": A1_BUILD_UA_SENTENCES_7,
+  "a1-33": A1_BUILD_UA_SENTENCES_7,
+  "a1-34": A1_BUILD_UA_SENTENCES_7,
+  "a1-35": A1_BUILD_UA_SENTENCES_7,
+
+  "a1-36": A1_BUILD_UA_SENTENCES_8,
+  "a1-37": A1_BUILD_UA_SENTENCES_8,
+  "a1-38": A1_BUILD_UA_SENTENCES_8,
+  "a1-39": A1_BUILD_UA_SENTENCES_8,
+  "a1-40": A1_BUILD_UA_SENTENCES_8,
+
+  // A2 lessons 1–5 -> file a2-1.ts
+  "a2-1": A2_BUILD_UA_SENTENCES_1,
+  "a2-2": A2_BUILD_UA_SENTENCES_1,
+  "a2-3": A2_BUILD_UA_SENTENCES_1,
+  "a2-4": A2_BUILD_UA_SENTENCES_1,
+  "a2-5": A2_BUILD_UA_SENTENCES_1,
+
+  // A2 lessons 6–10 -> file a2-2.ts
+  "a2-6": A2_BUILD_UA_SENTENCES_2,
+  "a2-7": A2_BUILD_UA_SENTENCES_2,
+  "a2-8": A2_BUILD_UA_SENTENCES_2,
+  "a2-9": A2_BUILD_UA_SENTENCES_2,
+  "a2-10": A2_BUILD_UA_SENTENCES_2,
+
+  // A2 lessons 11–15 -> file a2-3.ts
+  "a2-11": A2_BUILD_UA_SENTENCES_3,
+  "a2-12": A2_BUILD_UA_SENTENCES_3,
+  "a2-13": A2_BUILD_UA_SENTENCES_3,
+  "a2-14": A2_BUILD_UA_SENTENCES_3,
+  "a2-15": A2_BUILD_UA_SENTENCES_3,
+
+  // A2 lessons 16–20 -> file a2-4.ts
+  "a2-16": A2_BUILD_UA_SENTENCES_4,
+  "a2-17": A2_BUILD_UA_SENTENCES_4,
+  "a2-18": A2_BUILD_UA_SENTENCES_4,
+  "a2-19": A2_BUILD_UA_SENTENCES_4,
+  "a2-20": A2_BUILD_UA_SENTENCES_4,
+
+  // A2 lessons 21–25 -> file a2-5.ts
+  "a2-21": A2_BUILD_UA_SENTENCES_5,
+  "a2-22": A2_BUILD_UA_SENTENCES_5,
+  "a2-23": A2_BUILD_UA_SENTENCES_5,
+  "a2-24": A2_BUILD_UA_SENTENCES_5,
+  "a2-25": A2_BUILD_UA_SENTENCES_5,
+
+  // A2 lessons 26–30 -> file a2-6.ts
+  "a2-26": A2_BUILD_UA_SENTENCES_6,
+  "a2-27": A2_BUILD_UA_SENTENCES_6,
+  "a2-28": A2_BUILD_UA_SENTENCES_6,
+  "a2-29": A2_BUILD_UA_SENTENCES_6,
+  "a2-30": A2_BUILD_UA_SENTENCES_6,
+
+  // A2 lessons 31–35 -> file a2-7.ts
+  "a2-31": A2_BUILD_UA_SENTENCES_7,
+  "a2-32": A2_BUILD_UA_SENTENCES_7,
+  "a2-33": A2_BUILD_UA_SENTENCES_7,
+  "a2-34": A2_BUILD_UA_SENTENCES_7,
+  "a2-35": A2_BUILD_UA_SENTENCES_7,
+
+  // A2 lessons 36–40 -> file a2-8.ts
+  "a2-36": A2_BUILD_UA_SENTENCES_8,
+  "a2-37": A2_BUILD_UA_SENTENCES_8,
+  "a2-38": A2_BUILD_UA_SENTENCES_8,
+  "a2-39": A2_BUILD_UA_SENTENCES_8,
+  "a2-40": A2_BUILD_UA_SENTENCES_8,
+
+  // A2 lessons 41–45 -> file a2-9.ts
+  "a2-41": A2_BUILD_UA_SENTENCES_9,
+  "a2-42": A2_BUILD_UA_SENTENCES_9,
+  "a2-43": A2_BUILD_UA_SENTENCES_9,
+  "a2-44": A2_BUILD_UA_SENTENCES_9,
+  "a2-45": A2_BUILD_UA_SENTENCES_9,
+
+  // A2 lessons 46–50 -> file a2-10.ts
+  "a2-46": A2_BUILD_UA_SENTENCES_10,
+  "a2-47": A2_BUILD_UA_SENTENCES_10,
+  "a2-48": A2_BUILD_UA_SENTENCES_10,
+  "a2-49": A2_BUILD_UA_SENTENCES_10,
+  "a2-50": A2_BUILD_UA_SENTENCES_10,
+};
+
+const CS_REGISTRY: Record<string, BuildUaSentenceDict> = {};
+const PL_REGISTRY: Record<string, BuildUaSentenceDict> = {};
+
+export function getBuildUaSentencesForLevel(
+  courseId: string,
+  levelId: string
+): BuildUaSentenceDict | undefined {
+  const id = String(levelId).toLowerCase();
+
+  if (courseId === "cs") return CS_REGISTRY[id];
+  if (courseId === "pl") return PL_REGISTRY[id];
+  return SK_REGISTRY[id];
+}

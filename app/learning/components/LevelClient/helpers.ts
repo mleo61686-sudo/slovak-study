@@ -9,6 +9,11 @@ import {
   type Phrase,
   type PhraseDict,
 } from "@/app/learning/phrases/registry";
+import {
+  getBuildUaSentencesForLevel,
+  type BuildSentenceTranslationItem,
+  type BuildUaSentenceDict,
+} from "@/app/learning/build-ua-sentences/registry";
 
 export function shuffle<T>(arr: T[]) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -38,6 +43,14 @@ function getAudioBase(courseId: string = "sk") {
   return courseId === "sk" ? "/audio" : `/audio/${courseId}`;
 }
 
+function splitSentenceToTokens(sentence: string) {
+  return sentence
+    .replace(/([.,!?;:])/g, " $1 ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
 function findPhraseInDict(
   dict: PhraseDict,
   sk: string,
@@ -48,21 +61,50 @@ function findPhraseInDict(
   const skNorm = normalizeKeyPart(sk);
   const uaNorm = normalizeKeyPart(ua);
 
-  // 1) exact canonical match (new format: sk + lessonId)
   const canonical = dict[phraseKey(sk, levelId)];
   if (canonical) return canonical;
 
-  // 2) backward-compatible exact call form
-  //    (works even if some code still calls phraseKey(sk, ua, levelId))
   const compat = dict[phraseKey(sk, ua, levelId)];
   if (compat) return compat;
 
-  // 3) legacy dictionary key match: sk||ua||lessonId
   const legacyKey = `${skNorm}||${uaNorm}||${lessonNorm}`;
   const legacy = dict[legacyKey];
   if (legacy) return legacy;
 
-  // 4) fallback by sk + lessonId, якщо переклад/пунктуація змінювались
+  const suffix = `||${lessonNorm}`;
+
+  const hitKey = Object.keys(dict).find((k) => {
+    const key = normalizeKeyPart(k);
+
+    return (
+      key === `${skNorm}||${lessonNorm}` ||
+      (key.startsWith(`${skNorm}||`) && key.endsWith(suffix))
+    );
+  });
+
+  return hitKey ? dict[hitKey] : undefined;
+}
+
+function findBuildUaSentenceInDict(
+  dict: BuildUaSentenceDict,
+  sk: string,
+  ua: string,
+  levelId: string
+): BuildSentenceTranslationItem | undefined {
+  const lessonNorm = normalizeKeyPart(levelId);
+  const skNorm = normalizeKeyPart(sk);
+  const uaNorm = normalizeKeyPart(ua);
+
+  const canonical = dict[phraseKey(sk, levelId)];
+  if (canonical) return canonical;
+
+  const compat = dict[phraseKey(sk, ua, levelId)];
+  if (compat) return compat;
+
+  const legacyKey = `${skNorm}||${uaNorm}||${lessonNorm}`;
+  const legacy = dict[legacyKey];
+  if (legacy) return legacy;
+
   const suffix = `||${lessonNorm}`;
 
   const hitKey = Object.keys(dict).find((k) => {
@@ -102,13 +144,50 @@ export function getPhraseForWord(
   }
 
   const sk = `To je ${word.sk}.`;
-  const target =
-    lang === "ru"
-      ? `Это ${word.ru ?? word.ua}.`
-      : `Це ${word.ua}.`;
+  const target = lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
   const tokens = ["To", "je", word.sk, "."];
 
   return { sk, target, tokens };
+}
+
+export function getBuildUaSentenceForWord(
+  word: Word,
+  lang: Lang,
+  levelId: string,
+  courseId: string = "sk"
+) {
+  const dict = getBuildUaSentencesForLevel(courseId, levelId);
+
+  if (dict) {
+    const item = findBuildUaSentenceInDict(dict, word.sk, word.ua, levelId);
+
+    if (item) {
+      const isRu = lang === "ru";
+      const target = isRu ? item.ru ?? item.ua : item.ua;
+      const answerTokens = isRu
+        ? item.ruTokens ?? splitSentenceToTokens(item.ru ?? item.ua)
+        : item.uaTokens;
+      const extraTokens = isRu
+        ? item.extraRuTokens ?? []
+        : item.extraUaTokens;
+
+      return {
+        sk: item.sk,
+        target,
+        answerTokens,
+        extraTokens,
+      };
+    }
+  }
+
+  const fallbackSentence = lang === "ru" ? word.ru ?? word.ua : word.ua;
+
+  return {
+    sk: word.phrase?.sk ?? `To je ${word.sk}.`,
+    target: fallbackSentence,
+    answerTokens: splitSentenceToTokens(fallbackSentence),
+    extraTokens: [],
+  };
 }
 
 export async function sha1Hex(input: string) {

@@ -21,7 +21,8 @@ export type ExerciseKind =
   | "writeWord"
   | "audioQuiz"
   | "matchColumns"
-  | "buildSentence";
+  | "buildSentence"
+  | "buildUaSentence";
 
 export type ExerciseDef = {
   kind: ExerciseKind;
