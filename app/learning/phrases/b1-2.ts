@@ -137,8 +137,8 @@ export const B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("odvolanie", "b1-12")]: {
     sk: "Ak nesúhlasíš s rozhodnutím, môžeš podať odvolanie.",
-    ua: "Якщо не згоден з рішенням, можеш подати оскарження.",
-    ru: "Если не согласен с решением, можешь подать обжалование.",
+    ua: "Якщо не згоден з рішенням, можеш подати скаргу.",
+    ru: "Если не согласен с решением, можешь подать жалобу.",
     tokens: ["Ak", "nesúhlasíš", "s", "rozhodnutím", ",", "môžeš", "podať", "odvolanie", "."],
   },
 
@@ -342,8 +342,8 @@ export const B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("výkon", "b1-15")]: {
     sk: "Môj výkon závisí aj od spánku a regenerácie.",
-    ua: "Мій результат/продуктивність залежить також від сну та відновлення.",
-    ru: "Мой результат/продуктивность зависит также от сна и восстановления.",
+    ua: "Мій результат залежить також від сну та відновлення.",
+    ru: "Мой результат зависит также от сна и восстановления.",
     tokens: ["Môj", "výkon", "závisí", "aj", "od", "spánku", "a", "regenerácie", "."],
   },
 

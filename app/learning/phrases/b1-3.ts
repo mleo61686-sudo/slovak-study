@@ -620,8 +620,8 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("vysvetlenie", "b1-29")]: {
     sk: "Prosím o vysvetlenie, lebo mi to nie je jasné.",
-    ua: "Прошу пояснення, бо мені це не зрозуміло.",
-    ru: "Прошу объяснение, потому что мне это непонятно.",
+    ua: "Прошу пояснення, бо мені це незрозуміло.",
+    ru: "Прошу объяснений, потому что мне это непонятно.",
     tokens: ["Prosím", "o", "vysvetlenie", ",", "lebo", "mi", "to", "nie", "je", "jasné", "."],
   },
 

@@ -217,8 +217,8 @@ export const B1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("vysloviť", "b1-33")]: {
         sk: "Niektoré hlásky je ťažké vysloviť, keď s jazykom len začínaš.",
-        ua: "Деякі звуки важко вимовити, коли тільки починаєш мову.",
-        ru: "Некоторые звуки трудно произнести, когда только начинаешь язык.",
+        ua: "Деякі звуки важко вимовити, коли ти лише починаєш вивчати мову.",
+        ru: "Некоторые звуки трудно произнести, когда ты только начинаешь учить язык.",
         tokens: ["Niektoré", "hlásky", "je", "ťažké", "vysloviť", ",", "keď", "s", "jazykom", "len", "začínaš", "."],
     },
 
@@ -227,7 +227,7 @@ export const B1_PHRASES_4: Record<string, Phrase> = {
     // =========================
     [phraseKey("sebavedomie", "b1-34")]: {
         sk: "Sebavedomie rastie, keď máš skúsenosti a vidíš výsledky.",
-        ua: "Самовпевненість зростає, коли маєш досвід і бачиш результати.",
+        ua: "Впевненість у собі зростає, коли маєш досвід і бачиш результати.",
         ru: "Уверенность в себе растёт, когда есть опыт и видны результаты.",
         tokens: ["Sebavedomie", "rastie", ",", "keď", "máš", "skúsenosti", "a", "vidíš", "výsledky", "."],
     },
@@ -300,8 +300,8 @@ export const B1_PHRASES_4: Record<string, Phrase> = {
     // =========================
     [phraseKey("Kyjev", "b1-35")]: {
         sk: "Kyjev je hlavné mesto Ukrajiny a má bohatú históriu.",
-        ua: "Київ — столиця України та має багату історію.",
-        ru: "Киев — столица Украины и имеет богатую историю.",
+        ua: "Київ — столиця України з багатою історією.",
+        ru: "Киев — столица Украины с богатой историей.",
         tokens: ["Kyjev", "je", "hlavné", "mesto", "Ukrajiny", "a", "má", "bohatú", "históriu", "."],
     },
 
@@ -321,8 +321,8 @@ export const B1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("Bern", "b1-35")]: {
         sk: "Bern je hlavné mesto Švajčiarska a leží pri rieke Aare.",
-        ua: "Берн — столиця Швейцарії та лежить біля річки Ааре.",
-        ru: "Берн — столица Швейцарии и находится у реки Ааре.",
+        ua: "Берн — столиця Швейцарії, розташована біля річки Ааре.",
+        ru: "Берн — столица Швейцарии, расположенная у реки Ааре.",
         tokens: ["Bern", "je", "hlavné", "mesto", "Švajčiarska", "a", "leží", "pri", "rieke", "Aare", "."],
     },
 
@@ -363,8 +363,8 @@ export const B1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("Sofia", "b1-35")]: {
         sk: "Sofia je hlavné mesto Bulharska a je obklopená horami.",
-        ua: "Софія — столиця Болгарії та оточена горами.",
-        ru: "София — столица Болгарии и окружена горами.",
+        ua: "Софія — столиця Болгарії, оточена горами.",
+        ru: "София — столица Болгарии, окружённая горами.",
         tokens: ["Sofia", "je", "hlavné", "mesto", "Bulharska", "a", "je", "obklopená", "horami", "."],
     },
 };

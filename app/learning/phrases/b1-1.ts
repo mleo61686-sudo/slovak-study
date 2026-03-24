@@ -50,14 +50,14 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("dochádzka", "b1-1")]: {
     sk: "Dochádzku si zapisujeme v aplikácii.",
-    ua: "Відвідуваність/табель ми відмічаємо в додатку.",
-    ru: "Посещаемость/табель мы отмечаем в приложении.",
+    ua: "Табель ми відмічаємо в додатку.",
+    ru: "Табель мы отмечаем в приложении.",
     tokens: ["Dochádzku", "si", "zapisujeme", "v", "aplikácii", "."],
   },
 
   [phraseKey("benefit", "b1-1")]: {
     sk: "Ako benefit máme stravné a multisport kartu.",
-    ua: "Як бонус у нас є харчові та мультиспорт-карта.",
+    ua: "Як бонус у нас є харчування та мультиспорт-картка.",
     ru: "Как бонус у нас есть питание и мультиспорт-карта.",
     tokens: ["Ako", "benefit", "máme", "stravné", "a", "multisport", "kartu", "."],
   },
@@ -168,7 +168,7 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("cestujúci", "b1-3")]: {
     sk: "Cestujúci musia mať lístok pripravený na kontrolu.",
-    ua: "Пасажири повинні мати квиток готовий до перевірки.",
+    ua: "Пасажири повинні мати готовий квиток до перевірки.",
     ru: "Пассажиры должны иметь билет готовым к проверке.",
     tokens: ["Cestujúci", "musia", "mať", "lístok", "pripravený", "na", "kontrolu", "."],
   },
@@ -526,8 +526,8 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("pokladničný doklad", "b1-8")]: {
     sk: "Pokladničný doklad si nechám pre prípad reklamácie.",
-    ua: "Чек залишу на випадок повернення/рекламації.",
-    ru: "Чек оставлю на случай возврата/рекламации.",
+    ua: "Чек залишу на випадок рекламації.",
+    ru: "Чек оставлю на случай рекламации.",
     tokens: ["Pokladničný", "doklad", "si", "nechám", "pre", "prípad", "reklamácie", "."],
   },
 
@@ -541,7 +541,7 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
   [phraseKey("pôžička", "b1-8")]: {
     sk: "Pôžičku si vezmem len vtedy, ak to bude naozaj nutné.",
     ua: "Позику візьму лише тоді, якщо це буде справді необхідно.",
-    ru: "Займусь кредитом только тогда, если это будет действительно нужно.",
+    ru: "Я возьму кредит только тогда, если это будет действительно нужно.",
     tokens: ["Pôžičku", "si", "vezmem", "len", "vtedy", ",", "ak", "to", "bude", "naozaj", "nutné", "."],
   },
 
@@ -562,7 +562,7 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
   [phraseKey("výpis z účtu", "b1-8")]: {
     sk: "Výpis z účtu si stiahnem v internet bankingu.",
     ua: "Виписку з рахунку завантажу в інтернет-банкінгу.",
-    ru: "Выписку со счёта скачиваю в интернет-банкинге.",
+    ru: "Выписку со счёта скачаю в интернет-банкинге.",
     tokens: ["Výpis", "z", "účtu", "si", "stiahnem", "v", "internet", "bankingu", "."],
   },
 
@@ -613,8 +613,8 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("objednať servis", "b1-9")]: {
     sk: "Musím si objednať servis, lebo to už nefunguje správne.",
-    ua: "Мені треба замовити сервіс, бо це вже працює неправильно.",
-    ru: "Мне нужно заказать сервис, потому что это уже работает неправильно.",
+    ua: "Мені треба викликати сервіс, бо це вже працює неправильно.",
+    ru: "Мне нужно вызвать сервис, потому что это уже работает неправильно.",
     tokens: ["Musím", "si", "objednať", "servis", ",", "lebo", "to", "už", "nefunguje", "správne", "."],
   },
 
