@@ -78,7 +78,7 @@ export const A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
 
   [phraseKey("škaredý", "a1-11")]: {
     sk: "To nie je škaredý obraz.",
-    ua: "Це не негарна картина.",
+    ua: "Це не потворна картина.",
     ru: "Это не уродливая картина.",
     uaTokens: ["Це", "не", "негарна", "картина", "."],
     ruTokens: ["Это", "не", "уродливая", "картина", "."],

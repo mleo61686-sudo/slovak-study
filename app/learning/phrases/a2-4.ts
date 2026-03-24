@@ -29,15 +29,15 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("záloha", "a2-31")]: {
     sk: "Je potrebná záloha pri podpise zmluvy?",
-    ua: "Потрібна застава/депозит при підписанні договору?",
-    ru: "Нужен залог/депозит при подписании договора?",
+    ua: "Потрібен депозит при підписанні договору?",
+    ru: "Нужен депозит при подписании договора?",
     tokens: ["Je", "potrebná", "záloha", "pri", "podpise", "zmluvy", "?"],
   },
 
   [phraseKey("kaucia", "a2-31")]: {
     sk: "Kaucia je vo výške dvoch mesačných nájmov.",
-    ua: "Депозит (кауція) у розмірі двох місячних оплат.",
-    ru: "Депозит (кауция) в размере двух месячных оплат.",
+    ua: "Кауція у розмірі двох місячних оплат.",
+    ru: "Депозит в размере двух месячных оплат.",
     tokens: ["Kaucia", "je", "vo", "výške", "dvoch", "mesačných", "nájmov", "."],
   },
 
@@ -234,8 +234,8 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("objednať termín", "a2-34")]: {
     sk: "Potrebujem objednať termín na opravu.",
-    ua: "Мені треба записатися на час для ремонту.",
-    ru: "Мне нужно записаться на время для ремонта.",
+    ua: "Мені треба записатися на ремонт.",
+    ru: "Мне нужно записаться на ремонт.",
     tokens: ["Potrebujem", "objednať", "termín", "na", "opravu", "."],
   },
 
@@ -328,8 +328,8 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("dodanie", "a2-35")]: {
     sk: "Kedy bude dodanie?",
-    ua: "Коли буде поставка/доставка?",
-    ru: "Когда будет поставка/доставка?",
+    ua: "Коли буде доставка?",
+    ru: "Когда будет доставка?",
     tokens: ["Kedy", "bude", "dodanie", "?"],
   },
 
@@ -394,8 +394,8 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("izba", "a2-36")]: {
     sk: "Moja izba je na treťom poschodí.",
-    ua: "Мій номер/кімната на третьому поверсі.",
-    ru: "Мой номер/комната на третьем этаже.",
+    ua: "Мій номер на третьому поверсі.",
+    ru: "Мой номер на третьем этаже.",
     tokens: ["Moja", "izba", "je", "na", "treťom", "poschodí", "."],
   },
 
@@ -446,7 +446,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
   // =========================
   [phraseKey("obsluha", "a2-37")]: {
     sk: "Obsluha bola veľmi milá.",
-    ua: "Обслуговування було дуже приємне.",
+    ua: "Обслуговування було дуже приємним.",
     ru: "Обслуживание было очень приятным.",
     tokens: ["Obsluha", "bola", "veľmi", "milá", "."],
   },
@@ -575,8 +575,8 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("príloha", "a2-38")]: {
     sk: "V prílohe posielam dokument.",
-    ua: "У вкладенні надсилаю документ.",
-    ru: "Во вложении отправляю документ.",
+    ua: "Надсилаю документ у вкладенні.",
+    ru: "Отправляю документ во вложении.",
     tokens: ["V", "prílohe", "posielam", "dokument", "."],
   },
 
@@ -714,7 +714,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("príloha", "a2-40")]: {
     sk: "Skontrolujte, či sa príloha odoslala.",
-    ua: "Перевірте, чи вкладення відправилося.",
+    ua: "Перевірте, чи надіслалося вкладення.",
     ru: "Проверьте, отправилось ли вложение.",
     tokens: ["Skontrolujte", ",", "či", "sa", "príloha", "odoslala", "."],
   },

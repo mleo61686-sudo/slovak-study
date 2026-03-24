@@ -216,10 +216,10 @@ export const A1_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
   [phraseKey("reklamácia", "a1-38")]: {
     sk: "Chcem urobiť reklamáciu.",
-    ua: "Я хочу зробити рекламацію.",
-    ru: "Я хочу сделать рекламацию.",
-    uaTokens: ["Я", "хочу", "зробити", "рекламацію", "."],
-    ruTokens: ["Я", "хочу", "сделать", "рекламацию", "."],
+    ua: "Я хочу подати  рекламацію.",
+    ru: "Я хочу подать  рекламацию.",
+    uaTokens: ["Я", "хочу", "подати ", "рекламацію", "."],
+    ruTokens: ["Я", "хочу", "подать ", "рекламацию", "."],
     extraUaTokens: ["обмін", "зараз", "товару"],
     extraRuTokens: ["обмен", "сейчас", "товара"],
   },
@@ -237,9 +237,9 @@ export const A1_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
   [phraseKey("sklad", "a1-38")]: {
     sk: "Je to na sklade.",
     ua: "Це є на складі.",
-    ru: "Это есть на складе.",
+    ru: "Это  на складе.",
     uaTokens: ["Це", "є", "на", "складі", "."],
-    ruTokens: ["Это", "есть", "на", "складе", "."],
+    ruTokens: ["Это", "на", "складе", "."],
     extraUaTokens: ["магазині", "зараз", "нема"],
     extraRuTokens: ["магазине", "сейчас", "нет"],
   },
@@ -424,9 +424,9 @@ export const A1_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
   [phraseKey("učiť sa", "a1-40")]: {
     sk: "Učím sa po slovensky.",
-    ua: "Я вчуся словацької.",
+    ua: "Я вчу словацьку.",
     ru: "Я учу словацкий.",
-    uaTokens: ["Я", "вчуся", "словацької", "."],
+    uaTokens: ["Я", "вчу", "словацьку", "."],
     ruTokens: ["Я", "учу", "словацкий", "."],
     extraUaTokens: ["чеської", "сьогодні", "трохи"],
     extraRuTokens: ["чешский", "сегодня", "немного"],

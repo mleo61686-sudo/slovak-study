@@ -283,8 +283,8 @@ export const A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("výhody", "a2-4")]: {
     sk: "Medzi výhody patrí aj stravné.",
-    ua: "Серед бонусів є також харчування/компенсація на їжу.",
-    ru: "Среди бонусов есть также питание/компенсация на еду.",
+    ua: "Серед бонусів є також компенсація на їжу.",
+    ru: "Среди бонусов есть также компенсация на еду.",
     tokens: ["Medzi", "výhody", "patrí", "aj", "stravné", "."],
   },
 
@@ -328,7 +328,7 @@ export const A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("meškanie", "a2-5")]: {
     sk: "Let má meškanie dve hodiny.",
-    ua: "Рейс має затримку дві години.",
+    ua: "Рейс затримується на дві години.",
     ru: "Рейс задерживается на два часа.",
     tokens: ["Let", "má", "meškanie", "dve", "hodiny", "."],
   },
@@ -634,8 +634,8 @@ export const A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("doklad", "a2-9")]: {
     sk: "Máte k tomu doklad?",
-    ua: "У вас є до цього документ/підтвердження?",
-    ru: "У вас есть к этому документ/подтверждение?",
+    ua: "У вас є до цього підтвердження?",
+    ru: "У вас есть к этому подтверждение?",
     tokens: ["Máte", "k", "tomu", "doklad", "?"],
   },
 

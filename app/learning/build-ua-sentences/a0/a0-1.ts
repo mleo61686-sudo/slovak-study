@@ -369,7 +369,7 @@ export const A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     ua: "Прошу чек.",
     ru: "Мне чек, пожалуйста.",
     uaTokens: ["Прошу", "чек", "."],
-    ruTokens: ["Мне", "чек", "," , "пожалуйста", "."],
+    ruTokens: ["Мне", "чек", ",","пожалуйста", "."],
     extraUaTokens: ["каса", "велика", "карткою"],
     extraRuTokens: ["касса", "большая", "картой"],
   },

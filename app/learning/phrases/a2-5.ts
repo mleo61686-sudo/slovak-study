@@ -8,8 +8,8 @@ export const A2_PHRASES_5: Record<string, Phrase> = {
   // =========================
   [phraseKey("ambícia", "a2-41")]: {
     sk: "Moja ambícia je zlepšiť sa v práci.",
-    ua: "Моя амбіція — стати кращим у роботі.",
-    ru: "Моя амбиция — стать лучше в работе.",
+    ua: "Моя амбіція — стати кращим у своїй роботі.",
+    ru: "Моя амбиция — стать лучше в своей работе.",
     tokens: ["Moja", "ambícia", "je", "zlepšiť", "sa", "v", "práci", "."],
   },
 
@@ -284,7 +284,7 @@ export const A2_PHRASES_5: Record<string, Phrase> = {
   [phraseKey("zodpovedný", "a2-44")]: {
     sk: "Je zodpovedný za výsledok.",
     ua: "Він відповідальний за результат.",
-    ru: "Он отвечает за результат.",
+    ru: "Он ответственен за результат.",
     tokens: ["Je", "zodpovedný", "za", "výsledok", "."],
   },
 
@@ -335,7 +335,7 @@ export const A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("dôsledok", "a2-45")]: {
     sk: "Každé rozhodnutie má dôsledok.",
-    ua: "Кожне рішення має наслідок.",
+    ua: "Кожне рішення має наслідки.",
     ru: "Каждое решение имеет последствия.",
     tokens: ["Každé", "rozhodnutie", "má", "dôsledok", "."],
   },

@@ -71,7 +71,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     ua: "Тут є помилка.",
     ru: "Тут ошибка.",
     uaTokens: ["Тут", "є", "помилка", "."],
-    ruTokens: ["Тут", "ошибка", "."],
+    ruTokens: ["Тут", "есть", "ошибка", "."],
     extraUaTokens: ["рішення", "нема", "сьогодні"],
     extraRuTokens: ["решение", "нет", "сегодня"],
   },
@@ -152,10 +152,10 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
   [phraseKey("ďaleko", "a1-22")]: {
     sk: "Nie je to ďaleko.",
-    ua: "Це не далеко.",
-    ru: "Это не далеко.",
-    uaTokens: ["Це", "не", "далеко", "."],
-    ruTokens: ["Это", "не", "далеко", "."],
+    ua: "Це недалеко.",
+    ru: "Это недалеко.",
+    uaTokens: ["Це", "недалеко", "."],
+    ruTokens: ["Это", "недалеко", "."],
     extraUaTokens: ["близько", "дуже", "вже"],
     extraRuTokens: ["близко", "очень", "уже"],
   },

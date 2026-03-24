@@ -75,6 +75,10 @@ export default function BuildUaSentence({
     () => [...item.answerTokens],
     [item.answerTokens.join("|")]
   );
+  const validAnswers = useMemo(
+    () => item.validAnswers.map((tokens) => [...tokens]),
+    [JSON.stringify(item.validAnswers)]
+  );
 
   const allTokens = useMemo(
     () => shuffle([...item.answerTokens, ...item.extraTokens]),
@@ -119,13 +123,16 @@ export default function BuildUaSentence({
 
   async function check() {
     const built = tokensToSentence(picked);
-    const target = tokensToSentence(correctTokens);
-    const ok = normalizeSentence(built) === normalizeSentence(target);
+
+    const ok = validAnswers.some(
+      (answer) =>
+        normalizeSentence(built) ===
+        normalizeSentence(tokensToSentence(answer))
+    );
 
     setStatus(ok ? "correct" : "wrong");
     await playLocal(item.sk, "phrase", courseId);
   }
-
   function next() {
     onNext(status === "correct");
   }

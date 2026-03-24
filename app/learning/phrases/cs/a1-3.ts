@@ -108,7 +108,7 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("daleko", "a1-22")]: {
     sk: "To není daleko.",
-    ua: "Це не далеко.",
+    ua: "Це недалеко.",
     ru: "Это недалеко.",
     tokens: ["To", "není", "daleko", "."],
   },

@@ -64,8 +64,8 @@ export const A1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("prekvapenie", "a1-31")]: {
     sk: "To bolo prekvapenie.",
-    ua: "Це було здивування.",
-    ru: "Это было удивление.",
+    ua: "Це було неочікувано.",
+    ru: "Это было неожиданно.",
     tokens: ["To", "bolo", "prekvapenie", "."],
   },
 
@@ -304,7 +304,7 @@ export const A1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("úrad", "a1-35")]: {
     sk: "Idem na úrad.",
-    ua: "Я йду в установу.",
+    ua: "Я йду в держустанову.",
     ru: "Я иду в учреждение.",
     tokens: ["Idem", "na", "úrad", "."],
   },
@@ -526,8 +526,8 @@ export const A1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("reklamácia", "a1-38")]: {
     sk: "Chcem urobiť reklamáciu.",
-    ua: "Я хочу зробити рекламацію.",
-    ru: "Я хочу сделать рекламацию.",
+    ua: "Я хочу подати  рекламацію.",
+    ru: "Я хочу подать  рекламацию.",
     tokens: ["Chcem", "urobiť", "reklamáciu", "."],
   },
 
@@ -541,7 +541,7 @@ export const A1_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("sklad", "a1-38")]: {
     sk: "Je to na sklade.",
     ua: "Це є на складі.",
-    ru: "Это есть на складе.",
+    ru: "Это  на складе.",
     tokens: ["Je", "to", "na", "sklade", "."],
   },
 
@@ -674,7 +674,7 @@ export const A1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("učiť sa", "a1-40")]: {
     sk: "Učím sa po slovensky.",
-    ua: "Я вчуся словацької.",
+    ua: "Я вчу словацьку.",
     ru: "Я учу словацкий.",
     tokens: ["Učím", "sa", "po", "slovensky", "."],
   },

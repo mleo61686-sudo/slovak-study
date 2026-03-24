@@ -602,10 +602,12 @@ export const A0_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
   [phraseKey("búrka", "a0-16")]: {
     sk: "Je búrka.",
-    ua: "Буря / гроза.",
-    ru: "Буря / гроза.",
-    uaTokens: ["Буря", "/", "гроза", "."],
-    ruTokens: ["Буря", "/", "гроза", "."],
+    ua: "Буря.",
+    ru: "Буря.",
+    uaTokens: ["Буря", "."],
+    ruTokens: ["Буря", "."],
+    uaAltAnswers: [["Гроза", "."]],
+    ruAltAnswers: [["Гроза", "."]],
     extraUaTokens: ["дощ", "вітер", "сніг"],
     extraRuTokens: ["дождь", "ветер", "снег"],
   },

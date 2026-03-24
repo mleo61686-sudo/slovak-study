@@ -89,9 +89,9 @@ export const A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
   [phraseKey("prekvapenie", "a1-31")]: {
     sk: "To bolo prekvapenie.",
     ua: "Це було несподіванкою.",
-    ru: "Это было удивление.",
+    ru: "Это было неожиданно.",
     uaTokens: ["Це", "було", "несподіванкою", "."],
-    ruTokens: ["Это", "было", "удивление", "."],
+    ruTokens: ["Это", "было", "неожиданно", "."],
     extraUaTokens: ["радість", "велике", "вчора"],
     extraRuTokens: ["радость", "большая", "вчера"],
   },
@@ -424,9 +424,9 @@ export const A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
   [phraseKey("úrad", "a1-35")]: {
     sk: "Idem na úrad.",
-    ua: "Я йду в установу.",
+    ua: "Я йду в держустанову.",
     ru: "Я иду в учреждение.",
-    uaTokens: ["Я", "йду", "в", "установу", "."],
+    uaTokens: ["Я", "йду", "в", "держустанову", "."],
     ruTokens: ["Я", "иду", "в", "учреждение", "."],
     extraUaTokens: ["магазин", "сьогодні", "великий"],
     extraRuTokens: ["магазин", "сегодня", "большой"],

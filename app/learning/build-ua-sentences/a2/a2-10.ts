@@ -1,4 +1,3 @@
-// app/learning/build-ua-sentences/a2/a2-7.ts
 import { phraseKey } from "@/app/learning/phrases/phraseKey";
 import type { BuildUaSentenceDict } from "../registry";
 
@@ -453,7 +452,7 @@ export const A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
         sk: "Niekedy je lepšie nebyť tvrdohlavý.",
         ua: "Іноді краще не бути впертим.",
         ru: "Иногда лучше не быть упрямым.",
-        uaTokens: ["Іноді", "краще", "не", "бути", "впертым", "."],
+        uaTokens: ["Іноді", "краще", "не", "бути", "впертим", "."],
         ruTokens: ["Иногда", "лучше", "не", "быть", "упрямым", "."],
         extraUaTokens: ["занадто", "дуже", "таким"],
         extraRuTokens: ["слишком", "очень", "таким"],

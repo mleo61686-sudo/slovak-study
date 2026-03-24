@@ -22,14 +22,28 @@ import { A2_BUILD_UA_SENTENCES_8 } from "./a2/a2-8";
 import { A2_BUILD_UA_SENTENCES_9 } from "./a2/a2-9";
 import { A2_BUILD_UA_SENTENCES_10 } from "./a2/a2-10";
 
+import { B1_BUILD_UA_SENTENCES_1 } from "./b1/b1-1";
+import { B1_BUILD_UA_SENTENCES_2 } from "./b1/b1-2";
+import { B1_BUILD_UA_SENTENCES_3 } from "./b1/b1-3";
+import { B1_BUILD_UA_SENTENCES_4 } from "./b1/b1-4";
+import { B1_BUILD_UA_SENTENCES_5 } from "./b1/b1-5";
+import { B1_BUILD_UA_SENTENCES_6 } from "./b1/b1-6";
+import { B1_BUILD_UA_SENTENCES_7 } from "./b1/b1-7";
+
 export type BuildSentenceTranslationItem = {
   sk: string;
   ua: string;
   ru?: string;
+
   uaTokens: string[];
   ruTokens?: string[];
+
   extraUaTokens: string[];
   extraRuTokens?: string[];
+
+  // ✅ альтернативні правильні відповіді
+  uaAltAnswers?: string[][];
+  ruAltAnswers?: string[][];
 };
 
 export type BuildUaSentenceDict = Record<string, BuildSentenceTranslationItem>;
@@ -192,7 +206,48 @@ const SK_REGISTRY: Record<string, BuildUaSentenceDict> = {
   "a2-48": A2_BUILD_UA_SENTENCES_10,
   "a2-49": A2_BUILD_UA_SENTENCES_10,
   "a2-50": A2_BUILD_UA_SENTENCES_10,
+
+  // B1 lessons 1–5 -> file b1-1.ts
+  "b1-1": B1_BUILD_UA_SENTENCES_1,
+  "b1-2": B1_BUILD_UA_SENTENCES_1,
+  "b1-3": B1_BUILD_UA_SENTENCES_1,
+  "b1-4": B1_BUILD_UA_SENTENCES_1,
+  "b1-5": B1_BUILD_UA_SENTENCES_1,
+
+  // B1 lessons 6–10 -> file b1-2.ts
+  "b1-6": B1_BUILD_UA_SENTENCES_2,
+  "b1-7": B1_BUILD_UA_SENTENCES_2,
+  "b1-8": B1_BUILD_UA_SENTENCES_2,
+  "b1-9": B1_BUILD_UA_SENTENCES_2,
+  "b1-10": B1_BUILD_UA_SENTENCES_2,
+  "b1-11": B1_BUILD_UA_SENTENCES_3,
+  "b1-12": B1_BUILD_UA_SENTENCES_3,
+  "b1-13": B1_BUILD_UA_SENTENCES_3,
+  "b1-14": B1_BUILD_UA_SENTENCES_3,
+  "b1-15": B1_BUILD_UA_SENTENCES_3,
+  "b1-16": B1_BUILD_UA_SENTENCES_4,
+  "b1-17": B1_BUILD_UA_SENTENCES_4,
+  "b1-18": B1_BUILD_UA_SENTENCES_4,
+  "b1-19": B1_BUILD_UA_SENTENCES_4,
+  "b1-20": B1_BUILD_UA_SENTENCES_4,
+  "b1-21": B1_BUILD_UA_SENTENCES_5,
+  "b1-22": B1_BUILD_UA_SENTENCES_5,
+  "b1-23": B1_BUILD_UA_SENTENCES_5,
+  "b1-24": B1_BUILD_UA_SENTENCES_5,
+  "b1-25": B1_BUILD_UA_SENTENCES_5,
+
+  "b1-26": B1_BUILD_UA_SENTENCES_6,
+  "b1-27": B1_BUILD_UA_SENTENCES_6,
+  "b1-28": B1_BUILD_UA_SENTENCES_6,
+  "b1-29": B1_BUILD_UA_SENTENCES_6,
+  "b1-30": B1_BUILD_UA_SENTENCES_6,
+  "b1-31": B1_BUILD_UA_SENTENCES_7,
+  "b1-32": B1_BUILD_UA_SENTENCES_7,
+  "b1-33": B1_BUILD_UA_SENTENCES_7,
+  "b1-34": B1_BUILD_UA_SENTENCES_7,
+  "b1-35": B1_BUILD_UA_SENTENCES_7,
 };
+
 
 const CS_REGISTRY: Record<string, BuildUaSentenceDict> = {};
 const PL_REGISTRY: Record<string, BuildUaSentenceDict> = {};

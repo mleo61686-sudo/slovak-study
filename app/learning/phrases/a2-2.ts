@@ -422,8 +422,8 @@ export const A2_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("zlepšiť sa", "a2-16")]: {
     sk: "Chcem sa zlepšiť v gramatike.",
-    ua: "Хочу покращитися в граматиці.",
-    ru: "Хочу улучшиться в грамматике.",
+    ua: "Хочу покращити свою граматику.",
+    ru: "Хочу улучшить свою грамматику.",
     tokens: ["Chcem", "sa", "zlepšiť", "v", "gramatike", "."],
   },
 
@@ -533,8 +533,8 @@ export const A2_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("vklad", "a2-18")]: {
     sk: "Vklad môžem urobiť aj na pobočke.",
-    ua: "Внесення можу зробити також у відділенні.",
-    ru: "Внесение могу сделать также в отделении.",
+    ua: "Я також можу зробити внесення у відділенні.",
+    ru: "Я также могу сделать внесение в отделении.",
     tokens: ["Vklad", "môžem", "urobiť", "aj", "na", "pobočke", "."],
   },
 
@@ -648,8 +648,8 @@ export const A2_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("vybaviť", "a2-19")]: {
     sk: "Potrebujem to vybaviť čo najskôr.",
-    ua: "Мені треба це оформити/вирішити якнайшвидше.",
-    ru: "Мне нужно это оформить/решить как можно скорее.",
+    ua: "Мені треба це оформити якнайшвидше.",
+    ru: "Мне нужно это оформить как можно скорее.",
     tokens: ["Potrebujem", "to", "vybaviť", "čo", "najskôr", "."],
   },
 

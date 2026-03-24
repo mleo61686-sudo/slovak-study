@@ -480,7 +480,7 @@ export const A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("prax", "a1-17")]: {
     sk: "Mám prax v tejto práci.",
-    ua: "У мене є досвід роботи в цій роботі.",
+    ua: "У мене є досвід роботи в цій сфері.",
     ru: "У меня есть опыт работы в этой сфере.",
     tokens: ["Mám", "prax", "v", "tejto", "práci", "."],
   },
@@ -635,7 +635,7 @@ export const A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("wifi", "a1-19")]: {
     sk: "Máte tu wifi?",
-    ua: "У вас є тут вайфай?",
+    ua: "У вас тут є вайфай?",
     ru: "У вас тут есть вай-фай?",
     tokens: ["Máte", "tu", "wifi", "?"],
   },

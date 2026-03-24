@@ -43,7 +43,7 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("prietok", "a2-21")]: {
     sk: "Prietok vody je príliš silný.",
-    ua: "Протік (потік) води занадто сильний.",
+    ua: "Потік води занадто сильний.",
     ru: "Поток воды слишком сильный.",
     tokens: ["Prietok", "vody", "je", "príliš", "silný", "."],
   },
@@ -137,8 +137,8 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("kontrola", "a2-22")]: {
     sk: "Na kontrolu prídem o týždeň.",
-    ua: "На контроль/огляд прийду за тиждень.",
-    ru: "На контроль/осмотр приду через неделю.",
+    ua: "На контроль прийду за тиждень.",
+    ru: "На контроль приду через неделю.",
     tokens: ["Na", "kontrolu", "prídem", "o", "týždeň", "."],
   },
 
@@ -300,8 +300,8 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
   // =========================
   [phraseKey("itinerár", "a2-25")]: {
     sk: "Pripravil som si itinerár na celý týždeň.",
-    ua: "Я підготував маршрут/план подорожі на весь тиждень.",
-    ru: "Я подготовил маршрут/план поездки на всю неделю.",
+    ua: "Я підготував маршрут подорожі на весь тиждень.",
+    ru: "Я подготовил маршрут поездки на всю неделю.",
     tokens: ["Pripravil", "som", "si", "itinerár", "na", "celý", "týždeň", "."],
   },
 
@@ -315,7 +315,7 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("spoj", "a2-25")]: {
     sk: "Toto spojenie mi vyhovuje najviac.",
     ua: "Це сполучення мені підходить найбільше.",
-    ru: "Это сообщение/рейс мне подходит больше всего.",
+    ru: "Этот рейс мне подходит больше всего.",
     tokens: ["Toto", "spojenie", "mi", "vyhovuje", "najviac", "."],
   },
 
@@ -520,8 +520,8 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
   // =========================
   [phraseKey("súkromie", "a2-28")]: {
     sk: "Chcem chrániť svoje súkromie online.",
-    ua: "Я хочу захистити свою приватність онлайн.",
-    ru: "Я хочу защитить свою приватность онлайн.",
+    ua: "Я хочу захистити свою приватність в інтернеті.",
+    ru: "Я хочу защитить свою приватность в интернете.",
     tokens: ["Chcem", "chrániť", "svoje", "súkromie", "online", "."],
   },
 
@@ -534,15 +534,15 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("overenie", "a2-28")]: {
     sk: "Na prihlásenie potrebujem overenie.",
-    ua: "Для входу мені потрібне підтвердження/верифікація.",
-    ru: "Для входа мне нужна проверка/верификация.",
+    ua: "Для входу мені потрібне підтвердження.",
+    ru: "Для входа мне нужна верификация.",
     tokens: ["Na", "prihlásenie", "potrebujem", "overenie", "."],
   },
 
   [phraseKey("dvojfaktorové overenie", "a2-28")]: {
     sk: "Zapol som dvojfaktorové overenie.",
-    ua: "Я увімкнув 2FA (двофакторну перевірку).",
-    ru: "Я включил 2FA (двухфакторную проверку).",
+    ua: "Я увімкнув двофакторну перевірку.",
+    ru: "Я включил двухфакторную проверку.",
     tokens: ["Zapol", "som", "dvojfaktorové", "overenie", "."],
   },
 
@@ -562,8 +562,8 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("stiahnuť súbor", "a2-28")]: {
     sk: "Potrebujem stiahnuť súbor z e-mailu.",
-    ua: "Мені потрібно завантажити файл з email.",
-    ru: "Мне нужно скачать файл из e-mail.",
+    ua: "Мені потрібно завантажити файл з електронної пошти.",
+    ru: "Мне нужно скачать файл из электронной почты.",
     tokens: ["Potrebujem", "stiahnuť", "súbor", "z", "e-mailu", "."],
   },
 
@@ -628,7 +628,7 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("hrdý", "a2-29")]: {
     sk: "Som na teba hrdý.",
-    ua: "Я тобою гордий.",
+    ua: "Я пишаюся тобою.",
     ru: "Я тобой горжусь.",
     tokens: ["Som", "na", "teba", "hrdý", "."],
   },
@@ -680,8 +680,8 @@ export const A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("krádež", "a2-30")]: {
     sk: "Krádež už bola nahlásená.",
-    ua: "Крадіжку вже було заявлено.",
-    ru: "Кража уже была заявлена.",
+    ua: "Про крадіжку вже повідомили.",
+    ru: "О краже уже сообщили.",
     tokens: ["Krádež", "už", "bola", "nahlásená", "."],
   },
 

@@ -171,22 +171,30 @@ export function getBuildUaSentenceForWord(
         ? item.extraRuTokens ?? []
         : item.extraUaTokens;
 
+      const validAnswers = isRu
+        ? [answerTokens, ...(item.ruAltAnswers ?? [])]
+        : [answerTokens, ...(item.uaAltAnswers ?? [])];
+
       return {
         sk: item.sk,
         target,
         answerTokens,
         extraTokens,
+        validAnswers,
       };
     }
   }
 
   const fallbackSentence = lang === "ru" ? word.ru ?? word.ua : word.ua;
 
+  const fallbackTokens = splitSentenceToTokens(fallbackSentence);
+
   return {
     sk: word.phrase?.sk ?? `To je ${word.sk}.`,
     target: fallbackSentence,
-    answerTokens: splitSentenceToTokens(fallbackSentence),
+    answerTokens: fallbackTokens,
     extraTokens: [],
+    validAnswers: [fallbackTokens],
   };
 }
 
@@ -294,7 +302,7 @@ export async function playLocal(
     try {
       await tryPlay(url);
       return;
-    } catch {}
+    } catch { }
   }
 }
 
