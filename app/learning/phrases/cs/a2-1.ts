@@ -143,8 +143,8 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("doporučení", "a2-2")]: {
     sk: "Dostal jsem doporučení k odborníkovi.",
-    ua: "Я отримав направлення / рекомендацію до спеціаліста.",
-    ru: "Я получил направление / рекомендацию к специалисту.",
+    ua: "Я отримав направлення до спеціаліста.",
+    ru: "Я получил направление к специалисту.",
     tokens: ["Dostal", "jsem", "doporučení", "k", "odborníkovi", "."],
   },
 
@@ -654,8 +654,8 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("náhrada", "a2-9")]: {
     sk: "Obchod nám nabídl náhradu.",
-    ua: "Магазин запропонував нам компенсацію / заміну.",
-    ru: "Магазин предложил нам компенсацию / замену.",
+    ua: "Магазин запропонував нам компенсацію.",
+    ru: "Магазин предложил нам компенсацию.",
     tokens: ["Obchod", "nám", "nabídl", "náhradu", "."],
   },
 
