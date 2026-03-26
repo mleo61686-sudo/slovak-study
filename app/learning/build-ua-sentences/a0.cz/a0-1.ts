@@ -277,6 +277,12 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         ru: "На столе книга.",
         uaTokens: ["На", "столі", "книга", "."],
         ruTokens: ["На", "столе", "книга", "."],
+        uaAltAnswers: [
+            ["Книга", "на", "столі", "."],
+        ],
+        ruAltAnswers: [
+            ["Книга", "на", "столе", "."],
+        ],
         extraUaTokens: ["зошит", "вчора", "новий"],
         extraRuTokens: ["тетрадь", "вчера", "новый"],
     },
@@ -433,6 +439,12 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         ru: "Холодный напиток в холодильнике.",
         uaTokens: ["Холодний", "напій", "у", "холодильнику", "."],
         ruTokens: ["Холодный", "напиток", "в", "холодильнике", "."],
+        uaAltAnswers: [
+            ["У", "холодильнику", "холодний", "напій", "."],
+        ],
+        ruAltAnswers: [
+            ["В", "холодильнике", "холодный", "напиток", "."],
+        ],
         extraUaTokens: ["гарячий", "вчора", "сік"],
         extraRuTokens: ["горячий", "вчера", "сок"],
     },
@@ -443,6 +455,12 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         ru: "Каждое утро я ем хлеб.",
         uaTokens: ["Щоранку", "я", "їм", "хліб", "."],
         ruTokens: ["Каждое", "утро", "я", "ем", "хлеб", "."],
+        uaAltAnswers: [
+            ["Я", "щоранку", "їм", "хліб", "."],
+        ],
+        ruAltAnswers: [
+            ["Я", "каждое", "утро", "ем", "хлеб", "."],
+        ],
         extraUaTokens: ["сир", "сьогодні", "швидко"],
         extraRuTokens: ["сыр", "сегодня", "быстро"],
     },
