@@ -3,8 +3,10 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 type Lang = "ua" | "ru";
+type SeoCourseId = "sk" | "cs";
 
 const WordsStats = dynamic(() => import("./components/WordsStats"), {
   ssr: false,
@@ -57,6 +59,46 @@ const t = {
     levelsDesc: "Вправи: вибір відповіді, вставити слово, скласти речення.",
     open: "Відкрити →",
     start: "Почати →",
+
+    popularTitleByCourse: {
+      sk: "Популярні сторінки для старту",
+      cs: "Популярні сторінки для старту",
+    } satisfies Record<SeoCourseId, string>,
+
+    popularDescByCourse: {
+      sk: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по словацькій.",
+      cs: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по чеській.",
+    } satisfies Record<SeoCourseId, string>,
+
+    popularCardsByCourse: {
+      sk: [
+        {
+          href: "/vyvchennia-slovatskoi-movy-online",
+          title: "Вивчення словацької онлайн",
+          desc: "Огляд онлайн-курсу словацької: рівні, вправи, словник, граматика та озвучка.",
+        },
+        {
+          href: "/learn-slovak",
+          title: "Learn Slovak",
+          desc: "Англомовна сторінка про платформу та вивчення словацької онлайн.",
+        },
+      ],
+      cs: [
+        {
+          href: "/vyvchennia-cheskoi-movy-online",
+          title: "Вивчення чеської онлайн",
+          desc: "Огляд онлайн-курсу чеської: рівні, вправи, словник, граматика та озвучка.",
+        },
+        {
+          href: "/learn-czech",
+          title: "Learn Czech",
+          desc: "Англомовна сторінка про платформу та вивчення чеської онлайн.",
+        },
+      ],
+    } satisfies Record<
+      SeoCourseId,
+      { href: string; title: string; desc: string }[]
+    >,
 
     strip: [
       { k: "2 мови", v: "Словацька та чеська" },
@@ -112,6 +154,46 @@ const t = {
     open: "Открыть →",
     start: "Начать →",
 
+    popularTitleByCourse: {
+      sk: "Популярные страницы для старта",
+      cs: "Популярные страницы для старта",
+    } satisfies Record<SeoCourseId, string>,
+
+    popularDescByCourse: {
+      sk: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по словацкому.",
+      cs: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по чешскому.",
+    } satisfies Record<SeoCourseId, string>,
+
+    popularCardsByCourse: {
+      sk: [
+        {
+          href: "/ru/vyvchennia-slovatskoi-movy-online",
+          title: "Изучение словацкого онлайн",
+          desc: "Обзор онлайн-курса словацкого: уровни, упражнения, словарь, грамматика и озвучка.",
+        },
+        {
+          href: "/learn-slovak",
+          title: "Learn Slovak",
+          desc: "Англоязычная страница о платформе и изучении словацкого онлайн.",
+        },
+      ],
+      cs: [
+        {
+          href: "/ru/vyvchennia-cheskoi-movy-online",
+          title: "Изучение чешского онлайн",
+          desc: "Обзор онлайн-курса чешского: уровни, упражнения, словарь, грамматика и озвучка.",
+        },
+        {
+          href: "/learn-czech",
+          title: "Learn Czech",
+          desc: "Англоязычная страница о платформе и изучении чешского онлайн.",
+        },
+      ],
+    } satisfies Record<
+      SeoCourseId,
+      { href: string; title: string; desc: string }[]
+    >,
+
     strip: [
       { k: "2 языка", v: "Словацкий и чешский" },
       { k: "A0–B2", v: "Обучение по уровням" },
@@ -158,8 +240,13 @@ export default function HomeClient({
   latestBadge: string | null;
 }) {
   const { lang } = useLanguage();
+  const { courseId } = useActiveCourse();
+
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const tr = t[L];
+
+  const showSeoBlock = courseId === "sk" || courseId === "cs";
+  const seoCourseId: SeoCourseId = courseId === "cs" ? "cs" : "sk";
 
   return (
     <div className="space-y-8">
@@ -308,6 +395,37 @@ export default function HomeClient({
           <div className="mt-4 text-sm font-semibold">{tr.start}</div>
         </Link>
       </section>
+
+      {showSeoBlock && (
+        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold">
+              {tr.popularTitleByCourse[seoCourseId]}
+            </h2>
+            <p className="mt-2 text-slate-700">
+              {tr.popularDescByCourse[seoCourseId]}
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {tr.popularCardsByCourse[seoCourseId].map(
+              (card: { href: string; title: string; desc: string }) => (
+                <Link
+                  key={card.href}
+                  href={card.href}
+                  className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:bg-white"
+                >
+                  <h3 className="text-base font-semibold text-slate-900">
+                    {card.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-slate-700">{card.desc}</p>
+                  <div className="mt-4 text-sm font-semibold">{tr.open}</div>
+                </Link>
+              )
+            )}
+          </div>
+        </section>
+      )}
 
       <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <h2 className="mb-3 text-xl font-semibold">{tr.seoH2}</h2>

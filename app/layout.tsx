@@ -7,6 +7,7 @@ import SessionProviderClient from "./components/SessionProviderClient";
 import ProgressSync from "./components/ProgressSync";
 import SrsSync from "./components/SrsSync";
 import CourseBootstrap from "@/app/components/CourseBootstrap";
+import MainShell from "@/app/components/MainShell";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
@@ -81,7 +82,7 @@ export default function RootLayout({
         publisher: { "@id": "https://flunio.com/#organization" },
         inLanguage: ["uk", "ru"],
         description:
-          "Онлайн платформа для вивчення мов зі словамицьким і чеським курсами, граматикою, словником і вправами.",
+          "Онлайн платформа для вивчення мов зі словацьким і чеським курсами, граматикою, словником і вправами.",
         potentialAction: {
           "@type": "SearchAction",
           target: "https://flunio.com/dictionary?q={search_term_string}",
@@ -136,39 +137,36 @@ export default function RootLayout({
           <ProgressSync />
           <SrsSync />
 
-          <main className="flex-1 mx-auto w-full max-w-6xl px-4 py-8 sm:py-12">
-            {children}
-          </main>
+          <MainShell>{children}</MainShell>
         </SessionProviderClient>
 
-        <footer className="border-t">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              © {new Date().getFullYear()} Flunio — вивчай мови щодня.
-            </div>
+        <footer className="border-t bg-white">
+          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="text-left">
+                © {new Date().getFullYear()} Flunio — вивчай мови щодня.
+              </div>
 
-            <div className="flex flex-wrap gap-4">
-              <a className="hover:underline" href="/slovak-for-ukrainians">
-                Словацька для українців
-              </a>
-
-              <a
-                className="hover:underline"
-                href="/vyvchennia-slovatskoi-movy-online"
+              <nav
+                aria-label="Footer"
+                className="grid grid-cols-2 gap-x-6 gap-y-2 text-left sm:flex sm:flex-wrap sm:items-center sm:justify-end"
               >
-                Вивчення словацької онлайн
-              </a>
-
-              <a className="hover:underline" href="/ru/slovak-for-ukrainians">
-                Словацкий для украинцев
-              </a>
-
-              <a
-                className="hover:underline"
-                href="/ru/vyvchennia-slovatskoi-movy-online"
-              >
-                Изучение словацкого онлайн
-              </a>
+                <a className="hover:text-slate-900 hover:underline" href="/learn">
+                  Курси
+                </a>
+                <a className="hover:text-slate-900 hover:underline" href="/grammar">
+                  Граматика
+                </a>
+                <a className="hover:text-slate-900 hover:underline" href="/dictionary">
+                  Словник
+                </a>
+                <a className="hover:text-slate-900 hover:underline" href="/practice">
+                  Тренажер
+                </a>
+                <a className="hover:text-slate-900 hover:underline" href="/support">
+                  Підтримка
+                </a>
+              </nav>
             </div>
           </div>
         </footer>

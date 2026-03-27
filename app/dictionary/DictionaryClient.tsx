@@ -16,6 +16,16 @@ export default function DictionaryClient() {
 
   const dict = useMemo(() => getDictionaryForCourse(courseId), [courseId]);
 
+  const searchSourceLabel = useMemo(() => {
+    switch (courseId) {
+      case "cs":
+        return "česky";
+      case "sk":
+      default:
+        return "slovensky";
+    }
+  }, [courseId]);
+
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (!s) return dict;
@@ -49,7 +59,7 @@ export default function DictionaryClient() {
             setQ(e.target.value);
             setLimit(STEP);
           }}
-          placeholder="Пошук: slovensky / українська / русский…"
+          placeholder={`Пошук: ${searchSourceLabel} / українська / русский…`}
           className="w-full rounded-2xl border bg-white px-4 py-3 outline-none focus:ring-2"
         />
 
