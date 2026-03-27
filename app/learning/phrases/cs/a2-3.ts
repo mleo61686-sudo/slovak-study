@@ -35,8 +35,8 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("vyměnit", "a2-21")]: {
     sk: "Bude nutné vyměnit starou baterii.",
-    ua: "Буде необхідно замінити старий кран.",
-    ru: "Нужно будет заменить старый кран.",
+    ua: "Буде необхідно замінити старий змішувач.",
+    ru: "Нужно будет заменить старый смеситель.",
     tokens: ["Bude", "nutné", "vyměnit", "starou", "baterii", "."],
   },
 
@@ -56,8 +56,8 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("zatekat", "a2-21")]: {
     sk: "Po dešti začalo do sklepa zatékat.",
-    ua: "Після дощу в підвал почало протікати.",
-    ru: "После дождя в подвал начало протекать.",
+    ua: "Після дощу в підвал почала затікати вода.",
+    ru: "После дождя в подвал начала затекать вода.",
     tokens: ["Po", "dešti", "začalo", "do", "sklepa", "zatékat", "."],
   },
 
@@ -115,8 +115,8 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("očkování", "a2-22")]: {
     sk: "Příští týden mám očkování.",
-    ua: "Наступного тижня в мене вакцинація.",
-    ru: "На следующей неделе у меня вакцинация.",
+    ua: "Наступного тижня мені мають зробити щеплення.",
+    ru: "На следующей неделе мне должны сделать прививку.",
     tokens: ["Příští", "týden", "mám", "očkování", "."],
   },
 
@@ -233,7 +233,7 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("recept (kuchařský)", "a2-24")]: {
     sk: "Našel jsem jednoduchý recept na polévku.",
-    ua: "Я знайшов простий кулінарний рецепт на суп.",
+    ua: "Я знайшов простий кулінарний рецепт супу.",
     ru: "Я нашёл простой кулинарный рецепт супа.",
     tokens: ["Našel", "jsem", "jednoduchý", "recept", "na", "polévku", "."],
   },
@@ -306,14 +306,14 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("přestup", "a2-25")]: {
     sk: "V Brně budeme mít krátký přestup.",
-    ua: "У Брно в нас буде коротка пересадка.",
+    ua: "У Брні в нас буде коротка пересадка.",
     ru: "В Брно у нас будет короткая пересадка.",
     tokens: ["V", "Brně", "budeme", "mít", "krátký", "přestup", "."],
   },
 
   [phraseKey("spoj", "a2-25")]: {
     sk: "Tento spoj jede přímo do Prahy.",
-    ua: "Цей рейс їде прямо до Праги.",
+    ua: "Цей рейс прямує прямо до Праги.",
     ru: "Этот рейс идёт прямо до Праги.",
     tokens: ["Tento", "spoj", "jede", "přímo", "do", "Prahy", "."],
   },
@@ -487,8 +487,8 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("nevýhoda", "a2-27")]: {
     sk: "Nevýhodou je dlouhé čekání.",
-    ua: "Недолік у довгому очікуванні.",
-    ru: "Недостаток в долгом ожидании.",
+    ua: "Недоліком є довге очікування.",
+    ru: "Недостаток — долгое ожидание.",
     tokens: ["Nevýhodou", "je", "dlouhé", "čekání", "."],
   },
 
@@ -539,8 +539,8 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("dvojfaktorové ověření", "a2-28")]: {
     sk: "Mám zapnuté dvojfaktorové ověření.",
-    ua: "У мене ввімкнена двофакторна перевірка.",
-    ru: "У меня включена двухфакторная проверка.",
+    ua: "У мене ввімкнена двофакторна автентифікація.",
+    ru: "У меня включена двухфакторная аутентификация.",
     tokens: ["Mám", "zapnuté", "dvojfaktorové", "ověření", "."],
   },
 
@@ -568,7 +568,7 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("virus", "a2-28")]: {
     sk: "Ten počítač možná napadl virus.",
     ua: "Можливо, цей комп’ютер атакував вірус.",
-    ru: "Возможно, этот компьютер поразил вирус.",
+    ru: "Возможно, этот компьютер атаковал вирус.",
     tokens: ["Ten", "počítač", "možná", "napadl", "virus", "."],
   },
 
@@ -581,8 +581,8 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("obnovit heslo", "a2-28")]: {
     sk: "Potřebuji obnovit heslo k e-mailu.",
-    ua: "Мені потрібно відновити пароль до e-mail.",
-    ru: "Мне нужно восстановить пароль к e-mail.",
+    ua: "Мені потрібно відновити пароль до електронної пошти.",
+    ru: "Мне нужно восстановить пароль к электронной почте.",
     tokens: ["Potřebuji", "obnovit", "heslo", "k", "e-mailu", "."],
   },
 
@@ -699,7 +699,7 @@ export const CS_A2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("výplatní páska", "a2-30")]: {
     sk: "Výplatní pásku dostaneme e-mailem.",
-    ua: "Розрахунковий лист ми отримаємо електронною поштою.",
+    ua: "Розрахунковий листок ми отримаємо електронною поштою.",
     ru: "Расчётный листок мы получим по электронной почте.",
     tokens: ["Výplatní", "pásku", "dostaneme", "e-mailem", "."],
   },

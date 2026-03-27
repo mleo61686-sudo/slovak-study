@@ -261,7 +261,7 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("vyměnit", "a1-4")]: {
     sk: "Chtěl bych to vyměnit za větší.",
-    ua: "Я хотів би це обміняти на більше.",
+    ua: "Я хотів би це обміняти на більший розмір.",
     ru: "Я хотел бы обменять это на больший размер.",
     tokens: ["Chtěl", "bych", "to", "vyměnit", "za", "větší", "."],
   },
@@ -289,8 +289,8 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("účtovat", "a1-4")]: {
     sk: "Paní už účtuje nákup.",
-    ua: "Пані вже рахує покупку на касі.",
-    ru: "Женщина уже пробивает покупку на кассе.",
+    ua: "Пані вже пробиває покупку.",
+    ru: "Женщина уже пробивает покупку.",
     tokens: ["Paní", "už", "účtuje", "nákup", "."],
   },
 
@@ -313,8 +313,8 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("příloha", "a1-5")]: {
     sk: "Jakou přílohu si dáte?",
-    ua: "Який гарнір ви будете?",
-    ru: "Какой гарнир вы будете?",
+    ua: "Який гарнір ви будете брати?",
+    ru: "Какой гарнир вы будете брать?",
     tokens: ["Jakou", "přílohu", "si", "dáte", "?"],
   },
 
@@ -372,8 +372,8 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
   // =========================
   [phraseKey("cestovní řád", "a1-6")]: {
     sk: "Podívám se do cestovního řádu.",
-    ua: "Я подивлюся в розклад.",
-    ru: "Я посмотрю в расписание.",
+    ua: "Я подивлюся розклад.",
+    ru: "Я посмотрю расписание.",
     tokens: ["Podívám", "se", "do", "cestovního", "řádu", "."],
   },
 
@@ -539,7 +539,7 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("porada", "a1-8")]: {
     sk: "Ráno máme krátkou poradu.",
-    ua: "Вранці в нас коротка нарада.",
+    ua: "Вранці у нас коротка нарада.",
     ru: "Утром у нас короткое совещание.",
     tokens: ["Ráno", "máme", "krátkou", "poradu", "."],
   },
@@ -553,7 +553,7 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("hotovo", "a1-8")]: {
     sk: "Už je to hotovo.",
-    ua: "Уже готово.",
+    ua: "Вже готово.",
     ru: "Уже готово.",
     tokens: ["Už", "je", "to", "hotovo", "."],
   },
@@ -567,7 +567,7 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("opravit", "a1-8")]: {
     sk: "Technik přijde stroj opravit.",
-    ua: "Технік прийде полагодити машину.",
+    ua: "Технік прийде полагодити верстат.",
     ru: "Техник придёт починить станок.",
     tokens: ["Technik", "přijde", "stroj", "opravit", "."],
   },
@@ -647,8 +647,8 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("těšit se", "a1-9")]: {
     sk: "Těším se na víkend.",
-    ua: "Я з радістю чекаю вихідних.",
-    ru: "Я с радостью жду выходных.",
+    ua: "Я з нетерпінням чекаю вихідних.",
+    ru: "Я с нетерпением жду выходных.",
     tokens: ["Těším", "se", "na", "víkend", "."],
   },
 
@@ -671,8 +671,8 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("jaký", "a1-10")]: {
     sk: "Jaký film máš rád?",
-    ua: "Які фільми тобі подобаються?",
-    ru: "Какие фильмы тебе нравятся?",
+    ua: "Який фільм тобі подобається?",
+    ru: "Какой фильм тебе нравится?",
     tokens: ["Jaký", "film", "máš", "rád", "?"],
   },
 

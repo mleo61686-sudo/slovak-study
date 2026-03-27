@@ -324,14 +324,14 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     extraRuTokens: ["сегодня", "очень", "сильно"],
   },
 
-  [phraseKey("hlava", "a0-14")]: {
+  [phraseKey("hlava", "a1-16")]: {
     sk: "Dnes mě bolí hlava.",
-    ua: "Сьогодні в мене болить голова.",
+    ua: "Сьогодні у мене болить голова.",
     ru: "Сегодня у меня болит голова.",
-    uaTokens: ["Сьогодні", "в", "мене", "болить", "голова", "."],
+    uaTokens: ["Сьогодні", "у", "мене", "болить", "голова", "."],
     ruTokens: ["Сегодня", "у", "меня", "болит", "голова", "."],
-    extraUaTokens: ["дуже", "ввечері", "сильно"],
-    extraRuTokens: ["очень", "вечером", "сильно"],
+    extraUaTokens: ["зуб", "трохи", "вже"],
+    extraRuTokens: ["зуб", "немного", "уже"],
   },
 
   [phraseKey("oko", "a0-14")]: {

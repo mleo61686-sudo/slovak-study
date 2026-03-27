@@ -42,8 +42,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("příspěvek", "b1-1")]: {
     sk: "Firma nabízí příspěvek na dopravu.",
-    ua: "Фірма пропонує доплату на транспорт.",
-    ru: "Фирма предлагает доплату на транспорт.",
+    ua: "Фірма пропонує компенсацію на транспорт.",
+    ru: "Фирма предлагает компенсацию на транспорт.",
     tokens: ["Firma", "nabízí", "příspěvek", "na", "dopravu", "."],
   },
 
@@ -181,7 +181,7 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("přestupovat", "b1-3")]: {
     sk: "V Brně musíme přestupovat na jiný vlak.",
-    ua: "У Брно нам треба робити пересадку на інший потяг.",
+    ua: "У Брні нам треба робити пересадку на інший потяг.",
     ru: "В Брно нам нужно пересаживаться на другой поезд.",
     tokens: ["V", "Brně", "musíme", "přestupovat", "na", "jiný", "vlak", "."],
   },
@@ -289,8 +289,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("předpis", "b1-4")]: {
     sk: "Dodržujte prosím přesně lékařský předpis.",
-    ua: "Будь ласка, точно дотримуйтесь медичного призначення.",
-    ru: "Пожалуйста, точно соблюдайте врачебное предписание.",
+    ua: "Будь ласка, точно дотримуйтесь лікарських призначень.",
+    ru: "Пожалуйста, точно соблюдайте врачебные назначения.",
     tokens: ["Dodržujte", "prosím", "přesně", "lékařský", "předpis", "."],
   },
 
@@ -306,8 +306,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("smíření", "b1-5")]: {
     sk: "Po dlouhé době konečně došlo ke smíření.",
-    ua: "Після довгого часу нарешті дійшло до примирення.",
-    ru: "После долгого времени наконец произошло примирение.",
+    ua: "Після тривалого часу нарешті настало примирення.",
+    ru: "После долгого времени наконец наступило примирение.",
     tokens: ["Po", "dlouhé", "době", "konečně", "došlo", "ke", "smíření", "."],
   },
 
@@ -372,7 +372,7 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
   // =========================
   [phraseKey("seminář", "b1-6")]: {
     sk: "Zítra máme odborný seminář.",
-    ua: "Завтра в нас фаховий семінар.",
+    ua: "Завтра у нас фаховий семінар.",
     ru: "Завтра у нас профильный семинар.",
     tokens: ["Zítra", "máme", "odborný", "seminář", "."],
   },
@@ -428,8 +428,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("vypracovat", "b1-6")]: {
     sk: "Musíme vypracovat projekt do pátku.",
-    ua: "Ми повинні виконати проєкт до п’ятниці.",
-    ru: "Мы должны выполнить проект до пятницы.",
+    ua: "Ми повинні підготувати проєкт до п’ятниці.",
+    ru: "Мы должны подготовить проект до пятницы.",
     tokens: ["Musíme", "vypracovat", "projekt", "do", "pátku", "."],
   },
 
@@ -518,7 +518,7 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
   // =========================
   [phraseKey("splátka", "b1-8")]: {
     sk: "První splátka je splatná příští měsíc.",
-    ua: "Перший платіж частинами потрібно внести наступного місяця.",
+    ua: "Перший платіж за розстрочкою потрібно внести наступного місяця.",
     ru: "Первый платёж по рассрочке нужно внести в следующем месяце.",
     tokens: ["První", "splátka", "je", "splatná", "příští", "měsíc", "."],
   },
@@ -546,8 +546,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("úrok", "b1-8")]: {
     sk: "Úrok je letos vyšší než dřív.",
-    ua: "Відсоток цього року вищий, ніж раніше.",
-    ru: "Процент в этом году выше, чем раньше.",
+    ua: "Відсоткова ставка цього року вища, ніж раніше.",
+    ru: "Процентная ставка в этом году выше, чем раньше.",
     tokens: ["Úrok", "je", "letos", "vyšší", "než", "dřív", "."],
   },
 
@@ -612,8 +612,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("objednat servis", "b1-9")]: {
     sk: "Musíme co nejdřív objednat servis.",
-    ua: "Ми повинні якнайшвидше замовити сервіс.",
-    ru: "Мы должны как можно скорее заказать сервис.",
+    ua: "Ми повинні якнайшвидше замовити сервісне обслуговування.",
+    ru: "Мы должны как можно скорее заказать сервисное обслуживание.",
     tokens: ["Musíme", "co", "nejdřív", "objednat", "servis", "."],
   },
 
@@ -647,8 +647,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("pracovní postup", "b1-9")]: {
     sk: "Je nutné dodržet správný pracovní postup.",
-    ua: "Потрібно дотримуватися правильної робочої процедури.",
-    ru: "Нужно соблюдать правильную рабочую процедуру.",
+    ua: "Потрібно дотримуватися правильного порядку дій.",
+    ru: "Нужно соблюдать правильный порядок действий.",
     tokens: ["Je", "nutné", "dodržet", "správný", "pracovní", "postup", "."],
   },
 
@@ -699,8 +699,8 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("uveritelný", "b1-10")]: {
     sk: "Ten příběh zněl docela uvěřitelně.",
-    ua: "Та історія звучала досить достовірно.",
-    ru: "Та история звучала довольно достоверно.",
+    ua: "Та історія звучала досить правдоподібно.",
+    ru: "Та история звучала довольно правдоподобно.",
     tokens: ["Ten", "příběh", "zněl", "docela", "uvěřitelně", "."],
   },
 

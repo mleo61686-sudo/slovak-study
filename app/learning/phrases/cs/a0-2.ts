@@ -234,7 +234,7 @@ export const CS_A0_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("hlava", "a0-14")]: {
     sk: "Dnes mě bolí hlava.",
-    ua: "Сьогодні в мене болить голова.",
+    ua: "Сьогодні у мене болить голова.",
     ru: "Сегодня у меня болит голова.",
     tokens: ["Dnes", "mě", "bolí", "hlava", "."],
   },
@@ -620,8 +620,8 @@ export const CS_A0_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("mluvit", "a0-19")]: {
     sk: "Můžeme spolu mluvit česky.",
-    ua: "Ми можемо говорити разом чеською.",
-    ru: "Мы можем говорить вместе по-чешски.",
+    ua: "Ми можемо говорити чеською.",
+    ru: "Мы можем говорить по-чешски.",
     tokens: ["Můžeme", "spolu", "mluvit", "česky", "."],
   },
 

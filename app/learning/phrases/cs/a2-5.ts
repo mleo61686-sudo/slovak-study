@@ -70,8 +70,8 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("pokračovat", "a2-41")]: {
     sk: "Chci v tom pokračovat.",
-    ua: "Я хочу продовжити це далі.",
-    ru: "Я хочу продолжать это дальше.",
+    ua: "Я хочу продовжувати це.",
+    ru: "Я хочу продолжать это.",
     tokens: ["Chci", "v", "tom", "pokračovat", "."],
   },
 
@@ -122,7 +122,7 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("objížďka", "a2-42")]: {
     sk: "Kvůli opravě silnice vede objížďka jinudy.",
-    ua: "Через ремонт дороги об’їзд іде іншою дорогою.",
+    ua: "Через ремонт дороги об’їзд проходить іншою дорогою.",
     ru: "Из-за ремонта дороги объезд проходит по другому пути.",
     tokens: ["Kvůli", "opravě", "silnice", "vede", "objížďka", "jinudy", "."],
   },
@@ -261,7 +261,7 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("ochotný", "a2-44")]: {
     sk: "Byla velmi ochotná mi pomoct.",
-    ua: "Вона була дуже готова мені допомогти.",
+    ua: "Вона була дуже охоча мені допомогти.",
     ru: "Она была очень готова мне помочь.",
     tokens: ["Byla", "velmi", "ochotná", "mi", "pomoct", "."],
   },
@@ -282,7 +282,7 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("odpovědný", "a2-44")]: {
     sk: "Je to odpovědný a spolehlivý člověk.",
-    ua: "Він відповідальна і надійна людина.",
+    ua: "Він відповідальний і надійний чоловік.",
     ru: "Он ответственный и надёжный человек.",
     tokens: ["Je", "to", "odpovědný", "a", "spolehlivý", "člověk", "."],
   },
@@ -335,7 +335,7 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
   [phraseKey("důsledek", "a2-45")]: {
     sk: "To byl důsledek špatného rozhodnutí.",
     ua: "Це був наслідок поганого рішення.",
-    ru: "Это было последствие плохого решения.",
+    ru: "Это было следствием плохого решения.",
     tokens: ["To", "byl", "důsledek", "špatného", "rozhodnutí", "."],
   },
 
@@ -445,8 +445,8 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
   // =========================
   [phraseKey("kultura", "a2-47")]: {
     sk: "Rád poznávám českou kulturu.",
-    ua: "Я люблю пізнавати чеську культуру.",
-    ru: "Я люблю узнавать чешскую культуру.",
+    ua: "Я люблю знайомитися з чеською культурою.",
+    ru: "Я люблю знакомиться с чешской культурой.",
     tokens: ["Rád", "poznávám", "českou", "kulturu", "."],
   },
 
@@ -574,8 +574,8 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("výbava", "a2-48")]: {
     sk: "Na hory potřebuješ dobrou výbavu.",
-    ua: "У гори тобі потрібне хороше спорядження.",
-    ru: "В горы тебе нужно хорошее снаряжение.",
+    ua: "Для походу в гори тобі потрібне хороше спорядження.",
+    ru: "Для похода в горы тебе нужно хорошее снаряжение.",
     tokens: ["Na", "hory", "potřebuješ", "dobrou", "výbavu", "."],
   },
 
@@ -720,8 +720,8 @@ export const CS_A2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("výstraha", "a2-50")]: {
     sk: "V telefonu mi přišla výstraha na déšť.",
-    ua: "На телефон мені прийшло попередження про дощ.",
-    ru: "На телефон мне пришло предупреждение о дожде.",
+    ua: "Мені на телефон прийшло попередження про дощ.",
+    ru: "Мне на телефон пришло предупреждение о дожде.",
     tokens: ["V", "telefonu", "mi", "přišla", "výstraha", "na", "déšť", "."],
   },
 

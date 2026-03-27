@@ -14,8 +14,8 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("nízký", "a1-11")]: {
     sk: "Ten chlapec je spíš nízký.",
-    ua: "Той хлопець скоріше низький.",
-    ru: "Этот парень скорее низкий.",
+    ua: "Той хлопець доволі низький.",
+    ru: "Этот парень довольно низкий.",
     tokens: ["Ten", "chlapec", "je", "spíš", "nízký", "."],
   },
 
@@ -63,7 +63,7 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("milý", "a1-11")]: {
     sk: "Byla na mě velmi milá.",
-    ua: "Вона була до мене дуже мила.",
+    ua: "Вона була зі мною дуже милою.",
     ru: "Она была ко мне очень мила.",
     tokens: ["Byla", "na", "mě", "velmi", "milá", "."],
   },
@@ -181,7 +181,7 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("schody", "a1-13")]: {
     sk: "Musíme jít po schodech.",
-    ua: "Нам треба йти сходами.",
+    ua: "Нам треба йти по сходах.",
     ru: "Нам нужно идти по лестнице.",
     tokens: ["Musíme", "jít", "po", "schodech", "."],
   },
@@ -261,7 +261,7 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("značka", "a1-14")]: {
     sk: "Ta značka je hodně známá.",
-    ua: "Той бренд дуже відомий.",
+    ua: "Цей бренд дуже відомий.",
     ru: "Этот бренд очень известный.",
     tokens: ["Ta", "značka", "je", "hodně", "známá", "."],
   },
@@ -306,8 +306,8 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("ubytování", "a1-15")]: {
     sk: "Hledáme levné ubytování.",
-    ua: "Ми шукаємо недороге проживання.",
-    ru: "Мы ищем недорогое проживание.",
+    ua: "Ми шукаємо недороге житло.",
+    ru: "Мы ищем недорогое жильё.",
     tokens: ["Hledáme", "levné", "ubytování", "."],
   },
 
@@ -327,7 +327,7 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("exkurze", "a1-15")]: {
     sk: "Zítra máme exkurzi po městě.",
-    ua: "Завтра в нас екскурсія містом.",
+    ua: "Завтра у нас екскурсія містом.",
     ru: "Завтра у нас экскурсия по городу.",
     tokens: ["Zítra", "máme", "exkurzi", "po", "městě", "."],
   },
@@ -379,21 +379,21 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("hlava", "a1-16")]: {
     sk: "Dnes mě bolí hlava.",
-    ua: "Сьогодні в мене болить голова.",
+    ua: "Сьогодні у мене болить голова.",
     ru: "Сегодня у меня болит голова.",
     tokens: ["Dnes", "mě", "bolí", "hlava", "."],
   },
 
   [phraseKey("zub", "a1-16")]: {
     sk: "Ten zub je už lepší.",
-    ua: "Той зуб уже кращий.",
-    ru: "Тот зуб уже лучше.",
+    ua: "Цьому зубу вже краще.",
+    ru: "Этому зубу уже лучше.",
     tokens: ["Ten", "zub", "je", "už", "lepší", "."],
   },
 
   [phraseKey("žaludek", "a1-16")]: {
     sk: "Po tom jídle mě bolel žaludek.",
-    ua: "Після тієї їжі в мене болів шлунок.",
+    ua: "Після тієї їжі у мене болів шлунок.",
     ru: "После той еды у меня болел желудок.",
     tokens: ["Po", "tom", "jídle", "mě", "bolel", "žaludek", "."],
   },
@@ -421,7 +421,7 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("zdravý", "a1-16")]: {
     sk: "Chci být zdravý a silný.",
-    ua: "Я хочу бути здоровий і сильний.",
+    ua: "Я хочу бути здоровим і сильним.",
     ru: "Я хочу быть здоровым и сильным.",
     tokens: ["Chci", "být", "zdravý", "a", "silný", "."],
   },
@@ -560,8 +560,8 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("nesouhlasit", "a1-18")]: {
     sk: "Nemusíš hned nesouhlasit.",
-    ua: "Тобі не треба одразу не погоджуватися.",
-    ru: "Тебе не нужно сразу не соглашаться.",
+    ua: "Тобі не треба одразу заперечувати.",
+    ru: "Тебе не нужно сразу возражать.",
     tokens: ["Nemusíš", "hned", "nesouhlasit", "."],
   },
 
@@ -619,7 +619,7 @@ export const CS_A1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("internet", "a1-19")]: {
     sk: "Doma nám nejde internet.",
-    ua: "Удома в нас не працює інтернет.",
+    ua: "Удома у нас не працює інтернет.",
     ru: "Дома у нас не работает интернет.",
     tokens: ["Doma", "nám", "nejde", "internet", "."],
   },

@@ -327,8 +327,8 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("frustrace", "b1-25")]: {
     sk: "Dlouhé čekání v něm vyvolalo frustraci.",
-    ua: "Довге очікування викликало в нього фрустрацію.",
-    ru: "Долгое ожидание вызвало у него фрустрацию.",
+    ua: "Довге очікування викликало в нього роздратування.",
+    ru: "Долгое ожидание вызвало у него раздражение.",
     tokens: ["Dlouhé", "čekání", "v", "něm", "vyvolalo", "frustraci", "."],
   },
 
@@ -363,7 +363,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("vyčerpání", "b1-25")]: {
     sk: "Po několika dnech bez odpočinku přišlo vyčerpání.",
     ua: "Після кількох днів без відпочинку настало виснаження.",
-    ru: "После нескольких дней без отдыха наступило истощение.",
+    ru: "После нескольких дней без отдыха наступила сильная усталость.",
     tokens: ["Po", "několika", "dnech", "bez", "odpočinku", "přišlo", "vyčerpání", "."],
   },
 
@@ -421,8 +421,8 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("spolužití", "b1-26")]: {
     sk: "Spolužití různých kultur může být obohacující.",
-    ua: "Співжиття різних культур може бути збагачувальним.",
-    ru: "Сосуществование разных культур может быть обогащающим.",
+    ua: "Співжиття різних культур може збагачувати.",
+    ru: "Сосуществование разных культур может обогащать.",
     tokens: ["Spolužití", "různých", "kultur", "může", "být", "obohacující", "."],
   },
 
@@ -466,7 +466,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("zakázané", "b1-27")]: {
     sk: "V tomto prostoru je kouření zakázané.",
-    ua: "У цьому просторі куріння заборонене.",
+    ua: "У цьому приміщенні куріння заборонене.",
     ru: "В этом помещении курение запрещено.",
     tokens: ["V", "tomto", "prostoru", "je", "kouření", "zakázané", "."],
   },
@@ -547,7 +547,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("nakonec", "b1-28")]: {
     sk: "Nakonec všechno dopadlo dobře.",
     ua: "Врешті все закінчилося добре.",
-    ru: "В конце всё закончилось хорошо.",
+    ru: "В итоге всё закончилось хорошо.",
     tokens: ["Nakonec", "všechno", "dopadlo", "dobře", "."],
   },
 
@@ -665,7 +665,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("jestli tomu správně rozumím", "b1-30")]: {
     sk: "Jestli tomu správně rozumím, chcete změnit termín.",
     ua: "Якщо я правильно розумію, ви хочете змінити термін.",
-    ru: "Если я правильно понимаю, вы хотите изменить срок.",
+    ru: "Если я правильно понимаю, вы хотите изменить дату.",
     tokens: ["Jestli", "tomu", "správně", "rozumím", ",", "chcete", "změnit", "termín", "."],
   },
 
@@ -678,7 +678,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("na druhé straně", "b1-30")]: {
     sk: "Na druhé straně chápu i jeho pohled.",
-    ua: "З іншого боку, я розумію і його погляд.",
+    ua: "З іншого боку, я розумію і його точку зору.",
     ru: "С другой стороны, я понимаю и его точку зрения.",
     tokens: ["Na", "druhé", "straně", "chápu", "i", "jeho", "pohled", "."],
   },

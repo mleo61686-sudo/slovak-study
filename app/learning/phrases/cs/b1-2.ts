@@ -80,8 +80,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
   // =========================
   [phraseKey("přechodný pobyt", "b1-12")]: {
     sk: "Musím si prodloužit přechodný pobyt.",
-    ua: "Мені треба продовжити тимчасове проживання.",
-    ru: "Мне нужно продлить временное проживание.",
+    ua: "Мені треба продовжити тимчасовий дозвіл на проживання.",
+    ru: "Мне нужно продлить временный вид на жительство.",
     tokens: ["Musím", "si", "prodloužit", "přechodný", "pobyt", "."],
   },
 
@@ -122,7 +122,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("oprávnění", "b1-12")]: {
     sk: "K této činnosti potřebujete zvláštní oprávnění.",
-    ua: "Для цієї діяльності потрібне спеціальне повноваження.",
+    ua: "Для цієї діяльності потрібен спеціальний дозвіл.",
     ru: "Для этой деятельности нужно специальное разрешение.",
     tokens: ["K", "této", "činnosti", "potřebujete", "zvláštní", "oprávnění", "."],
   },
@@ -216,8 +216,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("požadavek", "b1-13")]: {
     sk: "Váš požadavek jsme už předali dál.",
-    ua: "Ваш запит ми вже передали далі.",
-    ru: "Ваш запрос мы уже передали дальше.",
+    ua: "Ваш запит ми вже передали далі на розгляд.",
+    ru: "Ваш запрос мы уже передали дальше на рассмотрение.",
     tokens: ["Váš", "požadavek", "jsme", "už", "předali", "dál", "."],
   },
 
@@ -348,8 +348,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("zlepšit výkon", "b1-15")]: {
     sk: "Chce zlepšit výkon pravidelným tréninkem.",
-    ua: "Він хоче покращити результат регулярними тренуваннями.",
-    ru: "Он хочет улучшить результат регулярными тренировками.",
+    ua: "Він хоче покращити свої результати регулярними тренуваннями.",
+    ru: "Он хочет улучшить свои результаты регулярными тренировками.",
     tokens: ["Chce", "zlepšit", "výkon", "pravidelným", "tréninkem", "."],
   },
 
@@ -379,8 +379,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("recenze", "b1-16")]: {
     sk: "Před návštěvou jsem si přečetl recenze.",
-    ua: "Перед візитом я прочитав рецензії.",
-    ru: "Перед посещением я прочитал рецензии.",
+    ua: "Перед візитом я прочитав відгуки.",
+    ru: "Перед посещением я прочитал отзывы.",
     tokens: ["Před", "návštěvou", "jsem", "si", "přečetl", "recenze", "."],
   },
 
@@ -459,8 +459,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("výhra", "b1-17")]: {
     sk: "Po dlouhé době přišla zasloužená výhra.",
-    ua: "Після довгого часу прийшла заслужена перемога.",
-    ru: "После долгого времени пришла заслуженная победа.",
+    ua: "Після тривалої перерви прийшла заслужена перемога.",
+    ru: "После долгого перерыва пришла заслуженная победа.",
     tokens: ["Po", "dlouhé", "době", "přišla", "zasloužená", "výhra", "."],
   },
 
@@ -473,8 +473,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("rozhodčí", "b1-17")]: {
     sk: "Rozhodčí odpískal faul hned na začátku.",
-    ua: "Суддя свиснув фол уже на початку.",
-    ru: "Судья свистнул фол уже в начале.",
+    ua: "Суддя зафіксував фол уже на початку.",
+    ru: "Судья зафиксировал фол уже в начале.",
     tokens: ["Rozhodčí", "odpískal", "faul", "hned", "na", "začátku", "."],
   },
 
@@ -487,8 +487,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("divák", "b1-17")]: {
     sk: "Každý divák sledoval zápas s napětím.",
-    ua: "Кожен глядач дивився матч із напругою.",
-    ru: "Каждый зритель смотрел матч с напряжением.",
+    ua: "Кожен глядач дивився матч із хвилюванням.",
+    ru: "Каждый зритель смотрел матч с волнением.",
     tokens: ["Každý", "divák", "sledoval", "zápas", "s", "napětím", "."],
   },
 
@@ -574,7 +574,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("vnitrozemí", "b1-18")]: {
     sk: "Ve vnitrozemí bývá chladněji než u moře.",
-    ua: "У внутрішній території буває холодніше, ніж біля моря.",
+    ua: "У внутрішніх районах буває холодніше, ніж біля моря.",
     ru: "Во внутренних районах бывает холоднее, чем у моря.",
     tokens: ["Ve", "vnitrozemí", "bývá", "chladněji", "než", "u", "moře", "."],
   },
@@ -692,8 +692,8 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("parlament", "b1-20")]: {
     sk: "O návrhu bude rozhodovat parlament.",
-    ua: "Про пропозицію вирішуватиме парламент.",
-    ru: "О предложении будет решать парламент.",
+    ua: "Щодо цієї пропозиції вирішуватиме парламент.",
+    ru: "По этому предложению будет решать парламент.",
     tokens: ["O", "návrhu", "bude", "rozhodovat", "parlament", "."],
   },
 

@@ -7,10 +7,10 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
   // =========================
   [phraseKey("cestovní řád", "a1-6")]: {
     sk: "Podívám se do cestovního řádu.",
-    ua: "Я подивлюся в розклад.",
-    ru: "Я посмотрю в расписание.",
-    uaTokens: ["Я", "подивлюся", "в", "розклад", "."],
-    ruTokens: ["Я", "посмотрю", "в", "расписание", "."],
+    ua: "Я подивлюся розклад.",
+    ru: "Я посмотрю расписание.",
+    uaTokens: ["Я", "подивлюся", "розклад", "."],
+    ruTokens: ["Я", "посмотрю", "расписание", "."],
     extraUaTokens: ["потягів", "пізніше", "уважно"],
     extraRuTokens: ["поездов", "позже", "внимательно"],
   },
@@ -243,9 +243,9 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
   [phraseKey("porada", "a1-8")]: {
     sk: "Ráno máme krátkou poradu.",
-    ua: "Вранці в нас коротка нарада.",
+    ua: "Вранці у нас коротка нарада.",
     ru: "Утром у нас короткое совещание.",
-    uaTokens: ["Вранці", "в", "нас", "коротка", "нарада", "."],
+    uaTokens: ["Вранці", "у", "нас", "коротка", "нарада", "."],
     ruTokens: ["Утром", "у", "нас", "короткое", "совещание", "."],
     extraUaTokens: ["довга", "зустріч", "сьогодні"],
     extraRuTokens: ["долгое", "собрание", "сегодня"],
@@ -263,9 +263,9 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
   [phraseKey("hotovo", "a1-8")]: {
     sk: "Už je to hotovo.",
-    ua: "Уже готово.",
+    ua: "Вже готово.",
     ru: "Уже готово.",
-    uaTokens: ["Уже", "готово", "."],
+    uaTokens: ["Вже", "готово", "."],
     ruTokens: ["Уже", "готово", "."],
     extraUaTokens: ["майже", "ще", "не"],
     extraRuTokens: ["почти", "ещё", "не"],
@@ -283,9 +283,9 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
   [phraseKey("opravit", "a1-8")]: {
     sk: "Technik přijde stroj opravit.",
-    ua: "Технік прийде полагодити машину.",
+    ua: "Технік прийде полагодити верстат.",
     ru: "Техник придёт починить станок.",
-    uaTokens: ["Технік", "прийде", "полагодити", "машину", "."],
+    uaTokens: ["Технік", "прийде", "полагодити", "верстат", "."],
     ruTokens: ["Техник", "придёт", "починить", "станок", "."],
     extraUaTokens: ["завтра", "пізніше", "цей"],
     extraRuTokens: ["завтра", "позже", "этот"],
@@ -396,10 +396,10 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
   [phraseKey("těšit se", "a1-9")]: {
     sk: "Těším se na víkend.",
-    ua: "Я з радістю чекаю вихідних.",
-    ru: "Я с радостью жду выходных.",
-    uaTokens: ["Я", "з", "радістю", "чекаю", "вихідних", "."],
-    ruTokens: ["Я", "с", "радостью", "жду", "выходных", "."],
+    ua: "Я з нетерпінням чекаю вихідних.",
+    ru: "Я с нетерпением жду выходных.",
+    uaTokens: ["Я", "з", "нетерпінням", "чекаю", "вихідних", "."],
+    ruTokens: ["Я", "с", "нетерпением", "жду", "выходных", "."],
     extraUaTokens: ["відпустки", "дуже", "вже"],
     extraRuTokens: ["отпуска", "очень", "уже"],
   },
@@ -429,14 +429,13 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
   [phraseKey("jaký", "a1-10")]: {
     sk: "Jaký film máš rád?",
-    ua: "Які фільми тобі подобаються?",
-    ru: "Какие фильмы тебе нравятся?",
-    uaTokens: ["Які", "фільми", "тобі", "подобаються", "?"],
-    ruTokens: ["Какие", "фильмы", "тебе", "нравятся", "?"],
+    ua: "Який фільм тобі подобається?",
+    ru: "Какой фильм тебе нравится?",
+    uaTokens: ["Який", "фільм", "тобі", "подобається", "?"],
+    ruTokens: ["Какой", "фильм", "тебе", "нравится", "?"],
     extraUaTokens: ["книги", "найбільше", "сьогодні"],
     extraRuTokens: ["книги", "больше", "сегодня"],
   },
-
   [phraseKey("čí", "a1-10")]: {
     sk: "Čí je to taška?",
     ua: "Чия це сумка?",
@@ -444,9 +443,8 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     uaTokens: ["Чия", "це", "сумка", "?"],
     ruTokens: ["Чья", "это", "сумка", "?"],
     extraUaTokens: ["валіза", "там", "лежить"],
-    extraRuTokens: ["сумка", "там", "лежит"],
+    extraRuTokens: ["чемодан", "там", "лежит"],
   },
-
   [phraseKey("kde je", "a1-10")]: {
     sk: "Kde je nejbližší banka?",
     ua: "Де найближчий банк?",

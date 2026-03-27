@@ -35,8 +35,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("kauce", "a2-31")]: {
     sk: "Kauce je ve výši jednoho nájmu.",
-    ua: "Кауція становить суму однієї оренди.",
-    ru: "Депозит составляет сумму одной аренды.",
+    ua: "Кауція дорівнює вартості одного місяця оренди.",
+    ru: "Депозит равен стоимости одного месяца аренды.",
     tokens: ["Kauce", "je", "ve", "výši", "jednoho", "nájmu", "."],
   },
 
@@ -80,8 +80,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
   // =========================
   [phraseKey("schopnost", "a2-32")]: {
     sk: "Komunikace je důležitá schopnost.",
-    ua: "Комунікація — важлива здатність.",
-    ru: "Коммуникация — важная способность.",
+    ua: "Комунікація — важлива навичка.",
+    ru: "Коммуникация — важный навык.",
     tokens: ["Komunikace", "je", "důležitá", "schopnost", "."],
   },
 
@@ -122,8 +122,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("spolehlivý", "a2-32")]: {
     sk: "Je to velmi spolehlivý kolega.",
-    ua: "Він дуже надійний колега.",
-    ru: "Он очень надёжный коллега.",
+    ua: "Він — дуже надійний колега.",
+    ru: "Он — очень надёжный коллега.",
     tokens: ["Je", "to", "velmi", "spolehlivý", "kolega", "."],
   },
 
@@ -233,8 +233,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("objednat termín", "a2-34")]: {
     sk: "Potřebuji objednat termín na příští týden.",
-    ua: "Мені потрібно записатися на час на наступний тиждень.",
-    ru: "Мне нужно записаться на время на следующую неделю.",
+    ua: "Мені потрібно домовитися про час на наступний тиждень.",
+    ru: "Мне нужно договориться о времени на следующую неделю.",
     tokens: ["Potřebuji", "objednat", "termín", "na", "příští", "týden", "."],
   },
 
@@ -268,7 +268,7 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("ceník", "a2-34")]: {
     sk: "Ceník mají vyvěšený u vstupu.",
-    ua: "Прайс у них вивішений біля входу.",
+    ua: "Прейскурант у них вивішений біля входу.",
     ru: "Прайс-лист у них вывешен у входа.",
     tokens: ["Ceník", "mají", "vyvěšený", "u", "vstupu", "."],
   },
@@ -289,8 +289,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("záruka", "a2-34")]: {
     sk: "Na tuto opravu je záruka šest měsíců.",
-    ua: "На цей ремонт є гарантія шість місяців.",
-    ru: "На этот ремонт даётся гарантия шесть месяцев.",
+    ua: "На цей ремонт є гарантія на шість місяців.",
+    ru: "На этот ремонт даётся гарантия на шесть месяцев.",
     tokens: ["Na", "tuto", "opravu", "je", "záruka", "šest", "měsíců", "."],
   },
 
@@ -407,8 +407,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("snídaně v ceně", "a2-36")]: {
     sk: "V rezervaci byla snídaně v ceně.",
-    ua: "У бронюванні сніданок був включений.",
-    ru: "В бронировании завтрак был включён.",
+    ua: "У вартість бронювання був включений сніданок.",
+    ru: "В стоимость бронирования был включён завтрак.",
     tokens: ["V", "rezervaci", "byla", "snídaně", "v", "ceně", "."],
   },
 
@@ -445,7 +445,7 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
   // =========================
   [phraseKey("obsluha", "a2-37")]: {
     sk: "Obsluha byla velmi milá.",
-    ua: "Обслуговування було дуже привітне.",
+    ua: "Обслуговування було дуже приємним.",
     ru: "Обслуживание было очень приятным.",
     tokens: ["Obsluha", "byla", "velmi", "milá", "."],
   },
@@ -654,8 +654,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("zlepšit se", "a2-39")]: {
     sk: "Chci se v češtině rychle zlepšit.",
-    ua: "Я хочу швидко покращитися в чеській.",
-    ru: "Я хочу быстро улучшиться в чешском.",
+    ua: "Я хочу швидко покращити свою чеську.",
+    ru: "Я хочу быстро улучшить свой чешский.",
     tokens: ["Chci", "se", "v", "češtině", "rychle", "zlepšit", "."],
   },
 
@@ -706,8 +706,8 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("spropitné", "a2-40")]: {
     sk: "Nechal jsem obsluze spropitné.",
-    ua: "Я залишив чайові обслуговуванню.",
-    ru: "Я оставил чаевые обслуживанию.",
+    ua: "Я залишив чайові персоналу.",
+    ru: "Я оставил чаевые персоналу.",
     tokens: ["Nechal", "jsem", "obsluze", "spropitné", "."],
   },
 

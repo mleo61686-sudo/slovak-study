@@ -7,8 +7,8 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
   // =========================
   [phraseKey("nájem", "a2-1")]: {
     sk: "Nájem za byt je tento měsíc vyšší.",
-    ua: "Оренда за квартиру цього місяця вища.",
-    ru: "Аренда за квартиру в этом месяце выше.",
+    ua: "Орендна плата за квартиру цього місяця вища.",
+    ru: "Плата за аренду квартиры в этом месяце выше.",
     tokens: ["Nájem", "za", "byt", "je", "tento", "měsíc", "vyšší", "."],
   },
 
@@ -63,7 +63,7 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("soused", "a2-1")]: {
     sk: "Náš soused je velmi ochotný.",
-    ua: "Наш сусід дуже охочий допомогти.",
+    ua: "Наш сусід дуже охоче допомагає.",
     ru: "Наш сосед очень отзывчивый.",
     tokens: ["Náš", "soused", "je", "velmi", "ochotný", "."],
   },
@@ -101,7 +101,7 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("bolest v krku", "a2-2")]: {
     sk: "Od rána mám bolest v krku.",
-    ua: "Від ранку в мене болить горло.",
+    ua: "Від ранку у мене болить горло.",
     ru: "С утра у меня болит горло.",
     tokens: ["Od", "rána", "mám", "bolest", "v", "krku", "."],
   },
@@ -226,7 +226,7 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
   // =========================
   [phraseKey("pohovor", "a2-4")]: {
     sk: "Příští týden mám pracovní pohovor.",
-    ua: "Наступного тижня в мене співбесіда.",
+    ua: "Наступного тижня у мене співбесіда.",
     ru: "На следующей неделе у меня собеседование.",
     tokens: ["Příští", "týden", "mám", "pracovní", "pohovor", "."],
   },
@@ -306,8 +306,8 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("ubytování", "a2-5")]: {
     sk: "Hledáme levné ubytování v centru.",
-    ua: "Ми шукаємо недороге проживання в центрі.",
-    ru: "Мы ищем недорогое проживание в центре.",
+    ua: "Ми шукаємо недороге житло в центрі.",
+    ru: "Мы ищем недорогое жильё в центре.",
     tokens: ["Hledáme", "levné", "ubytování", "v", "centru", "."],
   },
 
@@ -421,14 +421,14 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("trvalý příkaz", "a2-6")]: {
     sk: "Nájem platím přes trvalý příkaz.",
-    ua: "Оренду я плачу через автоплатіж.",
-    ru: "Аренду я плачу через постоянное поручение.",
+    ua: "Я плачу оренду через постійне доручення.",
+    ru: "Я плачу аренду через постоянное поручение.",
     tokens: ["Nájem", "platím", "přes", "trvalý", "příkaz", "."],
   },
 
   [phraseKey("úrok", "a2-6")]: {
     sk: "Banka zvýšila úrok na spoření.",
-    ua: "Банк підвищив відсоток на заощадження.",
+    ua: "Банк підвищив відсоткову ставку на заощадження.",
     ru: "Банк повысил процент по сбережениям.",
     tokens: ["Banka", "zvýšila", "úrok", "na", "spoření", "."],
   },
@@ -640,7 +640,7 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("výmena", "a2-9")]: {
     sk: "Možná bude lepší výměna zboží.",
-    ua: "Можливо, кращим буде обмін товару.",
+    ua: "Можливо, кращим варіантом буде обмін товару.",
     ru: "Возможно, лучше будет обмен товара.",
     tokens: ["Možná", "bude", "lepší", "výměna", "zboží", "."],
   },

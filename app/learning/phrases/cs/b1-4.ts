@@ -50,7 +50,7 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("Švédsko", "b1-31")]: {
     sk: "Švédsko patří mezi severské státy.",
     ua: "Швеція належить до скандинавських країн.",
-    ru: "Швеция относится к северным странам.",
+    ru: "Швеция относится к скандинавским странам.",
     tokens: ["Švédsko", "patří", "mezi", "severské", "státy", "."],
   },
 
@@ -108,7 +108,7 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("církev", "b1-32")]: {
     sk: "V neděli šli spolu do církve.",
-    ua: "У неділю вони разом пішли до церкви.",
+    ua: "У неділю вони разом пішли до храму.",
     ru: "В воскресенье они вместе пошли в церковь.",
     tokens: ["V", "neděli", "šli", "spolu", "do", "církve", "."],
   },
@@ -123,7 +123,7 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("víra", "b1-32")]: {
     sk: "Víra mu pomáhala překonat těžké chvíle.",
     ua: "Віра допомагала йому долати важкі моменти.",
-    ru: "Вера помогала ему преодолевать трудные моменты.",
+    ru: "Вера помогала ему преодолевать трудные времена.",
     tokens: ["Víra", "mu", "pomáhala", "překonat", "těžké", "chvíle", "."],
   },
 
@@ -188,7 +188,7 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("poznámka", "b1-33")]: {
     sk: "Do sešitu jsem si napsal krátkou poznámku.",
-    ua: "У зошит я записав коротку примітку.",
+    ua: "У зошит я записав коротку нотатку.",
     ru: "В тетрадь я записал короткую заметку.",
     tokens: ["Do", "sešitu", "jsem", "si", "napsal", "krátkou", "poznámku", "."],
   },
@@ -247,8 +247,8 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("být zklamaný", "b1-34")]: {
     sk: "Je normální být někdy zklamaný.",
-    ua: "Нормально іноді розчаровуватися.",
-    ru: "Нормально иногда разочаровываться.",
+    ua: "Нормально іноді бути розчарованим.",
+    ru: "Нормально иногда быть разочарованным.",
     tokens: ["Je", "normální", "být", "někdy", "zklamaný", "."],
   },
 
@@ -262,7 +262,7 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("seberozvoj", "b1-34")]: {
     sk: "V poslední době se hodně věnuje seberozvoji.",
     ua: "Останнім часом він багато уваги приділяє саморозвитку.",
-    ru: "В последнее время он много занимается саморазвитием.",
+    ru: "В последнее время он много внимания уделяет саморазвитию.",
     tokens: ["V", "poslední", "době", "se", "hodně", "věnuje", "seberozvoji", "."],
   },
 
@@ -282,7 +282,7 @@ export const CS_B1_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("odolnost", "b1-34")]: {
     sk: "Psychická odolnost se dá postupně posilovat.",
-    ua: "Психічну стійкість можна поступово зміцнювати.",
+    ua: "Психологічну стійкість можна поступово зміцнювати.",
     ru: "Психологическую устойчивость можно постепенно укреплять.",
     tokens: ["Psychická", "odolnost", "se", "dá", "postupně", "posilovat", "."],
   },
