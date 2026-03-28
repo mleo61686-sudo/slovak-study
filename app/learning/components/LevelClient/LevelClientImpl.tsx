@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SpeakButton from "@/app/components/SpeakButton";
@@ -89,12 +89,12 @@ function getNextLevelId(levelId: string) {
 }
 
 const EXERCISES: ExerciseDef[] = [
-//  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
-//  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
-//  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
-//  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-//  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
-//  { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
+  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
+  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
+  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
+  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
+  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
+  { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
   { kind: "buildUaSentence", title: "Збери переклад", mode: "perWord" },
 ];
 
@@ -138,6 +138,8 @@ export default function LevelClient({
   const t = UI[uiLangFrom(lang)];
 
   const [savingNext, setSavingNext] = useState(false);
+  const finishingRef = useRef(false);
+
   const [canGoNextNow, setCanGoNextNow] = useState<boolean>(canGoNext);
   const [lockedReasonNow, setLockedReasonNow] = useState<string | undefined>(
     lockedReason
@@ -241,7 +243,7 @@ export default function LevelClient({
             <div className="hidden justify-center lg:flex">
               <button
                 disabled={isFirst}
-                onClick={() => setWordIndex((i) => i - 1)}
+                onClick={() => setWordIndex((i) => Math.max(0, i - 1))}
                 className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {t.back}
@@ -313,7 +315,9 @@ export default function LevelClient({
                 </button>
               ) : (
                 <button
-                  onClick={() => setWordIndex((i) => i + 1)}
+                  onClick={() =>
+                    setWordIndex((i) => Math.min(words.length - 1, i + 1))
+                  }
                   className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50"
                 >
                   {t.next}
@@ -325,7 +329,7 @@ export default function LevelClient({
           <div className="mt-2 flex items-center justify-between gap-3 lg:hidden">
             <button
               disabled={isFirst}
-              onClick={() => setWordIndex((i) => i - 1)}
+              onClick={() => setWordIndex((i) => Math.max(0, i - 1))}
               className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t.back}
@@ -347,7 +351,9 @@ export default function LevelClient({
               </button>
             ) : (
               <button
-                onClick={() => setWordIndex((i) => i + 1)}
+                onClick={() =>
+                  setWordIndex((i) => Math.min(words.length - 1, i + 1))
+                }
                 className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
               >
                 {t.next}
@@ -363,6 +369,9 @@ export default function LevelClient({
   const currentWord = words[wordIndex];
 
   function finishLesson(finalScore: number) {
+    if (finishingRef.current) return;
+    finishingRef.current = true;
+
     setFinished(true);
 
     try {
@@ -393,8 +402,6 @@ export default function LevelClient({
           } else {
             setCanGoNextNow(canGoNext || freeCanGoNext);
           }
-
-          router.refresh();
         }
       } catch (e) {
         console.error("Save server progress error", e);
@@ -460,6 +467,7 @@ export default function LevelClient({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => {
+              finishingRef.current = false;
               setMode("learn");
               setExerciseIndex(0);
               setWordIndex(0);

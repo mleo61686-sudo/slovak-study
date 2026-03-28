@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { shuffle, trWord } from "../helpers";
@@ -56,10 +56,11 @@ export default function MatchColumns({
     null
   );
 
-  const MAX_WRONG = 3;
+  const [isResolving, setIsResolving] = useState(false);
 
-  // 🔒 захист від подвійного спрацювання
-  const resolvingRef = useRef(false);
+  const timeoutRef = useRef<number | null>(null);
+
+  const MAX_WRONG = 3;
 
   useEffect(() => {
     setSelectedLeft(null);
@@ -70,15 +71,30 @@ export default function MatchColumns({
     setWrongCount(0);
     setShakeWrong(false);
     setWrongPair(null);
-    resolvingRef.current = false;
-  }, [words]);
+    setIsResolving(false);
+
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, [words, lang]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const doneAll = matchedLeft.size >= words.length;
   const doneByWrong = wrongCount >= MAX_WRONG;
   const locked = doneAll || doneByWrong;
 
   function clearSelection() {
-    if (locked) return;
+    if (locked || isResolving) return;
+
     setSelectedLeft(null);
     setSelectedRight(null);
     setWrongPair(null);
@@ -87,10 +103,10 @@ export default function MatchColumns({
 
   useEffect(() => {
     if (locked) return;
+    if (isResolving) return;
     if (!selectedLeft || !selectedRight) return;
 
-    if (resolvingRef.current) return; // ✅ не даємо обробити двічі
-    resolvingRef.current = true;
+    setIsResolving(true);
 
     const correct = mapSkToTr.get(selectedLeft) === selectedRight;
 
@@ -102,7 +118,7 @@ export default function MatchColumns({
       setSelectedRight(null);
       setWrongPair(null);
       setShakeWrong(false);
-      resolvingRef.current = false;
+      setIsResolving(false);
       return;
     }
 
@@ -110,19 +126,15 @@ export default function MatchColumns({
     setWrongPair({ l: selectedLeft, r: selectedRight });
     setShakeWrong(true);
 
-    const tm = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       setSelectedLeft(null);
       setSelectedRight(null);
       setWrongPair(null);
       setShakeWrong(false);
-      resolvingRef.current = false;
+      setIsResolving(false);
+      timeoutRef.current = null;
     }, 700);
-
-    return () => {
-      clearTimeout(tm);
-      resolvingRef.current = false;
-    };
-  }, [selectedLeft, selectedRight, mapSkToTr, locked]);
+  }, [selectedLeft, selectedRight, mapSkToTr, locked, isResolving]);
 
   function leftBtnClass(sk: string) {
     const isMatched = matchedLeft.has(sk);
@@ -131,7 +143,7 @@ export default function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched
+      locked || isMatched || isResolving
         ? "opacity-50 cursor-not-allowed bg-slate-50"
         : "hover:bg-slate-50",
       isSelected ? "border-green-600 ring-4 ring-green-200 bg-green-50" : "",
@@ -146,7 +158,7 @@ export default function MatchColumns({
 
     return [
       "w-full text-left rounded-xl border px-4 py-3 transition",
-      locked || isMatched
+      locked || isMatched || isResolving
         ? "opacity-50 cursor-not-allowed bg-slate-50"
         : "hover:bg-slate-50",
       isSelected ? "border-black ring-2 ring-black/10 bg-slate-50" : "",
@@ -168,13 +180,13 @@ export default function MatchColumns({
           </div>
 
           {doneByWrong && (
-            <div className="text-sm text-red-600 font-semibold mt-1">
+            <div className="mt-1 text-sm font-semibold text-red-600">
               {t.limitReached}
             </div>
           )}
 
           {doneAll && (
-            <div className="text-sm text-green-700 font-semibold mt-1">
+            <div className="mt-1 text-sm font-semibold text-green-700">
               {t.allDone}
             </div>
           )}
@@ -183,8 +195,8 @@ export default function MatchColumns({
         <div className="flex gap-2">
           <button
             onClick={clearSelection}
-            disabled={locked}
-            className="px-4 py-2 border rounded-xl disabled:opacity-50"
+            disabled={locked || isResolving}
+            className="rounded-xl border px-4 py-2 disabled:opacity-50"
           >
             {t.clear}
           </button>
@@ -192,7 +204,7 @@ export default function MatchColumns({
           <button
             disabled={!canNext}
             onClick={() => onDone(correctCount)}
-            className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+            className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
           >
             {t.next}
           </button>
@@ -209,9 +221,9 @@ export default function MatchColumns({
           {left.map((sk) => (
             <button
               key={sk}
-              disabled={locked || matchedLeft.has(sk)}
+              disabled={locked || matchedLeft.has(sk) || isResolving}
               onClick={() => {
-                if (locked) return;
+                if (locked || isResolving) return;
                 setSelectedLeft(sk);
               }}
               className={leftBtnClass(sk)}
@@ -225,9 +237,9 @@ export default function MatchColumns({
           {right.map((r) => (
             <button
               key={r}
-              disabled={locked || matchedRight.has(r)}
+              disabled={locked || matchedRight.has(r) || isResolving}
               onClick={() => {
-                if (locked) return;
+                if (locked || isResolving) return;
                 setSelectedRight(r);
               }}
               className={rightBtnClass(r)}
@@ -240,11 +252,21 @@ export default function MatchColumns({
 
       <style jsx>{`
         @keyframes shake {
-          0% { transform: translateX(0); }
-          25% { transform: translateX(-6px); }
-          50% { transform: translateX(6px); }
-          75% { transform: translateX(-6px); }
-          100% { transform: translateX(0); }
+          0% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-6px);
+          }
+          50% {
+            transform: translateX(6px);
+          }
+          75% {
+            transform: translateX(-6px);
+          }
+          100% {
+            transform: translateX(0);
+          }
         }
       `}</style>
     </div>

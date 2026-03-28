@@ -75,17 +75,18 @@ export default function BuildUaSentence({
     () => [...item.answerTokens],
     [item.answerTokens.join("|")]
   );
+
   const validAnswers = useMemo(
     () => item.validAnswers.map((tokens) => [...tokens]),
     [JSON.stringify(item.validAnswers)]
   );
 
-  const allTokens = useMemo(
+  const initialTokens = useMemo(
     () => shuffle([...item.answerTokens, ...item.extraTokens]),
     [item.answerTokens.join("|"), item.extraTokens.join("|")]
   );
 
-  const [available, setAvailable] = useState<string[]>(allTokens);
+  const [available, setAvailable] = useState<string[]>(initialTokens);
   const [picked, setPicked] = useState<string[]>([]);
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
 
@@ -97,22 +98,24 @@ export default function BuildUaSentence({
 
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
+
     setPicked((p) => [...p, t]);
     setAvailable((a) => a.filter((_, i) => i !== idx));
   }
 
   function unpickLast() {
     if (status !== "idle") return;
-    setPicked((p) => {
-      if (p.length === 0) return p;
-      const last = p[p.length - 1];
-      setAvailable((a) => [...a, last]);
-      return p.slice(0, -1);
-    });
+    if (picked.length === 0) return;
+
+    const last = picked[picked.length - 1];
+
+    setPicked((p) => p.slice(0, -1));
+    setAvailable((a) => [...a, last]);
   }
 
   function clear() {
     if (status !== "idle") return;
+
     setPicked([]);
     setAvailable(shuffle([...item.answerTokens, ...item.extraTokens]));
   }
@@ -133,6 +136,7 @@ export default function BuildUaSentence({
     setStatus(ok ? "correct" : "wrong");
     await playLocal(item.sk, "phrase", courseId);
   }
+
   function next() {
     onNext(status === "correct");
   }

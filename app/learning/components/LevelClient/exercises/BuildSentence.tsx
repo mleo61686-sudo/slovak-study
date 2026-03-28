@@ -84,22 +84,24 @@ export default function BuildSentence({
 
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
+
     setPicked((p) => [...p, t]);
     setAvailable((a) => a.filter((_, i) => i !== idx));
   }
 
   function unpickLast() {
     if (status !== "idle") return;
-    setPicked((p) => {
-      if (p.length === 0) return p;
-      const last = p[p.length - 1];
-      setAvailable((a) => [...a, last]);
-      return p.slice(0, -1);
-    });
+    if (picked.length === 0) return;
+
+    const last = picked[picked.length - 1];
+
+    setPicked((p) => p.slice(0, -1));
+    setAvailable((a) => [...a, last]);
   }
 
   function clear() {
     if (status !== "idle") return;
+
     setPicked([]);
     setAvailable(shuffle(baseTokens));
   }
@@ -131,18 +133,18 @@ export default function BuildSentence({
 
           <div className="text-sm text-slate-500">
             {ui.targetLabel}:{" "}
-            <span className="text-slate-800 font-medium">{phrase.target}</span>
+            <span className="font-medium text-slate-800">{phrase.target}</span>
           </div>
 
           <div className="mt-2">
-            <button className="text-xs px-3 py-1 border rounded-lg text-slate-600 hover:bg-slate-50">
+            <button className="rounded-lg border px-3 py-1 text-xs text-slate-600 hover:bg-slate-50">
               {ui.reportBug}
             </button>
           </div>
         </div>
 
         <div className="flex gap-2">
-          <button onClick={clear} className="px-4 py-2 border rounded-xl">
+          <button onClick={clear} className="rounded-xl border px-4 py-2">
             {ui.clear}
           </button>
 
@@ -150,19 +152,22 @@ export default function BuildSentence({
             <button
               onClick={check}
               disabled={picked.length === 0}
-              className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+              className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
             >
               {ui.check}
             </button>
           ) : (
-            <button onClick={next} className="px-4 py-2 rounded-xl bg-black text-white">
+            <button
+              onClick={next}
+              className="rounded-xl bg-black px-4 py-2 text-white"
+            >
               {ui.next}
             </button>
           )}
         </div>
       </div>
 
-      <div className="rounded-2xl border bg-white p-4 space-y-2">
+      <div className="space-y-2 rounded-2xl border bg-white p-4">
         <div className="text-sm text-slate-500">{ui.yourSentence}</div>
         <div className="text-lg">{picked.length ? builtPretty : ui.dash}</div>
         <div className="text-sm text-slate-500">{ui.hint}</div>
@@ -173,7 +178,7 @@ export default function BuildSentence({
           <button
             key={`${t}-${idx}`}
             onClick={() => pickToken(t, idx)}
-            className="px-3 py-2 border rounded-xl hover:bg-slate-50"
+            className="rounded-xl border px-3 py-2 hover:bg-slate-50"
           >
             {t}
           </button>
@@ -184,30 +189,30 @@ export default function BuildSentence({
         <button
           onClick={unpickLast}
           disabled={picked.length === 0 || status !== "idle"}
-          className="px-3 py-2 border rounded-xl disabled:opacity-50"
+          className="rounded-xl border px-3 py-2 disabled:opacity-50"
         >
           {ui.back}
         </button>
       </div>
 
       {status === "correct" && (
-        <div className="font-semibold text-green-600 flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 font-semibold text-green-600">
           <span>{ui.correct}</span>
 
-          <button onClick={replay} className="px-3 py-2 border rounded-xl">
+          <button onClick={replay} className="rounded-xl border px-3 py-2">
             {ui.listenAgain}
           </button>
         </div>
       )}
 
       {status === "wrong" && (
-        <div className="font-semibold text-red-600 space-y-2">
+        <div className="space-y-2 font-semibold text-red-600">
           <div>
             {ui.wrongPrefix} <b>{tokensToSentence(baseTokens)}</b>
           </div>
 
           <div className="flex gap-2">
-            <button onClick={replay} className="px-3 py-2 border rounded-xl">
+            <button onClick={replay} className="rounded-xl border px-3 py-2">
               {ui.listenAgain}
             </button>
           </div>
