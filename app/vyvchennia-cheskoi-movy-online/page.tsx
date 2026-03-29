@@ -99,8 +99,8 @@ export default function Page() {
             Почати навчання
           </Link>
 
-          <Link href="/learning/a0" className="rounded-xl border px-4 py-2">
-            Почати з A0 →
+          <Link href="/learning" className="rounded-xl border px-4 py-2">
+            Усі курси і рівні →
           </Link>
 
           <Link href="/dictionary" className="rounded-xl border px-4 py-2">
@@ -166,10 +166,10 @@ export default function Page() {
 
         <div className="pt-2">
           <Link
-            href="/learning/a0"
+            href="/learning"
             className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
           >
-            Перейти до A0 →
+            Перейти до курсів →
           </Link>
         </div>
       </section>

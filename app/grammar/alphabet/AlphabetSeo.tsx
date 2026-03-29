@@ -201,7 +201,7 @@ const CONTENT = {
       nextLinks: [
         { href: "/grammar/verbs-present", label: "Глаголы настоящего времени" },
         { href: "/grammar/cases", label: "Падежи в словацком языке" },
-        { href: "/learning/a0", label: "Уровень A0 — базовые слова" },
+        { href: "/learning", label: "Все курсы и уровни" },
       ],
       outro:
         "Ниже на странице ты можешь пройти упражнения, послушать произношение и закрепить знания на практике.",

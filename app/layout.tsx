@@ -151,19 +151,46 @@ export default function RootLayout({
                 aria-label="Footer"
                 className="grid grid-cols-2 gap-x-6 gap-y-2 text-left sm:flex sm:flex-wrap sm:items-center sm:justify-end"
               >
-                <a className="hover:text-slate-900 hover:underline" href="/learn">
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/learning"
+                >
                   Курси
                 </a>
-                <a className="hover:text-slate-900 hover:underline" href="/grammar">
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/learn-slovak"
+                >
+                  Learn Slovak
+                </a>
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/learn-czech"
+                >
+                  Learn Czech
+                </a>
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/grammar"
+                >
                   Граматика
                 </a>
-                <a className="hover:text-slate-900 hover:underline" href="/dictionary">
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/dictionary"
+                >
                   Словник
                 </a>
-                <a className="hover:text-slate-900 hover:underline" href="/practice">
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/practice"
+                >
                   Тренажер
                 </a>
-                <a className="hover:text-slate-900 hover:underline" href="/support">
+                <a
+                  className="hover:text-slate-900 hover:underline"
+                  href="/support"
+                >
                   Підтримка
                 </a>
               </nav>

@@ -21,6 +21,18 @@ const nextConfig: NextConfig = {
         destination: `${SITE}/:path*`,
         permanent: true,
       },
+
+      // ✅ NEW: Redirect legacy SEO pages
+      {
+        source: "/slovak-for-ukrainians",
+        destination: "/learn-slovak",
+        permanent: true,
+      },
+      {
+        source: "/ru/slovak-for-ukrainians",
+        destination: "/learn-slovak",
+        permanent: true,
+      },
     ];
   },
 };

@@ -26,7 +26,26 @@ export const metadata: Metadata = {
 export default function GrammarPage() {
   return (
     <CourseGate>
-      <GrammarClient />
+      <div>
+        <GrammarClient />
+
+        {/* ✅ SEO internal links */}
+        <section className="mt-12 text-center">
+          <h2 className="text-xl font-semibold mb-4">
+            Почни повне навчання мови
+          </h2>
+
+          <div className="flex flex-col gap-2 items-center">
+            <a href="/learn-slovak" className="text-blue-600 hover:underline">
+              🇸🇰 Вивчення словацької мови онлайн
+            </a>
+
+            <a href="/learn-czech" className="text-blue-600 hover:underline">
+              🇨🇿 Вивчення чеської мови онлайн
+            </a>
+          </div>
+        </section>
+      </div>
     </CourseGate>
   );
 }

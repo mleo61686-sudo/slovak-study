@@ -99,8 +99,8 @@ export default function Page() {
             Почати навчання
           </Link>
 
-          <Link className="rounded-xl border px-4 py-2" href="/learning/a0">
-            Почати з A0 →
+          <Link className="rounded-xl border px-4 py-2" href="/learning">
+            Усі курси і рівні →
           </Link>
 
           <Link className="rounded-xl border px-4 py-2" href="/dictionary">
@@ -169,9 +169,9 @@ export default function Page() {
         <div className="pt-2">
           <Link
             className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
-            href="/learning/a0"
+            href="/learning"
           >
-            Перейти до A0 →
+            Перейти до курсів →
           </Link>
         </div>
       </section>
@@ -189,10 +189,10 @@ export default function Page() {
           </p>
 
           <p>
-            Якщо тобі потрібен окремий акцент саме на переїзд, адаптацію та
-            повсякденне життя у Словаччині, подивись також сторінку{" "}
-            <Link href="/slovak-for-ukrainians" className="underline">
-              словацька для українців
+            Якщо тобі потрібен окремий акцент саме на словацькій мові та
+            навчанні з нуля, подивись також сторінку{" "}
+            <Link href="/learn-slovak" className="underline">
+              Learn Slovak
             </Link>
             .
           </p>

@@ -8,18 +8,18 @@ import { SITE_URL } from "@/lib/site";
 import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
-  title: "Вивчення словацької мови по рівнях A0–B2 | Flunio",
+  title: "Курси мов A0–B2 | Flunio",
   description:
-    "Навчання словацької мови онлайн: рівні A0–B2, уроки по 10 слів, вправи та прогрес. Почни з A0.",
+    "Онлайн курси мов у Flunio: словацька та чеська, рівні A0–B2, уроки по 10 слів, вправи та прогрес. Почни навчання системно.",
 
   alternates: {
     canonical: `${SITE_URL}/learning`,
   },
 
   openGraph: {
-    title: "Навчання словацької — рівні A0–B2 | Flunio",
+    title: "Курси мов A0–B2 | Flunio",
     description:
-      "Уроки по рівнях A0–B2, вправи та прогрес. Вивчай словацьку системно.",
+      "Словацька та чеська мови онлайн: рівні A0–B2, уроки, вправи та прогрес в одній платформі.",
     url: `${SITE_URL}/learning`,
     siteName: "Flunio",
     type: "website",
@@ -55,7 +55,26 @@ export default async function LearningPage() {
 
   return (
     <CourseGate>
-      <LearningClient bands={bands} />
+      <div>
+        <LearningClient bands={bands} />
+
+        {/* ✅ SEO internal links */}
+        <section className="mt-12 text-center">
+          <h2 className="text-xl font-semibold mb-4">
+            Вивчай мову повністю
+          </h2>
+
+          <div className="flex flex-col gap-2 items-center">
+            <a href="/learn-slovak" className="text-blue-600 hover:underline">
+              🇸🇰 Словацька мова онлайн
+            </a>
+
+            <a href="/learn-czech" className="text-blue-600 hover:underline">
+              🇨🇿 Чеська мова онлайн
+            </a>
+          </div>
+        </section>
+      </div>
     </CourseGate>
   );
 }
