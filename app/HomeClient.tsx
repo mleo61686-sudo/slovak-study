@@ -73,26 +73,26 @@ const t = {
     popularCardsByCourse: {
       sk: [
         {
-          href: "/vyvchennia-slovatskoi-movy-online",
-          title: "Вивчення словацької онлайн",
-          desc: "Огляд онлайн-курсу словацької: рівні, вправи, словник, граматика та озвучка.",
+          href: "/learn-slovak",
+          title: "🇸🇰 Словацька мова онлайн",
+          desc: "Повний курс A0–B2 з вправами та вимовою",
         },
         {
-          href: "/learn-slovak",
-          title: "Learn Slovak",
-          desc: "Англомовна сторінка про платформу та вивчення словацької онлайн.",
+          href: "/learn-slovak-for-ukrainians",
+          title: "🇸🇰 Словацька для українців",
+          desc: "З перекладом та простим стартом з нуля",
         },
       ],
       cs: [
         {
-          href: "/vyvchennia-cheskoi-movy-online",
-          title: "Вивчення чеської онлайн",
-          desc: "Огляд онлайн-курсу чеської: рівні, вправи, словник, граматика та озвучка.",
+          href: "/learn-czech",
+          title: "🇨🇿 Чеська мова онлайн",
+          desc: "Уроки, словник та граматика в одному місці",
         },
         {
-          href: "/learn-czech",
-          title: "Learn Czech",
-          desc: "Англомовна сторінка про платформу та вивчення чеської онлайн.",
+          href: "/learn-czech-for-ukrainians",
+          title: "🇨🇿 Чеська для українців",
+          desc: "Для життя, роботи та адаптації в Чехії",
         },
       ],
     } satisfies Record<

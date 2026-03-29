@@ -26,11 +26,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // словацька SEO
     `${baseUrl}/learn-slovak`,
+    `${baseUrl}/learn-slovak-for-ukrainians`,
     `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
 
-    // чеська SEO (НОВЕ)
+    // чеська SEO
     `${baseUrl}/learn-czech`,
+    `${baseUrl}/learn-czech-for-ukrainians`,
     `${baseUrl}/vyvchennia-cheskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-cheskoi-movy-online`,
 
