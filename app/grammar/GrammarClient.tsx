@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
+type Lang = "ua" | "ru";
+
 type Topic = {
   id: string;
   title: { ua: string; ru: string };
@@ -21,7 +23,10 @@ const SK_TOPICS: Topic[] = [
   },
   {
     id: "verbs-present",
-    title: { ua: "Дієслова теперішнього часу", ru: "Глаголы настоящего времени" },
+    title: {
+      ua: "Дієслова теперішнього часу",
+      ru: "Глаголы настоящего времени",
+    },
     description: {
       ua: "Як відмінюються дієслова в теперішньому часі.",
       ru: "Как спрягаются глаголы в настоящем времени.",
@@ -56,7 +61,10 @@ const CS_TOPICS: Topic[] = [
   },
   {
     id: "verbs-present",
-    title: { ua: "Дієслова теперішнього часу", ru: "Глаголы настоящего времени" },
+    title: {
+      ua: "Дієслова теперішнього часу",
+      ru: "Глаголы настоящего времени",
+    },
     description: {
       ua: "Як відмінюються дієслова в теперішньому часі.",
       ru: "Как спрягаются глаголы в настоящем времени.",
@@ -80,28 +88,28 @@ const CS_TOPICS: Topic[] = [
   },
 ];
 
+function tr(lang: Lang, ua: string, ru: string) {
+  return lang === "ru" ? ru : ua;
+}
+
 function TopicCard({
   topic,
   lang,
 }: {
   topic: Topic;
-  lang: "ua" | "ru";
+  lang: Lang;
 }) {
-  const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
-
   return (
     <Link
       href={`/grammar/${topic.id}`}
-      className="rounded-2xl border bg-white p-5 shadow-sm transition hover:bg-slate-50"
+      className="block rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:bg-slate-50"
     >
-      <div className="flex items-start justify-between gap-3">
-        <h2 className="text-lg font-semibold">
-          {t(topic.title.ua, topic.title.ru)}
-        </h2>
-      </div>
+      <h2 className="text-lg font-semibold">
+        {tr(lang, topic.title.ua, topic.title.ru)}
+      </h2>
 
-      <p className="mt-1 text-sm text-slate-600">
-        {t(topic.description.ua, topic.description.ru)}
+      <p className="mt-2 text-sm leading-6 text-slate-600">
+        {tr(lang, topic.description.ua, topic.description.ru)}
       </p>
     </Link>
   );
@@ -111,34 +119,37 @@ export default function GrammarClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
-
+  const currentLang: Lang = lang === "ru" ? "ru" : "ua";
   const isCzech = courseId === "cs";
   const topics = isCzech ? CS_TOPICS : SK_TOPICS;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">
-        {isCzech
-          ? t("Граматика CZ", "Грамматика CZ")
-          : t("Граматика SK", "Грамматика SK")}
-      </h1>
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold">
+          {isCzech
+            ? tr(currentLang, "Граматика CZ", "Грамматика CZ")
+            : tr(currentLang, "Граматика SK", "Грамматика SK")}
+        </h1>
 
-      <p className="text-slate-700">
-        {isCzech
-          ? t(
-              "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
-              "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка."
-            )
-          : t(
-              "Обери тему та відкрий урок з прикладами і міні-вправою.",
-              "Выбери тему и открой урок с примерами и мини-упражнением."
-            )}
-      </p>
+        <p className="text-slate-700">
+          {isCzech
+            ? tr(
+                currentLang,
+                "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
+                "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка."
+              )
+            : tr(
+                currentLang,
+                "Обери тему та відкрий урок з прикладами і міні-вправою.",
+                "Выбери тему и открой урок с примерами и мини-упражнением."
+              )}
+        </p>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {topics.map((topic) => (
-          <TopicCard key={topic.id} topic={topic} lang={lang} />
+          <TopicCard key={topic.id} topic={topic} lang={currentLang} />
         ))}
       </div>
     </div>

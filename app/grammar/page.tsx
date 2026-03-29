@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import GrammarClient from "./GrammarClient";
 import CourseGate from "@/app/components/CourseGate";
 
@@ -26,23 +27,28 @@ export const metadata: Metadata = {
 export default function GrammarPage() {
   return (
     <CourseGate>
-      <div>
+      <div className="space-y-12">
         <GrammarClient />
 
-        {/* ✅ SEO internal links */}
-        <section className="mt-12 text-center">
-          <h2 className="text-xl font-semibold mb-4">
+        <section className="text-center">
+          <h2 className="mb-4 text-xl font-semibold">
             Почни повне навчання мови
           </h2>
 
-          <div className="flex flex-col gap-2 items-center">
-            <a href="/learn-slovak" className="text-blue-600 hover:underline">
+          <div className="flex flex-col items-center gap-2">
+            <Link
+              href="/learn-slovak"
+              className="text-blue-600 hover:underline"
+            >
               🇸🇰 Вивчення словацької мови онлайн
-            </a>
+            </Link>
 
-            <a href="/learn-czech" className="text-blue-600 hover:underline">
+            <Link
+              href="/learn-czech"
+              className="text-blue-600 hover:underline"
+            >
               🇨🇿 Вивчення чеської мови онлайн
-            </a>
+            </Link>
           </div>
         </section>
       </div>

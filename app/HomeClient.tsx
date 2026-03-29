@@ -1,17 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 type Lang = "ua" | "ru";
 type SeoCourseId = "sk" | "cs";
-
-const WordsStats = dynamic(() => import("./components/WordsStats"), {
-  ssr: false,
-  loading: () => <WordsStatsSkeleton />,
-});
 
 const t = {
   ua: {
@@ -57,6 +51,12 @@ const t = {
     dictDesc: "Пошук, теми, приклади речень і «в обране».",
     levelsTitle: "Рівні",
     levelsDesc: "Вправи: вибір відповіді, вставити слово, скласти речення.",
+
+    progressTitle: "Твій прогрес",
+    progressDesc:
+      "Повторення слів, SRS та статистика навчання в окремому розділі.",
+    progressCta: "Відкрити прогрес →",
+
     open: "Відкрити →",
     start: "Почати →",
 
@@ -151,6 +151,12 @@ const t = {
     levelsTitle: "Уровни",
     levelsDesc:
       "Упражнения: выбор ответа, вставить слово, составить предложение.",
+
+    progressTitle: "Твой прогресс",
+    progressDesc:
+      "Повторение слов, SRS и статистика обучения в отдельном разделе.",
+    progressCta: "Открыть прогресс →",
+
     open: "Открыть →",
     start: "Начать →",
 
@@ -208,29 +214,6 @@ function StatPill({ k, v }: { k: string; v: string }) {
       <div className="text-sm font-semibold text-slate-900">{k}</div>
       <div className="text-xs text-slate-600">{v}</div>
     </div>
-  );
-}
-
-function WordsStatsSkeleton() {
-  return (
-    <section className="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="animate-pulse space-y-4">
-        <div className="h-6 w-40 rounded bg-slate-200" />
-        <div className="grid grid-cols-2 gap-3">
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-        </div>
-        <div className="h-2 w-full rounded bg-slate-200" />
-        <div className="grid grid-cols-2 gap-3 pt-2">
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -363,7 +346,15 @@ export default function HomeClient({
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
-        <WordsStats />
+        <Link
+          href="/words"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+        >
+          <div className="text-2xl">📊</div>
+          <h2 className="mt-3 text-lg font-semibold">{tr.progressTitle}</h2>
+          <p className="mt-1 text-sm text-slate-700">{tr.progressDesc}</p>
+          <div className="mt-4 text-sm font-semibold">{tr.progressCta}</div>
+        </Link>
 
         <Link
           href="/grammar"
@@ -387,7 +378,7 @@ export default function HomeClient({
 
         <Link
           href="/learning"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50 sm:col-span-3"
         >
           <div className="text-2xl">🏋️</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.levelsTitle}</h2>
