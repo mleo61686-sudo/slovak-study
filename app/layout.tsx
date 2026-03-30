@@ -129,7 +129,10 @@ export default function RootLayout({
         />
       </head>
 
-      <body suppressHydrationWarning className="min-h-screen flex flex-col">
+      <body
+        suppressHydrationWarning
+        className="flex min-h-screen flex-col bg-slate-50 text-slate-900"
+      >
         <CourseBootstrap />
         <Navbar />
 
@@ -137,12 +140,14 @@ export default function RootLayout({
           <ProgressSync />
           <SrsSync />
 
-          <MainShell>{children}</MainShell>
+          <div className="flex min-h-0 flex-1 flex-col">
+            <MainShell>{children}</MainShell>
+          </div>
         </SessionProviderClient>
 
-        <footer className="border-t bg-white">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <footer className="shrink-0 border-t bg-white">
+          <div className="mx-auto min-h-[112px] max-w-5xl px-4 py-6 text-sm text-slate-600">
+            <div className="flex min-h-[64px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-left">
                 © {new Date().getFullYear()} Flunio — вивчай мови щодня.
               </div>

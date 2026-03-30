@@ -228,25 +228,24 @@ export default function HomeClient({
   const L: Lang = lang === "ru" ? "ru" : "ua";
   const tr = t[L];
 
-  const showSeoBlock = courseId === "sk" || courseId === "cs";
   const seoCourseId: SeoCourseId = courseId === "cs" ? "cs" : "sk";
 
   return (
     <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8">
+      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 min-h-[640px] sm:min-h-[560px]">
         <div className="pointer-events-none absolute top-0 right-0 h-40 w-40 rounded-full bg-amber-200/20 blur-2xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-40 rounded-full bg-slate-200/35 blur-2xl" />
 
         <div className="relative space-y-5">
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          <h1 className="min-h-[96px] text-3xl font-semibold leading-tight tracking-tight sm:min-h-[120px] sm:text-5xl">
             {tr.h1}
           </h1>
 
-          <p className="max-w-2xl text-base text-slate-700 sm:text-lg">
+          <p className="max-w-2xl min-h-[84px] text-base text-slate-700 sm:min-h-[84px] sm:text-lg">
             {tr.heroP}
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-1">
+          <div className="flex min-h-[116px] flex-wrap content-start gap-3 pt-1 sm:min-h-[56px]">
             <Link
               href="/learning"
               className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-black"
@@ -269,7 +268,7 @@ export default function HomeClient({
             </Link>
           </div>
 
-          <div className="mt-4 space-y-1 text-sm text-slate-700">
+          <div className="mt-4 min-h-[76px] space-y-1 text-sm text-slate-700">
             {tr.free.map((item: string) => (
               <div key={item}>✅ {item}</div>
             ))}
@@ -281,10 +280,12 @@ export default function HomeClient({
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             >
               ✨ {L === "ru" ? "Что нового" : "Що нового"}
-              {latestBadge && (
+              {latestBadge ? (
                 <span className="rounded-full bg-amber-200 px-2 py-0.5 font-bold text-amber-900">
                   {latestBadge}
                 </span>
+              ) : (
+                <span className="inline-block min-w-[56px]" />
               )}
             </Link>
           </div>
@@ -298,7 +299,7 @@ export default function HomeClient({
       </section>
 
       <section className="relative">
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm">
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm min-h-[520px] sm:min-h-[460px]">
           <div className="pointer-events-none absolute -top-24 left-10 h-56 w-56 rounded-full bg-amber-400/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 right-10 h-56 w-56 rounded-full bg-sky-400/10 blur-3xl" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
@@ -326,7 +327,7 @@ export default function HomeClient({
               <div className="text-sm text-white/70">{tr.premiumPriceNote}</div>
             </div>
 
-            <div className="flex flex-col gap-3 sm:pt-2">
+            <div className="flex min-w-[220px] flex-col gap-3 sm:pt-2">
               <Link
                 href="/premium"
                 className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black hover:opacity-90"
@@ -345,10 +346,10 @@ export default function HomeClient({
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid auto-rows-fr gap-4 sm:grid-cols-3">
         <Link
           href="/words"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50 min-h-[220px]"
         >
           <div className="text-2xl">📊</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.progressTitle}</h2>
@@ -358,7 +359,7 @@ export default function HomeClient({
 
         <Link
           href="/grammar"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50 min-h-[220px]"
         >
           <div className="text-2xl">📘</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.grammarTitle}</h2>
@@ -368,7 +369,7 @@ export default function HomeClient({
 
         <Link
           href="/dictionary"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50 min-h-[220px]"
         >
           <div className="text-2xl">📚</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.dictTitle}</h2>
@@ -378,7 +379,7 @@ export default function HomeClient({
 
         <Link
           href="/learning"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50 sm:col-span-3"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50 sm:col-span-3 min-h-[180px]"
         >
           <div className="text-2xl">🏋️</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.levelsTitle}</h2>
@@ -387,38 +388,36 @@ export default function HomeClient({
         </Link>
       </section>
 
-      {showSeoBlock && (
-        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold">
-              {tr.popularTitleByCourse[seoCourseId]}
-            </h2>
-            <p className="mt-2 text-slate-700">
-              {tr.popularDescByCourse[seoCourseId]}
-            </p>
-          </div>
+      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm min-h-[292px]">
+        <div className="mb-6 min-h-[76px]">
+          <h2 className="text-xl font-semibold">
+            {tr.popularTitleByCourse[seoCourseId]}
+          </h2>
+          <p className="mt-2 text-slate-700">
+            {tr.popularDescByCourse[seoCourseId]}
+          </p>
+        </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {tr.popularCardsByCourse[seoCourseId].map(
-              (card: { href: string; title: string; desc: string }) => (
-                <Link
-                  key={card.href}
-                  href={card.href}
-                  className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:bg-white"
-                >
-                  <h3 className="text-base font-semibold text-slate-900">
-                    {card.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-slate-700">{card.desc}</p>
-                  <div className="mt-4 text-sm font-semibold">{tr.open}</div>
-                </Link>
-              )
-            )}
-          </div>
-        </section>
-      )}
+        <div className="grid gap-4 sm:grid-cols-2">
+          {tr.popularCardsByCourse[seoCourseId].map(
+            (card: { href: string; title: string; desc: string }) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:bg-white min-h-[156px]"
+              >
+                <h3 className="text-base font-semibold text-slate-900">
+                  {card.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-700">{card.desc}</p>
+                <div className="mt-4 text-sm font-semibold">{tr.open}</div>
+              </Link>
+            )
+          )}
+        </div>
+      </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm min-h-[260px]">
         <h2 className="mb-3 text-xl font-semibold">{tr.seoH2}</h2>
         <p className="mb-3 text-slate-700">{tr.seoP1}</p>
         <p className="text-slate-700">{tr.seoP2}</p>

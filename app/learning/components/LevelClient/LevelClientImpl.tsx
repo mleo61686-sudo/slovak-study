@@ -230,11 +230,11 @@ export default function LevelClient({
 
     return (
       <div
-        className="space-y-3 sm:space-y-6"
+        className="min-h-[760px] space-y-3 sm:min-h-[860px] sm:space-y-6"
         onPointerDownCapture={unlockInsideLesson}
         onKeyDownCapture={unlockInsideLesson}
       >
-        <div className="sticky top-2 z-10 rounded-xl border bg-white/90 px-4 py-2 text-sm font-semibold backdrop-blur">
+        <div className="sticky top-2 z-10 min-h-[44px] rounded-xl border bg-white/90 px-4 py-2 text-sm font-semibold backdrop-blur">
           {t.viewed}: {wordIndex + 1}/{words.length}
         </div>
 
@@ -259,7 +259,7 @@ export default function LevelClient({
                       alt={word.sk}
                       width={1200}
                       height={900}
-                      className="max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]"
+                      className="max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain sm:max-h-[380px] sm:w-auto sm:max-w-full lg:max-h-[460px]"
                       priority={wordIndex === 0}
                       fetchPriority={wordIndex === 0 ? "high" : "auto"}
                       sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
@@ -447,7 +447,7 @@ export default function LevelClient({
 
   if (finished) {
     return (
-      <div className="space-y-3 rounded-2xl border bg-white p-6">
+      <div className="min-h-[420px] space-y-3 rounded-2xl border bg-white p-6">
         <div className="text-xl font-semibold">{t.levelDone}</div>
         <div className="text-slate-600">
           {t.result}: <b>{score}</b> / <b>{totalQuestions}</b>
@@ -514,7 +514,7 @@ export default function LevelClient({
 
   return (
     <div
-      className="space-y-4 rounded-2xl border bg-white p-6"
+      className="min-h-[620px] space-y-4 rounded-2xl border bg-white p-6"
       onPointerDownCapture={unlockInsideLesson}
       onKeyDownCapture={unlockInsideLesson}
     >
