@@ -9,8 +9,6 @@ import { auth } from "@/auth";
 
 type LessonsProgress = Record<string, any>;
 
-const TEMP_HIDDEN_BANDS = new Set<string>(["b2"]);
-
 function getLessonFromLessonsByBand(lessonsByBand: Record<string, any[]>, id: string) {
   const raw = String(id).toLowerCase();
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/.exec(raw);
@@ -18,8 +16,6 @@ function getLessonFromLessonsByBand(lessonsByBand: Record<string, any[]>, id: st
 
   const band = m[1];
   const n = Number(m[2]);
-
-  if (TEMP_HIDDEN_BANDS.has(band)) return null;
 
   const list = lessonsByBand[band] ?? [];
   return list[n - 1] ?? null;
@@ -73,18 +69,9 @@ function nextLevelId(id: string) {
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= (limit ?? 30)) return "a1-1";
   if (p.band === "a1" && Number.isFinite(p.n) && p.n >= (limit ?? 40)) return "a2-1";
   if (p.band === "a2" && Number.isFinite(p.n) && p.n >= (limit ?? 50)) return "b1-1";
-  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) {
-    return TEMP_HIDDEN_BANDS.has("b2") ? "b1-35" : "b2-1";
-  }
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) return "b2-1";
 
-  const next = `${p.band}-${p.n + 1}`;
-  const nextParsed = parseLevelId(next);
-
-  if (nextParsed && TEMP_HIDDEN_BANDS.has(nextParsed.band)) {
-    return id;
-  }
-
-  return next;
+  return `${p.band}-${p.n + 1}`;
 }
 
 function isSameDay(a: Date, b: Date) {
@@ -143,8 +130,6 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
     const p = parseLevelId(id);
     if (!p) continue;
 
-    if (TEMP_HIDDEN_BANDS.has(p.band)) continue;
-
     const done =
       val === true || (val && typeof val === "object" && (val as any).done === true);
 
@@ -164,11 +149,6 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
 export default async function Page({ params }: { params: Promise<{ level: string }> }) {
   const { level: levelIdRaw } = await params;
   const levelId = String(levelIdRaw).toLowerCase();
-  const parsedLevel = parseLevelId(levelId);
-
-  if (parsedLevel && TEMP_HIDDEN_BANDS.has(parsedLevel.band)) {
-    redirect("/learning");
-  }
 
   const cookieStore = await cookies();
   const cookieCourse = cookieStore.get("slovakStudyActiveCourse")?.value as CourseId | undefined;
@@ -219,14 +199,6 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const lp = (row.lessonsProgress ?? {}) as any;
 
   let lastUnlockedLevel = row.lastUnlockedLevel;
-
-  if (
-    lastUnlockedLevel &&
-    parseLevelId(lastUnlockedLevel) &&
-    TEMP_HIDDEN_BANDS.has(parseLevelId(lastUnlockedLevel)!.band)
-  ) {
-    lastUnlockedLevel = null;
-  }
 
   if (!lastUnlockedLevel) {
     const recovered = hasPremium

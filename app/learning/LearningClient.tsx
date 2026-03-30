@@ -15,7 +15,7 @@ type Lang = "ua" | "ru";
 const dict = {
   ua: {
     title: "Навчання 📚",
-    subtitle: "Обирай рівень (A0 → B1) і проходь уроки по 10 слів.",
+    subtitle: "Обирай рівень (A0 → B2) і проходь уроки по 10 слів.",
     done: "Пройдено уроків:",
     lessons: "Уроків:",
     words: "Слів:",
@@ -30,7 +30,7 @@ const dict = {
   },
   ru: {
     title: "Обучение 📚",
-    subtitle: "Выбирай уровень (A0 → B1) и проходи уроки по 10 слов.",
+    subtitle: "Выбирай уровень (A0 → B2) и проходи уроки по 10 слов.",
     done: "Пройдено уроков:",
     lessons: "Уроков:",
     words: "Слов:",
@@ -50,9 +50,6 @@ const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b1: 35,
   b2: 50,
 };
-
-// ✅ Тимчасово ховаємо недороблені рівні з UI
-const TEMP_HIDDEN_BANDS = new Set<string>(["b2"]);
 
 // ===== Глобальна логіка порядку =====
 
@@ -213,7 +210,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   );
 
   const visibleBands = useMemo(() => {
-    return bands.filter((band) => !TEMP_HIDDEN_BANDS.has(band.id));
+    return bands;
   }, [bands]);
 
   const allowed = useMemo(() => {
