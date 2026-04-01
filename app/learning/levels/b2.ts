@@ -648,7 +648,7 @@ export const B2_ALL: Lesson[] = [
             { sk: "umelecké dielo", ua: "твір мистецтва", ru: "произведение искусства", img: "/words_b2/umelecké dielo.jpg" },
             { sk: "maliar", ua: "художник", ru: "художник", img: "/words_b2/maliar.jpg" },
             { sk: "socha", ua: "скульптура", ru: "скульптура", img: "/words_b2/socha.jpg" },
-            { sk: "plátno", ua: "полотно (для картини)", ru: "холст", img: "/words_b2/plátno.jpg" },
+            { sk: "plátno", ua: "полотно", ru: "холст", img: "/words_b2/plátno.jpg" },
             { sk: "portrét", ua: "портрет", ru: "портрет", img: "/words_b2/portrét.jpg" },
             { sk: "umelecký štýl", ua: "художній стиль", ru: "художественный стиль", img: "/words_b2/umelecký štýl.jpg" },
             { sk: "abstraktné umenie", ua: "абстрактне мистецтво", ru: "абстрактное искусство", img: "/words_b2/abstraktné umenie.jpg" },
