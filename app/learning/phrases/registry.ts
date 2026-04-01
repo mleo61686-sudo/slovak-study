@@ -2,6 +2,7 @@ import { A0_PHRASES as SK_A0_PHRASES } from "./a0";
 import { A1_PHRASES as SK_A1_PHRASES } from "./a1";
 import { A2_PHRASES as SK_A2_PHRASES } from "./a2";
 import { B1_PHRASES as SK_B1_PHRASES } from "./b1";
+import { B2_PHRASES as SK_B2_PHRASES } from "./b2";
 import { CS_A0_PHRASES } from "./cs/a0";
 import { CS_A1_PHRASES } from "./cs/a1";
 import { CS_A2_PHRASES } from "./cs/a2";
@@ -28,6 +29,7 @@ const SK_PHRASES_BY_BAND: PhraseRegistry = {
   a1: SK_A1_PHRASES,
   a2: SK_A2_PHRASES,
   b1: SK_B1_PHRASES,
+  b2: SK_B2_PHRASES,
 };
 
 // ====================================
