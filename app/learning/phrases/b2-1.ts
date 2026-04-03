@@ -15,7 +15,7 @@ export const B2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("dohoda", "b2-1")]: {
     sk: "Nakoniec sme dospeli k dohode, ktorá vyhovuje všetkým.",
-    ua: "Зрештою ми дійшли домовленості, яка влаштовує всіх.",
+    ua: "Зрештою ми дійшли до домовленості, яка влаштовує всіх.",
     ru: "В конце концов мы пришли к соглашению, которое устраивает всех.",
     tokens: ["Nakoniec", "sme", "dospeli", "k", "dohode", ",", "ktorá", "vyhovuje", "všetkým", "."],
   },
@@ -373,7 +373,7 @@ export const B2_PHRASES_1: Record<string, Phrase> = {
   // =========================
   [phraseKey("zmluva", "b2-6")]: {
     sk: "Zmluva nadobudne platnosť po podpise oboch strán.",
-    ua: "Договір набуде чинності після підпису обома сторонами.",
+    ua: "Договір набуде чинності після підписання обома сторонами.",
     ru: "Договор вступит в силу после подписания обеими сторонами.",
     tokens: ["Zmluva", "nadobudne", "platnosť", "po", "podpise", "oboch", "strán", "."],
   },
@@ -422,8 +422,8 @@ export const B2_PHRASES_1: Record<string, Phrase> = {
 
   [phraseKey("lehota", "b2-6")]: {
     sk: "Lehota na dodanie sa predĺžila o tri dni.",
-    ua: "Термін доставки продовжився на три дні.",
-    ru: "Срок поставки продлился на три дня.",
+    ua: "Термін доставки було продовжено на три дні.",
+    ru: "Срок поставки был продлён на три дня.",
     tokens: ["Lehota", "na", "dodanie", "sa", "predĺžila", "o", "tri", "dni", "."],
   },
 

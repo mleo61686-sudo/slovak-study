@@ -15,7 +15,7 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("šťavnatý", "b2-11")]: {
     sk: "Melón bol veľmi šťavnatý a osviežujúci.",
-    ua: "Кавун був дуже соковитий і освіжаючий.",
+    ua: "Кавун був дуже соковитий і освіжний.",
     ru: "Арбуз был очень сочным и освежающим.",
     tokens: ["Melón", "bol", "veľmi", "šťavnatý", "a", "osviežujúci", "."],
   },
