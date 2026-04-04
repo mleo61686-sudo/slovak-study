@@ -33,8 +33,15 @@ export default function WriteWord({
     setCorrectAnswer(null);
   }, [word.sk]);
 
+  function stripDiacritics(s: string) {
+    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
   function normalize(s: string) {
-    return s.trim().toLowerCase();
+    return stripDiacritics(s)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ");
   }
 
   async function check() {
@@ -62,12 +69,16 @@ export default function WriteWord({
     title: lang === "ru" ? "Напиши по-словацки:" : "Напиши словацькою:",
     placeholder: lang === "ru" ? "Введи слово..." : "Введи слово...",
     check: lang === "ru" ? "Проверить" : "Перевірити",
-    correct: lang === "ru" ? "✅ Правильно!" : "✅ Правильно!",
+    correctPrefix: lang === "ru" ? "✅ Правильно:" : "✅ Правильно:",
     wrongPrefix:
       lang === "ru"
         ? "❌ Неправильно. Правильно:"
         : "❌ Неправильно. Правильно:",
     next: lang === "ru" ? "Далее →" : "Далі →",
+    hint:
+      lang === "ru"
+        ? "Можно без диакритики"
+        : "Можна без діакритики",
   };
 
   return (
@@ -93,10 +104,12 @@ export default function WriteWord({
           placeholder={t.placeholder}
         />
 
+        <div className="text-sm text-slate-500">{t.hint}</div>
+
         {status === "idle" ? (
           <button
             onClick={check}
-            className="px-4 py-2 rounded-xl bg-black text-white"
+            className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
             disabled={!value.trim()}
           >
             {t.check}
@@ -104,7 +117,9 @@ export default function WriteWord({
         ) : (
           <div className="space-y-2">
             {status === "correct" ? (
-              <div className="font-semibold text-green-600">{t.correct}</div>
+              <div className="font-semibold text-green-600">
+                {t.correctPrefix} <b>{correctAnswer}</b>
+              </div>
             ) : (
               <div className="font-semibold text-red-600">
                 {t.wrongPrefix} <b>{correctAnswer}</b>

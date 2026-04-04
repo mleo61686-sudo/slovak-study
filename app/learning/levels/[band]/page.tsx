@@ -10,8 +10,6 @@ import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-const TEMP_HIDDEN_BANDS = new Set<string>(["b2"]);
-
 export default function BandPage() {
   const params = useParams<{ band?: string }>();
   const bandId = String(params?.band || "").trim().toLowerCase();
@@ -22,12 +20,11 @@ export default function BandPage() {
   const isPremium = (session?.user as any)?.isPremium === true;
 
   const band = useMemo(() => {
-    if (TEMP_HIDDEN_BANDS.has(bandId)) return null;
     return CEFR_LEVELS.find((b) => b.id === bandId) ?? null;
   }, [bandId]);
 
   const visibleBandIds = useMemo(() => {
-    return CEFR_LEVELS.filter((b) => !TEMP_HIDDEN_BANDS.has(b.id)).map((b) => b.id);
+    return CEFR_LEVELS.map((b) => b.id);
   }, []);
 
   const [progress, setProgress] = useState<LessonsProgress>({});

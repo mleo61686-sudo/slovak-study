@@ -188,9 +188,28 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["most", "mostt"],
   ["more", "moré"],
   ["chyba", "chíba"],
-  ["recept (kuchársky)", "recépt"],
   ["hosť", "hhosť."],
   ["Kyjev", "Kyjév."],
+  ["verdikt", "verdíkt"],
+  ["recept", "retcept"],
+  ["cuketa", "cúketa"],
+  ["protiargument", "protiargúment"],
+  ["raketa", "ráketa"],
+  ["set", "sét"],
+  ["udica", "udícá"],
+  ["breh", "bréghh"],
+  ["triler", "tríler"],
+  ["melódia", "melódia"],
+  ["energia", "energhía"],
+  ["socha", "sochá"],
+  ["portrét", "po rtrét"],
+  ["most", "môst"],
+  ["juh", "júgh"],
+  ["misia", "mísiá"],
+  ["experiment", "experímént"],
+  ["kyselina", "kýselina"],
+
+
 
 ]);
 
