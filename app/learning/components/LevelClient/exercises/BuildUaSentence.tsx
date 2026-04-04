@@ -66,35 +66,46 @@ export default function BuildUaSentence({
 }) {
   const ui = UI[uiLangFrom(lang)];
 
+  // Фіксуємо мову самої вправи на поточному слові,
+  // щоб перемикання UI-мови не скидало стан і не давало обійти перевірку.
+  const [lockedExerciseLang, setLockedExerciseLang] = useState<UiLang>(uiLangFrom(lang));
+
+  // При переході на нове слово дозволяємо вправі знову взяти актуальну мову.
+  useEffect(() => {
+    setLockedExerciseLang(uiLangFrom(lang));
+  }, [word.sk, levelId, courseId]);
+
   const item = useMemo(
-    () => getBuildUaSentenceForWord(word, lang, levelId, courseId),
-    [word, lang, levelId, courseId]
+    () => getBuildUaSentenceForWord(word, lockedExerciseLang as Lang, levelId, courseId),
+    [word, lockedExerciseLang, levelId, courseId]
   );
 
   const correctTokens = useMemo(
     () => [...item.answerTokens],
-    [item.answerTokens.join("|")]
+    [item.answerTokens]
   );
 
   const validAnswers = useMemo(
     () => item.validAnswers.map((tokens) => [...tokens]),
-    [JSON.stringify(item.validAnswers)]
+    [item.validAnswers]
   );
 
   const initialTokens = useMemo(
     () => shuffle([...item.answerTokens, ...item.extraTokens]),
-    [item.answerTokens.join("|"), item.extraTokens.join("|")]
+    [item.answerTokens, item.extraTokens]
   );
 
   const [available, setAvailable] = useState<string[]>(initialTokens);
   const [picked, setPicked] = useState<string[]>([]);
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
 
+  // Скидаємо вправу тільки коли змінилось саме слово/рівень/курс,
+  // але НЕ при звичайному перемиканні UA/RU посеред поточної спроби.
   useEffect(() => {
     setAvailable(shuffle([...item.answerTokens, ...item.extraTokens]));
     setPicked([]);
     setStatus("idle");
-  }, [word.sk, item.answerTokens.join("|"), item.extraTokens.join("|")]);
+  }, [word.sk, levelId, courseId, item.answerTokens, item.extraTokens]);
 
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
@@ -162,7 +173,11 @@ export default function BuildUaSentence({
         </div>
 
         <div className="flex gap-2">
-          <button onClick={clear} className="rounded-xl border px-4 py-2">
+          <button
+            onClick={clear}
+            disabled={status !== "idle"}
+            className="rounded-xl border px-4 py-2 disabled:opacity-50"
+          >
             {ui.clear}
           </button>
 
@@ -196,7 +211,8 @@ export default function BuildUaSentence({
           <button
             key={`${t}-${idx}`}
             onClick={() => pickToken(t, idx)}
-            className="rounded-xl border px-3 py-2 hover:bg-slate-50"
+            disabled={status !== "idle"}
+            className="rounded-xl border px-3 py-2 hover:bg-slate-50 disabled:opacity-50"
           >
             {t}
           </button>

@@ -89,13 +89,13 @@ function getNextLevelId(levelId: string) {
 }
 
 const EXERCISES: ExerciseDef[] = [
-//  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
-//  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
-//  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
-//  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-//  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
+  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
+  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
+  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
+  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
+  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
   { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
-//  { kind: "buildUaSentence", title: "Збери переклад", mode: "perWord" },
+  { kind: "buildUaSentence", title: "Збери переклад", mode: "perWord" },
 ];
 
 export default function LevelClient({

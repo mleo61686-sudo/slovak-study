@@ -35,6 +35,7 @@ import { A0_PHRASES } from "../app/learning/phrases/a0";
 import { A1_PHRASES } from "../app/learning/phrases/a1";
 import { A2_PHRASES } from "../app/learning/phrases/a2";
 import { B1_PHRASES } from "../app/learning/phrases/b1";
+import { B2_PHRASES } from "../app/learning/phrases/b2";
 
 type Item = { kind: "word" | "phrase"; text: string };
 type CourseId = "sk" | "cs";
@@ -116,12 +117,12 @@ async function main() {
         : ALPHABET_ONLY
           ? collectAlphabetItems(COURSE)
           : [
-            ...collect(COURSE),
-            ...collectAlphabetItems(COURSE),
-            ...collectCasesItems(COURSE),
-            ...collectVerbsPresentItems(COURSE),
-            ...collectSlangItems(),
-          ];
+              ...collect(COURSE),
+              ...collectAlphabetItems(COURSE),
+              ...collectCasesItems(COURSE),
+              ...collectVerbsPresentItems(COURSE),
+              ...collectSlangItems(),
+            ];
 
   /* =======================
      BAND mode
@@ -134,6 +135,7 @@ async function main() {
     if (b === "b2") {
       bandItems = [
         ...collectFromLessons(B2_ALL as any[]),
+        ...collectFromPhraseDict(B2_PHRASES),
       ];
     } else if (b === "b1") {
       bandItems = [
