@@ -1,7 +1,9 @@
+export type Lang = "ua" | "ru" | "en";
+
 export type UpdateItem = {
   date: string; // "2026-02-15"
-  title: { ua: string; ru: string };
-  items: { ua: string[]; ru: string[] };
+  title: Partial<Record<Lang, string>>;
+  items: Partial<Record<Lang, string[]>>;
 };
 
 export const UPDATES: UpdateItem[] = [
@@ -141,7 +143,6 @@ export const UPDATES: UpdateItem[] = [
       ],
     },
   },
-
   {
     date: "2026-02-15",
     title: {

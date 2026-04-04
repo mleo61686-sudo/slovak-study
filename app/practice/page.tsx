@@ -9,7 +9,7 @@ import { useLanguage } from "@/lib/src/useLanguage";
 import { SLANG_SK, SLANG_CS } from "@/data/slang";
 import CourseGate from "@/app/components/CourseGate";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 type Mode = "mcq" | "typing";
 type SessionMode = "mixed" | "mcq" | "typing";
 
@@ -17,17 +17,19 @@ type SessionQuestionBase =
   | {
     id: string;
     mode: "mcq";
-    sk: string; // ✅ term (fallback sk)
+    sk: string;
     ua: string;
     ru: string;
-    options: string[]; // ✅ term (fallback sk)
+    en: string;
+    options: string[];
   }
   | {
     id: string;
     mode: "typing";
-    sk: string; // ✅ term (fallback sk)
+    sk: string;
     ua: string;
     ru: string;
+    en: string;
   };
 
 const UI = {
@@ -35,7 +37,7 @@ const UI = {
     title: "Тренування 🏋️",
     loading: "Завантаження…",
     notEnoughTitle: "Недостатньо слів для тренування.",
-    notEnoughHint: "Додай хоча б 4 слова з перекладом для UA і RU.",
+    notEnoughHint: "Додай хоча б 4 слова з перекладом для UA, RU або EN.",
     wordsSrs: "🧠 Words (SRS)",
 
     setupTitle: "Налаштування тренування",
@@ -51,6 +53,7 @@ const UI = {
     streak: "Серія",
     bestStreak: "Краща серія",
     record: "Рекорд",
+    bestScore: "Найкращий результат",
     skip: "Пропустити →",
 
     resultTitle: "Результат 🏁",
@@ -66,15 +69,19 @@ const UI = {
     listen: "Слухати правильну відповідь (після відповіді):",
     next: "Далі →",
     check: "Перевірити ✓",
-    placeholder: "Введи словацьке слово...",
+    placeholder: "Введи слово мовою курсу...",
     correct: "Правильно!",
     wrongPrefix: "Неправильно. Правильна відповідь:",
+    yourAnswer: "Твоя відповідь:",
+    prompt: (tr: string) => `Як буде мовою курсу слово «${tr}»?`,
+    helper: (sk: string, tr: string) => `Мовою курсу: ${sk} — «${tr}»`,
+    revealLock: "Відповідай, щоб відкрити озвучку",
   },
   ru: {
     title: "Тренировка 🏋️",
     loading: "Загрузка…",
     notEnoughTitle: "Недостаточно слов для тренировки.",
-    notEnoughHint: "Добавь хотя бы 4 слова с переводом для UA и RU.",
+    notEnoughHint: "Добавь хотя бы 4 слова с переводом для UA, RU или EN.",
     wordsSrs: "🧠 Words (SRS)",
 
     setupTitle: "Настройки тренировки",
@@ -90,6 +97,7 @@ const UI = {
     streak: "Серия",
     bestStreak: "Лучшая серия",
     record: "Рекорд",
+    bestScore: "Лучший результат",
     skip: "Пропустить →",
 
     resultTitle: "Результат 🏁",
@@ -105,9 +113,57 @@ const UI = {
     listen: "Слушать правильный ответ (после ответа):",
     next: "Далее →",
     check: "Проверить ✓",
-    placeholder: "Введи словацкое слово...",
+    placeholder: "Введи слово на языке курса...",
     correct: "Правильно!",
     wrongPrefix: "Неверно. Правильный ответ:",
+    yourAnswer: "Твой ответ:",
+    prompt: (tr: string) => `Как будет на языке курса слово «${tr}»?`,
+    helper: (sk: string, tr: string) => `На языке курса: ${sk} — «${tr}»`,
+    revealLock: "Ответь, чтобы открыть озвучку",
+  },
+  en: {
+    title: "Practice 🏋️",
+    loading: "Loading…",
+    notEnoughTitle: "Not enough words for practice.",
+    notEnoughHint: "Add at least 4 words with UA, RU or EN translation.",
+    wordsSrs: "🧠 Words (SRS)",
+
+    setupTitle: "Practice settings",
+    setupCount: "Number of questions",
+    setupMode: "Mode",
+    modeMixed: "Mixed (choice and typing)",
+    modeMcq: "Multiple choice only",
+    modeTyping: "Typing only",
+    start: "Start ▶",
+
+    progress: "Progress",
+    accuracy: "Accuracy",
+    streak: "Streak",
+    bestStreak: "Best streak",
+    record: "Record",
+    bestScore: "Best score",
+    skip: "Skip →",
+
+    resultTitle: "Result 🏁",
+    yourResult: "Your result",
+    tryAgain: "New practice ↻",
+    retryMistakes: "Retry mistakes only 🔁",
+    mistakesTitle: "Mistakes",
+    noMistakes: "No mistakes — great! ✅",
+
+    questionLabel: "Question",
+    mcqBadge: "Multiple choice",
+    typingBadge: "Typing",
+    listen: "Listen to the correct answer (after answering):",
+    next: "Next →",
+    check: "Check ✓",
+    placeholder: "Type the course language word...",
+    correct: "Correct!",
+    wrongPrefix: "Wrong. Correct answer:",
+    yourAnswer: "Your answer:",
+    prompt: (tr: string) => `How do you say “${tr}” in the course language?`,
+    helper: (sk: string, tr: string) => `In the course language: ${sk} — “${tr}”`,
+    revealLock: "Answer first to unlock audio",
   },
 } as const;
 
@@ -139,7 +195,7 @@ function loadStats(): PracticeStats {
 function saveStats(next: PracticeStats) {
   try {
     window.localStorage.setItem(LS_KEY, JSON.stringify(next));
-  } catch { }
+  } catch {}
 }
 
 function norm(s: string) {
@@ -162,8 +218,14 @@ function getTerm(word: any): string {
 }
 
 function getTrans(word: any, lang: Lang): string | null {
-  const t = lang === "ua" ? word.ua : word.ru;
-  return typeof t === "string" && t.trim() ? t : null;
+  const value =
+    lang === "en"
+      ? word.en ?? word.ua
+      : lang === "ru"
+        ? word.ru ?? word.ua
+        : word.ua;
+
+  return typeof value === "string" && value.trim() ? value : null;
 }
 
 function buildSessionBase(
@@ -181,9 +243,10 @@ function buildSessionBase(
         __id: `${term || "x"}-${idx}`,
         __ua: getTrans(w, "ua"),
         __ru: getTrans(w, "ru"),
+        __en: getTrans(w, "en"),
       };
     })
-    .filter((w) => w.__term && w.__ua && w.__ru);
+    .filter((w) => w.__term && w.__ua && w.__ru && w.__en);
 
   if (pool.length < 4) return [];
 
@@ -198,7 +261,7 @@ function buildSessionBase(
 
     if (sessionMode === "mcq") mode = "mcq";
     else if (sessionMode === "typing") mode = "typing";
-    else mode = i % 3 === 0 ? "typing" : "mcq"; // mixed
+    else mode = i % 3 === 0 ? "typing" : "mcq";
 
     if (mode === "typing") {
       return {
@@ -207,6 +270,7 @@ function buildSessionBase(
         sk: w.__term,
         ua: w.__ua!,
         ru: w.__ru!,
+        en: w.__en!,
       };
     }
 
@@ -223,30 +287,25 @@ function buildSessionBase(
       sk: w.__term,
       ua: w.__ua!,
       ru: w.__ru!,
+      en: w.__en!,
       options,
     };
   });
 }
 
 function makePromptAndHelper(q: SessionQuestionBase, lang: Lang) {
-  const tr = lang === "ua" ? q.ua : q.ru;
+  const tr = lang === "en" ? q.en : lang === "ru" ? q.ru : q.ua;
+  const t = UI[lang];
 
-  const prompt =
-    lang === "ua"
-      ? `Як буде словацькою слово «${tr}»?`
-      : `Как будет по-словацки слово «${tr}»?`;
-
-  const helper =
-    lang === "ua"
-      ? `Словацькою: ${q.sk} — «${tr}»`
-      : `По-словацки: ${q.sk} — «${tr}»`;
-
-  return { prompt, helper };
+  return {
+    prompt: t.prompt(tr),
+    helper: t.helper(q.sk, tr),
+  };
 }
 
 export default function PracticePage() {
   const { lang } = useLanguage();
-  const uiLang: Lang = lang === "ru" ? "ru" : "ua";
+  const uiLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = UI[uiLang];
 
   const { courseId } = useActiveCourse();
@@ -254,21 +313,18 @@ export default function PracticePage() {
   const [ready, setReady] = useState(false);
   const words = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
 
-  // ---- URL params: /practice?pack=slang&level=A1&cat=friends
   const urlParams = useMemo(() => {
     if (typeof window === "undefined") return null;
     return new URLSearchParams(window.location.search);
-  }, [ready]); // після ready вже є window
+  }, [ready]);
 
-  const pack = urlParams?.get("pack"); // "slang" | null
-  const slangLevel = urlParams?.get("level"); // "A1" | "A2" | "B1" | null
-  const slangCat = urlParams?.get("cat"); // category string | null
+  const pack = urlParams?.get("pack");
+  const slangLevel = urlParams?.get("level");
+  const slangCat = urlParams?.get("cat");
 
-  // setup
   const [sessionMode, setSessionMode] = useState<SessionMode>("mixed");
   const [questionCount, setQuestionCount] = useState<number>(12);
 
-  // flow
   const [phase, setPhase] = useState<"setup" | "quiz" | "result">("setup");
   const [session, setSession] = useState<SessionQuestionBase[]>([]);
 
@@ -276,7 +332,6 @@ export default function PracticePage() {
     setReady(true);
   }, []);
 
-  // stats (persisted)
   const [stats, setStats] = useState<PracticeStats>({
     bestAccuracyPct: 0,
     bestStreak: 0,
@@ -287,7 +342,6 @@ export default function PracticePage() {
     setStats(loadStats());
   }, []);
 
-  // quiz state
   const [current, setCurrent] = useState(0);
   const [score, setScore] = useState(0);
 
@@ -299,20 +353,19 @@ export default function PracticePage() {
   const [typedChecked, setTypedChecked] = useState<null | { ok: boolean }>(null);
   const [revealAutoKey, setRevealAutoKey] = useState(0);
 
-  // mistakes
   const [mistakes, setMistakes] = useState<
-    { sk: string; ua: string; ru: string; mode: Mode; your?: string }[]
+    { sk: string; ua: string; ru: string; en: string; mode: Mode; your?: string }[]
   >([]);
 
-  // pool check
   const poolCount = useMemo(() => {
     const pool = (words as any[])
       .map((w) => ({
         term: getTerm(w),
         ua: getTrans(w, "ua"),
         ru: getTrans(w, "ru"),
+        en: getTrans(w, "en"),
       }))
-      .filter((w) => w.term && w.ua && w.ru);
+      .filter((w) => w.term && w.ua && w.ru && w.en);
     return pool.length;
   }, [words]);
 
@@ -323,11 +376,13 @@ export default function PracticePage() {
 
     const slang = courseId === "cs" ? SLANG_CS : SLANG_SK;
 
-    const list = slang.filter((x) => {
-      const okLevel = !slangLevel || x.level === slangLevel;
-      const okCat = !slangCat || x.category === slangCat;
-      return okLevel && okCat;
-    }).map((x) => x.sk);
+    const list = slang
+      .filter((x) => {
+        const okLevel = !slangLevel || x.level === slangLevel;
+        const okCat = !slangCat || x.category === slangCat;
+        return okLevel && okCat;
+      })
+      .map((x) => x.sk);
 
     return list;
   }, [pack, slangLevel, slangCat, courseId]);
@@ -432,7 +487,14 @@ export default function PracticePage() {
     if (!ok) {
       setMistakes((m) => [
         ...m,
-        { sk: qBase.sk, ua: qBase.ua, ru: qBase.ru, mode: "mcq", your: option },
+        {
+          sk: qBase.sk,
+          ua: qBase.ua,
+          ru: qBase.ru,
+          en: qBase.en,
+          mode: "mcq",
+          your: option,
+        },
       ]);
     }
   }
@@ -448,7 +510,14 @@ export default function PracticePage() {
     if (!ok) {
       setMistakes((m) => [
         ...m,
-        { sk: qBase.sk, ua: qBase.ua, ru: qBase.ru, mode: "typing", your: typed },
+        {
+          sk: qBase.sk,
+          ua: qBase.ua,
+          ru: qBase.ru,
+          en: qBase.en,
+          mode: "typing",
+          your: typed,
+        },
       ]);
     }
   }
@@ -558,7 +627,7 @@ export default function PracticePage() {
                   {t.bestStreak}: <b>{stats.bestStreak}</b>
                 </div>
                 <div className="rounded-xl border bg-white px-3 py-2">
-                  Best score: <b>{stats.bestScore}</b>
+                  {t.bestScore}: <b>{stats.bestScore}</b>
                 </div>
               </div>
             </div>
@@ -599,7 +668,7 @@ export default function PracticePage() {
                   {t.bestStreak}: <b>{stats.bestStreak}</b>
                 </div>
                 <div className="rounded-xl border bg-white px-3 py-2">
-                  Best score: <b>{stats.bestScore}</b>
+                  {t.bestScore}: <b>{stats.bestScore}</b>
                 </div>
               </div>
             </div>
@@ -632,7 +701,7 @@ export default function PracticePage() {
               ) : (
                 <div className="space-y-2">
                   {mistakes.slice(0, 20).map((m, idx) => {
-                    const tr = uiLang === "ua" ? m.ua : m.ru;
+                    const tr = uiLang === "en" ? m.en : uiLang === "ru" ? m.ru : m.ua;
                     return (
                       <div
                         key={`${m.sk}-${idx}`}
@@ -646,7 +715,7 @@ export default function PracticePage() {
                         </div>
                         {m.your ? (
                           <div className="mt-1 text-sm text-slate-600">
-                            Your: <span className="font-medium">{m.your}</span>
+                            {t.yourAnswer} <span className="font-medium">{m.your}</span>
                           </div>
                         ) : null}
                       </div>
@@ -660,7 +729,6 @@ export default function PracticePage() {
 
         {phase === "quiz" && qBase ? (
           <section className="rounded-2xl border bg-white p-6 space-y-4">
-            {/* top bar */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm text-gray-500">
                 <div>
@@ -681,7 +749,6 @@ export default function PracticePage() {
                 </div>
               </div>
 
-              {/* progress bar */}
               <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
                 <div
                   className="h-2 bg-slate-900"
@@ -696,7 +763,6 @@ export default function PracticePage() {
               </div>
             </div>
 
-            {/* prompt */}
             {(() => {
               const { prompt, helper } = makePromptAndHelper(qBase, uiLang);
 
@@ -720,11 +786,7 @@ export default function PracticePage() {
                           type="button"
                           disabled
                           className="rounded-lg border bg-white px-2 py-1 text-xs opacity-50 cursor-not-allowed"
-                          title={
-                            uiLang === "ua"
-                              ? "Відповідай, щоб відкрити озвучку"
-                              : "Ответь, чтобы открыть озвучку"
-                          }
+                          title={t.revealLock}
                         >
                           🔒
                         </button>
@@ -825,10 +887,11 @@ ${!selected
                         ) : (
                           <div className="space-y-3">
                             <div
-                              className={`rounded-xl border px-4 py-3 text-sm ${typedChecked.ok
+                              className={`rounded-xl border px-4 py-3 text-sm ${
+                                typedChecked.ok
                                   ? "bg-green-100 border-green-400"
                                   : "bg-red-100 border-red-400"
-                                }`}
+                              }`}
                             >
                               {typedChecked.ok
                                 ? t.correct

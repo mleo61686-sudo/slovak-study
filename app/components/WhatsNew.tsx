@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { UPDATES } from "@/app/updates/updates";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 
 function formatUA(dateISO: string) {
   const [y, m, d] = dateISO.split("-").map(Number);
@@ -10,16 +10,28 @@ function formatUA(dateISO: string) {
 
 export default function WhatsNew({ lang }: { lang: Lang }) {
   const latest = UPDATES.slice(0, 2);
+  const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
 
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm ring-1 ring-black/5 space-y-4">
+    <section className="space-y-4 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm ring-1 ring-black/5">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-xl font-semibold">
-          {lang === "ru" ? "Последние обновления ✨" : "Останні оновлення ✨"}
+          {safeLang === "ru"
+            ? "Последние обновления ✨"
+            : safeLang === "en"
+              ? "Latest updates ✨"
+              : "Останні оновлення ✨"}
         </h2>
 
-        <Link href="/updates" className="text-sm font-semibold underline text-slate-700">
-          {lang === "ru" ? "Все обновления →" : "Усі оновлення →"}
+        <Link
+          href="/updates"
+          className="text-sm font-semibold text-slate-700 underline"
+        >
+          {safeLang === "ru"
+            ? "Все обновления →"
+            : safeLang === "en"
+              ? "All updates →"
+              : "Усі оновлення →"}
         </Link>
       </div>
 
@@ -27,10 +39,10 @@ export default function WhatsNew({ lang }: { lang: Lang }) {
         {latest.map((u) => (
           <div key={u.date} className="rounded-2xl border bg-slate-50 p-5">
             <div className="text-sm text-slate-500">{formatUA(u.date)}</div>
-            <div className="font-semibold">{u.title[lang]}</div>
+            <div className="font-semibold">{u.title[safeLang] ?? u.title.ua}</div>
 
-            <ul className="mt-2 list-disc pl-5 text-sm text-slate-700 space-y-1">
-              {u.items[lang].slice(0, 3).map((t) => (
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {(u.items[safeLang] ?? u.items.ua ?? []).slice(0, 3).map((t: string) => (
                 <li key={t}>{t}</li>
               ))}
             </ul>

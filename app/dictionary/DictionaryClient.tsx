@@ -5,9 +5,58 @@ import SpeakButton from "@/app/components/SpeakButton";
 import { getDictionaryForCourse } from "@/app/learning/courses/dictionary";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
+import type { Lang } from "@/lib/src/language";
+
+function getWordTranslation(word: any, lang: Lang) {
+  if (lang === "en") return word.en ?? word.ua;
+  if (lang === "ru") return word.ru ?? word.ua;
+  return word.ua;
+}
+
+const ui = {
+  ua: {
+    title: "Словник 📚",
+    searchIn: {
+      sk: "словацька",
+      cs: "чеська",
+      pl: "польська",
+      fallback: "мова курсу",
+    },
+    placeholder: (label: string) =>
+      `Пошук: ${label} / українська / русский / english…`,
+    found: "Знайдено:",
+    showMore: (n: number) => `Показати ще (${n})`,
+  },
+  ru: {
+    title: "Словарь 📚",
+    searchIn: {
+      sk: "словацкий",
+      cs: "чешский",
+      pl: "польский",
+      fallback: "язык курса",
+    },
+    placeholder: (label: string) =>
+      `Поиск: ${label} / українська / русский / english…`,
+    found: "Найдено:",
+    showMore: (n: number) => `Показать ещё (${n})`,
+  },
+  en: {
+    title: "Dictionary 📚",
+    searchIn: {
+      sk: "Slovak",
+      cs: "Czech",
+      pl: "Polish",
+      fallback: "course language",
+    },
+    placeholder: (label: string) =>
+      `Search: ${label} / Ukrainian / Russian / English…`,
+    found: "Found:",
+    showMore: (n: number) => `Show more (${n})`,
+  },
+} satisfies Record<Lang, any>;
 
 export default function DictionaryClient() {
-  const { lang } = useLanguage();
+  const { lang } = useLanguage() as { lang: Lang };
   const { courseId } = useActiveCourse();
 
   const [q, setQ] = useState("");
@@ -15,16 +64,14 @@ export default function DictionaryClient() {
   const [limit, setLimit] = useState(STEP);
 
   const dict = useMemo(() => getDictionaryForCourse(courseId), [courseId]);
+  const t = ui[lang];
 
   const searchSourceLabel = useMemo(() => {
-    switch (courseId) {
-      case "cs":
-        return "česky";
-      case "sk":
-      default:
-        return "slovensky";
-    }
-  }, [courseId]);
+    return (
+      t.searchIn[courseId as "sk" | "cs" | "pl"] ??
+      t.searchIn.fallback
+    );
+  }, [courseId, t]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -34,12 +81,14 @@ export default function DictionaryClient() {
       const term = String(w.term ?? w.sk ?? "").toLowerCase();
       const ua = String(w.ua ?? "").toLowerCase();
       const ru = String(w.ru ?? "").toLowerCase();
+      const en = String(w.en ?? "").toLowerCase();
       const ipa = String(w.ipa ?? "").toLowerCase();
 
       return (
         term.includes(s) ||
         ua.includes(s) ||
         ru.includes(s) ||
+        en.includes(s) ||
         ipa.includes(s)
       );
     });
@@ -50,7 +99,7 @@ export default function DictionaryClient() {
 
   return (
     <div className="mx-auto w-[min(100vw-2rem,56rem)] space-y-6">
-      <h1 className="text-2xl font-semibold">Словник 📚</h1>
+      <h1 className="text-2xl font-semibold">{t.title}</h1>
 
       <div className="space-y-2 w-full self-stretch">
         <input
@@ -59,12 +108,12 @@ export default function DictionaryClient() {
             setQ(e.target.value);
             setLimit(STEP);
           }}
-          placeholder={`Пошук: ${searchSourceLabel} / українська / русский…`}
+          placeholder={t.placeholder(searchSourceLabel)}
           className="w-full rounded-2xl border bg-white px-4 py-3 outline-none focus:ring-2"
         />
 
         <div className="text-sm text-slate-500">
-          Знайдено: {filtered.length}
+          {t.found} {filtered.length}
         </div>
       </div>
 
@@ -90,9 +139,7 @@ export default function DictionaryClient() {
               )}
 
               <span className="text-slate-700">
-                {lang === "ua"
-                  ? visible[0].ua
-                  : visible[0].ru ?? visible[0].ua}
+                {getWordTranslation(visible[0], lang)}
               </span>
             </div>
           </div>
@@ -124,9 +171,7 @@ export default function DictionaryClient() {
                   )}
 
                   <span className="text-slate-700">
-                    {lang === "ua"
-                      ? word.ua
-                      : word.ru ?? word.ua}
+                    {getWordTranslation(word, lang)}
                   </span>
                 </div>
               </div>
@@ -142,7 +187,7 @@ export default function DictionaryClient() {
             onClick={() => setLimit((v) => v + STEP)}
             className="rounded-2xl border bg-white px-5 py-3 text-sm font-medium hover:bg-slate-50"
           >
-            Показати ще ({filtered.length - visible.length})
+            {t.showMore(filtered.length - visible.length)}
           </button>
         </div>
       )}

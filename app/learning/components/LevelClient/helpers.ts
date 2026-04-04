@@ -28,7 +28,7 @@ export function normalizeSentence(s: string) {
 }
 
 export const trWord = (w: Word, lang: Lang) =>
-  lang === "ru" ? w.ru ?? w.ua : w.ua;
+  lang === "en" ? w.en ?? w.ua : lang === "ru" ? w.ru ?? w.ua : w.ua;
 
 function normalizeKeyPart(value: string | number) {
   return String(value)
@@ -131,20 +131,35 @@ export function getPhraseForWord(
     const p = findPhraseInDict(dict, word.sk, word.ua, levelId);
 
     if (p) {
-      const target = lang === "ru" ? p.ru ?? p.ua : p.ua;
+      const target =
+        lang === "en"
+          ? p.en ?? p.ua
+          : lang === "ru"
+            ? p.ru ?? p.ua
+            : p.ua;
+
       return { sk: p.sk, target, tokens: p.tokens };
     }
   }
 
   if (word.phrase) {
     const target =
-      lang === "ru" ? word.phrase.ru ?? word.phrase.ua : word.phrase.ua;
+      lang === "en"
+        ? word.phrase.en ?? word.phrase.ua
+        : lang === "ru"
+          ? word.phrase.ru ?? word.phrase.ua
+          : word.phrase.ua;
 
     return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
   }
 
   const sk = `To je ${word.sk}.`;
-  const target = lang === "ru" ? `Это ${word.ru ?? word.ua}.` : `Це ${word.ua}.`;
+  const target =
+    lang === "en"
+      ? `This is ${word.en ?? word.ua}.`
+      : lang === "ru"
+        ? `Это ${word.ru ?? word.ua}.`
+        : `Це ${word.ua}.`;
   const tokens = ["To", "je", word.sk, "."];
 
   return { sk, target, tokens };
@@ -163,17 +178,31 @@ export function getBuildUaSentenceForWord(
 
     if (item) {
       const isRu = lang === "ru";
-      const target = isRu ? item.ru ?? item.ua : item.ua;
+      const isEn = lang === "en";
+
+      const target = isEn
+        ? item.en ?? item.ua
+        : isRu
+          ? item.ru ?? item.ua
+          : item.ua;
+
       const answerTokens = isRu
         ? item.ruTokens ?? splitSentenceToTokens(item.ru ?? item.ua)
-        : item.uaTokens;
+        : isEn
+          ? item.enTokens ?? splitSentenceToTokens(item.en ?? item.ua)
+          : item.uaTokens;
+
       const extraTokens = isRu
         ? item.extraRuTokens ?? []
-        : item.extraUaTokens;
+        : isEn
+          ? item.extraEnTokens ?? []
+          : item.extraUaTokens;
 
       const validAnswers = isRu
         ? [answerTokens, ...(item.ruAltAnswers ?? [])]
-        : [answerTokens, ...(item.uaAltAnswers ?? [])];
+        : isEn
+          ? [answerTokens, ...(item.enAltAnswers ?? [])]
+          : [answerTokens, ...(item.uaAltAnswers ?? [])];
 
       return {
         sk: item.sk,
@@ -185,7 +214,8 @@ export function getBuildUaSentenceForWord(
     }
   }
 
-  const fallbackSentence = lang === "ru" ? word.ru ?? word.ua : word.ua;
+  const fallbackSentence =
+    lang === "en" ? word.en ?? word.ua : lang === "ru" ? word.ru ?? word.ua : word.ua;
 
   const fallbackTokens = splitSentenceToTokens(fallbackSentence);
 
@@ -302,7 +332,7 @@ export async function playLocal(
     try {
       await tryPlay(url);
       return;
-    } catch { }
+    } catch {}
   }
 }
 

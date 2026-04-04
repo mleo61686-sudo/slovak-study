@@ -11,11 +11,13 @@ import {
   tokensToSentence,
 } from "../helpers";
 
-type UiLang = "ua" | "ru";
+type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
 
 function uiLangFrom(lang: Lang): UiLang {
-  return (lang === "ru" ? "ru" : "ua") as UiLang;
+  if (lang === "ru") return "ru";
+  if (lang === "en") return "en";
+  return "ua";
 }
 
 const UI = {
@@ -49,6 +51,21 @@ const UI = {
     reportBug: "Сообщить об ошибке",
     dash: "—",
   },
+  en: {
+    title: "Build the translation",
+    targetLabel: "Target",
+    yourSentence: "Your translation:",
+    hint: "Tap the words below. There are extra words.",
+    clear: "Clear",
+    check: "Check",
+    next: "Next →",
+    back: "← Back",
+    correct: "✅ Correct!",
+    wrongPrefix: "❌ Wrong. Correct answer:",
+    listenAgain: "🔊 Listen again",
+    reportBug: "Report a bug",
+    dash: "—",
+  },
 } as const;
 
 export default function BuildUaSentence({
@@ -66,11 +83,8 @@ export default function BuildUaSentence({
 }) {
   const ui = UI[uiLangFrom(lang)];
 
-  // Фіксуємо мову самої вправи на поточному слові,
-  // щоб перемикання UI-мови не скидало стан і не давало обійти перевірку.
   const [lockedExerciseLang, setLockedExerciseLang] = useState<UiLang>(uiLangFrom(lang));
 
-  // При переході на нове слово дозволяємо вправі знову взяти актуальну мову.
   useEffect(() => {
     setLockedExerciseLang(uiLangFrom(lang));
   }, [word.sk, levelId, courseId]);
@@ -99,8 +113,6 @@ export default function BuildUaSentence({
   const [picked, setPicked] = useState<string[]>([]);
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
 
-  // Скидаємо вправу тільки коли змінилось саме слово/рівень/курс,
-  // але НЕ при звичайному перемиканні UA/RU посеред поточної спроби.
   useEffect(() => {
     setAvailable(shuffle([...item.answerTokens, ...item.extraTokens]));
     setPicked([]);

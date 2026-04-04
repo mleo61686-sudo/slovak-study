@@ -7,7 +7,7 @@ import {
 } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 
 const dict = {
   ua: {
@@ -20,6 +20,11 @@ const dict = {
     subtitle: "Выбери, что хочешь изучать. Это можно изменить в любой момент.",
     comingSoon: "Скоро",
   },
+  en: {
+    title: "Choose a language",
+    subtitle: "Choose what you want to learn. You can change it anytime.",
+    comingSoon: "Coming soon",
+  },
 } satisfies Record<
   Lang,
   {
@@ -31,7 +36,7 @@ const dict = {
 
 export default function LearnPage() {
   const { lang } = useLanguage();
-  const safeLang: Lang = lang === "ru" ? "ru" : "ua";
+  const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = dict[safeLang];
 
   function chooseCourse(id: string, enabled: boolean) {
@@ -66,7 +71,7 @@ export default function LearnPage() {
                 </div>
                 <div className="mt-1 text-sm text-slate-500">{c.subtitle}</div>
                 <div className="mt-3 text-sm text-slate-600">
-                  {c.description[safeLang]}
+                  {c.description[safeLang] ?? c.description.ua}
                 </div>
               </div>
 

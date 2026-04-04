@@ -42,8 +42,14 @@ export default function ChooseSlovak({
   const answered = status !== "idle";
 
   const title =
-    lang === "ru" ? "Выбери слово по-словацки:" : "Обери слово словацькою:";
-  const correctLabel = lang === "ru" ? "Правильно:" : "Правильно:";
+    lang === "en"
+      ? "Choose the word in the course language:"
+      : lang === "ru"
+        ? "Выбери слово по-словацки:"
+        : "Обери слово словацькою:";
+
+  const correctLabel =
+    lang === "en" ? "Correct:" : lang === "ru" ? "Правильно:" : "Правильно:";
 
   return (
     <>

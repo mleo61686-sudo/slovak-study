@@ -11,11 +11,13 @@ import {
   tokensToSentence,
 } from "../helpers";
 
-type UiLang = "ua" | "ru";
+type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
 
 function uiLangFrom(lang: Lang): UiLang {
-  return (lang === "ru" ? "ru" : "ua") as UiLang;
+  if (lang === "ru") return "ru";
+  if (lang === "en") return "en";
+  return "ua";
 }
 
 const UI = {
@@ -47,6 +49,21 @@ const UI = {
     wrongPrefix: "❌ Неправильно. Правильно:",
     listenAgain: "🔊 Прослушать ещё раз",
     reportBug: "Сообщить об ошибке",
+    dash: "—",
+  },
+  en: {
+    title: "Build the sentence",
+    targetLabel: "Target",
+    yourSentence: "Your sentence:",
+    hint: "Tap the words below.",
+    clear: "Clear",
+    check: "Check",
+    next: "Next →",
+    back: "← Back",
+    correct: "✅ Correct!",
+    wrongPrefix: "❌ Wrong. Correct answer:",
+    listenAgain: "🔊 Listen again",
+    reportBug: "Report a bug",
     dash: "—",
   },
 } as const;

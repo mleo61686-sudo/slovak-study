@@ -79,16 +79,20 @@ export type BuildSentenceTranslationItem = {
   sk: string;
   ua: string;
   ru?: string;
+  en?: string;
 
   uaTokens: string[];
   ruTokens?: string[];
+  enTokens?: string[];
 
   extraUaTokens: string[];
   extraRuTokens?: string[];
+  extraEnTokens?: string[];
 
   // ✅ альтернативні правильні відповіді
   uaAltAnswers?: string[][];
   ruAltAnswers?: string[][];
+  enAltAnswers?: string[][];
 };
 
 export type BuildUaSentenceDict = Record<string, BuildSentenceTranslationItem>;
@@ -352,7 +356,6 @@ const SK_REGISTRY: Record<string, BuildUaSentenceDict> = {
   "b2-49": B2_BUILD_UA_SENTENCES_10,
   "b2-50": B2_BUILD_UA_SENTENCES_10,
 };
-
 
 const CS_REGISTRY: Record<string, BuildUaSentenceDict> = {
   "a0-1": CS_A0_BUILD_UA_SENTENCES_1,

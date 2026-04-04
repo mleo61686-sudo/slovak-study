@@ -15,19 +15,32 @@ export default function MatchColumns({
   onDone: (correctCount: number) => void;
 }) {
   const t = {
-    title: lang === "ru" ? "Подбери пары" : "Підбери пари",
-    correct: lang === "ru" ? "✅ Правильно" : "✅ Правильно",
-    wrongs: lang === "ru" ? "❌ Ошибки" : "❌ Помилки",
+    title:
+      lang === "en"
+        ? "Match the pairs"
+        : lang === "ru"
+          ? "Подбери пары"
+          : "Підбери пари",
+    correct:
+      lang === "en" ? "✅ Correct" : lang === "ru" ? "✅ Правильно" : "✅ Правильно",
+    wrongs:
+      lang === "en" ? "❌ Mistakes" : lang === "ru" ? "❌ Ошибки" : "❌ Помилки",
     limitReached:
-      lang === "ru"
-        ? "Лимит ошибок исчерпан — можно перейти дальше."
-        : "Ліміт помилок вичерпано — можна перейти далі.",
+      lang === "en"
+        ? "Mistake limit reached — you can continue."
+        : lang === "ru"
+          ? "Лимит ошибок исчерпан — можно перейти дальше."
+          : "Ліміт помилок вичерпано — можна перейти далі.",
     allDone:
-      lang === "ru"
-        ? "Все пары собраны — можно перейти дальше."
-        : "Усі пари зібрано — можна перейти далі.",
-    clear: lang === "ru" ? "Очистить" : "Очистити",
-    next: lang === "ru" ? "Далее →" : "Наступне →",
+      lang === "en"
+        ? "All pairs matched — you can continue."
+        : lang === "ru"
+          ? "Все пары собраны — можно перейти дальше."
+          : "Усі пари зібрано — можна перейти далі.",
+    clear:
+      lang === "en" ? "Clear" : lang === "ru" ? "Очистить" : "Очистити",
+    next:
+      lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Наступне →",
   };
 
   const left = useMemo(() => shuffle(words.map((w) => w.sk)), [words]);

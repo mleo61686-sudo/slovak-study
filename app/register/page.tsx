@@ -12,13 +12,34 @@ import {
 } from "@/app/learning/courses/useActiveCourse";
 import { COURSE_REGISTRY } from "@/app/learning/courses/registry";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 
-const T: Record<Lang, any> = {
+const T: Record<
+  Lang,
+  {
+    title: string;
+    subtitle: string;
+    chooseCourse: string;
+    courseHint: string;
+    name: string;
+    email: string;
+    password: string;
+    password2: string;
+    create: string;
+    creating: string;
+    have: string;
+    login: string;
+    show: string;
+    hide: string;
+    pwRuleHint: string;
+    soon: string;
+    selected: string;
+  }
+> = {
   ua: {
-    title: "Регістрація",
+    title: "Реєстрація",
     subtitle: "Спочатку обери курс, який хочеш вивчати.",
-    chooseCourse: "Оберіть курс",
+    chooseCourse: "Обери курс",
     courseHint: "Курс можна буде змінити пізніше в профілі.",
     name: "Ім’я (необовʼязково)",
     email: "Email",
@@ -53,17 +74,56 @@ const T: Record<Lang, any> = {
     soon: "Скоро",
     selected: "Выбрано",
   },
+  en: {
+    title: "Register",
+    subtitle: "First choose the course you want to learn.",
+    chooseCourse: "Choose a course",
+    courseHint: "You can change the course later in your profile.",
+    name: "Name (optional)",
+    email: "Email",
+    password: "Password",
+    password2: "Repeat password",
+    create: "Create account",
+    creating: "Creating...",
+    have: "Already have an account?",
+    login: "Log in",
+    show: "Show",
+    hide: "Hide",
+    pwRuleHint: "Minimum 8 characters • 1 digit • 1 uppercase letter",
+    soon: "Coming soon",
+    selected: "Selected",
+  },
 };
 
-const ERROR_TEXT: Record<string, { ua: string; ru: string }> = {
-  USER_EXISTS: { ua: "Користувач вже існує", ru: "Пользователь уже существует" },
-  INVALID_EMAIL: { ua: "Некоректний email", ru: "Некорректный email" },
+const ERROR_TEXT: Record<
+  string,
+  { ua: string; ru: string; en: string }
+> = {
+  USER_EXISTS: {
+    ua: "Користувач вже існує",
+    ru: "Пользователь уже существует",
+    en: "User already exists",
+  },
+  INVALID_EMAIL: {
+    ua: "Некоректний email",
+    ru: "Некорректный email",
+    en: "Invalid email",
+  },
   WEAK_PASSWORD: {
     ua: "Слабкий пароль: мінімум 8 символів, 1 цифра, 1 велика літера",
     ru: "Слабый пароль: минимум 8 символов, 1 цифра, 1 заглавная буква",
+    en: "Weak password: minimum 8 characters, 1 digit, 1 uppercase letter",
   },
-  PASSWORD_MISMATCH: { ua: "Паролі не співпадають", ru: "Пароли не совпадают" },
-  UNKNOWN_ERROR: { ua: "Не вдалося створити акаунт", ru: "Не удалось создать аккаунт" },
+  PASSWORD_MISMATCH: {
+    ua: "Паролі не співпадають",
+    ru: "Пароли не совпадают",
+    en: "Passwords do not match",
+  },
+  UNKNOWN_ERROR: {
+    ua: "Не вдалося створити акаунт",
+    ru: "Не удалось создать аккаунт",
+    en: "Could not create account",
+  },
 };
 
 function scorePassword(pw: string) {
@@ -81,8 +141,8 @@ function FlagIcon({ courseId, title }: { courseId: CourseId; title: string }) {
     courseId === "sk"
       ? "https://flagcdn.com/w80/sk.png"
       : courseId === "cs"
-      ? "https://flagcdn.com/w80/cz.png"
-      : "https://flagcdn.com/w80/pl.png";
+        ? "https://flagcdn.com/w80/cz.png"
+        : "https://flagcdn.com/w80/pl.png";
 
   return (
     <img
@@ -98,7 +158,7 @@ const COURSE_ORDER: CourseId[] = ["sk", "cs", "pl"];
 
 export default function RegisterPage() {
   const { lang } = useLanguage();
-  const L: Lang = lang === "ru" ? "ru" : "ua";
+  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
   const router = useRouter();
 
@@ -207,7 +267,9 @@ export default function RegisterPage() {
         <p className="mt-2 text-sm text-slate-600">{t.subtitle}</p>
 
         <div className="mt-7">
-          <div className="text-sm font-semibold text-slate-800">{t.chooseCourse}</div>
+          <div className="text-sm font-semibold text-slate-800">
+            {t.chooseCourse}
+          </div>
 
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             {COURSE_ORDER.map((courseId) => {
@@ -269,7 +331,9 @@ export default function RegisterPage() {
 
         <form onSubmit={onSubmit} className="mt-7 grid gap-4">
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">{t.name}</label>
+            <label className="text-sm font-medium text-slate-700">
+              {t.name}
+            </label>
             <input
               className="h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200"
               placeholder={t.name}
@@ -283,7 +347,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">{t.email}</label>
+            <label className="text-sm font-medium text-slate-700">
+              {t.email}
+            </label>
             <input
               className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${
                 emailOk ? "" : "border-red-400"
@@ -299,12 +365,16 @@ export default function RegisterPage() {
               required
             />
             {!emailOk && (
-              <div className="text-xs text-red-600">{ERROR_TEXT.INVALID_EMAIL[L]}</div>
+              <div className="text-xs text-red-600">
+                {ERROR_TEXT.INVALID_EMAIL[L]}
+              </div>
             )}
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">{t.password}</label>
+            <label className="text-sm font-medium text-slate-700">
+              {t.password}
+            </label>
 
             <div className="relative">
               <input
@@ -340,7 +410,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">{t.password2}</label>
+            <label className="text-sm font-medium text-slate-700">
+              {t.password2}
+            </label>
 
             <div className="relative">
               <input
@@ -365,7 +437,9 @@ export default function RegisterPage() {
             </div>
 
             {pw2.length > 0 && pw !== pw2 && (
-              <div className="text-xs text-red-600">{ERROR_TEXT.PASSWORD_MISMATCH[L]}</div>
+              <div className="text-xs text-red-600">
+                {ERROR_TEXT.PASSWORD_MISMATCH[L]}
+              </div>
             )}
           </div>
 

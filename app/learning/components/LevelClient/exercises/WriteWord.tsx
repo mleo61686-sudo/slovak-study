@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import SpeakButton from "@/app/components/SpeakButton";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { trWord, playLocal } from "../helpers";
-import SpeakButton from "@/app/components/SpeakButton";
 
 type CourseId = "sk" | "cs" | "pl";
 
@@ -66,19 +66,40 @@ export default function WriteWord({
         : "border-slate-300";
 
   const t = {
-    title: lang === "ru" ? "Напиши по-словацки:" : "Напиши словацькою:",
-    placeholder: lang === "ru" ? "Введи слово..." : "Введи слово...",
-    check: lang === "ru" ? "Проверить" : "Перевірити",
-    correctPrefix: lang === "ru" ? "✅ Правильно:" : "✅ Правильно:",
+    title:
+      lang === "en"
+        ? "Write it in the course language:"
+        : lang === "ru"
+          ? "Напиши по-словацки:"
+          : "Напиши словацькою:",
+    placeholder:
+      lang === "en"
+        ? "Type the word..."
+        : lang === "ru"
+          ? "Введи слово..."
+          : "Введи слово...",
+    check:
+      lang === "en" ? "Check" : lang === "ru" ? "Проверить" : "Перевірити",
+    correctPrefix:
+      lang === "en"
+        ? "✅ Correct:"
+        : lang === "ru"
+          ? "✅ Правильно:"
+          : "✅ Правильно:",
     wrongPrefix:
-      lang === "ru"
-        ? "❌ Неправильно. Правильно:"
-        : "❌ Неправильно. Правильно:",
-    next: lang === "ru" ? "Далее →" : "Далі →",
+      lang === "en"
+        ? "❌ Wrong. Correct:"
+        : lang === "ru"
+          ? "❌ Неправильно. Правильно:"
+          : "❌ Неправильно. Правильно:",
+    next:
+      lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Далі →",
     hint:
-      lang === "ru"
-        ? "Можно без диакритики"
-        : "Можна без діакритики",
+      lang === "en"
+        ? "You can type without diacritics"
+        : lang === "ru"
+          ? "Можно без диакритики"
+          : "Можна без діакритики",
   };
 
   return (

@@ -2,6 +2,7 @@ export type Word = {
   sk: string;
   ua: string;
   ru?: string;
+  en?: string;
   ipa?: string;
   img?: string;
   imgCredit?: string;
@@ -11,6 +12,7 @@ export type Word = {
     sk: string;
     ua: string;
     ru?: string;
+    en?: string;
     tokens: string[];
   };
 };

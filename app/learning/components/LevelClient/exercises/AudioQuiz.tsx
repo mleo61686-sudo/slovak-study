@@ -42,11 +42,14 @@ export default function AudioQuiz({
   const answered = status !== "idle";
 
   const title =
-    lang === "ru"
-      ? "Прослушай слово и выбери правильное:"
-      : "Прослухай слово і обери правильне:";
+    lang === "en"
+      ? "Listen to the word and choose the correct one:"
+      : lang === "ru"
+        ? "Прослушай слово и выбери правильное:"
+        : "Прослухай слово і обери правильне:";
 
-  const correctLabel = lang === "ru" ? "Правильно:" : "Правильно:";
+  const correctLabel =
+    lang === "en" ? "Correct:" : lang === "ru" ? "Правильно:" : "Правильно:";
 
   return (
     <>

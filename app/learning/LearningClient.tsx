@@ -5,12 +5,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import type { CefrBand } from "./data";
+import type { CefrBand, Lang, LocalizedText } from "./data";
 import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
-
-type Lang = "ua" | "ru";
 
 const dict = {
   ua: {
@@ -27,6 +25,9 @@ const dict = {
     locked: "Закрито 🔒",
     premiumOnly: "Доступно лише для Premium ⭐",
     buyPremium: "Купити Premium",
+    premiumActive: "⭐ Premium активний — безліміт доступу",
+    availableNow: "Доступний зараз:",
+    lastDone: "Останній пройдений:",
   },
   ru: {
     title: "Обучение 📚",
@@ -42,6 +43,27 @@ const dict = {
     locked: "Закрыто 🔒",
     premiumOnly: "Доступно только для Premium ⭐",
     buyPremium: "Купить Premium",
+    premiumActive: "⭐ Premium активен — безлимитный доступ",
+    availableNow: "Доступно сейчас:",
+    lastDone: "Последний пройденный:",
+  },
+  en: {
+    title: "Learning 📚",
+    subtitle: "Choose a level (A0 → B2) and complete lessons with 10 words each.",
+    done: "Completed lessons:",
+    lessons: "Lessons:",
+    words: "Words:",
+    allLessons: "All lessons →",
+    soon: "Lessons for this level will be added soon ✅",
+    wordsCount: (n: number) => `${n} words`,
+    repeat: "Repeat",
+    start: "Start",
+    locked: "Locked 🔒",
+    premiumOnly: "Available only for Premium ⭐",
+    buyPremium: "Buy Premium",
+    premiumActive: "⭐ Premium active — unlimited access",
+    availableNow: "Available now:",
+    lastDone: "Last completed:",
   },
 } satisfies Record<Lang, any>;
 
@@ -135,6 +157,10 @@ function getAllowedSequential(progress: LessonsProgress, bands: CefrBand[]) {
   // якщо всі видимі уроки пройдені, просто лишаємо останній доступним
   const last = allIds[allIds.length - 1];
   return last ? last.toLowerCase() : "a0-1";
+}
+
+function getLocalized(value: LocalizedText, lang: Lang) {
+  return value[lang] ?? value.ua ?? value.ru ?? "";
 }
 
 export default function LearningPage({ bands }: { bands: CefrBand[] }) {
@@ -235,14 +261,16 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
 
       {isPremium && (
         <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-          ⭐ Premium активний — безліміт доступу
+          {t.premiumActive}
         </div>
       )}
 
       <div className="mt-2 text-xs text-slate-500">
-        Доступний зараз: <span className="font-medium">{allowed}</span>
+        {t.availableNow} <span className="font-medium">{allowed}</span>
         {lastDone ? (
-          <span className="ml-2 text-slate-400">· Last done: {lastDone}</span>
+          <span className="ml-2 text-slate-400">
+            · {t.lastDone} {lastDone}
+          </span>
         ) : null}
       </div>
 
@@ -261,9 +289,11 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold">{band.title[lang]}</h2>
+                  <h2 className="text-xl font-semibold">
+                    {getLocalized(band.title, lang)}
+                  </h2>
                   <p className="mt-1 text-sm text-slate-600">
-                    {band.subtitle[lang]}
+                    {getLocalized(band.subtitle, lang)}
                   </p>
 
                   <p className="mt-2 text-xs text-slate-500">
@@ -327,7 +357,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-medium">
-                            {lesson.title[lang]} {done ? "✅" : ""}
+                            {getLocalized(lesson.title, lang)} {done ? "✅" : ""}
                           </div>
                           <div className="text-sm text-slate-500">
                             {t.wordsCount(lesson.wordsCount)}

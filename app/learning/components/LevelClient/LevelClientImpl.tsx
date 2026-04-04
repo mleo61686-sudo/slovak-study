@@ -20,11 +20,13 @@ import MatchColumns from "@/app/learning/components/LevelClient/exercises/MatchC
 import BuildSentence from "@/app/learning/components/LevelClient/exercises/BuildSentence";
 import BuildUaSentence from "@/app/learning/components/LevelClient/exercises/BuildUaSentence";
 
-type UiLang = "ua" | "ru";
+type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
 
 function uiLangFrom(lang: string): UiLang {
-  return lang === "ru" ? "ru" : "ua";
+  if (lang === "ru") return "ru";
+  if (lang === "en") return "en";
+  return "ua";
 }
 
 const UI = {
@@ -65,6 +67,25 @@ const UI = {
     toLessonsList: "К списку уроков",
     notAvailableFree: "Недоступно в free",
     saving: "Сохраняю прогресс…",
+  },
+  en: {
+    viewed: "Viewed",
+    back: "← Back",
+    next: "Next →",
+    startExercises: "Start exercises 🧠",
+    exercise: "Exercise",
+    word: "Word",
+    lesson: "Lesson",
+    levelDone: "Level completed 🎉",
+    result: "Result",
+    nextLockedTitle: "The next lesson is locked right now 🔒",
+    nextLockedDefault:
+      "In the free version there is a lesson limit/sequence. Return to the lessons list.",
+    reviewAgain: "Review words again",
+    goNextLevel: "Go to the next level →",
+    toLessonsList: "Back to lessons list",
+    notAvailableFree: "Not available in free",
+    saving: "Saving progress…",
   },
 } as const;
 

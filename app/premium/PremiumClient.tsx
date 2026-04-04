@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 type Currency = "eur" | "usd" | "uah";
 type Interval = "month" | "year";
 
@@ -63,8 +63,10 @@ const T = {
     colFree: "Free",
     colPremium: "Premium",
     ctaAfterCompare: "Оформити Premium →",
-    onFree: "У Free",
-    onPremium: "У Premium",
+    premiumBetter: "краще",
+    yearlyHint: "Річний план — найкращий вибір, якщо вчишся серйозно.",
+    monthlyHint: "Можна перейти на річний план у будь-який момент.",
+    currencyHint: "Вгорі можна обрати EUR/USD/UAH та місячний/річний план.",
   },
   ru: {
     topTitle: "Premium ⭐",
@@ -108,8 +110,57 @@ const T = {
     colFree: "Free",
     colPremium: "Premium",
     ctaAfterCompare: "Оформить Premium →",
-    onFree: "В Free",
-    onPremium: "В Premium",
+    premiumBetter: "лучше",
+    yearlyHint: "Годовой план — лучший выбор, если учишься всерьёз.",
+    monthlyHint: "Можно перейти на годовой план в любое время.",
+    currencyHint: "Можно выбрать EUR/USD/UAH и месячный/годовой план вверху.",
+  },
+  en: {
+    topTitle: "Premium ⭐",
+    topSubtitle:
+      "Full access without limits: lessons, trainer, audio, and statistics.",
+    badge: "Premium",
+    title: "Learning without limits 🚀",
+    subtitle:
+      "Unlock all A0–B2 levels at once and go through lessons without a daily limit.",
+    bullets: [
+      "🔓 All levels and lessons unlocked instantly (A0–B2)",
+      "🚫 No daily limit on new lessons",
+      "🏋️ Full access to the trainer",
+      "🔁 Review only mistakes",
+      "📊 Statistics, streaks, and records",
+    ],
+
+    planTitle: "Choose a plan:",
+    planMonth: "Monthly",
+    planYear: "Yearly",
+    planYearBadge: "better value",
+    planHint: "You can cancel anytime.",
+
+    priceNote:
+      "Choose currency: EUR / USD / UAH • Payment via Stripe • cancel anytime",
+
+    buy: (currencyLabel: string, price: string, interval: Interval) =>
+      interval === "year"
+        ? `Get Premium — ${price} / year (${currencyLabel}) →`
+        : `Get Premium — ${price} / month (${currencyLabel}) →`,
+
+    manage: "Manage subscription →",
+    secondary: "Open trainer →",
+    lockedTrainer: "Trainer 🔒",
+    loading: "Loading…",
+    opening: "Opening Stripe…",
+
+    compareTitle: "Free vs Premium",
+    compareSubtitle: "A difference you’ll feel right away.",
+    colFeature: "Feature",
+    colFree: "Free",
+    colPremium: "Premium",
+    ctaAfterCompare: "Get Premium →",
+    premiumBetter: "better",
+    yearlyHint: "The yearly plan is the best choice if you’re learning seriously.",
+    monthlyHint: "You can switch to the yearly plan at any time.",
+    currencyHint: "You can choose EUR/USD/UAH and monthly/yearly above.",
   },
 } satisfies Record<Lang, any>;
 
@@ -124,6 +175,7 @@ const FEATURES = [
     key: "levels",
     ua: "Доступ до рівнів",
     ru: "Доступ к уровням",
+    en: "Access to levels",
     free: "A0–A2",
     premium: "A0–B2",
   },
@@ -131,6 +183,7 @@ const FEATURES = [
     key: "limit",
     ua: "Нові уроки на день",
     ru: "Новые уроки в день",
+    en: "New lessons per day",
     free: "2",
     premium: "∞",
   },
@@ -138,6 +191,7 @@ const FEATURES = [
     key: "trainer",
     ua: "Тренажер",
     ru: "Тренажёр",
+    en: "Trainer",
     free: "🔒",
     premium: "✅",
   },
@@ -145,6 +199,7 @@ const FEATURES = [
     key: "voice",
     ua: "Озвучка",
     ru: "Озвучка",
+    en: "Audio",
     free: "✅",
     premium: "✅",
   },
@@ -152,6 +207,7 @@ const FEATURES = [
     key: "mistakes",
     ua: "Повторення помилок",
     ru: "Повторение ошибок",
+    en: "Mistake review",
     free: "✅",
     premium: "✅",
   },
@@ -159,6 +215,7 @@ const FEATURES = [
     key: "stats",
     ua: "Серії та рекорди",
     ru: "Серии и рекорды",
+    en: "Streaks and records",
     free: "🔒",
     premium: "✅",
   },
@@ -176,7 +233,7 @@ export default function PremiumClient() {
   const { lang } = useLanguage();
   const { data: session, status } = useSession();
 
-  const L: Lang = lang === "ru" ? "ru" : "ua";
+  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
 
   const isLoadingSession = status === "loading";
@@ -239,7 +296,6 @@ export default function PremiumClient() {
         <p className="text-slate-600">{t.topSubtitle}</p>
       </header>
 
-      {/* ===== HERO ===== */}
       <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm">
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-4">
@@ -250,7 +306,6 @@ export default function PremiumClient() {
             <h2 className="text-2xl font-semibold">{t.title}</h2>
             <p className="max-w-2xl text-white/80">{t.subtitle}</p>
 
-            {/* ✅ Plan toggle */}
             {!isPremium ? (
               <div className="space-y-2">
                 <div className="text-sm font-semibold text-white/90">
@@ -364,25 +419,18 @@ export default function PremiumClient() {
 
             {!isPremium ? (
               <div className="pt-1 text-center text-xs text-white/55">
-                {interval === "year"
-                  ? L === "ru"
-                    ? "Годовой план — лучший выбор, если учишься всерьёз."
-                    : "Річний план — найкращий вибір, якщо вчишся серйозно."
-                  : L === "ru"
-                  ? "Можно перейти на годовой план в любое время."
-                  : "Можна перейти на річний план у будь-який момент."}
+                {interval === "year" ? t.yearlyHint : t.monthlyHint}
               </div>
             ) : null}
           </div>
         </div>
       </section>
 
-      {/* ===== FREE vs PREMIUM ===== */}
       {!isPremium ? (
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
-          <div className="text-center space-y-1">
+        <section className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="space-y-1 text-center">
             <h2 className="text-2xl font-semibold">{t.compareTitle}</h2>
-            <p className="text-slate-600 text-sm">{t.compareSubtitle}</p>
+            <p className="text-sm text-slate-600">{t.compareSubtitle}</p>
           </div>
 
           <div className="overflow-x-auto">
@@ -391,9 +439,9 @@ export default function PremiumClient() {
                 <tr className="bg-slate-50 text-sm">
                   <th className="p-4 text-left">{t.colFeature}</th>
                   <th className="p-4 text-center">{t.colFree}</th>
-                  <th className="p-4 text-center bg-amber-50">
-                    <div className="inline-flex items-center gap-2 justify-center">
-                      {t.colPremium} <Badge>{L === "ru" ? "лучше" : "краще"}</Badge>
+                  <th className="bg-amber-50 p-4 text-center">
+                    <div className="inline-flex items-center justify-center gap-2">
+                      {t.colPremium} <Badge>{t.premiumBetter}</Badge>
                     </div>
                   </th>
                 </tr>
@@ -403,14 +451,14 @@ export default function PremiumClient() {
                 {FEATURES.map((f) => (
                   <tr key={f.key} className="border-t">
                     <td className="p-4 text-sm text-slate-900">
-                      {L === "ru" ? f.ru : f.ua}
+                      {L === "ru" ? f.ru : L === "en" ? f.en : f.ua}
                     </td>
 
                     <td className="p-4 text-center text-sm text-slate-700">
                       {f.free}
                     </td>
 
-                    <td className="p-4 text-center text-sm font-semibold bg-amber-50 text-slate-900">
+                    <td className="bg-amber-50 p-4 text-center text-sm font-semibold text-slate-900">
                       {f.premium}
                     </td>
                   </tr>
@@ -428,10 +476,8 @@ export default function PremiumClient() {
               {loading ? t.opening : t.ctaAfterCompare}
             </button>
 
-            <div className="text-xs text-slate-500 text-center">
-              {L === "ru"
-                ? "Можно выбрать EUR/USD/UAH и месячный/годовой план вверху."
-                : "Вгорі можна обрати EUR/USD/UAH та місячний/річний план."}
+            <div className="text-center text-xs text-slate-500">
+              {t.currencyHint}
             </div>
           </div>
         </section>

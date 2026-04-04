@@ -14,9 +14,20 @@ type Props = {
   onNavigate?: () => void;
 };
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 
-const T: Record<Lang, any> = {
+const T: Record<
+  Lang,
+  {
+    profile: string;
+    chooseLanguage: string;
+    interfaceLanguage: string;
+    manageSub: string;
+    manageSubHint: string;
+    logout: string;
+    userFallback: string;
+  }
+> = {
   ua: {
     profile: "Профіль",
     chooseLanguage: "Обрати курс",
@@ -35,6 +46,15 @@ const T: Record<Lang, any> = {
     logout: "Выйти",
     userFallback: "Пользователь",
   },
+  en: {
+    profile: "Profile",
+    chooseLanguage: "Choose course",
+    interfaceLanguage: "Interface language",
+    manageSub: "Manage subscription",
+    manageSubHint: "Change plan • cancel • update card • invoices",
+    logout: "Log out",
+    userFallback: "User",
+  },
 };
 
 export default function UserMenu({
@@ -45,7 +65,7 @@ export default function UserMenu({
   onNavigate,
 }: Props) {
   const { lang, setLang } = useLanguage();
-  const L: Lang = lang === "ru" ? "ru" : "ua";
+  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
 
   const router = useRouter();
@@ -156,6 +176,19 @@ export default function UserMenu({
           }`}
         >
           RU
+        </button>
+
+        <button
+          type="button"
+          aria-pressed={lang === "en"}
+          onClick={() => setLang("en")}
+          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
+            lang === "en"
+              ? "bg-black text-white"
+              : "bg-white text-slate-900 hover:bg-slate-50"
+          }`}
+        >
+          EN
         </button>
       </div>
     </div>

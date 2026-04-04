@@ -21,6 +21,13 @@ export const RESULT_I18N = {
     correctAnswer: "Правильный ответ:",
     correctWord: "Правильно:",
   },
+  en: {
+    correct: "✅ Correct!",
+    wrong: "❌ Wrong.",
+    next: "Next →",
+    correctAnswer: "Correct answer:",
+    correctWord: "Correct:",
+  },
 } satisfies Record<Lang, any>;
 
 export function ResultBox({
@@ -78,8 +85,8 @@ export function WordImage({
     size === "large"
       ? "w-[280px] sm:w-[360px] md:w-[420px] lg:w-[440px]"
       : size === "small"
-      ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
-      : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
+        ? "w-[220px] sm:w-[260px] md:w-[280px] lg:w-[300px]"
+        : "w-[240px] sm:w-[300px] md:w-[320px] lg:w-[340px]";
 
   return (
     <div className="flex flex-col items-center gap-2">

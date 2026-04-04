@@ -1,10 +1,13 @@
-export type Lang = "ua" | "ru";
+export type Lang = "ua" | "ru" | "en";
+
+export type LocalizedText = Partial<Record<Lang, string>>;
 
 export type Word = {
     term?: string; // optional universal term
     sk: string;
     ua: string;
     ru?: string;
+    en?: string;
     ipa?: string;
     img?: string;
     imgCredit?: string;
@@ -12,13 +15,14 @@ export type Word = {
         sk: string;
         ua: string;
         ru?: string;
+        en?: string;
         tokens: string[];
     };
 };
 
 export type LessonSource = {
     id: string;
-    title: string | Record<Lang, string>;
+    title: string | LocalizedText;
     words: Word[];
 };
 

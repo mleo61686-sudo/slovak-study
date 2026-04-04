@@ -6,9 +6,28 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 
-const T: Record<Lang, any> = {
+const T: Record<
+  Lang,
+  {
+    title: string;
+    email: string;
+    password: string;
+    signIn: string;
+    signingIn: string;
+    noAccount: string;
+    register: string;
+    invalid: string;
+    show: string;
+    hide: string;
+    hint: string;
+    forgot: string;
+    invalidEmail: string;
+    invalidEmailShort: string;
+    passwordMin: string;
+  }
+> = {
   ua: {
     title: "Вхід",
     email: "Email",
@@ -16,12 +35,15 @@ const T: Record<Lang, any> = {
     signIn: "Увійти",
     signingIn: "Вхід...",
     noAccount: "Немає акаунта?",
-    register: "Регістрація",
+    register: "Реєстрація",
     invalid: "Невірний email або пароль",
     show: "Показати",
     hide: "Сховати",
     hint: "Використай email і пароль.",
     forgot: "Забув пароль?",
+    invalidEmail: "Email некоректний",
+    invalidEmailShort: "Некоректний email",
+    passwordMin: "Пароль має бути мінімум 8 символів",
   },
   ru: {
     title: "Вход",
@@ -36,12 +58,33 @@ const T: Record<Lang, any> = {
     hide: "Скрыть",
     hint: "Используй email и пароль.",
     forgot: "Забыли пароль?",
+    invalidEmail: "Некорректный email",
+    invalidEmailShort: "Некорректный email",
+    passwordMin: "Пароль должен быть минимум 8 символов",
+  },
+  en: {
+    title: "Log in",
+    email: "Email",
+    password: "Password",
+    signIn: "Log in",
+    signingIn: "Signing in...",
+    noAccount: "Don’t have an account?",
+    register: "Register",
+    invalid: "Invalid email or password",
+    show: "Show",
+    hide: "Hide",
+    hint: "Use your email and password.",
+    forgot: "Forgot password?",
+    invalidEmail: "Invalid email",
+    invalidEmailShort: "Invalid email",
+    passwordMin: "Password must be at least 8 characters",
   },
 };
 
 export default function LoginClient() {
   const { lang } = useLanguage();
-  const t = T[(lang as Lang) ?? "ua"];
+  const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
+  const t = T[safeLang];
 
   const sp = useSearchParams();
   const router = useRouter();
@@ -65,12 +108,12 @@ export default function LoginClient() {
     const e2 = email.trim().toLowerCase();
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e2)) {
-      setMsg("Email некоректний");
+      setMsg(t.invalidEmail);
       return;
     }
 
     if (password.length < 8) {
-      setMsg("Пароль має бути мінімум 8 символів");
+      setMsg(t.passwordMin);
       return;
     }
 
@@ -101,10 +144,13 @@ export default function LoginClient() {
 
         <form onSubmit={onSubmit} className="mt-6 grid gap-4">
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">{t.email}</label>
+            <label className="text-sm font-medium text-slate-700">
+              {t.email}
+            </label>
             <input
-              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${emailOk ? "" : "border-red-400"
-                }`}
+              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${
+                emailOk ? "" : "border-red-400"
+              }`}
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -112,11 +158,15 @@ export default function LoginClient() {
               autoComplete="email"
               required
             />
-            {!emailOk && <div className="text-xs text-red-600">Некоректний email</div>}
+            {!emailOk && (
+              <div className="text-xs text-red-600">{t.invalidEmailShort}</div>
+            )}
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">{t.password}</label>
+            <label className="text-sm font-medium text-slate-700">
+              {t.password}
+            </label>
 
             <div className="relative">
               <input
@@ -160,7 +210,7 @@ export default function LoginClient() {
           </div>
 
           <div className="text-sm">
-            <Link href="/forgot-password" className="underline text-slate-600">
+            <Link href="/forgot-password" className="text-slate-600 underline">
               {t.forgot}
             </Link>
           </div>

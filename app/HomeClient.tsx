@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 type SeoCourseId = "sk" | "cs";
 
 const WordsStats = dynamic(() => import("./components/WordsStats"), {
@@ -59,6 +59,7 @@ const t = {
     levelsDesc: "Вправи: вибір відповіді, вставити слово, скласти речення.",
     open: "Відкрити →",
     start: "Почати →",
+    whatsNew: "Що нового",
 
     popularTitleByCourse: {
       sk: "Популярні сторінки для старту",
@@ -153,6 +154,7 @@ const t = {
       "Упражнения: выбор ответа, вставить слово, составить предложение.",
     open: "Открыть →",
     start: "Начать →",
+    whatsNew: "Что нового",
 
     popularTitleByCourse: {
       sk: "Популярные страницы для старта",
@@ -200,6 +202,100 @@ const t = {
       { k: "10 мин/день", v: "Короткие уроки" },
     ],
   },
+
+  en: {
+    h1: "Learn Slovak and Czech from zero to B2 — for work, life, and relocation",
+    heroP:
+      "Flunio is an online platform for learning Slovak and Czech: A0–B2 lessons, dictionary, grammar, and exercises. Start for free and study in just 10 minutes a day.",
+    ctaLearning: "Go to learning 🚀",
+    ctaDict: "Open dictionary",
+    ctaGrammar: "Go to grammar",
+
+    free: [
+      "Slovak and Czech courses are already available",
+      "A0–A2 levels are free",
+      "2 new lessons daily without payment",
+    ],
+
+    seoH2: "Online Slovak and Czech course",
+    seoP1:
+      "Flunio is an online platform for learning Slovak and Czech from scratch. Here you will find grammar with examples, a тематic dictionary, practice exercises, and structured learning across A0–B2 levels.",
+    seoP2:
+      "The website is suitable for people who plan to work, study, or live in Europe. Learn Slovak and Czech online in a convenient format with short lessons, gradual progression, and practice for real life.",
+
+    premiumTitle: "Premium — learning without limits 🚀",
+    premiumSubtitle:
+      "Unlock all A0–B2 levels and get full access to all available courses with no daily limit.",
+    premiumBullets: [
+      "🔓 All levels and lessons unlocked instantly (A0–B2)",
+      "🇸🇰 Full access to the Slovak course",
+      "🇨🇿 Full access to the Czech course",
+      "🚫 No daily limit on new lessons",
+      "🏋️ Full access to the trainer",
+      "🔁 Review only mistakes",
+      "📊 Statistics, streaks, and records",
+      "🔊 Word audio (Premium)",
+    ],
+    premiumPriceNote: "€7.99 / month • cancel anytime",
+    premiumCta: "Try Premium →",
+    trainerLocked: "Trainer 🔒",
+
+    grammarTitle: "Grammar",
+    grammarDesc: "Topics kept short and clear + examples and mini exercises.",
+    dictTitle: "Dictionary",
+    dictDesc: "Search, topics, example sentences, and favorites.",
+    levelsTitle: "Levels",
+    levelsDesc: "Exercises: choose the answer, insert the word, build a sentence.",
+    open: "Open →",
+    start: "Start →",
+    whatsNew: "What’s new",
+
+    popularTitleByCourse: {
+      sk: "Popular pages to start with",
+      cs: "Popular pages to start with",
+    } satisfies Record<SeoCourseId, string>,
+
+    popularDescByCourse: {
+      sk: "If you want to start quickly or find useful materials, here are the most important Slovak pages.",
+      cs: "If you want to start quickly or find useful materials, here are the most important Czech pages.",
+    } satisfies Record<SeoCourseId, string>,
+
+    popularCardsByCourse: {
+      sk: [
+        {
+          href: "/learn-slovak",
+          title: "Learn Slovak",
+          desc: "An English overview of the Slovak online course: levels, exercises, dictionary, grammar, and audio.",
+        },
+        {
+          href: "/vyvchennia-slovatskoi-movy-online",
+          title: "Learn Slovak Online",
+          desc: "Overview of the Slovak learning platform, lessons, dictionary, grammar, and practice tools.",
+        },
+      ],
+      cs: [
+        {
+          href: "/learn-czech",
+          title: "Learn Czech",
+          desc: "An English overview of the Czech online course: levels, exercises, dictionary, grammar, and audio.",
+        },
+        {
+          href: "/vyvchennia-cheskoi-movy-online",
+          title: "Learn Czech Online",
+          desc: "Overview of the Czech learning platform, lessons, dictionary, grammar, and practice tools.",
+        },
+      ],
+    } satisfies Record<
+      SeoCourseId,
+      { href: string; title: string; desc: string }[]
+    >,
+
+    strip: [
+      { k: "2 languages", v: "Slovak and Czech" },
+      { k: "A0–B2", v: "Level-based learning" },
+      { k: "10 min/day", v: "Short lessons" },
+    ],
+  },
 } satisfies Record<Lang, any>;
 
 function StatPill({ k, v }: { k: string; v: string }) {
@@ -242,7 +338,7 @@ export default function HomeClient({
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const L: Lang = lang === "ru" ? "ru" : "ua";
+  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const tr = t[L];
 
   const showSeoBlock = courseId === "sk" || courseId === "cs";
@@ -297,7 +393,7 @@ export default function HomeClient({
               href="/updates"
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             >
-              ✨ {L === "ru" ? "Что нового" : "Що нового"}
+              ✨ {tr.whatsNew}
               {latestBadge && (
                 <span className="rounded-full bg-amber-200 px-2 py-0.5 font-bold text-amber-900">
                   {latestBadge}

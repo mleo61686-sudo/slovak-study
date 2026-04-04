@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { UPDATES, type UpdateItem } from "./updates";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-type Lang = "ua" | "ru";
+type Lang = "ua" | "ru" | "en";
 
 const I18N = {
     ua: {
@@ -19,11 +19,21 @@ const I18N = {
     },
     ru: {
         title: "Обновления",
-        subtitle: "Здесь публикуются все обновления Flunio: новые уроки, слова и улучшения обучения.",
+        subtitle:
+            "Здесь публикуются все обновления Flunio: новые уроки, слова и улучшения обучения.",
         back: "На главную",
         empty: "Пока нет обновлений.",
         months: "Архив",
         hintTitle: "Подсказка",
+    },
+    en: {
+        title: "Updates",
+        subtitle:
+            "All Flunio updates are published here: new lessons, words, and learning improvements.",
+        back: "Back to home",
+        empty: "No updates yet.",
+        months: "Archive",
+        hintTitle: "Hint",
     },
 } satisfies Record<Lang, any>;
 
@@ -62,7 +72,22 @@ function monthLabel(m: string, L: Lang) {
         "ноябрь",
         "декабрь",
     ];
-    return (L === "ru" ? ru : ua)[idx] ?? m;
+    const en = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+    ];
+
+    return (L === "ru" ? ru : L === "en" ? en : ua)[idx] ?? m;
 }
 
 type MonthGroup = {
@@ -74,7 +99,7 @@ type MonthGroup = {
 
 export default function UpdatesPage() {
     const { lang } = useLanguage();
-    const L: Lang = lang === "ru" ? "ru" : "ua";
+    const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
     const tr = I18N[L];
 
     const sorted = useMemo(() => {
@@ -106,7 +131,10 @@ export default function UpdatesPage() {
                 <div className="max-w-5xl">
                     <div className="flex items-center justify-between gap-3">
                         <h1 className="text-2xl font-bold">{tr.title}</h1>
-                        <Link href="/" className="text-sm font-semibold text-slate-700 hover:underline">
+                        <Link
+                            href="/"
+                            className="text-sm font-semibold text-slate-700 hover:underline"
+                        >
                             ← {tr.back}
                         </Link>
                     </div>
@@ -119,7 +147,7 @@ export default function UpdatesPage() {
     return (
         <div className="w-full py-8">
             <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-                <div className="grid gap-8 lg:grid-cols-[340px_minmax(0,1fr)] items-start">
+                <div className="grid items-start gap-8 lg:grid-cols-[340px_minmax(0,1fr)]">
                     <aside className="space-y-5 lg:sticky lg:top-24">
                         <div className="flex items-start justify-between gap-3">
                             <div>
@@ -129,7 +157,7 @@ export default function UpdatesPage() {
 
                             <Link
                                 href="/"
-                                className="shrink-0 inline-flex h-10 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                                className="inline-flex h-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"
                             >
                                 ← {tr.back}
                             </Link>
@@ -183,7 +211,7 @@ export default function UpdatesPage() {
                                                                         isActive ? "text-white" : "text-slate-900",
                                                                     ].join(" ")}
                                                                 >
-                                                                    {u.title[L]}
+                                                                    {u.title[L] ?? u.title.ua}
                                                                 </div>
                                                             </div>
 
@@ -210,14 +238,14 @@ export default function UpdatesPage() {
 
                     <main className="min-w-0 space-y-4">
                         {active && (
-                            <article className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                            <article className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
                                 <div className="flex flex-wrap items-start justify-between gap-3">
                                     <div>
                                         <div className="text-sm text-slate-500">
                                             {fmtDate(active.date).full}
                                         </div>
                                         <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
-                                            {active.title[L]}
+                                            {active.title[L] ?? active.title.ua}
                                         </h2>
                                     </div>
 
@@ -227,7 +255,7 @@ export default function UpdatesPage() {
                                 </div>
 
                                 <ul className="mt-5 space-y-2">
-                                    {active.items[L].map((it) => (
+                                    {(active.items[L] ?? active.items.ua ?? []).map((it: string) => (
                                         <li key={it} className="flex gap-3">
                                             <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-slate-900" />
                                             <span className="text-slate-700">{it}</span>

@@ -1,3 +1,5 @@
+export type Lang = "ua" | "ru" | "en";
+
 export type CourseId = "sk" | "cs" | "pl";
 
 export type CourseFeature = "learn" | "grammar" | "dictionary" | "practice";
@@ -7,10 +9,7 @@ export type CourseDefinition = {
   id: CourseId;
   title: string;
   subtitle: string;
-  description: {
-    ua: string;
-    ru: string;
-  };
+  description: Partial<Record<Lang, string>>;
   enabled: boolean;
   status: CourseStatus;
   features: Record<CourseFeature, boolean>;
@@ -24,6 +23,7 @@ export const COURSES: CourseDefinition[] = [
     description: {
       ua: "Почни з нуля та вивчай словацьку через уроки, граматику, словник і тренажер.",
       ru: "Начни с нуля и изучай словацкий через уроки, грамматику, словарь и тренажёр.",
+      // en можна додати пізніше
     },
     enabled: true,
     status: "active",

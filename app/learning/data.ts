@@ -11,7 +11,14 @@ import {
   type PhraseDict,
 } from "./phrases/registry";
 
-export type Lang = "ua" | "ru";
+export type Lang = "ua" | "ru" | "en";
+export type ContentLang = "ua" | "ru";
+
+export type LocalizedText = {
+  ua: string;
+  ru: string;
+  en?: string;
+};
 
 export type Word = {
   // 🔑 універсальне слово курсу (Slovak / Czech / Polish)
@@ -22,6 +29,7 @@ export type Word = {
 
   ua: string;
   ru?: string;
+  en?: string;
 
   ipa?: string;
   img?: string;
@@ -31,6 +39,7 @@ export type Word = {
     sk: string;
     ua: string;
     ru?: string;
+    en?: string;
     tokens: string[];
   };
 };
@@ -38,13 +47,13 @@ export type Word = {
 // ✅ внутрішній тип: у джерелі title може бути старим string
 type LessonSource = {
   id: string; // "1" або "a0-1"
-  title: string | Record<Lang, string>;
+  title: string | LocalizedText;
   words: Word[];
 };
 
 export type Lesson = {
   id: string; // "1" або "a0-1"
-  title: Record<Lang, string>;
+  title: LocalizedText;
   words: Word[];
 };
 
@@ -52,9 +61,9 @@ export type CefrBandId = "a0" | "a1" | "a2" | "b1" | "b2";
 
 export type CefrBand = {
   id: CefrBandId;
-  title: Record<Lang, string>;
-  subtitle: Record<Lang, string>;
-  lessons: { id: string; title: Record<Lang, string>; wordsCount: number }[];
+  title: LocalizedText;
+  subtitle: LocalizedText;
+  lessons: { id: string; title: LocalizedText; wordsCount: number }[];
 };
 
 // ✅ скільки уроків у кожному рівні
@@ -70,47 +79,73 @@ const WORDS_PER_LESSON = 10;
 
 const BAND_META: Record<
   CefrBandId,
-  { title: Record<Lang, string>; subtitle: Record<Lang, string> }
+  { title: LocalizedText; subtitle: LocalizedText }
 > = {
   a0: {
-    title: { ua: "A0 — Початківець", ru: "A0 — Новичок" },
+    title: {
+      ua: "A0 — Початківець",
+      ru: "A0 — Новичок",
+      en: "A0 — Beginner",
+    },
     subtitle: {
       ua: "Старт із нуля: базові слова та фрази",
       ru: "Старт с нуля: базовые слова и фразы",
+      en: "Start from zero: basic words and phrases",
     },
   },
   a1: {
-    title: { ua: "A1 — Початковий", ru: "A1 — Начальный" },
+    title: {
+      ua: "A1 — Початковий",
+      ru: "A1 — Начальный",
+      en: "A1 — Elementary",
+    },
     subtitle: {
       ua: "Побутові теми: магазин, робота, місто",
       ru: "Бытовые темы: магазин, работа, город",
+      en: "Everyday topics: shop, work, city",
     },
   },
   a2: {
-    title: { ua: "A2 — Базовий", ru: "A2 — Базовый" },
+    title: {
+      ua: "A2 — Базовий",
+      ru: "A2 — Базовый",
+      en: "A2 — Basic",
+    },
     subtitle: {
       ua: "Більше словника + впевнене спілкування",
       ru: "Больше словаря + уверенное общение",
+      en: "More vocabulary + more confident communication",
     },
   },
   b1: {
-    title: { ua: "B1 — Середній", ru: "B1 — Средний" },
+    title: {
+      ua: "B1 — Середній",
+      ru: "B1 — Средний",
+      en: "B1 — Intermediate",
+    },
     subtitle: {
       ua: "Діалоги, описи, розмовні теми",
       ru: "Диалоги, описания, разговорные темы",
+      en: "Dialogs, descriptions, speaking topics",
     },
   },
   b2: {
-    title: { ua: "B2 — Вище середнього", ru: "B2 — Выше среднего" },
+    title: {
+      ua: "B2 — Вище середнього",
+      ru: "B2 — Выше среднего",
+      en: "B2 — Upper Intermediate",
+    },
     subtitle: {
       ua: "Складніші теми, нюанси, швидкість",
       ru: "Более сложные темы, нюансы, скорость",
+      en: "More advanced topics, nuance and speed",
     },
   },
 };
 
 // ✅ Назви для всіх 30 уроків A0 (UA/RU)
-const A0_TITLES: Record<number, Record<Lang, string>> = {
+// en поки опціональна: якщо її нема — UI візьме fallback
+const A0_TITLES: Record<number, LocalizedText> = {
   1: { ua: "Базові слова", ru: "Базовые слова" },
   2: { ua: "Люди та сімʼя", ru: "Люди и семья" },
   3: { ua: "Дім і кімнати", ru: "Дом и комнаты" },
@@ -169,9 +204,17 @@ function addRu(words: Word[]): Word[] {
   }));
 }
 
-function toTitle(title: string | Record<Lang, string>): Record<Lang, string> {
-  if (typeof title === "string") return { ua: title, ru: title };
-  return title;
+function toTitle(title: string | LocalizedText): LocalizedText {
+  if (typeof title === "string") return { ua: title, ru: title, en: title };
+  return {
+    ua: title.ua,
+    ru: title.ru,
+    en: title.en,
+  };
+}
+
+export function pickLocalizedText(value: LocalizedText, lang: Lang): string {
+  return value[lang] ?? value.ua ?? value.ru ?? "";
 }
 
 function chunk<T>(arr: T[], size: number): T[][] {
@@ -192,6 +235,7 @@ function fillTo10(words: Word[], lessonNum: number): Word[] {
     sk: `TODO-${lessonNum}-${i + 1}`,
     ua: "—",
     ru: "—",
+    en: "—",
   }));
   return [...words, ...fillers];
 }
@@ -200,7 +244,7 @@ function fillTo10(words: Word[], lessonNum: number): Word[] {
 // 1) ТВОЇ РЕАЛЬНІ УРОКИ A0 (1..30)
 // =============================
 
-// ✅ нормалізуємо A0_REAL: title -> {ua,ru} + додаємо ru у слова
+// ✅ нормалізуємо A0_REAL: title -> {ua,ru,en?} + додаємо ru у слова
 const A0_REAL: Lesson[] = (A0_REAL_SOURCE as LessonSource[]).map((l) => ({
   ...l,
   title: toTitle(l.title),
@@ -226,6 +270,14 @@ const neededWords = neededLessons * WORDS_PER_LESSON;
 const bankSlice = BANK.slice(0, neededWords);
 const bankChunks = chunk(bankSlice, WORDS_PER_LESSON);
 
+function makeLessonTitle(n: number, topic: LocalizedText): LocalizedText {
+  return {
+    ua: `Урок ${n} — ${topic.ua}`,
+    ru: `Урок ${n} — ${topic.ru}`,
+    en: topic.en ? `Lesson ${n} — ${topic.en}` : undefined,
+  };
+}
+
 // =============================
 // 5) Будуємо A0_ALL: 30 уроків (1..30)
 // =============================
@@ -238,7 +290,7 @@ const A0_ALL: Lesson[] = Array.from({ length: LESSONS_PER_BAND.a0 }, (_, i) => {
   if (real) {
     return {
       ...real,
-      title: { ua: `Урок ${n} — ${topic.ua}`, ru: `Урок ${n} — ${topic.ru}` },
+      title: makeLessonTitle(n, topic),
       words: addRu(real.words),
     };
   }
@@ -248,7 +300,7 @@ const A0_ALL: Lesson[] = Array.from({ length: LESSONS_PER_BAND.a0 }, (_, i) => {
 
   return {
     id: String(n),
-    title: { ua: `Урок ${n} — ${topic.ua}`, ru: `Урок ${n} — ${topic.ru}` },
+    title: makeLessonTitle(n, topic),
     words,
   };
 });
@@ -389,7 +441,7 @@ export type DictionaryEntry = Word & {
   refs: {
     band: CefrBandId;
     lessonId: string;
-    lessonTitle: Record<Lang, string>;
+    lessonTitle: LocalizedText;
   }[];
 };
 
@@ -437,6 +489,7 @@ export function buildDictionaryFromLessonsByBand(
 
         if (!existing.ua && w.ua) existing.ua = w.ua;
         if (!existing.ru && w.ru) existing.ru = w.ru;
+        if (!existing.en && w.en) existing.en = w.en;
       });
     });
   });

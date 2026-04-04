@@ -4,6 +4,7 @@ type WordLike = {
   sk: string;
   ua: string;
   ru?: string;
+  en?: string;
 };
 
 // авто переклад UA → RU
@@ -42,5 +43,6 @@ function autoRu(text: string): string {
 export function trWord(word: WordLike, lang: Lang): string {
   if (lang === "ua") return word.ua;
   if (lang === "ru") return word.ru ?? autoRu(word.ua);
+  if (lang === "en") return word.en ?? word.ua;
   return word.ua;
 }

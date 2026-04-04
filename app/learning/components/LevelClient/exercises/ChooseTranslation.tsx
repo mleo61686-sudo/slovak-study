@@ -45,10 +45,18 @@ export default function ChooseTranslation({
   const answered = status !== "idle";
 
   const correctLabel =
-    lang === "ru" ? "Правильный ответ:" : "Правильна відповідь:";
+    lang === "en"
+      ? "Correct answer:"
+      : lang === "ru"
+        ? "Правильный ответ:"
+        : "Правильна відповідь:";
 
   const chooseLabel =
-    lang === "ru" ? "Выбери перевод:" : "Обери переклад:";
+    lang === "en"
+      ? "Choose the translation:"
+      : lang === "ru"
+        ? "Выбери перевод:"
+        : "Обери переклад:";
 
   return (
     <>
