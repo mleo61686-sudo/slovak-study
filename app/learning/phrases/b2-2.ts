@@ -475,13 +475,13 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
   [phraseKey("zemiak", "b2-17")]: {
     sk: "Pečený zemiak je jednoduchý, ale veľmi chutný.",
     ua: "Запечена картопля проста, але дуже смачна.",
-    ru: "Запечённый картофель — это просто, но очень вкусно.",
+    ru: "Запечённый картофель прост, но очень вкусен.",
     tokens: ["Pečený", "zemiak", "je", "jednoduchý", ",", "ale", "veľmi", "chutný", "."],
   },
 
   [phraseKey("cibuľa", "b2-17")]: {
     sk: "Bez cibule si túto omáčku neviem predstaviť.",
-    ua: "Без цибулі я не уявляю цей соус.",
+    ua: "Без цибулі я не уявляю цього соусу.",
     ru: "Без лука я не представляю этот соус.",
     tokens: ["Bez", "cibule", "si", "túto", "omáčku", "neviem", "predstaviť", "."],
   },
@@ -519,7 +519,7 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
   // =========================
   [phraseKey("minerálna voda", "b2-18")]: {
     sk: "K obedu si dám len minerálnu vodu.",
-    ua: "До обіду я візьму лише мінеральну воду.",
+    ua: "На обід я візьму лише мінеральну воду.",
     ru: "К обеду я возьму только минеральную воду.",
     tokens: ["K", "obedu", "si", "dám", "len", "minerálnu", "vodu", "."],
   },
@@ -607,7 +607,7 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
   [phraseKey("dojatie", "b2-19")]: {
     sk: "Jeho príhovor v nej vyvolal silné dojatie.",
     ua: "Його промова викликала в неї сильне зворушення.",
-    ru: "Его речь вызвала в ней сильное волнение и растроганность.",
+    ru: "Его речь вызвала в ней сильное душевное волнение.",
     tokens: ["Jeho", "príhovor", "v", "nej", "vyvolal", "silné", "dojatie", "."],
   },
 

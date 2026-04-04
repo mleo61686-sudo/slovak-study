@@ -18,10 +18,12 @@
     "jsx": "preserve",
     "incremental": true,
 
-    "baseUrl": ".",                // ✅ ДОДАНО
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
+
+    "ignoreDeprecations": "6.0",
 
     "plugins": [
       {

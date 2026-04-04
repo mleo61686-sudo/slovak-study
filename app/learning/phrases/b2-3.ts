@@ -8,8 +8,8 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
   // =========================
   [phraseKey("uvažovanie", "b2-21")]: {
     sk: "Jeho uvažovanie bolo pokojné, logické a premyslené.",
-    ua: "Його роздумування було спокійним, логічним і продуманим.",
-    ru: "Его размышление было спокойным, логичным и продуманным.",
+    ua: "Його міркування було спокійним, логічним і продуманим.",
+    ru: "Его рассуждение было спокойным, логичным и продуманным.",
     tokens: ["Jeho", "uvažovanie", "bolo", "pokojné", ",", "logické", "a", "premyslené", "."],
   },
 
@@ -169,7 +169,7 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("sebaistý", "b2-23")]: {
     sk: "Na pohovore pôsobil pokojne a sebaisto.",
     ua: "На співбесіді він виглядав спокійним і впевненим у собі.",
-    ru: "На собеседовании он выглядел спокойно и уверенно.",
+    ru: "На собеседовании он выглядел спокойным и уверенным в себе.",
     tokens: ["Na", "pohovore", "pôsobil", "pokojne", "a", "sebaisto", "."],
   },
 
@@ -349,8 +349,8 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("diskusia", "b2-25")]: {
     sk: "Diskusia bola živá, ale stále vecná.",
-    ua: "Дискусія була жвавою, але все ще предметною.",
-    ru: "Дискуссия была оживлённой, но всё ещё предметной.",
+    ua: "Дискусія була жвавою, але все ще змістовною.",
+    ru: "Дискуссия была оживлённой, но всё ещё содержательной.",
     tokens: ["Diskusia", "bola", "živá", ",", "ale", "stále", "vecná", "."],
   },
 
@@ -394,7 +394,7 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("duševná rovnováha", "b2-26")]: {
     sk: "Na duševnú rovnováhu vplýva práca aj oddych.",
-    ua: "На психологічну рівновагу впливають і робота, і відпочинок.",
+    ua: "На душевну рівновагу впливають і робота, і відпочинок.",
     ru: "На душевное равновесие влияют и работа, и отдых.",
     tokens: ["Na", "duševnú", "rovnováhu", "vplýva", "práca", "aj", "oddych", "."],
   },
@@ -422,8 +422,8 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("psychická odolnosť", "b2-26")]: {
     sk: "Psychická odolnosť sa buduje postupne a dlhodobo.",
-    ua: "Психологічна стійкість формується поступово й довго.",
-    ru: "Психологическая устойчивость формируется постепенно и надолго.",
+    ua: "Психологічна стійкість формується поступово й упродовж тривалого часу.",
+    ru: "Психологическая устойчивость формируется постепенно и в течение долгого времени.",
     tokens: ["Psychická", "odolnosť", "sa", "buduje", "postupne", "a", "dlhodobo", "."],
   },
 
@@ -453,8 +453,8 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
 
   [phraseKey("ústretový postoj", "b2-27")]: {
     sk: "Jeho ústretový postoj pomohol zmierniť napätie.",
-    ua: "Його компромісна позиція допомогла зменшити напругу.",
-    ru: "Его уступчивый подход помог снизить напряжение.",
+    ua: "Його конструктивна позиція допомогла зменшити напругу.",
+    ru: "Его конструктивная позиция помогла снизить напряжение.",
     tokens: ["Jeho", "ústretový", "postoj", "pomohol", "zmierniť", "napätie", "."],
   },
 
@@ -527,7 +527,7 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
   [phraseKey("humanitárna kríza", "b2-28")]: {
     sk: "Vojna často vedie k hlbokej humanitárnej kríze.",
     ua: "Війна часто призводить до глибокої гуманітарної кризи.",
-    ru: "Война часто приводит к глубокой гуманитарной кризисной ситуации.",
+    ru: "Война часто приводит к глубокой гуманитарной кризе.",
     tokens: ["Vojna", "často", "vedie", "k", "hlbokej", "humanitárnej", "kríze", "."],
   },
 

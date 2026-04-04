@@ -57,8 +57,8 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("maľba", "b2-41")]: {
     sk: "Táto maľba patrí medzi najcennejšie v celej galérii.",
-    ua: "Цей живопис належить до найцінніших у всій галереї.",
-    ru: "Эта живопись относится к самым ценным во всей галерее.",
+    ua: "Ця картина належить до найцінніших у всій галереї.",
+    ru: "Эта картина относится к самым ценным во всей галерее.",
     tokens: ["Táto", "maľba", "patrí", "medzi", "najcennejšie", "v", "celej", "galérii", "."],
   },
 
@@ -71,8 +71,8 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("kritika", "b2-41")]: {
     sk: "Jeho posledné dielo získalo priaznivú kritiku.",
-    ua: "Його остання робота отримала схвальну критику.",
-    ru: "Его последняя работа получила положительную критику.",
+    ua: "Його остання робота отримала схвальні відгуки критиків.",
+    ru: "Его последняя работа получила положительные отзывы критиков.",
     tokens: ["Jeho", "posledné", "dielo", "získalo", "priaznivú", "kritiku", "."],
   },
 
@@ -110,7 +110,7 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
   [phraseKey("historická budova", "b2-42")]: {
     sk: "Tá historická budova prešla náročnou rekonštrukciou.",
     ua: "Та історична будівля пройшла складну реконструкцію.",
-    ru: "То историческое здание прошло сложную реконструкцию.",
+    ru: "Это историческое здание прошло сложную реконструкцию.",
     tokens: ["Tá", "historická", "budova", "prešla", "náročnou", "rekonštrukciou", "."],
   },
 
@@ -131,7 +131,7 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
   [phraseKey("veža", "b2-42")]: {
     sk: "Z veže bol výborný výhľad na celé okolie.",
     ua: "Із вежі відкривався чудовий краєвид на всю околицю.",
-    ru: "С башни открывался отличный вид на всю окрестность.",
+    ru: "С башни открывался отличный вид на всю округу.",
     tokens: ["Z", "veže", "bol", "výborný", "výhľad", "na", "celé", "okolie", "."],
   },
 
@@ -218,7 +218,7 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
   [phraseKey("prudké ochladenie", "b2-43")]: {
     sk: "Prudké ochladenie prišlo už počas noci.",
     ua: "Різке похолодання настало вже вночі.",
-    ru: "Резкое похолодание пришло уже ночью.",
+    ru: "Резкое похолодание наступило уже ночью.",
     tokens: ["Prudké", "ochladenie", "prišlo", "už", "počas", "noci", "."],
   },
 
@@ -283,7 +283,7 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("pokuta", "b2-44")]: {
     sk: "Za porušenie pravidiel mu uložili vysokú pokutu.",
-    ua: "За порушення правил йому призначили великий штраф.",
+    ua: "За порушення правил йому призначили значний штраф.",
     ru: "За нарушение правил ему назначили высокий штраф.",
     tokens: ["Za", "porušenie", "pravidiel", "mu", "uložili", "vysokú", "pokutu", "."],
   },
@@ -349,8 +349,8 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("navigácia", "b2-45")]: {
     sk: "Navigácia nás doviedla až priamo pred hotel.",
-    ua: "Навігація довела нас просто до готелю.",
-    ru: "Навигация довела нас прямо до отеля.",
+    ua: "Навігація привела нас просто до готелю.",
+    ru: "Навигация привела нас прямо к отелю.",
     tokens: ["Navigácia", "nás", "doviedla", "až", "priamo", "pred", "hotel", "."],
   },
 
@@ -363,8 +363,8 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("cestovná trasa", "b2-45")]: {
     sk: "Našu cestovnú trasu sme si naplánovali ešte doma.",
-    ua: "Наш маршрут подорожі ми спланували ще вдома.",
-    ru: "Наш маршрут путешествия мы спланировали ещё дома.",
+    ua: "Маршрут подорожі ми спланували ще вдома.",
+    ru: "Маршрут путешествия мы спланировали ещё дома.",
     tokens: ["Našu", "cestovnú", "trasu", "sme", "si", "naplánovali", "ešte", "doma", "."],
   },
 
@@ -374,7 +374,7 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
   [phraseKey("videohra", "b2-46")]: {
     sk: "Táto videohra má výborný príbeh aj grafiku.",
     ua: "Ця відеогра має чудовий сюжет і графіку.",
-    ru: "Эта видеоигра имеет отличный сюжет и графику.",
+    ru: "У этой видеоигры отличный сюжет и графика.",
     tokens: ["Táto", "videohra", "má", "výborný", "príbeh", "aj", "grafiku", "."],
   },
 
@@ -509,8 +509,8 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
 
   [phraseKey("nekonečný vesmír", "b2-47")]: {
     sk: "Pri pohľade na nekonečný vesmír cítil pokoru.",
-    ua: "Дивлячись на безмежний космос, він відчував захоплення і смирення.",
-    ru: "Глядя на бесконечный космос, он чувствовал восхищение и смирение.",
+    ua: "Дивлячись на безмежний космос, він відчував смирення.",
+    ru: "Глядя на бесконечный космос, он чувствовал смирение.",
     tokens: ["Pri", "pohľade", "na", "nekonečný", "vesmír", "cítil", "pokoru", "."],
   },
 
@@ -519,22 +519,22 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
   // =========================
   [phraseKey("chemický prvok", "b2-48")]: {
     sk: "Každý chemický prvok má svoju značku v periodickej tabuľke.",
-    ua: "Кожен хімічний елемент має свій знак у періодичній таблиці.",
-    ru: "Каждый химический элемент имеет свой знак в периодической таблице.",
+    ua: "Кожен хімічний елемент має свій символ у періодичній таблиці.",
+    ru: "Каждый химический элемент имеет свой символ в периодической таблице.",
     tokens: ["Každý", "chemický", "prvok", "má", "svoju", "značku", "v", "periodickej", "tabuľke", "."],
   },
 
   [phraseKey("zlúčenina", "b2-48")]: {
     sk: "Táto zlúčenina vzniká spojením dvoch prvkov.",
     ua: "Ця сполука утворюється внаслідок поєднання двох елементів.",
-    ru: "Это соединение образуется в результате соединения двух элементов.",
+    ru: "Это соединение образуется в результате сочетания двух элементов.",
     tokens: ["Táto", "zlúčenina", "vzniká", "spojením", "dvoch", "prvkov", "."],
   },
 
   [phraseKey("reakcia", "b2-48")]: {
     sk: "Chemická reakcia prebehla rýchlejšie, než očakávali.",
-    ua: "Хімічна реакція пройшла швидше, ніж очікували.",
-    ru: "Химическая реакция прошла быстрее, чем ожидали.",
+    ua: "Хімічна реакція відбулася швидше, ніж очікували.",
+    ru: "Химическая реакция произошла быстрее, чем ожидали.",
     tokens: ["Chemická", "reakcia", "prebehla", "rýchlejšie", ",", "než", "očakávali", "."],
   },
 

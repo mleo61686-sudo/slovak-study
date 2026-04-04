@@ -8,8 +8,8 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   // =========================
   [phraseKey("prihrávka", "b2-31")]: {
     sk: "Jeho presná prihrávka rozhodla o celej akcii.",
-    ua: "Його точний пас вирішив усю атаку.",
-    ru: "Его точный пас решил всю атаку.",
+    ua: "Його точний пас вирішив результат усієї атаки.",
+    ru: "Его точный пас решил исход всей атаки.",
     tokens: ["Jeho", "presná", "prihrávka", "rozhodla", "o", "celej", "akcii", "."],
   },
 
@@ -43,8 +43,8 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("rozhodca", "b2-31")]: {
     sk: "Rozhodca prerušil hru po ostrom zákroku.",
-    ua: "Суддя зупинив гру після жорсткого порушення.",
-    ru: "Судья остановил игру после жёсткого нарушения.",
+    ua: "Суддя зупинив гру після жорсткого фолу.",
+    ru: "Судья остановил игру после жёсткого фола.",
     tokens: ["Rozhodca", "prerušil", "hru", "po", "ostrom", "zákroku", "."],
   },
 
@@ -95,7 +95,7 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("loptička", "b2-32")]: {
     sk: "Žltá loptička dopadla presne na čiaru.",
-    ua: "Жовтий м’яч упав точно на лінію.",
+    ua: "Жовтий м’ячик упав точно на лінію.",
     ru: "Жёлтый мяч упал точно на линию.",
     tokens: ["Žltá", "loptička", "dopadla", "presne", "na", "čiaru", "."],
   },
@@ -154,7 +154,7 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   // =========================
   [phraseKey("udica", "b2-33")]: {
     sk: "Nová udica je ľahká a dobre sa s ňou nahadzuje.",
-    ua: "Нова вудка легка, і нею добре закидати.",
+    ua: "Нова вудка легка, і нею зручно закидати.",
     ru: "Новая удочка лёгкая, и ей удобно забрасывать.",
     tokens: ["Nová", "udica", "je", "ľahká", "a", "dobre", "sa", "s", "ňou", "nahadzuje", "."],
   },
@@ -162,7 +162,7 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("navijak", "b2-33")]: {
     sk: "Navijak sa mu zasekol práve v najhoršej chvíli.",
     ua: "Котушка заклинила саме в найгірший момент.",
-    ru: "Катушка заклинила как раз в самый плохой момент.",
+    ru: "Катушка заклинила как раз в самый неподходящий момент.",
     tokens: ["Navijak", "sa", "mu", "zasekol", "práve", "v", "najhoršej", "chvíli", "."],
   },
 
@@ -270,14 +270,14 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("BMW", "b2-34")]: {
     sk: "BMW si mnohí spájajú so športovou jazdou a výkonom.",
     ua: "BMW багато хто пов’язує зі спортивною їздою та потужністю.",
-    ru: "BMW многие связывают со спортивной ездой и мощностью.",
+    ru: "Многие связывают BMW со спортивной ездой и мощностью.",
     tokens: ["BMW", "si", "mnohí", "spájajú", "so", "športovou", "jazdou", "a", "výkonom", "."],
   },
 
   [phraseKey("Mercedes", "b2-34")]: {
     sk: "Mercedes je symbolom pohodlia a vyššej triedy.",
     ua: "Mercedes є символом комфорту й вищого класу.",
-    ru: "Mercedes является символом комфорта и более высокого класса.",
+    ru: "Mercedes является символом комфорта и высшего класса.",
     tokens: ["Mercedes", "je", "symbolom", "pohodlia", "a", "vyššej", "triedy", "."],
   },
 
@@ -363,8 +363,8 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("námorná doprava", "b2-35")]: {
     sk: "Námorná doprava je dôležitá pre medzinárodný obchod.",
-    ua: "Морський транспорт важливий для міжнародної торгівлі.",
-    ru: "Морской транспорт важен для международной торговли.",
+    ua: "Морські перевезення важливі для міжнародної торгівлі.",
+    ru: "Морские перевозки важны для международной торговли.",
     tokens: ["Námorná", "doprava", "je", "dôležitá", "pre", "medzinárodný", "obchod", "."],
   },
 
@@ -381,7 +381,7 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("ruleta", "b2-36")]: {
     sk: "Pri rulete sledoval, na ktoré číslo padne guľôčka.",
     ua: "Біля рулетки він стежив, на яке число впаде кулька.",
-    ru: "У рулетки он следил, на какое число упадёт шарик.",
+    ru: "За рулеткой он следил, на какое число упадёт шарик.",
     tokens: ["Pri", "rulete", "sledoval", ",", "na", "ktoré", "číslo", "padne", "guľôčka", "."],
   },
 
@@ -461,7 +461,7 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("dráma", "b2-37")]: {
     sk: "Táto dráma mala silný príbeh aj výborné herecké výkony.",
     ua: "Ця драма мала сильний сюжет і чудову акторську гру.",
-    ru: "Эта драма имела сильный сюжет и отличную актёрскую игру.",
+    ru: "У этой драмы был сильный сюжет и отличная актёрская игра.",
     tokens: ["Táto", "dráma", "mala", "silný", "príbeh", "aj", "výborné", "herecké", "výkony", "."],
   },
 
@@ -496,7 +496,7 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
   [phraseKey("horor", "b2-37")]: {
     sk: "Nemám rád horor, lebo je na mňa príliš strašidelný.",
     ua: "Я не люблю жахи, бо вони для мене надто страшні.",
-    ru: "Я не люблю ужасы, потому что они для меня слишком страшные.",
+    ru: "Я не люблю ужасы, потому что они слишком страшные для меня.",
     tokens: ["Nemám", "rád", "horor", ",", "lebo", "je", "na", "mňa", "príliš", "strašidelný", "."],
   },
 
@@ -547,8 +547,8 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("kaňon", "b2-38")]: {
     sk: "Hlboký kaňon vytvorila rieka počas tisícok rokov.",
-    ua: "Глибокий каньйон річка створювала тисячі років.",
-    ru: "Глубокий каньон река создавала тысячи лет.",
+    ua: "Глибокий каньйон річка формувала тисячі років.",
+    ru: "Глубокий каньон река формировала тысячи лет.",
     tokens: ["Hlboký", "kaňon", "vytvorila", "rieka", "počas", "tisícok", "rokov", "."],
   },
 
@@ -634,8 +634,8 @@ export const B2_PHRASES_4: Record<string, Phrase> = {
 
   [phraseKey("spevák", "b2-39")]: {
     sk: "Hlavný spevák mal silný hlas aj výborný prejav.",
-    ua: "Головний співак мав сильний голос і чудову подачу.",
-    ru: "Главный певец имел сильный голос и отличную подачу.",
+    ua: "Головний співак мав сильний голос і чудову манеру виконання.",
+    ru: "Главный певец обладал сильным голосом и отличной манерой исполнения.",
     tokens: ["Hlavný", "spevák", "mal", "silný", "hlas", "aj", "výborný", "prejav", "."],
   },
 
