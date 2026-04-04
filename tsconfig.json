@@ -14,12 +14,9 @@
     "jsx": "preserve",
     "incremental": true,
 
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     },
-
-    "ignoreDeprecations": "5.0",
 
     "plugins": [
       {
