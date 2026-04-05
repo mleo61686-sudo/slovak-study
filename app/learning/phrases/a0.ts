@@ -7,6 +7,7 @@ export type Phrase = {
   sk: string;
   ua: string;
   ru?: string;
+  en?: string; // 👈 ДОДАЛИ
   tokens: string[];
 };
 
