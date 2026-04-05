@@ -15,19 +15,36 @@ type ReportPayload = {
   key?: string;
 };
 
-type UiLang = "ua" | "ru";
-function uiLangFrom(lang: Lang): UiLang {
-  return (lang === "ru" ? "ru" : "ua") as UiLang;
-}
-
-const UI = {
+const UI: Record<
+  Lang,
+  {
+    button: string;
+    title: string;
+    subtitle: string;
+    category: string;
+    description: string;
+    placeholder: string;
+    sent: string;
+    failed: string;
+    cancel: string;
+    sending: string;
+    send: string;
+    categories: {
+      spelling: string;
+      translation: string;
+      grammar: string;
+      other: string;
+    };
+  }
+> = {
   ua: {
     button: "Повідомити про помилку",
     title: "Повідомити про помилку",
     subtitle: "Напиши, що саме не так (слово/фраза/переклад/граматика).",
     category: "Категорія",
     description: "Опис",
-    placeholder: "Наприклад: 'правильно має бути ...' або 'переклад невірний, краще ...'",
+    placeholder:
+      "Наприклад: 'правильно має бути ...' або 'переклад невірний, краще ...'",
     sent: "Відправлено ✅",
     failed: "Не вийшло 😕",
     cancel: "Скасувати",
@@ -46,7 +63,8 @@ const UI = {
     subtitle: "Напиши, что именно не так (слово/фраза/перевод/грамматика).",
     category: "Категория",
     description: "Описание",
-    placeholder: "Например: 'правильно должно быть ...' или 'перевод неверный, лучше ...'",
+    placeholder:
+      "Например: 'правильно должно быть ...' или 'перевод неверный, лучше ...'",
     sent: "Отправлено ✅",
     failed: "Не получилось 😕",
     cancel: "Отмена",
@@ -59,7 +77,27 @@ const UI = {
       other: "Другое",
     },
   },
-} as const;
+  en: {
+    button: "Report an error",
+    title: "Report an error",
+    subtitle: "Describe what is wrong (word/phrase/translation/grammar).",
+    category: "Category",
+    description: "Description",
+    placeholder:
+      "For example: 'it should be ...' or 'the translation is incorrect, better: ...'",
+    sent: "Sent ✅",
+    failed: "Something went wrong 😕",
+    cancel: "Cancel",
+    sending: "Sending...",
+    send: "Send",
+    categories: {
+      spelling: "Spelling",
+      translation: "Translation",
+      grammar: "Grammar",
+      other: "Other",
+    },
+  },
+};
 
 const CATEGORY_IDS = ["spelling", "translation", "grammar", "other"] as const;
 type CategoryId = (typeof CATEGORY_IDS)[number];
@@ -75,7 +113,7 @@ export default function ReportErrorButton({
   label?: string;
   className?: string;
 }) {
-  const ui = UI[uiLangFrom(lang)];
+  const ui = UI[lang] ?? UI.ua;
 
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -105,7 +143,8 @@ export default function ReportErrorButton({
           ...context,
           category,
           message: message.trim(),
-          userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
+          userAgent:
+            typeof navigator !== "undefined" ? navigator.userAgent : undefined,
         }),
       });
 
@@ -131,7 +170,8 @@ export default function ReportErrorButton({
         type="button"
         onClick={() => setOpen(true)}
         className={
-          "text-xs px-2 py-1 rounded-md border border-slate-300 hover:bg-slate-50 " + className
+          "text-xs px-2 py-1 rounded-md border border-slate-300 hover:bg-slate-50 " +
+          className
         }
       >
         {label ?? ui.button}

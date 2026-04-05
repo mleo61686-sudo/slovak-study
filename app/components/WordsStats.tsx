@@ -6,8 +6,14 @@ import { useSession } from "next-auth/react";
 import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
+import type { Lang } from "@/lib/src/language";
 import type { SrsState } from "@/lib/srs/srsWords";
-import { isLearned, isMastered, loadDb as loadSrsDb, migrateSrsIfNeeded } from "@/lib/srs/srsWords";
+import {
+  isLearned,
+  isMastered,
+  loadDb as loadSrsDb,
+  migrateSrsIfNeeded,
+} from "@/lib/srs/srsWords";
 import { getLessonsProgress } from "@/lib/src/progress";
 
 type Stats = {
@@ -24,11 +30,29 @@ type LessonAnalytics = {
   bestStreak: number;
 };
 
-
 const DAILY_REVIEW_LIMIT = 30;
 
-
-const I18N = {
+const I18N: Record<
+  Lang,
+  {
+    title: string;
+    repeat: string;
+    done: string;
+    addNew: string;
+    total: string;
+    learned: string;
+    mastered: string;
+    due: string;
+    progress: string;
+    premiumTitle: string;
+    lessonsDone: string;
+    studyDays: string;
+    currentStreak: string;
+    bestStreak: string;
+    premiumLocked: string;
+    premiumHint: string;
+  }
+> = {
   ua: {
     title: "Твій прогрес слів",
     repeat: "Повторити",
@@ -39,14 +63,13 @@ const I18N = {
     mastered: "Вивчив",
     due: "На сьогодні",
     progress: "Прогрес",
-
-    // Premium analytics
     premiumTitle: "Твій прогрес уроків (Premium)",
     lessonsDone: "Уроків завершено",
     studyDays: "Днів навчання",
     currentStreak: "Серія (днів)",
     bestStreak: "Рекорд серії",
     premiumLocked: "🔒 Серії та рекорди — в Premium",
+    premiumHint: "Premium відкриває серії, рекорди та статистику уроків.",
   },
   ru: {
     title: "Твой прогресс слов",
@@ -58,16 +81,33 @@ const I18N = {
     mastered: "Выучил",
     due: "На сегодня",
     progress: "Прогресс",
-
-    // Premium analytics
     premiumTitle: "Твой прогресс уроков (Premium)",
     lessonsDone: "Уроков завершено",
     studyDays: "Дней обучения",
     currentStreak: "Серия (дней)",
     bestStreak: "Рекорд серии",
     premiumLocked: "🔒 Серии и рекорды — в Premium",
+    premiumHint: "Premium открывает серии, рекорды и статистику уроков.",
   },
-} as const;
+  en: {
+    title: "Your word progress",
+    repeat: "Review",
+    done: "✅ Everything is done for today",
+    addNew: "Add new words",
+    total: "Total words",
+    learned: "Learned",
+    mastered: "Mastered",
+    due: "Due today",
+    progress: "Progress",
+    premiumTitle: "Your lesson progress (Premium)",
+    lessonsDone: "Lessons completed",
+    studyDays: "Study days",
+    currentStreak: "Current streak",
+    bestStreak: "Best streak",
+    premiumLocked: "🔒 Streaks and records — Premium",
+    premiumHint: "Premium unlocks streaks, records, and lesson analytics.",
+  },
+};
 
 function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -84,8 +124,6 @@ function getDailySession(userId: string): { date: string; ids: string[] } | null
     return null;
   }
 }
-
-
 
 function computeStats(
   db: Record<string, SrsState>,
@@ -111,19 +149,24 @@ function computeStats(
 
 // ===== Premium lesson analytics =====
 
-function parseDoneAt(v: any): string | null {
-  // підтримка: boolean true (старий формат) — без дати
+function parseDoneAt(v: unknown): string | null {
   if (v === true) return null;
 
   if (v && typeof v === "object") {
-    const done = v.done === true;
+    const record = v as {
+      done?: boolean;
+      doneAt?: string;
+      updatedAt?: string;
+    };
+
+    const done = record.done === true;
     if (!done) return null;
 
-    const doneAt = typeof v.doneAt === "string" ? v.doneAt : null;
+    const doneAt = typeof record.doneAt === "string" ? record.doneAt : null;
     if (doneAt && /^\d{4}-\d{2}-\d{2}$/.test(doneAt)) return doneAt;
 
-    // fallback: updatedAt -> YYYY-MM-DD
-    const updatedAt = typeof v.updatedAt === "string" ? v.updatedAt : null;
+    const updatedAt =
+      typeof record.updatedAt === "string" ? record.updatedAt : null;
     if (updatedAt) {
       const day = updatedAt.slice(0, 10);
       if (/^\d{4}-\d{2}-\d{2}$/.test(day)) return day;
@@ -134,7 +177,6 @@ function parseDoneAt(v: any): string | null {
 }
 
 function dayToInt(day: string): number {
-  // YYYY-MM-DD -> days since epoch (UTC)
   const [y, m, d] = day.split("-").map((x) => parseInt(x, 10));
   const ms = Date.UTC(y, m - 1, d);
   return Math.floor(ms / 86400000);
@@ -144,12 +186,17 @@ function computeLessonAnalytics(): LessonAnalytics {
   const lessons = getLessonsProgress();
   const values = Object.values(lessons);
 
-  // done count
-  const lessonsDone = values.filter((v: any) =>
-    v === true ? true : !!(v && typeof v === "object" && v.done === true)
+  const lessonsDone = values.filter((v: unknown) =>
+    v === true
+      ? true
+      : !!(
+          v &&
+          typeof v === "object" &&
+          "done" in v &&
+          (v as { done?: boolean }).done === true
+        )
   ).length;
 
-  // dates set
   const dateSet = new Set<string>();
   for (const v of values) {
     const day = parseDoneAt(v);
@@ -166,7 +213,6 @@ function computeLessonAnalytics(): LessonAnalytics {
     .map(dayToInt)
     .sort((a, b) => a - b);
 
-  // best streak over all history
   let bestStreak = 1;
   let run = 1;
   for (let i = 1; i < days.length; i++) {
@@ -175,16 +221,13 @@ function computeLessonAnalytics(): LessonAnalytics {
     if (run > bestStreak) bestStreak = run;
   }
 
-  // current streak up to today
   const todayInt = dayToInt(getTodayKey());
   const hasToday = dateSet.has(getTodayKey());
 
-  // if no activity today, streak can still be "ongoing" if last day was yesterday
   const lastInt = days[days.length - 1];
   let currentStreak = 0;
 
   if (hasToday || lastInt === todayInt - 1) {
-    // Build int set for fast check
     const intSet = new Set(days);
 
     currentStreak = 1;
@@ -203,10 +246,10 @@ function computeLessonAnalytics(): LessonAnalytics {
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
     <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3">
-      <div className="text-[11px] text-slate-500 whitespace-nowrap overflow-hidden text-ellipsis">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[11px] text-slate-500">
         {label}
       </div>
-      <div className="mt-1 text-2xl font-semibold tabular-nums leading-none">
+      <div className="mt-1 text-2xl font-semibold leading-none tabular-nums">
         {value}
       </div>
     </div>
@@ -215,13 +258,12 @@ function StatTile({ label, value }: { label: string; value: number }) {
 
 export default function WordsStats() {
   const { lang } = useLanguage();
-  const t = I18N[lang];
+  const t = I18N[lang] ?? I18N.ua;
   const { data: session, status } = useSession();
 
   const isPremium = !!session?.user?.isPremium;
   const { courseId } = useActiveCourse();
 
-  // ✅ тепер беремо загальну кількість слів із уроків, а не з WORDS
   const allWords = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
 
   const [stats, setStats] = useState<Stats>({
@@ -240,7 +282,6 @@ export default function WordsStats() {
 
   useEffect(() => {
     const update = () => {
-      // ✅ якщо не залогінений — не показуємо чужий localStorage прогрес
       if (status !== "authenticated") {
         setStats({
           total: allWords.length,
@@ -266,8 +307,6 @@ export default function WordsStats() {
 
       const db = loadSrsDb(userId);
       setStats(computeStats(db, allWords.length, userId));
-
-      // ✅ premium analytics (lightweight)
       setLessonA(computeLessonAnalytics());
     };
 
@@ -280,13 +319,14 @@ export default function WordsStats() {
       window.removeEventListener("storage", update);
     };
   }, [allWords.length, status, session]);
+
   const progress =
     stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);
 
   const showPremiumBlock = status !== "loading";
 
   return (
-    <section className="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+    <section className="min-w-0 space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">📊 {t.title}</h2>
 
@@ -310,7 +350,6 @@ export default function WordsStats() {
         )}
       </div>
 
-      {/* ✅ завжди 2x2 — стабільно в колонці */}
       <div className="grid grid-cols-2 gap-3">
         <StatTile label={t.total} value={stats.total} />
         <StatTile label={t.learned} value={stats.learned} />
@@ -322,7 +361,7 @@ export default function WordsStats() {
         <div className="text-xs text-slate-500">
           {t.progress}: {progress}%
         </div>
-        <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">
           <div
             className="h-2 bg-black transition-all"
             style={{ width: `${progress}%` }}
@@ -330,16 +369,15 @@ export default function WordsStats() {
         </div>
       </div>
 
-      {/* ✅ Premium: streak + records */}
       {showPremiumBlock ? (
-        <div className="pt-2 space-y-3">
+        <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between gap-3">
             <div className="text-sm font-semibold">⭐ {t.premiumTitle}</div>
 
             {!isPremium ? (
               <Link
                 href="/premium"
-                className="text-xs rounded-full border border-slate-200 px-3 py-1 hover:bg-slate-50"
+                className="rounded-full border border-slate-200 px-3 py-1 text-xs hover:bg-slate-50"
               >
                 {t.premiumLocked}
               </Link>
@@ -366,11 +404,7 @@ export default function WordsStats() {
           </div>
 
           {!isPremium ? (
-            <div className="text-xs text-slate-500">
-              {lang === "ru"
-                ? "Premium открывает серии, рекорды и статистику уроков."
-                : "Premium відкриває серії, рекорди та статистику уроків."}
-            </div>
+            <div className="text-xs text-slate-500">{t.premiumHint}</div>
           ) : null}
         </div>
       ) : null}

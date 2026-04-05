@@ -8,18 +8,18 @@ import { SITE_URL } from "@/lib/site";
 import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
-  title: "Вивчення словацької мови по рівнях A0–B2 | Flunio",
+  title: "Вивчення мов по рівнях A0–B2 | Flunio",
   description:
-    "Навчання словацької мови онлайн: рівні A0–B2, уроки по 10 слів, вправи та прогрес. Почни з A0.",
+    "Навчання мов онлайн: рівні A0–B2, уроки по 10 слів, вправи та прогрес. Вивчай словацьку та чеську системно.",
 
   alternates: {
     canonical: `${SITE_URL}/learning`,
   },
 
   openGraph: {
-    title: "Навчання словацької — рівні A0–B2 | Flunio",
+    title: "Навчання по рівнях A0–B2 | Flunio",
     description:
-      "Уроки по рівнях A0–B2, вправи та прогрес. Вивчай словацьку системно.",
+      "Уроки по рівнях A0–B2, вправи та прогрес. Вивчай словацьку та чеську системно.",
     url: `${SITE_URL}/learning`,
     siteName: "Flunio",
     type: "website",

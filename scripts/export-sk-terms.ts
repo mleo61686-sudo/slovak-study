@@ -12,7 +12,18 @@ type TermRow = {
   sk: string;
   ua: string;
   ru: string;
-  count: number; // скільки разів зустрічається в уроках
+  count: number;
+};
+
+type LessonWord = {
+  term?: string;
+  sk?: string;
+  ua?: string;
+  ru?: string;
+};
+
+type LessonLike = {
+  words?: LessonWord[];
 };
 
 function main() {
@@ -21,25 +32,31 @@ function main() {
   const bands = Object.keys(SK_LESSONS_BY_BAND) as Array<keyof typeof SK_LESSONS_BY_BAND>;
 
   for (const band of bands) {
-    const lessons: any[] = (SK_LESSONS_BY_BAND as any)[band] ?? [];
+    const lessons = (SK_LESSONS_BY_BAND[band] ?? []) as LessonLike[];
+
     for (const lesson of lessons) {
-      const words: any[] = lesson?.words ?? [];
+      const words = lesson.words ?? [];
+
       for (const w of words) {
-        const skRaw = String(w?.term ?? w?.sk ?? "").trim();
-        const uaRaw = String(w?.ua ?? "").trim();
-        const ruRaw = String(w?.ru ?? w?.ua ?? "").trim();
+        const skRaw = String(w.term ?? w.sk ?? "").trim();
+        const uaRaw = String(w.ua ?? "").trim();
+        const ruRaw = String(w.ru ?? w.ua ?? "").trim();
 
         if (!skRaw || !uaRaw) continue;
 
         const key = norm(skRaw);
-
         const prev = map.get(key);
+
         if (!prev) {
-          map.set(key, { sk: skRaw, ua: uaRaw, ru: ruRaw || uaRaw, count: 1 });
+          map.set(key, {
+            sk: skRaw,
+            ua: uaRaw,
+            ru: ruRaw || uaRaw,
+            count: 1,
+          });
         } else {
           prev.count += 1;
 
-          // якщо раніше було пусто/гірше — підстрахуємо
           if (!prev.ua && uaRaw) prev.ua = uaRaw;
           if ((!prev.ru || prev.ru === prev.ua) && ruRaw) prev.ru = ruRaw;
         }

@@ -25,14 +25,21 @@ const COURSE_META: Record<
   },
 };
 
+function isCourseKey(value: string): value is CourseKey {
+  return value === "sk" || value === "cs" || value === "pl";
+}
+
 export default function CourseBadge() {
   const { course, ready } = useActiveCourse();
-  const c: CourseKey = (ready ? (course as CourseKey) : "sk") || "sk";
-  const meta = COURSE_META[c] ?? COURSE_META.sk;
+
+  const safeCourse: CourseKey =
+    ready && isCourseKey(course) ? course : "sk";
+
+  const meta = COURSE_META[safeCourse];
 
   return (
     <span className="inline-flex items-center gap-2.5">
-      <span className="overflow-hidden rounded-md ring-1 ring-slate-200 shadow-sm shrink-0">
+      <span className="shrink-0 overflow-hidden rounded-md ring-1 ring-slate-200 shadow-sm">
         <img
           src={meta.flag}
           alt={meta.alt}

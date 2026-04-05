@@ -23,6 +23,12 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: "/",
+    languages: {
+      uk: "/",
+      ru: "/",
+      en: "/",
+      "x-default": "/",
+    },
   },
 
   icons: {
@@ -80,7 +86,7 @@ export default function RootLayout({
         url: "https://flunio.com/",
         name: "Flunio",
         publisher: { "@id": "https://flunio.com/#organization" },
-        inLanguage: ["uk", "ru"],
+        inLanguage: ["uk", "ru", "en"],
         description:
           "Онлайн платформа для вивчення мов зі словацьким і чеським курсами, граматикою, словником і вправами.",
         potentialAction: {
@@ -96,7 +102,7 @@ export default function RootLayout({
         name: "Flunio",
         description:
           "Онлайн платформа для вивчення мов: словацька та чеська, уроки A0–B2, граматика, словник, вправи та практика.",
-        inLanguage: ["uk", "ru"],
+        inLanguage: ["uk", "ru", "en"],
         educationalUse: "language learning",
       },
     ],
@@ -111,7 +117,8 @@ export default function RootLayout({
         />
 
         <link rel="alternate" hrefLang="uk" href="https://flunio.com/" />
-        <link rel="alternate" hrefLang="ru" href="https://flunio.com/ru/" />
+        <link rel="alternate" hrefLang="ru" href="https://flunio.com/" />
+        <link rel="alternate" hrefLang="en" href="https://flunio.com/" />
         <link rel="alternate" hrefLang="x-default" href="https://flunio.com/" />
 
         <Script

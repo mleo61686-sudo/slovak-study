@@ -6,7 +6,15 @@ import SpeakButton from "@/app/components/SpeakButton";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 
-export const RESULT_I18N = {
+type ResultI18n = {
+  correct: string;
+  wrong: string;
+  next: string;
+  correctAnswer: string;
+  correctWord: string;
+};
+
+export const RESULT_I18N: Record<Lang, ResultI18n> = {
   ua: {
     correct: "✅ Правильно!",
     wrong: "❌ Неправильно.",
@@ -28,7 +36,7 @@ export const RESULT_I18N = {
     correctAnswer: "Correct answer:",
     correctWord: "Correct:",
   },
-} satisfies Record<Lang, any>;
+};
 
 export function ResultBox({
   correct,

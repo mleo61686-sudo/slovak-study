@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
+import type { Lang } from "@/lib/src/language";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
+
+type LocalizedText = Partial<Record<Lang, string>>;
 
 type Section = {
   heading: string;
@@ -19,7 +22,17 @@ type Content = {
   outro: string;
 };
 
-const CONTENT = {
+type CourseContent = Record<"sk" | "cs", Content>;
+
+function withEn<T extends Record<"ua" | "ru", CourseContent>>(content: T): Record<Lang, CourseContent> {
+  return {
+    ua: content.ua,
+    ru: content.ru,
+    en: content.ua,
+  };
+}
+
+const CONTENT = withEn({
   ua: {
     sk: {
       title: "Словацький алфавіт: повний гід з вимови",
@@ -265,7 +278,7 @@ const CONTENT = {
         "Ниже на странице ты можешь пройти упражнения, послушать произношение и закрепить знания на практике.",
     },
   },
-} satisfies Record<"ua" | "ru", Record<"sk" | "cs", Content>>;
+});
 
 function SectionBlock({ section }: { section: Section }) {
   return (
@@ -294,10 +307,8 @@ export default function AlphabetSeo() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const uiLang = lang === "ru" ? "ru" : "ua";
   const course = courseId === "cs" ? "cs" : "sk";
-
-  const content = CONTENT[uiLang][course];
+  const content = CONTENT[lang]?.[course] ?? CONTENT.ua[course];
 
   return (
     <section className="space-y-10 text-slate-800">

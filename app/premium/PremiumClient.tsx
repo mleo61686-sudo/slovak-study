@@ -8,6 +8,55 @@ type Lang = "ua" | "ru" | "en";
 type Currency = "eur" | "usd" | "uah";
 type Interval = "month" | "year";
 
+type SessionUserLike = {
+  isPremium?: boolean;
+};
+
+type PremiumTranslations = {
+  topTitle: string;
+  topSubtitle: string;
+  badge: string;
+  title: string;
+  subtitle: string;
+  bullets: string[];
+
+  planTitle: string;
+  planMonth: string;
+  planYear: string;
+  planYearBadge: string;
+  planHint: string;
+
+  priceNote: string;
+
+  buy: (currencyLabel: string, price: string, interval: Interval) => string;
+
+  manage: string;
+  secondary: string;
+  lockedTrainer: string;
+  loading: string;
+  opening: string;
+
+  compareTitle: string;
+  compareSubtitle: string;
+  colFeature: string;
+  colFree: string;
+  colPremium: string;
+  ctaAfterCompare: string;
+  premiumBetter: string;
+  yearlyHint: string;
+  monthlyHint: string;
+  currencyHint: string;
+};
+
+type FeatureRow = {
+  key: string;
+  ua: string;
+  ru: string;
+  en: string;
+  free: string;
+  premium: string;
+};
+
 const YEARLY_DISPLAY_PRICE: Record<Currency, string> = {
   eur: "€79",
   usd: "$89",
@@ -20,7 +69,7 @@ const MONTHLY_DISPLAY_PRICE: Record<Currency, string> = {
   uah: "₴349",
 };
 
-const T = {
+const T: Record<Lang, PremiumTranslations> = {
   ua: {
     topTitle: "Premium ⭐",
     topSubtitle:
@@ -162,7 +211,7 @@ const T = {
     monthlyHint: "You can switch to the yearly plan at any time.",
     currencyHint: "You can choose EUR/USD/UAH and monthly/yearly above.",
   },
-} satisfies Record<Lang, any>;
+};
 
 const CURRENCY_LABEL: Record<Currency, string> = {
   eur: "EUR",
@@ -170,7 +219,7 @@ const CURRENCY_LABEL: Record<Currency, string> = {
   uah: "UAH",
 };
 
-const FEATURES = [
+const FEATURES: readonly FeatureRow[] = [
   {
     key: "levels",
     ua: "Доступ до рівнів",
@@ -232,12 +281,13 @@ function Badge({ children }: { children: React.ReactNode }) {
 export default function PremiumClient() {
   const { lang } = useLanguage();
   const { data: session, status } = useSession();
+  const user = session?.user as SessionUserLike | undefined;
 
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
 
   const isLoadingSession = status === "loading";
-  const isPremium = !!session?.user?.isPremium;
+  const isPremium = user?.isPremium === true;
 
   const [loading, setLoading] = useState<Currency | "portal" | null>(null);
   const [interval, setInterval] = useState<Interval>("month");
@@ -255,7 +305,7 @@ export default function PremiumClient() {
         body: JSON.stringify({ currency, interval }),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
 
       if (!res.ok || !data?.url) {
         console.error("Checkout error:", { status: res.status, data });
@@ -273,7 +323,7 @@ export default function PremiumClient() {
     setLoading("portal");
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
-      const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
 
       if (!res.ok || !data?.url) {
         console.error("Portal error:", { status: res.status, data });
@@ -350,7 +400,7 @@ export default function PremiumClient() {
             ) : null}
 
             <ul className="grid gap-2 sm:grid-cols-2">
-              {t.bullets.map((item: string) => (
+              {t.bullets.map((item) => (
                 <li
                   key={item}
                   className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/90"

@@ -1,12 +1,15 @@
 /**
  * CourseBootstrap – клієнтський bootstrap для активного курсу.
+ *
  * Що робить:
  * При першому завантаженні перевіряє localStorage і, якщо курс
  * не встановлений, автоматично ставить default курс (Slovak).
+ *
  * Пов’язані файли:
  * - lib/course.ts
  * - CourseSwitcher
  * - CourseGate
+ *
  * Роль у Flunio:
  * Забезпечує стабільний activeCourse для multi-course системи.
  */
@@ -21,12 +24,12 @@ export default function CourseBootstrap() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // не чіпаємо /learn (щоб не зациклюватись)
+    // не чіпаємо /learn, щоб не зациклюватись
     if (pathname === "/learn") return;
 
     const saved = localStorage.getItem(COURSE_STORAGE_KEY);
 
-    // ✅ якщо курсу нема — тихо ставимо Slovak і все
+    // якщо курсу нема — тихо ставимо default курс
     if (!saved) {
       localStorage.setItem(COURSE_STORAGE_KEY, getDefaultCourse());
     }

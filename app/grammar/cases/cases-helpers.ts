@@ -1,3 +1,4 @@
+import type { Lang } from "@/lib/src/language";
 import type { CaseBlock, W } from "./cases-data";
 
 export type SentencePart = {
@@ -28,7 +29,7 @@ export function makeSentenceParts(example: string): SentencePart[] {
   }));
 }
 
-export function makeCaseQuiz(cases: CaseBlock[], lang: "ua" | "ru"): QuizQ[] {
+export function makeCaseQuiz(cases: CaseBlock[], lang: Lang): QuizQ[] {
   const picks = shuffle(cases).slice(0, 4);
 
   return picks.map((c) => {
@@ -37,14 +38,19 @@ export function makeCaseQuiz(cases: CaseBlock[], lang: "ua" | "ru"): QuizQ[] {
 
     while (opts.size < 4) {
       const anyCase = cases[Math.floor(Math.random() * cases.length)];
-      const ex = anyCase.examples[Math.floor(Math.random() * anyCase.examples.length)].sk;
+      const ex =
+        anyCase.examples[Math.floor(Math.random() * anyCase.examples.length)].sk;
       opts.add(ex);
     }
 
     const prompt =
       lang === "ru"
         ? { sk: c.questions.sk, ua: "", ru: `${c.name.ru}: ${c.questions.ru}` }
-        : { sk: c.questions.sk, ua: `${c.name.ua}: ${c.questions.ua}`, ru: "" };
+        : {
+            sk: c.questions.sk,
+            ua: `${c.name.ua}: ${c.questions.ua}`,
+            ru: "",
+          };
 
     return {
       caseId: c.id,

@@ -23,7 +23,7 @@ export const COURSES: CourseDefinition[] = [
     description: {
       ua: "Почни з нуля та вивчай словацьку через уроки, граматику, словник і тренажер.",
       ru: "Начни с нуля и изучай словацкий через уроки, грамматику, словарь и тренажёр.",
-      // en можна додати пізніше
+      en: "Start from zero and learn Slovak through lessons, grammar, dictionary, and practice.",
     },
     enabled: true,
     status: "active",
@@ -36,6 +36,7 @@ export const COURSES: CourseDefinition[] = [
     description: {
       ua: "Чеський курс уже доступний. Деякі рівні та матеріали ще допрацьовуються.",
       ru: "Чешский курс уже доступен. Некоторые уровни и материалы ещё дорабатываются.",
+      en: "The Czech course is already available. Some levels and materials are still being improved.",
     },
     enabled: true,
     status: "active",
@@ -48,6 +49,7 @@ export const COURSES: CourseDefinition[] = [
     description: {
       ua: "Польська мова з’явиться пізніше після завершення словацького й чеського напрямків.",
       ru: "Польский язык появится позже, после завершения словацкого и чешского направлений.",
+      en: "Polish will be added later after the Slovak and Czech tracks are completed.",
     },
     enabled: false,
     status: "comingSoon",

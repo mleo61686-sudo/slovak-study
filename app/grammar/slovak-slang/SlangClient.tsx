@@ -3,19 +3,99 @@
 import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
+import type { Lang } from "@/lib/src/language";
 import SpeakButton from "@/app/components/SpeakButton";
 import { getSlangByCourse, SlangCategory, SlangItem } from "@/data/slang";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
-const CAT_LABEL: Record<SlangCategory, { ua: string; ru: string }> = {
-  daily: { ua: "Побут", ru: "Быт" },
-  work: { ua: "Робота", ru: "Работа" },
-  friends: { ua: "Друзі", ru: "Друзья" },
-  street: { ua: "Вулиця", ru: "Улица" },
-  reactions: { ua: "Реакції", ru: "Реакции" },
+type LocalizedText = Partial<Record<Lang, string>>;
+
+const CAT_LABEL: Record<SlangCategory, LocalizedText> = {
+  daily: { ua: "Побут", ru: "Быт", en: "Daily life" },
+  work: { ua: "Робота", ru: "Работа", en: "Work" },
+  friends: { ua: "Друзі", ru: "Друзья", en: "Friends" },
+  street: { ua: "Вулиця", ru: "Улица", en: "Street" },
+  reactions: { ua: "Реакції", ru: "Реакции", en: "Reactions" },
 };
 
 const LEVELS = ["A1", "A2", "B1", "B2"] as const;
+
+const UI: Record<string, LocalizedText> = {
+  titleSk: {
+    ua: "Сленг і розмовна мова 🇸🇰",
+    ru: "Сленг и разговорная речь 🇸🇰",
+    en: "Slang and spoken language 🇸🇰",
+  },
+  titleCs: {
+    ua: "Сленг і розмовна мова 🇨🇿",
+    ru: "Сленг и разговорная речь 🇨🇿",
+    en: "Slang and spoken language 🇨🇿",
+  },
+  introSk: {
+    ua: "Живі фрази та вирази, які ти реально почуєш у Словаччині: на роботі, в магазині, між друзями.",
+    ru: "Живые фразы и выражения, которые ты реально услышишь в Словакии.",
+    en: "Real-life phrases and expressions you’ll actually hear in Slovakia: at work, in shops, and among friends.",
+  },
+  introCs: {
+    ua: "Живі чеські розмовні фрази та сленг, які реально використовують у Чехії.",
+    ru: "Живые чешские разговорные фразы и сленг, которые реально используют в Чехии.",
+    en: "Real Czech colloquial phrases and slang that people actually use in the Czech Republic.",
+  },
+  practice: {
+    ua: "Практикувати сленг →",
+    ru: "Практиковать сленг →",
+    en: "Practice slang →",
+  },
+  totals: {
+    ua: "Всього",
+    ru: "Всего",
+    en: "Total",
+  },
+  shown: {
+    ua: "Показано",
+    ru: "Показано",
+    en: "Shown",
+  },
+  searchPlaceholder: {
+    ua: "Пошук: слово / переклад / приклад…",
+    ru: "Поиск: слово / перевод / пример…",
+    en: "Search: word / translation / example…",
+  },
+  levelAll: {
+    ua: "Рівень: всі",
+    ru: "Уровень: все",
+    en: "Level: all",
+  },
+  categoryAll: {
+    ua: "Категорія: всі",
+    ru: "Категория: все",
+    en: "Category: all",
+  },
+  showMore: {
+    ua: "Показати ще",
+    ru: "Показать ещё",
+    en: "Show more",
+  },
+  nothingFound: {
+    ua: "Нічого не знайдено 😅",
+    ru: "Ничего не найдено 😅",
+    en: "Nothing found 😅",
+  },
+  example: {
+    ua: "Приклад",
+    ru: "Пример",
+    en: "Example",
+  },
+};
+
+function tr(text: LocalizedText, lang: Lang) {
+  return text[lang] ?? text.ua ?? "";
+}
+
+function trPair(ua: string, ru: string | undefined, lang: Lang) {
+  if (lang === "ru") return ru ?? ua;
+  return ua;
+}
 
 export default function SlangClient() {
   const { lang } = useLanguage();
@@ -23,8 +103,6 @@ export default function SlangClient() {
 
   const slang = getSlangByCourse(courseId);
   const isCzech = courseId === "cs";
-
-  const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
 
   const [q, setQ] = useState("");
   const [level, setLevel] = useState<(typeof LEVELS)[number] | "ALL">("ALL");
@@ -67,39 +145,26 @@ export default function SlangClient() {
   }, [level, cat]);
 
   return (
-    <div className="max-w-5xl mx-auto py-10 space-y-6">
+    <div className="mx-auto max-w-5xl space-y-6 py-10">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">
-          {isCzech
-            ? t("Сленг і розмовна мова 🇨🇿", "Сленг и разговорная речь 🇨🇿")
-            : t("Сленг і розмовна мова 🇸🇰", "Сленг и разговорная речь 🇸🇰")}
+          {isCzech ? tr(UI.titleCs, lang) : tr(UI.titleSk, lang)}
         </h1>
 
         <p className="text-slate-700">
-          {isCzech
-            ? t(
-                "Живі чеські розмовні фрази та сленг, які реально використовують у Чехії.",
-                "Живые чешские разговорные фразы и сленг, которые реально используют в Чехии."
-              )
-            : t(
-                "Живі фрази та вирази, які ти реально почуєш у Словаччині: на роботі, в магазині, між друзями.",
-                "Живые фразы и выражения, которые ты реально услышишь в Словакии."
-              )}
+          {isCzech ? tr(UI.introCs, lang) : tr(UI.introSk, lang)}
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
           <Link
             href={practiceHref}
-            className="inline-flex items-center justify-center rounded-xl bg-black text-white px-4 py-2 text-sm hover:bg-black/90 transition"
+            className="inline-flex items-center justify-center rounded-xl bg-black px-4 py-2 text-sm text-white transition hover:bg-black/90"
           >
-            {t("Практикувати сленг →", "Практиковать сленг →")}
+            {tr(UI.practice, lang)}
           </Link>
 
-          <div className="text-sm text-slate-500 self-center">
-            {t(
-              `Всього: ${slang.length} • Показано: ${filtered.length}`,
-              `Всего: ${slang.length} • Показано: ${filtered.length}`
-            )}
+          <div className="self-center text-sm text-slate-500">
+            {tr(UI.totals, lang)}: {slang.length} • {tr(UI.shown, lang)}: {filtered.length}
           </div>
         </div>
       </div>
@@ -109,19 +174,16 @@ export default function SlangClient() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder={t(
-              "Пошук: слово / переклад / приклад…",
-              "Поиск: слово / перевод / пример…"
-            )}
+            placeholder={tr(UI.searchPlaceholder, lang)}
             className="h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-black/10"
           />
 
           <select
             value={level}
-            onChange={(e) => setLevel(e.target.value as any)}
+            onChange={(e) => setLevel(e.target.value as (typeof LEVELS)[number] | "ALL")}
             className="h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-black/10"
           >
-            <option value="ALL">{t("Рівень: всі", "Уровень: все")}</option>
+            <option value="ALL">{tr(UI.levelAll, lang)}</option>
 
             {LEVELS.map((lv) => (
               <option key={lv} value={lv}>
@@ -132,19 +194,17 @@ export default function SlangClient() {
 
           <select
             value={cat}
-            onChange={(e) => setCat(e.target.value as any)}
+            onChange={(e) => setCat(e.target.value as SlangCategory | "ALL")}
             className="h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-black/10"
           >
-            <option value="ALL">
-              {t("Категорія: всі", "Категория: все")}
-            </option>
+            <option value="ALL">{tr(UI.categoryAll, lang)}</option>
 
             {Object.keys(CAT_LABEL).map((k) => {
               const key = k as SlangCategory;
 
               return (
                 <option key={key} value={key}>
-                  {t(CAT_LABEL[key].ua, CAT_LABEL[key].ru)}
+                  {tr(CAT_LABEL[key], lang)}
                 </option>
               );
             })}
@@ -164,14 +224,14 @@ export default function SlangClient() {
             onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
             className="rounded-xl border px-4 py-2 text-sm hover:bg-slate-50"
           >
-            {t("Показати ще", "Показать ещё")}
+            {tr(UI.showMore, lang)}
           </button>
         </div>
       )}
 
       {filtered.length === 0 && (
         <div className="rounded-2xl border bg-white p-6 text-slate-600">
-          {t("Нічого не знайдено 😅", "Ничего не найдено 😅")}
+          {tr(UI.nothingFound, lang)}
         </div>
       )}
     </div>
@@ -181,13 +241,13 @@ export default function SlangClient() {
 function SlangCard({ item }: { item: SlangItem }) {
   const { lang } = useLanguage();
 
-  const t = (ua: string, ru: string) => (lang === "ru" ? ru : ua);
-
-  const meaning = lang === "ru" ? item.ru : item.ua;
-  const example = lang === "ru" ? item.exampleRu : item.exampleUa;
+  const meaning =
+    lang === "ru" ? item.ru : item.ua;
+  const example =
+    lang === "ru" ? item.exampleRu : item.exampleUa;
 
   return (
-    <div className="rounded-2xl border bg-white p-5 shadow-sm space-y-3">
+    <div className="space-y-3 rounded-2xl border bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-lg font-semibold">{item.sk}</div>
@@ -204,10 +264,10 @@ function SlangCard({ item }: { item: SlangItem }) {
 
       <div className="rounded-xl bg-slate-50 p-3">
         <div className="text-xs uppercase tracking-wide text-slate-500">
-          {t("Приклад", "Пример")}
+          {tr(UI.example, lang)}
         </div>
 
-        <div className="text-sm text-slate-700 italic">{item.exampleSk}</div>
+        <div className="text-sm italic text-slate-700">{item.exampleSk}</div>
         <div className="text-sm text-slate-500">{example}</div>
 
         <div className="pt-2">
@@ -227,13 +287,13 @@ function SlangCard({ item }: { item: SlangItem }) {
         </span>
 
         <span className="rounded-full border px-2 py-1 text-slate-600">
-          {t(CAT_LABEL[item.category].ua, CAT_LABEL[item.category].ru)}
+          {tr(CAT_LABEL[item.category], lang)}
         </span>
       </div>
 
       {item.caution && (
         <div className="text-sm text-amber-700">
-          ⚠ {t(item.caution.ua, item.caution.ru)}
+          ⚠ {trPair(item.caution.ua, item.caution.ru, lang)}
         </div>
       )}
     </div>

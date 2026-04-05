@@ -21,10 +21,10 @@ export type LocalizedText = {
 };
 
 export type Word = {
-  // 🔑 універсальне слово курсу (Slovak / Czech / Polish)
+  // універсальне слово курсу (Slovak / Czech / Polish)
   term?: string;
 
-  // ⚠️ legacy (поки використовується у коді)
+  // legacy (поки використовується у коді)
   sk: string;
 
   ua: string;
@@ -44,15 +44,14 @@ export type Word = {
   };
 };
 
-// ✅ внутрішній тип: у джерелі title може бути старим string
 type LessonSource = {
-  id: string; // "1" або "a0-1"
+  id: string;
   title: string | LocalizedText;
   words: Word[];
 };
 
 export type Lesson = {
-  id: string; // "1" або "a0-1"
+  id: string;
   title: LocalizedText;
   words: Word[];
 };
@@ -66,7 +65,6 @@ export type CefrBand = {
   lessons: { id: string; title: LocalizedText; wordsCount: number }[];
 };
 
-// ✅ скільки уроків у кожному рівні
 const LESSONS_PER_BAND: Record<CefrBandId, number> = {
   a0: 30,
   a1: 40,
@@ -143,8 +141,6 @@ const BAND_META: Record<
   },
 };
 
-// ✅ Назви для всіх 30 уроків A0 (UA/RU)
-// en поки опціональна: якщо її нема — UI візьме fallback
 const A0_TITLES: Record<number, LocalizedText> = {
   1: { ua: "Базові слова", ru: "Базовые слова" },
   2: { ua: "Люди та сімʼя", ru: "Люди и семья" },
@@ -178,9 +174,6 @@ const A0_TITLES: Record<number, LocalizedText> = {
   30: { ua: "Повторення бази", ru: "Повторение базы" },
 };
 
-// =============================
-// RU логіка — твоя
-// =============================
 const RU_OVERRIDES: Record<string, string> = {
   "дім": "дом",
   "гроші": "деньги",
@@ -198,7 +191,6 @@ const RU_OVERRIDES: Record<string, string> = {
 function addRu(words: Word[]): Word[] {
   return words.map((w) => ({
     ...w,
-    // 🔑 якщо term не заданий — використовуємо sk
     term: w.term ?? w.sk,
     ru: w.ru ?? RU_OVERRIDES[w.ua] ?? w.ua,
   }));
@@ -240,20 +232,12 @@ function fillTo10(words: Word[], lessonNum: number): Word[] {
   return [...words, ...fillers];
 }
 
-// =============================
-// 1) ТВОЇ РЕАЛЬНІ УРОКИ A0 (1..30)
-// =============================
-
-// ✅ нормалізуємо A0_REAL: title -> {ua,ru,en?} + додаємо ru у слова
 const A0_REAL: Lesson[] = (A0_REAL_SOURCE as LessonSource[]).map((l) => ({
   ...l,
   title: toTitle(l.title),
   words: addRu(l.words),
 }));
 
-// =============================
-// 4) Генеруємо з WORDS без дублювання
-// =============================
 const realUsed = new Set<string>(A0_REAL.flatMap((l) => l.words.map(keyOf)));
 
 const BANK = addRu(WORDS)
@@ -278,9 +262,6 @@ function makeLessonTitle(n: number, topic: LocalizedText): LocalizedText {
   };
 }
 
-// =============================
-// 5) Будуємо A0_ALL: 30 уроків (1..30)
-// =============================
 const A0_ALL: Lesson[] = Array.from({ length: LESSONS_PER_BAND.a0 }, (_, i) => {
   const n = i + 1;
 
@@ -305,12 +286,11 @@ const A0_ALL: Lesson[] = Array.from({ length: LESSONS_PER_BAND.a0 }, (_, i) => {
   };
 });
 
-// ✅ нормалізація A1/A2/B1/B2 (щоб не ламалось, якщо title там string)
-function normalizeLessonList(list: any[]): Lesson[] {
+function normalizeLessonList(list: LessonSource[]): Lesson[] {
   return list.map((l) => ({
     id: String(l.id),
     title: toTitle(l.title ?? ""),
-    words: addRu((l.words ?? []) as Word[]),
+    words: addRu(l.words ?? []),
   }));
 }
 
@@ -320,11 +300,9 @@ function findPhrase(
   ua: string,
   lessonId: string
 ) {
-  // 1) exact match (як було)
   const exact = dict[phraseKey(sk, ua, lessonId)];
   if (exact) return exact;
 
-  // 2) fallback: якщо ua мінявся — знайдемо будь-який ключ для цього sk + lessonId
   const skNorm = sk.trim().toLowerCase();
   const lid = String(lessonId).trim().toLowerCase();
 
@@ -342,14 +320,11 @@ function attachPhrases(words: Word[], dict: PhraseDict, lessonId: string) {
   });
 }
 
-const A1_LIST = normalizeLessonList(A1_ALL as any);
-const A2_LIST = normalizeLessonList(A2_ALL as any);
-const B1_LIST = normalizeLessonList(B1_ALL as any);
-const B2_LIST = normalizeLessonList(B2_ALL as any);
+const A1_LIST = normalizeLessonList(A1_ALL as LessonSource[]);
+const A2_LIST = normalizeLessonList(A2_ALL as LessonSource[]);
+const B1_LIST = normalizeLessonList(B1_ALL as LessonSource[]);
+const B2_LIST = normalizeLessonList(B2_ALL as LessonSource[]);
 
-// =============================
-// 6) CEFR_LEVELS
-// =============================
 export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBandId[]).map(
   (id) => {
     const meta = BAND_META[id];
@@ -381,9 +356,6 @@ export const CEFR_LEVELS: CefrBand[] = (["a0", "a1", "a2", "b1", "b2"] as CefrBa
   }
 );
 
-// =============================
-// 7) getLesson: "a0-1" / "a1-3" / ...
-// =============================
 export function getLesson(id: string, courseId: string = "sk") {
   const raw = String(id);
 
@@ -412,7 +384,6 @@ export function getLesson(id: string, courseId: string = "sk") {
     };
   }
 
-  // старий формат "1" (підтримка A0)
   const lesson = A0_ALL.find((l) => l.id === raw) ?? null;
   if (!lesson) return null;
 
@@ -425,9 +396,6 @@ export function getLesson(id: string, courseId: string = "sk") {
   };
 }
 
-// =============================
-// 8) Lessons by band (SK) – лишаємо як було (це база для sk-lessons-by-band.ts)
-// =============================
 export const LESSONS_BY_BAND: Record<CefrBandId, Lesson[]> = {
   a0: A0_ALL,
   a1: A1_LIST,
@@ -449,9 +417,6 @@ function dictKey(w: Word) {
   return String(w.sk).trim().toLowerCase();
 }
 
-// =============================
-// 9) Course-agnostic dictionary / SRS builders
-// =============================
 export function buildDictionaryFromLessonsByBand(
   lessonsByBand: Record<CefrBandId, Lesson[]>
 ): DictionaryEntry[] {

@@ -13,25 +13,27 @@ type TopicConfig = {
   render: () => React.ReactElement;
 };
 
-const TOPICS: Record<string, TopicConfig> = {
+type TopicSlug = "alphabet" | "verbs-present" | "cases";
+
+const TOPICS: Record<TopicSlug, TopicConfig> = {
   alphabet: {
-    title: "Алфавіт і вимова | Flunio",
+    title: "Alphabet and pronunciation | Flunio",
     description:
-      "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
+      "Alphabet and pronunciation for Slovak and Czech: reading rules, sounds, examples, and mini practice.",
     path: "/grammar/alphabet",
     render: () => <AlphabetPage />,
   },
   "verbs-present": {
-    title: "Дієслова теперішнього часу | Flunio",
+    title: "Present tense verbs | Flunio",
     description:
-      "Дієслова теперішнього часу у словацькій та чеській мовах: таблиці, приклади та міні-вправи.",
+      "Present tense verbs in Slovak and Czech: tables, examples, and mini exercises.",
     path: "/grammar/verbs-present",
     render: () => <VerbsPresentPage />,
   },
   cases: {
-    title: "Відмінки | Flunio",
+    title: "Cases | Flunio",
     description:
-      "Відмінки у словацькій та чеській мовах: питання, форми, приклади речень і прості пояснення.",
+      "Cases in Slovak and Czech: question patterns, forms, example sentences, and simple explanations.",
     path: "/grammar/cases",
     render: () => <CasesPage />,
   },
@@ -43,7 +45,7 @@ export async function generateMetadata({
   params: Promise<{ topic: string }>;
 }): Promise<Metadata> {
   const { topic } = await params;
-  const config = TOPICS[topic];
+  const config = TOPICS[topic as TopicSlug];
 
   if (!config) {
     return {};
@@ -77,7 +79,7 @@ export default async function GrammarTopicPage({
   params: Promise<{ topic: string }>;
 }) {
   const { topic } = await params;
-  const config = TOPICS[topic];
+  const config = TOPICS[topic as TopicSlug];
 
   if (!config) {
     notFound();

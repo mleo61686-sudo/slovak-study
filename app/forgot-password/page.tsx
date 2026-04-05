@@ -4,31 +4,52 @@ import { useState } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 
+type Lang = "ua" | "ru" | "en";
+
+type ForgotPasswordI18n = {
+  title: string;
+  email: string;
+  btn: string;
+  ok: string;
+  back: string;
+  hint: string;
+  footer: string;
+};
+
+const dict: Record<Lang, ForgotPasswordI18n> = {
+  ua: {
+    title: "Відновлення пароля",
+    email: "Email",
+    btn: "Надіслати посилання",
+    ok: "Якщо акаунт існує — ми надіслали лист.",
+    back: "← Назад до входу",
+    hint: "Введи email — ми надішлемо посилання для скидання пароля.",
+    footer: "© 2026 Flunio — вивчай мови щодня.",
+  },
+  ru: {
+    title: "Восстановление пароля",
+    email: "Email",
+    btn: "Отправить ссылку",
+    ok: "Если аккаунт существует — мы отправили письмо.",
+    back: "← Назад ко входу",
+    hint: "Введи email — мы отправим ссылку для сброса пароля.",
+    footer: "© 2026 Flunio — изучай языки каждый день.",
+  },
+  en: {
+    title: "Password reset",
+    email: "Email",
+    btn: "Send reset link",
+    ok: "If the account exists, we have sent an email.",
+    back: "← Back to login",
+    hint: "Enter your email and we will send you a link to reset your password.",
+    footer: "© 2026 Flunio — learn languages every day.",
+  },
+};
+
 export default function ForgotPasswordPage() {
   const { lang } = useLanguage();
-
-  const dict = {
-    ua: {
-      title: "Відновлення пароля",
-      email: "Email",
-      btn: "Надіслати посилання",
-      ok: "Якщо акаунт існує — ми надіслали лист.",
-      back: "← Назад до входу",
-      hint: "Введи email — ми надішлемо посилання для скидання пароля.",
-      footer: "© 2026 Flunio — вивчай мови щодня.",
-    },
-    ru: {
-      title: "Восстановление пароля",
-      email: "Email",
-      btn: "Отправить ссылку",
-      ok: "Если аккаунт существует — мы отправили письмо.",
-      back: "← Назад ко входу",
-      hint: "Введи email — мы отправим ссылку для сброса пароля.",
-      footer: "© 2026 Flunio — изучай языки каждый день.",
-    },
-  } as const;
-
-  const t = dict[lang];
+  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
+  const t = dict[L];
 
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);

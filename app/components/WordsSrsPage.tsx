@@ -9,6 +9,7 @@ import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import type { CourseId } from "@/app/learning/courses/registry";
 import { useLanguage } from "@/lib/src/useLanguage";
+import type { Lang } from "@/lib/src/language";
 import {
   isLearned as _isLearned,
   isMastered as _isMastered,
@@ -46,7 +47,39 @@ const FORGOT_MINUTES = 10;
 const DAILY_REVIEW_LIMIT = 30;
 const DAILY_SESSION_KEY_BASE = "slovakStudy.srsDailySession";
 
-const I18N = {
+const I18N: Record<
+  Lang,
+  {
+    title: string;
+    today: string;
+    back: string;
+    add30: string;
+    total: string;
+    mastered: string;
+    learned: string;
+    due: string;
+    left: string;
+    showAnswer: string;
+    noDueTitle: string;
+    noDueText: string;
+    sessionDone: string;
+    nextSession: string;
+    skip: string;
+    forgot: string;
+    hard: string;
+    good: string;
+    easy: string;
+    dailyLimit: string;
+    noNew: string;
+    repeatAgainThisSession: string;
+    nextTomorrow: string;
+    nextIn: (days: number) => string;
+    nextSoon: string;
+    needLoginTitle: string;
+    needLoginText: string;
+    login: string;
+  }
+> = {
   ua: {
     title: "Слова (SRS)",
     today: "На сьогодні",
@@ -69,6 +102,8 @@ const I18N = {
     easy: "Легко",
     dailyLimit: "Ліміт нових слів на сьогодні вичерпано 🙂",
     noNew: "Немає нових слів 🙂",
+    repeatAgainThisSession: "🔁 Повторимо ще раз у цьому сеансі",
+    nextTomorrow: "⏳ Наступне повторення — завтра",
     nextIn: (days: number) => `📆 Наступне повторення через ${days} днів`,
     nextSoon: `⏳ Наступне повторення через ${FORGOT_MINUTES} хв`,
     needLoginTitle: "Потрібен вхід",
@@ -98,6 +133,8 @@ const I18N = {
     easy: "Легко",
     dailyLimit: "Лимит новых слов на сегодня исчерпан 🙂",
     noNew: "Нет новых слов 🙂",
+    repeatAgainThisSession: "🔁 Повторим ещё раз в этом сеансе",
+    nextTomorrow: "⏳ Следующее повторение — завтра",
     nextIn: (days: number) => `📆 Следующее повторение через ${days} дней`,
     nextSoon: `⏳ Следующее повторение через ${FORGOT_MINUTES} мин`,
     needLoginTitle: "Нужен вход",
@@ -105,7 +142,38 @@ const I18N = {
       "SRS-прогресс сохраняется по аккаунту. Войдите, чтобы продолжить.",
     login: "Войти →",
   },
-} as const;
+  en: {
+    title: "Words (SRS)",
+    today: "For today",
+    back: "Back",
+    add30: "Add 30",
+    total: "Total words",
+    learned: "Learned",
+    mastered: "Mastered",
+    due: "Due today",
+    left: "Left",
+    showAnswer: "Show answer",
+    noDueTitle: "🎉 No words to review today",
+    noDueText: 'Press "Add 30".',
+    sessionDone: "✅ Session completed",
+    nextSession: "Take next batch",
+    skip: "Skip",
+    forgot: "Forgot",
+    hard: "Hard",
+    good: "Good",
+    easy: "Easy",
+    dailyLimit: "Daily limit of new words reached 🙂",
+    noNew: "No new words 🙂",
+    repeatAgainThisSession: "🔁 We’ll repeat it again in this session",
+    nextTomorrow: "⏳ Next review — tomorrow",
+    nextIn: (days: number) => `📆 Next review in ${days} days`,
+    nextSoon: `⏳ Next review in ${FORGOT_MINUTES} min`,
+    needLoginTitle: "Login required",
+    needLoginText:
+      "SRS progress is saved per account. Log in to continue.",
+    login: "Log in →",
+  },
+};
 
 function getTodayKey() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
@@ -220,7 +288,7 @@ function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
           localStorage.removeItem(legacyDailySessionKey(userId));
         }
       }
-    } catch { }
+    } catch {}
   }
 
   try {
@@ -292,8 +360,8 @@ function applyReview(prev: SrsState, grade: 0 | 1 | 2 | 3): SrsState {
   };
 }
 
-const isLearned = (s: SrsState) => _isLearned(s as any);
-const isMastered = (s: SrsState) => _isMastered(s as any);
+const isLearned = (s: SrsState) => _isLearned(s as never);
+const isMastered = (s: SrsState) => _isMastered(s as never);
 
 function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
   const now = Date.now();
@@ -306,8 +374,14 @@ function computeStats(db: Record<string, SrsState>, totalWords: number): Stats {
   return { total: totalWords, learned, mastered, due };
 }
 
-function getTerm(w: any): string {
-  return String(w?.term ?? w?.sk ?? "").trim();
+function getTerm(w: Word): string {
+  return String((w as { term?: string; sk?: string }).term ?? w.sk ?? "").trim();
+}
+
+function getTranslation(w: Word, lang: Lang): string {
+  if (lang === "ru") return w.ru ?? w.ua ?? "";
+  if (lang === "en") return w.en ?? w.ua ?? "";
+  return w.ua ?? "";
 }
 
 function getDueSorted(words: Word[], db: Record<string, SrsState>): Word[] {
@@ -327,7 +401,7 @@ function getDueSorted(words: Word[], db: Record<string, SrsState>): Word[] {
 
 export default function WordsSrsPage({ backHref }: { backHref: string }) {
   const { lang } = useLanguage();
-  const t = I18N[lang];
+  const t = I18N[lang] ?? I18N.ua;
 
   const { data: session, status } = useSession();
   const userId = String(session?.user?.id ?? "");
@@ -393,6 +467,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
       ids = dueIds.slice(0, target);
       setDailySession(userId, courseId, ids);
     }
+
     const byId = new Map(allWords.map((w) => [getTerm(w), w]));
     const sessionWords = ids.map((id) => byId.get(id)).filter(Boolean) as Word[];
 
@@ -480,17 +555,9 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     updated[curId] = next;
 
     if (g === 0) {
-      setLastInfo(
-        lang === "ua"
-          ? "🔁 Повторимо ще раз у цьому сеансі"
-          : "🔁 Повторим ещё раз в этом сеансе"
-      );
+      setLastInfo(t.repeatAgainThisSession);
     } else if (next.interval <= 1) {
-      setLastInfo(
-        lang === "ua"
-          ? "⏳ Наступне повторення — завтра"
-          : "⏳ Следующее повторение — завтра"
-      );
+      setLastInfo(t.nextTomorrow);
     } else {
       setLastInfo(t.nextIn(next.interval));
     }
@@ -534,15 +601,9 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   }
 
   const left = current ? queue.length : 0;
-
-  const translation =
-    !current
-      ? ""
-      : lang === "ru"
-        ? current.ru || current.ua || ""
-        : current.ua || "";
-
+  const translation = current ? getTranslation(current, lang) : "";
   const term = current ? getTerm(current) : "";
+  const ipa = current && "ipa" in current ? current.ipa : undefined;
 
   // ✅ Login UI після хуків (правильно для React)
   if (needLogin) {
@@ -565,7 +626,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   }
 
   return (
-    <main className="mx-auto max-w-3xl p-4 space-y-6">
+    <main className="mx-auto max-w-3xl space-y-6 p-4">
       <div className="flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">🧠 {t.title}</h1>
@@ -633,7 +694,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
           </div>
         )
       ) : (
-        <div className="rounded-2xl border bg-white p-6 space-y-4">
+        <div className="space-y-4 rounded-2xl border bg-white p-6">
           <div className="text-sm text-gray-500">
             {t.left}: {queue.length}
           </div>
@@ -641,11 +702,7 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
           <div className="flex items-center gap-2">
             <div className="text-3xl font-bold">{term}</div>
             <SpeakButton text={term} />
-            {show && (current as any).ipa && (
-              <span className="text-sm text-slate-500">
-                {(current as any).ipa}
-              </span>
-            )}
+            {show && ipa && <span className="text-sm text-slate-500">{ipa}</span>}
           </div>
 
           {lastInfo && <div className="text-sm text-slate-600">{lastInfo}</div>}
@@ -673,28 +730,28 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
                 <button
                   disabled={isGrading}
                   onClick={() => grade(0)}
-                  className="rounded-xl bg-red-600 px-4 py-2 text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl bg-red-600 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t.forgot}
                 </button>
                 <button
                   disabled={isGrading}
                   onClick={() => grade(1)}
-                  className="rounded-xl bg-orange-500 px-4 py-2 text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl bg-orange-500 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t.hard}
                 </button>
                 <button
                   disabled={isGrading}
                   onClick={() => grade(2)}
-                  className="rounded-xl bg-green-600 px-4 py-2 text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl bg-green-600 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t.good}
                 </button>
                 <button
                   disabled={isGrading}
                   onClick={() => grade(3)}
-                  className="rounded-xl bg-emerald-700 px-4 py-2 text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-xl bg-emerald-700 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {t.easy}
                 </button>

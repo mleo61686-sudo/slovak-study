@@ -5,7 +5,7 @@ import { COURSE_STORAGE_KEY, getDefaultCourse, type CourseId } from "@/lib/cours
 export type LessonProgressObj = {
   done?: boolean;
 
-  // ✅ NEW: дата завершення уроку (для streak/records)
+  // дата завершення уроку (для streak/records)
   doneAt?: string; // "YYYY-MM-DD"
 
   lastCorrect?: number;
@@ -23,7 +23,8 @@ export type LessonProgressValue = boolean | LessonProgressObj;
 export type LessonsProgress = Record<string, LessonProgressValue>;
 
 // ===== SRS прогрес =====
-export type SrsProgress = Record<string, any>;
+export type SrsWordProgress = Record<string, unknown>;
+export type SrsProgress = Record<string, SrsWordProgress>;
 
 // ===== Загальний прогрес додатку =====
 export type AppProgress = {
@@ -33,13 +34,13 @@ export type AppProgress = {
   srs: SrsProgress;
 };
 
-// ✅ Хто “активний” користувач (ставимо в ProgressSync після GET /api/progress)
+// Хто “активний” користувач (ставимо в ProgressSync після GET /api/progress)
 const ACTIVE_USER_KEY = "slovakStudy.activeUserId";
 
-// ✅ База ключа
+// База ключа
 const BASE = "progress";
 
-// ✅ Гість (щоб не змішувалось з юзерами)
+// Гість (щоб не змішувалось з юзерами)
 const GUEST_ID = "guest";
 
 function safeDispatchStorage() {
@@ -70,14 +71,14 @@ function getActiveCourseId(): CourseId {
   }
 }
 
-// ✅ ВИКЛИКАЙ ЦЕ з ProgressSync після того як отримав userId з /api/progress
+// ВИКЛИКАЙ ЦЕ з ProgressSync після того як отримав userId з /api/progress
 export function setActiveUserId(userId: string | null) {
   if (typeof window === "undefined") return;
   try {
     if (!userId) localStorage.removeItem(ACTIVE_USER_KEY);
     else localStorage.setItem(ACTIVE_USER_KEY, userId);
   } catch {}
-  // 🔥 важливо: повідомляємо UI одразу
+
   safeDispatchStorage();
 }
 
@@ -101,26 +102,37 @@ export function emptyProgress(): AppProgress {
   };
 }
 
-// ✅ приймає і новий формат (AppProgress), і старий (де лежав lessonsProgress напряму)
-function normalizeLoaded(parsed: any): AppProgress {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+// приймає і новий формат (AppProgress), і старий (де лежав lessonsProgress напряму)
+function normalizeLoaded(parsed: unknown): AppProgress {
   // AppProgress-like
-  if (parsed && typeof parsed === "object" && "lessons" in parsed) {
+  if (isRecord(parsed) && "lessons" in parsed) {
+    const updatedAt =
+      typeof parsed.updatedAt === "number" ? parsed.updatedAt : Date.now();
+
+    const lessons = isRecord(parsed.lessons)
+      ? (parsed.lessons as LessonsProgress)
+      : {};
+
+    const srs = isRecord(parsed.srs) ? (parsed.srs as SrsProgress) : {};
+
     return {
       version: 1,
-      updatedAt:
-        typeof parsed?.updatedAt === "number" ? parsed.updatedAt : Date.now(),
-      lessons:
-        typeof parsed?.lessons === "object" && parsed.lessons ? parsed.lessons : {},
-      srs: typeof parsed?.srs === "object" && parsed.srs ? parsed.srs : {},
+      updatedAt,
+      lessons,
+      srs,
     };
   }
 
   // Старий формат: lessonsProgress напряму
-  if (parsed && typeof parsed === "object") {
+  if (isRecord(parsed)) {
     return {
       version: 1,
       updatedAt: Date.now(),
-      lessons: parsed,
+      lessons: parsed as LessonsProgress,
       srs: {},
     };
   }
@@ -135,7 +147,7 @@ export function loadProgress(): AppProgress {
   const courseId = getActiveCourseId();
   const key = storageKeyFor(uid, courseId);
 
-  // ✅ міграція: якщо ми на sk і нового ключа ще нема, але є старий — переносимо
+  // міграція: якщо ми на sk і нового ключа ще нема, але є старий — переносимо
   if (courseId === "sk") {
     const legacyKey = legacyStorageKeyFor(uid);
 
@@ -195,10 +207,8 @@ export function saveProgress(p: AppProgress) {
     );
   } catch {}
 
-  // 🔥 щоб UI оновився
   safeDispatchStorage();
 
-  // 🔥 щоб ProgressSync знав, що треба відправити на сервер
   try {
     window.dispatchEvent(new Event("slovakStudy:progressChanged"));
   } catch {}
@@ -222,8 +232,8 @@ export function patchLessonProgress(lessonId: string, patch: LessonProgressObj) 
     prev === true
       ? { done: true }
       : typeof prev === "object" && prev
-      ? (prev as LessonProgressObj)
-      : {};
+        ? (prev as LessonProgressObj)
+        : {};
 
   const next: LessonProgressObj = { ...prevObj, ...patch };
   setLessonsProgress({ ...lessons, [lessonId]: next });
@@ -241,8 +251,8 @@ export function finishLessonQuiz(
     prev === true
       ? { done: true }
       : typeof prev === "object" && prev
-      ? (prev as LessonProgressObj)
-      : {};
+        ? (prev as LessonProgressObj)
+        : {};
 
   const attempts = (prevObj.attempts ?? 0) + 1;
   const bestCorrect = Math.max(prevObj.bestCorrect ?? 0, finalScore);
@@ -253,7 +263,7 @@ export function finishLessonQuiz(
   const next: LessonProgressObj = {
     ...prevObj,
     done: true,
-    doneAt: prevObj.doneAt ?? dayKey, // ✅ якщо вже було — не перезатираємо
+    doneAt: prevObj.doneAt ?? dayKey,
     lastCorrect: finalScore,
     lastTotal: total,
     lastWrong: Math.max(0, total - finalScore),

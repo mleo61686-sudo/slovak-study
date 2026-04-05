@@ -4,18 +4,18 @@ import { SITE_URL } from "@/lib/site";
 import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
-  title: "Онлайн словник | Flunio",
+  title: "Online dictionary | Flunio",
   description:
-    "Онлайн словник у Flunio: переклад слів, вимова, приклади та зручний пошук для вивчення словацької та чеської мов.",
+    "Flunio online dictionary: word translations, pronunciation, examples, and convenient search for learning Slovak and Czech.",
 
   alternates: {
     canonical: `${SITE_URL}/dictionary`,
   },
 
   openGraph: {
-    title: "Онлайн словник — Flunio",
+    title: "Online dictionary | Flunio",
     description:
-      "Переклад слів, вимова, приклади та зручний пошук для вивчення словацької та чеської мов.",
+      "Word translations, pronunciation, examples, and convenient search for learning Slovak and Czech.",
     url: `${SITE_URL}/dictionary`,
     siteName: "Flunio",
     type: "website",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Онлайн словник — Flunio",
+    title: "Online dictionary | Flunio",
     description:
-      "Переклад слів, вимова, приклади та зручний пошук для вивчення словацької та чеської мов.",
+      "Word translations, pronunciation, examples, and convenient search for learning Slovak and Czech.",
     images: ["/opengraph-image"],
   },
 

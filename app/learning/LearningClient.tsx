@@ -6,11 +6,45 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import type { CefrBand, Lang, LocalizedText } from "./data";
-import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
+import type {
+  LessonsProgress,
+  LessonProgressObj,
+  LessonProgressValue,
+} from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
 
-const dict = {
+type LearningDict = {
+  title: string;
+  subtitle: string;
+  done: string;
+  lessons: string;
+  words: string;
+  allLessons: string;
+  soon: string;
+  wordsCount: (n: number) => string;
+  repeat: string;
+  start: string;
+  locked: string;
+  premiumOnly: string;
+  buyPremium: string;
+  premiumActive: string;
+  availableNow: string;
+  lastDone: string;
+};
+
+type SessionUserLike = {
+  email?: string | null;
+  isPremium?: boolean;
+};
+
+type LessonStats = {
+  lastCorrect: number;
+  lastWrong: number;
+  lastTotal: number;
+};
+
+const dict: Record<Lang, LearningDict> = {
   ua: {
     title: "Навчання 📚",
     subtitle: "Обирай рівень (A0 → B2) і проходь уроки по 10 слів.",
@@ -65,9 +99,9 @@ const dict = {
     availableNow: "Available now:",
     lastDone: "Last completed:",
   },
-} satisfies Record<Lang, any>;
+};
 
-// ✅ Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
+// Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
 const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b1: 35,
   b2: 50,
@@ -104,16 +138,21 @@ function compareLevel(a: string, b: string) {
   return pa.n < pb.n ? -1 : 1;
 }
 
-function nextLevelId(id: string) {
-  const p = parseLevelId(id);
-  if (!p) return id;
+function getLessonProgressValue(
+  progress: LessonsProgress,
+  id: string
+): LessonProgressValue | undefined {
+  const key = id.toLowerCase();
+  return progress[key] ?? progress[id];
+}
 
-  if (p.band === "a0" && Number.isFinite(p.n) && p.n >= 30) return "a1-1";
-  if (p.band === "a1" && Number.isFinite(p.n) && p.n >= 40) return "a2-1";
-  if (p.band === "a2" && Number.isFinite(p.n) && p.n >= 50) return "b1-1";
-  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= 35) return "b2-1";
-
-  return `${p.band}-${p.n + 1}`;
+function getLessonProgressObj(
+  progress: LessonsProgress,
+  id: string
+): LessonProgressObj | null {
+  const value = getLessonProgressValue(progress, id);
+  if (!value || value === true || typeof value !== "object") return null;
+  return value;
 }
 
 function getLastDone(progress: LessonsProgress) {
@@ -124,9 +163,7 @@ function getLastDone(progress: LessonsProgress) {
     const p = parseLevelId(id);
     if (!p) continue;
 
-    const done =
-      val === true ||
-      (val && typeof val === "object" && (val as any).done === true);
+    const done = val === true || (typeof val === "object" && val.done === true);
 
     if (!done) continue;
 
@@ -138,11 +175,8 @@ function getLastDone(progress: LessonsProgress) {
 }
 
 function isDoneId(progress: LessonsProgress, id: string) {
-  const key = id.toLowerCase();
-  const v: LessonProgressValue | undefined =
-    (progress as any)[key] ?? (progress as any)[id];
-
-  return v === true || (typeof v === "object" && v?.done === true);
+  const value = getLessonProgressValue(progress, id);
+  return value === true || (typeof value === "object" && value?.done === true);
 }
 
 function getAllowedSequential(progress: LessonsProgress, bands: CefrBand[]) {
@@ -154,7 +188,6 @@ function getAllowedSequential(progress: LessonsProgress, bands: CefrBand[]) {
     if (!isDoneId(progress, id)) return id.toLowerCase();
   }
 
-  // якщо всі видимі уроки пройдені, просто лишаємо останній доступним
   const last = allIds[allIds.length - 1];
   return last ? last.toLowerCase() : "a0-1";
 }
@@ -166,7 +199,8 @@ function getLocalized(value: LocalizedText, lang: Lang) {
 export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const router = useRouter();
   const { data: session } = useSession();
-  const isPremium = (session?.user as any)?.isPremium === true;
+  const user = session?.user as SessionUserLike | undefined;
+  const isPremium = user?.isPremium === true;
   const arePremiumBandsLocked = !isPremium;
 
   const adminEmails = useMemo(() => {
@@ -176,7 +210,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
       .filter(Boolean);
   }, []);
 
-  const myEmail = (session?.user?.email ?? "").toLowerCase();
+  const myEmail = (user?.email ?? "").toLowerCase();
   const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
 
   const DISABLED_BANDS = useMemo(() => {
@@ -209,19 +243,18 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
 
   const isDone = (id: string) => isDoneId(progress, id);
 
-  const getStats = (id: string) => {
-    const key = id.toLowerCase();
-    const v = (progress as any)[key] ?? (progress as any)[id];
-    if (!v || v === true || typeof v !== "object") return null;
+  const getStats = (id: string): LessonStats | null => {
+    const value = getLessonProgressObj(progress, id);
+    if (!value) return null;
 
-    if (typeof v.lastTotal === "number" && v.lastTotal > 0) {
-      const lastCorrect = Number(v.lastCorrect ?? 0);
+    if (typeof value.lastTotal === "number" && value.lastTotal > 0) {
+      const lastCorrect = Number(value.lastCorrect ?? 0);
       const lastWrong =
-        typeof v.lastWrong === "number"
-          ? v.lastWrong
-          : Math.max(0, v.lastTotal - Number(v.lastCorrect ?? 0));
+        typeof value.lastWrong === "number"
+          ? value.lastWrong
+          : Math.max(0, value.lastTotal - Number(value.lastCorrect ?? 0));
 
-      return { lastCorrect, lastWrong, lastTotal: v.lastTotal };
+      return { lastCorrect, lastWrong, lastTotal: value.lastTotal };
     }
 
     return null;
@@ -235,9 +268,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
     [progress]
   );
 
-  const visibleBands = useMemo(() => {
-    return bands;
-  }, [bands]);
+  const visibleBands = useMemo(() => bands, [bands]);
 
   const allowed = useMemo(() => {
     return getAllowedSequential(progress, visibleBands);

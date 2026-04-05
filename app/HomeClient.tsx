@@ -8,12 +8,60 @@ import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 type Lang = "ua" | "ru" | "en";
 type SeoCourseId = "sk" | "cs";
 
+type PopularCard = {
+  href: string;
+  title: string;
+  desc: string;
+};
+
+type StatItem = {
+  k: string;
+  v: string;
+};
+
+type HomeTranslations = {
+  h1: string;
+  heroP: string;
+  ctaLearning: string;
+  ctaDict: string;
+  ctaGrammar: string;
+
+  free: string[];
+
+  seoH2: string;
+  seoP1: string;
+  seoP2: string;
+
+  premiumTitle: string;
+  premiumSubtitle: string;
+  premiumBullets: string[];
+  premiumPriceNote: string;
+  premiumCta: string;
+  trainerLocked: string;
+
+  grammarTitle: string;
+  grammarDesc: string;
+  dictTitle: string;
+  dictDesc: string;
+  levelsTitle: string;
+  levelsDesc: string;
+  open: string;
+  start: string;
+  whatsNew: string;
+
+  popularTitleByCourse: Record<SeoCourseId, string>;
+  popularDescByCourse: Record<SeoCourseId, string>;
+  popularCardsByCourse: Record<SeoCourseId, PopularCard[]>;
+
+  strip: StatItem[];
+};
+
 const WordsStats = dynamic(() => import("./components/WordsStats"), {
   ssr: false,
   loading: () => <WordsStatsSkeleton />,
 });
 
-const t = {
+const t: Record<Lang, HomeTranslations> = {
   ua: {
     h1: "Вивчай словацьку та чеську з нуля до B2 — для роботи, життя та переїзду",
     heroP:
@@ -64,12 +112,12 @@ const t = {
     popularTitleByCourse: {
       sk: "Популярні сторінки для старту",
       cs: "Популярні сторінки для старту",
-    } satisfies Record<SeoCourseId, string>,
+    },
 
     popularDescByCourse: {
       sk: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по словацькій.",
       cs: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по чеській.",
-    } satisfies Record<SeoCourseId, string>,
+    },
 
     popularCardsByCourse: {
       sk: [
@@ -96,10 +144,7 @@ const t = {
           desc: "Англомовна сторінка про платформу та вивчення чеської онлайн.",
         },
       ],
-    } satisfies Record<
-      SeoCourseId,
-      { href: string; title: string; desc: string }[]
-    >,
+    },
 
     strip: [
       { k: "2 мови", v: "Словацька та чеська" },
@@ -159,12 +204,12 @@ const t = {
     popularTitleByCourse: {
       sk: "Популярные страницы для старта",
       cs: "Популярные страницы для старта",
-    } satisfies Record<SeoCourseId, string>,
+    },
 
     popularDescByCourse: {
       sk: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по словацкому.",
       cs: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по чешскому.",
-    } satisfies Record<SeoCourseId, string>,
+    },
 
     popularCardsByCourse: {
       sk: [
@@ -191,10 +236,7 @@ const t = {
           desc: "Англоязычная страница о платформе и изучении чешского онлайн.",
         },
       ],
-    } satisfies Record<
-      SeoCourseId,
-      { href: string; title: string; desc: string }[]
-    >,
+    },
 
     strip: [
       { k: "2 языка", v: "Словацкий и чешский" },
@@ -219,7 +261,7 @@ const t = {
 
     seoH2: "Online Slovak and Czech course",
     seoP1:
-      "Flunio is an online platform for learning Slovak and Czech from scratch. Here you will find grammar with examples, a тематic dictionary, practice exercises, and structured learning across A0–B2 levels.",
+      "Flunio is an online platform for learning Slovak and Czech from scratch. Here you will find grammar with examples, a thematic dictionary, practice exercises, and structured learning across A0–B2 levels.",
     seoP2:
       "The website is suitable for people who plan to work, study, or live in Europe. Learn Slovak and Czech online in a convenient format with short lessons, gradual progression, and practice for real life.",
 
@@ -253,12 +295,12 @@ const t = {
     popularTitleByCourse: {
       sk: "Popular pages to start with",
       cs: "Popular pages to start with",
-    } satisfies Record<SeoCourseId, string>,
+    },
 
     popularDescByCourse: {
       sk: "If you want to start quickly or find useful materials, here are the most important Slovak pages.",
       cs: "If you want to start quickly or find useful materials, here are the most important Czech pages.",
-    } satisfies Record<SeoCourseId, string>,
+    },
 
     popularCardsByCourse: {
       sk: [
@@ -285,10 +327,7 @@ const t = {
           desc: "Overview of the Czech learning platform, lessons, dictionary, grammar, and practice tools.",
         },
       ],
-    } satisfies Record<
-      SeoCourseId,
-      { href: string; title: string; desc: string }[]
-    >,
+    },
 
     strip: [
       { k: "2 languages", v: "Slovak and Czech" },
@@ -296,7 +335,7 @@ const t = {
       { k: "10 min/day", v: "Short lessons" },
     ],
   },
-} satisfies Record<Lang, any>;
+};
 
 function StatPill({ k, v }: { k: string; v: string }) {
   return (
@@ -383,7 +422,7 @@ export default function HomeClient({
           </div>
 
           <div className="mt-4 space-y-1 text-sm text-slate-700">
-            {tr.free.map((item: string) => (
+            {tr.free.map((item) => (
               <div key={item}>✅ {item}</div>
             ))}
           </div>
@@ -403,7 +442,7 @@ export default function HomeClient({
           </div>
 
           <div className="grid gap-3 pt-3 sm:grid-cols-3">
-            {tr.strip.map((it: { k: string; v: string }) => (
+            {tr.strip.map((it) => (
               <StatPill key={it.k} k={it.k} v={it.v} />
             ))}
           </div>
@@ -426,7 +465,7 @@ export default function HomeClient({
               <p className="max-w-2xl text-white/80">{tr.premiumSubtitle}</p>
 
               <ul className="grid gap-2 sm:grid-cols-2">
-                {tr.premiumBullets.map((item: string) => (
+                {tr.premiumBullets.map((item) => (
                   <li
                     key={item}
                     className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white/90"
@@ -504,21 +543,19 @@ export default function HomeClient({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {tr.popularCardsByCourse[seoCourseId].map(
-              (card: { href: string; title: string; desc: string }) => (
-                <Link
-                  key={card.href}
-                  href={card.href}
-                  className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:bg-white"
-                >
-                  <h3 className="text-base font-semibold text-slate-900">
-                    {card.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-slate-700">{card.desc}</p>
-                  <div className="mt-4 text-sm font-semibold">{tr.open}</div>
-                </Link>
-              )
-            )}
+            {tr.popularCardsByCourse[seoCourseId].map((card) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:bg-white"
+              >
+                <h3 className="text-base font-semibold text-slate-900">
+                  {card.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-700">{card.desc}</p>
+                <div className="mt-4 text-sm font-semibold">{tr.open}</div>
+              </Link>
+            ))}
           </div>
         </section>
       )}

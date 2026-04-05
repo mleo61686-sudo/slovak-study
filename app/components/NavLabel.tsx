@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/lib/src/useLanguage";
+import type { Lang } from "@/lib/src/language";
 
 export type NavKey =
   | "grammar"
@@ -11,34 +12,50 @@ export type NavKey =
   | "reports"
   | "login";
 
-function getLabel(lang: "ua" | "ru", key: NavKey) {
-  const dict = {
-    ua: {
-      grammar: "Граматика",
-      dictionary: "Словник",
-      practice: "Тренажер",
-      practiceLocked: "Тренажер 🔒",
-      support: "Підтримка",
-      reports: "Reports",
-      login: "Login",
-    },
-    ru: {
-      grammar: "Грамматика",
-      dictionary: "Словарь",
-      practice: "Тренажёр",
-      practiceLocked: "Тренажёр 🔒",
-      support: "Поддержка",
-      reports: "Reports",
-      login: "Login",
-    },
-  } as const;
+const DICT: Record<NavKey, Partial<Record<Lang, string>>> = {
+  grammar: {
+    ua: "Граматика",
+    ru: "Грамматика",
+    en: "Grammar",
+  },
+  dictionary: {
+    ua: "Словник",
+    ru: "Словарь",
+    en: "Dictionary",
+  },
+  practice: {
+    ua: "Тренажер",
+    ru: "Тренажёр",
+    en: "Practice",
+  },
+  practiceLocked: {
+    ua: "Тренажер 🔒",
+    ru: "Тренажёр 🔒",
+    en: "Practice 🔒",
+  },
+  support: {
+    ua: "Підтримка",
+    ru: "Поддержка",
+    en: "Support",
+  },
+  reports: {
+    ua: "Reports",
+    ru: "Reports",
+    en: "Reports",
+  },
+  login: {
+    ua: "Login",
+    ru: "Login",
+    en: "Login",
+  },
+};
 
-  return dict[lang][key];
+function getLabel(lang: Lang, key: NavKey) {
+  return DICT[key][lang] ?? DICT[key].ua ?? key;
 }
 
 export default function NavLabel({ k }: { k: NavKey }) {
   const { lang } = useLanguage();
-  const safeLang: "ua" | "ru" = lang === "ru" ? "ru" : "ua";
 
-  return <span className="whitespace-nowrap">{getLabel(safeLang, k)}</span>;
+  return <span className="whitespace-nowrap">{getLabel(lang, k)}</span>;
 }

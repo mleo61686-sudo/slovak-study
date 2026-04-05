@@ -48,6 +48,14 @@ const UI = {
     toLessonsList: "До списку уроків",
     notAvailableFree: "Недоступно у free",
     saving: "Зберігаю прогрес…",
+
+    exerciseChooseTranslation: "Вибір перекладу",
+    exerciseChooseSlovak: "Вибір словацького слова",
+    exerciseWriteWord: "Введення слова",
+    exerciseAudioQuiz: "Аудіо-вправа",
+    exerciseMatchColumns: "Пари (2 колонки)",
+    exerciseBuildSentence: "Збери речення",
+    exerciseBuildUaSentence: "Збери переклад",
   },
   ru: {
     viewed: "Просмотрено",
@@ -67,6 +75,14 @@ const UI = {
     toLessonsList: "К списку уроков",
     notAvailableFree: "Недоступно в free",
     saving: "Сохраняю прогресс…",
+
+    exerciseChooseTranslation: "Выбор перевода",
+    exerciseChooseSlovak: "Выбор словацкого слова",
+    exerciseWriteWord: "Ввод слова",
+    exerciseAudioQuiz: "Аудио-упражнение",
+    exerciseMatchColumns: "Пары (2 колонки)",
+    exerciseBuildSentence: "Собери предложение",
+    exerciseBuildUaSentence: "Собери перевод",
   },
   en: {
     viewed: "Viewed",
@@ -86,6 +102,14 @@ const UI = {
     toLessonsList: "Back to lessons list",
     notAvailableFree: "Not available in free",
     saving: "Saving progress…",
+
+    exerciseChooseTranslation: "Choose the translation",
+    exerciseChooseSlovak: "Choose the Slovak word",
+    exerciseWriteWord: "Type the word",
+    exerciseAudioQuiz: "Audio exercise",
+    exerciseMatchColumns: "Match pairs (2 columns)",
+    exerciseBuildSentence: "Build the sentence",
+    exerciseBuildUaSentence: "Build the translation",
   },
 } as const;
 
@@ -110,14 +134,38 @@ function getNextLevelId(levelId: string) {
 }
 
 const EXERCISES: ExerciseDef[] = [
-  { kind: "chooseTranslation", title: "Вибір перекладу", mode: "perWord" },
-  { kind: "chooseSlovak", title: "Вибір словацького слова", mode: "perWord" },
-  { kind: "writeWord", title: "Введення слова", mode: "perWord" },
-  { kind: "audioQuiz", title: "Аудіо-вправа", mode: "perWord" },
-  { kind: "matchColumns", title: "Пари (2 колонки)", mode: "perWord" },
-  { kind: "buildSentence", title: "Збери речення", mode: "perWord" },
-  { kind: "buildUaSentence", title: "Збери переклад", mode: "perWord" },
+  { kind: "chooseTranslation", title: "chooseTranslation", mode: "perWord" },
+  { kind: "chooseSlovak", title: "chooseSlovak", mode: "perWord" },
+  { kind: "writeWord", title: "writeWord", mode: "perWord" },
+  { kind: "audioQuiz", title: "audioQuiz", mode: "perWord" },
+  { kind: "matchColumns", title: "matchColumns", mode: "perWord" },
+  { kind: "buildSentence", title: "buildSentence", mode: "perWord" },
+  { kind: "buildUaSentence", title: "buildUaSentence", mode: "perWord" },
 ];
+
+function getExerciseTitle(
+  kind: ExerciseDef["kind"],
+  t: (typeof UI)[UiLang]
+): string {
+  switch (kind) {
+    case "chooseTranslation":
+      return t.exerciseChooseTranslation;
+    case "chooseSlovak":
+      return t.exerciseChooseSlovak;
+    case "writeWord":
+      return t.exerciseWriteWord;
+    case "audioQuiz":
+      return t.exerciseAudioQuiz;
+    case "matchColumns":
+      return t.exerciseMatchColumns;
+    case "buildSentence":
+      return t.exerciseBuildSentence;
+    case "buildUaSentence":
+      return t.exerciseBuildUaSentence;
+    default:
+      return t.exercise;
+  }
+}
 
 export default function LevelClient({
   levelId,
@@ -388,6 +436,7 @@ export default function LevelClient({
 
   const exercise = EXERCISES[exerciseIndex];
   const currentWord = words[wordIndex];
+  const exerciseTitle = getExerciseTitle(exercise.kind, t);
 
   function finishLesson(finalScore: number) {
     if (finishingRef.current) return;
@@ -540,7 +589,7 @@ export default function LevelClient({
       onKeyDownCapture={unlockInsideLesson}
     >
       <div className="text-sm text-slate-500">
-        {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} •{" "}
+        {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} • {exerciseTitle} •{" "}
         {exercise.mode === "perWord" ? (
           <>
             {t.word} {wordIndex + 1} / {words.length}

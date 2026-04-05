@@ -1,4 +1,4 @@
-export type W = { sk: string; ua: string; ru?: string };
+export type W = { sk: string; ua: string; ru?: string; en?: string };
 
 export type PersonKey = "ja" | "ty" | "on" | "ona" | "ono" | "my" | "vy" | "oni";
 
@@ -19,63 +19,62 @@ export type VerbBlock = {
 };
 
 export const PRONOUNS: Record<PersonKey, W> = {
-  ja: { sk: "ja", ua: "я", ru: "я" },
-  ty: { sk: "ty", ua: "ти", ru: "ты" },
-  on: { sk: "on", ua: "він", ru: "он" },
-  ona: { sk: "ona", ua: "вона", ru: "она" },
-  ono: { sk: "ono", ua: "воно", ru: "оно" },
-  my: { sk: "my", ua: "ми", ru: "мы" },
-  vy: { sk: "vy", ua: "ви", ru: "вы" },
-  oni: { sk: "oni", ua: "вони", ru: "они" },
+  ja: { sk: "ja", ua: "я", ru: "я", en: "I" },
+  ty: { sk: "ty", ua: "ти", ru: "ты", en: "you" },
+  on: { sk: "on", ua: "він", ru: "он", en: "he" },
+  ona: { sk: "ona", ua: "вона", ru: "она", en: "she" },
+  ono: { sk: "ono", ua: "воно", ru: "оно", en: "it" },
+  my: { sk: "my", ua: "ми", ru: "мы", en: "we" },
+  vy: { sk: "vy", ua: "ви", ru: "вы", en: "you" },
+  oni: { sk: "oni", ua: "вони", ru: "они", en: "they" },
 };
 
-type UiLang = "ua" | "ru";
+type UiLang = "ua" | "ru" | "en";
 
-export const UI: Record<
-  UiLang,
-  {
-    loading: string;
-    titleSk: string;
-    titleCs: string;
-    subtitleSk: string;
-    subtitleCs: string;
+type UiDict = {
+  loading: string;
+  titleSk: string;
+  titleCs: string;
+  subtitleSk: string;
+  subtitleCs: string;
 
-    s1: string;
-    s2: string;
-    s3: string;
-    s4: string;
-    s5: string;
-    s6: string;
+  s1: string;
+  s2: string;
+  s3: string;
+  s4: string;
+  s5: string;
+  s6: string;
 
-    infinitive: string;
-    hint: string;
+  infinitive: string;
+  hint: string;
 
-    negation: string;
-    question: string;
+  negation: string;
+  question: string;
 
-    reset: string;
-    clear: string;
-    next: string;
+  reset: string;
+  clear: string;
+  next: string;
 
-    quizA: string;
-    quizB: string;
+  quizA: string;
+  quizB: string;
 
-    score: string;
-    target: string;
+  score: string;
+  target: string;
 
-    yourSentence: string;
-    correct: string;
-    wrongHint: string;
-    clickWords: string;
+  yourSentence: string;
+  correct: string;
+  wrongHint: string;
+  clickWords: string;
 
-    correctYes: string;
-    correctNo: string;
-    correctForm: string;
+  correctYes: string;
+  correctNo: string;
+  correctForm: string;
 
-    cheatItemsSk: string[];
-    cheatItemsCs: string[];
-  }
-> = {
+  cheatItemsSk: string[];
+  cheatItemsCs: string[];
+};
+
+export const UI: Record<UiLang, UiDict> = {
   ua: {
     loading: "Завантаження…",
 
@@ -181,6 +180,60 @@ export const UI: Record<
       "В чешском лицо часто видно по окончанию: -m (já), -š (ty), -me (my), -te (vy).",
       "Отрицание: обычно ne- вместе с глаголом: dělám → nedělám. Для jít: jdu → nejdu.",
       "Вопрос: часто достаточно интонации или знака вопроса: Jdete do města?",
+    ],
+  },
+
+  en: {
+    loading: "Loading…",
+
+    titleSk: "Present Tense Verbs",
+    titleCs: "Present Tense Verbs",
+    subtitleSk:
+      "In Slovak, verbs change by person (ja/ty/on…). Below you’ll find tables, audio, and exercises.",
+    subtitleCs:
+      "In Czech, verbs change by person (já/ty/on…). Below you’ll find tables, audio, and exercises.",
+
+    s1: "1) Personal pronouns",
+    s2: "2) Choose a verb",
+    s3: "3) Conjugation",
+    s4: "4) Examples + question + negation",
+    s5: "5) Practice 🧠",
+    s6: "6) Cheat sheet",
+
+    infinitive: "Infinitive",
+    hint: "Hint",
+
+    negation: "Negation",
+    question: "Question",
+
+    reset: "Reset",
+    clear: "Clear",
+    next: "Next",
+
+    quizA: "A) Choose the correct form",
+    quizB: "B) Build the sentence",
+
+    score: "Score",
+    target: "Target",
+
+    yourSentence: "Your sentence:",
+    correct: "✅ Correct!",
+    wrongHint: "Compare it with the target 👆",
+    clickWords: "Click the words below.",
+
+    correctYes: "✅ Correct",
+    correctNo: "❌ Incorrect.",
+    correctForm: "Correct form",
+
+    cheatItemsSk: [
+      "Endings often help you identify the person: -m (ja), -š (ty), -me (my), -te (vy).",
+      "Negation is usually made with ne- attached to the verb: robím → nerobím. For ísť: idem → nejdem.",
+      "For questions, a question mark is often enough: Idete do mesta?",
+    ],
+    cheatItemsCs: [
+      "In Czech, the ending often shows the person: -m (já), -š (ty), -me (my), -te (vy).",
+      "Negation is usually made with ne- attached to the verb: dělám → nedělám. For jít: jdu → nejdu.",
+      "For questions, intonation or a question mark is often enough: Jdete do města?",
     ],
   },
 };
