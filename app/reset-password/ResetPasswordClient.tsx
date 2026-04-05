@@ -5,47 +5,85 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 
+type Lang = "ua" | "ru" | "en";
+
+type ResetPasswordI18n = {
+  title: string;
+  subtitle: string;
+  pass: string;
+  pass2: string;
+  btn: string;
+  ok: string;
+  bad: string;
+  mismatch: string;
+  back: string;
+  show: string;
+  hide: string;
+  min8: string;
+  weak: string;
+  footer: string;
+};
+
+const dict: Record<Lang, ResetPasswordI18n> = {
+  ua: {
+    title: "Новий пароль",
+    subtitle: "Введи новий пароль та підтверди його.",
+    pass: "Новий пароль (мін. 8 символів)",
+    pass2: "Підтверди новий пароль",
+    btn: "Зберегти пароль",
+    ok: "Пароль змінено. Можна увійти.",
+    bad: "Токен недійсний або протермінований.",
+    mismatch: "Паролі не співпадають.",
+    back: "← До входу",
+    show: "Показати",
+    hide: "Сховати",
+    min8: "Мінімум 8 символів",
+    weak: "Пароль занадто слабкий",
+    footer: "© 2026 Flunio — вчи мови щодня.",
+  },
+  ru: {
+    title: "Новый пароль",
+    subtitle: "Введи новый пароль и подтверди его.",
+    pass: "Новый пароль (мин. 8 символов)",
+    pass2: "Подтверди новый пароль",
+    btn: "Сохранить пароль",
+    ok: "Пароль изменён. Можно войти.",
+    bad: "Токен недействителен или истёк.",
+    mismatch: "Пароли не совпадают.",
+    back: "← Ко входу",
+    show: "Показать",
+    hide: "Скрыть",
+    min8: "Минимум 8 символов",
+    weak: "Пароль слишком слабый",
+    footer: "© 2026 Flunio — изучай языки каждый день.",
+  },
+  en: {
+    title: "New password",
+    subtitle: "Enter your new password and confirm it.",
+    pass: "New password (min. 8 characters)",
+    pass2: "Confirm new password",
+    btn: "Save password",
+    ok: "Password changed. You can log in now.",
+    bad: "The token is invalid or has expired.",
+    mismatch: "Passwords do not match.",
+    back: "← Back to login",
+    show: "Show",
+    hide: "Hide",
+    min8: "Minimum 8 characters",
+    weak: "Password is too weak",
+    footer: "© 2026 Flunio — learn languages every day.",
+  },
+};
+
 export default function ResetPasswordClient() {
   const { lang } = useLanguage();
   const router = useRouter();
   const sp = useSearchParams();
 
+  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
+  const t = dict[L];
+
   const token = useMemo(() => sp.get("token") || "", [sp]);
-
-  const dict = {
-    ua: {
-      title: "Новий пароль",
-      subtitle: "Введи новий пароль та підтверди його.",
-      pass: "Новий пароль (мін. 8 символів)",
-      pass2: "Підтверди новий пароль",
-      btn: "Зберегти пароль",
-      ok: "Пароль змінено. Можна увійти.",
-      bad: "Токен недійсний або протермінований.",
-      mismatch: "Паролі не співпадають.",
-      back: "← До входу",
-      show: "Показати",
-      hide: "Сховати",
-      min8: "Мінімум 8 символів",
-      weak: "Пароль занадто слабкий",
-    },
-    ru: {
-      title: "Новый пароль",
-      subtitle: "Введи новый пароль и подтверди его.",
-      pass: "Новый пароль (мин. 8 символов)",
-      pass2: "Подтверди новый пароль",
-      btn: "Сохранить пароль",
-      ok: "Пароль изменён. Можно войти.",
-      bad: "Токен недействителен или истёк.",
-      mismatch: "Пароли не совпадают.",
-      back: "← Ко входу",
-      show: "Показать",
-      hide: "Скрыть",
-      min8: "Минимум 8 символов",
-      weak: "Пароль слишком слабый",
-    },
-  } as const;
-
-  const t = dict[lang];
 
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -69,7 +107,10 @@ export default function ResetPasswordClient() {
         body: JSON.stringify({ token, password, password2 }),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        code?: string;
+      };
 
       if (res.ok && data?.ok) {
         setStatus("ok");
@@ -98,7 +139,7 @@ export default function ResetPasswordClient() {
           </div>
 
           <p className="mt-6 text-center text-xs text-slate-500">
-            © 2026 Flunio — вчи словацьку щодня.
+            {t.footer}
           </p>
         </div>
       </main>
@@ -175,8 +216,8 @@ export default function ResetPasswordClient() {
                   {errorCode === "PASSWORD_MISMATCH"
                     ? t.mismatch
                     : errorCode === "WEAK_PASSWORD"
-                    ? t.weak
-                    : t.bad}
+                      ? t.weak
+                      : t.bad}
                 </div>
               )}
 
@@ -197,9 +238,7 @@ export default function ResetPasswordClient() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-500">
-          © 2026 Flunio — вчи словацьку щодня.
-        </p>
+        <p className="mt-6 text-center text-xs text-slate-500">{t.footer}</p>
       </div>
     </main>
   );
