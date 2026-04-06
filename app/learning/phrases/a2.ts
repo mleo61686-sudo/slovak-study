@@ -10,6 +10,7 @@ export type Phrase = {
     sk: string;
     ua: string;
     ru?: string;
+    en?: string;
     tokens: string[];
 };
 

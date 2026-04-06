@@ -10,6 +10,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Na Slovensku žijem už niekoľko rokov a cítim sa tu dobre.",
     ua: "У Словаччині я живу вже кілька років і почуваюся тут добре.",
     ru: "В Словакии я живу уже несколько лет и чувствую себя здесь хорошо.",
+    en: "I have been living in Slovakia for several years and I feel good here.",
     tokens: ["Na", "Slovensku", "žijem", "už", "niekoľko", "rokov", "a", "cítim", "sa", "tu", "dobre", "."],
   },
 
@@ -17,6 +18,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Do Česka sa dá ísť rýchlo aj vlakom.",
     ua: "До Чехії можна швидко доїхати навіть потягом.",
     ru: "В Чехию можно быстро доехать даже поездом.",
+    en: "You can get to the Czech Republic quickly even by train.",
     tokens: ["Do", "Česka", "sa", "dá", "ísť", "rýchlo", "aj", "vlakom", "."],
   },
 
@@ -24,6 +26,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Poľsko má veľa krásnych miest, ktoré stoja za návštevu.",
     ua: "У Польщі багато гарних місць, які варто відвідати.",
     ru: "В Польше много красивых мест, которые стоит посетить.",
+    en: "Poland has many beautiful places worth visiting.",
     tokens: ["Poľsko", "má", "veľa", "krásnych", "miest", ",", "ktoré", "stoja", "za", "návštevu", "."],
   },
 
@@ -31,6 +34,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "V Nemecku je doprava často veľmi dobre organizovaná.",
     ua: "У Німеччині транспорт часто дуже добре організований.",
     ru: "В Германии транспорт часто очень хорошо организован.",
+    en: "In Germany, transport is often very well organized.",
     tokens: ["V", "Nemecku", "je", "doprava", "často", "veľmi", "dobre", "organizovaná", "."],
   },
 
@@ -38,6 +42,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Rakúsko je blízko, takže tam chodíme na výlety.",
     ua: "Австрія близько, тому ми їздимо туди на екскурсії.",
     ru: "Австрия рядом, поэтому мы ездим туда на экскурсии.",
+    en: "Austria is close, so we go there on trips.",
     tokens: ["Rakúsko", "je", "blízko", ",", "takže", "tam", "chodíme", "na", "výlety", "."],
   },
 
@@ -45,6 +50,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Do Maďarska sa mi páči ísť kvôli jedlu a kúpeľom.",
     ua: "Мені подобається їздити в Угорщину через їжу та термальні купальні.",
     ru: "Мне нравится ездить в Венгрию из-за еды и термальных купален.",
+    en: "I like going to Hungary because of the food and the thermal baths.",
     tokens: ["Do", "Maďarska", "sa", "mi", "páči", "ísť", "kvôli", "jedlu", "a", "kúpeľom", "."],
   },
 
@@ -52,6 +58,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Francúzsko je známe kultúrou, módou aj gastronómiou.",
     ua: "Франція відома культурою, модою та гастрономією.",
     ru: "Франция известна культурой, модой и гастрономией.",
+    en: "France is known for its culture, fashion, and gastronomy.",
     tokens: ["Francúzsko", "je", "známe", "kultúrou", ",", "módou", "aj", "gastronómiou", "."],
   },
 
@@ -59,6 +66,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "V Taliansku by som chcel vidieť Rím a ochutnať pravú pizzu.",
     ua: "В Італії я хотів би побачити Рим і скуштувати справжню піцу.",
     ru: "В Италии я хотел бы увидеть Рим и попробовать настоящую пиццу.",
+    en: "In Italy, I would like to see Rome and taste real pizza.",
     tokens: ["V", "Taliansku", "by", "som", "chcel", "vidieť", "Rím", "a", "ochutnať", "pravú", "pizzu", "."],
   },
 
@@ -66,6 +74,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Španielsko má teplé podnebie a veľmi živé mestá.",
     ua: "Іспанія має теплий клімат і дуже жваві міста.",
     ru: "Испания имеет тёплый климат и очень оживлённые города.",
+    en: "Spain has a warm climate and very lively cities.",
     tokens: ["Španielsko", "má", "teplé", "podnebie", "a", "veľmi", "živé", "mestá", "."],
   },
 
@@ -73,6 +82,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Ukrajina má bohatú tradíciu a silnú kultúru.",
     ua: "Україна має багаті традиції та сильну культуру.",
     ru: "Украина имеет богатые традиции и сильную культуру.",
+    en: "Ukraine has a rich tradition and a strong culture.",
     tokens: ["Ukrajina", "má", "bohatú", "tradíciu", "a", "silnú", "kultúru", "."],
   },
 
@@ -83,6 +93,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Tlač často zverejňuje rôzne názory na tú istú tému.",
     ua: "Преса часто публікує різні погляди на одну й ту саму тему.",
     ru: "Пресса часто публикует разные мнения на одну и ту же тему.",
+    en: "The press often publishes different opinions on the same topic.",
     tokens: ["Tlač", "často", "zverejňuje", "rôzne", "názory", "na", "tú", "istú", "tému", "."],
   },
 
@@ -90,6 +101,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Noviny si kupujem zriedka, skôr čítam správy online.",
     ua: "Газети купую рідко, частіше читаю новини онлайн.",
     ru: "Газеты покупаю редко, чаще читаю новости онлайн.",
+    en: "I rarely buy newspapers; I mostly read the news online.",
     tokens: ["Noviny", "si", "kupujem", "zriedka", ",", "skôr", "čítam", "správy", "online", "."],
   },
 
@@ -97,6 +109,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "V televízii pozerám hlavne dokumenty a správy.",
     ua: "По телевізору я дивлюся переважно документальні фільми та новини.",
     ru: "По телевизору я смотрю в основном документальные фильмы и новости.",
+    en: "On television, I mainly watch documentaries and news.",
     tokens: ["V", "televízii", "pozerám", "hlavne", "dokumenty", "a", "správy", "."],
   },
 
@@ -104,6 +117,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Rozhlas počúvam v aute, keď cestujem do práce.",
     ua: "Радіо слухаю в машині, коли їду на роботу.",
     ru: "Радио слушаю в машине, когда еду на работу.",
+    en: "I listen to the radio in the car when I travel to work.",
     tokens: ["Rozhlas", "počúvam", "v", "aute", ",", "keď", "cestujem", "do", "práce", "."],
   },
 
@@ -111,6 +125,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Vysielanie bolo prerušené kvôli technickým problémom.",
     ua: "Трансляцію перервали через технічні проблеми.",
     ru: "Вещание прервали из-за технических проблем.",
+    en: "The broadcast was interrupted due to technical problems.",
     tokens: ["Vysielanie", "bolo", "prerušené", "kvôli", "technickým", "problémom", "."],
   },
 
@@ -118,6 +133,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Reklama môže ovplyvniť rozhodnutie, ale nie vždy.",
     ua: "Реклама може вплинути на рішення, але не завжди.",
     ru: "Реклама может повлиять на решение, но не всегда.",
+    en: "Advertising can influence a decision, but not always.",
     tokens: ["Reklama", "môže", "ovplyvniť", "rozhodnutie", ",", "ale", "nie", "vždy", "."],
   },
 
@@ -125,6 +141,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Redaktor sa ma pýtal na detaily, aby mal presné informácie.",
     ua: "Журналіст питав мене про деталі, щоб мати точну інформацію.",
     ru: "Журналист спрашивал меня о деталях, чтобы иметь точную информацию.",
+    en: "The editor asked me for details so that he would have accurate information.",
     tokens: ["Redaktor", "sa", "ma", "pýtal", "na", "detaily", ",", "aby", "mal", "presné", "informácie", "."],
   },
 
@@ -132,6 +149,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Titulok znel dramaticky, ale článok bol vyvážený.",
     ua: "Заголовок звучав драматично, але стаття була збалансована.",
     ru: "Заголовок звучал драматично, но статья была сбалансированной.",
+    en: "The headline sounded dramatic, but the article was balanced.",
     tokens: ["Titulok", "znel", "dramaticky", ",", "ale", "článok", "bol", "vyvážený", "."],
   },
 
@@ -139,6 +157,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Nie je ľahké uveriť všetkému, čo sa píše na internete.",
     ua: "Не так легко повірити всьому, що пишуть в інтернеті.",
     ru: "Не так легко поверить всему, что пишут в интернете.",
+    en: "It is not easy to believe everything that is written on the internet.",
     tokens: ["Nie", "je", "ľahké", "uveriť", "všetkému", ",", "čo", "sa", "píše", "na", "internete", "."],
   },
 
@@ -146,6 +165,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Verejná myšlienka sa môže rýchlo zmeniť po jednej udalosti.",
     ua: "Громадська думка може швидко змінитися після однієї події.",
     ru: "Общественное мнение может быстро измениться после одного события.",
+    en: "Public opinion can change quickly after a single event.",
     tokens: ["Verejná", "myšlienka", "sa", "môže", "rýchlo", "zmeniť", "po", "jednej", "udalosti", "."],
   },
 
@@ -156,6 +176,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Na webovej stránke nájdeš všetky informácie aj kontakty.",
     ua: "На вебсайті знайдеш всю інформацію та контакти.",
     ru: "На веб-сайте найдёшь всю информацию и контакты.",
+    en: "On the website you will find all the information and contacts.",
     tokens: ["Na", "webovej", "stránke", "nájdeš", "všetky", "informácie", "aj", "kontakty", "."],
   },
 
@@ -163,6 +184,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Mám viac sledovateľov, odkedy zverejňujem pravidelne.",
     ua: "У мене більше підписників відтоді, як я публікую регулярно.",
     ru: "У меня больше подписчиков с тех пор, как я публикую регулярно.",
+    en: "I have more followers since I started posting regularly.",
     tokens: ["Mám", "viac", "sledovateľov", ",", "odkedy", "zverejňujem", "pravidelne", "."],
   },
 
@@ -170,6 +192,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Som online len večer, cez deň pracujem.",
     ua: "Я онлайн лише ввечері, вдень працюю.",
     ru: "Я онлайн только вечером, днём работаю.",
+    en: "I am online only in the evening; during the day I work.",
     tokens: ["Som", "online", "len", "večer", ",", "cez", "deň", "pracujem", "."],
   },
 
@@ -177,6 +200,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Keď som offline, aspoň ma nič neruší.",
     ua: "Коли я офлайн, мене принаймні нічого не відволікає.",
     ru: "Когда я офлайн, меня по крайней мере ничто не отвлекает.",
+    en: "When I am offline, at least nothing disturbs me.",
     tokens: ["Keď", "som", "offline", ",", "aspoň", "ma", "nič", "neruší", "."],
   },
 
@@ -184,6 +208,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Profil mám nastavený ako súkromný, aby som mal viac pokoja.",
     ua: "Профіль у мене приватний, щоб мати більше спокою.",
     ru: "Профиль у меня закрытый, чтобы было больше спокойствия.",
+    en: "My profile is set to private so that I can have more peace.",
     tokens: ["Profil", "mám", "nastavený", "ako", "súkromný", ",", "aby", "som", "mal", "viac", "pokoja", "."],
   },
 
@@ -191,6 +216,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Nemusíš to komentovať hneď, najprv si to premysli.",
     ua: "Не обов’язково коментувати одразу, спершу подумай.",
     ru: "Не обязательно комментировать сразу, сначала подумай.",
+    en: "You do not have to comment on it right away; think it through first.",
     tokens: ["Nemusíš", "to", "komentovať", "hneď", ",", "najprv", "si", "to", "premysli", "."],
   },
 
@@ -198,6 +224,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Môžeš ma označiť na fotke, aby som to videl.",
     ua: "Можеш мене тегнути на фото, щоб я це побачив.",
     ru: "Можешь отметить меня на фото, чтобы я это увидел.",
+    en: "You can tag me in the photo so that I can see it.",
     tokens: ["Môžeš", "ma", "označiť", "na", "fotke", ",", "aby", "som", "to", "videl", "."],
   },
 
@@ -205,6 +232,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Ak je to užitočné, môžeš to zdieľať ďalej.",
     ua: "Якщо це корисно, можеш поширити далі.",
     ru: "Если это полезно, можешь поделиться дальше.",
+    en: "If it is useful, you can share it further.",
     tokens: ["Ak", "je", "to", "užitočné", ",", "môžeš", "to", "zdieľať", "ďalej", "."],
   },
 
@@ -212,6 +240,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Poslal som ti správu, keď budeš mať čas, pozri si ju.",
     ua: "Я надіслав тобі повідомлення — як матимеш час, подивись.",
     ru: "Я отправил тебе сообщение — как будет время, посмотри.",
+    en: "I sent you a message; when you have time, take a look at it.",
     tokens: ["Poslal", "som", "ti", "správu", ",", "keď", "budeš", "mať", "čas", ",", "pozri", "si", "ju", "."],
   },
 
@@ -219,6 +248,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Vypol som upozornenia, aby ma nič nevyrušovalo.",
     ua: "Я вимкнув сповіщення, щоб мене нічого не відволікало.",
     ru: "Я выключил уведомления, чтобы меня ничто не отвлекало.",
+    en: "I turned off notifications so that nothing would disturb me.",
     tokens: ["Vypol", "som", "upozornenia", ",", "aby", "ma", "nič", "nevyrušovalo", "."],
   },
 
@@ -229,6 +259,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Dostal som pozvanie na večeru a veľmi ma to potešilo.",
     ua: "Я отримав запрошення на вечерю, і це мене дуже потішило.",
     ru: "Я получил приглашение на ужин, и это меня очень обрадовало.",
+    en: "I received an invitation to dinner, and it made me very happy.",
     tokens: ["Dostal", "som", "pozvanie", "na", "večeru", "a", "veľmi", "ma", "to", "potešilo", "."],
   },
 
@@ -236,6 +267,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Hostiteľ nás privítal pri dverách s úsmevom.",
     ua: "Господар зустрів нас біля дверей з усмішкою.",
     ru: "Хозяин встретил нас у двери с улыбкой.",
+    en: "The host welcomed us at the door with a smile.",
     tokens: ["Hostiteľ", "nás", "privítal", "pri", "dverách", "s", "úsmevom", "."],
   },
 
@@ -243,6 +275,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Ako hosť som sa snažil byť slušný a nenápadný.",
     ua: "Як гість я намагався бути ввічливим і ненав’язливим.",
     ru: "Как гость я старался быть вежливым и ненавязчивым.",
+    en: "As a guest, I tried to be polite and unobtrusive.",
     tokens: ["Ako", "hosť", "som", "sa", "snažil", "byť", "slušný", "a", "nenápadný", "."],
   },
 
@@ -250,6 +283,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Pohostenie bolo výborné, najmä domáci koláč.",
     ua: "Частування було чудове, особливо домашній пиріг.",
     ru: "Угощение было отличным, особенно домашний пирог.",
+    en: "The refreshments were excellent, especially the homemade cake.",
     tokens: ["Pohostenie", "bolo", "výborné", ",", "najmä", "domáci", "koláč", "."],
   },
 
@@ -257,6 +291,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Je slušné priniesť darček, aj keď len malú pozornosť.",
     ua: "Ввічливо принести подарунок, навіть якщо це маленька дрібничка.",
     ru: "Вежливо принести подарок, даже если это маленький знак внимания.",
+    en: "It is polite to bring a gift, even if it is just a small token.",
     tokens: ["Je", "slušné", "priniesť", "darček", ",", "aj", "keď", "len", "malú", "pozornosť", "."],
   },
 
@@ -264,6 +299,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Slušnosť je základ, najmä keď niekoho navštíviš.",
     ua: "Ввічливість — це основа, особливо коли йдеш у гості.",
     ru: "Вежливость — основа, особенно когда идёшь в гости.",
+    en: "Politeness is the foundation, especially when you visit someone.",
     tokens: ["Slušnosť", "je", "základ", ",", "najmä", "keď", "niekoho", "navštíviš", "."],
   },
 
@@ -271,6 +307,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Prišli sme načas a hostiteľ nás hneď privítal.",
     ua: "Ми прийшли вчасно, і господар нас одразу привітав.",
     ru: "Мы пришли вовремя, и хозяин нас сразу поприветствовал.",
+    en: "We arrived on time, and the host welcomed us right away.",
     tokens: ["Prišli", "sme", "načas", "a", "hostiteľ", "nás", "hneď", "privítal", "."],
   },
 
@@ -278,6 +315,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Ponúkol mi kávu alebo čaj, tak som si vybral čaj.",
     ua: "Мені запропонували каву або чай, тож я обрав чай.",
     ru: "Мне предложили кофе или чай, и я выбрал чай.",
+    en: "He offered me coffee or tea, so I chose tea.",
     tokens: ["Ponúkol", "mi", "kávu", "alebo", "čaj", ",", "tak", "som", "si", "vybral", "čaj", "."],
   },
 
@@ -285,6 +323,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Na konci som sa poďakoval za pozvanie aj za pohostenie.",
     ua: "Наприкінці я подякував за запрошення та частування.",
     ru: "В конце я поблагодарил за приглашение и угощение.",
+    en: "At the end, I thanked them for the invitation and the refreshments.",
     tokens: ["Na", "konci", "som", "sa", "poďakoval", "za", "pozvanie", "aj", "za", "pohostenie", "."],
   },
 
@@ -292,6 +331,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Rozlúčili sme sa a sľúbili sme si, že sa čoskoro uvidíme.",
     ua: "Ми попрощалися і пообіцяли, що скоро побачимося.",
     ru: "Мы попрощались и пообещали, что скоро увидимся.",
+    en: "We said goodbye and promised each other that we would see each other soon.",
     tokens: ["Rozlúčili", "sme", "sa", "a", "sľúbili", "sme", "si", ",", "že", "sa", "čoskoro", "uvidíme", "."],
   },
 
@@ -302,6 +342,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Cítil som sklamanie, lebo som čakal iný výsledok.",
     ua: "Я відчував розчарування, бо очікував інший результат.",
     ru: "Я чувствовал разочарование, потому что ожидал другой результат.",
+    en: "I felt disappointment because I expected a different result.",
     tokens: ["Cítil", "som", "sklamanie", ",", "lebo", "som", "čakal", "iný", "výsledok", "."],
   },
 
@@ -309,6 +350,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Cítim hrdosť, keď vidím, koľko som sa naučil.",
     ua: "Я відчуваю гордість, коли бачу, скільки я навчився.",
     ru: "Я чувствую гордость, когда вижу, сколько я научился.",
+    en: "I feel pride when I see how much I have learned.",
     tokens: ["Cítim", "hrdosť", ",", "keď", "vidím", ",", "koľko", "som", "sa", "naučil", "."],
   },
 
@@ -316,6 +358,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Keď sa problém vyriešil, cítil som veľkú úľavu.",
     ua: "Коли проблема вирішилася, я відчув велике полегшення.",
     ru: "Когда проблема решилась, я почувствовал большое облегчение.",
+    en: "When the problem was solved, I felt great relief.",
     tokens: ["Keď", "sa", "problém", "vyriešil", ",", "cítil", "som", "veľkú", "úľavu", "."],
   },
 
@@ -323,6 +366,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Neistota je normálna, keď začínaš niečo nové.",
     ua: "Невпевненість — це нормально, коли починаєш щось нове.",
     ru: "Неуверенность — это нормально, когда начинаешь что-то новое.",
+    en: "Uncertainty is normal when you start something new.",
     tokens: ["Neistota", "je", "normálna", ",", "keď", "začínaš", "niečo", "nové", "."],
   },
 
@@ -330,6 +374,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Frustrácia rastie, keď sa nič nemení napriek snahe.",
     ua: "Фрустрація зростає, коли нічого не змінюється попри зусилля.",
     ru: "Фрустрация растёт, когда ничего не меняется несмотря на усилия.",
+    en: "Frustration grows when nothing changes despite the effort.",
     tokens: ["Frustrácia", "rastie", ",", "keď", "sa", "nič", "nemení", "napriek", "snahe", "."],
   },
 
@@ -337,6 +382,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Mal som pochybnosť, či je to správne rozhodnutie.",
     ua: "У мене був сумнів, чи це правильне рішення.",
     ru: "У меня было сомнение, правильное ли это решение.",
+    en: "I had a doubt whether it was the right decision.",
     tokens: ["Mal", "som", "pochybnosť", ",", "či", "je", "to", "správne", "rozhodnutie", "."],
   },
 
@@ -344,6 +390,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Mám obavu, že to nestihneme do termínu.",
     ua: "Я боюся, що ми не встигнемо до терміну.",
     ru: "Я опасаюсь, что мы не успеем к сроку.",
+    en: "I am worried that we will not make it by the deadline.",
     tokens: ["Mám", "obavu", ",", "že", "to", "nestihneme", "do", "termínu", "."],
   },
 
@@ -351,6 +398,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Spokojnosť príde, keď uvidíš reálny pokrok.",
     ua: "Задоволення прийде, коли побачиш реальний прогрес.",
     ru: "Удовлетворение придёт, когда увидишь реальный прогресс.",
+    en: "Satisfaction comes when you see real progress.",
     tokens: ["Spokojnosť", "príde", ",", "keď", "uvidíš", "reálny", "pokrok", "."],
   },
 
@@ -358,6 +406,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Bezmocnosť som cítil, keď som nemohol nič ovplyvniť.",
     ua: "Безсилля я відчував, коли не міг нічого змінити.",
     ru: "Бессилие я чувствовал, когда не мог ничего изменить.",
+    en: "I felt helplessness when I could not influence anything.",
     tokens: ["Bezmocnosť", "som", "cítil", ",", "keď", "som", "nemohol", "nič", "ovplyvniť", "."],
   },
 
@@ -365,9 +414,9 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Po náročnom týždni som cítil úplné vyčerpanie.",
     ua: "Після важкого тижня я відчував повне виснаження.",
     ru: "После тяжёлой недели я чувствовал полное истощение.",
+    en: "After a difficult week, I felt complete exhaustion.",
     tokens: ["Po", "náročnom", "týždni", "som", "cítil", "úplné", "vyčerpanie", "."],
   },
-
   // =========================
   // LESSON 26 — Spoločnosť a vzťahy
   // =========================
@@ -375,6 +424,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Bez porozumenia sa konflikt len prehĺbi.",
     ua: "Без розуміння конфлікт лише поглибиться.",
     ru: "Без понимания конфликт только углубится.",
+    en: "Without understanding, the conflict will only deepen.",
     tokens: ["Bez", "porozumenia", "sa", "konflikt", "len", "prehĺbi", "."],
   },
 
@@ -382,6 +432,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Solidarita je dôležitá najmä v ťažkých časoch.",
     ua: "Солідарність важлива особливо у важкі часи.",
     ru: "Солидарность важна особенно в трудные времена.",
+    en: "Solidarity is especially important in difficult times.",
     tokens: ["Solidarita", "je", "dôležitá", "najmä", "v", "ťažkých", "časoch", "."],
   },
 
@@ -389,6 +440,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Konflikt sa dá vyriešiť, ak obe strany chcú hľadať riešenie.",
     ua: "Конфлікт можна вирішити, якщо обидві сторони хочуть шукати рішення.",
     ru: "Конфликт можно решить, если обе стороны хотят искать решение.",
+    en: "A conflict can be resolved if both sides want to find a solution.",
     tokens: ["Konflikt", "sa", "dá", "vyriešiť", ",", "ak", "obe", "strany", "chcú", "hľadať", "riešenie", "."],
   },
 
@@ -396,6 +448,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Predsudok často vzniká z neznalosti a strachu.",
     ua: "Упередження часто виникає з незнання та страху.",
     ru: "Предрассудок часто возникает из незнания и страха.",
+    en: "Prejudice often arises from ignorance and fear.",
     tokens: ["Predsudok", "často", "vzniká", "z", "neznalosti", "a", "strachu", "."],
   },
 
@@ -403,6 +456,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Rovnosť neznamená, že sme všetci rovnakí, ale že máme rovnaké práva.",
     ua: "Рівність не означає, що ми однакові, а що маємо однакові права.",
     ru: "Равенство не значит, что мы одинаковые, а что у нас одинаковые права.",
+    en: "Equality does not mean we are all the same, but that we have equal rights.",
     tokens: ["Rovnosť", "neznamená", ",", "že", "sme", "všetci", "rovnakí", ",", "ale", "že", "máme", "rovnaké", "práva", "."],
   },
 
@@ -410,6 +464,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Tolerancia je o rešpekte, nie o tom, že so všetkým súhlasíš.",
     ua: "Толерантність — це про повагу, а не про згоду з усім.",
     ru: "Толерантность — это про уважение, а не про согласие со всем.",
+    en: "Tolerance is about respect, not about agreeing with everything.",
     tokens: ["Tolerancia", "je", "o", "rešpekte", ",", "nie", "o", "tom", ",", "že", "so", "všetkým", "súhlasíš", "."],
   },
 
@@ -417,13 +472,15 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Diskriminácia je neprijateľná a mala by sa riešiť.",
     ua: "Дискримінація неприйнятна і її треба вирішувати.",
     ru: "Дискриминация неприемлема и её нужно решать.",
+    en: "Discrimination is unacceptable and should be addressed.",
     tokens: ["Diskriminácia", "je", "neprijateľná", "a", "mala", "by", "sa", "riešiť", "."],
   },
 
   [phraseKey("spolužitie", "b1-26")]: {
     sk: "Spolužitie funguje, keď sa ľudia navzájom počúvajú.",
     ua: "Співжиття працює, коли люди слухають одне одного.",
-    ru: "Сосуществование работает, когда люди слушают друг друга.",
+    ru: "Сосуществование работает, когда people listen to each other.",
+    en: "Coexistence works when people listen to each other.",
     tokens: ["Spolužitie", "funguje", ",", "keď", "sa", "ľudia", "navzájom", "počúvajú", "."],
   },
 
@@ -431,6 +488,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Dôvera sa buduje dlho, ale dá sa stratiť za chvíľu.",
     ua: "Довіра будується довго, але втрачається за мить.",
     ru: "Доверие строится долго, но теряется за мгновение.",
+    en: "Trust takes a long time to build but can be lost in a moment.",
     tokens: ["Dôvera", "sa", "buduje", "dlho", ",", "ale", "dá", "sa", "stratiť", "za", "chvíľu", "."],
   },
 
@@ -438,6 +496,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Niekedy je kompromis lepší než vyhrať hádku.",
     ua: "Іноді компроміс кращий, ніж виграти суперечку.",
     ru: "Иногда компромисс лучше, чем выиграть спор.",
+    en: "Sometimes compromise is better than winning an argument.",
     tokens: ["Niekedy", "je", "kompromis", "lepší", "než", "vyhrať", "hádku", "."],
   },
 
@@ -448,6 +507,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Bezpečnosť práce berieme vážne, lebo zdravie je na prvom mieste.",
     ua: "Охорону праці ми сприймаємо серйозно, бо здоров’я на першому місці.",
     ru: "Охрану труда мы воспринимаем серьёзно, потому что здоровье на первом месте.",
+    en: "We take workplace safety seriously because health comes first.",
     tokens: ["Bezpečnosť", "práce", "berieme", "vážne", ",", "lebo", "zdravie", "je", "na", "prvom", "mieste", "."],
   },
 
@@ -455,6 +515,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Ochranné pomôcky musíme používať pri každej rizikovej činnosti.",
     ua: "Засоби захисту потрібно використовувати під час кожної ризикової роботи.",
     ru: "Средства защиты нужно использовать при каждой рискованной работе.",
+    en: "Protective equipment must be used during every risky activity.",
     tokens: ["Ochranné", "pomôcky", "musíme", "používať", "pri", "každej", "rizikovej", "činnosti", "."],
   },
 
@@ -462,6 +523,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Nosenie prilby je v tejto zóne povinné.",
     ua: "Носіння каски в цій зоні обов’язкове.",
     ru: "Ношение каски в этой зоне обязательное.",
+    en: "Wearing a helmet is mandatory in this area.",
     tokens: ["Nosenie", "prilby", "je", "v", "tejto", "zóne", "povinné", "."],
   },
 
@@ -469,6 +531,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Vstup bez oprávnenia je zakázaný.",
     ua: "Вхід без дозволу заборонений.",
     ru: "Вход без разрешения запрещён.",
+    en: "Entry without authorization is prohibited.",
     tokens: ["Vstup", "bez", "oprávnenia", "je", "zakázaný", "."],
   },
 
@@ -476,6 +539,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Školenie bezpečnosti sme absolvovali hneď prvý deň.",
     ua: "Інструктаж з безпеки ми пройшли в перший день.",
     ru: "Инструктаж по безопасности мы прошли в первый день.",
+    en: "We completed safety training on the first day.",
     tokens: ["Školenie", "bezpečnosti", "sme", "absolvovali", "hneď", "prvý", "deň", "."],
   },
 
@@ -483,6 +547,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Je dôležité dodržiavať postup, aj keď sa ponáhľaš.",
     ua: "Важливо дотримуватися процедури, навіть якщо поспішаєш.",
     ru: "Важно соблюдать процедуру, даже если спешишь.",
+    en: "It is important to follow the procedure even if you are in a hurry.",
     tokens: ["Je", "dôležité", "dodržiavať", "postup", ",", "aj", "keď", "sa", "ponáhľaš", "."],
   },
 
@@ -490,6 +555,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Pracovný úraz treba nahlásiť okamžite nadriadenému.",
     ua: "Виробничу травму треба негайно повідомити керівнику.",
     ru: "Производственную травму нужно немедленно сообщить руководителю.",
+    en: "A workplace injury must be reported immediately to a supervisor.",
     tokens: ["Pracovný", "úraz", "treba", "nahlásiť", "okamžite", "nadriadenému", "."],
   },
 
@@ -497,6 +563,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Bezpečnostné pravidlá platia pre všetkých bez výnimky.",
     ua: "Правила безпеки діють для всіх без винятку.",
     ru: "Правила безопасности действуют для всех без исключения.",
+    en: "Safety rules apply to everyone without exception.",
     tokens: ["Bezpečnostné", "pravidlá", "platia", "pre", "všetkých", "bez", "výnimky", "."],
   },
 
@@ -504,6 +571,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Práca prebieha pod dohľadom skúseného majstra.",
     ua: "Робота проходить під наглядом досвідченого майстра.",
     ru: "Работа проходит под надзором опытного мастера.",
+    en: "Work is carried out under the supervision of an experienced supervisor.",
     tokens: ["Práca", "prebieha", "pod", "dohľadom", "skúseného", "majstra", "."],
   },
 
@@ -511,6 +579,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Dostal som upozornenie, že musím nosiť ochranné okuliare.",
     ua: "Я отримав попередження, що маю носити захисні окуляри.",
     ru: "Я получил предупреждение, что должен носить защитные очки.",
+    en: "I received a warning that I must wear protective glasses.",
     tokens: ["Dostal", "som", "upozornenie", ",", "že", "musím", "nosiť", "ochranné", "okuliare", "."],
   },
 
@@ -521,6 +590,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Najprv si pripravíme plán a potom začneme.",
     ua: "Спочатку підготуємо план, а потім почнемо.",
     ru: "Сначала подготовим план, а потом начнём.",
+    en: "First we will prepare a plan and then start.",
     tokens: ["Najprv", "si", "pripravíme", "plán", "a", "potom", "začneme", "."],
   },
 
@@ -528,6 +598,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Dokončil som prácu a potom som si oddýchol.",
     ua: "Я закінчив роботу, а потім відпочив.",
     ru: "Я закончил работу, а потом отдохнул.",
+    en: "I finished the work and then rested.",
     tokens: ["Dokončil", "som", "prácu", "a", "potom", "som", "si", "oddýchol", "."],
   },
 
@@ -535,6 +606,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Následne sme poslali dokumenty a čakali na odpoveď.",
     ua: "Далі ми надіслали документи й чекали відповіді.",
     ru: "Затем мы отправили документы и ждали ответ.",
+    en: "Then we sent the documents and waited for a response.",
     tokens: ["Následne", "sme", "poslali", "dokumenty", "a", "čakali", "na", "odpoveď", "."],
   },
 
@@ -542,6 +614,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Medzitým som si skontroloval e-mail a vybavil pár vecí.",
     ua: "Тим часом я перевірив e-mail і вирішив кілька справ.",
     ru: "Тем временем я проверил e-mail и сделал пару дел.",
+    en: "Meanwhile, I checked my email and handled a few things.",
     tokens: ["Medzitým", "som", "si", "skontroloval", "e-mail", "a", "vybavil", "pár", "vecí", "."],
   },
 
@@ -549,6 +622,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Nakoniec sme našli riešenie, ktoré vyhovovalo všetkým.",
     ua: "Врешті ми знайшли рішення, яке всіх влаштувало.",
     ru: "В конце концов мы нашли решение, которое всех устроило.",
+    en: "In the end, we found a solution that suited everyone.",
     tokens: ["Nakoniec", "sme", "našli", "riešenie", ",", "ktoré", "vyhovovalo", "všetkým", "."],
   },
 
@@ -556,6 +630,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Zrazu sa všetko pokazilo a museli sme začať odznova.",
     ua: "Раптом усе зламалося, і нам довелося починати спочатку.",
     ru: "Вдруг всё сломалось, и нам пришлось начинать сначала.",
+    en: "Suddenly everything went wrong and we had to start over.",
     tokens: ["Zrazu", "sa", "všetko", "pokazilo", "a", "museli", "sme", "začať", "odznova", "."],
   },
 
@@ -563,6 +638,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Napokon sme sa dohodli, aj keď to trvalo dlho.",
     ua: "Зрештою ми домовилися, хоча це тривало довго.",
     ru: "В итоге мы договорились, хотя это заняло много времени.",
+    en: "Eventually we reached an agreement, even though it took a long time.",
     tokens: ["Napokon", "sme", "sa", "dohodli", ",", "aj", "keď", "to", "trvalo", "dlho", "."],
   },
 
@@ -570,6 +646,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Vtedy som pochopil, že musím zmeniť prístup.",
     ua: "Тоді я зрозумів, що маю змінити підхід.",
     ru: "Тогда я понял, что должен изменить подход.",
+    en: "At that moment I realized that I need to change my approach.",
     tokens: ["Vtedy", "som", "pochopil", ",", "že", "musím", "zmeniť", "prístup", "."],
   },
 
@@ -577,6 +654,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Odvtedy si dávam väčší pozor na detaily.",
     ua: "Відтоді я більше звертаю увагу на деталі.",
     ru: "С тех пор я больше обращаю внимание на детали.",
+    en: "Since then, I pay more attention to details.",
     tokens: ["Odvtedy", "si", "dávam", "väčší", "pozor", "na", "detaily", "."],
   },
 
@@ -584,16 +662,18 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Dovtedy som o tom nič nevedel, takže ma to prekvapilo.",
     ua: "До того часу я про це нічого не знав, тому мене це здивувало.",
     ru: "До того времени я об этом ничего не знал, поэтому меня это удивило.",
+    en: "Until then I knew nothing about it, so it surprised me.",
     tokens: ["Dovtedy", "som", "o", "tom", "nič", "nevedel", ",", "takže", "ma", "to", "prekvapilo", "."],
   },
 
   // =========================
-  // LESSON 29 — Konflikty: hovoriť pokojne
+  // LESSON 29 — Konflikty
   // =========================
   [phraseKey("nepríjemné", "b1-29")]: {
     sk: "Je mi nepríjemné, keď na mňa niekto kričí.",
     ua: "Мені неприємно, коли хтось на мене кричить.",
     ru: "Мне неприятно, когда кто-то на меня кричит.",
+    en: "I feel uncomfortable when someone shouts at me.",
     tokens: ["Je", "mi", "nepríjemné", ",", "keď", "na", "mňa", "niekto", "kričí", "."],
   },
 
@@ -601,6 +681,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Nechcel som ťa uraziť, len som to povedal nešikovne.",
     ua: "Я не хотів тебе образити, просто незграбно сказав.",
     ru: "Я не хотел тебя обидеть, просто неловко сказал.",
+    en: "I didn’t want to offend you, I just said it awkwardly.",
     tokens: ["Nechcel", "som", "ťa", "uraziť", ",", "len", "som", "to", "povedal", "nešikovne", "."],
   },
 
@@ -608,6 +689,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Je ľahké kritizovať, ale ťažšie je ponúknuť riešenie.",
     ua: "Легко критикувати, але складніше запропонувати рішення.",
     ru: "Легко критиковать, но сложнее предложить решение.",
+    en: "It is easy to criticize, but harder to offer a solution.",
     tokens: ["Je", "ľahké", "kritizovať", ",", "ale", "ťažšie", "je", "ponúknuť", "riešenie", "."],
   },
 
@@ -615,6 +697,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Chcem sa vyjadriť pokojne, aby sme sa pochopili.",
     ua: "Хочу висловитися спокійно, щоб ми зрозуміли одне одного.",
     ru: "Хочу высказаться спокойно, чтобы мы поняли друг друга.",
+    en: "I want to express myself calmly so that we understand each other.",
     tokens: ["Chcem", "sa", "vyjadriť", "pokojne", ",", "aby", "sme", "sa", "pochopili", "."],
   },
 
@@ -622,6 +705,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Prosím o vysvetlenie, lebo mi to nie je jasné.",
     ua: "Прошу пояснення, бо мені це незрозуміло.",
     ru: "Прошу объяснений, потому что мне это непонятно.",
+    en: "I ask for an explanation because it is not clear to me.",
     tokens: ["Prosím", "o", "vysvetlenie", ",", "lebo", "mi", "to", "nie", "je", "jasné", "."],
   },
 
@@ -629,6 +713,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Ospravedlnenie veľa znamená, ak je úprimné.",
     ua: "Вибачення багато значить, якщо воно щире.",
     ru: "Извинение много значит, если оно искреннее.",
+    en: "An apology means a lot if it is sincere.",
     tokens: ["Ospravedlnenie", "veľa", "znamená", ",", "ak", "je", "úprimné", "."],
   },
 
@@ -636,6 +721,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Snažím sa pochopiť tvoj pohľad, aj keď nesúhlasím.",
     ua: "Я намагаюся зрозуміти твою позицію, навіть якщо не згоден.",
     ru: "Я стараюсь понять твою позицию, даже если не согласен.",
+    en: "I try to understand your point of view even if I disagree.",
     tokens: ["Snažím", "sa", "pochopiť", "tvoj", "pohľad", ",", "aj", "keď", "nesúhlasím", "."],
   },
 
@@ -643,6 +729,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "V takej situácii je najťažšie zachovať pokoj.",
     ua: "У такій ситуації найважче зберігати спокій.",
     ru: "В такой ситуации сложнее всего сохранять спокойствие.",
+    en: "In such a situation, it is hardest to stay calm.",
     tokens: ["V", "takej", "situácii", "je", "najťažšie", "zachovať", "pokoj", "."],
   },
 
@@ -650,6 +737,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Niekedy je lepšie ustúpiť, aby sa hádka neskončila zle.",
     ua: "Іноді краще поступитися, щоб сварка не закінчилася погано.",
     ru: "Иногда лучше уступить, чтобы ссора не закончилась плохо.",
+    en: "Sometimes it is better to step back so the argument does not end badly.",
     tokens: ["Niekedy", "je", "lepšie", "ustúpiť", ",", "aby", "sa", "hádka", "neskončila", "zle", "."],
   },
 
@@ -657,16 +745,18 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Skúsme to urovnať, kým z toho nebude väčší problém.",
     ua: "Спробуймо це уладнати, поки не стало більшою проблемою.",
     ru: "Давай уладим это, пока это не стало большей проблемой.",
+    en: "Let’s settle this before it becomes a bigger problem.",
     tokens: ["Skúsme", "to", "urovnať", ",", "kým", "z", "toho", "nebude", "väčší", "problém", "."],
   },
 
   // =========================
-  // LESSON 30 — Jazyk: frázy do rozhovoru
+  // LESSON 30 — Frázy
   // =========================
   [phraseKey("ak tomu rozumiem správne", "b1-30")]: {
     sk: "Ak tomu rozumiem správne, chceš to urobiť ešte dnes.",
     ua: "Якщо я правильно розумію, ти хочеш зробити це ще сьогодні.",
     ru: "Если я правильно понимаю, ты хочешь сделать это ещё сегодня.",
+    en: "If I understand correctly, you want to do it today.",
     tokens: ["Ak", "tomu", "rozumiem", "správne", ",", "chceš", "to", "urobiť", "ešte", "dnes", "."],
   },
 
@@ -674,6 +764,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Inými slovami, potrebujeme viac času a menej tlaku.",
     ua: "Іншими словами, нам потрібно більше часу і менше тиску.",
     ru: "Другими словами, нам нужно больше времени и меньше давления.",
+    en: "In other words, we need more time and less pressure.",
     tokens: ["Inými", "slovami", ",", "potrebujeme", "viac", "času", "a", "menej", "tlaku", "."],
   },
 
@@ -681,6 +772,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Na druhej strane je to dobrá príležitosť, ktorú nechcem premárniť.",
     ua: "З іншого боку, це хороша можливість, яку я не хочу втратити.",
     ru: "С другой стороны, это хорошая возможность, которую я не хочу упустить.",
+    en: "On the other hand, it is a good opportunity that I do not want to miss.",
     tokens: ["Na", "druhej", "strane", "je", "to", "dobrá", "príležitosť", ",", "ktorú", "nechcem", "premárniť", "."],
   },
 
@@ -688,6 +780,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "V každom prípade ti dám vedieť, keď budem mať odpoveď.",
     ua: "У будь-якому разі я дам тобі знати, коли матиму відповідь.",
     ru: "В любом случае я дам тебе знать, когда будет ответ.",
+    en: "In any case, I will let you know when I have an answer.",
     tokens: ["V", "každom", "prípade", "ti", "dám", "vedieť", ",", "keď", "budem", "mať", "odpoveď", "."],
   },
 
@@ -695,6 +788,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Záleží na tom, čo presne chceme dosiahnuť.",
     ua: "Це залежить від того, чого саме ми хочемо досягти.",
     ru: "Это зависит от того, чего именно мы хотим добиться.",
+    en: "It depends on what exactly we want to achieve.",
     tokens: ["Záleží", "na", "tom", ",", "čo", "presne", "chceme", "dosiahnuť", "."],
   },
 
@@ -702,6 +796,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Mám pocit, že sme sa v tomto bode už posunuli.",
     ua: "Мені здається, що в цьому питанні ми вже просунулися.",
     ru: "Мне кажется, что в этом вопросе мы уже продвинулись.",
+    en: "I feel that we have already moved forward at this point.",
     tokens: ["Mám", "pocit", ",", "že", "sme", "sa", "v", "tomto", "bode", "už", "posunuli", "."],
   },
 
@@ -709,6 +804,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Neviem presne, kedy to bude hotové, ale dám ti vedieť.",
     ua: "Не знаю точно, коли це буде готово, але повідомлю.",
     ru: "Не знаю точно, когда это будет готово, но сообщу.",
+    en: "I don’t know exactly when it will be ready, but I will let you know.",
     tokens: ["Neviem", "presne", ",", "kedy", "to", "bude", "hotové", ",", "ale", "dám", "ti", "vedieť", "."],
   },
 
@@ -716,6 +812,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "To dáva zmysel, lebo tak ušetríme čas aj energiu.",
     ua: "Це має сенс, бо так ми зекономимо час і енергію.",
     ru: "Это имеет смысл, потому что так мы сэкономим время и энергию.",
+    en: "That makes sense because it saves time and energy.",
     tokens: ["To", "dáva", "zmysel", ",", "lebo", "tak", "ušetríme", "čas", "aj", "energiu", "."],
   },
 
@@ -723,6 +820,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "To je zaujímavé, povedz mi o tom viac.",
     ua: "Це цікаво, розкажи мені більше.",
     ru: "Это интересно, расскажи мне больше.",
+    en: "That’s interesting, tell me more about it.",
     tokens: ["To", "je", "zaujímavé", ",", "povedz", "mi", "o", "tom", "viac", "."],
   },
 
@@ -730,6 +828,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Poďme ďalej a pozrime sa na ďalší krok.",
     ua: "Йдемо далі й подивімося на наступний крок.",
     ru: "Пойдём дальше и посмотрим на следующий шаг.",
+    en: "Let’s move on and look at the next step.",
     tokens: ["Poďme", "ďalej", "a", "pozrime", "sa", "na", "ďalší", "krok", "."],
   },
 };
