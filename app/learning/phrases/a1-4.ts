@@ -346,7 +346,7 @@ export const A1_PHRASES_4: Record<string, Phrase> = {
     sk: "Idem na úrad.",
     ua: "Я йду в держустанову.",
     ru: "Я иду в учреждение.",
-    en: "I am going to the office.",
+    en: "I am going to the government office.",
     tokens: ["Idem", "na", "úrad", "."],
   },
 

@@ -496,7 +496,7 @@ export const CS_A1_PHRASES_4: Record<string, Phrase> = {
     sk: "Prosím, zastavte u obchodu.",
     ua: "Будь ласка, зупиніться біля магазину.",
     ru: "Пожалуйста, остановитесь у магазина.",
-    en: "Please stop by the shop.",
+    en: "Please stop near the shop.",
     tokens: ["Prosím", ",", "zastavte", "u", "obchodu", "."],
   },
 

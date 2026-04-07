@@ -28,7 +28,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["I", "want", "to", "save", "some", "money", "."],
     extraUaTokens: ["багато", "сьогодні", "ще"],
     extraRuTokens: ["много", "сегодня", "ещё"],
-    extraEnTokens: ["a-lot", "today", "still"],
+    extraEnTokens: ["much", "today", "still"],
   },
 
   [phraseKey("minout", "a1-26")]: {
@@ -41,7 +41,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["I", "spent", "too", "much", "money", "."],
     extraUaTokens: ["сьогодні", "даремно", "дуже"],
     extraRuTokens: ["сегодня", "зря", "очень"],
-    extraEnTokens: ["today", "for-nothing", "very"],
+    extraEnTokens: ["today", "nothing", "very"],
   },
 
   [phraseKey("výplata", "a1-26")]: {
@@ -100,10 +100,10 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     sk: "Peníze přišly na účet.",
     ua: "Гроші надійшли на рахунок.",
     ru: "Деньги пришли на счёт.",
-    en: "The money came to the account.",
+    en: "The money arrived in the account.",
     uaTokens: ["Гроші", "надійшли", "на", "рахунок", "."],
     ruTokens: ["Деньги", "пришли", "на", "счёт", "."],
-    enTokens: ["The", "money", "came", "to", "the", "account", "."],
+    enTokens: ["The", "money", "arrived", "in", "the", "account", "."],
     extraUaTokens: ["картку", "сьогодні", "вже"],
     extraRuTokens: ["карту", "сегодня", "уже"],
     extraEnTokens: ["card", "today", "already"],
@@ -187,7 +187,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["I", "cannot", "log", "into", "the", "account", "."],
     extraUaTokens: ["вийти", "зараз", "знову"],
     extraRuTokens: ["выйти", "сейчас", "снова"],
-    extraEnTokens: ["log-out", "now", "again"],
+    extraEnTokens: ["out", "now", "again"],
   },
 
   [phraseKey("odhlásit se", "a1-27")]: {
@@ -200,7 +200,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["Do", "not", "forget", "to", "log", "out", "."],
     extraUaTokens: ["увійти", "потім", "ще"],
     extraRuTokens: ["войти", "потом", "ещё"],
-    extraEnTokens: ["log-in", "later", "still"],
+    extraEnTokens: ["login", "later", "still"],
   },
 
   [phraseKey("stáhnout", "a1-27")]: {
@@ -427,7 +427,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["Sorry", ",", "I", "do", "not", "understand", "it", "."],
     extraUaTokens: ["ще", "зовсім", "добре"],
     extraRuTokens: ["ещё", "совсем", "хорошо"],
-    extraEnTokens: ["still", "at-all", "well"],
+    extraEnTokens: ["still", "all", "well"],
   },
 
   [phraseKey("hotovo", "a1-29")]: {
@@ -573,7 +573,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["What", "will", "you", "do", "today", "?"],
     extraUaTokens: ["завтра", "потім", "вдома"],
     extraRuTokens: ["завтра", "потом", "дома"],
-    extraEnTokens: ["tomorrow", "later", "at-home"],
+    extraEnTokens: ["tomorrow", "later", "home"],
   },
 
   [phraseKey("jít", "a1-30")]: {
@@ -651,7 +651,7 @@ export const CS_A1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["I", "want", "to", "learn", "more", "."],
     extraUaTokens: ["сьогодні", "ще", "трохи"],
     extraRuTokens: ["сегодня", "ещё", "немного"],
-    extraEnTokens: ["today", "still", "a-little"],
+    extraEnTokens: ["today", "still", "little"],
   },
 
   [phraseKey("moci", "a1-30")]: {

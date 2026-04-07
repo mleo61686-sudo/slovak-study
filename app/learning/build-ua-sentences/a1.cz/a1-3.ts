@@ -171,7 +171,7 @@ export const CS_A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     en: "In the evening I go for a walk.",
     uaTokens: ["Увечері", "я", "ходжу", "на", "прогулянку", "."],
     ruTokens: ["Вечером", "я", "хожу", "на", "прогулку", "."],
-    enTokens: ["In", "the", "eving", "I", "go", "for", "a", "walk", "."],
+    enTokens: ["In", "the", "evening", "I", "go", "for", "a", "walk", "."],
     extraUaTokens: ["вранці", "роботу", "часто"],
     extraRuTokens: ["утром", "работу", "часто"],
     extraEnTokens: ["morning", "work", "often"],
@@ -226,7 +226,7 @@ export const CS_A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["The", "day", "after", "tomorrow", "I", "have", "a", "day", "off", "."],
     extraUaTokens: ["завтра", "робота", "буде"],
     extraRuTokens: ["завтра", "работа", "будет"],
-    extraEnTokens: ["tomorrow", "work", "will-be"],
+    extraEnTokens: ["tomorrow", "work", "later"],
   },
 
   [phraseKey("vždy", "a1-12")]: {
@@ -327,10 +327,10 @@ export const CS_A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     sk: "Musíme jít po schodech.",
     ua: "Нам треба йти по сходах.",
     ru: "Нам нужно идти по лестнице.",
-    en: "We need to go by the stairs.",
+    en: "We need to take the stairs.",
     uaTokens: ["Нам", "треба", "йти", "по", "сходах", "."],
     ruTokens: ["Нам", "нужно", "идти", "по", "лестнице", "."],
-    enTokens: ["We", "need", "to", "go", "by", "the", "stairs", "."],
+    enTokens: ["We", "need", "to", "take", "the", "stairs", "."],
     extraUaTokens: ["ліфтом", "вгору", "сьогодні"],
     extraRuTokens: ["лифтом", "наверх", "сегодня"],
     extraEnTokens: ["lift", "upstairs", "today"],
@@ -599,7 +599,7 @@ export const CS_A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["Tomorrow", "we", "have", "a", "city", "tour", "."],
     extraUaTokens: ["музеєм", "довга", "буде"],
     extraRuTokens: ["музею", "долгая", "будет"],
-    extraEnTokens: ["museum", "long", "will-be"],
+    extraEnTokens: ["museum", "long", "tomorrow"],
   },
 
   [phraseKey("pláž", "a1-15")]: {

@@ -58,7 +58,7 @@ export const A2_PHRASES_1: Record<string, Phrase> = {
     sk: "Oprava práčky bude zajtra.",
     ua: "Ремонт пральної машини буде завтра.",
     ru: "Ремонт стиральной машины будет завтра.",
-    en: "The washing machine repair will be tomorrow.",
+    en: "The washing machine repair is scheduled for tomorrow.",
     tokens: ["Oprava", "práčky", "bude", "zajtra", "."],
   },
 

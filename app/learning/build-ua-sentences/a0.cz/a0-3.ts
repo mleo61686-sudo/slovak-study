@@ -427,7 +427,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["Today", "I", "have", "a", "headache", "."],
     extraUaTokens: ["зуб", "трохи", "вже"],
     extraRuTokens: ["зуб", "немного", "уже"],
-    extraEnTokens: ["tooth", "a-little", "already"],
+    extraEnTokens: ["tooth", "little", "already"],
   },
 
   [phraseKey("oko", "a0-14")]: {

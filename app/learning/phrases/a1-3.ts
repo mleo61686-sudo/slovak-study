@@ -134,7 +134,7 @@ export const A1_PHRASES_3: Record<string, Phrase> = {
     sk: "Choďte hore po schodoch.",
     ua: "Підійдіть вгору по сходах.",
     ru: "Поднимитесь вверх по лестнице.",
-    en: "Go upstairs by the stairs.",
+    en: "Go up the stairs.",
     tokens: ["Choďte", "hore", "po", "schodoch", "."],
   },
 
@@ -486,7 +486,7 @@ export const A1_PHRASES_3: Record<string, Phrase> = {
     sk: "Mám účet v banke.",
     ua: "У мене є рахунок у банку.",
     ru: "У меня есть счёт в банке.",
-    en: "I have an account in the bank.",
+    en: "I have an account at the bank.",
     tokens: ["Mám", "účet", "v", "banke", "."],
   },
 

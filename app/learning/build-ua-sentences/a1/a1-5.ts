@@ -55,7 +55,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["I", "cannot", "find", "the", "phone", "."],
     extraUaTokens: ["ключі", "загубив", "вдома"],
     extraRuTokens: ["ключи", "потерял", "дома"],
-    extraEnTokens: ["keys", "lost", "at", "home"],
+    extraEnTokens: ["keys", "lost", "home"],
   },
 
   [phraseKey("meškať", "a1-21")]: {
@@ -189,7 +189,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["It", "is", "close", "."],
     extraUaTokens: ["далеко", "дуже", "звідси"],
     extraRuTokens: ["далеко", "очень", "отсюда"],
-    extraEnTokens: ["far", "very", "from", "here"],
+    extraEnTokens: ["far", "very", "here"],
   },
 
   [phraseKey("ďaleko", "a1-22")]: {
@@ -241,7 +241,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["The", "stop", "is", "in", "front", "of", "the", "shop", "."],
     extraUaTokens: ["за", "банком", "пошта"],
     extraRuTokens: ["за", "банком", "почта"],
-    extraEnTokens: ["behind", "bank", "post", "office"],
+    extraEnTokens: ["behind", "bank", "post"],
   },
 
   [phraseKey("za", "a1-22")]: {
@@ -254,7 +254,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["The", "park", "is", "behind", "the", "house", "."],
     extraUaTokens: ["перед", "школою", "магазин"],
     extraRuTokens: ["перед", "школой", "магазин"],
-    extraEnTokens: ["in", "front", "of", "school", "shop"],
+    extraEnTokens: ["front", "school", "shop"],
   },
 
   [phraseKey("medzi", "a1-22")]: {
@@ -267,7 +267,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["It", "is", "between", "the", "bank", "and", "the", "post", "office", "."],
     extraUaTokens: ["перед", "магазином", "ліворуч"],
     extraRuTokens: ["перед", "магазином", "налево"],
-    extraEnTokens: ["in", "front", "of", "shop", "left"],
+    extraEnTokens: ["front", "shop", "left"],
   },
 
   // =========================
@@ -431,7 +431,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["It", "is", "cold", "outside", "."],
     extraUaTokens: ["тепло", "сьогодні", "вдома"],
     extraRuTokens: ["тепло", "сегодня", "дома"],
-    extraEnTokens: ["warm", "today", "at", "home"],
+    extraEnTokens: ["warm", "today", "home"],
   },
 
   [phraseKey("zamračené", "a1-24")]: {
@@ -470,7 +470,7 @@ export const A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["It", "is", "raining", "today", "."],
     extraUaTokens: ["сніг", "завтра", "буде"],
     extraRuTokens: ["снег", "завтра", "будет"],
-    extraEnTokens: ["snow", "tomorrow", "will", "be"],
+    extraEnTokens: ["snow", "tomorrow", "will"],
   },
 
   [phraseKey("snežiť", "a1-24")]: {

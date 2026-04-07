@@ -88,10 +88,10 @@ export const A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     sk: "Oprava práčky bude zajtra.",
     ua: "Ремонт пральної машини буде завтра.",
     ru: "Ремонт стиральной машины будет завтра.",
-    en: "The washing machine repair will be tomorrow.",
+    en: "The washing machine repair is scheduled for tomorrow.",
     uaTokens: ["Ремонт", "пральної", "машини", "буде", "завтра", "."],
     ruTokens: ["Ремонт", "стиральной", "машины", "будет", "завтра", "."],
-    enTokens: ["The", "washing", "machine", "repair", "will", "be", "tomorrow", "."],
+    enTokens: ["The", "washing", "machine", "repair", "is", "scheduled", "for", "tomorrow", "."],
     extraUaTokens: ["майстер", "інструмент", "техніка"],
     extraRuTokens: ["мастер", "инструмент", "техника"],
     extraEnTokens: ["repairman", "tool", "equipment"],
@@ -175,7 +175,7 @@ export const A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     enTokens: ["The", "main", "symptom", "is", "a", "cough", "."],
     extraUaTokens: ["температура", "нежить", "горло"],
     extraRuTokens: ["температура", "насморк", "горло"],
-    extraEnTokens: ["fever", "runny nose", "throat"],
+    extraEnTokens: ["fever", "nose", "throat"],
   },
 
   [phraseKey("bolesť hrdla", "a2-2")]: {
@@ -360,7 +360,7 @@ export const A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     enTokens: ["The", "administrative", "fee", "is", "ten", "euros", "."],
     extraUaTokens: ["каса", "оплата", "послуга"],
     extraRuTokens: ["касса", "оплата", "услуга"],
-    extraEnTokens: ["cash desk", "payment", "service"],
+    extraEnTokens: ["desk", "payment", "service"],
   },
 
   [phraseKey("objednať sa", "a2-3")]: {
@@ -626,7 +626,7 @@ export const A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     enTokens: ["One", "one-way", "ticket", ",", "please", "."],
     extraUaTokens: ["каса", "маршрут", "станція"],
     extraRuTokens: ["касса", "маршрут", "станция"],
-    extraEnTokens: ["ticket office", "route", "station"],
+    extraEnTokens: ["office", "route", "station"],
   },
 
   [phraseKey("spiatočný", "a2-5")]: {

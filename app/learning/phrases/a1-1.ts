@@ -117,7 +117,7 @@ export const A1_PHRASES_1: Record<string, Phrase> = {
     sk: "Niet za čo, rád pomôžem.",
     ua: "Нема за що, із радістю допоможу.",
     ru: "Не за что, с радостью помогу.",
-    en: "You're welcome, I'm happy to help.",
+    en: "You're welcome, I'll gladly help.",
     tokens: ["Niet", "za", "čo", ",", "rád", "pomôžem", "."],
   },
 

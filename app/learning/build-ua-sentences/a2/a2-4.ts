@@ -55,7 +55,7 @@ export const A2_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
         enTokens: ["The", "homework", "must", "be", "submitted", "by", "Friday", "."],
         extraUaTokens: ["термін", "учитель", "вчасно"],
         extraRuTokens: ["срок", "учитель", "вовремя"],
-        extraEnTokens: ["deadline", "teacher", "on time"],
+        extraEnTokens: ["deadline", "teacher", "timely"],
     },
 
     [phraseKey("skúška", "a2-16")]: {
@@ -102,8 +102,8 @@ export const A2_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
         ua: "Хочу покращити свою граматику.",
         ru: "Хочу улучшить свою грамматику.",
         en: "I want to improve my grammar.",
-        uaTokens: ["Хочу", "покращити", "свою", "граматиці", "."],
-        ruTokens: ["Хочу", "улучшить", "свою", "грамматике", "."],
+        uaTokens: ["Хочу", "покращити", "свою", "граматику", "."],
+        ruTokens: ["Хочу", "улучшить", "свою", "грамматику", "."],
         enTokens: ["I", "want", "to", "improve", "my", "grammar", "."],
         extraUaTokens: ["правила", "вправи", "мова"],
         extraRuTokens: ["правила", "упражнения", "язык"],
@@ -119,7 +119,7 @@ export const A2_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
         ruTokens: ["Каждый", "день", "повторяю", "новые", "слова", "."],
         enTokens: ["I", "revise", "new", "words", "every", "day", "."],
         extraUaTokens: ["словник", "пам'ять", "щовечора"],
-        extraRuTokens: ["словарь", "память", "каждый", "вечер"],
+        extraRuTokens: ["словарь", "память", "вечером"],
         extraEnTokens: ["dictionary", "memory", "every evening"],
     },
 
@@ -308,7 +308,7 @@ export const A2_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
         enTokens: ["I", "can", "also", "make", "a", "deposit", "at", "the", "branch", "."],
         extraUaTokens: ["каса", "сума", "рахунок"],
         extraRuTokens: ["касса", "сумма", "счёт"],
-        extraEnTokens: ["cash desk", "amount", "account"],
+        extraEnTokens: ["cashier", "amount", "account"],
     },
 
     [phraseKey("previesť", "a2-18")]: {

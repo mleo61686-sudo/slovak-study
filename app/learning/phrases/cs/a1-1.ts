@@ -65,7 +65,7 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
     sk: "Těší mě, že vás poznávám.",
     ua: "Мені приємно з вами познайомитися.",
     ru: "Мне приятно с вами познакомиться.",
-    en: "Nice to meet you.",
+    en: "It is nice to meet you.",
     tokens: ["Těší", "mě", ",", "že", "vás", "poznávám", "."],
   },
 
@@ -330,7 +330,7 @@ export const CS_A1_PHRASES_1: Record<string, Phrase> = {
     sk: "Paní už účtuje nákup.",
     ua: "Пані вже пробиває покупку.",
     ru: "Женщина уже пробивает покупку.",
-    en: "The lady is already checking out the purchase.",
+    en: "The lady is already ringing up the purchase.",
     tokens: ["Paní", "už", "účtuje", "nákup", "."],
   },
 

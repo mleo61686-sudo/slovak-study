@@ -323,7 +323,7 @@ export const A2_PHRASES_2: Record<string, Phrase> = {
     sk: "Poštovné je v cene alebo zvlášť?",
     ua: "Вартість доставки входить у ціну чи окремо?",
     ru: "Стоимость доставки входит в цену или отдельно?",
-    en: "Is shipping included in the price or separate?",
+    en: "Is shipping included in the price or is it separate?",
     tokens: ["Poštovné", "je", "v", "cene", "alebo", "zvlášť", "?"],
   },
 

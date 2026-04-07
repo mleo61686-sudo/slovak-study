@@ -307,7 +307,7 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["Yesterday", "I", "worked", "overtime", "."],
     extraUaTokens: ["сьогодні", "недовго", "вдома"],
     extraRuTokens: ["сегодня", "недолго", "дома"],
-    extraEnTokens: ["today", "briefly", "at-home"],
+    extraEnTokens: ["today", "briefly", "home"],
   },
 
   [phraseKey("porada", "a1-8")]: {
@@ -427,7 +427,7 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["Today", "I", "am", "really", "happy", "."],
     extraUaTokens: ["сумний", "дуже", "через"],
     extraRuTokens: ["грустный", "очень", "из-за"],
-    extraEnTokens: ["sad", "very", "because-of"],
+    extraEnTokens: ["sad", "very", "because"],
   },
 
   [phraseKey("smutný", "a1-9")]: {
@@ -586,7 +586,7 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["Where", "is", "the", "nearest", "bank", "?"],
     extraUaTokens: ["пошта", "аптека", "тут"],
     extraRuTokens: ["почта", "аптека", "здесь"],
-    extraEnTokens: ["post-office", "pharmacy", "here"],
+    extraEnTokens: ["post office", "pharmacy", "here"],
   },
 
   [phraseKey("kolik to stojí", "a1-10")]: {
@@ -625,7 +625,7 @@ export const CS_A1_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["What", "does", "it", "mean", "in", "Czech", "?"],
     extraUaTokens: ["словацькою", "українською", "точно"],
     extraRuTokens: ["по-словацки", "по-украински", "точно"],
-    extraEnTokens: ["in-Slovak", "in-Ukrainian", "exactly"],
+    extraEnTokens: ["in Slovak", "in Ukrainian", "exactly"],
   },
 
   [phraseKey("rozumíte", "a1-10")]: {

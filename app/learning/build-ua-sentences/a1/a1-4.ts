@@ -81,7 +81,7 @@ export const A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["This", "syrup", "is", "for", "a", "cough", "."],
     extraUaTokens: ["таблетки", "нежитю", "добрий"],
     extraRuTokens: ["таблетки", "насморка", "хороший"],
-    extraEnTokens: ["tablets", "runny", "nose", "good"],
+    extraEnTokens: ["tablets", "cold", "good"],
   },
 
   [phraseKey("odpočívať", "a1-16")]: {
@@ -552,7 +552,7 @@ export const A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "need", "to", "get", "up", "early", "."],
     extraUaTokens: ["пізно", "лягти", "сьогодні"],
     extraRuTokens: ["поздно", "лечь", "сегодня"],
-    extraEnTokens: ["late", "go", "to", "bed"],
+    extraEnTokens: ["late", "sleep", "today"],
   },
 
   [phraseKey("ísť do práce", "a1-20")]: {

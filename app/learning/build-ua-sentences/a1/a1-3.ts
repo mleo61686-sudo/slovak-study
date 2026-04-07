@@ -99,7 +99,7 @@ export const A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
 
   [phraseKey("škaredý", "a1-11")]: {
     sk: "To nie je škaredý obraz.",
-    ua: "Це не потворна картина.",
+    ua: "Це не негарна картина.",
     ru: "Это не уродливая картина.",
     en: "This is not an ugly picture.",
     uaTokens: ["Це", "не", "негарна", "картина", "."],
@@ -150,7 +150,7 @@ export const A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["In", "the", "morning", "I", "get", "up", "at", "seven", "."],
     extraUaTokens: ["ввечері", "лягаю", "вдома"],
     extraRuTokens: ["вечером", "ложусь", "дома"],
-    extraEnTokens: ["evening", "go", "to", "bed"],
+    extraEnTokens: ["evening", "sleep", "home"],
   },
 
   [phraseKey("obed", "a1-12")]: {
@@ -228,7 +228,7 @@ export const A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["The", "day", "after", "tomorrow", "we", "have", "a", "meeting", "."],
     extraUaTokens: ["завтра", "робота", "буде"],
     extraRuTokens: ["завтра", "работа", "будет"],
-    extraEnTokens: ["tomorrow", "work", "will", "be"],
+    extraEnTokens: ["tomorrow", "work", "today"],
   },
 
   [phraseKey("vždy", "a1-12")]: {
@@ -241,7 +241,7 @@ export const A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["I", "always", "get", "up", "early", "."],
     extraUaTokens: ["інколи", "пізно", "лягаю"],
     extraRuTokens: ["иногда", "поздно", "ложусь"],
-    extraEnTokens: ["sometimes", "late", "go", "to", "bed"],
+    extraEnTokens: ["sometimes", "late", "sleep"],
   },
 
   [phraseKey("často", "a1-12")]: {
@@ -496,7 +496,7 @@ export const A1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["There", "is", "a", "sale", "on", "shoes", "today", "."],
     extraUaTokens: ["знижка", "сукні", "буде"],
     extraRuTokens: ["скидка", "платья", "будет"],
-    extraEnTokens: ["discount", "dresses", "will", "be"],
+    extraEnTokens: ["discount", "dresses", "tomorrow"],
   },
 
   [phraseKey("zľavnený", "a1-14")]: {

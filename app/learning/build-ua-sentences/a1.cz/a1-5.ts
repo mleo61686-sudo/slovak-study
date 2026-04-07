@@ -168,10 +168,10 @@ export const CS_A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     sk: "Jděte pořád rovno.",
     ua: "Ідіть весь час прямо.",
     ru: "Идите всё время прямо.",
-    en: "Go straight all the time.",
+    en: "Keep going straight.",
     uaTokens: ["Ідіть", "весь", "час", "прямо", "."],
     ruTokens: ["Идите", "всё", "время", "прямо", "."],
-    enTokens: ["Go", "straight", "all", "the", "time", "."],
+    enTokens: ["Keep", "going", "straight", "."],
     extraUaTokens: ["далі", "швидко", "тепер"],
     extraRuTokens: ["дальше", "быстро", "теперь"],
     extraEnTokens: ["farther", "quickly", "now"],
@@ -200,17 +200,17 @@ export const CS_A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["It", "is", "not", "far", "."],
     extraUaTokens: ["близько", "зовсім", "не"],
     extraRuTokens: ["близко", "совсем", "не"],
-    extraEnTokens: ["close", "at-all", "not"],
+    extraEnTokens: ["close", "at all", "not"],
   },
 
   [phraseKey("nahoru", "a1-22")]: {
     sk: "Pojďte nahoru po schodech.",
     ua: "Ідіть вгору сходами.",
     ru: "Поднимайтесь вверх по лестнице.",
-    en: "Go upstairs by the stairs.",
+    en: "Go up the stairs.",
     uaTokens: ["Ідіть", "вгору", "сходами", "."],
     ruTokens: ["Поднимайтесь", "вверх", "по", "лестнице", "."],
-    enTokens: ["Go", "upstairs", "by", "the", "stairs", "."],
+    enTokens: ["Go", "up", "the", "stairs", "."],
     extraUaTokens: ["вниз", "повільно", "теж"],
     extraRuTokens: ["вниз", "медленно", "тоже"],
     extraEnTokens: ["down", "slowly", "too"],
@@ -252,7 +252,7 @@ export const CS_A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["The", "school", "is", "behind", "the", "park", "."],
     extraUaTokens: ["перед", "великим", "містом"],
     extraRuTokens: ["перед", "большим", "городом"],
-    extraEnTokens: ["in-front-of", "big", "city"],
+    extraEnTokens: ["in front of", "big", "city"],
   },
 
   [phraseKey("mezi", "a1-22")]: {
@@ -651,7 +651,7 @@ export const CS_A1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["After", "running", "I", "am", "very", "thirsty", "."],
     extraUaTokens: ["їсти", "зараз", "сильно"],
     extraRuTokens: ["есть", "сейчас", "сильно"],
-    extraEnTokens: ["eat", "now", "badly"],
+    extraEnTokens: ["eat", "now", "very"],
   },
 
   [phraseKey("chuť", "a1-25")]: {

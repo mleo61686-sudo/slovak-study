@@ -41,7 +41,7 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["The", "child", "was", "afraid", "of", "the", "dark", "."],
     extraUaTokens: ["вночі", "дуже", "сам"],
     extraRuTokens: ["ночью", "очень", "сам"],
-    extraEnTokens: ["at-night", "very", "alone"],
+    extraEnTokens: ["night", "very", "alone"],
   },
 
   [phraseKey("hněv", "a1-31")]: {
@@ -74,10 +74,10 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     sk: "Po práci cítím velkou únavu.",
     ua: "Після роботи я відчуваю велику втому.",
     ru: "После работы я чувствую сильную усталость.",
-    en: "After work I feel great tiredness.",
+    en: "After work I feel very tired.",
     uaTokens: ["Після", "роботи", "я", "відчуваю", "велику", "втому", "."],
     ruTokens: ["После", "работы", "я", "чувствую", "сильную", "усталость", "."],
-    enTokens: ["After", "work", "I", "feel", "great", "tiredness", "."],
+    enTokens: ["After", "work", "I", "feel", "very", "tired", "."],
     extraUaTokens: ["стрес", "сьогодні", "дуже"],
     extraRuTokens: ["стресс", "сегодня", "очень"],
     extraEnTokens: ["stress", "today", "very"],
@@ -87,10 +87,10 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     sk: "Před zkouškou mám stres.",
     ua: "Перед іспитом у мене стрес.",
     ru: "Перед экзаменом у меня стресс.",
-    en: "I have stress before the exam.",
+    en: "I feel stressed before the exam.",
     uaTokens: ["Перед", "іспитом", "у", "мене", "стрес", "."],
     ruTokens: ["Перед", "экзаменом", "у", "меня", "стресс", "."],
-    enTokens: ["I", "have", "stress", "before", "the", "exam", "."],
+    enTokens: ["I", "feel", "stressed", "before", "the", "exam", "."],
     extraUaTokens: ["великий", "зараз", "дуже"],
     extraRuTokens: ["большой", "сейчас", "очень"],
     extraEnTokens: ["big", "now", "very"],
@@ -414,7 +414,7 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["Can", "you", "describe", "this", "problem", "to", "me", "?"],
     extraUaTokens: ["детально", "ще", "раз"],
     extraRuTokens: ["подробно", "ещё", "раз"],
-    extraEnTokens: ["in-detail", "one-more", "time"],
+    extraEnTokens: ["detailed", "again", "time"],
   },
 
   [phraseKey("navrhnout", "a1-34")]: {
@@ -440,7 +440,7 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["Grandpa", "likes", "telling", "stories", "."],
     extraUaTokens: ["казки", "дітям", "часто"],
     extraRuTokens: ["сказки", "детям", "часто"],
-    extraEnTokens: ["fairy-tales", "to-children", "often"],
+    extraEnTokens: ["tales", "children", "often"],
   },
 
   [phraseKey("oznámit", "a1-34")]: {
@@ -492,7 +492,7 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["I", "will", "call", "you", "after", "work", "."],
     extraUaTokens: ["увечері", "завтра", "ще"],
     extraRuTokens: ["вечером", "завтра", "ещё"],
-    extraEnTokens: ["in-the-evening", "tomorrow", "still"],
+    extraEnTokens: ["evening", "tomorrow", "still"],
   },
 
   [phraseKey("pozdravit", "a1-34")]: {
@@ -518,7 +518,7 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["I", "want", "to", "ask", "something", "."],
     extraUaTokens: ["тебе", "ще", "раз"],
     extraRuTokens: ["тебя", "ещё", "раз"],
-    extraEnTokens: ["you", "one-more", "time"],
+    extraEnTokens: ["you", "again", "time"],
   },
 
   [phraseKey("dohodnout se", "a1-34")]: {
@@ -593,10 +593,10 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     sk: "Auto stojí u čerpací stanice.",
     ua: "Авто стоїть біля заправки.",
     ru: "Машина стоит у заправки.",
-    en: "The car is standing by the gas station.",
+    en: "The car is parked by the gas station.",
     uaTokens: ["Авто", "стоїть", "біля", "заправки", "."],
     ruTokens: ["Машина", "стоит", "у", "заправки", "."],
-    enTokens: ["The", "car", "is", "standing", "by", "the", "gas", "station", "."],
+    enTokens: ["The", "car", "is", "parked", "by", "the", "gas", "station", "."],
     extraUaTokens: ["магазину", "сьогодні", "ще"],
     extraRuTokens: ["магазина", "сегодня", "ещё"],
     extraEnTokens: ["shop", "today", "still"],
@@ -612,7 +612,7 @@ export const CS_A1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["We", "will", "meet", "at", "the", "bus", "station", "."],
     extraUaTokens: ["завтра", "вранці", "там"],
     extraRuTokens: ["завтра", "утром", "там"],
-    extraEnTokens: ["tomorrow", "in-the-morning", "there"],
+    extraEnTokens: ["tomorrow", "morning", "there"],
   },
 
   [phraseKey("železniční stanice", "a1-35")]: {

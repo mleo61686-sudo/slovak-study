@@ -28,7 +28,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["Today", "I", "have", "a", "headache", "."],
     extraUaTokens: ["зуб", "трохи", "вже"],
     extraRuTokens: ["зуб", "немного", "уже"],
-    extraEnTokens: ["tooth", "a-little", "already"],
+    extraEnTokens: ["tooth", "little", "already"],
   },
 
   [phraseKey("zub", "a1-16")]: {
@@ -74,10 +74,10 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     sk: "Na kašel pomáhá tenhle sirup.",
     ua: "Від кашлю допомагає цей сироп.",
     ru: "От кашля помогает этот сироп.",
-    en: "This syrup helps with cough.",
+    en: "This syrup helps with a cough.",
     uaTokens: ["Від", "кашлю", "допомагає", "цей", "сироп", "."],
     ruTokens: ["От", "кашля", "помогает", "этот", "сироп", "."],
-    enTokens: ["This", "syrup", "helps", "with", "cough", "."],
+    enTokens: ["This", "syrup", "helps", "with", "a", "cough", "."],
     extraUaTokens: ["таблетка", "добре", "дуже"],
     extraRuTokens: ["таблетка", "хорошо", "очень"],
     extraEnTokens: ["tablet", "well", "very"],
@@ -213,7 +213,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["He", "wants", "to", "build", "a", "successful", "career", "."],
     extraUaTokens: ["майбутнє", "добре", "своє"],
     extraRuTokens: ["будущее", "хорошо", "свою"],
-    extraEnTokens: ["future", "well", "his-own"],
+    extraEnTokens: ["future", "well", "own"],
   },
 
   [phraseKey("povýšení", "a1-17")]: {
@@ -294,7 +294,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["Can", "you", "explain", "it", "to", "me", "?"],
     extraUaTokens: ["повторити", "ще", "раз"],
     extraRuTokens: ["повторить", "ещё", "раз"],
-    extraEnTokens: ["repeat", "one-more", "time"],
+    extraEnTokens: ["repeat", "again", "time"],
   },
 
   [phraseKey("zeptat se", "a1-18")]: {
@@ -547,7 +547,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "need", "to", "get", "up", "early", "tomorrow", "."],
     extraUaTokens: ["пізно", "сьогодні", "лягти"],
     extraRuTokens: ["поздно", "сегодня", "лечь"],
-    extraEnTokens: ["late", "today", "go-to-bed"],
+    extraEnTokens: ["late", "today", "sleep"],
   },
 
   [phraseKey("jít do práce", "a1-20")]: {
@@ -586,7 +586,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["After", "work", "I", "want", "to", "rest", "."],
     extraUaTokens: ["поїсти", "трохи", "зараз"],
     extraRuTokens: ["поесть", "немного", "сейчас"],
-    extraEnTokens: ["eat", "a-little", "now"],
+    extraEnTokens: ["eat", "little", "now"],
   },
 
   [phraseKey("setkat se", "a1-20")]: {
@@ -612,7 +612,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "cannot", "talk", "on", "the", "phone", "right", "now", "."],
     extraUaTokens: ["писати", "трохи", "пізніше"],
     extraRuTokens: ["писать", "немного", "позже"],
-    extraEnTokens: ["write", "a-little", "later"],
+    extraEnTokens: ["write", "little", "later"],
   },
 
   [phraseKey("vařit", "a1-20")]: {
@@ -638,7 +638,7 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "like", "watching", "a", "film", "in", "the", "evening", "."],
     extraUaTokens: ["серіал", "вдома", "часто"],
     extraRuTokens: ["сериал", "дома", "часто"],
-    extraEnTokens: ["series", "at-home", "often"],
+    extraEnTokens: ["series", "home", "often"],
   },
 
   [phraseKey("číst", "a1-20")]: {
@@ -664,6 +664,6 @@ export const CS_A1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["Today", "I", "will", "go", "to", "bed", "early", "."],
     extraUaTokens: ["пізно", "встати", "завтра"],
     extraRuTokens: ["поздно", "встать", "завтра"],
-    extraEnTokens: ["late", "get-up", "tomorrow"],
+    extraEnTokens: ["late", "wake", "tomorrow"],
   },
 };

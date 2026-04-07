@@ -132,7 +132,7 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
     sk: "Pojďte nahoru po schodech.",
     ua: "Ідіть вгору сходами.",
     ru: "Поднимайтесь вверх по лестнице.",
-    en: "Go upstairs by the stairs.",
+    en: "Go up the stairs.",
     tokens: ["Pojďte", "nahoru", "po", "schodech", "."],
   },
 
