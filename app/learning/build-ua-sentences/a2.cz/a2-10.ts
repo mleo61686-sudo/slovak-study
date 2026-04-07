@@ -226,7 +226,7 @@ export const CS_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
     enTokens: ["Everyone", "has", "their", "own", "opinion", "."],
     extraUaTokens: ["чужу", "відповідь", "часто"],
     extraRuTokens: ["чужое", "решение", "часто"],
-    extraEnTokens: ["someone_else's", "answer", "often"],
+    extraEnTokens: ["someone", "answer", "often"],
   },
 
   [phraseKey("reklama", "a2-47")]: {
@@ -593,10 +593,10 @@ export const CS_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
     sk: "Nakonec jsme si s tím poradili.",
     ua: "Зрештою ми з цим дали собі раду.",
     ru: "В итоге мы с этим справились.",
-    en: "In the end, we managed it.",
+    en: "In the end, we managed to deal with it.",
     uaTokens: ["Зрештою", "ми", "з", "цим", "дали", "собі", "раду", "."],
     ruTokens: ["В", "итоге", "мы", "с", "этим", "справились", "."],
-    enTokens: ["In", "the", "end", ",", "we", "managed", "it", "."],
+    enTokens: ["In", "the", "end", ",", "we", "managed", "to", "deal", "with", "it", "."],
     extraUaTokens: ["не", "змогли", "нічого"],
     extraRuTokens: ["не", "смогли", "ничего"],
     extraEnTokens: ["not", "could", "anything"],
@@ -637,7 +637,7 @@ export const CS_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
     ruTokens: ["Для", "похода", "у", "нас", "есть", "всё", "необходимое", "снаряжение", "."],
     enTokens: ["We", "have", "all", "the", "necessary", "equipment", "for", "the", "hike", "."],
     extraUaTokens: ["бракує", "лише", "їжі"],
-    extraRuTokens: ["не", "хватает", "только", "еды"],
+    extraRuTokens: ["хватает", "только", "еды"],
     extraEnTokens: ["lack", "only", "food"],
   },
 
@@ -664,6 +664,6 @@ export const CS_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
     enTokens: ["I", "can", "already", "find", "my", "way", "well", "in", "the", "center", "."],
     extraUaTokens: ["погано", "заблукати", "містом"],
     extraRuTokens: ["плохо", "заблудиться", "городом"],
-    extraEnTokens: ["badly", "get_lost", "city"],
+    extraEnTokens: ["badly", "get", "city"],
   },
 };

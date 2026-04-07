@@ -481,7 +481,7 @@ export const A2_PHRASES_5: Record<string, Phrase> = {
     sk: "Nemôžem len predpokladať, musím to vedieť.",
     ua: "Я не можу лише припускати — мушу це знати.",
     ru: "Я не могу просто предполагать — я должен это знать.",
-    en: "I cannot just assume, I must know.",
+    en: "I cannot just assume — I need to know for sure.",
     tokens: ["Nemôžem", "len", "predpokladať", ",", "musím", "to", "vedieť", "."],
   },
 

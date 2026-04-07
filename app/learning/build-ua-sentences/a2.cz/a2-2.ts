@@ -54,7 +54,7 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["I", "want", "to", "save", "a", "little", "this", "month", "."],
     extraUaTokens: ["витратити", "багато", "вчора"],
     extraRuTokens: ["потратить", "много", "вчера"],
-    extraEnTokens: ["spend", "a_lot", "yesterday"],
+    extraEnTokens: ["spend", "much", "yesterday"],
   },
 
   [phraseKey("minout", "a2-6")]: {
@@ -194,13 +194,13 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     sk: "Na konci to můžu stručně shrnout.",
     ua: "Наприкінці я можу коротко це підсумувати.",
     ru: "В конце я могу кратко это подытожить.",
-    en: "At the end I can summarize it briefly.",
+    en: "At the end, I can briefly summarize it.",
     uaTokens: ["Наприкінці", "я", "можу", "коротко", "це", "підсумувати", "."],
     ruTokens: ["В", "конце", "я", "могу", "кратко", "это", "подытожить", "."],
-    enTokens: ["At", "the", "end", "I", "can", "summarize", "it", "briefly", "."],
+    enTokens: ["At", "the", "end", ",", "I", "can", "briefly", "summarize", "it", "."],
     extraUaTokens: ["детально", "забути", "вранці"],
     extraRuTokens: ["подробно", "забыть", "утром"],
-    extraEnTokens: ["in_detail", "forget", "morning"],
+    extraEnTokens: ["in detail", "forget", "morning"],
   },
 
   [phraseKey("vyjádřit názor", "a2-7")]: {
@@ -213,7 +213,7 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["Everyone", "has", "the", "right", "to", "express", "an", "opinion", "."],
     extraUaTokens: ["мовчати", "обов’язок", "завтра"],
     extraRuTokens: ["молчать", "обязанность", "завтра"],
-    extraEnTokens: ["stay_silent", "duty", "tomorrow"],
+    extraEnTokens: ["silent", "duty", "tomorrow"],
   },
 
   [phraseKey("argumentovat", "a2-7")]: {
@@ -265,7 +265,7 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["We", "have", "to", "react", "faster", "."],
     extraUaTokens: ["повільніше", "мовчати", "вчора"],
     extraRuTokens: ["медленнее", "молчать", "вчера"],
-    extraEnTokens: ["slower", "stay_silent", "yesterday"],
+    extraEnTokens: ["slower", "stay", "yesterday"],
   },
 
   // =========================
@@ -398,7 +398,7 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["I", "hope", "that", "I", "will", "still", "make", "it", "."],
     extraUaTokens: ["запізнюся", "ти", "вчора"],
     extraRuTokens: ["опоздаю", "ты", "вчера"],
-    extraEnTokens: ["be_late", "you", "yesterday"],
+    extraEnTokens: ["late", "you", "yesterday"],
   },
 
   // =========================
@@ -486,10 +486,10 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     sk: "Máte k tomu nějaký doklad?",
     ua: "У вас є до цього якесь підтвердження?",
     ru: "У вас есть к этому какой-нибудь документ?",
-    en: "Do you have any proof for that?",
+    en: "Do you have any proof of that?",
     uaTokens: ["У", "вас", "є", "до", "цього", "якесь", "підтвердження", "?"],
     ruTokens: ["У", "вас", "есть", "к", "этому", "какой-нибудь", "документ", "?"],
-    enTokens: ["Do", "you", "have", "any", "proof", "for", "that", "?"],
+    enTokens: ["Do", "you", "have", "any", "proof", "of", "that", "?"],
     extraUaTokens: ["пояснення", "немає", "сьогодні"],
     extraRuTokens: ["объяснение", "нет", "сегодня"],
     extraEnTokens: ["explanation", "none", "today"],
@@ -606,10 +606,10 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     sk: "Dnes je vysoká vlhkost vzduchu.",
     ua: "Сьогодні висока вологість повітря.",
     ru: "Сегодня высокая влажность воздуха.",
-    en: "Today the air humidity is high.",
+    en: "The humidity is high today.",
     uaTokens: ["Сьогодні", "висока", "вологість", "повітря", "."],
     ruTokens: ["Сегодня", "высокая", "влажность", "воздуха", "."],
-    enTokens: ["Today", "the", "air", "humidity", "is", "high", "."],
+    enTokens: ["The", "humidity", "is", "high", "today", "."],
     extraUaTokens: ["низька", "температура", "вчора"],
     extraRuTokens: ["низкая", "температура", "вчера"],
     extraEnTokens: ["low", "temperature", "yesterday"],
@@ -638,7 +638,7 @@ export const CS_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     enTokens: ["It", "should", "get", "noticeably", "colder", "in", "the", "evening", "."],
     extraUaTokens: ["потеплішати", "вдень", "трохи"],
     extraRuTokens: ["потеплеть", "днём", "немного"],
-    extraEnTokens: ["warmer", "daytime", "a_little"],
+    extraEnTokens: ["warmer", "daytime", "little"],
   },
 
   [phraseKey("oteplit se", "a2-10")]: {

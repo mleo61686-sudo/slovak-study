@@ -93,7 +93,7 @@ export const CS_A2_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["We", "must", "react", "calmly", "to", "criticism", "."],
     extraUaTokens: ["голосно", "вчора", "мовчати"],
     extraRuTokens: ["громко", "вчера", "молчать"],
-    extraEnTokens: ["loudly", "yesterday", "stay_silent"],
+    extraEnTokens: ["loudly", "yesterday", "silent"],
   },
 
   [phraseKey("diskuze", "a2-26")]: {

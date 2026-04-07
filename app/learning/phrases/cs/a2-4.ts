@@ -389,7 +389,7 @@ export const CS_A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Dostal jsem poškozené zboží.",
     ua: "Я отримав пошкоджений товар.",
     ru: "Я получил повреждённый товар.",
-    en: "I received damaged goods.",
+    en: "I received a damaged product.",
     tokens: ["Dostal", "jsem", "poškozené", "zboží", "."],
   },
 

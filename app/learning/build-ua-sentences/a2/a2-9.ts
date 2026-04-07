@@ -114,13 +114,13 @@ export const A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
         sk: "Musíš vytrvať a nevzdať sa.",
         ua: "Треба витримати й не здатися.",
         ru: "Нужно выдержать и не сдаться.",
-        en: "You have to endure and not give up.",
+        en: "You have to persevere and not give up.",
         uaTokens: ["Треба", "витримати", "й", "не", "здатися", "."],
         ruTokens: ["Нужно", "выдержать", "и", "не", "сдаться", "."],
-        enTokens: ["You", "have", "to", "endure", "and", "not", "give", "up", "."],
+        enTokens: ["You", "have", "to", "persevere", "and", "not", "give", "up", "."],
         extraUaTokens: ["далі", "до", "кінця"],
         extraRuTokens: ["дальше", "до", "конца"],
-        extraEnTokens: ["further", "until", "the_end"],
+        extraEnTokens: ["further", "until", "end"],
     },
 
     [phraseKey("pokračovať", "a2-41")]: {
@@ -162,7 +162,7 @@ export const A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
         enTokens: ["Turn", "right", "at", "the", "intersection", "."],
         extraUaTokens: ["ліворуч", "прямо", "світлофор"],
         extraRuTokens: ["налево", "прямо", "светофор"],
-        extraEnTokens: ["left", "straight", "traffic_light"],
+        extraEnTokens: ["left", "straight", "light"],
     },
 
     [phraseKey("kruhový objazd", "a2-42")]: {
@@ -188,7 +188,7 @@ export const A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
         enTokens: ["Cross", "the", "pedestrian", "crossing", "."],
         extraUaTokens: ["обережно", "дорога", "світлофор"],
         extraRuTokens: ["осторожно", "дорога", "светофор"],
-        extraEnTokens: ["carefully", "road", "traffic_light"],
+        extraEnTokens: ["carefully", "road", "light"],
     },
 
     [phraseKey("zákaz", "a2-42")]: {
@@ -315,10 +315,10 @@ export const A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
         sk: "Chcem si odvyknúť od sladkého.",
         ua: "Я хочу відвикнути від солодкого.",
         ru: "Я хочу отвыкнуть от сладкого.",
-        en: "I want to stop being used to sweets.",
+        en: "I want to give up sweets.",
         uaTokens: ["Я", "хочу", "відвикнути", "від", "солодкого", "."],
         ruTokens: ["Я", "хочу", "отвыкнуть", "от", "сладкого", "."],
-        enTokens: ["I", "want", "to", "stop", "being", "used", "to", "sweets", "."],
+        enTokens: ["I", "want", "to", "give", "up", "sweets", "."],
         extraUaTokens: ["цукру", "звички", "шоколаду"],
         extraRuTokens: ["сахара", "привычки", "шоколада"],
         extraEnTokens: ["sugar", "habit", "chocolate"],
@@ -574,7 +574,7 @@ export const A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
         enTokens: ["We", "are", "looking", "for", "the", "best", "solution", "."],
         extraUaTokens: ["варіант", "вихід", "спосіб"],
         extraRuTokens: ["вариант", "выход", "способ"],
-        extraEnTokens: ["option", "way_out", "method"],
+        extraEnTokens: ["option", "way", "method"],
     },
 
     [phraseKey("možnosť", "a2-45")]: {

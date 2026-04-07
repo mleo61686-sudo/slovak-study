@@ -92,7 +92,7 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
     sk: "Lékař mi doporučil další vyšetření.",
     ua: "Лікар порекомендував мені додаткове обстеження.",
     ru: "Врач порекомендовал мне дополнительное обследование.",
-    en: "The doctor recommended further examination.",
+    en: "The doctor recommended an additional examination.",
     tokens: ["Lékař", "mi", "doporučil", "další", "vyšetření", "."],
   },
 
@@ -795,7 +795,7 @@ export const CS_A2_PHRASES_1: Record<string, Phrase> = {
     sk: "Dnes je vysoká vlhkost vzduchu.",
     ua: "Сьогодні висока вологість повітря.",
     ru: "Сегодня высокая влажность воздуха.",
-    en: "Today the air humidity is high.",
+    en: "The humidity is high today.",
     tokens: ["Dnes", "je", "vysoká", "vlhkost", "vzduchu", "."],
   },
 

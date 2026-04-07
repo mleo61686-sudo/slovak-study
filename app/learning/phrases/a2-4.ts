@@ -82,7 +82,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Spolubývanie mi vyhovuje, ak sú pravidlá jasné.",
     ua: "Спільне проживання мені підходить, якщо правила ясні.",
     ru: "Совместное проживание мне подходит, если правила понятны.",
-    en: "Shared living suits me if the rules are clear.",
+    en: "Shared accommodation works for me if the rules are clear.",
     tokens: ["Spolubývanie", "mi", "vyhovuje", ",", "ak", "sú", "pravidlá", "jasné", "."],
   },
 
@@ -176,7 +176,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Vo voľnom čase rád športujem.",
     ua: "У вільний час я люблю займатися спортом.",
     ru: "В свободное время я люблю заниматься спортом.",
-    en: "In my free time I like to do sports.",
+    en: "In my free time, I like playing sports.",
     tokens: ["Vo", "voľnom", "čase", "rád", "športujem", "."],
   },
 
@@ -240,7 +240,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Tá výstava ma veľmi zaujala.",
     ua: "Ця виставка мене дуже зацікавила.",
     ru: "Эта выставка меня очень заинтересовала.",
-    en: "That exhibition really interested me.",
+    en: "I found that exhibition very interesting.",
     tokens: ["Tá", "výstava", "ma", "veľmi", "zaujala", "."],
   },
 
@@ -259,7 +259,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Auto dám do servisu zajtra.",
     ua: "Я віддам авто в сервіс завтра.",
     ru: "Я отдам машину в сервис завтра.",
-    en: "I will take the car to the service tomorrow.",
+    en: "I will take the car in for service tomorrow.",
     tokens: ["Auto", "dám", "do", "servisu", "zajtra", "."],
   },
 
@@ -275,7 +275,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Najprv urobíme diagnostiku.",
     ua: "Спочатку зробимо діагностику.",
     ru: "Сначала сделаем диагностику.",
-    en: "First, we will do diagnostics.",
+    en: "First, we will run diagnostics.",
     tokens: ["Najprv", "urobíme", "diagnostiku", "."],
   },
 
@@ -390,7 +390,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Dostal som poškodený tovar.",
     ua: "Я отримав пошкоджений товар.",
     ru: "Я получил повреждённый товар.",
-    en: "I received damaged goods.",
+    en: "I received a damaged product.",
     tokens: ["Dostal", "som", "poškodený", "tovar", "."],
   },
 
@@ -639,7 +639,7 @@ export const A2_PHRASES_4: Record<string, Phrase> = {
     sk: "Potrebujeme dohodnúť termín stretnutia.",
     ua: "Нам потрібно узгодити дату зустрічі.",
     ru: "Нам нужно согласовать дату встречи.",
-    en: "We need to arrange a meeting date.",
+    en: "We need to arrange a date for the meeting.",
     tokens: ["Potrebujeme", "dohodnúť", "termín", "stretnutia", "."],
   },
 

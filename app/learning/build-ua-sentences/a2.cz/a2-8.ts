@@ -627,15 +627,15 @@ export const CS_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
     extraRuTokens: ["счёт", "вчера", "большие"],
     extraEnTokens: ["bill", "yesterday", "big"],
   },
-  
+
   [phraseKey("příloha", "a2-40")]: {
     sk: "V příloze posílám potřebné dokumenty.",
     ua: "У вкладенні надсилаю потрібні документи.",
     ru: "Во вложении отправляю нужные документы.",
-    en: "I am sending the necessary documents in the attachment.",
+    en: "I am sending the necessary documents as an attachment.",
     uaTokens: ["У", "вкладенні", "надсилаю", "потрібні", "документи", "."],
     ruTokens: ["Во", "вложении", "отправляю", "нужные", "документы", "."],
-    enTokens: ["I", "am", "sending", "the", "necessary", "documents", "in", "the", "attachment", "."],
+    enTokens: ["I", "am", "sending", "the", "necessary", "documents", "as", "an", "attachment", "."],
     extraUaTokens: ["тему", "вчора", "листа"],
     extraRuTokens: ["тему", "вчера", "письма"],
     extraEnTokens: ["subject", "yesterday", "letter"],

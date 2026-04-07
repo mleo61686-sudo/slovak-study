@@ -231,7 +231,7 @@ export const CS_A2_PHRASES_2: Record<string, Phrase> = {
     sk: "Musíme udělat kompromis.",
     ua: "Ми маємо піти на компроміс.",
     ru: "Мы должны пойти на компромисс.",
-    en: "We have to make a compromise.",
+    en: "We have to reach a compromise.",
     tokens: ["Musíme", "udělat", "kompromis", "."],
   },
 
@@ -495,7 +495,7 @@ export const CS_A2_PHRASES_2: Record<string, Phrase> = {
     sk: "Nemám rád učit se text nazpaměť.",
     ua: "Я не люблю вчити текст напам’ять.",
     ru: "Я не люблю учить текст наизусть.",
-    en: "I do not like learning a text by heart.",
+    en: "I do not like memorizing a text.",
     tokens: ["Nemám", "rád", "učit", "se", "text", "nazpaměť", "."],
   },
 
