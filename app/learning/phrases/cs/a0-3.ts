@@ -373,7 +373,7 @@ export const CS_A0_PHRASES_3: Record<string, Phrase> = {
     sk: "Letenku mám v telefonu.",
     ua: "Квиток на літак у мене в телефоні.",
     ru: "Авиабилет у меня в телефоне.",
-    en: "I have the plane ticket in my phone.",
+    en: "I have my plane ticket on my phone.",
     tokens: ["Letenku", "mám", "v", "telefonu", "."],
   },
 

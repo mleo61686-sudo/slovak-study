@@ -67,7 +67,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["Can", "I", "see", "the", "menu", ",", "please", "?"],
     extraUaTokens: ["зараз", "ще", "раз"],
     extraRuTokens: ["сейчас", "ещё", "раз"],
-    extraEnTokens: ["now", "one", "more-time"],
+    extraEnTokens: ["now", "one", "again"],
   },
 
   [phraseKey("objednat", "a0-26")]: {
@@ -93,7 +93,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["Breakfast", "is", "from", "seven", "o'clock", "."],
     extraUaTokens: ["вранці", "щодня", "рано"],
     extraRuTokens: ["утром", "каждый", "рано"],
-    extraEnTokens: ["in-the-morning", "every-day", "early"],
+    extraEnTokens: ["morning", "everyday", "early"],
   },
 
   [phraseKey("oběd", "a0-26")]: {
@@ -161,7 +161,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["I", "pay", "only", "in", "euros", "."],
     extraUaTokens: ["сьогодні", "готівкою", "зараз"],
     extraRuTokens: ["сегодня", "наличными", "сейчас"],
-    extraEnTokens: ["today", "in-cash", "now"],
+    extraEnTokens: ["today", "cash", "now"],
   },
 
   [phraseKey("cena", "a0-27")]: {
@@ -213,7 +213,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["My", "card", "is", "not", "working", "."],
     extraUaTokens: ["сьогодні", "знову", "чомусь"],
     extraRuTokens: ["сегодня", "снова", "почему-то"],
-    extraEnTokens: ["today", "again", "for-some-reason"],
+    extraEnTokens: ["today", "again", "somehow"],
   },
 
   [phraseKey("účet", "a0-27")]: {
@@ -275,10 +275,10 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     sk: "Moderní technologie mě baví.",
     ua: "Мені подобаються сучасні технології.",
     ru: "Мне нравятся современные технологии.",
-    en: "I like modern technologies.",
+    en: "I like modern technology.",
     uaTokens: ["Мені", "подобаються", "сучасні", "технології", "."],
     ruTokens: ["Мне", "нравятся", "современные", "технологии", "."],
-    enTokens: ["I", "like", "modern", "technologies", "."],
+    enTokens: ["I", "like", "modern", "technology", "."],
     extraUaTokens: ["дуже", "сьогодні", "нові"],
     extraRuTokens: ["очень", "сегодня", "новые"],
     extraEnTokens: ["very", "today", "new"],
@@ -346,7 +346,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["I", "use", "this", "program", "often", "."],
     extraUaTokens: ["щодня", "сьогодні", "зручно"],
     extraRuTokens: ["каждый", "сегодня", "удобно"],
-    extraEnTokens: ["every-day", "today", "comfortably"],
+    extraEnTokens: ["everyday", "today", "easily"],
   },
 
   [phraseKey("systém", "a0-28")]: {
@@ -492,7 +492,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["Sorry", ",", "I", "do", "not", "understand", "."],
     extraUaTokens: ["ще", "трохи", "зараз"],
     extraRuTokens: ["ещё", "немного", "сейчас"],
-    extraEnTokens: ["still", "a-little", "now"],
+    extraEnTokens: ["still", "little", "now"],
   },
 
   [phraseKey("pomozte", "a0-29")]: {
@@ -599,7 +599,7 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["We", "are", "learning", "Czech", "."],
     extraUaTokens: ["разом", "сьогодні", "щодня"],
     extraRuTokens: ["вместе", "сегодня", "каждый"],
-    extraEnTokens: ["together", "today", "every-day"],
+    extraEnTokens: ["together", "today", "everyday"],
   },
 
   [phraseKey("vy", "a0-30")]: {
@@ -658,10 +658,10 @@ export const CS_A0_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     sk: "Musíme už jít.",
     ua: "Нам уже треба йти.",
     ru: "Нам уже нужно идти.",
-    en: "We need to go now.",
+    en: "We need to leave now.",
     uaTokens: ["Нам", "уже", "треба", "йти", "."],
     ruTokens: ["Нам", "уже", "нужно", "идти", "."],
-    enTokens: ["We", "need", "to", "go", "now", "."],
+    enTokens: ["We", "need", "to", "leave", "now", "."],
     extraUaTokens: ["зараз", "додому", "швидко"],
     extraRuTokens: ["сейчас", "домой", "быстро"],
     extraEnTokens: ["now", "home", "quickly"],

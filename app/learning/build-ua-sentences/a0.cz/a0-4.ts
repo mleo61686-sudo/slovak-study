@@ -113,10 +113,10 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     sk: "Večer přijde bouře.",
     ua: "Увечері прийде буря.",
     ru: "Вечером придёт буря.",
-    en: "A storm will come in the evening.",
+    en: "There will be a storm in the evening.",
     uaTokens: ["Увечері", "прийде", "буря", "."],
     ruTokens: ["Вечером", "придёт", "буря", "."],
-    enTokens: ["A", "storm", "will", "come", "in", "the", "evening", "."],
+    enTokens: ["There", "will", "be", "a", "storm", "in", "the", "evening", "."],
     extraUaTokens: ["сильна", "сьогодні", "пізніше"],
     extraRuTokens: ["сильная", "сегодня", "позже"],
     extraEnTokens: ["strong", "today", "later"],
@@ -320,7 +320,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "am", "cleaning", "my", "room", "."],
     extraUaTokens: ["сьогодні", "чисто", "акуратно"],
     extraRuTokens: ["сегодня", "чисто", "аккуратно"],
-    extraEnTokens: ["today", "cleanly", "neatly"],
+    extraEnTokens: ["today", "clean", "neatly"],
   },
 
   [phraseKey("postel", "a0-18")]: {
@@ -333,7 +333,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["In", "the", "morning", "I", "make", "the", "bed", "."],
     extraUaTokens: ["щодня", "сьогодні", "акуратно"],
     extraRuTokens: ["каждый", "сегодня", "аккуратно"],
-    extraEnTokens: ["every-day", "today", "neatly"],
+    extraEnTokens: ["daily", "today", "neatly"],
   },
 
   [phraseKey("stůl", "a0-18")]: {
@@ -359,7 +359,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "am", "sitting", "on", "a", "chair", "."],
     extraUaTokens: ["зараз", "тихо", "вдома"],
     extraRuTokens: ["сейчас", "тихо", "дома"],
-    extraEnTokens: ["now", "quietly", "at-home"],
+    extraEnTokens: ["now", "quietly", "home"],
   },
 
   [phraseKey("kuchyně", "a0-18")]: {
@@ -398,7 +398,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "have", "to", "clean", "today", "."],
     extraUaTokens: ["вдома", "довго", "зараз"],
     extraRuTokens: ["дома", "долго", "сейчас"],
-    extraEnTokens: ["at-home", "long", "now"],
+    extraEnTokens: ["home", "long", "now"],
   },
 
   // =========================
@@ -414,7 +414,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["What", "will", "you", "do", "today", "?"],
     extraUaTokens: ["завтра", "вдома", "потім"],
     extraRuTokens: ["завтра", "дома", "потом"],
-    extraEnTokens: ["tomorrow", "at-home", "later"],
+    extraEnTokens: ["tomorrow", "home", "later"],
   },
 
   [phraseKey("jít", "a0-19")]: {
@@ -427,7 +427,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["I", "need", "to", "go", "to", "work", "."],
     extraUaTokens: ["зараз", "швидко", "вранці"],
     extraRuTokens: ["сейчас", "быстро", "утром"],
-    extraEnTokens: ["now", "quickly", "in-the-morning"],
+    extraEnTokens: ["now", "quickly", "morning"],
   },
 
   [phraseKey("přijít", "a0-19")]: {
@@ -438,9 +438,9 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     uaTokens: ["Ти", "можеш", "прийти", "ввечері", "?"],
     ruTokens: ["Ты", "можешь", "прийти", "вечером", "?"],
     enTokens: ["Can", "you", "come", "in", "the", "evening", "?"],
-    extraUaTokens: ["завтра", "пізніше", "до", "мене"],
-    extraRuTokens: ["завтра", "позже", "ко", "мне"],
-    extraEnTokens: ["tomorrow", "later", "to", "me"],
+    extraUaTokens: ["завтра", "пізніше", "ввечері"],
+    extraRuTokens: ["завтра", "позже", "вечером"],
+    extraEnTokens: ["tomorrow", "later", "evening"],
   },
 
   [phraseKey("vidět", "a0-19")]: {
@@ -456,7 +456,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     extraEnTokens: ["today", "again", "soon"],
   },
 
-  [phraseKey("mluvit", "a1-19")]: {
+  [phraseKey("mluvit", "a0-19")]: {
     sk: "Můžeme spolu mluvit česky.",
     ua: "Ми можемо говорити чеською.",
     ru: "Мы можем говорить по-чешски.",
@@ -467,7 +467,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     extraUaTokens: ["словацькою", "сьогодні", "ще"],
     extraRuTokens: ["по-словацки", "сегодня", "ещё"],
     extraEnTokens: ["Slovak", "today", "still"],
-  }, 
+  },
 
   [phraseKey("jíst", "a0-19")]: {
     sk: "Nechci teď jíst.",
@@ -505,7 +505,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["The", "child", "already", "wants", "to", "sleep", "."],
     extraUaTokens: ["зараз", "дуже", "вдома"],
     extraRuTokens: ["сейчас", "очень", "дома"],
-    extraEnTokens: ["now", "very", "at-home"],
+    extraEnTokens: ["now", "very", "home"],
   },
 
   [phraseKey("pracovat", "a0-19")]: {
@@ -560,7 +560,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["What", "are", "you", "doing", "?"],
     extraUaTokens: ["зараз", "вдома", "там"],
     extraRuTokens: ["сейчас", "дома", "там"],
-    extraEnTokens: ["now", "at-home", "there"],
+    extraEnTokens: ["now", "home", "there"],
   },
 
   [phraseKey("kde", "a0-20")]: {
@@ -573,7 +573,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["Where", "do", "you", "live", "?"],
     extraUaTokens: ["зараз", "вдома", "тут"],
     extraRuTokens: ["сейчас", "дома", "тут"],
-    extraEnTokens: ["now", "at-home", "here"],
+    extraEnTokens: ["now", "home", "here"],
   },
 
   [phraseKey("kdy", "a0-20")]: {
@@ -586,7 +586,7 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["When", "will", "you", "arrive", "?"],
     extraUaTokens: ["завтра", "сюди", "ввечері"],
     extraRuTokens: ["завтра", "сюда", "вечером"],
-    extraEnTokens: ["tomorrow", "here", "in-the-evening"],
+    extraEnTokens: ["tomorrow", "here", "evening"],
   },
 
   [phraseKey("proč", "a0-20")]: {
@@ -673,6 +673,6 @@ export const CS_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     enTokens: ["Maybe", "I", "will", "come", "later", "."],
     extraUaTokens: ["завтра", "сьогодні", "ввечері"],
     extraRuTokens: ["завтра", "сегодня", "вечером"],
-    extraEnTokens: ["tomorrow", "today", "in-the-evening"],
+    extraEnTokens: ["tomorrow", "today", "evening"],
   },
 };

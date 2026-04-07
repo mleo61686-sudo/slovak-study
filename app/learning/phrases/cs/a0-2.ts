@@ -10,7 +10,7 @@ export const CS_A0_PHRASES_2: Record<string, Phrase> = {
     sk: "Na účtu mám nulu.",
     ua: "На рахунку в мене нуль.",
     ru: "На счету у меня ноль.",
-    en: "I have zero in my account.",
+    en: "I have zero in my bank account.",
     tokens: ["Na", "účtu", "mám", "nulu", "."],
   },
 
@@ -489,7 +489,7 @@ export const CS_A0_PHRASES_2: Record<string, Phrase> = {
     sk: "Večer přijde bouře.",
     ua: "Увечері прийде буря.",
     ru: "Вечером придёт буря.",
-    en: "A storm will come in the evening.",
+    en: "There will be a storm in the evening.",
     tokens: ["Večer", "přijde", "bouře", "."],
   },
 

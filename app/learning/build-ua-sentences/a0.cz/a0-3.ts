@@ -9,10 +9,10 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     sk: "Na účtu mám nulu.",
     ua: "На рахунку в мене нуль.",
     ru: "На счету у меня ноль.",
-    en: "I have zero in my account.",
+    en: "I have zero in my bank account.",
     uaTokens: ["На", "рахунку", "в", "мене", "нуль", "."],
     ruTokens: ["На", "счету", "у", "меня", "ноль", "."],
-    enTokens: ["I", "have", "zero", "in", "my", "account", "."],
+    enTokens: ["I", "have", "zero", "in", "my", "bank", "account", "."],
     extraUaTokens: ["гроші", "сьогодні", "багато"],
     extraRuTokens: ["деньги", "сегодня", "много"],
     extraEnTokens: ["money", "today", "many"],
@@ -54,7 +54,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["We", "have", "three", "children", "."],
     extraUaTokens: ["два", "малих", "вдома"],
     extraRuTokens: ["два", "маленьких", "дома"],
-    extraEnTokens: ["two", "small", "at-home"],
+    extraEnTokens: ["two", "small", "home"],
   },
 
   [phraseKey("čtyři", "a0-11")]: {
@@ -213,7 +213,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["I", "like", "green", "tea", "."],
     extraUaTokens: ["чорний", "вранці", "гарячий"],
     extraRuTokens: ["чёрный", "утром", "горячий"],
-    extraEnTokens: ["black", "in-the-morning", "hot"],
+    extraEnTokens: ["black", "morning", "hot"],
   },
 
   [phraseKey("žlutý", "a0-12")]: {
@@ -346,7 +346,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["I", "wear", "a", "coat", "in", "winter", "."],
     extraUaTokens: ["щодня", "тепле", "сьогодні"],
     extraRuTokens: ["каждый", "тёплое", "сегодня"],
-    extraEnTokens: ["every-day", "warm", "today"],
+    extraEnTokens: ["everyday", "warm", "today"],
   },
 
   [phraseKey("šaty", "a0-13")]: {
@@ -417,7 +417,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     extraEnTokens: ["today", "very", "strongly"],
   },
 
-  [phraseKey("hlava", "a1-16")]: {
+  [phraseKey("hlava", "a0-14")]: {
     sk: "Dnes mě bolí hlava.",
     ua: "Сьогодні у мене болить голова.",
     ru: "Сегодня у меня болит голова.",
@@ -466,7 +466,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["Open", "your", "mouth", ",", "please", "."],
     extraUaTokens: ["ширше", "зараз", "трохи"],
     extraRuTokens: ["шире", "сейчас", "немного"],
-    extraEnTokens: ["wider", "now", "a-little"],
+    extraEnTokens: ["wider", "now", "little"],
   },
 
   [phraseKey("ruka", "a0-14")]: {
@@ -545,9 +545,9 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     uaTokens: ["Здоров’я", "важливе", "."],
     ruTokens: ["Здоровье", "важно", "."],
     enTokens: ["Health", "is", "important", "."],
-    extraUaTokens: ["дуже", "сьогодні", "для", "всіх"],
-    extraRuTokens: ["очень", "сегодня", "для", "всех"],
-    extraEnTokens: ["very", "today", "for", "everyone"],
+    extraUaTokens: ["дуже", "сьогодні", "для"],
+    extraRuTokens: ["очень", "сегодня", "для"],
+    extraEnTokens: ["very", "today", "for"],
   },
 
   [phraseKey("choroba", "a0-15")]: {
@@ -586,7 +586,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["My", "brother", "was", "taken", "to", "the", "hospital", "."],
     extraUaTokens: ["сьогодні", "швидко", "вранці"],
     extraRuTokens: ["сегодня", "быстро", "утром"],
-    extraEnTokens: ["today", "quickly", "in-the-morning"],
+    extraEnTokens: ["today", "quickly", "morning"],
   },
 
   [phraseKey("lék", "a0-15")]: {
@@ -599,7 +599,7 @@ export const CS_A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["I", "take", "medicine", "in", "the", "morning", "and", "in", "the", "evening", "."],
     extraUaTokens: ["щодня", "сьогодні", "регулярно"],
     extraRuTokens: ["каждый", "сегодня", "регулярно"],
-    extraEnTokens: ["every-day", "today", "regularly"],
+    extraEnTokens: ["everyday", "today", "regularly"],
   },
 
   [phraseKey("bolest", "a0-15")]: {

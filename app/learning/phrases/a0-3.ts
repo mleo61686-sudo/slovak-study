@@ -165,7 +165,7 @@ export const A0_PHRASES_3: Record<string, Phrase> = {
     sk: "Rád športujem.",
     ua: "Я люблю займатися спортом.",
     ru: "Я люблю заниматься спортом.",
-    en: "I like doing sports.",
+    en: "I like sports.",
     tokens: ["Rád", "športujem", "."],
   },
   [phraseKey("futbal", "a0-23")]: {
@@ -454,7 +454,7 @@ export const A0_PHRASES_3: Record<string, Phrase> = {
     sk: "Nemám teraz peniaze.",
     ua: "Я зараз не маю грошей.",
     ru: "У меня сейчас нет денег.",
-    en: "I don't have money now.",
+    en: "I do not have any money now.",
     tokens: ["Nemám", "teraz", "peniaze", "."],
   },
   [phraseKey("euro", "a0-27")]: {

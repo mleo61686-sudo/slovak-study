@@ -430,7 +430,7 @@ export const A0_PHRASES_1: Record<string, Phrase> = {
     sk: "Stretneme sa na námestí.",
     ua: "Зустрінемося на площі.",
     ru: "Встретимся на площади.",
-    en: "We will meet at the square.",
+    en: "We will meet in the square.",
     tokens: ["Stretneme", "sa", "na", "námestí", "."],
   },
 
@@ -577,7 +577,7 @@ export const A0_PHRASES_1: Record<string, Phrase> = {
     sk: "Čakám na zastávke.",
     ua: "Я чекаю на зупинці.",
     ru: "Я жду на остановке.",
-    en: "I am waiting at the stop.",
+    en: "I am waiting at the bus stop.",
     tokens: ["Čakám", "na", "zastávke", "."],
   },
 
@@ -644,7 +644,7 @@ export const A0_PHRASES_1: Record<string, Phrase> = {
     sk: "Čakám jednu hodinu.",
     ua: "Я чекаю одну годину.",
     ru: "Я жду один час.",
-    en: "I am waiting for one hour.",
+    en: "I am waiting for an hour.",
     tokens: ["Čakám", "jednu", "hodinu", "."],
   },
 

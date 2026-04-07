@@ -106,7 +106,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["Today", "is", "a", "nice", "day", "."],
         extraUaTokens: ["місяць", "дуже", "вдома"],
         extraRuTokens: ["месяц", "очень", "дома"],
-        extraEnTokens: ["month", "very", "at-home"],
+        extraEnTokens: ["month", "very", "home"],
     },
 
     [phraseKey("dobrý", "a0-1")]: {
@@ -161,7 +161,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["That", "man", "is", "working", "."],
         extraUaTokens: ["вчора", "вдома", "новий"],
         extraRuTokens: ["вчера", "дома", "новый"],
-        extraEnTokens: ["yesterday", "at-home", "new"],
+        extraEnTokens: ["yesterday", "home", "new"],
     },
 
     [phraseKey("žena", "a0-2")]: {
@@ -187,7 +187,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["The", "child", "is", "playing", "."],
         extraUaTokens: ["вдома", "тихо", "малий"],
         extraRuTokens: ["дома", "тихо", "маленький"],
-        extraEnTokens: ["at-home", "quietly", "small"],
+        extraEnTokens: ["home", "quietly", "small"],
     },
 
     [phraseKey("kamarád", "a0-2")]: {
@@ -213,7 +213,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["My", "female", "friend", "is", "studying", "."],
         extraUaTokens: ["вдома", "завтра", "висока"],
         extraRuTokens: ["дома", "завтра", "высокая"],
-        extraEnTokens: ["at-home", "tomorrow", "tall"],
+        extraEnTokens: ["home", "tomorrow", "tall"],
     },
 
     [phraseKey("otec", "a0-2")]: {
@@ -307,7 +307,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["The", "kitchen", "is", "clean", "."],
         extraUaTokens: ["світла", "сьогодні", "вдома"],
         extraRuTokens: ["светлая", "сегодня", "дома"],
-        extraEnTokens: ["bright", "today", "at-home"],
+        extraEnTokens: ["bright", "today", "home"],
     },
 
     [phraseKey("koupelna", "a0-3")]: {
@@ -395,7 +395,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["The", "bed", "is", "in", "the", "room", "."],
         extraUaTokens: ["велике", "вдома", "стілець"],
         extraRuTokens: ["большая", "дома", "стул"],
-        extraEnTokens: ["big", "at-home", "chair"],
+        extraEnTokens: ["big", "home", "chair"],
     },
 
     [phraseKey("skříň", "a0-3")]: {
@@ -483,10 +483,10 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         sk: "Prosím, účtenku.",
         ua: "Чек, будь ласка.",
         ru: "Чек, пожалуйста.",
-        en: "The receipt, please.",
+        en: "A receipt, please.",
         uaTokens: ["Чек", ",", "будь", "ласка", "."],
         ruTokens: ["Чек", ",", "пожалуйста", "."],
-        enTokens: ["The", "receipt", ",", "please", "."],
+        enTokens: ["A", "receipt", ",", "please", "."],
         extraUaTokens: ["сумка", "великий", "зараз"],
         extraRuTokens: ["сумка", "большой", "сейчас"],
         extraEnTokens: ["bag", "big", "now"],
@@ -502,7 +502,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["I", "pay", "in", "cash", "."],
         extraUaTokens: ["карткою", "сьогодні", "магазин"],
         extraRuTokens: ["картой", "сегодня", "магазин"],
-        extraEnTokens: ["by-card", "today", "shop"],
+        extraEnTokens: ["card", "today", "shop"],
     },
 
     [phraseKey("karta", "a0-4")]: {
@@ -614,7 +614,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["Today", "I", "am", "cooking", "meat", "."],
         extraUaTokens: ["суп", "ввечері", "великий"],
         extraRuTokens: ["суп", "вечером", "большой"],
-        extraEnTokens: ["soup", "in-the-evening", "big"],
+        extraEnTokens: ["soup", "evening", "big"],
     },
 
     [phraseKey("polévka", "a0-5")]: {
@@ -679,7 +679,7 @@ export const CS_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["In", "the", "morning", "I", "drink", "coffee", "."],
         extraUaTokens: ["чай", "щодня", "гарячий"],
         extraRuTokens: ["чай", "каждый", "горячий"],
-        extraEnTokens: ["tea", "every-day", "hot"],
+        extraEnTokens: ["tea", "daily", "hot"],
     },
 
     [phraseKey("čaj", "a0-5")]: {
