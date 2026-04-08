@@ -57,6 +57,36 @@ const T: Record<
   },
 };
 
+const LANGUAGE_OPTIONS: {
+  code: Lang;
+  label: Record<Lang, string>;
+}[] = [
+  {
+    code: "ua",
+    label: {
+      ua: "Українська",
+      ru: "Украинский",
+      en: "Ukrainian",
+    },
+  },
+  {
+    code: "ru",
+    label: {
+      ua: "Русский",
+      ru: "Русский",
+      en: "Russian",
+    },
+  },
+  {
+    code: "en",
+    label: {
+      ua: "English",
+      ru: "English",
+      en: "English",
+    },
+  },
+];
+
 export default function UserMenu({
   name,
   email,
@@ -151,45 +181,26 @@ export default function UserMenu({
         {t.interfaceLanguage}
       </div>
 
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          aria-pressed={lang === "ua"}
-          onClick={() => setLang("ua")}
-          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
-            lang === "ua"
-              ? "bg-black text-white"
-              : "bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          UA
-        </button>
+      <div className="flex flex-col gap-2">
+        {LANGUAGE_OPTIONS.map((item) => {
+          const isActive = lang === item.code;
 
-        <button
-          type="button"
-          aria-pressed={lang === "ru"}
-          onClick={() => setLang("ru")}
-          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
-            lang === "ru"
-              ? "bg-black text-white"
-              : "bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          RU
-        </button>
-
-        <button
-          type="button"
-          aria-pressed={lang === "en"}
-          onClick={() => setLang("en")}
-          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
-            lang === "en"
-              ? "bg-black text-white"
-              : "bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          EN
-        </button>
+          return (
+            <button
+              key={item.code}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => setLang(item.code)}
+              className={`flex min-h-11 w-full items-center rounded-xl border px-3 py-2 text-left text-sm font-medium transition ${
+                isActive
+                  ? "border-black bg-black text-white"
+                  : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
+              }`}
+            >
+              {item.label[L]}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -259,7 +270,7 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-xl border bg-white shadow-lg"
+          className="absolute right-0 top-full mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="px-4 py-3 text-sm">

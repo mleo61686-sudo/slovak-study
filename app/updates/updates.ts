@@ -8,6 +8,28 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-04-08",
+    title: {
+      ua: "Оновлення: додано англійську та покращено тренажер",
+      ru: "Обновление: добавлен английский и улучшен тренажёр",
+      en: "Update: English added and trainer improved",
+    },
+    items: {
+      ua: [
+        "Додано англійську мову в інтерфейс сайту — тепер платформою можна користуватися українською, російською та англійською",
+        "Оновлено тренажер — тепер можна вводити відповіді без діакритики (наприклад, \"zavazok\" замість \"záväzok\")",
+      ],
+      ru: [
+        "Добавлен английский язык в интерфейс сайта — теперь платформой можно пользоваться на украинском, русском и английском",
+        "Обновлён тренажёр — теперь можно вводить ответы без диакритики (например, \"zavazok\" вместо \"záväzok\")",
+      ],
+      en: [
+        "English has been added to the interface — the platform is now available in Ukrainian, Russian, and English",
+        "The practice trainer has been improved — you can now enter answers without diacritics (for example, \"zavazok\" instead of \"záväzok\")",
+      ],
+    },
+  },
+  {
     date: "2026-04-04",
     title: {
       ua: "Оновлення: додано рівень B2 та покращено вправи",

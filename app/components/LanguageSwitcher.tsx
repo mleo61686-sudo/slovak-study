@@ -2,43 +2,38 @@
 
 import { useLanguage } from "@/lib/src/useLanguage";
 
+const LANGUAGES = [
+  { code: "ua", label: "Українська", flag: "🇺🇦" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+] as const;
+
 export default function LanguageSwitcher() {
   const { lang, setLang } = useLanguage();
 
-  const baseClass =
-    "h-9 w-12 rounded-lg border text-sm font-semibold transition";
-
-  const active = "bg-black text-white";
-  const inactive = "bg-white hover:bg-slate-50";
-
   return (
-    <div className="flex items-center gap-2">
-      <button
-        type="button"
-        aria-pressed={lang === "ua"}
-        onClick={() => setLang("ua")}
-        className={`${baseClass} ${lang === "ua" ? active : inactive}`}
-      >
-        UA
-      </button>
+    <div className="flex flex-col gap-2">
+      {LANGUAGES.map((item) => {
+        const isActive = lang === item.code;
 
-      <button
-        type="button"
-        aria-pressed={lang === "ru"}
-        onClick={() => setLang("ru")}
-        className={`${baseClass} ${lang === "ru" ? active : inactive}`}
-      >
-        RU
-      </button>
-
-      <button
-        type="button"
-        aria-pressed={lang === "en"}
-        onClick={() => setLang("en")}
-        className={`${baseClass} ${lang === "en" ? active : inactive}`}
-      >
-        EN
-      </button>
+        return (
+          <button
+            key={item.code}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => setLang(item.code)}
+            className={[
+              "flex h-11 w-full items-center gap-3 rounded-xl border px-3 text-left text-sm font-medium transition",
+              isActive
+                ? "border-black bg-black text-white"
+                : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50",
+            ].join(" ")}
+          >
+            <span className="text-base leading-none">{item.flag}</span>
+            <span>{item.label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }

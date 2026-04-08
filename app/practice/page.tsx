@@ -73,9 +73,9 @@ const UI = {
     correct: "Правильно!",
     wrongPrefix: "Неправильно. Правильна відповідь:",
     yourAnswer: "Твоя відповідь:",
-    prompt: (tr: string) => `Як буде мовою курсу слово «${tr}»?`,
     helper: (sk: string, tr: string) => `Мовою курсу: ${sk} — «${tr}»`,
     revealLock: "Відповідай, щоб відкрити озвучку",
+    hintNoDiacritics: "Можна без діакритики",
   },
   ru: {
     title: "Тренировка 🏋️",
@@ -117,9 +117,9 @@ const UI = {
     correct: "Правильно!",
     wrongPrefix: "Неверно. Правильный ответ:",
     yourAnswer: "Твой ответ:",
-    prompt: (tr: string) => `Как будет на языке курса слово «${tr}»?`,
     helper: (sk: string, tr: string) => `На языке курса: ${sk} — «${tr}»`,
     revealLock: "Ответь, чтобы открыть озвучку",
+    hintNoDiacritics: "Можно без диакритики",
   },
   en: {
     title: "Practice 🏋️",
@@ -161,9 +161,9 @@ const UI = {
     correct: "Correct!",
     wrongPrefix: "Wrong. Correct answer:",
     yourAnswer: "Your answer:",
-    prompt: (tr: string) => `How do you say “${tr}” in the course language?`,
     helper: (sk: string, tr: string) => `In the course language: ${sk} — “${tr}”`,
     revealLock: "Answer first to unlock audio",
+    hintNoDiacritics: "You can type without diacritics",
   },
 } as const;
 
@@ -176,11 +176,14 @@ type PracticeStats = {
 };
 
 function loadStats(): PracticeStats {
-  if (typeof window === "undefined")
+  if (typeof window === "undefined") {
     return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
+  }
+
   try {
     const raw = window.localStorage.getItem(LS_KEY);
     if (!raw) return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
+
     const parsed = JSON.parse(raw);
     return {
       bestAccuracyPct: Number(parsed?.bestAccuracyPct) || 0,
@@ -195,12 +198,20 @@ function loadStats(): PracticeStats {
 function saveStats(next: PracticeStats) {
   try {
     window.localStorage.setItem(LS_KEY, JSON.stringify(next));
-  } catch {}
+  } catch { }
+}
+
+function stripDiacritics(s: string) {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function norm(s: string) {
-  return s.trim().toLowerCase();
+  return stripDiacritics(s)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
+
 function shuffle<T>(arr: T[]) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -209,6 +220,7 @@ function shuffle<T>(arr: T[]) {
   }
   return a;
 }
+
 function sample<T>(arr: T[], n: number) {
   return shuffle(arr).slice(0, Math.min(n, arr.length));
 }
@@ -226,6 +238,29 @@ function getTrans(word: any, lang: Lang): string | null {
         : word.ua;
 
   return typeof value === "string" && value.trim() ? value : null;
+}
+
+function getCourseLanguageName(courseId: string, uiLang: Lang): string {
+  const names = {
+    sk: {
+      ua: "словацькою",
+      ru: "по-словацки",
+      en: "in Slovak",
+    },
+    cs: {
+      ua: "чеською",
+      ru: "по-чешски",
+      en: "in Czech",
+    },
+    pl: {
+      ua: "польською",
+      ru: "по-польски",
+      en: "in Polish",
+    },
+  } as const;
+
+  const safeCourseId = courseId === "cs" || courseId === "pl" ? courseId : "sk";
+  return names[safeCourseId][uiLang];
 }
 
 function buildSessionBase(
@@ -293,12 +328,22 @@ function buildSessionBase(
   });
 }
 
-function makePromptAndHelper(q: SessionQuestionBase, lang: Lang) {
+function makePromptAndHelper(
+  q: SessionQuestionBase,
+  lang: Lang,
+  courseId: string
+) {
   const tr = lang === "en" ? q.en : lang === "ru" ? q.ru : q.ua;
   const t = UI[lang];
+  const courseLangName = getCourseLanguageName(courseId, lang);
 
   return {
-    prompt: t.prompt(tr),
+    prompt:
+      lang === "en"
+        ? `How do you say “${tr}” ${courseLangName}?`
+        : lang === "ru"
+          ? `Как сказать «${tr}» ${courseLangName}?`
+          : `Як сказати «${tr}» ${courseLangName}?`,
     helper: t.helper(q.sk, tr),
   };
 }
@@ -559,7 +604,7 @@ export default function PracticePage() {
 
   return (
     <CourseGate>
-      <main className="mx-auto max-w-3xl p-4 space-y-6">
+      <main className="mx-auto max-w-3xl space-y-6 p-4">
         <div className="flex items-center justify-between gap-3">
           <h1 className="text-2xl font-semibold">{t.title}</h1>
 
@@ -574,14 +619,14 @@ export default function PracticePage() {
         </div>
 
         {notEnough ? (
-          <div className="rounded-2xl border bg-white p-6 space-y-3">
+          <div className="space-y-3 rounded-2xl border bg-white p-6">
             <p className="font-medium">{t.notEnoughTitle}</p>
             <p className="text-sm text-gray-600">{t.notEnoughHint}</p>
           </div>
         ) : null}
 
         {phase === "setup" ? (
-          <section className="rounded-2xl border bg-white p-6 space-y-4">
+          <section className="space-y-4 rounded-2xl border bg-white p-6">
             <h2 className="text-lg font-semibold">{t.setupTitle}</h2>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -618,7 +663,7 @@ export default function PracticePage() {
             </div>
 
             <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
-              <div className="font-semibold mb-2">{t.record}</div>
+              <div className="mb-2 font-semibold">{t.record}</div>
               <div className="flex flex-wrap gap-2">
                 <div className="rounded-xl border bg-white px-3 py-2">
                   {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
@@ -643,7 +688,7 @@ export default function PracticePage() {
         ) : null}
 
         {phase === "result" ? (
-          <section className="rounded-2xl border bg-white p-6 space-y-4">
+          <section className="space-y-4 rounded-2xl border bg-white p-6">
             <h2 className="text-xl font-semibold">{t.resultTitle}</h2>
 
             <div className="flex flex-wrap gap-3 text-sm">
@@ -659,7 +704,7 @@ export default function PracticePage() {
             </div>
 
             <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
-              <div className="font-semibold mb-2">{t.record}</div>
+              <div className="mb-2 font-semibold">{t.record}</div>
               <div className="flex flex-wrap gap-2">
                 <div className="rounded-xl border bg-white px-3 py-2">
                   {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
@@ -693,7 +738,7 @@ export default function PracticePage() {
               </button>
             </div>
 
-            <div className="pt-2 space-y-2">
+            <div className="space-y-2 pt-2">
               <div className="text-sm font-semibold">{t.mistakesTitle}</div>
 
               {mistakes.length === 0 ? (
@@ -728,7 +773,7 @@ export default function PracticePage() {
         ) : null}
 
         {phase === "quiz" && qBase ? (
-          <section className="rounded-2xl border bg-white p-6 space-y-4">
+          <section className="space-y-4 rounded-2xl border bg-white p-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm text-gray-500">
                 <div>
@@ -749,7 +794,7 @@ export default function PracticePage() {
                 </div>
               </div>
 
-              <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
                 <div
                   className="h-2 bg-slate-900"
                   style={{ width: `${progressPct}%` }}
@@ -764,12 +809,12 @@ export default function PracticePage() {
             </div>
 
             {(() => {
-              const { prompt, helper } = makePromptAndHelper(qBase, uiLang);
+              const { prompt, helper } = makePromptAndHelper(qBase, uiLang, courseId);
 
               return (
                 <>
                   <div className="space-y-2">
-                    <p className="font-medium text-lg">{prompt}</p>
+                    <p className="text-lg font-medium">{prompt}</p>
 
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <span>{t.listen}</span>
@@ -785,7 +830,7 @@ export default function PracticePage() {
                         <button
                           type="button"
                           disabled
-                          className="rounded-lg border bg-white px-2 py-1 text-xs opacity-50 cursor-not-allowed"
+                          className="cursor-not-allowed rounded-lg border bg-white px-2 py-1 text-xs opacity-50"
                           title={t.revealLock}
                         >
                           🔒
@@ -818,12 +863,12 @@ export default function PracticePage() {
                                   checkMcq(option);
                                 }
                               }}
-                              className={`w-full rounded-xl border px-4 py-3 text-left transition flex items-center justify-between
-${isCorrect ? "bg-green-100 border-green-400" : ""}
-${isWrong ? "bg-red-100 border-red-400" : ""}
+                              className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition
+${isCorrect ? "border-green-400 bg-green-100" : ""}
+${isWrong ? "border-red-400 bg-red-100" : ""}
 ${!selected
-                                  ? "hover:bg-slate-50 cursor-pointer"
-                                  : "opacity-95 cursor-default"
+                                  ? "cursor-pointer hover:bg-slate-50"
+                                  : "cursor-default opacity-95"
                                 }
 `}
                             >
@@ -876,6 +921,10 @@ ${!selected
                           disabled={!!typedChecked}
                         />
 
+                        <div className="text-sm text-slate-500">
+                          {t.hintNoDiacritics}
+                        </div>
+
                         {!typedChecked ? (
                           <button
                             onClick={checkTyping}
@@ -887,11 +936,10 @@ ${!selected
                         ) : (
                           <div className="space-y-3">
                             <div
-                              className={`rounded-xl border px-4 py-3 text-sm ${
-                                typedChecked.ok
-                                  ? "bg-green-100 border-green-400"
-                                  : "bg-red-100 border-red-400"
-                              }`}
+                              className={`rounded-xl border px-4 py-3 text-sm ${typedChecked.ok
+                                  ? "border-green-400 bg-green-100"
+                                  : "border-red-400 bg-red-100"
+                                }`}
                             >
                               {typedChecked.ok
                                 ? t.correct
