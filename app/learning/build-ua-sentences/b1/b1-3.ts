@@ -14,7 +14,7 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     ruTokens: ["В", "этом", "году", "сильная", "засуха", ",", "и", "урожай", "хуже", "."],
     enTokens: ["This", "year", "there", "is", "a", "severe", "drought", ",", "and", "the", "harvest", "is", "worse", "."],
     extraUaTokens: ["значно", "цього", "ще"],
-    extraRuTokens: ["значительно", "в", "этом", "ещё"],
+    extraRuTokens: ["значительно", "этом", "ещё"],
     extraEnTokens: ["much", "still", "today"],
   },
 
@@ -53,7 +53,7 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     ruTokens: ["Днём", "облачность", "будет", "высокой", ",", "но", "дождя", "может", "не", "быть", "."],
     enTokens: ["Cloud", "cover", "will", "be", "heavy", "in", "the", "afternoon", ",", "but", "it", "may", "not", "rain", "."],
     extraUaTokens: ["сьогодні", "ще", "все ж"],
-    extraRuTokens: ["сегодня", "ещё", "всё", "же"],
+    extraRuTokens: ["сегодня", "всё", "же"],
     extraEnTokens: ["today", "still", "though"],
   },
 
@@ -74,13 +74,13 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     sk: "Zemetrasenie bolo krátke, ale ľudia ho cítili.",
     ua: "Землетрус був короткий, але люди його відчули.",
     ru: "Землетрясение было коротким, но люди его почувствовали.",
-    en: "The earthquake was short, but people felt it.",
+    en: "The earthquake was brief, but people felt it.",
     uaTokens: ["Землетрус", "був", "короткий", ",", "але", "люди", "його", "відчули", "."],
     ruTokens: ["Землетрясение", "было", "коротким", ",", "но", "люди", "его", "почувствовали", "."],
-    enTokens: ["The", "earthquake", "was", "short", ",", "but", "people", "felt", "it", "."],
+    enTokens: ["The", "earthquake", "was", "brief", ",", "but", "people", "felt", "it", "."],
     extraUaTokens: ["дуже", "все", "вночі"],
     extraRuTokens: ["очень", "все", "ночью"],
-    extraEnTokens: ["very", "everyone", "at", "night"],
+    extraEnTokens: ["very", "everyone", "night"],
   },
 
   [phraseKey("vlhkosť", "b1-11")]: {
@@ -93,7 +93,7 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["The", "humidity", "is", "high", "today", ",", "so", "it", "is", "hard", "for", "me", "to", "breathe", "."],
     extraUaTokens: ["дуже", "знову", "так"],
     extraRuTokens: ["очень", "снова", "так"],
-    extraEnTokens: ["very", "again", "like", "this"],
+    extraEnTokens: ["very", "again", "today"],
   },
 
   [phraseKey("topenie", "b1-11")]: {
@@ -233,10 +233,10 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     sk: "Zápis do registra trvá zvyčajne niekoľko dní.",
     ua: "Внесення до реєстру зазвичай триває кілька днів.",
     ru: "Внесение в реестр обычно занимает несколько дней.",
-    en: "Registration in the register usually takes several days.",
+    en: "Entry in the register usually takes several days.",
     uaTokens: ["Внесення", "до", "реєстру", "зазвичай", "триває", "кілька", "днів", "."],
     ruTokens: ["Внесение", "в", "реестр", "обычно", "занимает", "несколько", "дней", "."],
-    enTokens: ["Registration", "in", "the", "register", "usually", "takes", "several", "days", "."],
+    enTokens: ["Entry", "in", "the", "register", "usually", "takes", "several", "days", "."],
     extraUaTokens: ["ще", "інколи", "довше"],
     extraRuTokens: ["ещё", "иногда", "дольше"],
     extraEnTokens: ["still", "sometimes", "longer"],
@@ -479,7 +479,7 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["I", "want", "to", "limit", "sweets", "because", "I", "do", "not", "feel", "very", "well", "."],
     extraUaTokens: ["вже", "трохи", "його"],
     extraRuTokens: ["уже", "немного", "его"],
-    extraEnTokens: ["already", "a", "bit", "of", "it"],
+    extraEnTokens: ["already", "a", "bit"],
   },
 
   [phraseKey("vyvážená strava", "b1-14")]: {
@@ -586,7 +586,7 @@ export const B1_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["After", "training", ",", "I", "will", "do", "a", "short", "stretch", "."],
     extraUaTokens: ["ще", "спокійну", "трохи"],
     extraRuTokens: ["ещё", "спокойную", "немного"],
-    extraEnTokens: ["still", "gentle", "a", "little"],
+    extraEnTokens: ["still", "gentle", "little"],
   },
 
   [phraseKey("životospráva", "b1-15")]: {

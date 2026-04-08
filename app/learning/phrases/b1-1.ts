@@ -714,7 +714,7 @@ export const B1_PHRASES_1: Record<string, Phrase> = {
     sk: "Porucha zariadenia sa objavila hneď po výpadku elektriny.",
     ua: "Поломка пристрою з’явилася одразу після відключення електрики.",
     ru: "Поломка устройства появилась сразу после отключения электричества.",
-    en: "The device malfunction appeared right after the power outage.",
+    en: "The device malfunction occurred right after the power outage.",
     tokens: ["Porucha", "zariadenia", "sa", "objavila", "hneď", "po", "výpadku", "elektriny", "."],
   },
 

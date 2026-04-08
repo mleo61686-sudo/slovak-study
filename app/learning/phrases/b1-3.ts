@@ -117,7 +117,7 @@ export const B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Rozhlas počúvam v aute, keď cestujem do práce.",
     ua: "Радіо слухаю в машині, коли їду на роботу.",
     ru: "Радио слушаю в машине, когда еду на работу.",
-    en: "I listen to the radio in the car when I travel to work.",
+    en: "I listen to the radio in the car when I go to work.",
     tokens: ["Rozhlas", "počúvam", "v", "aute", ",", "keď", "cestujem", "do", "práce", "."],
   },
 

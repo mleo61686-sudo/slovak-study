@@ -149,7 +149,7 @@ export const B1_PHRASES_2: Record<string, Phrase> = {
     sk: "Zápis do registra trvá zvyčajne niekoľko dní.",
     ua: "Внесення до реєстру зазвичай триває кілька днів.",
     ru: "Внесение в реестр обычно занимает несколько дней.",
-    en: "Registration in the register usually takes several days.",
+    en: "Entry in the register usually takes several days.",
     tokens: ["Zápis", "do", "registra", "trvá", "zvyčajne", "niekoľko", "dní", "."],
   },
 

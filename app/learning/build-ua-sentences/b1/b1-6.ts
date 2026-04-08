@@ -333,7 +333,7 @@ export const B1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["In", "the", "end", ",", "we", "found", "a", "solution", "that", "suited", "everyone", "."],
     extraUaTokens: ["спільне", "хороше", "таки"],
     extraRuTokens: ["общее", "хорошее", "всё-таки"],
-    extraEnTokens: ["shared", "good", "after", "all"],
+    extraEnTokens: ["shared", "good", "all"],
   },
 
   [phraseKey("zrazu", "b1-28")]: {
@@ -414,7 +414,7 @@ export const B1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["It", "makes", "me", "uncomfortable", "when", "someone", "shouts", "at", "me", "."],
     extraUaTokens: ["дуже", "справді", "так"],
     extraRuTokens: ["очень", "действительно", "так"],
-    extraEnTokens: ["very", "really", "like", "that"],
+    extraEnTokens: ["very", "really", "that"],
   },
 
   [phraseKey("uraziť", "b1-29")]: {
@@ -465,7 +465,7 @@ export const B1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     ruTokens: ["Прошу", "объяснений", ",", "потому", "что", "мне", "это", "непонятно", "."],
     enTokens: ["I", "am", "asking", "for", "an", "explanation", "because", "it", "is", "not", "clear", "to", "me", "."],
     extraUaTokens: ["зовсім", "ще", "досі"],
-    extraRuTokens: ["совсем", "ещё", "до", "сих", "пор"],
+    extraRuTokens: ["совсем", "ещё", "сейчас"],
     extraEnTokens: ["at", "all", "still"],
   },
 
@@ -518,7 +518,7 @@ export const B1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["Sometimes", "it", "is", "better", "to", "give", "in", "so", "that", "the", "argument", "does", "not", "end", "badly", "."],
     extraUaTokens: ["трохи", "просто", "вчасно"],
     extraRuTokens: ["немного", "просто", "вовремя"],
-    extraEnTokens: ["a", "bit", "in", "time"],
+    extraEnTokens: ["bit", "in", "time"],
   },
 
   [phraseKey("urovnať", "b1-29")]: {
@@ -638,7 +638,7 @@ export const B1_BUILD_UA_SENTENCES_6: BuildUaSentenceDict = {
     enTokens: ["That", "makes", "sense", "because", "this", "way", "we", "will", "save", "time", "and", "energy", "."],
     extraUaTokens: ["ще", "більше", "трохи"],
     extraRuTokens: ["ещё", "больше", "немного"],
-    extraEnTokens: ["even", "more", "a", "bit"],
+    extraEnTokens: ["even", "more", "later"],
   },
 
   [phraseKey("to je zaujímavé", "b1-30")]: {

@@ -14,7 +14,7 @@ export const B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     ruTokens: ["Моё", "рабочее", "время", "—", "с", "восьми", "до", "четырёх", "."],
     enTokens: ["My", "working", "hours", "are", "from", "eight", "to", "four", "."],
     extraUaTokens: ["сьогодні", "ранку", "щодня"],
-    extraRuTokens: ["сегодня", "утром", "каждый", "день"],
+    extraRuTokens: ["сегодня", "утром", "каждый"],
     extraEnTokens: ["today", "morning", "daily"],
   },
 
@@ -185,7 +185,7 @@ export const B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     uaTokens: ["Можеш", "висловитися", "щодо", "цього", "ще", "сьогодні", "?"],
     ruTokens: ["Можешь", "высказаться", "по", "этому", "поводу", "ещё", "сегодня", "?"],
     enTokens: ["Can", "you", "comment", "on", "this", "today", "?"],
-    extraUaTokens: ["спокійно", "коротко", "будь", "ласка"],
+    extraUaTokens: ["спокійно", "коротко", "будь"],
     extraRuTokens: ["спокойно", "кратко", "пожалуйста"],
     extraEnTokens: ["calmly", "briefly", "please"],
   },
@@ -478,7 +478,7 @@ export const B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     ruTokens: ["Госпитализация", "не", "понадобилась", ",", "хватило", "домашнего", "лечения", "."],
     enTokens: ["Hospitalization", "was", "not", "necessary", ";", "home", "treatment", "was", "enough", "."],
     extraUaTokens: ["цього", "разу", "лише"],
-    extraRuTokens: ["в", "этот", "раз", "только"],
+    extraRuTokens: ["этот", "раз", "только"],
     extraEnTokens: ["this", "time", "only"],
   },
 
@@ -649,8 +649,8 @@ export const B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     uaTokens: ["Під", "час", "поїздки", "ми", "більше", "зблизилися", "."],
     ruTokens: ["Во", "время", "поездки", "мы", "больше", "сблизились", "."],
     enTokens: ["During", "the", "trip", ",", "we", "grew", "closer", "."],
-    extraUaTokens: ["дуже", "тоді", "між", "собою"],
-    extraRuTokens: ["очень", "тогда", "между", "собой"],
+    extraUaTokens: ["дуже", "тоді", "разом"],
+    extraRuTokens: ["очень", "тогда", "вместе"],
     extraEnTokens: ["very", "then", "together"],
   },
 
