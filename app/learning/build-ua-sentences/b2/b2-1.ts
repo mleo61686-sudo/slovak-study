@@ -69,7 +69,7 @@ export const B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     ruAltAnswers: [["Мы", "чётко", "и", "спокойно", "объяснили", "свою", "позицию", "."]],
     extraUaTokens: ["вчора", "довго", "рішення"],
     extraRuTokens: ["вчера", "долго", "решение"],
-    extraEnTokens: ["yesterday", "for long", "decision"],
+    extraEnTokens: ["yesterday", "long", "decision"],
   },
 
   [phraseKey("presadiť", "b2-1")]: {
@@ -643,7 +643,7 @@ export const B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     ruTokens: ["Ответственное", "лицо", "свяжется", "с", "вами", "ещё", "сегодня", "."],
     enTokens: ["The", "responsible", "person", "will", "contact", "you", "later", "today", "."],
     extraUaTokens: ["обов’язково", "пізніше", "телефоном"],
-    extraRuTokens: ["обязательно", "позже", "по", "телефону"],
+    extraRuTokens: ["обязательно", "позже", "телефону"],
     extraEnTokens: ["definitely", "later", "by phone"],
   },
 
@@ -656,7 +656,7 @@ export const B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     ruTokens: ["Мы", "ждём", "официальную", "позицию", "компании", "по", "этому", "вопросу", "."],
     enTokens: ["We", "are", "waiting", "for", "the", "company’s", "official", "statement", "on", "the", "whole", "matter", "."],
     extraUaTokens: ["досі", "після", "скарги"],
-    extraRuTokens: ["до", "сих", "пор", "после", "жалобы"],
+    extraRuTokens: ["до", "после", "жалобы"],
     extraEnTokens: ["still", "after", "complaint"],
   },
 

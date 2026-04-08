@@ -247,7 +247,7 @@ export const CS_B1_PHRASES_1: Record<string, Phrase> = {
     sk: "Po příletu nás čekala celní kontrola.",
     ua: "Після прильоту нас чекав митний контроль.",
     ru: "После прилёта нас ждал таможенный контроль.",
-    en: "After arrival, customs control was waiting for us.",
+    en: "After arrival, we had to go through customs control.",
     tokens: ["Po", "příletu", "nás", "čekala", "celní", "kontrola", "."],
   },
 

@@ -10,12 +10,21 @@ export type SlangItem = {
   sk: string;
   ua: string;
   ru: string;
+  en: string;
+
   exampleSk: string;
   exampleUa: string;
   exampleRu: string;
+  exampleEn: string;
+
   category: SlangCategory;
   level: "A1" | "A2" | "B1" | "B2";
-  caution?: { ua: string; ru: string };
+
+  caution?: {
+    ua: string;
+    ru: string;
+    en: string;
+  };
 };
 
 import { SLANG_SK } from "./slang-sk";

@@ -58,7 +58,7 @@ export const B1_PHRASES_4: Record<string, Phrase> = {
         sk: "Švédsko je známe tým, že kladie dôraz na rovnováhu medzi prácou a voľným časom.",
         ua: "Швеція відома тим, що робить акцент на балансі між роботою та вільним часом.",
         ru: "Швеция известна тем, что делает акцент на балансе между работой и свободным временем.",
-        en: "Sweden is known for placing emphasis on the balance between work and free time.",
+        en: "Sweden is known for emphasizing the balance between work and free time.",
         tokens: ["Švédsko", "je", "známe", "tým", ",", "že", "kladie", "dôraz", "na", "rovnováhu", "medzi", "prácou", "a", "voľným", "časom", "."],
     },
 

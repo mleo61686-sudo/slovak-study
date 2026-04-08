@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 import Navbar from "./components/Navbar";
+import FooterClient from "./components/FooterClient"; // 👈 ДОДАНО
 import SessionProviderClient from "./components/SessionProviderClient";
 import ProgressSync from "./components/ProgressSync";
 import SrsSync from "./components/SrsSync";
@@ -147,36 +148,8 @@ export default function RootLayout({
           <MainShell>{children}</MainShell>
         </SessionProviderClient>
 
-        <footer className="border-t bg-white">
-          <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-left">
-                © {new Date().getFullYear()} Flunio — вивчай мови щодня.
-              </div>
-
-              <nav
-                aria-label="Footer"
-                className="grid grid-cols-2 gap-x-6 gap-y-2 text-left sm:flex sm:flex-wrap sm:items-center sm:justify-end"
-              >
-                <a className="hover:text-slate-900 hover:underline" href="/learn">
-                  Курси
-                </a>
-                <a className="hover:text-slate-900 hover:underline" href="/grammar">
-                  Граматика
-                </a>
-                <a className="hover:text-slate-900 hover:underline" href="/dictionary">
-                  Словник
-                </a>
-                <a className="hover:text-slate-900 hover:underline" href="/practice">
-                  Тренажер
-                </a>
-                <a className="hover:text-slate-900 hover:underline" href="/support">
-                  Підтримка
-                </a>
-              </nav>
-            </div>
-          </div>
-        </footer>
+        {/* 👇 НОВИЙ мультимовний footer */}
+        <FooterClient />
 
         <SpeedInsights />
       </body>

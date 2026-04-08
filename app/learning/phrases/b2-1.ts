@@ -820,7 +820,7 @@ export const B2_PHRASES_1: Record<string, Phrase> = {
     sk: "Táto skúsenosť veľmi podporila jeho osobný rast.",
     ua: "Цей досвід дуже посприяв його особистому розвитку.",
     ru: "Этот опыт сильно способствовал его личностному росту.",
-    en: "This experience greatly supported his personal growth.",
+    en: "This experience greatly contributed to his personal growth.",
     tokens: ["Táto", "skúsenosť", "veľmi", "podporila", "jeho", "osobný", "rast", "."],
   },
 

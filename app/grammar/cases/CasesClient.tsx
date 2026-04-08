@@ -177,9 +177,11 @@ function tr(text: LocalizedText, lang: Lang) {
 function trPair(
   ua: string,
   ru: string | undefined,
+  en: string | undefined,
   lang: Lang
 ) {
   if (lang === "ru") return ru ?? ua;
+  if (lang === "en") return en ?? ua;
   return ua;
 }
 
@@ -258,13 +260,13 @@ export default function CasesClient() {
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <div className="font-semibold">
-                    {c.name.sk} — {trPair(c.name.ua, c.name.ru, lang)}
+                    {c.name.sk} — {trPair(c.name.ua, c.name.ru, c.name.en, lang)}
                   </div>
 
                   <div className="text-sm text-slate-600">
                     <span className="font-medium">{c.questions.sk}</span>{" "}
                     <span className="text-slate-500">
-                      ({trPair(c.questions.ua, c.questions.ru, lang)})
+                      ({trPair(c.questions.ua, c.questions.ru, c.questions.en, lang)})
                     </span>
                   </div>
                 </div>
@@ -273,10 +275,10 @@ export default function CasesClient() {
               </div>
 
               <div className="text-sm text-slate-700">
-                {trPair(c.use.ua, c.use.ru, lang)}
+                {trPair(c.use.ua, c.use.ru, c.use.en, lang)}
               </div>
               <div className="text-sm text-slate-500">
-                {trPair(c.rule.ua, c.rule.ru, lang)}
+                {trPair(c.rule.ua, c.rule.ru, c.rule.en, lang)}
               </div>
             </div>
           ))}
@@ -290,7 +292,7 @@ export default function CasesClient() {
           {cases.map((c) => (
             <div key={c.id} className="space-y-3 border-b px-5 py-4 last:border-b-0">
               <div className="font-semibold">
-                {c.name.sk} — {trPair(c.name.ua, c.name.ru, lang)}
+                {c.name.sk} — {trPair(c.name.ua, c.name.ru, c.name.en, lang)}
               </div>
 
               <div className="grid gap-2">
@@ -344,7 +346,7 @@ export default function CasesClient() {
             {quiz.map((q) => (
               <div key={q.caseId} className="space-y-2 rounded-xl border p-4">
                 <div className="text-sm text-slate-500">
-                  {lang === "ru" ? q.prompt.ru : q.prompt.ua}
+                  {lang === "ru" ? q.prompt.ru : lang === "en" ? q.prompt.en : q.prompt.ua}
                 </div>
 
                 <div className="flex flex-wrap gap-2">

@@ -57,7 +57,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
     sk: "Vlhkost vzduchu je dnes velmi vysoká.",
     ua: "Вологість повітря сьогодні дуже висока.",
     ru: "Влажность воздуха сегодня очень высокая.",
-    en: "The air humidity is very high today.",
+    en: "The humidity is very high today.",
     tokens: ["Vlhkost", "vzduchu", "je", "dnes", "velmi", "vysoká", "."],
   },
 
@@ -148,7 +148,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
     sk: "Zápis do evidence trval jen pár minut.",
     ua: "Внесення до реєстру тривало лише кілька хвилин.",
     ru: "Внесение в реестр заняло всего несколько минут.",
-    en: "The registration in the records took only a few minutes.",
+    en: "The entry in the register took only a few minutes.",
     tokens: ["Zápis", "do", "evidence", "trval", "jen", "pár", "minut", "."],
   },
 
@@ -389,7 +389,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
     sk: "Jeho sportovní výkon byl dnes výborný.",
     ua: "Його спортивний результат сьогодні був чудовим.",
     ru: "Его спортивный результат сегодня был отличным.",
-    en: "His sports performance was excellent today.",
+    en: "His athletic performance was excellent today.",
     tokens: ["Jeho", "sportovní", "výkon", "byl", "dnes", "výborný", "."],
   },
 
@@ -456,7 +456,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
     sk: "Ve volném čase rád čtu a sportuji.",
     ua: "У вільний час я люблю читати і займатися спортом.",
     ru: "В свободное время я люблю читать и заниматься спортом.",
-    en: "In my free time, I like reading and doing sports.",
+    en: "In my free time, I like reading and playing sports.",
     tokens: ["Ve", "volném", "čase", "rád", "čtu", "a", "sportuji", "."],
   },
 
@@ -555,7 +555,7 @@ export const CS_B1_PHRASES_2: Record<string, Phrase> = {
     sk: "Každý divák sledoval zápas s napětím.",
     ua: "Кожен глядач дивився матч із хвилюванням.",
     ru: "Каждый зритель смотрел матч с волнением.",
-    en: "Every spectator watched the match with tension.",
+    en: "Every spectator watched the match with suspense.",
     tokens: ["Každý", "divák", "sledoval", "zápas", "s", "napětím", "."],
   },
 

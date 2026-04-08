@@ -5,8 +5,6 @@ import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
-type LocalizedText = Partial<Record<Lang, string>>;
-
 type Section = {
   heading: string;
   body?: string[];
@@ -24,15 +22,7 @@ type Content = {
 
 type CourseContent = Record<"sk" | "cs", Content>;
 
-function withEn<T extends Record<"ua" | "ru", CourseContent>>(content: T): Record<Lang, CourseContent> {
-  return {
-    ua: content.ua,
-    ru: content.ru,
-    en: content.ua,
-  };
-}
-
-const CONTENT = withEn({
+const CONTENT: Record<Lang, CourseContent> = {
   ua: {
     sk: {
       title: "Словацький алфавіт: повний гід з вимови",
@@ -155,6 +145,7 @@ const CONTENT = withEn({
         "Нижче на сторінці ти можеш пройти вправи, послухати вимову та закріпити знання на практиці.",
     },
   },
+
   ru: {
     sk: {
       title: "Словацкий алфавит: полный гид по произношению",
@@ -278,7 +269,130 @@ const CONTENT = withEn({
         "Ниже на странице ты можешь пройти упражнения, послушать произношение и закрепить знания на практике.",
     },
   },
-});
+
+  en: {
+    sk: {
+      title: "Slovak alphabet: complete pronunciation guide",
+      intro: [
+        "The Slovak alphabet is the foundation of learning Slovak. If you want to read, speak, and understand Slovak correctly, you need to know the letters, pronunciation rules, and stress.",
+        "On this page, you will find an explanation of Slovak alphabet letters, diacritics, reading rules, examples, and practical exercises.",
+      ],
+      sections: [
+        {
+          heading: "How many letters are in the Slovak alphabet",
+          body: [
+            "Slovak uses the Latin alphabet with diacritical marks. In addition to standard letters (a, b, c, d...), there are special letters: á, ä, č, ď, é, í, ľ, ň, ó, ô, š, ť, ú, ý, ž.",
+            "Long vowels are marked with an accent above the letter (á, é, í, ó, ú, ý). They are pronounced longer than short vowels.",
+          ],
+        },
+        {
+          heading: "Diacritics in Slovak",
+          bullets: [
+            "č — pronounced like “ch” in “chair”",
+            "š — pronounced like “sh”",
+            "ž — pronounced like “s” in “measure”",
+            "ď, ť, ň — soft consonants",
+            "ľ — soft “l” sound",
+            "ô — pronounced like “uo”",
+          ],
+          body: [
+            "These letters often cause difficulties for beginners, but after a few exercises their pronunciation becomes natural.",
+          ],
+        },
+        {
+          heading: "Letter combinations CH, DZ, DŽ",
+          body: ["In Slovak, there are several special letter combinations:"],
+          bullets: [
+            "ch — pronounced like “h”/“kh” (chlieb)",
+            "dz — pronounced like “dz” (medzi)",
+            "dž — pronounced like “j” in “jungle” (džús)",
+          ],
+        },
+        {
+          heading: "Stress in Slovak",
+          body: [
+            "In Slovak, stress almost always falls on the first syllable. For example: PRÁ-ca, ŠKO-la, DO-mo-v.",
+            "This rule makes learning much easier because you do not need to memorize stress for every word separately.",
+          ],
+        },
+        {
+          heading: "Typical mistakes learners make",
+          bullets: [
+            "Confusing i and y in spelling",
+            "Ignoring vowel length",
+            "Mispronouncing ch",
+            "Mixing up č and c",
+          ],
+        },
+      ],
+      nextLabel: "What to study after the alphabet",
+      nextLinks: [
+        { href: "/grammar/verbs-present", label: "Present tense verbs" },
+        { href: "/grammar/cases", label: "Cases in Slovak" },
+      ],
+      outro:
+        "Below on this page, you can complete exercises, listen to pronunciation, and reinforce what you have learned in practice.",
+    },
+    cs: {
+      title: "Czech alphabet: complete pronunciation guide",
+      intro: [
+        "The Czech alphabet is the foundation of learning Czech. If you want to read, speak, and understand Czech correctly, you need to know the letters, pronunciation rules, and stress.",
+        "On this page, you will find an explanation of Czech alphabet letters, diacritics, reading rules, examples, and practical exercises.",
+      ],
+      sections: [
+        {
+          heading: "How many letters are in the Czech alphabet",
+          body: [
+            "Czech uses the Latin alphabet with diacritical marks. In addition to standard letters, there are special letters: á, č, ď, é, ě, í, ň, ó, ř, š, ť, ú, ů, ý, ž.",
+            "Long vowels are marked with an accent above the letter or with a ring in the letter ů. They are pronounced longer than short vowels.",
+          ],
+        },
+        {
+          heading: "Diacritics in Czech",
+          bullets: [
+            "č — pronounced like “ch” in “chair”",
+            "š — pronounced like “sh”",
+            "ž — pronounced like “s” in “measure”",
+            "ď, ť, ň — soft consonants",
+            "ř — a special Czech sound between “r” and “zh”",
+            "ě — softens the preceding consonant",
+          ],
+          body: [
+            "The letters ř, ě, and ů are the ones that most often cause difficulties for beginners.",
+          ],
+        },
+        {
+          heading: "The CH combination",
+          body: ["In Czech, there is a special letter combination:"],
+          bullets: ["ch — pronounced like “h”/“kh” (chléb)"],
+        },
+        {
+          heading: "Stress in Czech",
+          body: [
+            "In Czech, stress almost always falls on the first syllable. For example: PRA-ha, ČES-ko, DO-mov.",
+            "This rule also makes learning easier because stress is predictable in most words.",
+          ],
+        },
+        {
+          heading: "Typical mistakes learners make",
+          bullets: [
+            "Confusing í / y / ý",
+            "Ignoring the difference between ú and ů",
+            "Difficulty pronouncing ř",
+            "Reading ě incorrectly",
+          ],
+        },
+      ],
+      nextLabel: "What to study after the alphabet",
+      nextLinks: [
+        { href: "/grammar/verbs-present", label: "Present tense verbs" },
+        { href: "/grammar/cases", label: "Cases in Czech" },
+      ],
+      outro:
+        "Below on this page, you can complete exercises, listen to pronunciation, and reinforce what you have learned in practice.",
+    },
+  },
+};
 
 function SectionBlock({ section }: { section: Section }) {
   return (
@@ -307,8 +421,9 @@ export default function AlphabetSeo() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const course = courseId === "cs" ? "cs" : "sk";
-  const content = CONTENT[lang]?.[course] ?? CONTENT.ua[course];
+  const safeLang: Lang = lang === "ru" || lang === "en" ? lang : "ua";
+  const course: "sk" | "cs" = courseId === "cs" ? "cs" : "sk";
+  const content = CONTENT[safeLang][course];
 
   return (
     <section className="space-y-10 text-slate-800">

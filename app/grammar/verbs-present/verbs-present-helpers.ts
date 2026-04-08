@@ -42,7 +42,7 @@ const PRON = new Set([
 
 type TailMap = Record<
   string,
-  { sk: string[]; ua: string[]; ru: string[] }
+  { sk: string[]; ua: string[]; ru: string[]; en: string[] }
 >;
 
 const TAILS_SK: TailMap = {
@@ -50,56 +50,67 @@ const TAILS_SK: TailMap = {
     sk: ["v práci", "dnes", "v Bratislave", "ráno"],
     ua: ["на роботі", "сьогодні", "в Братиславі", "зранку"],
     ru: ["на работе", "сегодня", "в Братиславе", "утром"],
+    en: ["at work", "today", "in Bratislava", "in the morning"],
   },
   robit: {
     sk: ["doma", "úlohu", "to teraz", "v práci"],
     ua: ["вдома", "завдання", "це зараз", "на роботі"],
     ru: ["дома", "задание", "это сейчас", "на работе"],
+    en: ["at home", "homework", "this now", "at work"],
   },
   byt: {
     sk: ["doma", "tu", "v meste", "v práci"],
     ua: ["вдома", "тут", "в місті", "на роботі"],
     ru: ["дома", "здесь", "в городе", "на работе"],
+    en: ["at home", "here", "in the city", "at work"],
   },
   byvat: {
     sk: ["v Bratislave", "tu", "v meste", "doma"],
     ua: ["в Братиславі", "тут", "в місті", "вдома"],
     ru: ["в Братиславе", "здесь", "в городе", "дома"],
+    en: ["in Bratislava", "here", "in the city", "at home"],
   },
   chodit: {
     sk: ["do práce", "do školy", "pešo", "každý deň"],
     ua: ["на роботу", "до школи", "пішки", "щодня"],
     ru: ["на работу", "в школу", "пешком", "каждый день"],
+    en: ["to work", "to school", "on foot", "every day"],
   },
   ucit: {
     sk: ["deti", "po slovensky", "dnes", "v škole"],
     ua: ["дітей", "словацьку", "сьогодні", "в школі"],
     ru: ["детей", "словацкий", "сегодня", "в школе"],
+    en: ["children", "Slovak", "today", "at school"],
   },
   ucitsa: {
     sk: ["po slovensky", "doma", "dnes", "v práci"],
     ua: ["словацької", "вдома", "сьогодні", "на роботі"],
     ru: ["по-словацки", "дома", "сегодня", "на работе"],
+    en: ["Slovak", "at home", "today", "at work"],
   },
   hladat: {
     sk: ["prácu", "byt", "kľúč", "teraz"],
     ua: ["роботу", "квартиру", "ключ", "зараз"],
     ru: ["работу", "квартиру", "ключ", "сейчас"],
+    en: ["a job", "an apartment", "a key", "now"],
   },
   mat: {
     sk: ["čas", "prácu", "lístok", "otázku"],
     ua: ["час", "роботу", "квиток", "питання"],
     ru: ["время", "работу", "билет", "вопрос"],
+    en: ["time", "a job", "a ticket", "a question"],
   },
   ist: {
     sk: ["do práce", "domov", "do mesta", "do obchodu"],
     ua: ["на роботу", "додому", "в місто", "в магазин"],
     ru: ["на работу", "домой", "в город", "в магазин"],
+    en: ["to work", "home", "to the city", "to the shop"],
   },
   default: {
     sk: ["dnes", "teraz", "doma", "v práci"],
     ua: ["сьогодні", "зараз", "вдома", "на роботі"],
     ru: ["сегодня", "сейчас", "дома", "на работе"],
+    en: ["today", "now", "at home", "at work"],
   },
 };
 
@@ -108,56 +119,67 @@ const TAILS_CS: TailMap = {
     sk: ["v práci", "dnes", "v Praze", "ráno"],
     ua: ["на роботі", "сьогодні", "у Празі", "зранку"],
     ru: ["на работе", "сегодня", "в Праге", "утром"],
+    en: ["at work", "today", "in Prague", "in the morning"],
   },
   delat: {
     sk: ["doma", "úkol", "to teď", "v práci"],
     ua: ["вдома", "завдання", "це зараз", "на роботі"],
     ru: ["дома", "задание", "это сейчас", "на работе"],
+    en: ["at home", "homework", "this now", "at work"],
   },
   byt: {
     sk: ["doma", "tady", "ve městě", "v práci"],
     ua: ["вдома", "тут", "у місті", "на роботі"],
     ru: ["дома", "здесь", "в городе", "на работе"],
+    en: ["at home", "here", "in the city", "at work"],
   },
   bydlet: {
     sk: ["v Praze", "tady", "ve městě", "doma"],
     ua: ["у Празі", "тут", "у місті", "вдома"],
     ru: ["в Праге", "здесь", "в городе", "дома"],
+    en: ["in Prague", "here", "in the city", "at home"],
   },
   chodit: {
     sk: ["do práce", "do školy", "pěšky", "každý den"],
     ua: ["на роботу", "до школи", "пішки", "щодня"],
     ru: ["на работу", "в школу", "пешком", "каждый день"],
+    en: ["to work", "to school", "on foot", "every day"],
   },
   ucit: {
     sk: ["děti", "česky", "dnes", "ve škole"],
     ua: ["дітей", "чеської", "сьогодні", "у школі"],
     ru: ["детей", "чешскому", "сегодня", "в школе"],
+    en: ["children", "Czech", "today", "at school"],
   },
   ucitse: {
     sk: ["česky", "doma", "dnes", "v práci"],
     ua: ["чеської", "вдома", "сьогодні", "на роботі"],
     ru: ["чешский", "дома", "сегодня", "на работе"],
+    en: ["Czech", "at home", "today", "at work"],
   },
   hledat: {
     sk: ["práci", "byt", "klíč", "teď"],
     ua: ["роботу", "квартиру", "ключ", "зараз"],
     ru: ["работу", "квартиру", "ключ", "сейчас"],
+    en: ["a job", "an apartment", "a key", "now"],
   },
   mit: {
     sk: ["čas", "práci", "lístek", "otázku"],
     ua: ["час", "роботу", "квиток", "питання"],
     ru: ["время", "работу", "билет", "вопрос"],
+    en: ["time", "a job", "a ticket", "a question"],
   },
   jit: {
     sk: ["do práce", "domů", "do města", "do obchodu"],
     ua: ["на роботу", "додому", "у місто", "в магазин"],
     ru: ["на работу", "домой", "в город", "в магазин"],
+    en: ["to work", "home", "to the city", "to the shop"],
   },
   default: {
     sk: ["dnes", "teď", "doma", "v práci"],
     ua: ["сьогодні", "зараз", "вдома", "на роботі"],
     ru: ["сегодня", "сейчас", "дома", "на работе"],
+    en: ["today", "now", "at home", "at work"],
   },
 };
 
@@ -276,16 +298,18 @@ export function genExamplesFromRows(active: VerbBlock, isCzech: boolean): W[] {
 
   return wanted.map((p, idx) => {
     const row = rowMap.get(p);
-    if (!row) return { sk: "", ua: "" };
+    if (!row) return { sk: "", ua: "", ru: "", en: "" };
 
     const tailSk = tails.sk[idx % tails.sk.length];
     const tailUa = tails.ua[idx % tails.ua.length];
     const tailRu = tails.ru[idx % tails.ru.length];
+    const tailEn = tails.en[idx % tails.en.length];
 
     const sk = `${capFirst(row.full)} ${tailSk}.`.replace(/\s+/g, " ");
     const ua = `${capFirst(row.tr.ua)} ${tailUa}.`.replace(/\s+/g, " ");
     const ru = `${capFirst(row.tr.ru ?? row.tr.ua)} ${tailRu}.`.replace(/\s+/g, " ");
+    const en = `${capFirst(row.tr.en ?? row.tr.ua)} ${tailEn}.`.replace(/\s+/g, " ");
 
-    return { sk, ua, ru };
+    return { sk, ua, ru, en };
   });
 }

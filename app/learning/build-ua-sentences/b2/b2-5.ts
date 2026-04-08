@@ -283,7 +283,7 @@ export const B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["He", "is", "a", "very", "reliable", "colleague", "you", "can", "count", "on", "."],
     extraUaTokens: ["завжди", "у", "роботі"],
     extraRuTokens: ["всегда", "в", "работе"],
-    extraEnTokens: ["always", "at work", "there"],
+    extraEnTokens: ["always", "work", "there"],
   },
 
   [phraseKey("zásadový", "b2-23")]: {
@@ -381,10 +381,10 @@ export const B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     sk: "Je otvorený novým skúsenostiam aj ľuďom.",
     ua: "Він відкритий до нового досвіду й до людей.",
     ru: "Он открыт новому опыту и людям.",
-    en: "He is open to new experiences and to people.",
+    en: "He is open to new experiences and to other people.",
     uaTokens: ["Він", "відкритий", "до", "нового", "досвіду", "й", "до", "людей", "."],
     ruTokens: ["Он", "открыт", "новому", "опыту", "и", "людям", "."],
-    enTokens: ["He", "is", "open", "to", "new", "experiences", "and", "to", "people", "."],
+    enTokens: ["He", "is", "open", "to", "new", "experiences", "and", "to", "other", "people", "."],
     extraUaTokens: ["завжди", "щиро", "дуже"],
     extraRuTokens: ["всегда", "искренне", "очень"],
     extraEnTokens: ["always", "sincerely", "very"],
@@ -429,7 +429,7 @@ export const B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     enTokens: ["This", "device", "is", "intended", "for", "everyday", "use", "."],
     extraUaTokens: ["вдома", "дуже", "зручний"],
     extraRuTokens: ["дома", "очень", "удобный"],
-    extraEnTokens: ["at home", "very", "convenient"],
+    extraEnTokens: ["home", "very", "convenient"],
   },
 
   [phraseKey("údaje", "b2-24")]: {
@@ -634,10 +634,10 @@ export const B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     sk: "Diskusia bola živá, ale stále vecná.",
     ua: "Дискусія була жвавою, але все ще змістовною.",
     ru: "Дискуссия была оживлённой, но всё ещё содержательной.",
-    en: "The discussion was lively but still meaningful.",
+    en: "The discussion was lively but still constructive.",
     uaTokens: ["Дискусія", "була", "жвавою", ",", "але", "все", "ще", "змістовною", "."],
     ruTokens: ["Дискуссия", "была", "оживлённой", ",", "но", "всё", "ещё", "содержательной", "."],
-    enTokens: ["The", "discussion", "was", "lively", "but", "still", "meaningful", "."],
+    enTokens: ["The", "discussion", "was", "lively", "but", "still", "constructive", "."],
     extraUaTokens: ["дуже", "емоційною", "сьогодні"],
     extraRuTokens: ["очень", "эмоциональной", "сегодня"],
     extraEnTokens: ["very", "emotional", "today"],

@@ -373,7 +373,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Dlouhé čekání v něm vyvolalo frustraci.",
     ua: "Довге очікування викликало в нього роздратування.",
     ru: "Долгое ожидание вызвало у него раздражение.",
-    en: "The long wait caused frustration in him.",
+    en: "The long wait made him feel frustrated.",
     tokens: ["Dlouhé", "čekání", "v", "něm", "vyvolalo", "frustraci", "."],
   },
 
@@ -507,7 +507,7 @@ export const CS_B1_PHRASES_3: Record<string, Phrase> = {
     sk: "Bezpečnost práce je v této firmě priorita.",
     ua: "Охорона праці в цій фірмі є пріоритетом.",
     ru: "Охрана труда в этой фирме — приоритет.",
-    en: "Work safety is a priority in this company.",
+    en: "Workplace safety is a priority in this company.",
     tokens: ["Bezpečnost", "práce", "je", "v", "této", "firmě", "priorita", "."],
   },
 

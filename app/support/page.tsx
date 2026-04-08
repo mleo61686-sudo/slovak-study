@@ -13,23 +13,103 @@ export default function SupportPage() {
   const [status, setStatus] = useState<string | null>(null);
 
   const t = {
-    title: lang === "ru" ? "Поддержка" : "Підтримка",
-    emailPlaceholder: lang === "ru" ? "Ваш email *" : "Ваш email *",
-    topicProblem: lang === "ru" ? "Проблема" : "Проблема",
-    topicQuestion: lang === "ru" ? "Вопрос" : "Питання",
-    topicIdea: lang === "ru" ? "Идея" : "Ідея",
-    topicPayment: lang === "ru" ? "Оплата" : "Оплата",
-    messagePlaceholder: lang === "ru" ? "Опишите проблему..." : "Опиши проблему...",
-    send: lang === "ru" ? "Отправить" : "Надіслати",
-    sending: lang === "ru" ? "Отправляю..." : "Відправляю...",
-    emailRequired: lang === "ru" ? "Укажите email" : "Вкажіть email",
+    title:
+      lang === "ru"
+        ? "Поддержка"
+        : lang === "en"
+        ? "Support"
+        : "Підтримка",
+
+    emailPlaceholder:
+      lang === "ru"
+        ? "Ваш email *"
+        : lang === "en"
+        ? "Your email *"
+        : "Ваш email *",
+
+    topicProblem:
+      lang === "ru"
+        ? "Проблема"
+        : lang === "en"
+        ? "Problem"
+        : "Проблема",
+
+    topicQuestion:
+      lang === "ru"
+        ? "Вопрос"
+        : lang === "en"
+        ? "Question"
+        : "Питання",
+
+    topicIdea:
+      lang === "ru"
+        ? "Идея"
+        : lang === "en"
+        ? "Idea"
+        : "Ідея",
+
+    topicPayment:
+      lang === "ru"
+        ? "Оплата"
+        : lang === "en"
+        ? "Payment"
+        : "Оплата",
+
+    messagePlaceholder:
+      lang === "ru"
+        ? "Опишите проблему..."
+        : lang === "en"
+        ? "Describe the problem..."
+        : "Опиши проблему...",
+
+    send:
+      lang === "ru"
+        ? "Отправить"
+        : lang === "en"
+        ? "Send"
+        : "Надіслати",
+
+    sending:
+      lang === "ru"
+        ? "Отправляю..."
+        : lang === "en"
+        ? "Sending..."
+        : "Відправляю...",
+
+    emailRequired:
+      lang === "ru"
+        ? "Укажите email"
+        : lang === "en"
+        ? "Enter your email"
+        : "Вкажіть email",
+
     messageShort:
       lang === "ru"
         ? "Опишите проблему подробнее (минимум 10 символов)"
+        : lang === "en"
+        ? "Describe the problem in more detail (minimum 10 characters)"
         : "Опиши проблему детальніше (мінімум 10 символів)",
-    sendError: lang === "ru" ? "Ошибка отправки" : "Помилка відправки",
-    serverError: lang === "ru" ? "Серверная ошибка" : "Серверна помилка",
-    sent: lang === "ru" ? "Сообщение отправлено ✅" : "Повідомлення відправлено ✅",
+
+    sendError:
+      lang === "ru"
+        ? "Ошибка отправки"
+        : lang === "en"
+        ? "Failed to send"
+        : "Помилка відправки",
+
+    serverError:
+      lang === "ru"
+        ? "Серверная ошибка"
+        : lang === "en"
+        ? "Server error"
+        : "Серверна помилка",
+
+    sent:
+      lang === "ru"
+        ? "Сообщение отправлено ✅"
+        : lang === "en"
+        ? "Message sent ✅"
+        : "Повідомлення відправлено ✅",
   };
 
   async function handleSubmit(e: React.FormEvent) {

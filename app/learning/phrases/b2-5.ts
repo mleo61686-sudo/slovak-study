@@ -216,7 +216,7 @@ export const B2_PHRASES_5: Record<string, Phrase> = {
     sk: "Prívalový dážď zatopil viaceré ulice v meste.",
     ua: "Злива підтопила кілька вулиць у місті.",
     ru: "Ливень затопил несколько улиц в городе.",
-    en: "A torrential rain flooded several streets in the city.",
+    en: "Torrential rain flooded several streets in the city.",
     tokens: ["Prívalový", "dážď", "zatopil", "viaceré", "ulice", "v", "meste", "."],
   },
 

@@ -240,7 +240,7 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
     sk: "Je otvorený novým skúsenostiam aj ľuďom.",
     ua: "Він відкритий до нового досвіду й до людей.",
     ru: "Он открыт новому опыту и людям.",
-    en: "He is open to new experiences and to people.",
+    en: "He is open to new experiences and to other people.",
     tokens: ["Je", "otvorený", "novým", "skúsenostiam", "aj", "ľuďom", "."],
   },
 
@@ -820,7 +820,7 @@ export const B2_PHRASES_3: Record<string, Phrase> = {
     sk: "Malý kultúrny rozdiel môže viesť k nedorozumeniu.",
     ua: "Невелика культурна різниця може призвести до непорозуміння.",
     ru: "Небольшое культурное различие может привести к недопониманию.",
-    en: "A small cultural difference can lead to misunderstanding.",
+    en: "A small cultural difference can lead to a misunderstanding.",
     tokens: ["Malý", "kultúrny", "rozdiel", "môže", "viesť", "k", "nedorozumeniu", "."],
   },
 

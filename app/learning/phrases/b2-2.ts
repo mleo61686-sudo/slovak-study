@@ -16,7 +16,7 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
 
   [phraseKey("šťavnatý", "b2-11")]: {
     sk: "Melón bol veľmi šťavnatý a osviežujúci.",
-    ua: "Кавун був дуже соковитий і освіжний.",
+    ua: "Кавун був дуже соковитий і освіжаючий.",
     ru: "Арбуз был очень сочным и освежающим.",
     en: "The melon was very juicy and refreshing.",
     tokens: ["Melón", "bol", "veľmi", "šťavnatý", "a", "osviežujúci", "."],
@@ -42,7 +42,7 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
     sk: "V lete si najradšej kupujeme sezónne ovocie.",
     ua: "Влітку ми найбільше любимо купувати сезонні фрукти.",
     ru: "Летом мы больше всего любим покупать сезонные фрукты.",
-    en: "In summer, we most like to buy seasonal fruit.",
+    en: "In summer, we most enjoy buying seasonal fruit.",
     tokens: ["V", "lete", "si", "najradšej", "kupujeme", "sezónne", "ovocie", "."],
   },
 
@@ -757,7 +757,7 @@ export const B2_PHRASES_2: Record<string, Phrase> = {
     sk: "Moderné umenie v ňom vyvoláva veľa otázok.",
     ua: "Сучасне мистецтво викликає в нього багато запитань.",
     ru: "Современное искусство вызывает у него много вопросов.",
-    en: "Modern art raises many questions in him.",
+    en: "Modern art raises many questions for him.",
     tokens: ["Moderné", "umenie", "v", "ňom", "vyvoláva", "veľa", "otázok", "."],
   },
 

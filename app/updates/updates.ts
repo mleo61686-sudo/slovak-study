@@ -12,6 +12,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Оновлення: додано рівень B2 та покращено вправи",
       ru: "Обновление: добавлен уровень B2 и улучшены упражнения",
+      en: "Update: B2 level added and exercises improved",
     },
     items: {
       ua: [
@@ -26,6 +27,12 @@ export const UPDATES: UpdateItem[] = [
         "Улучшено упражнение с написанием слов(3) — теперь можно вводить ответы без диакритики (например, \"zavazok\" вместо \"záväzok\")",
         "После правильного ответа теперь отображается правильный вариант слова с диакритикой для лучшего запоминания",
       ],
+      en: [
+        "The B2 level has been added for the Slovak course — new, more advanced lessons, words, and exercises are now available",
+        "Some sentences in exercises from previous levels were edited so that the translations are more accurate and natural",
+        "The word-writing exercise (3) has been improved — now you can enter answers without diacritics (for example, \"zavazok\" instead of \"záväzok\")",
+        "After a correct answer, the correct version of the word with diacritics is now shown for better memorization",
+      ],
     },
   },
   {
@@ -33,6 +40,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Оновлення: нова вправа та виправлення багів",
       ru: "Обновление: новое упражнение и исправление багов",
+      en: "Update: new exercise and bug fixes",
     },
     items: {
       ua: [
@@ -47,6 +55,12 @@ export const UPDATES: UpdateItem[] = [
         "Улучшена стабильность работы упражнений и обработка быстрых кликов",
         "Следующий шаг — добавление уровня B2 для словацкого и чешского курсов",
       ],
+      en: [
+        "A new seventh exercise for lessons has been added — “Build the translation”, which helps reinforce phrase comprehension better",
+        "A bug in the “Build the sentence” exercise related to the “Back” button was fixed (duplicate words)",
+        "The stability of exercises and handling of fast clicks have been improved",
+        "The next step is adding the B2 level for the Slovak and Czech courses",
+      ],
     },
   },
   {
@@ -54,6 +68,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Велике оновлення: чеський курс і розширення платформи",
       ru: "Большое обновление: чешский курс и расширение платформы",
+      en: "Major update: Czech course and platform expansion",
     },
     items: {
       ua: [
@@ -74,6 +89,15 @@ export const UPDATES: UpdateItem[] = [
         "Планируется расширение уроков до 7 типов упражнений для более эффективного обучения",
         "Начато добавление уровня B2 — новые более сложные уроки уже в разработке",
       ],
+      en: [
+        "A new Czech language course has been added — now you can study not only Slovak",
+        "The platform has become multi-course — Polish is planned to be added in the future",
+        "The registration page has been updated — now the course is chosen immediately when creating an account",
+        "The profile menu has been updated — now you can change the course at any time",
+        "The ability to switch between courses directly in the profile has been added",
+        "The lessons are planned to be expanded to 7 exercise types for more effective learning",
+        "Work on the B2 level has started — new, more advanced lessons are already in development",
+      ],
     },
   },
   {
@@ -81,6 +105,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Оновлення: нова сторінка зі сленгом і покращена робота сайту",
       ru: "Обновление: новая страница со сленгом и улучшенная работа сайта",
+      en: "Update: new slang page and improved site performance",
     },
     items: {
       ua: [
@@ -95,6 +120,12 @@ export const UPDATES: UpdateItem[] = [
         "Улучшен словарь — теперь им удобнее пользоваться и быстрее находить нужные слова",
         "Улучшена скорость и стабильность работы сайта",
       ],
+      en: [
+        "A new “Slang and spoken language” page has been added with real-life phrases that Slovaks use in everyday life",
+        "The page includes example sentences, translations, and audio for words and phrases",
+        "The dictionary has been improved — now it is easier to use and faster to find the words you need",
+        "The site’s speed and stability have been improved",
+      ],
     },
   },
   {
@@ -102,6 +133,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Оновлення: завершено B1, оновлено словник, тренажер і головну сторінку",
       ru: "Обновление: завершён B1, обновлены словарь, тренажёр и главная страница",
+      en: "Update: B1 completed, dictionary, trainer, and homepage updated",
     },
     items: {
       ua: [
@@ -116,6 +148,12 @@ export const UPDATES: UpdateItem[] = [
         "Улучшен тренажёр: стало удобнее тренироваться и повторять материал",
         "Улучшена главная страница — теперь проще понять, как начать обучение",
       ],
+      en: [
+        "The B1 level has been completed: lessons, words, and exercises are ready",
+        "The dictionary has been updated — now it contains only words from levels A0–B1",
+        "The trainer has been improved: now it is more convenient to practice and review material",
+        "The homepage has been improved — now it is easier to understand how to start learning",
+      ],
     },
   },
   {
@@ -123,6 +161,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Велике оновлення: завершено A2, нова AI-озвучка та покращений інтерфейс",
       ru: "Большое обновление: завершён A2, новая AI-озвучка и улучшенный интерфейс",
+      en: "Major update: A2 completed, new AI voice-over, and improved interface",
     },
     items: {
       ua: [
@@ -141,6 +180,14 @@ export const UPDATES: UpdateItem[] = [
         "Исправлены многочисленные баги, которые позволяли проходить уровни без ошибок",
         "Доработаны страницы «Алфавит и произношение», «Глаголы (настоящее время)» и «Падежи»",
       ],
+      en: [
+        "The A2 level has been fully completed: lessons, words, and exercises are ready for full learning",
+        "Matching A2-level phrases have been added — more complex, more natural, and closer to real speech",
+        "AI voice-over with a native Slovak speaker’s voice has been added for the dictionary, grammar pages, and levels A0/A1/A2",
+        "The design has been improved: photos now have rounded corners, cards look cleaner, and the interface feels more modern",
+        "Numerous bugs that allowed users to pass levels without mistakes have been fixed",
+        "The “Alphabet and pronunciation”, “Verbs (present tense)”, and “Cases” pages have been improved",
+      ],
     },
   },
   {
@@ -148,6 +195,7 @@ export const UPDATES: UpdateItem[] = [
     title: {
       ua: "Покращено сторінку «Оновлення»",
       ru: "Улучшена страница «Обновления»",
+      en: "The “Updates” page has been improved",
     },
     items: {
       ua: [
@@ -161,6 +209,12 @@ export const UPDATES: UpdateItem[] = [
         "Можно переключаться между обновлениями без перезагрузки страницы",
         "На главной странице появилась кнопка «Что нового»",
         "Улучшена скорость загрузки фото",
+      ],
+      en: [
+        "An updates archive grouped by months has been added",
+        "You can switch between updates without reloading the page",
+        "A “What’s new” button has appeared on the homepage",
+        "Photo loading speed has been improved",
       ],
     },
   },

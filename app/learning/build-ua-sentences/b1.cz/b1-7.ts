@@ -333,7 +333,7 @@ export const CS_B1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["There", "was", "an", "interesting", "quote", "at", "the", "beginning", "of", "the", "text", "."],
     extraUaTokens: ["фраза", "вчора", "вдома"],
     extraRuTokens: ["фраза", "вчера", "дома"],
-    extraEnTokens: ["phrase", "yesterday", "at", "home"],
+    extraEnTokens: ["phrase", "yesterday", "at"],
   },
 
   [phraseKey("poznámka", "b1-33")]: {
@@ -466,7 +466,7 @@ export const CS_B1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["He", "had", "to", "overcome", "fear", "and", "take", "the", "first", "step", "."],
     extraUaTokens: ["паніку", "вчора", "вдома"],
     extraRuTokens: ["панику", "вчера", "дома"],
-    extraEnTokens: ["panic", "yesterday", "at", "home"],
+    extraEnTokens: ["panic", "yesterday", "home"],
   },
 
   [phraseKey("seberozvoj", "b1-34")]: {
@@ -492,7 +492,7 @@ export const CS_B1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["Meditation", "helps", "him", "find", "inner", "peace", "."],
     extraUaTokens: ["радість", "вчора", "вночі"],
     extraRuTokens: ["радость", "вчера", "ночью"],
-    extraEnTokens: ["joy", "yesterday", "at", "night"],
+    extraEnTokens: ["yesterday", "at", "night"],
   },
 
   [phraseKey("sebedisciplína", "b1-34")]: {
@@ -531,7 +531,7 @@ export const CS_B1_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     enTokens: ["He", "learned", "to", "deal", "with", "a", "problem", "without", "panic", "."],
     extraUaTokens: ["страху", "вчора", "вночі"],
     extraRuTokens: ["страха", "вчера", "ночью"],
-    extraEnTokens: ["fear", "yesterday", "at", "night"],
+    extraEnTokens: ["fear", "yesterday", "night"],
   },
 
   // =========================

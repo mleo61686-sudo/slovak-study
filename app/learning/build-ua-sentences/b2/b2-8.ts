@@ -190,7 +190,7 @@ export const B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
     en: "The tense thriller kept us on edge until the very end.",
     uaTokens: ["Напружений", "трилер", "тримав", "нас", "у", "напрузі", "до", "самого", "кінця", "."],
     ruTokens: ["Напряжённый", "триллер", "держал", "нас", "в", "напряжении", "до", "самого", "конца", "."],
-    enTokens: ["The", "tense", "thriller", "kept", "us", "on", "edge", "until", "the", "very", "end", "."],
+    enTokens: ["The", "tense", "thriller", "kept", "us", "on", "the", "edge", "until", "the", "very", "end", "."],
     extraUaTokens: ["майже", "весь", "вечір"],
     extraRuTokens: ["почти", "весь", "вечер"],
     extraEnTokens: ["almost", "whole", "evening"],
@@ -299,7 +299,7 @@ export const B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
     ruTokens: ["На", "невысоком", "холме", "стояли", "остатки", "старого", "замка", "."],
     enTokens: ["On", "a", "low", "hill", "stood", "the", "remains", "of", "an", "old", "castle", "."],
     extraUaTokens: ["ще", "й", "досі"],
-    extraRuTokens: ["ещё", "и", "до", "сих", "пор"],
+    extraRuTokens: ["ещё", "и", "до"],
     extraEnTokens: ["still", "even", "now"],
   },
 
@@ -556,7 +556,7 @@ export const B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
     enTokens: ["Without", "electricity", ",", "almost", "nothing", "works", "today", "."],
     extraUaTokens: ["в", "будинку", "зовсім"],
     extraRuTokens: ["в", "доме", "совсем"],
-    extraEnTokens: ["in", "house", "at all"],
+    extraEnTokens: ["in", "house", "at"],
   },
 
   [phraseKey("elektrický prúd", "b2-40")]: {
@@ -587,7 +587,7 @@ export const B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
     extraRuTokens: ["внимательно", "ещё", "раз"],
     extraEnTokens: ["carefully", "once", "again"],
   },
-  
+
   [phraseKey("zásuvka", "b2-40")]: {
     sk: "Tento spotrebič sa pripája priamo do zásuvky.",
     ua: "Цей прилад підключається безпосередньо в розетку.",
@@ -598,7 +598,7 @@ export const B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
     enTokens: ["This", "appliance", "is", "plugged", "directly", "into", "the", "socket", "."],
     extraUaTokens: ["вдома", "дуже", "легко"],
     extraRuTokens: ["дома", "очень", "легко"],
-    extraEnTokens: ["at home", "very", "easily"],
+    extraEnTokens: ["home", "very", "easily"],
   },
 
   [phraseKey("kábel", "b2-40")]: {

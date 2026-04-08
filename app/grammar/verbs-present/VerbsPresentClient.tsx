@@ -32,6 +32,8 @@ type QuizItem = {
   options: string[];
 };
 
+type UiLang = "ua" | "ru" | "en";
+
 const FALLBACK_SK = "Ja pracujem.";
 const FALLBACK_CS = "Já pracuji.";
 
@@ -39,7 +41,8 @@ export default function VerbsPresentClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const ui = UI[lang === "ru" ? "ru" : "ua"];
+  const uiLang: UiLang = lang === "ru" || lang === "en" ? lang : "ua";
+  const ui = UI[uiLang];
   const isCzech = courseId === "cs";
   const verbs = isCzech ? VERBS_CS : VERBS_SK;
 
@@ -92,6 +95,7 @@ export default function VerbsPresentClient() {
       sk: isCzech ? FALLBACK_CS : FALLBACK_SK,
       ua: "Я працюю.",
       ru: "Я работаю.",
+      en: "I work.",
     };
 
   const sentenceSource = currentEx.sk || (isCzech ? FALLBACK_CS : FALLBACK_SK);
@@ -111,7 +115,7 @@ export default function VerbsPresentClient() {
 
   const builtSentence = build.join(" ");
   const targetSk = sentenceSource.replace(/[.!?]$/, "");
-  const targetUa = (currentEx.ua || "Я працюю.").replace(/[.!?]$/, "");
+  const targetTr = trWord(currentEx, uiLang).replace(/[.!?]$/, "");
 
   const handleResetQuiz = () => {
     setAnswers({});
@@ -149,7 +153,7 @@ export default function VerbsPresentClient() {
               className="flex justify-between border-b px-5 py-3 last:border-b-0"
             >
               <span className="font-medium">{PRONOUNS[k].sk}</span>
-              <span className="text-slate-600">{trWord(PRONOUNS[k], lang)}</span>
+              <span className="text-slate-600">{trWord(PRONOUNS[k], uiLang)}</span>
             </div>
           ))}
         </div>
@@ -185,14 +189,14 @@ export default function VerbsPresentClient() {
               <div className="text-sm text-slate-500">{ui.infinitive}</div>
               <div className="text-lg font-semibold">{active?.infinitive}</div>
               <div className="mt-1 text-slate-600">
-                {active ? trWord(active.meaning, lang) : "—"}
+                {active ? trWord(active.meaning, uiLang) : "—"}
               </div>
             </div>
 
             <div className="rounded-xl border p-4">
               <div className="text-sm text-slate-500">{ui.hint}</div>
               <div className="text-slate-700">
-                {active?.note ? trWord(active.note, lang) : "—"}
+                {active?.note ? trWord(active.note, uiLang) : "—"}
               </div>
             </div>
           </div>
@@ -211,7 +215,7 @@ export default function VerbsPresentClient() {
                 <div className="font-medium">
                   <span className="text-slate-900">{capFirst(row.full)}</span>
                 </div>
-                <div className="text-sm text-slate-500">{trWord(row.tr, lang)}</div>
+                <div className="text-sm text-slate-500">{trWord(row.tr, uiLang)}</div>
               </div>
               <SpeakButton text={row.full} kind="phrase" />
             </div>
@@ -235,7 +239,7 @@ export default function VerbsPresentClient() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="font-medium">{ex.sk}</div>
-                    <div className="text-sm text-slate-500">{trWord(ex, lang)}</div>
+                    <div className="text-sm text-slate-500">{trWord(ex, uiLang)}</div>
                   </div>
                   <SpeakButton text={ex.sk} kind="phrase" />
                 </div>
@@ -345,7 +349,7 @@ export default function VerbsPresentClient() {
             <div>
               <div className="font-semibold">{ui.quizB}</div>
               <div className="text-sm text-slate-500">
-                {ui.target}: <span className="font-medium text-slate-900">{targetUa}</span>
+                {ui.target}: <span className="font-medium text-slate-900">{targetTr}</span>
               </div>
             </div>
 

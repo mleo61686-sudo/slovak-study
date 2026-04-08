@@ -45,11 +45,24 @@ export function makeCaseQuiz(cases: CaseBlock[], lang: Lang): QuizQ[] {
 
     const prompt =
       lang === "ru"
-        ? { sk: c.questions.sk, ua: "", ru: `${c.name.ru}: ${c.questions.ru}` }
-        : {
+        ? {
+          sk: c.questions.sk,
+          ua: "",
+          ru: `${c.name.ru}: ${c.questions.ru}`,
+          en: "",
+        }
+        : lang === "en"
+          ? {
+            sk: c.questions.sk,
+            ua: "",
+            ru: "",
+            en: `${c.name.en}: ${c.questions.en}`,
+          }
+          : {
             sk: c.questions.sk,
             ua: `${c.name.ua}: ${c.questions.ua}`,
             ru: "",
+            en: "",
           };
 
     return {

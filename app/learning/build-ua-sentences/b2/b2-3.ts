@@ -20,13 +20,13 @@ export const B2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
 
   [phraseKey("šťavnatý", "b2-11")]: {
     sk: "Melón bol veľmi šťavnatý a osviežujúci.",
-    ua: "Кавун був дуже соковитий і освіжний.",
+    ua: "Кавун був дуже соковитий і освіжаючий.",
     ru: "Арбуз был очень сочным и освежающим.",
     en: "The watermelon was very juicy and refreshing.",
-    uaTokens: ["Кавун", "був", "дуже", "соковитий", "і", "освіжний", "."],
+    uaTokens: ["Кавун", "був", "дуже", "соковитий", "і", "освіжаючий", "."],
     ruTokens: ["Арбуз", "был", "очень", "сочным", "и", "освежающим", "."],
     enTokens: ["The", "watermelon", "was", "very", "juicy", "and", "refreshing", "."],
-    uaAltAnswers: [["Кавун", "був", "соковитий", "і", "дуже", "освіжний", "."]],
+    uaAltAnswers: [["Кавун", "був", "соковитий", "і", "дуже", "освіжаючий", "."]],
     ruAltAnswers: [["Арбуз", "был", "сочным", "и", "очень", "освежающим", "."]],
     extraUaTokens: ["вчора", "справді", "великий"],
     extraRuTokens: ["вчера", "правда", "большой"],
@@ -63,10 +63,10 @@ export const B2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     sk: "V lete si najradšej kupujeme sezónne ovocie.",
     ua: "Влітку ми найбільше любимо купувати сезонні фрукти.",
     ru: "Летом мы больше всего любим покупать сезонные фрукты.",
-    en: "In summer, we most like to buy seasonal fruit.",
+    en: "In summer, we most enjoy buying seasonal fruit.",
     uaTokens: ["Влітку", "ми", "найбільше", "любимо", "купувати", "сезонні", "фрукти", "."],
     ruTokens: ["Летом", "мы", "больше", "всего", "любим", "покупать", "сезонные", "фрукты", "."],
-    enTokens: ["In", "summer", ",", "we", "most", "like", "to", "buy", "seasonal", "fruit", "."],
+    enTokens: ["In", "summer", ",", "we", "most", "enjoy", "buying", "seasonal", "fruit", "."],
     extraUaTokens: ["на", "ринку", "свіжі"],
     extraRuTokens: ["на", "рынке", "свежие"],
     extraEnTokens: ["at", "market", "fresh"],
@@ -228,7 +228,7 @@ export const B2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["I", "got", "this", "recipe", "from", "my", "grandmother", "."],
     extraUaTokens: ["колись", "ще", "давно"],
     extraRuTokens: ["когда-то", "ещё", "давно"],
-    extraEnTokens: ["once", "still", "long", "ago"],
+    extraEnTokens: ["still", "long", "ago"],
   },
 
   [phraseKey("pripraviť jedlo", "b2-12")]: {
@@ -241,7 +241,7 @@ export const B2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     enTokens: ["In", "the", "evening", ",", "I", "want", "to", "prepare", "food", "for", "the", "whole", "family", "."],
     extraUaTokens: ["смачну", "сьогодні", "вдома"],
     extraRuTokens: ["вкусную", "сегодня", "дома"],
-    extraEnTokens: ["tasty", "today", "at", "home"],
+    extraEnTokens: ["tasty", "today", "home"],
   },
 
   [phraseKey("podávať jedlo", "b2-12")]: {

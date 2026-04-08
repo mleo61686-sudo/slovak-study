@@ -92,11 +92,6 @@ function tr(text: LocalizedText, lang: Lang) {
   return text[lang] ?? text.ua ?? "";
 }
 
-function trPair(ua: string, ru: string | undefined, lang: Lang) {
-  if (lang === "ru") return ru ?? ua;
-  return ua;
-}
-
 export default function SlangClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
@@ -124,7 +119,11 @@ export default function SlangClient() {
         item.sk.toLowerCase().includes(query) ||
         item.ua.toLowerCase().includes(query) ||
         item.ru.toLowerCase().includes(query) ||
-        item.exampleSk.toLowerCase().includes(query);
+        item.en.toLowerCase().includes(query) ||
+        item.exampleSk.toLowerCase().includes(query) ||
+        item.exampleUa.toLowerCase().includes(query) ||
+        item.exampleRu.toLowerCase().includes(query) ||
+        item.exampleEn.toLowerCase().includes(query);
 
       const matchesLevel = level === "ALL" || item.level === level;
       const matchesCat = cat === "ALL" || item.category === cat;
@@ -242,9 +241,19 @@ function SlangCard({ item }: { item: SlangItem }) {
   const { lang } = useLanguage();
 
   const meaning =
-    lang === "ru" ? item.ru : item.ua;
+    lang === "ru" ? item.ru : lang === "en" ? item.en : item.ua;
+
   const example =
-    lang === "ru" ? item.exampleRu : item.exampleUa;
+    lang === "ru" ? item.exampleRu : lang === "en" ? item.exampleEn : item.exampleUa;
+
+  const caution =
+    item.caution
+      ? lang === "ru"
+        ? item.caution.ru
+        : lang === "en"
+          ? item.caution.en
+          : item.caution.ua
+      : null;
 
   return (
     <div className="space-y-3 rounded-2xl border bg-white p-5 shadow-sm">
@@ -291,9 +300,9 @@ function SlangCard({ item }: { item: SlangItem }) {
         </span>
       </div>
 
-      {item.caution && (
+      {caution && (
         <div className="text-sm text-amber-700">
-          ⚠ {trPair(item.caution.ua, item.caution.ru, lang)}
+          ⚠ {caution}
         </div>
       )}
     </div>
