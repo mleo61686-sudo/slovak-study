@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
-import { getDictionaryForCourse } from "@/app/learning/courses/dictionary";
-import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
 import type { CourseId } from "@/app/learning/courses/registry";
@@ -18,7 +16,7 @@ type DictionaryUi = {
   showMore: (n: number) => string;
 };
 
-type DictionaryWord = {
+export type DictionaryWord = {
   key?: string;
   term?: string;
   sk?: string;
@@ -26,6 +24,11 @@ type DictionaryWord = {
   ru?: string;
   en?: string;
   ipa?: string;
+};
+
+type Props = {
+  initialCourseId: CourseId;
+  initialDictionary: DictionaryWord[];
 };
 
 function getWordTranslation(word: DictionaryWord, lang: Lang) {
@@ -76,29 +79,29 @@ const ui: Record<Lang, DictionaryUi> = {
   },
 };
 
-export default function DictionaryClient() {
+export default function DictionaryClient({
+  initialCourseId,
+  initialDictionary,
+}: Props) {
   const { lang } = useLanguage();
-  const { courseId } = useActiveCourse();
 
   const [q, setQ] = useState("");
+  const deferredQ = useDeferredValue(q);
+
   const STEP = 80;
   const [limit, setLimit] = useState(STEP);
 
-  const dict = useMemo(
-    () => getDictionaryForCourse(courseId) as DictionaryWord[],
-    [courseId]
-  );
   const t = ui[lang] ?? ui.ua;
 
   const searchSourceLabel = useMemo(() => {
-    return t.searchIn[courseId] ?? t.searchIn.fallback;
-  }, [courseId, t]);
+    return t.searchIn[initialCourseId] ?? t.searchIn.fallback;
+  }, [initialCourseId, t]);
 
   const filtered = useMemo(() => {
-    const s = q.trim().toLowerCase();
-    if (!s) return dict;
+    const s = deferredQ.trim().toLowerCase();
+    if (!s) return initialDictionary;
 
-    return dict.filter((w) => {
+    return initialDictionary.filter((w) => {
       const term = String(w.term ?? w.sk ?? "").toLowerCase();
       const ua = String(w.ua ?? "").toLowerCase();
       const ru = String(w.ru ?? "").toLowerCase();
@@ -113,7 +116,7 @@ export default function DictionaryClient() {
         ipa.includes(s)
       );
     });
-  }, [q, dict]);
+  }, [deferredQ, initialDictionary]);
 
   const visible = useMemo(() => filtered.slice(0, limit), [filtered, limit]);
   const canLoadMore = visible.length < filtered.length;
@@ -147,7 +150,10 @@ export default function DictionaryClient() {
                   {visible[0].term ?? visible[0].sk}
                 </span>
 
-                <SpeakButton text={visible[0].term ?? visible[0].sk ?? ""} kind="word" />
+                <SpeakButton
+                  text={visible[0].term ?? visible[0].sk ?? ""}
+                  kind="word"
+                />
               </div>
 
               {visible[0].ipa && (
@@ -174,7 +180,10 @@ export default function DictionaryClient() {
                       {word.term ?? word.sk}
                     </span>
 
-                    <SpeakButton text={word.term ?? word.sk ?? ""} kind="word" />
+                    <SpeakButton
+                      text={word.term ?? word.sk ?? ""}
+                      kind="word"
+                    />
                   </div>
 
                   {word.ipa && (
@@ -196,7 +205,7 @@ export default function DictionaryClient() {
           <button
             type="button"
             onClick={() => setLimit((v) => v + STEP)}
-            className="rounded-2xl border bg-white px-5 py-3 text-sm font-medium hover:bg-slate-50"
+            className="rounded-2xl border bg-white px-5 py-3 text-sm font-medium transition-transform duration-100 hover:bg-slate-50 active:scale-95"
           >
             {t.showMore(filtered.length - visible.length)}
           </button>
