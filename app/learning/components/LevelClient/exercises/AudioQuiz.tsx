@@ -53,55 +53,63 @@ export default function AudioQuiz({
 
   return (
     <>
-      <div className="text-lg font-semibold">{title}</div>
+      <div className="space-y-3 sm:space-y-4">
+        <div className="text-lg font-semibold leading-snug">{title}</div>
 
-      <SpeakCentered
-        text={word.sk}
-        kind="word"
-        autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
-      />
-
-      <div className="grid gap-3">
-        {options.map((opt) => (
-          <button
-            key={opt}
-            disabled={answered}
-            onClick={async () => {
-              if (answered) return;
-
-              const ok = opt === word.sk;
-              setPicked(opt);
-              setStatus(ok ? "correct" : "wrong");
-
-              if (!audioUnlocked) {
-                await playLocal(word.sk, "word", courseId);
-              }
-            }}
-            className={[
-              "rounded-xl border px-4 py-3 text-left transition",
-              answered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50",
-              picked === opt ? "border-black ring-2 ring-black/10" : "",
-            ].join(" ")}
-          >
-            {opt}
-          </button>
-        ))}
+        <div className="flex justify-center">
+          <SpeakCentered
+            text={word.sk}
+            kind="word"
+            autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+          />
+        </div>
       </div>
 
-      {answered && (
-        <ResultBox
-          correct={status === "correct"}
-          onNext={() => onNext(status === "correct")}
-          lang={lang}
-          extra={
-            status === "wrong" ? (
-              <div className="text-sm text-slate-700">
-                {correctLabel} <b>{word.sk}</b>
-              </div>
-            ) : null
-          }
-        />
-      )}
+      <div className="mt-4 w-full space-y-3">
+        <div className="grid gap-3">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              disabled={answered}
+              onClick={async () => {
+                if (answered) return;
+
+                const ok = opt === word.sk;
+                setPicked(opt);
+                setStatus(ok ? "correct" : "wrong");
+
+                if (!audioUnlocked) {
+                  await playLocal(word.sk, "word", courseId);
+                }
+              }}
+              className={[
+                "rounded-2xl border px-4 py-3 text-left text-[17px] transition sm:px-5 sm:py-3.5",
+                answered ? "cursor-not-allowed opacity-60" : "hover:bg-slate-50",
+                picked === opt ? "border-black ring-2 ring-black/10" : "",
+              ].join(" ")}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+
+        {answered && (
+          <div className="mt-4">
+            <ResultBox
+              correct={status === "correct"}
+              onNext={() => onNext(status === "correct")}
+              lang={lang}
+              extra={
+                status === "wrong" ? (
+                  <div className="text-sm text-slate-700">
+                    {correctLabel} <b>{word.sk}</b>
+                  </div>
+                ) : null
+              }
+            />
+          </div>
+        )}
+      </div>
     </>
   );
 }

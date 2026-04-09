@@ -13,6 +13,19 @@ import type { Word, ExerciseDef } from "./types";
 import { trWord } from "./helpers";
 import { phraseKey } from "@/app/learning/phrases/phraseKey";
 
+const exerciseEnterStyle = `
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+`;
+
 type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
 
@@ -26,8 +39,18 @@ type IdleWindow = Window & {
 
 function ExerciseLoading() {
   return (
-    <div className="rounded-xl border bg-slate-50 p-4 text-sm text-slate-500">
-      Loading exercise…
+    <div className="rounded-2xl bg-white">
+      <div className="animate-pulse space-y-4">
+        <div className="h-6 w-56 rounded bg-slate-200" />
+        <div className="mx-auto h-[220px] w-full max-w-[320px] rounded-2xl bg-slate-200" />
+        <div className="mx-auto h-10 w-10 rounded-full bg-slate-200" />
+        <div className="space-y-3">
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -281,6 +304,7 @@ export default function LevelClient({
     lockedReason
   );
   const [isNavigating, startNavigation] = useTransition();
+  const [learnImageLoaded, setLearnImageLoaded] = useState(false);
 
   const audioUnlockedRef = useRef(false);
   const finishingRef = useRef(false);
@@ -320,6 +344,10 @@ export default function LevelClient({
   useEffect(() => {
     advancingRef.current = false;
   }, [mode, exerciseIndex, wordIndex, finished]);
+  useEffect(() => {
+    router.prefetch(nextLevelId);
+    router.prefetch(onLockedNextRedirect);
+  }, [router, nextLevelId, onLockedNextRedirect]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -337,6 +365,11 @@ export default function LevelClient({
       img.src = src;
     }
   }, [mode, words, wordIndex]);
+
+  useEffect(() => {
+    if (mode !== "learn") return;
+    setLearnImageLoaded(false);
+  }, [mode, wordIndex]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -503,6 +536,13 @@ export default function LevelClient({
       router.push(path);
     });
   }
+  function goPrevWord() {
+    setWordIndex((i) => Math.max(0, i - 1));
+  }
+
+  function goNextWord() {
+    setWordIndex((i) => Math.min(words.length - 1, i + 1));
+  }
 
   if (mode === "learn") {
     const word = words[wordIndex];
@@ -524,7 +564,7 @@ export default function LevelClient({
             <div className="hidden justify-center lg:flex">
               <button
                 disabled={isFirst}
-                onClick={() => setWordIndex((i) => Math.max(0, i - 1))}
+                onClick={goPrevWord}
                 className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {t.back}
@@ -534,13 +574,23 @@ export default function LevelClient({
             <div className="relative mx-auto w-full max-w-[760px] rounded-3xl border bg-white px-3 py-3 text-center shadow-sm sm:px-6 sm:py-6">
               {word?.img ? (
                 <div className="flex flex-col items-center gap-2">
-                  <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl bg-slate-50 px-1 py-1 sm:min-h-[420px]">
+                  <div className="relative flex min-h-[360px] w-full items-center justify-center overflow-hidden rounded-2xl bg-slate-50 px-1 py-1 sm:min-h-[420px]">
+                    {!learnImageLoaded && (
+                      <div className="absolute inset-0 animate-pulse bg-slate-200/70" />
+                    )}
+
                     <Image
                       src={word.img}
                       alt={word.sk}
                       width={1200}
                       height={900}
-                      className="max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]"
+                      onLoad={() => setLearnImageLoaded(true)}
+                      className={[
+                        "max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain transition-all duration-500 sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
+                        learnImageLoaded
+                          ? "opacity-100 blur-0 scale-100"
+                          : "opacity-0 blur-sm scale-[1.02]",
+                      ].join(" ")}
                       priority={wordIndex === 0}
                       fetchPriority={wordIndex === 0 ? "high" : "auto"}
                       sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
@@ -559,7 +609,14 @@ export default function LevelClient({
                 </div>
               )}
 
-              <div className="mt-4 flex flex-col items-center">
+              <div
+                className={[
+                  "mt-4 flex flex-col items-center transition-all duration-300",
+                  learnImageLoaded
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-1 opacity-85",
+                ].join(" ")}
+              >
                 <div className="flex items-center justify-center">
                   <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
                     {word.sk}
@@ -589,9 +646,7 @@ export default function LevelClient({
                 </button>
               ) : (
                 <button
-                  onClick={() =>
-                    setWordIndex((i) => Math.min(words.length - 1, i + 1))
-                  }
+                  onClick={goNextWord}
                   className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50"
                 >
                   {t.next}
@@ -603,7 +658,7 @@ export default function LevelClient({
           <div className="mt-2 flex items-center justify-between gap-3 lg:hidden">
             <button
               disabled={isFirst}
-              onClick={() => setWordIndex((i) => Math.max(0, i - 1))}
+              onClick={goPrevWord}
               className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t.back}
@@ -618,9 +673,7 @@ export default function LevelClient({
               </button>
             ) : (
               <button
-                onClick={() =>
-                  setWordIndex((i) => Math.min(words.length - 1, i + 1))
-                }
+                onClick={goNextWord}
                 className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
               >
                 {t.next}
@@ -635,6 +688,7 @@ export default function LevelClient({
   const exercise = EXERCISES[exerciseIndex];
   const currentWord = words[wordIndex];
   const exerciseTitle = getExerciseTitle(exercise.kind, t);
+  const exerciseScreenKey = `${exercise.kind}-${wordIndex}-${quizAutoKey}`;
 
   if (finished) {
     return (
@@ -665,13 +719,7 @@ export default function LevelClient({
           </button>
 
           <button
-            onClick={() => {
-              if (!canGoNextNow) {
-                goTo(onLockedNextRedirect);
-                return;
-              }
-              goTo(nextLevelId);
-            }}
+            onClick={() => goTo(nextLevelId)}
             className={[
               "rounded-xl px-4 py-2 text-white disabled:cursor-not-allowed",
               canGoNextNow && !savingNext && !isNavigating
@@ -714,6 +762,7 @@ export default function LevelClient({
           <>{t.lesson}</>
         )}
       </div>
+      <style>{exerciseEnterStyle}</style>
 
       <ReportErrorButton
         lang={lang}
@@ -731,72 +780,77 @@ export default function LevelClient({
         }}
       />
 
-      {exercise.kind === "chooseTranslation" && (
-        <ChooseTranslation
-          word={currentWord}
-          words={words}
-          lang={lang}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-        />
-      )}
+      <div
+        key={exerciseScreenKey}
+        className="rounded-2xl transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
+      >
+        {exercise.kind === "chooseTranslation" && (
+          <ChooseTranslation
+            word={currentWord}
+            words={words}
+            lang={lang}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+          />
+        )}
 
-      {exercise.kind === "chooseSlovak" && (
-        <ChooseSlovak
-          word={currentWord}
-          words={words}
-          lang={lang}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-        />
-      )}
+        {exercise.kind === "chooseSlovak" && (
+          <ChooseSlovak
+            word={currentWord}
+            words={words}
+            lang={lang}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+          />
+        )}
 
-      {exercise.kind === "writeWord" && (
-        <WriteWord
-          word={currentWord}
-          lang={lang}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-        />
-      )}
+        {exercise.kind === "writeWord" && (
+          <WriteWord
+            word={currentWord}
+            lang={lang}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+          />
+        )}
 
-      {exercise.kind === "audioQuiz" && (
-        <AudioQuiz
-          word={currentWord}
-          words={words}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-          lang={lang}
-        />
-      )}
+        {exercise.kind === "audioQuiz" && (
+          <AudioQuiz
+            word={currentWord}
+            words={words}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+            lang={lang}
+          />
+        )}
 
-      {exercise.kind === "matchColumns" && (
-        <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
-      )}
+        {exercise.kind === "matchColumns" && (
+          <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
+        )}
 
-      {exercise.kind === "buildSentence" && (
-        <BuildSentence
-          word={currentWord}
-          lang={lang}
-          levelId={levelId}
-          courseId={courseId}
-          onNext={nextPerWord}
-        />
-      )}
+        {exercise.kind === "buildSentence" && (
+          <BuildSentence
+            word={currentWord}
+            lang={lang}
+            levelId={levelId}
+            courseId={courseId}
+            onNext={nextPerWord}
+          />
+        )}
 
-      {exercise.kind === "buildUaSentence" && (
-        <BuildUaSentence
-          word={currentWord}
-          lang={lang}
-          levelId={levelId}
-          courseId={courseId}
-          onNext={nextPerWord}
-        />
-      )}
+        {exercise.kind === "buildUaSentence" && (
+          <BuildUaSentence
+            word={currentWord}
+            lang={lang}
+            levelId={levelId}
+            courseId={courseId}
+            onNext={nextPerWord}
+          />
+        )}
+      </div>
     </div>
   );
 }

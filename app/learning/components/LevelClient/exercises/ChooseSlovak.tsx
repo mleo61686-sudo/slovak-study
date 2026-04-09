@@ -53,17 +53,21 @@ export default function ChooseSlovak({
 
   return (
     <>
-      <div className="text-lg font-semibold">
-        {title} <span className="font-bold">{trWord(word, lang)}</span>
+      <div className="space-y-3">
+        <div className="text-lg font-semibold leading-snug">
+          {title} <span className="font-bold">{trWord(word, lang)}</span>
+        </div>
+
+        <div className="flex justify-center">
+          <SpeakCentered
+            text={word.sk}
+            kind="word"
+            autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+          />
+        </div>
       </div>
 
-      <SpeakCentered
-        text={word.sk}
-        kind="word"
-        autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
-      />
-
-      <div className="grid gap-3">
+      <div className="mt-4 grid gap-3">
         {options.map((opt) => (
           <button
             key={opt}
@@ -80,8 +84,8 @@ export default function ChooseSlovak({
               }
             }}
             className={[
-              "rounded-xl border px-4 py-3 text-left transition",
-              answered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50",
+              "rounded-2xl border px-4 py-3 text-left text-[17px] transition sm:px-5 sm:py-3.5",
+              answered ? "cursor-not-allowed opacity-60" : "hover:bg-slate-50",
               picked === opt ? "border-black ring-2 ring-black/10" : "",
             ].join(" ")}
           >
@@ -91,18 +95,20 @@ export default function ChooseSlovak({
       </div>
 
       {answered && (
-        <ResultBox
-          correct={status === "correct"}
-          onNext={() => onNext(status === "correct")}
-          lang={lang}
-          extra={
-            status === "wrong" ? (
-              <div className="text-sm text-slate-700">
-                {correctLabel} <b>{word.sk}</b>
-              </div>
-            ) : null
-          }
-        />
+        <div className="mt-4">
+          <ResultBox
+            correct={status === "correct"}
+            onNext={() => onNext(status === "correct")}
+            lang={lang}
+            extra={
+              status === "wrong" ? (
+                <div className="text-sm text-slate-700">
+                  {correctLabel} <b>{word.sk}</b>
+                </div>
+              ) : null
+            }
+          />
+        </div>
       )}
     </>
   );

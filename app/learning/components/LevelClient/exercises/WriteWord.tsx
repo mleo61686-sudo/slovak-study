@@ -104,45 +104,47 @@ export default function WriteWord({
 
   return (
     <>
-      <div className="text-lg font-semibold">
-        {t.title} <span className="font-bold">{trWord(word, lang)}</span>
+      <div className="space-y-2.5 sm:space-y-3">
+        <div className="text-lg font-semibold leading-snug">
+          {t.title} <span className="font-bold">{trWord(word, lang)}</span>
+        </div>
+
+        <div className="flex justify-start">
+          <SpeakButton
+            text={word.sk}
+            kind="word"
+            autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+          />
+        </div>
       </div>
 
-      <div className="mt-2">
-        <SpeakButton
-          text={word.sk}
-          kind="word"
-          autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
-        />
-      </div>
-
-      <div className="space-y-3 mt-3">
+      <div className="mt-3 max-w-[720px] space-y-2.5 sm:mt-4 sm:space-y-3">
         <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={status !== "idle"}
-          className={`w-full border rounded-xl px-3 py-2 ${inputClass}`}
+          className={`w-full rounded-2xl border px-4 py-2.5 text-[17px] outline-none transition sm:py-3 ${inputClass}`}
           placeholder={t.placeholder}
         />
 
-        <div className="text-sm text-slate-500">{t.hint}</div>
+        <div className="text-sm leading-snug text-slate-500">{t.hint}</div>
 
         {status === "idle" ? (
           <button
             onClick={check}
-            className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+            className="rounded-2xl bg-black px-5 py-2.5 text-white transition disabled:opacity-50 sm:px-5 sm:py-2.5"
             disabled={!value.trim()}
           >
             {t.check}
           </button>
         ) : (
-          <div className="space-y-2">
+          <div className="mt-2 space-y-3">
             {status === "correct" ? (
-              <div className="font-semibold text-green-600">
+              <div className="rounded-xl border border-green-200 bg-green-50 px-3 py-2 font-semibold text-green-700">
                 {t.correctPrefix} <b>{correctAnswer}</b>
               </div>
             ) : (
-              <div className="font-semibold text-red-600">
+              <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 font-semibold text-red-700">
                 {t.wrongPrefix} <b>{correctAnswer}</b>
               </div>
             )}
@@ -150,7 +152,7 @@ export default function WriteWord({
             <div className="flex gap-2 items-center">
               <button
                 onClick={next}
-                className="px-4 py-2 rounded-xl bg-black text-white"
+                className="rounded-2xl bg-black px-5 py-2.5 text-white transition"
               >
                 {t.next}
               </button>
