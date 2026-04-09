@@ -552,7 +552,7 @@ export const B2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     ruTokens: ["Нашим", "летним", "местом", "назначения", "был", "прибрежный", "город", "в", "Италии", "."],
     enTokens: ["Our", "summer", "destination", "was", "a", "coastal", "town", "in", "Italy", "."],
     extraUaTokens: ["цього", "року", "гарне"],
-    extraRuTokens: ["в", "этом", "году", "красивое"],
+    extraRuTokens: ["в", "году", "красивое"],
     extraEnTokens: ["this", "year", "beautiful"],
   },
 

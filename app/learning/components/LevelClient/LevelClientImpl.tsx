@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SpeakButton from "@/app/components/SpeakButton";
@@ -12,16 +13,96 @@ import type { Word, ExerciseDef } from "./types";
 import { trWord } from "./helpers";
 import { phraseKey } from "@/app/learning/phrases/phraseKey";
 
-import ChooseTranslation from "@/app/learning/components/LevelClient/exercises/ChooseTranslation";
-import ChooseSlovak from "@/app/learning/components/LevelClient/exercises/ChooseSlovak";
-import WriteWord from "@/app/learning/components/LevelClient/exercises/WriteWord";
-import AudioQuiz from "@/app/learning/components/LevelClient/exercises/AudioQuiz";
-import MatchColumns from "@/app/learning/components/LevelClient/exercises/MatchColumns";
-import BuildSentence from "@/app/learning/components/LevelClient/exercises/BuildSentence";
-import BuildUaSentence from "@/app/learning/components/LevelClient/exercises/BuildUaSentence";
-
 type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
+
+type IdleWindow = Window & {
+  requestIdleCallback?: (
+    callback: () => void,
+    options?: { timeout: number }
+  ) => number;
+  cancelIdleCallback?: (id: number) => void;
+};
+
+function ExerciseLoading() {
+  return (
+    <div className="rounded-xl border bg-slate-50 p-4 text-sm text-slate-500">
+      Loading exercise…
+    </div>
+  );
+}
+
+const ChooseTranslation = dynamic(
+  () =>
+    import(
+      "@/app/learning/components/LevelClient/exercises/ChooseTranslation"
+    ),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const ChooseSlovak = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/ChooseSlovak"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const WriteWord = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/WriteWord"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const AudioQuiz = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/AudioQuiz"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const MatchColumns = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/MatchColumns"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const BuildSentence = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/BuildSentence"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const BuildUaSentence = dynamic(
+  () =>
+    import("@/app/learning/components/LevelClient/exercises/BuildUaSentence"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+function preloadExerciseModules() {
+  return Promise.all([
+    import("@/app/learning/components/LevelClient/exercises/ChooseTranslation"),
+    import("@/app/learning/components/LevelClient/exercises/ChooseSlovak"),
+    import("@/app/learning/components/LevelClient/exercises/WriteWord"),
+    import("@/app/learning/components/LevelClient/exercises/AudioQuiz"),
+    import("@/app/learning/components/LevelClient/exercises/MatchColumns"),
+    import("@/app/learning/components/LevelClient/exercises/BuildSentence"),
+    import("@/app/learning/components/LevelClient/exercises/BuildUaSentence"),
+  ]);
+}
 
 function uiLangFrom(lang: string): UiLang {
   if (lang === "ru") return "ru";
@@ -182,37 +263,54 @@ export default function LevelClient({
   onLockedNextRedirect?: string;
   courseId?: CourseId;
 }) {
-  const [mode, setMode] = useState<"learn" | "quiz">("learn");
-
-  const [exerciseIndex, setExerciseIndex] = useState(0);
-  const [wordIndex, setWordIndex] = useState(0);
-
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
-
-  const [quizAutoKey, setQuizAutoKey] = useState(0);
-
-  const [audioUnlocked, setAudioUnlocked] = useState(false);
-  const unlockedRef = useMemo(() => ({ v: false }), []);
-
-  function unlockInsideLesson() {
-    if (unlockedRef.v) return;
-    unlockedRef.v = true;
-    setAudioUnlocked(true);
-  }
-
   const router = useRouter();
-  const nextLevelId = getNextLevelId(levelId);
   const { lang } = useLanguage();
   const t = UI[uiLangFrom(lang)];
+  const nextLevelId = getNextLevelId(levelId);
 
+  const [mode, setMode] = useState<"learn" | "quiz">("learn");
+  const [exerciseIndex, setExerciseIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [quizAutoKey, setQuizAutoKey] = useState(0);
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
   const [savingNext, setSavingNext] = useState(false);
-  const finishingRef = useRef(false);
-
   const [canGoNextNow, setCanGoNextNow] = useState<boolean>(canGoNext);
   const [lockedReasonNow, setLockedReasonNow] = useState<string | undefined>(
     lockedReason
   );
+  const [isNavigating, startNavigation] = useTransition();
+
+  const audioUnlockedRef = useRef(false);
+  const finishingRef = useRef(false);
+  const advancingRef = useRef(false);
+
+  function unlockInsideLesson() {
+    if (audioUnlockedRef.current) return;
+    audioUnlockedRef.current = true;
+    setAudioUnlocked(true);
+  }
+
+  function resetToLearn() {
+    finishingRef.current = false;
+    advancingRef.current = false;
+    setMode("learn");
+    setExerciseIndex(0);
+    setWordIndex(0);
+    setScore(0);
+    setFinished(false);
+  }
+
+  function startQuiz() {
+    advancingRef.current = false;
+    setQuizAutoKey((k) => k + 1);
+    setMode("quiz");
+    setExerciseIndex(0);
+    setWordIndex(0);
+    setScore(0);
+    setFinished(false);
+  }
 
   useEffect(() => {
     setCanGoNextNow(canGoNext);
@@ -220,9 +318,15 @@ export default function LevelClient({
   }, [canGoNext, lockedReason]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    advancingRef.current = false;
+  }, [mode, exerciseIndex, wordIndex, finished]);
 
-    const lookahead = 4;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (mode !== "learn") return;
+
+    const lookahead = 2;
+
     for (let k = 1; k <= lookahead; k++) {
       const src = words[wordIndex + k]?.img;
       if (!src) continue;
@@ -232,7 +336,31 @@ export default function LevelClient({
       img.loading = "eager";
       img.src = src;
     }
-  }, [words, wordIndex]);
+  }, [mode, words, wordIndex]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (mode !== "learn") return;
+
+    const win = window as IdleWindow;
+
+    const preload = () => {
+      void preloadExerciseModules();
+    };
+
+    if (typeof win.requestIdleCallback === "function") {
+      const idleId = win.requestIdleCallback(preload, { timeout: 1500 });
+
+      return () => {
+        if (typeof win.cancelIdleCallback === "function") {
+          win.cancelIdleCallback(idleId);
+        }
+      };
+    }
+
+    const timeoutId = window.setTimeout(preload, 900);
+    return () => window.clearTimeout(timeoutId);
+  }, [mode]);
 
   useEffect(() => {
     if (mode !== "learn") return;
@@ -272,12 +400,7 @@ export default function LevelClient({
           return;
         }
 
-        setQuizAutoKey((k) => k + 1);
-        setMode("quiz");
-        setExerciseIndex(0);
-        setWordIndex(0);
-        setScore(0);
-        setFinished(false);
+        startQuiz();
       }
     }
 
@@ -286,11 +409,100 @@ export default function LevelClient({
   }, [mode, wordIndex, words.length]);
 
   const totalQuestions = useMemo(() => {
-    return EXERCISES.reduce(
-      (sum, ex) => sum + (ex.mode === "perWord" ? words.length : words.length),
-      0
-    );
+    return EXERCISES.reduce((sum, ex) => {
+      return sum + (ex.mode === "perWord" ? words.length : words.length);
+    }, 0);
   }, [words.length]);
+
+  function finishLesson(finalScore: number) {
+    if (finishingRef.current) return;
+    finishingRef.current = true;
+
+    setFinished(true);
+
+    try {
+      finishLessonQuiz(levelId, finalScore, totalQuestions);
+    } catch (e) {
+      console.error("Save local progress error", e);
+    }
+
+    (async () => {
+      setSavingNext(true);
+      try {
+        const res = await fetch("/api/progress/lesson-done", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ levelId }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data?.ok) {
+          const dailyCount =
+            typeof data?.dailyCount === "number" ? data.dailyCount : 0;
+          const freeCanGoNext = dailyCount < 2;
+
+          if (!canGoNext && freeCanGoNext) {
+            setCanGoNextNow(true);
+            setLockedReasonNow(undefined);
+          } else {
+            setCanGoNextNow(canGoNext || freeCanGoNext);
+          }
+        }
+      } catch (e) {
+        console.error("Save server progress error", e);
+      } finally {
+        setSavingNext(false);
+      }
+    })();
+  }
+
+  function nextPerWord(correct: boolean) {
+    if (advancingRef.current || finishingRef.current) return;
+    advancingRef.current = true;
+
+    const updatedScore = score + (correct ? 1 : 0);
+    if (correct) setScore((s) => s + 1);
+
+    const lastWord = wordIndex >= words.length - 1;
+    const lastExercise = exerciseIndex >= EXERCISES.length - 1;
+
+    if (!lastWord) {
+      setWordIndex((i) => i + 1);
+      return;
+    }
+
+    if (!lastExercise) {
+      setExerciseIndex((e) => e + 1);
+      setWordIndex(0);
+      return;
+    }
+
+    finishLesson(updatedScore);
+  }
+
+  function doneWhole(correctCount: number) {
+    if (advancingRef.current || finishingRef.current) return;
+    advancingRef.current = true;
+
+    const updatedScore = score + correctCount;
+    setScore((s) => s + correctCount);
+
+    const lastExercise = exerciseIndex >= EXERCISES.length - 1;
+    if (!lastExercise) {
+      setExerciseIndex((e) => e + 1);
+      setWordIndex(0);
+      return;
+    }
+
+    finishLesson(updatedScore);
+  }
+
+  function goTo(path: string) {
+    startNavigation(() => {
+      router.push(path);
+    });
+  }
 
   if (mode === "learn") {
     const word = words[wordIndex];
@@ -370,14 +582,7 @@ export default function LevelClient({
             <div className="hidden justify-center lg:flex">
               {isLast ? (
                 <button
-                  onClick={() => {
-                    setQuizAutoKey((k) => k + 1);
-                    setMode("quiz");
-                    setExerciseIndex(0);
-                    setWordIndex(0);
-                    setScore(0);
-                    setFinished(false);
-                  }}
+                  onClick={startQuiz}
                   className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-slate-900"
                 >
                   {t.startExercises}
@@ -406,14 +611,7 @@ export default function LevelClient({
 
             {isLast ? (
               <button
-                onClick={() => {
-                  setQuizAutoKey((k) => k + 1);
-                  setMode("quiz");
-                  setExerciseIndex(0);
-                  setWordIndex(0);
-                  setScore(0);
-                  setFinished(false);
-                }}
+                onClick={startQuiz}
                 className="min-h-[44px] rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-900"
               >
                 {t.startExercises}
@@ -438,83 +636,6 @@ export default function LevelClient({
   const currentWord = words[wordIndex];
   const exerciseTitle = getExerciseTitle(exercise.kind, t);
 
-  function finishLesson(finalScore: number) {
-    if (finishingRef.current) return;
-    finishingRef.current = true;
-
-    setFinished(true);
-
-    try {
-      finishLessonQuiz(levelId, finalScore, totalQuestions);
-    } catch (e) {
-      console.error("Save local progress error", e);
-    }
-
-    (async () => {
-      setSavingNext(true);
-      try {
-        const res = await fetch("/api/progress/lesson-done", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ levelId }),
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (res.ok && data?.ok) {
-          const dailyCount =
-            typeof data?.dailyCount === "number" ? data.dailyCount : 0;
-          const freeCanGoNext = dailyCount < 2;
-
-          if (!canGoNext && freeCanGoNext) {
-            setCanGoNextNow(true);
-            setLockedReasonNow(undefined);
-          } else {
-            setCanGoNextNow(canGoNext || freeCanGoNext);
-          }
-        }
-      } catch (e) {
-        console.error("Save server progress error", e);
-      } finally {
-        setSavingNext(false);
-      }
-    })();
-  }
-
-  function nextPerWord(correct: boolean) {
-    if (correct) setScore((s) => s + 1);
-
-    const lastWord = wordIndex >= words.length - 1;
-    const lastExercise = exerciseIndex >= EXERCISES.length - 1;
-
-    if (!lastWord) {
-      setWordIndex((i) => i + 1);
-      return;
-    }
-
-    if (!lastExercise) {
-      setExerciseIndex((e) => e + 1);
-      setWordIndex(0);
-      return;
-    }
-
-    const finalScore = score + (correct ? 1 : 0);
-    finishLesson(finalScore);
-  }
-
-  function doneWhole(correctCount: number) {
-    setScore((s) => s + correctCount);
-
-    const lastExercise = exerciseIndex >= EXERCISES.length - 1;
-    if (!lastExercise) {
-      setExerciseIndex((e) => e + 1);
-      setWordIndex(0);
-      return;
-    }
-
-    finishLesson(score + correctCount);
-  }
-
   if (finished) {
     return (
       <div className="space-y-3 rounded-2xl border bg-white p-6">
@@ -536,15 +657,9 @@ export default function LevelClient({
 
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => {
-              finishingRef.current = false;
-              setMode("learn");
-              setExerciseIndex(0);
-              setWordIndex(0);
-              setScore(0);
-              setFinished(false);
-            }}
-            className="rounded-xl border px-4 py-2"
+            onClick={resetToLearn}
+            disabled={isNavigating}
+            className="rounded-xl border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {t.reviewAgain}
           </button>
@@ -552,18 +667,18 @@ export default function LevelClient({
           <button
             onClick={() => {
               if (!canGoNextNow) {
-                router.push(onLockedNextRedirect);
+                goTo(onLockedNextRedirect);
                 return;
               }
-              router.push(nextLevelId);
+              goTo(nextLevelId);
             }}
             className={[
-              "rounded-xl px-4 py-2 text-white",
-              canGoNextNow && !savingNext
+              "rounded-xl px-4 py-2 text-white disabled:cursor-not-allowed",
+              canGoNextNow && !savingNext && !isNavigating
                 ? "bg-black"
-                : "cursor-not-allowed bg-black/40",
+                : "bg-black/40",
             ].join(" ")}
-            disabled={!canGoNextNow || savingNext}
+            disabled={!canGoNextNow || savingNext || isNavigating}
             title={!canGoNextNow ? t.notAvailableFree : undefined}
           >
             {t.goNextLevel}
@@ -571,8 +686,9 @@ export default function LevelClient({
 
           {!canGoNextNow && (
             <button
-              onClick={() => router.push(onLockedNextRedirect)}
-              className="rounded-xl border px-4 py-2"
+              onClick={() => goTo(onLockedNextRedirect)}
+              disabled={isNavigating}
+              className="rounded-xl border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {t.toLessonsList}
             </button>
