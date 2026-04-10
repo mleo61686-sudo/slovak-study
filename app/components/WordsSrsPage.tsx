@@ -5,8 +5,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import type { Word } from "@/app/learning/data";
-import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
-import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import type { CourseId } from "@/app/learning/courses/registry";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
@@ -16,9 +14,9 @@ import {
 } from "@/lib/srs/srsWords";
 
 type SrsState = {
-  id: string; // word.term або word.sk
+  id: string;
   dueAt: number;
-  interval: number; // days
+  interval: number;
   ease: number;
   reps: number;
 };
@@ -30,20 +28,22 @@ type Stats = {
   due: number;
 };
 
+type Props = {
+  backHref: string;
+  initialCourseId: CourseId;
+  initialWords?: Word[];
+};
+
 const KEY_BASE = "slovakStudy.srsWords";
 const DAY = 1000 * 60 * 60 * 24;
 
-// ✅ Хочеш 30 нових слів на день
 const DAILY_NEW_LIMIT = 30;
 const DAILY_KEY_BASE = "slovakStudy.dailyNewWords";
 
-// ✅ Сеанс повторення (скільки показувати за один раз)
 const SESSION_SIZE = 30;
 
-// ✅ Forgot → повертається швидко
 const FORGOT_MINUTES = 10;
 
-// ✅ НЕ НАКОПИЧУЄМО БОРГ: максимум 30 повторень на день
 const DAILY_REVIEW_LIMIT = 30;
 const DAILY_SESSION_KEY_BASE = "slovakStudy.srsDailySession";
 
@@ -176,7 +176,7 @@ const I18N: Record<
 };
 
 function getTodayKey() {
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  return new Date().toISOString().slice(0, 10);
 }
 
 function srsKey(userId: string, courseId: CourseId) {
@@ -189,7 +189,6 @@ function dailySessionKey(userId: string, courseId: CourseId) {
   return `${DAILY_SESSION_KEY_BASE}:${userId}:${courseId}`;
 }
 
-// legacy keys (до курсів)
 function legacySrsKey(userId: string) {
   return `${KEY_BASE}:${userId}`;
 }
@@ -224,10 +223,12 @@ function setDailyState(userId: string, courseId: CourseId, count: number) {
   );
 }
 
-// ✅ “Порція повторення на день”
 type DailySession = { date: string; ids: string[] };
 
-function getDailySession(userId: string, courseId: CourseId): DailySession | null {
+function getDailySession(
+  userId: string,
+  courseId: CourseId
+): DailySession | null {
   const raw = localStorage.getItem(dailySessionKey(userId, courseId));
   if (!raw) return null;
   try {
@@ -246,7 +247,11 @@ function setDailySession(userId: string, courseId: CourseId, ids: string[]) {
   );
 }
 
-function removeFromDailySession(userId: string, courseId: CourseId, id: string) {
+function removeFromDailySession(
+  userId: string,
+  courseId: CourseId,
+  id: string
+) {
   const saved = getDailySession(userId, courseId);
   if (!saved) return;
   if (saved.date !== getTodayKey()) return;
@@ -256,7 +261,6 @@ function removeFromDailySession(userId: string, courseId: CourseId, id: string) 
 }
 
 function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
-  // ✅ міграція: тільки для sk — переносимо legacy ключі в :sk один раз
   if (courseId === "sk") {
     try {
       const newKey = srsKey(userId, courseId);
@@ -288,7 +292,7 @@ function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
           localStorage.removeItem(legacyDailySessionKey(userId));
         }
       }
-    } catch {}
+    } catch { }
   }
 
   try {
@@ -298,7 +302,11 @@ function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
   }
 }
 
-function saveDb(userId: string, courseId: CourseId, db: Record<string, SrsState>) {
+function saveDb(
+  userId: string,
+  courseId: CourseId,
+  db: Record<string, SrsState>
+) {
   localStorage.setItem(srsKey(userId, courseId), JSON.stringify(db));
   window.dispatchEvent(new CustomEvent("slovakStudy:srsChanged"));
   window.dispatchEvent(new Event("storage"));
@@ -399,19 +407,22 @@ function getDueSorted(words: Word[], db: Record<string, SrsState>): Word[] {
     .map((x) => x.w);
 }
 
-export default function WordsSrsPage({ backHref }: { backHref: string }) {
+export default function WordsSrsPage({
+  backHref,
+  initialCourseId,
+  initialWords,
+}: Props) {
   const { lang } = useLanguage();
   const t = I18N[lang] ?? I18N.ua;
 
   const { data: session, status } = useSession();
   const userId = String(session?.user?.id ?? "");
 
-  const { courseId } = useActiveCourse();
+  const courseId = initialCourseId;
+  const allWords = initialWords ?? [];
 
-  // ✅ важливо: НІЯКИХ ранніх return ДО хуків
   const needLogin = status !== "authenticated";
 
-  const allWords = useMemo(() => getSrsWordsForCourse(courseId), [courseId]);
   const [db, setDb] = useState<Record<string, SrsState>>({});
 
   const [queue, setQueue] = useState<Word[]>([]);
@@ -457,7 +468,6 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
     if (saved?.date === today) {
       ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
 
-      // ✅ якщо saved.ids вичерпались/порожні — генеруємо нову порцію з due
       if (ids.length === 0) {
         ids = dueIds.slice(0, target);
       }
@@ -605,7 +615,6 @@ export default function WordsSrsPage({ backHref }: { backHref: string }) {
   const term = current ? getTerm(current) : "";
   const ipa = current && "ipa" in current ? current.ipa : undefined;
 
-  // ✅ Login UI після хуків (правильно для React)
   if (needLogin) {
     return (
       <main className="mx-auto max-w-3xl p-4">

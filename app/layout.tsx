@@ -138,17 +138,15 @@ export default function RootLayout({
       </head>
 
       <body suppressHydrationWarning className="min-h-screen flex flex-col">
-        <CourseBootstrap />
-        <Navbar />
-
         <SessionProviderClient>
+          <CourseBootstrap />
+          <Navbar />
           <ProgressSync />
           <SrsSync />
 
           <MainShell>{children}</MainShell>
         </SessionProviderClient>
 
-        {/* 👇 НОВИЙ мультимовний footer */}
         <FooterClient />
 
         <SpeedInsights />
