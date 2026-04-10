@@ -28,7 +28,11 @@ const LANGUAGES: {
   },
 ];
 
-export default function LanguageMenu() {
+type Props = {
+  mobile?: boolean;
+};
+
+export default function LanguageMenu({ mobile = false }: Props) {
   const { lang, setLang } = useLanguage();
   const current: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
 
@@ -67,7 +71,12 @@ export default function LanguageMenu() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white hover:bg-slate-50"
+        className={[
+          "inline-flex items-center justify-center border border-slate-200 bg-white hover:bg-slate-50",
+          mobile
+            ? "h-10 w-10 rounded-xl"
+            : "h-9 w-9 rounded-full",
+        ].join(" ")}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Interface language"
@@ -85,7 +94,10 @@ export default function LanguageMenu() {
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lg"
+          className={[
+            "absolute top-full z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lg",
+            mobile ? "right-0 w-52" : "right-0 w-56",
+          ].join(" ")}
           style={{ maxWidth: "calc(100vw - 16px)" }}
           role="menu"
         >

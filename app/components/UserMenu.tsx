@@ -21,7 +21,6 @@ const T: Record<
   {
     profile: string;
     chooseLanguage: string;
-    interfaceLanguage: string;
     manageSub: string;
     manageSubHint: string;
     logout: string;
@@ -31,7 +30,6 @@ const T: Record<
   ua: {
     profile: "Профіль",
     chooseLanguage: "Обрати курс",
-    interfaceLanguage: "Мова інтерфейсу",
     manageSub: "Керувати підпискою",
     manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
@@ -40,7 +38,6 @@ const T: Record<
   ru: {
     profile: "Профиль",
     chooseLanguage: "Выбрать курс",
-    interfaceLanguage: "Язык интерфейса",
     manageSub: "Управлять подпиской",
     manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
@@ -49,43 +46,12 @@ const T: Record<
   en: {
     profile: "Profile",
     chooseLanguage: "Choose course",
-    interfaceLanguage: "Interface language",
     manageSub: "Manage subscription",
     manageSubHint: "Change plan • cancel • update card • invoices",
     logout: "Log out",
     userFallback: "User",
   },
 };
-
-const LANGUAGE_OPTIONS: {
-  code: Lang;
-  label: Record<Lang, string>;
-}[] = [
-  {
-    code: "ua",
-    label: {
-      ua: "Українська",
-      ru: "Украинский",
-      en: "Ukrainian",
-    },
-  },
-  {
-    code: "ru",
-    label: {
-      ua: "Русский",
-      ru: "Русский",
-      en: "Russian",
-    },
-  },
-  {
-    code: "en",
-    label: {
-      ua: "English",
-      ru: "English",
-      en: "English",
-    },
-  },
-];
 
 export default function UserMenu({
   name,
@@ -94,7 +60,7 @@ export default function UserMenu({
   mobile = false,
   onNavigate,
 }: Props) {
-  const { lang, setLang } = useLanguage();
+  const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
 
@@ -175,36 +141,6 @@ export default function UserMenu({
     }
   }
 
-  const mobileLanguageBlock = (
-    <div className="px-4 py-3">
-      <div className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
-        {t.interfaceLanguage}
-      </div>
-
-      <div className="flex flex-col gap-2">
-        {LANGUAGE_OPTIONS.map((item) => {
-          const isActive = lang === item.code;
-
-          return (
-            <button
-              key={item.code}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => setLang(item.code)}
-              className={`flex min-h-11 w-full items-center rounded-xl border px-3 py-2 text-left text-sm font-medium transition ${
-                isActive
-                  ? "border-black bg-black text-white"
-                  : "border-slate-300 bg-white text-slate-900 hover:bg-slate-50"
-              }`}
-            >
-              {item.label[L]}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-
   if (mobile) {
     return (
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
@@ -236,10 +172,6 @@ export default function UserMenu({
             {t.manageSubHint}
           </div>
         </button>
-
-        <div className="border-t border-slate-200" />
-
-        {mobileLanguageBlock}
 
         <div className="border-t border-slate-200" />
 

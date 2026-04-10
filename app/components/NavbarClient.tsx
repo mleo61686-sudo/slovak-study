@@ -109,10 +109,12 @@ export default function NavbarClient() {
         </div>
       </div>
 
-      <div className="relative sm:hidden" ref={menuRef}>
+      <div className="sm:hidden flex items-center gap-2" ref={menuRef}>
+        <LanguageMenu mobile />
+
         <button
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-lg hover:bg-slate-100"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-lg hover:bg-slate-100"
           aria-label="Menu"
           type="button"
         >
