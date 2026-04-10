@@ -175,7 +175,7 @@ export default function UserMenu({
     }
   }
 
-  const languageBlock = (
+  const mobileLanguageBlock = (
     <div className="px-4 py-3">
       <div className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
         {t.interfaceLanguage}
@@ -239,7 +239,7 @@ export default function UserMenu({
 
         <div className="border-t border-slate-200" />
 
-        {languageBlock}
+        {mobileLanguageBlock}
 
         <div className="border-t border-slate-200" />
 
@@ -297,10 +297,6 @@ export default function UserMenu({
             <div className="font-medium">{t.manageSub}</div>
             <div className="text-xs text-slate-500">{t.manageSubHint}</div>
           </button>
-
-          <div className="border-t" />
-
-          {languageBlock}
 
           <div className="border-t" />
 

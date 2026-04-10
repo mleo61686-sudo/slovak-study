@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import HomeClient from "./HomeClient";
+import { cookies } from "next/headers";
+import HomeContent from "./HomeContent";
 import { SITE_URL } from "@/lib/site";
 import { UPDATES } from "@/app/updates/updates";
+import {
+  DEFAULT_LANG,
+  LANG_STORAGE_KEY,
+  normalizeLang,
+  type Lang,
+} from "@/lib/src/language";
 
 export const metadata: Metadata = {
   title: "Flunio — вивчення мов онлайн (A0–B2)",
@@ -40,11 +47,27 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function HomePage() {
+const COURSE_COOKIE_KEY = "slovakStudyActiveCourse";
+
+export default async function HomePage() {
+  const cookieStore = await cookies();
+
   const latestDate = UPDATES[0]?.date;
   const latestBadge = latestDate
     ? latestDate.slice(5).replace("-", ".").split(".").reverse().join(".")
     : null;
 
-  return <HomeClient latestBadge={latestBadge} />;
+  const langCookie = cookieStore.get(LANG_STORAGE_KEY)?.value;
+  const lang: Lang = langCookie ? normalizeLang(langCookie) : DEFAULT_LANG;
+
+  const rawCourseId = cookieStore.get(COURSE_COOKIE_KEY)?.value;
+  const courseId = rawCourseId ?? "sk";
+
+  return (
+    <HomeContent
+      latestBadge={latestBadge}
+      lang={lang}
+      courseId={courseId}
+    />
+  );
 }

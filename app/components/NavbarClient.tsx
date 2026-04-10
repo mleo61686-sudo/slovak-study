@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import UserMenu from "@/app/components/UserMenu";
 import PremiumButton from "@/app/components/PremiumButton";
 import NavLabel, { type NavKey } from "@/app/components/NavLabel";
+import LanguageMenu from "@/app/components/LanguageMenu";
 
 type NavItem = { href: string; key: NavKey };
 
@@ -72,7 +73,7 @@ export default function NavbarClient() {
           {isAdmin && (
             <Link
               href="/admin/reports"
-              className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-900 border border-slate-300 hover:bg-slate-100"
+              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
               title="Bug reports"
             >
               🛠️ <NavLabel k="reports" />
@@ -84,25 +85,31 @@ export default function NavbarClient() {
           {isLoggedIn && <PremiumButton />}
 
           {isLoggedIn ? (
-            <UserMenu
-              name={session.user?.name ?? null}
-              email={session.user?.email ?? null}
-              isPremium={!!session.user?.isPremium}
-            />
+            <>
+              <UserMenu
+                name={session.user?.name ?? null}
+                email={session.user?.email ?? null}
+                isPremium={!!session.user?.isPremium}
+              />
+              <LanguageMenu />
+            </>
           ) : (
-            <Link
-              href="/login"
-              className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-            >
-              <span className="inline-block min-w-[60px] text-center whitespace-nowrap">
-                <NavLabel k="login" />
-              </span>
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+              >
+                <span className="inline-block min-w-[60px] text-center whitespace-nowrap">
+                  <NavLabel k="login" />
+                </span>
+              </Link>
+              <LanguageMenu />
+            </>
           )}
         </div>
       </div>
 
-      <div className="sm:hidden relative" ref={menuRef}>
+      <div className="relative sm:hidden" ref={menuRef}>
         <button
           onClick={() => setOpen((v) => !v)}
           className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-lg hover:bg-slate-100"
