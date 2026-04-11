@@ -6,7 +6,7 @@ import { useLanguage } from "@/lib/src/useLanguage";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 type Lang = "ua" | "ru" | "en";
-type SeoCourseId = "sk" | "cs";
+type SeoCourseId = "sk" | "cs" | "pl";
 
 type PopularCard = {
   href: string;
@@ -63,24 +63,24 @@ const WordsStats = dynamic(() => import("./components/WordsStats"), {
 
 const t: Record<Lang, HomeTranslations> = {
   ua: {
-    h1: "Вивчай словацьку та чеську з нуля до B2 — для роботи, життя та переїзду",
+    h1: "Вивчай словацьку, чеську та польську з нуля до B2 — для роботи, життя та переїзду",
     heroP:
-      "Flunio — це онлайн платформа для вивчення словацької та чеської мов: уроки A0–B2, словник, граматика та вправи. Почни безкоштовно і займайся всього 10 хвилин на день.",
+      "Flunio — це онлайн платформа для вивчення словацької, чеської та польської мов: уроки A0–B2, словник, граматика та вправи. Почни безкоштовно і займайся всього 10 хвилин на день.",
     ctaLearning: "Перейти до навчання 🚀",
     ctaDict: "Відкрити словник",
     ctaGrammar: "Перейти до граматики",
 
     free: [
-      "Словацький і чеський курси вже доступні",
+      "Словацький, чеський і польський курси вже доступні",
       "Рівні A0–A2 безкоштовно",
       "2 нові уроки щодня без оплати",
     ],
 
-    seoH2: "Онлайн курс словацької та чеської мов",
+    seoH2: "Онлайн курс словацької, чеської та польської мов",
     seoP1:
-      "Flunio — це онлайн платформа для вивчення словацької та чеської мов з нуля. Тут ви знайдете граматику з прикладами, тематичний словник, вправи для тренування та системне навчання по рівнях A0–B2.",
+      "Flunio — це онлайн платформа для вивчення словацької, чеської та польської мов з нуля. Тут ви знайдете граматику з прикладами, тематичний словник, вправи для тренування та системне навчання по рівнях A0–B2.",
     seoP2:
-      "Сайт підходить для людей, які планують працювати, навчатися або жити в Європі. Вивчайте словацьку та чеську онлайн у зручному форматі, з короткими уроками, поступовим ускладненням матеріалу та практикою для реального життя.",
+      "Сайт підходить для людей, які планують працювати, навчатися або жити в Європі. Вивчайте словацьку, чеську та польську онлайн у зручному форматі, з короткими уроками, поступовим ускладненням матеріалу та практикою для реального життя.",
 
     premiumTitle: "Premium — навчання без обмежень 🚀",
     premiumSubtitle:
@@ -89,6 +89,7 @@ const t: Record<Lang, HomeTranslations> = {
       "🔓 Усі рівні та уроки відкриті одразу (A0–B2)",
       "🇸🇰 Повний доступ до словацького курсу",
       "🇨🇿 Повний доступ до чеського курсу",
+      "🇵🇱 Повний доступ до польського курсу",
       "🚫 Без денного ліміту на нові уроки",
       "🏋️ Повний доступ до тренажера",
       "🔁 Повторення тільки помилок",
@@ -112,11 +113,13 @@ const t: Record<Lang, HomeTranslations> = {
     popularTitleByCourse: {
       sk: "Популярні сторінки для старту",
       cs: "Популярні сторінки для старту",
+      pl: "Популярні сторінки для старту",
     },
 
     popularDescByCourse: {
       sk: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по словацькій.",
       cs: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по чеській.",
+      pl: "Якщо хочеш швидко почати або знайти корисні матеріали, ось найважливіші сторінки по польській.",
     },
 
     popularCardsByCourse: {
@@ -144,34 +147,46 @@ const t: Record<Lang, HomeTranslations> = {
           desc: "Англомовна сторінка про платформу та вивчення чеської онлайн.",
         },
       ],
+      pl: [
+        {
+          href: "/vyvchennia-polskoi-movy-online",
+          title: "Вивчення польської онлайн",
+          desc: "Огляд онлайн-курсу польської: рівні, вправи, словник, граматика та озвучка.",
+        },
+        {
+          href: "/learn-polish",
+          title: "Learn Polish",
+          desc: "Англомовна сторінка про платформу та вивчення польської онлайн.",
+        },
+      ],
     },
 
     strip: [
-      { k: "2 мови", v: "Словацька та чеська" },
+      { k: "3 мови", v: "Словацька, чеська та польська" },
       { k: "A0–B2", v: "Навчання по рівнях" },
       { k: "10 хв/день", v: "Короткі уроки" },
     ],
   },
 
   ru: {
-    h1: "Изучай словацкий и чешский с нуля до B2 — для работы, жизни и переезда",
+    h1: "Изучай словацкий, чешский и польский с нуля до B2 — для работы, жизни и переезда",
     heroP:
-      "Flunio — это онлайн платформа для изучения словацкого и чешского языков: уроки A0–B2, словарь, грамматика и упражнения. Начни бесплатно и занимайся всего 10 минут в день.",
+      "Flunio — это онлайн платформа для изучения словацкого, чешского и польского языков: уроки A0–B2, словарь, грамматика и упражнения. Начни бесплатно и занимайся всего 10 минут в день.",
     ctaLearning: "Перейти к обучению 🚀",
     ctaDict: "Открыть словарь",
     ctaGrammar: "Перейти к грамматике",
 
     free: [
-      "Словацкий и чешский курсы уже доступны",
+      "Словацкий, чешский и польский курсы уже доступны",
       "Уровни A0–A2 бесплатно",
       "2 новых урока ежедневно без оплаты",
     ],
 
-    seoH2: "Онлайн курс словацкого и чешского языков",
+    seoH2: "Онлайн курс словацкого, чешского и польского языков",
     seoP1:
-      "Flunio — это онлайн платформа для изучения словацкого и чешского языков с нуля. Здесь вы найдёте грамматику с примерами, тематический словарь, упражнения для тренировки и системное обучение по уровням A0–B2.",
+      "Flunio — это онлайн платформа для изучения словацкого, чешского и польского языков с нуля. Здесь вы найдёте грамматику с примерами, тематический словарь, упражнения для тренировки и системное обучение по уровням A0–B2.",
     seoP2:
-      "Сайт подходит для людей, которые планируют работать, учиться или жить в Европе. Изучайте словацкий и чешский онлайн в удобном формате: короткие уроки, постепенное усложнение материала и практика для реальной жизни.",
+      "Сайт подходит для людей, которые планируют работать, учиться или жить в Европе. Изучайте словацкий, чешский и польский онлайн в удобном формате: короткие уроки, постепенное усложнение материала и практика для реальной жизни.",
 
     premiumTitle: "Premium — обучение без ограничений 🚀",
     premiumSubtitle:
@@ -180,6 +195,7 @@ const t: Record<Lang, HomeTranslations> = {
       "🔓 Все уровни и уроки открыты сразу (A0–B2)",
       "🇸🇰 Полный доступ к словацкому курсу",
       "🇨🇿 Полный доступ к чешскому курсу",
+      "🇵🇱 Полный доступ к польскому курсу",
       "🚫 Без дневного лимита на новые уроки",
       "🏋️ Полный доступ к тренажёру",
       "🔁 Повторять только ошибки",
@@ -204,11 +220,13 @@ const t: Record<Lang, HomeTranslations> = {
     popularTitleByCourse: {
       sk: "Популярные страницы для старта",
       cs: "Популярные страницы для старта",
+      pl: "Популярные страницы для старта",
     },
 
     popularDescByCourse: {
       sk: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по словацкому.",
       cs: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по чешскому.",
+      pl: "Если хочешь быстро начать или найти полезные материалы, вот самые важные страницы по польскому.",
     },
 
     popularCardsByCourse: {
@@ -236,34 +254,46 @@ const t: Record<Lang, HomeTranslations> = {
           desc: "Англоязычная страница о платформе и изучении чешского онлайн.",
         },
       ],
+      pl: [
+        {
+          href: "/ru/vyvchennia-polskoi-movy-online",
+          title: "Изучение польского онлайн",
+          desc: "Обзор онлайн-курса польского: уровни, упражнения, словарь, грамматика и озвучка.",
+        },
+        {
+          href: "/learn-polish",
+          title: "Learn Polish",
+          desc: "Англоязычная страница о платформе и изучении польского онлайн.",
+        },
+      ],
     },
 
     strip: [
-      { k: "2 языка", v: "Словацкий и чешский" },
+      { k: "3 языка", v: "Словацкий, чешский и польский" },
       { k: "A0–B2", v: "Обучение по уровням" },
       { k: "10 мин/день", v: "Короткие уроки" },
     ],
   },
 
   en: {
-    h1: "Learn Slovak and Czech from zero to B2 — for work, life, and relocation",
+    h1: "Learn Slovak, Czech, and Polish from zero to B2 — for work, life, and relocation",
     heroP:
-      "Flunio is an online platform for learning Slovak and Czech: A0–B2 lessons, dictionary, grammar, and exercises. Start for free and study in just 10 minutes a day.",
+      "Flunio is an online platform for learning Slovak, Czech, and Polish: A0–B2 lessons, dictionary, grammar, and exercises. Start for free and study in just 10 minutes a day.",
     ctaLearning: "Go to learning 🚀",
     ctaDict: "Open dictionary",
     ctaGrammar: "Go to grammar",
 
     free: [
-      "Slovak and Czech courses are already available",
+      "Slovak, Czech, and Polish courses are already available",
       "A0–A2 levels are free",
       "2 new lessons daily without payment",
     ],
 
-    seoH2: "Online Slovak and Czech course",
+    seoH2: "Online Slovak, Czech, and Polish course",
     seoP1:
-      "Flunio is an online platform for learning Slovak and Czech from scratch. Here you will find grammar with examples, a thematic dictionary, practice exercises, and structured learning across A0–B2 levels.",
+      "Flunio is an online platform for learning Slovak, Czech, and Polish from scratch. Here you will find grammar with examples, a thematic dictionary, practice exercises, and structured learning across A0–B2 levels.",
     seoP2:
-      "The website is suitable for people who plan to work, study, or live in Europe. Learn Slovak and Czech online in a convenient format with short lessons, gradual progression, and practice for real life.",
+      "The website is suitable for people who plan to work, study, or live in Europe. Learn Slovak, Czech, and Polish online in a convenient format with short lessons, gradual progression, and practice for real life.",
 
     premiumTitle: "Premium — learning without limits 🚀",
     premiumSubtitle:
@@ -272,6 +302,7 @@ const t: Record<Lang, HomeTranslations> = {
       "🔓 All levels and lessons unlocked instantly (A0–B2)",
       "🇸🇰 Full access to the Slovak course",
       "🇨🇿 Full access to the Czech course",
+      "🇵🇱 Full access to the Polish course",
       "🚫 No daily limit on new lessons",
       "🏋️ Full access to the trainer",
       "🔁 Review only mistakes",
@@ -295,11 +326,13 @@ const t: Record<Lang, HomeTranslations> = {
     popularTitleByCourse: {
       sk: "Popular pages to start with",
       cs: "Popular pages to start with",
+      pl: "Popular pages to start with",
     },
 
     popularDescByCourse: {
       sk: "If you want to start quickly or find useful materials, here are the most important Slovak pages.",
       cs: "If you want to start quickly or find useful materials, here are the most important Czech pages.",
+      pl: "If you want to start quickly or find useful materials, here are the most important Polish pages.",
     },
 
     popularCardsByCourse: {
@@ -327,10 +360,22 @@ const t: Record<Lang, HomeTranslations> = {
           desc: "Overview of the Czech learning platform, lessons, dictionary, grammar, and practice tools.",
         },
       ],
+      pl: [
+        {
+          href: "/learn-polish",
+          title: "Learn Polish",
+          desc: "An English overview of the Polish online course: levels, exercises, dictionary, grammar, and audio.",
+        },
+        {
+          href: "/vyvchennia-polskoi-movy-online",
+          title: "Learn Polish Online",
+          desc: "Overview of the Polish learning platform, lessons, dictionary, grammar, and practice tools.",
+        },
+      ],
     },
 
     strip: [
-      { k: "2 languages", v: "Slovak and Czech" },
+      { k: "3 languages", v: "Slovak, Czech, and Polish" },
       { k: "A0–B2", v: "Level-based learning" },
       { k: "10 min/day", v: "Short lessons" },
     ],
@@ -380,8 +425,10 @@ export default function HomeClient({
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const tr = t[L];
 
-  const showSeoBlock = courseId === "sk" || courseId === "cs";
-  const seoCourseId: SeoCourseId = courseId === "cs" ? "cs" : "sk";
+  const showSeoBlock =
+    courseId === "sk" || courseId === "cs" || courseId === "pl";
+  const seoCourseId: SeoCourseId =
+    courseId === "cs" ? "cs" : courseId === "pl" ? "pl" : "sk";
 
   return (
     <div className="space-y-8">

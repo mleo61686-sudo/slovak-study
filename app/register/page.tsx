@@ -176,7 +176,16 @@ export default function RegisterPage() {
   const [showPw2, setShowPw2] = useState(false);
 
   useEffect(() => {
-    setSelectedCourse(getStoredCourseId());
+    const stored = getStoredCourseId();
+    const storedCourse = COURSE_REGISTRY[stored];
+
+    if (storedCourse?.status === "live") {
+      setSelectedCourse(stored);
+      return;
+    }
+
+    setSelectedCourse("sk");
+    setStoredCourseId("sk");
   }, []);
 
   const emailOk = useMemo(() => {
@@ -196,6 +205,9 @@ export default function RegisterPage() {
   }, [errorCode, L]);
 
   function onSelectCourse(courseId: CourseId) {
+    const course = COURSE_REGISTRY[courseId];
+    if (!course || course.status !== "live") return;
+
     setSelectedCourse(courseId);
     setStoredCourseId(courseId);
   }
@@ -221,7 +233,11 @@ export default function RegisterPage() {
       return;
     }
 
-    setStoredCourseId(selectedCourse);
+    const selectedCourseConfig = COURSE_REGISTRY[selectedCourse];
+    const safeCourse: CourseId =
+      selectedCourseConfig?.status === "live" ? selectedCourse : "sk";
+
+    setStoredCourseId(safeCourse);
     setLoading(true);
 
     const res = await fetch("/api/register", {
@@ -284,10 +300,14 @@ export default function RegisterPage() {
                   key={courseId}
                   type="button"
                   onClick={() => onSelectCourse(courseId)}
+                  disabled={!isLive}
+                  aria-disabled={!isLive}
                   className={`group relative rounded-2xl border p-4 text-left transition-all duration-200 ${
-                    isActive
-                      ? "border-slate-900 bg-slate-50 shadow-sm ring-2 ring-slate-200"
-                      : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm"
+                    !isLive
+                      ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-70"
+                      : isActive
+                        ? "border-slate-900 bg-slate-50 shadow-sm ring-2 ring-slate-200"
+                        : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -300,7 +320,7 @@ export default function RegisterPage() {
                         </span>
                       )}
 
-                      {isActive && (
+                      {isActive && isLive && (
                         <span className="rounded-full bg-slate-900 px-2 py-1 text-[11px] font-medium text-white">
                           {t.selected}
                         </span>

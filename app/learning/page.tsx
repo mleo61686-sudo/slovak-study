@@ -10,7 +10,7 @@ import CourseGate from "@/app/components/CourseGate";
 export const metadata: Metadata = {
   title: "Вивчення мов по рівнях A0–B2 | Flunio",
   description:
-    "Навчання мов онлайн: рівні A0–B2, уроки по 10 слів, вправи та прогрес. Вивчай словацьку та чеську системно.",
+    "Навчання мов онлайн: рівні A0–B2, уроки по 10 слів, вправи та прогрес. Вивчай словацьку, чеську та польську системно.",
 
   alternates: {
     canonical: `${SITE_URL}/learning`,
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Навчання по рівнях A0–B2 | Flunio",
     description:
-      "Уроки по рівнях A0–B2, вправи та прогрес. Вивчай словацьку та чеську системно.",
+      "Уроки по рівнях A0–B2, вправи та прогрес. Вивчай словацьку, чеську та польську системно.",
     url: `${SITE_URL}/learning`,
     siteName: "Flunio",
     type: "website",

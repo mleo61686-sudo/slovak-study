@@ -2,6 +2,7 @@ import type { Lesson } from "../data";
 import type { CefrBandId } from "./sk-lessons-by-band";
 import { SK_LESSONS_BY_BAND } from "./sk-lessons-by-band";
 import { LESSONS_BY_BAND_CS } from "./cs";
+import { PL_LESSONS_BY_BAND } from "./pl-lessons-by-band";
 
 /**
  * 1) Реєстр курсів (для UI перемикача, SEO, гейтів тощо)
@@ -9,7 +10,7 @@ import { LESSONS_BY_BAND_CS } from "./cs";
 export const COURSE_REGISTRY = {
   sk: { id: "sk", title: "Slovak", emoji: "🇸🇰", status: "live" as const },
   cs: { id: "cs", title: "Czech", emoji: "🇨🇿", status: "live" as const },
-  pl: { id: "pl", title: "Polish", emoji: "🇵🇱", status: "soon" as const },
+  pl: { id: "pl", title: "Polish", emoji: "🇵🇱", status: "live" as const },
 } as const;
 
 export type CourseId = keyof typeof COURSE_REGISTRY; // "sk" | "cs" | "pl"
@@ -28,8 +29,8 @@ function withFallback(primary: LessonsByBand, fallback: LessonsByBand): LessonsB
     const p = primary[band] ?? [];
     const f = fallback[band] ?? [];
 
-    // якщо є чеські уроки — ставимо їх першими,
-    // а словацькі додаємо як "банк", щоб SRS/Practice не ламались
+    // якщо є уроки primary — ставимо їх першими,
+    // а fallback додаємо як банк, щоб SRS/Practice не ламались
     out[band] = p.length > 0 ? [...p, ...f] : f;
   });
 
@@ -37,7 +38,7 @@ function withFallback(primary: LessonsByBand, fallback: LessonsByBand): LessonsB
 }
 
 export function getLessonsByBand(courseId: CourseId): LessonsByBand {
-  if (courseId === "cs") return LESSONS_BY_BAND_CS as any;
-  if (courseId === "pl") return SK_LESSONS_BY_BAND; // тимчасово
+  if (courseId === "cs") return LESSONS_BY_BAND_CS as LessonsByBand;
+  if (courseId === "pl") return PL_LESSONS_BY_BAND as LessonsByBand;
   return SK_LESSONS_BY_BAND;
 }

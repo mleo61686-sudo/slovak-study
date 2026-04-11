@@ -1,6 +1,6 @@
 "use client";
 
-import { COURSES } from "@/lib/course";
+import { COURSE_REGISTRY } from "@/app/learning/courses/registry";
 import {
   setStoredCourseId,
   type CourseId,
@@ -14,16 +14,46 @@ const dict = {
     title: "Обери мову",
     subtitle: "Вибери, що хочеш вивчати. Це можна змінити будь-коли.",
     comingSoon: "Скоро",
+    descriptions: {
+      sk: "Словацька мова для життя, роботи та переїзду.",
+      cs: "Чеська мова для життя, роботи та навчання.",
+      pl: "Польська мова для життя, роботи та навчання.",
+    },
+    subtitles: {
+      sk: "Slovenčina",
+      cs: "Čeština",
+      pl: "Polski",
+    },
   },
   ru: {
     title: "Выбери язык",
     subtitle: "Выбери, что хочешь изучать. Это можно изменить в любой момент.",
     comingSoon: "Скоро",
+    descriptions: {
+      sk: "Словацкий язык для жизни, работы и переезда.",
+      cs: "Чешский язык для жизни, работы и учёбы.",
+      pl: "Польский язык для жизни, работы и учёбы.",
+    },
+    subtitles: {
+      sk: "Slovenčina",
+      cs: "Čeština",
+      pl: "Polski",
+    },
   },
   en: {
     title: "Choose a language",
     subtitle: "Choose what you want to learn. You can change it anytime.",
     comingSoon: "Coming soon",
+    descriptions: {
+      sk: "Slovak for life, work, and relocation.",
+      cs: "Czech for life, work, and study.",
+      pl: "Polish for life, work, and study.",
+    },
+    subtitles: {
+      sk: "Slovenčina",
+      cs: "Čeština",
+      pl: "Polski",
+    },
   },
 } satisfies Record<
   Lang,
@@ -31,18 +61,22 @@ const dict = {
     title: string;
     subtitle: string;
     comingSoon: string;
+    descriptions: Record<CourseId, string>;
+    subtitles: Record<CourseId, string>;
   }
 >;
+
+const COURSE_ORDER = ["sk", "cs", "pl"] as const satisfies readonly CourseId[];
 
 export default function LearnPage() {
   const { lang } = useLanguage();
   const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = dict[safeLang];
 
-  function chooseCourse(id: string, enabled: boolean) {
-    if (!enabled) return;
+  function chooseCourse(id: CourseId, isLive: boolean) {
+    if (!isLive) return;
 
-    setStoredCourseId(id as CourseId);
+    setStoredCourseId(id);
     window.location.href = "/learning";
   }
 
@@ -56,33 +90,43 @@ export default function LearnPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {COURSES.map((c) => (
-          <button
-            key={c.id}
-            onClick={() => chooseCourse(c.id, c.enabled)}
-            className="rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-[2px] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={!c.enabled}
-            type="button"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="text-xl font-semibold text-slate-900">
-                  {c.title}
-                </div>
-                <div className="mt-1 text-sm text-slate-500">{c.subtitle}</div>
-                <div className="mt-3 text-sm text-slate-600">
-                  {c.description[safeLang] ?? c.description.ua}
-                </div>
-              </div>
+        {COURSE_ORDER.map((id) => {
+          const c = COURSE_REGISTRY[id];
+          const isLive = c.status === "live";
 
-              {c.status === "comingSoon" && (
-                <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
-                  {t.comingSoon}
-                </span>
-              )}
-            </div>
-          </button>
-        ))}
+          return (
+            <button
+              key={c.id}
+              onClick={() => chooseCourse(c.id, isLive)}
+              className="rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-[2px] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={!isLive}
+              type="button"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2 text-xl font-semibold text-slate-900">
+                    <span>{c.emoji}</span>
+                    <span>{c.title}</span>
+                  </div>
+
+                  <div className="mt-1 text-sm text-slate-500">
+                    {t.subtitles[c.id]}
+                  </div>
+
+                  <div className="mt-3 text-sm text-slate-600">
+                    {t.descriptions[c.id]}
+                  </div>
+                </div>
+
+                {!isLive && (
+                  <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                    {t.comingSoon}
+                  </span>
+                )}
+              </div>
+            </button>
+          );
+        })}
       </div>
     </main>
   );

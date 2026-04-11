@@ -2,7 +2,7 @@
  * CourseGate – компонент-фільтр для multi-course системи Flunio.
  *
  * Що робить:
- * Перевіряє чи активний курс (enabled). Якщо курс ще не доступний —
+ * Перевіряє чи активний курс (live). Якщо курс ще не доступний —
  * показує повідомлення “скоро” і пропонує перейти на /learn.
  *
  * Використовується:
@@ -10,8 +10,8 @@
  * який ще не реалізований.
  *
  * Пов’язані файли:
- * - hooks/useActiveCourse.ts
- * - lib/course.ts (COURSES registry)
+ * - app/learning/courses/useActiveCourse.ts
+ * - app/learning/courses/registry.ts
  * - CourseBootstrap
  * - сторінка /learn
  */
@@ -19,9 +19,8 @@
 "use client";
 
 import Link from "next/link";
-import { useActiveCourse } from "@/hooks/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { COURSES } from "@/lib/course";
+import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 
 type Lang = "ua" | "ru" | "en";
 
@@ -62,13 +61,13 @@ export default function CourseGate({
 }: {
   children: React.ReactNode;
 }) {
-  const { course, ready } = useActiveCourse();
+  const { course, courseId } = useActiveCourse();
   const { lang } = useLanguage();
 
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = I18N[L];
 
-  if (!ready) {
+  if (!course) {
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10">
         <div className="min-h-[220px] rounded-2xl border bg-white p-6" />
@@ -76,10 +75,10 @@ export default function CourseGate({
     );
   }
 
-  const def = COURSES.find((c) => c.id === course);
+  const isLive = course.status === "live";
 
-  if (!def || !def.enabled) {
-    const name = def?.title ?? t.fallbackCourse;
+  if (!isLive) {
+    const name = course.title ?? t.fallbackCourse;
 
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10">
