@@ -21,7 +21,6 @@ const T: Record<
   {
     profile: string;
     chooseLanguage: string;
-    interfaceLanguage: string;
     manageSub: string;
     manageSubHint: string;
     logout: string;
@@ -31,7 +30,6 @@ const T: Record<
   ua: {
     profile: "Профіль",
     chooseLanguage: "Обрати курс",
-    interfaceLanguage: "Мова інтерфейсу",
     manageSub: "Керувати підпискою",
     manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
@@ -40,7 +38,6 @@ const T: Record<
   ru: {
     profile: "Профиль",
     chooseLanguage: "Выбрать курс",
-    interfaceLanguage: "Язык интерфейса",
     manageSub: "Управлять подпиской",
     manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
@@ -49,7 +46,6 @@ const T: Record<
   en: {
     profile: "Profile",
     chooseLanguage: "Choose course",
-    interfaceLanguage: "Interface language",
     manageSub: "Manage subscription",
     manageSubHint: "Change plan • cancel • update card • invoices",
     logout: "Log out",
@@ -64,7 +60,7 @@ export default function UserMenu({
   mobile = false,
   onNavigate,
 }: Props) {
-  const { lang, setLang } = useLanguage();
+  const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
 
@@ -145,55 +141,6 @@ export default function UserMenu({
     }
   }
 
-  const languageBlock = (
-    <div className="px-4 py-3">
-      <div className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">
-        {t.interfaceLanguage}
-      </div>
-
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          aria-pressed={lang === "ua"}
-          onClick={() => setLang("ua")}
-          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
-            lang === "ua"
-              ? "bg-black text-white"
-              : "bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          UA
-        </button>
-
-        <button
-          type="button"
-          aria-pressed={lang === "ru"}
-          onClick={() => setLang("ru")}
-          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
-            lang === "ru"
-              ? "bg-black text-white"
-              : "bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          RU
-        </button>
-
-        <button
-          type="button"
-          aria-pressed={lang === "en"}
-          onClick={() => setLang("en")}
-          className={`h-9 w-12 rounded-lg border text-sm font-semibold transition ${
-            lang === "en"
-              ? "bg-black text-white"
-              : "bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          EN
-        </button>
-      </div>
-    </div>
-  );
-
   if (mobile) {
     return (
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
@@ -228,10 +175,6 @@ export default function UserMenu({
 
         <div className="border-t border-slate-200" />
 
-        {languageBlock}
-
-        <div className="border-t border-slate-200" />
-
         <button
           onClick={() => {
             onNavigate?.();
@@ -259,7 +202,7 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-xl border bg-white shadow-lg"
+          className="absolute right-0 top-full mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="px-4 py-3 text-sm">
@@ -286,10 +229,6 @@ export default function UserMenu({
             <div className="font-medium">{t.manageSub}</div>
             <div className="text-xs text-slate-500">{t.manageSubHint}</div>
           </button>
-
-          <div className="border-t" />
-
-          {languageBlock}
 
           <div className="border-t" />
 

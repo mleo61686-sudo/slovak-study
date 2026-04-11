@@ -36,10 +36,12 @@ export default function ChooseTranslation({
 
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
+    setImageLoaded(false);
   }, [word.sk]);
 
   const answered = status !== "idle";
@@ -60,20 +62,41 @@ export default function ChooseTranslation({
 
   return (
     <>
-      <div className="text-lg font-semibold">
+      <div
+        className={[
+          "text-lg font-semibold transition-all duration-300",
+          word.img
+            ? imageLoaded
+              ? "opacity-100 translate-y-0"
+              : "opacity-90 translate-y-1"
+            : "opacity-100 translate-y-0",
+        ].join(" ")}
+      >
         {chooseLabel} <span className="font-bold">{word.sk}</span>
       </div>
 
       {word.img ? (
         <div className="mt-2 flex flex-col items-center gap-2">
           <div className="mx-auto w-full max-w-[320px]">
-            <Image
-              src={word.img}
-              alt={word.sk}
-              width={1200}
-              height={900}
-              className="w-full h-auto rounded-2xl bg-white"
-            />
+            <div className="relative min-h-[180px] overflow-hidden rounded-2xl bg-slate-100">
+              {!imageLoaded && (
+                <div className="absolute inset-0 animate-pulse bg-slate-200/70" />
+              )}
+
+              <Image
+                src={word.img}
+                alt={word.sk}
+                width={1200}
+                height={900}
+                onLoad={() => setImageLoaded(true)}
+                className={[
+                  "h-auto w-full rounded-2xl bg-white transition-all duration-500",
+                  imageLoaded
+                    ? "opacity-100 blur-0 scale-100"
+                    : "opacity-0 blur-sm scale-[1.02]",
+                ].join(" ")}
+              />
+            </div>
           </div>
 
           {word.imgCredit && (
@@ -84,7 +107,16 @@ export default function ChooseTranslation({
         </div>
       ) : null}
 
-      <div className="mt-2">
+      <div
+        className={[
+          "mt-2 transition-all duration-300",
+          word.img
+            ? imageLoaded
+              ? "opacity-100 translate-y-0"
+              : "opacity-90 translate-y-1"
+            : "opacity-100 translate-y-0",
+        ].join(" ")}
+      >
         <SpeakCentered
           text={word.sk}
           kind="word"

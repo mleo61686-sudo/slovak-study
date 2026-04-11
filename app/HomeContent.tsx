@@ -1,9 +1,5 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useLanguage } from "@/lib/src/useLanguage";
-import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
+import WordsStatsClient from "./components/home/WordsStatsClient";
 
 type Lang = "ua" | "ru" | "en";
 type SeoCourseId = "sk" | "cs" | "pl";
@@ -55,11 +51,6 @@ type HomeTranslations = {
 
   strip: StatItem[];
 };
-
-const WordsStats = dynamic(() => import("./components/WordsStats"), {
-  ssr: false,
-  loading: () => <WordsStatsSkeleton />,
-});
 
 const t: Record<Lang, HomeTranslations> = {
   ua: {
@@ -318,7 +309,8 @@ const t: Record<Lang, HomeTranslations> = {
     dictTitle: "Dictionary",
     dictDesc: "Search, topics, example sentences, and favorites.",
     levelsTitle: "Levels",
-    levelsDesc: "Exercises: choose the answer, insert the word, build a sentence.",
+    levelsDesc:
+      "Exercises: choose the answer, insert the word, build a sentence.",
     open: "Open →",
     start: "Start →",
     whatsNew: "What’s new",
@@ -391,50 +383,25 @@ function StatPill({ k, v }: { k: string; v: string }) {
   );
 }
 
-function WordsStatsSkeleton() {
-  return (
-    <section className="min-w-0 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="animate-pulse space-y-4">
-        <div className="h-6 w-40 rounded bg-slate-200" />
-        <div className="grid grid-cols-2 gap-3">
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-        </div>
-        <div className="h-2 w-full rounded bg-slate-200" />
-        <div className="grid grid-cols-2 gap-3 pt-2">
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-          <div className="h-20 rounded-2xl bg-slate-100" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default function HomeClient({
+export default function HomeContent({
   latestBadge,
+  lang,
+  courseId,
 }: {
   latestBadge: string | null;
+  lang: Lang;
+  courseId: string;
 }) {
-  const { lang } = useLanguage();
-  const { courseId } = useActiveCourse();
-
-  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
-  const tr = t[L];
-
-  const showSeoBlock =
-    courseId === "sk" || courseId === "cs" || courseId === "pl";
+  const tr = t[lang];
+  const showSeoBlock = courseId === "sk" || courseId === "cs" || courseId === "pl";
   const seoCourseId: SeoCourseId =
     courseId === "cs" ? "cs" : courseId === "pl" ? "pl" : "sk";
 
   return (
     <div className="space-y-8">
       <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8">
-        <div className="pointer-events-none absolute top-0 right-0 h-40 w-40 rounded-full bg-amber-200/20 blur-2xl" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-40 rounded-full bg-slate-200/35 blur-2xl" />
+        <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-amber-200/15 blur-xl" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-32 w-32 rounded-full bg-slate-200/25 blur-xl" />
 
         <div className="relative space-y-5">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
@@ -498,8 +465,8 @@ export default function HomeClient({
 
       <section className="relative">
         <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm">
-          <div className="pointer-events-none absolute -top-24 left-10 h-56 w-56 rounded-full bg-amber-400/20 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 right-10 h-56 w-56 rounded-full bg-sky-400/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-20 left-10 h-40 w-40 rounded-full bg-amber-400/15 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-20 right-10 h-40 w-40 rounded-full bg-sky-400/10 blur-2xl" />
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
@@ -545,7 +512,7 @@ export default function HomeClient({
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
-        <WordsStats />
+        <WordsStatsClient />
 
         <Link
           href="/grammar"

@@ -6,6 +6,7 @@ declare module "next-auth" {
       id: string;
       isPremium?: boolean;
       premiumUntil?: Date | null;
+      isAdmin?: boolean;
     };
   }
 
@@ -13,13 +14,17 @@ declare module "next-auth" {
     id: string;
     isPremium?: boolean;
     premiumUntil?: Date | null;
+    isAdmin?: boolean;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     id?: string;
+    email?: string | null;
     isPremium?: boolean;
     premiumUntil?: Date | null;
+    premiumCheckedAt?: number;
+    isAdmin?: boolean;
   }
 }

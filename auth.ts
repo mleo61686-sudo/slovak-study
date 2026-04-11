@@ -3,6 +3,19 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+function isAdminEmail(email?: string | null) {
+  if (!email) return false;
+
+  const raw = process.env.ADMIN_EMAILS ?? "";
+
+  const list = raw
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+
+  return list.includes(email.toLowerCase());
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
 
@@ -34,52 +47,58 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
-  async jwt({ token, user }) {
-  if (user) token.id = user.id;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
 
-  // якщо нема id — гість
-  if (!token.id) {
-    token.isPremium = false;
-    token.premiumUntil = null;
-    return token;
-  }
+      const email = typeof token.email === "string" ? token.email : null;
+      token.isAdmin = isAdminEmail(email);
 
-  const now = Date.now();
-  const last = (token.premiumCheckedAt as number | undefined) ?? 0;
-  const REFRESH_EVERY_MS = 15 * 60 * 1000; // 15 хв
+      // якщо нема id — гість
+      if (!token.id) {
+        token.isPremium = false;
+        token.premiumUntil = null;
+        return token;
+      }
 
-  // ✅ не ліземо в БД кожного разу
-  if (last && now - last < REFRESH_EVERY_MS) return token;
+      const now = Date.now();
+      const last = (token.premiumCheckedAt as number | undefined) ?? 0;
+      const REFRESH_EVERY_MS = 15 * 60 * 1000; // 15 хв
 
-  try {
-    const dbUser = await prisma.user.findUnique({
-      where: { id: token.id as string },
-      select: { isPremium: true, premiumUntil: true },
-    });
+      // ✅ не ліземо в БД кожного разу
+      if (last && now - last < REFRESH_EVERY_MS) return token;
 
-    token.isPremium = dbUser?.isPremium ?? false;
-    token.premiumUntil = dbUser?.premiumUntil ?? null;
-    token.premiumCheckedAt = now;
-  } catch (e) {
-    // ✅ якщо БД недоступна — не валимо сесію
-    token.isPremium = Boolean(token.isPremium);
-    token.premiumUntil = (token.premiumUntil as any) ?? null;
-  }
+      try {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { isPremium: true, premiumUntil: true },
+        });
 
-  return token;
-},
+        token.isPremium = dbUser?.isPremium ?? false;
+        token.premiumUntil = dbUser?.premiumUntil ?? null;
+        token.premiumCheckedAt = now;
+      } catch {
+        // ✅ якщо БД недоступна — не валимо сесію
+        token.isPremium = Boolean(token.isPremium);
+        token.premiumUntil = (token.premiumUntil as any) ?? null;
+      }
+
+      return token;
+    },
+
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.isPremium = Boolean(token.isPremium);
         session.user.premiumUntil = token.premiumUntil as Date | null;
+        session.user.isAdmin = Boolean(token.isAdmin);
       }
 
       return session;
     },
   },
-
-
 
   pages: {
     signIn: "/login",

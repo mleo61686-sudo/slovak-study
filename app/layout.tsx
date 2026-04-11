@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Flunio — вивчення мов онлайн",
     description:
-      "Словацька та чеська онлайн: уроки A0–B2, граматика, словник, вправи та озвучка.",
+      "Словацька та чеська мови онлайн: уроки A0–B2, граматика, словник, вправи та озвучка.",
     images: ["/opengraph-image"],
   },
 
@@ -138,17 +138,15 @@ export default function RootLayout({
       </head>
 
       <body suppressHydrationWarning className="min-h-screen flex flex-col">
-        <CourseBootstrap />
-        <Navbar />
-
         <SessionProviderClient>
+          <CourseBootstrap />
+          <Navbar />
           <ProgressSync />
           <SrsSync />
 
           <MainShell>{children}</MainShell>
         </SessionProviderClient>
 
-        {/* 👇 НОВИЙ мультимовний footer */}
         <FooterClient />
 
         <SpeedInsights />

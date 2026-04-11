@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SpeakButton from "@/app/components/SpeakButton";
@@ -12,16 +13,119 @@ import type { Word, ExerciseDef } from "./types";
 import { trWord } from "./helpers";
 import { phraseKey } from "@/app/learning/phrases/phraseKey";
 
-import ChooseTranslation from "@/app/learning/components/LevelClient/exercises/ChooseTranslation";
-import ChooseSlovak from "@/app/learning/components/LevelClient/exercises/ChooseSlovak";
-import WriteWord from "@/app/learning/components/LevelClient/exercises/WriteWord";
-import AudioQuiz from "@/app/learning/components/LevelClient/exercises/AudioQuiz";
-import MatchColumns from "@/app/learning/components/LevelClient/exercises/MatchColumns";
-import BuildSentence from "@/app/learning/components/LevelClient/exercises/BuildSentence";
-import BuildUaSentence from "@/app/learning/components/LevelClient/exercises/BuildUaSentence";
+const exerciseEnterStyle = `
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+`;
 
 type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
+
+type IdleWindow = Window & {
+  requestIdleCallback?: (
+    callback: () => void,
+    options?: { timeout: number }
+  ) => number;
+  cancelIdleCallback?: (id: number) => void;
+};
+
+function ExerciseLoading() {
+  return (
+    <div className="rounded-2xl bg-white">
+      <div className="animate-pulse space-y-4">
+        <div className="h-6 w-56 rounded bg-slate-200" />
+        <div className="mx-auto h-[220px] w-full max-w-[320px] rounded-2xl bg-slate-200" />
+        <div className="mx-auto h-10 w-10 rounded-full bg-slate-200" />
+        <div className="space-y-3">
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-slate-200" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const ChooseTranslation = dynamic(
+  () =>
+    import(
+      "@/app/learning/components/LevelClient/exercises/ChooseTranslation"
+    ),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const ChooseSlovak = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/ChooseSlovak"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const WriteWord = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/WriteWord"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const AudioQuiz = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/AudioQuiz"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const MatchColumns = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/MatchColumns"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const BuildSentence = dynamic(
+  () => import("@/app/learning/components/LevelClient/exercises/BuildSentence"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+const BuildUaSentence = dynamic(
+  () =>
+    import("@/app/learning/components/LevelClient/exercises/BuildUaSentence"),
+  {
+    ssr: false,
+    loading: () => <ExerciseLoading />,
+  }
+);
+
+function preloadExerciseModules() {
+  return Promise.all([
+    import("@/app/learning/components/LevelClient/exercises/ChooseTranslation"),
+    import("@/app/learning/components/LevelClient/exercises/ChooseSlovak"),
+    import("@/app/learning/components/LevelClient/exercises/WriteWord"),
+    import("@/app/learning/components/LevelClient/exercises/AudioQuiz"),
+    import("@/app/learning/components/LevelClient/exercises/MatchColumns"),
+    import("@/app/learning/components/LevelClient/exercises/BuildSentence"),
+    import("@/app/learning/components/LevelClient/exercises/BuildUaSentence"),
+  ]);
+}
 
 function uiLangFrom(lang: string): UiLang {
   if (lang === "ru") return "ru";
@@ -182,37 +286,55 @@ export default function LevelClient({
   onLockedNextRedirect?: string;
   courseId?: CourseId;
 }) {
-  const [mode, setMode] = useState<"learn" | "quiz">("learn");
-
-  const [exerciseIndex, setExerciseIndex] = useState(0);
-  const [wordIndex, setWordIndex] = useState(0);
-
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
-
-  const [quizAutoKey, setQuizAutoKey] = useState(0);
-
-  const [audioUnlocked, setAudioUnlocked] = useState(false);
-  const unlockedRef = useMemo(() => ({ v: false }), []);
-
-  function unlockInsideLesson() {
-    if (unlockedRef.v) return;
-    unlockedRef.v = true;
-    setAudioUnlocked(true);
-  }
-
   const router = useRouter();
-  const nextLevelId = getNextLevelId(levelId);
   const { lang } = useLanguage();
   const t = UI[uiLangFrom(lang)];
+  const nextLevelId = getNextLevelId(levelId);
 
+  const [mode, setMode] = useState<"learn" | "quiz">("learn");
+  const [exerciseIndex, setExerciseIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [quizAutoKey, setQuizAutoKey] = useState(0);
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
   const [savingNext, setSavingNext] = useState(false);
-  const finishingRef = useRef(false);
-
   const [canGoNextNow, setCanGoNextNow] = useState<boolean>(canGoNext);
   const [lockedReasonNow, setLockedReasonNow] = useState<string | undefined>(
     lockedReason
   );
+  const [isNavigating, startNavigation] = useTransition();
+  const [learnImageLoaded, setLearnImageLoaded] = useState(false);
+
+  const audioUnlockedRef = useRef(false);
+  const finishingRef = useRef(false);
+  const advancingRef = useRef(false);
+
+  function unlockInsideLesson() {
+    if (audioUnlockedRef.current) return;
+    audioUnlockedRef.current = true;
+    setAudioUnlocked(true);
+  }
+
+  function resetToLearn() {
+    finishingRef.current = false;
+    advancingRef.current = false;
+    setMode("learn");
+    setExerciseIndex(0);
+    setWordIndex(0);
+    setScore(0);
+    setFinished(false);
+  }
+
+  function startQuiz() {
+    advancingRef.current = false;
+    setQuizAutoKey((k) => k + 1);
+    setMode("quiz");
+    setExerciseIndex(0);
+    setWordIndex(0);
+    setScore(0);
+    setFinished(false);
+  }
 
   useEffect(() => {
     setCanGoNextNow(canGoNext);
@@ -220,9 +342,19 @@ export default function LevelClient({
   }, [canGoNext, lockedReason]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    advancingRef.current = false;
+  }, [mode, exerciseIndex, wordIndex, finished]);
+  useEffect(() => {
+    router.prefetch(nextLevelId);
+    router.prefetch(onLockedNextRedirect);
+  }, [router, nextLevelId, onLockedNextRedirect]);
 
-    const lookahead = 4;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (mode !== "learn") return;
+
+    const lookahead = 2;
+
     for (let k = 1; k <= lookahead; k++) {
       const src = words[wordIndex + k]?.img;
       if (!src) continue;
@@ -232,7 +364,36 @@ export default function LevelClient({
       img.loading = "eager";
       img.src = src;
     }
-  }, [words, wordIndex]);
+  }, [mode, words, wordIndex]);
+
+  useEffect(() => {
+    if (mode !== "learn") return;
+    setLearnImageLoaded(false);
+  }, [mode, wordIndex]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (mode !== "learn") return;
+
+    const win = window as IdleWindow;
+
+    const preload = () => {
+      void preloadExerciseModules();
+    };
+
+    if (typeof win.requestIdleCallback === "function") {
+      const idleId = win.requestIdleCallback(preload, { timeout: 1500 });
+
+      return () => {
+        if (typeof win.cancelIdleCallback === "function") {
+          win.cancelIdleCallback(idleId);
+        }
+      };
+    }
+
+    const timeoutId = window.setTimeout(preload, 900);
+    return () => window.clearTimeout(timeoutId);
+  }, [mode]);
 
   useEffect(() => {
     if (mode !== "learn") return;
@@ -272,12 +433,7 @@ export default function LevelClient({
           return;
         }
 
-        setQuizAutoKey((k) => k + 1);
-        setMode("quiz");
-        setExerciseIndex(0);
-        setWordIndex(0);
-        setScore(0);
-        setFinished(false);
+        startQuiz();
       }
     }
 
@@ -286,157 +442,10 @@ export default function LevelClient({
   }, [mode, wordIndex, words.length]);
 
   const totalQuestions = useMemo(() => {
-    return EXERCISES.reduce(
-      (sum, ex) => sum + (ex.mode === "perWord" ? words.length : words.length),
-      0
-    );
+    return EXERCISES.reduce((sum, ex) => {
+      return sum + (ex.mode === "perWord" ? words.length : words.length);
+    }, 0);
   }, [words.length]);
-
-  if (mode === "learn") {
-    const word = words[wordIndex];
-    const isFirst = wordIndex === 0;
-    const isLast = wordIndex === words.length - 1;
-
-    return (
-      <div
-        className="space-y-3 sm:space-y-6"
-        onPointerDownCapture={unlockInsideLesson}
-        onKeyDownCapture={unlockInsideLesson}
-      >
-        <div className="sticky top-2 z-10 rounded-xl border bg-white/90 px-4 py-2 text-sm font-semibold backdrop-blur">
-          {t.viewed}: {wordIndex + 1}/{words.length}
-        </div>
-
-        <div className="mx-auto w-full max-w-[1100px]">
-          <div className="grid grid-cols-1 items-center gap-3 sm:gap-4 lg:grid-cols-[110px_minmax(0,1fr)_110px]">
-            <div className="hidden justify-center lg:flex">
-              <button
-                disabled={isFirst}
-                onClick={() => setWordIndex((i) => Math.max(0, i - 1))}
-                className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {t.back}
-              </button>
-            </div>
-
-            <div className="relative mx-auto w-full max-w-[760px] rounded-3xl border bg-white px-3 py-3 text-center shadow-sm sm:px-6 sm:py-6">
-              {word?.img ? (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl bg-slate-50 px-1 py-1 sm:min-h-[420px]">
-                    <Image
-                      src={word.img}
-                      alt={word.sk}
-                      width={1200}
-                      height={900}
-                      className="max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]"
-                      priority={wordIndex === 0}
-                      fetchPriority={wordIndex === 0 ? "high" : "auto"}
-                      sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
-                    />
-                  </div>
-
-                  {word.imgCredit && (
-                    <div className="text-xs text-slate-500">{word.imgCredit}</div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl border bg-slate-50 text-slate-400 sm:min-h-[420px]">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="text-5xl">📷</div>
-                  </div>
-                </div>
-              )}
-
-              <div className="mt-4 flex flex-col items-center">
-                <div className="flex items-center justify-center">
-                  <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
-                    {word.sk}
-                  </div>
-
-                  <div className="ml-5 shrink-0 sm:ml-6">
-                    <SpeakButton
-                      text={word.sk}
-                      autoPlayKey={audioUnlocked ? word.sk : undefined}
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-3 text-center text-lg leading-tight text-slate-600 sm:text-xl">
-                  {trWord(word, lang)}
-                </div>
-              </div>
-            </div>
-
-            <div className="hidden justify-center lg:flex">
-              {isLast ? (
-                <button
-                  onClick={() => {
-                    setQuizAutoKey((k) => k + 1);
-                    setMode("quiz");
-                    setExerciseIndex(0);
-                    setWordIndex(0);
-                    setScore(0);
-                    setFinished(false);
-                  }}
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-slate-900"
-                >
-                  {t.startExercises}
-                </button>
-              ) : (
-                <button
-                  onClick={() =>
-                    setWordIndex((i) => Math.min(words.length - 1, i + 1))
-                  }
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50"
-                >
-                  {t.next}
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-2 flex items-center justify-between gap-3 lg:hidden">
-            <button
-              disabled={isFirst}
-              onClick={() => setWordIndex((i) => Math.max(0, i - 1))}
-              className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {t.back}
-            </button>
-
-            {isLast ? (
-              <button
-                onClick={() => {
-                  setQuizAutoKey((k) => k + 1);
-                  setMode("quiz");
-                  setExerciseIndex(0);
-                  setWordIndex(0);
-                  setScore(0);
-                  setFinished(false);
-                }}
-                className="min-h-[44px] rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-900"
-              >
-                {t.startExercises}
-              </button>
-            ) : (
-              <button
-                onClick={() =>
-                  setWordIndex((i) => Math.min(words.length - 1, i + 1))
-                }
-                className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
-              >
-                {t.next}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const exercise = EXERCISES[exerciseIndex];
-  const currentWord = words[wordIndex];
-  const exerciseTitle = getExerciseTitle(exercise.kind, t);
 
   function finishLesson(finalScore: number) {
     if (finishingRef.current) return;
@@ -482,6 +491,10 @@ export default function LevelClient({
   }
 
   function nextPerWord(correct: boolean) {
+    if (advancingRef.current || finishingRef.current) return;
+    advancingRef.current = true;
+
+    const updatedScore = score + (correct ? 1 : 0);
     if (correct) setScore((s) => s + 1);
 
     const lastWord = wordIndex >= words.length - 1;
@@ -498,11 +511,14 @@ export default function LevelClient({
       return;
     }
 
-    const finalScore = score + (correct ? 1 : 0);
-    finishLesson(finalScore);
+    finishLesson(updatedScore);
   }
 
   function doneWhole(correctCount: number) {
+    if (advancingRef.current || finishingRef.current) return;
+    advancingRef.current = true;
+
+    const updatedScore = score + correctCount;
     setScore((s) => s + correctCount);
 
     const lastExercise = exerciseIndex >= EXERCISES.length - 1;
@@ -512,8 +528,167 @@ export default function LevelClient({
       return;
     }
 
-    finishLesson(score + correctCount);
+    finishLesson(updatedScore);
   }
+
+  function goTo(path: string) {
+    startNavigation(() => {
+      router.push(path);
+    });
+  }
+  function goPrevWord() {
+    setWordIndex((i) => Math.max(0, i - 1));
+  }
+
+  function goNextWord() {
+    setWordIndex((i) => Math.min(words.length - 1, i + 1));
+  }
+
+  if (mode === "learn") {
+    const word = words[wordIndex];
+    const isFirst = wordIndex === 0;
+    const isLast = wordIndex === words.length - 1;
+
+    return (
+      <div
+        className="space-y-3 sm:space-y-6"
+        onPointerDownCapture={unlockInsideLesson}
+        onKeyDownCapture={unlockInsideLesson}
+      >
+        <div className="sticky top-2 z-10 rounded-xl border bg-white/90 px-4 py-2 text-sm font-semibold backdrop-blur">
+          {t.viewed}: {wordIndex + 1}/{words.length}
+        </div>
+
+        <div className="mx-auto w-full max-w-[1100px]">
+          <div className="grid grid-cols-1 items-center gap-3 sm:gap-4 lg:grid-cols-[110px_minmax(0,1fr)_110px]">
+            <div className="hidden justify-center lg:flex">
+              <button
+                disabled={isFirst}
+                onClick={goPrevWord}
+                className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {t.back}
+              </button>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[760px] rounded-3xl border bg-white px-3 py-3 text-center shadow-sm sm:px-6 sm:py-6">
+              {word?.img ? (
+                <div className="flex flex-col items-center gap-2">
+                  <div className="relative flex min-h-[360px] w-full items-center justify-center overflow-hidden rounded-2xl bg-slate-50 px-1 py-1 sm:min-h-[420px]">
+                    {!learnImageLoaded && (
+                      <div className="absolute inset-0 animate-pulse bg-slate-200/70" />
+                    )}
+
+                    <Image
+                      src={word.img}
+                      alt={word.sk}
+                      width={1200}
+                      height={900}
+                      onLoad={() => setLearnImageLoaded(true)}
+                      className={[
+                        "max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain transition-all duration-500 sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
+                        learnImageLoaded
+                          ? "opacity-100 blur-0 scale-100"
+                          : "opacity-0 blur-sm scale-[1.02]",
+                      ].join(" ")}
+                      priority={wordIndex === 0}
+                      fetchPriority={wordIndex === 0 ? "high" : "auto"}
+                      sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
+                    />
+                  </div>
+
+                  {word.imgCredit && (
+                    <div className="text-xs text-slate-500">{word.imgCredit}</div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl border bg-slate-50 text-slate-400 sm:min-h-[420px]">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="text-5xl">📷</div>
+                  </div>
+                </div>
+              )}
+
+              <div
+                className={[
+                  "mt-4 flex flex-col items-center transition-all duration-300",
+                  learnImageLoaded
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-1 opacity-85",
+                ].join(" ")}
+              >
+                <div className="flex items-center justify-center">
+                  <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
+                    {word.sk}
+                  </div>
+
+                  <div className="ml-5 shrink-0 sm:ml-6">
+                    <SpeakButton
+                      text={word.sk}
+                      autoPlayKey={audioUnlocked ? word.sk : undefined}
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-3 text-center text-lg leading-tight text-slate-600 sm:text-xl">
+                  {trWord(word, lang)}
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden justify-center lg:flex">
+              {isLast ? (
+                <button
+                  onClick={startQuiz}
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-slate-900"
+                >
+                  {t.startExercises}
+                </button>
+              ) : (
+                <button
+                  onClick={goNextWord}
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50"
+                >
+                  {t.next}
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-2 flex items-center justify-between gap-3 lg:hidden">
+            <button
+              disabled={isFirst}
+              onClick={goPrevWord}
+              className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {t.back}
+            </button>
+
+            {isLast ? (
+              <button
+                onClick={startQuiz}
+                className="min-h-[44px] rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-900"
+              >
+                {t.startExercises}
+              </button>
+            ) : (
+              <button
+                onClick={goNextWord}
+                className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
+              >
+                {t.next}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const exercise = EXERCISES[exerciseIndex];
+  const currentWord = words[wordIndex];
+  const exerciseTitle = getExerciseTitle(exercise.kind, t);
+  const exerciseScreenKey = `${exercise.kind}-${wordIndex}-${quizAutoKey}`;
 
   if (finished) {
     return (
@@ -536,34 +711,22 @@ export default function LevelClient({
 
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => {
-              finishingRef.current = false;
-              setMode("learn");
-              setExerciseIndex(0);
-              setWordIndex(0);
-              setScore(0);
-              setFinished(false);
-            }}
-            className="rounded-xl border px-4 py-2"
+            onClick={resetToLearn}
+            disabled={isNavigating}
+            className="rounded-xl border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {t.reviewAgain}
           </button>
 
           <button
-            onClick={() => {
-              if (!canGoNextNow) {
-                router.push(onLockedNextRedirect);
-                return;
-              }
-              router.push(nextLevelId);
-            }}
+            onClick={() => goTo(nextLevelId)}
             className={[
-              "rounded-xl px-4 py-2 text-white",
-              canGoNextNow && !savingNext
+              "rounded-xl px-4 py-2 text-white disabled:cursor-not-allowed",
+              canGoNextNow && !savingNext && !isNavigating
                 ? "bg-black"
-                : "cursor-not-allowed bg-black/40",
+                : "bg-black/40",
             ].join(" ")}
-            disabled={!canGoNextNow || savingNext}
+            disabled={!canGoNextNow || savingNext || isNavigating}
             title={!canGoNextNow ? t.notAvailableFree : undefined}
           >
             {t.goNextLevel}
@@ -571,8 +734,9 @@ export default function LevelClient({
 
           {!canGoNextNow && (
             <button
-              onClick={() => router.push(onLockedNextRedirect)}
-              className="rounded-xl border px-4 py-2"
+              onClick={() => goTo(onLockedNextRedirect)}
+              disabled={isNavigating}
+              className="rounded-xl border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {t.toLessonsList}
             </button>
@@ -598,6 +762,7 @@ export default function LevelClient({
           <>{t.lesson}</>
         )}
       </div>
+      <style>{exerciseEnterStyle}</style>
 
       <ReportErrorButton
         lang={lang}
@@ -615,72 +780,77 @@ export default function LevelClient({
         }}
       />
 
-      {exercise.kind === "chooseTranslation" && (
-        <ChooseTranslation
-          word={currentWord}
-          words={words}
-          lang={lang}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-        />
-      )}
+      <div
+        key={exerciseScreenKey}
+        className="rounded-2xl transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
+      >
+        {exercise.kind === "chooseTranslation" && (
+          <ChooseTranslation
+            word={currentWord}
+            words={words}
+            lang={lang}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+          />
+        )}
 
-      {exercise.kind === "chooseSlovak" && (
-        <ChooseSlovak
-          word={currentWord}
-          words={words}
-          lang={lang}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-        />
-      )}
+        {exercise.kind === "chooseSlovak" && (
+          <ChooseSlovak
+            word={currentWord}
+            words={words}
+            lang={lang}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+          />
+        )}
 
-      {exercise.kind === "writeWord" && (
-        <WriteWord
-          word={currentWord}
-          lang={lang}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-        />
-      )}
+        {exercise.kind === "writeWord" && (
+          <WriteWord
+            word={currentWord}
+            lang={lang}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+          />
+        )}
 
-      {exercise.kind === "audioQuiz" && (
-        <AudioQuiz
-          word={currentWord}
-          words={words}
-          onNext={nextPerWord}
-          quizAutoKey={quizAutoKey}
-          audioUnlocked={audioUnlocked}
-          lang={lang}
-        />
-      )}
+        {exercise.kind === "audioQuiz" && (
+          <AudioQuiz
+            word={currentWord}
+            words={words}
+            onNext={nextPerWord}
+            quizAutoKey={quizAutoKey}
+            audioUnlocked={audioUnlocked}
+            lang={lang}
+          />
+        )}
 
-      {exercise.kind === "matchColumns" && (
-        <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
-      )}
+        {exercise.kind === "matchColumns" && (
+          <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
+        )}
 
-      {exercise.kind === "buildSentence" && (
-        <BuildSentence
-          word={currentWord}
-          lang={lang}
-          levelId={levelId}
-          courseId={courseId}
-          onNext={nextPerWord}
-        />
-      )}
+        {exercise.kind === "buildSentence" && (
+          <BuildSentence
+            word={currentWord}
+            lang={lang}
+            levelId={levelId}
+            courseId={courseId}
+            onNext={nextPerWord}
+          />
+        )}
 
-      {exercise.kind === "buildUaSentence" && (
-        <BuildUaSentence
-          word={currentWord}
-          lang={lang}
-          levelId={levelId}
-          courseId={courseId}
-          onNext={nextPerWord}
-        />
-      )}
+        {exercise.kind === "buildUaSentence" && (
+          <BuildUaSentence
+            word={currentWord}
+            lang={lang}
+            levelId={levelId}
+            courseId={courseId}
+            onNext={nextPerWord}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -107,8 +106,6 @@ const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b2: 50,
 };
 
-// ===== Глобальна логіка порядку =====
-
 function parseLevelId(id: string) {
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(String(id).toLowerCase());
   if (!m) return null;
@@ -164,7 +161,6 @@ function getLastDone(progress: LessonsProgress) {
     if (!p) continue;
 
     const done = val === true || (typeof val === "object" && val.done === true);
-
     if (!done) continue;
 
     if (!best) best = id;
@@ -202,6 +198,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const user = session?.user as SessionUserLike | undefined;
   const isPremium = user?.isPremium === true;
   const arePremiumBandsLocked = !isPremium;
+  const [isPending, startTransition] = useTransition();
 
   const adminEmails = useMemo(() => {
     return (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
@@ -268,17 +265,21 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
     [progress]
   );
 
-  const visibleBands = useMemo(() => bands, [bands]);
-
   const allowed = useMemo(() => {
-    return getAllowedSequential(progress, visibleBands);
-  }, [progress, visibleBands]);
+    return getAllowedSequential(progress, bands);
+  }, [progress, bands]);
 
   const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
   function isLessonUnlockedGlobal(lessonId: string) {
     if (isPremium) return true;
     return compareLevel(lessonId, allowed) <= 0;
+  }
+
+  function goTo(path: string) {
+    startTransition(() => {
+      router.push(path);
+    });
   }
 
   return (
@@ -306,7 +307,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
       </div>
 
       <div className="mt-8 space-y-8">
-        {visibleBands.map((band) => {
+        {bands.map((band) => {
           const limit = LESSONS_LIMITS[band.id] ?? band.lessons.length;
           const lessonsTotal = Math.min(band.lessons.length, limit);
           const wordsTotal = lessonsTotal * 10;
@@ -334,19 +335,23 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
 
                 <div className="flex items-center gap-2">
                   {isBandDisabled ? (
-                    <Link
-                      href="/premium"
-                      className="rounded-xl bg-black px-3 py-1 text-xs font-medium text-white"
+                    <button
+                      type="button"
+                      onClick={() => goTo("/premium")}
+                      disabled={isPending}
+                      className="rounded-xl bg-black px-3 py-1 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {t.buyPremium}
-                    </Link>
+                    </button>
                   ) : (
-                    <Link
-                      href={`/learning/levels/${band.id}`}
-                      className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50"
+                    <button
+                      type="button"
+                      onClick={() => goTo(`/learning/levels/${band.id}`)}
+                      disabled={isPending}
+                      className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {t.allLessons}
-                    </Link>
+                    </button>
                   )}
 
                   <span className="rounded-full border px-3 py-1 text-xs text-slate-600">
@@ -363,12 +368,14 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                 <div className="mt-5 flex items-center justify-between rounded-2xl border bg-slate-50 p-4">
                   <div className="text-sm font-medium">🔒 {t.premiumOnly}</div>
 
-                  <Link
-                    href="/premium"
-                    className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
+                  <button
+                    type="button"
+                    onClick={() => goTo("/premium")}
+                    disabled={isPending}
+                    className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {t.buyPremium}
-                  </Link>
+                  </button>
                 </div>
               ) : (
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -376,8 +383,8 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                     const unlocked = isLessonUnlockedGlobal(lesson.id);
                     const done = isDone(lesson.id);
                     const stats = getStats(lesson.id);
-
                     const isStart = lesson.id === allowed && !done;
+                    const lessonPath = `/learning/${lesson.id}`;
 
                     return (
                       <div
@@ -404,23 +411,20 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
 
                         <div className="mt-3 flex justify-end">
                           {unlocked ? (
-                            isStart ? (
-                              <button
-                                onClick={() => router.push(`/learning/${lesson.id}`)}
-                                className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
-                              >
-                                {t.start}
-                              </button>
-                            ) : (
-                              <Link
-                                href={`/learning/${lesson.id}`}
-                                className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
-                              >
-                                {t.repeat}
-                              </Link>
-                            )
+                            <button
+                              type="button"
+                              onClick={() => goTo(lessonPath)}
+                              disabled={isPending}
+                              className={[
+                                "rounded-xl px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60",
+                                "bg-black",
+                              ].join(" ")}
+                            >
+                              {isStart ? t.start : t.repeat}
+                            </button>
                           ) : (
                             <button
+                              type="button"
                               disabled
                               className="rounded-xl border px-4 py-2 text-sm text-slate-600"
                             >

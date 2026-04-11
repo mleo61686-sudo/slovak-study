@@ -25,7 +25,7 @@ const UI = {
     title: "Збери переклад",
     targetLabel: "Ціль",
     yourSentence: "Твій переклад:",
-    hint: "Натискай слова нижче. Є зайві слова.",
+    hint: "Збери речення. Є зайві слова.",
     clear: "Очистити",
     check: "Перевірити",
     next: "Наступне →",
@@ -33,14 +33,13 @@ const UI = {
     correct: "✅ Правильно!",
     wrongPrefix: "❌ Неправильно. Правильно:",
     listenAgain: "🔊 Прослухати ще раз",
-    reportBug: "Повідомити про помилку",
     dash: "—",
   },
   ru: {
     title: "Собери перевод",
     targetLabel: "Цель",
     yourSentence: "Твой перевод:",
-    hint: "Нажимай слова ниже. Есть лишние слова.",
+    hint: "Собери предложение. Есть лишние слова.",
     clear: "Очистить",
     check: "Проверить",
     next: "Далее →",
@@ -48,7 +47,6 @@ const UI = {
     correct: "✅ Правильно!",
     wrongPrefix: "❌ Неправильно. Правильно:",
     listenAgain: "🔊 Прослушать ещё раз",
-    reportBug: "Сообщить об ошибке",
     dash: "—",
   },
   en: {
@@ -63,7 +61,6 @@ const UI = {
     correct: "✅ Correct!",
     wrongPrefix: "❌ Wrong. Correct answer:",
     listenAgain: "🔊 Listen again",
-    reportBug: "Report a bug",
     dash: "—",
   },
 } as const;
@@ -83,21 +80,26 @@ export default function BuildUaSentence({
 }) {
   const ui = UI[uiLangFrom(lang)];
 
-  const [lockedExerciseLang, setLockedExerciseLang] = useState<UiLang>(uiLangFrom(lang));
+  const [lockedExerciseLang, setLockedExerciseLang] = useState<UiLang>(
+    uiLangFrom(lang)
+  );
 
   useEffect(() => {
     setLockedExerciseLang(uiLangFrom(lang));
   }, [word.sk, levelId, courseId]);
 
   const item = useMemo(
-    () => getBuildUaSentenceForWord(word, lockedExerciseLang as Lang, levelId, courseId),
+    () =>
+      getBuildUaSentenceForWord(
+        word,
+        lockedExerciseLang as Lang,
+        levelId,
+        courseId
+      ),
     [word, lockedExerciseLang, levelId, courseId]
   );
 
-  const correctTokens = useMemo(
-    () => [...item.answerTokens],
-    [item.answerTokens]
-  );
+  const correctTokens = useMemo(() => [...item.answerTokens], [item.answerTokens]);
 
   const validAnswers = useMemo(
     () => item.validAnswers.map((tokens) => [...tokens]),
@@ -167,28 +169,22 @@ export default function BuildUaSentence({
   const builtPretty = picked.join(" ").replace(/\s+([.,!?;:])/g, "$1");
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="font-semibold">{ui.title}</div>
+    <div className="space-y-5">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="space-y-2">
+          <div className="text-lg font-semibold leading-snug">{ui.title}</div>
 
           <div className="text-sm text-slate-500">
             {ui.targetLabel}:{" "}
             <span className="font-medium text-slate-800">{item.sk}</span>
           </div>
-
-          <div className="mt-2">
-            <button className="rounded-lg border px-3 py-1 text-xs text-slate-600 hover:bg-slate-50">
-              {ui.reportBug}
-            </button>
-          </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           <button
             onClick={clear}
             disabled={status !== "idle"}
-            className="rounded-xl border px-4 py-2 disabled:opacity-50"
+            className="rounded-2xl border px-4 py-2.5 text-sm font-medium transition hover:bg-slate-50 disabled:opacity-50"
           >
             {ui.clear}
           </button>
@@ -197,14 +193,14 @@ export default function BuildUaSentence({
             <button
               onClick={check}
               disabled={picked.length === 0}
-              className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
+              className="rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-900 disabled:opacity-50"
             >
               {ui.check}
             </button>
           ) : (
             <button
               onClick={next}
-              className="rounded-xl bg-black px-4 py-2 text-white"
+              className="rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-900"
             >
               {ui.next}
             </button>
@@ -212,19 +208,27 @@ export default function BuildUaSentence({
         </div>
       </div>
 
-      <div className="space-y-2 rounded-2xl border bg-white p-4">
-        <div className="text-sm text-slate-500">{ui.yourSentence}</div>
-        <div className="text-lg">{picked.length ? builtPretty : ui.dash}</div>
-        <div className="text-sm text-slate-500">{ui.hint}</div>
+      <div className="rounded-2xl border bg-slate-50/60 p-4 shadow-sm sm:p-5">
+        <div className="space-y-3">
+          <div className="text-sm font-medium text-slate-500">
+            {ui.yourSentence}
+          </div>
+
+          <div className="min-h-[32px] text-lg font-semibold text-slate-900 sm:text-[28px]">
+            {picked.length ? builtPretty : ui.dash}
+          </div>
+
+          <div className="text-sm text-slate-500">{ui.hint}</div>
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         {available.map((t, idx) => (
           <button
             key={`${t}-${idx}`}
             onClick={() => pickToken(t, idx)}
             disabled={status !== "idle"}
-            className="rounded-xl border px-3 py-2 hover:bg-slate-50 disabled:opacity-50"
+            className="rounded-xl border bg-white px-3 py-2 text-sm font-medium transition hover:bg-slate-50 active:scale-[0.97] disabled:opacity-50"
           >
             {t}
           </button>
@@ -235,30 +239,38 @@ export default function BuildUaSentence({
         <button
           onClick={unpickLast}
           disabled={picked.length === 0 || status !== "idle"}
-          className="rounded-xl border px-3 py-2 disabled:opacity-50"
+          className="rounded-2xl border px-4 py-2.5 text-sm font-medium transition hover:bg-slate-50 disabled:opacity-50"
         >
           {ui.back}
         </button>
       </div>
 
       {status === "correct" && (
-        <div className="flex items-center justify-between gap-3 font-semibold text-green-600">
-          <span>{ui.correct}</span>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 font-medium text-green-700">
+            <span>{ui.correct}</span>
+          </div>
 
-          <button onClick={replay} className="rounded-xl border px-3 py-2">
+          <button
+            onClick={replay}
+            className="rounded-2xl border border-green-300 bg-white px-4 py-2.5 text-sm font-medium text-green-700 transition hover:bg-green-50"
+          >
             {ui.listenAgain}
           </button>
         </div>
       )}
 
       {status === "wrong" && (
-        <div className="space-y-2 font-semibold text-red-600">
-          <div>
+        <div className="space-y-3">
+          <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 font-medium text-red-700">
             {ui.wrongPrefix} <b>{tokensToSentence(correctTokens)}</b>
           </div>
 
           <div className="flex gap-2">
-            <button onClick={replay} className="rounded-xl border px-3 py-2">
+            <button
+              onClick={replay}
+              className="rounded-2xl border border-red-200 bg-white px-4 py-2.5 text-sm font-medium transition hover:bg-red-50"
+            >
               {ui.listenAgain}
             </button>
           </div>

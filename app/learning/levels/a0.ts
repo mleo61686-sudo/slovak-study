@@ -96,7 +96,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
         },
         words: [
             { sk: "obchod", ua: "магазин", ru: "магазин", en: "shop", img: "/words/obchod.jpg" },
-            { sk: "pokladňa", ua: "каса", ru: "касса", en: "cash register", img: "/words/cena.jpg" },
+            { sk: "pokladňa", ua: "каса", ru: "касса", en: "cash register", img: "/words/pokladňa.jpg" },
             { sk: "cena", ua: "ціна", ru: "цена", en: "price", img: "/words/cena.jpg" },
             { sk: "zľava", ua: "знижка", ru: "скидка", en: "discount", img: "/words/zľava.jpg" },
             { sk: "taška", ua: "пакет/сумка", ru: "пакет/сумка", en: "bag", img: "/words/taška.jpg" },

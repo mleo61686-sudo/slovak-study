@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import DictionaryClient from "./DictionaryClient";
 import { SITE_URL } from "@/lib/site";
 import CourseGate from "@/app/components/CourseGate";
+import { getDictionaryForCourse } from "@/app/learning/courses/dictionary";
 
 export const metadata: Metadata = {
   title: "Online dictionary | Flunio",
@@ -33,10 +35,32 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function DictionaryPage() {
+type DictionaryWord = {
+  key?: string;
+  term?: string;
+  sk?: string;
+  ua?: string;
+  ru?: string;
+  en?: string;
+  ipa?: string;
+};
+
+function getCourseIdFromCookie(value?: string): "sk" | "cs" | "pl" {
+  if (value === "cs") return "cs";
+  if (value === "pl") return "pl";
+  return "sk";
+}
+
+export default async function DictionaryPage() {
+  const cookieStore = await cookies();
+  const activeCourseCookie = cookieStore.get("slovakStudyActiveCourse")?.value;
+  const courseId = getCourseIdFromCookie(activeCourseCookie);
+
+  const dictionary = getDictionaryForCourse(courseId) as DictionaryWord[];
+
   return (
     <CourseGate>
-      <DictionaryClient />
+      <DictionaryClient initialCourseId={courseId} initialDictionary={dictionary} />
     </CourseGate>
   );
 }
