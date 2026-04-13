@@ -46,7 +46,7 @@ export const PL_A1_SOURCE: Lesson[] = [
       { sk: "biblioteka", ua: "бібліотека", ru: "библиотека", en: "library", img: "/words_a1_cz/knihovna.jpg" },
       { sk: "rynek", ua: "ринок", ru: "рынок", en: "market", img: "/words_a1/trh.jpg" },
       { sk: "wejście", ua: "вхід", ru: "вход", en: "entrance", img: "/words_a1/vstup.jpg" },
-      { sk: "wschód", ua: "вихід", ru: "выход", en: "exit", img: "/words_a1/východ.jpg" },
+      { sk: "wyjście ewakuacyjne", ua: "аварійний вихід", ru: "аварийный выход", en: "emergency exit", img: "/words_a1/východ.jpg" },
     ],
   },
   {
@@ -222,7 +222,7 @@ export const PL_A1_SOURCE: Lesson[] = [
       { sk: "promocja", ua: "акція", ru: "акция", en: "sale / promotion", img: "/words_a1_cz/akce.jpg" },
       { sk: "przeceniony", ua: "зі знижкою", ru: "со скидкой", en: "discounted", img: "/words_a1_cz/zlevněný.jpg" },
       { sk: "kasa", ua: "каса", ru: "касса", en: "cash desk", img: "/words_a1_cz/pokladna.jpg" },
-      { sk: "blok", ua: "чек", ru: "чек", en: "receipt", img: "/words_a1_cz/účtenka.jpg" },
+      { sk: "paragon", ua: "чек", ru: "чек", en: "receipt", img: "/words_a1_cz/účtenka.jpg" },
     ],
   },
   {
@@ -526,7 +526,7 @@ export const PL_A1_SOURCE: Lesson[] = [
       { sk: "przeprowadzić się", ua: "переїхати", ru: "переехать", en: "to move", img: "/words_a1_cz/přestěhovat se.jpg" },
       { sk: "powiesić", ua: "повісити", ru: "повесить", en: "to hang", img: "/words_a1_cz/zavěsit.jpg" },
       { sk: "złożyć", ua: "скласти (речі)", ru: "сложить (вещи)", en: "to fold", img: "/words_a1_cz/poskládat.jpg" },
-      { sk: "załatwić", ua: "облаштувати", ru: "обустроить", en: "to furnish / arrange", img: "/words_a1_cz/zařídit.jpg" },
+      { sk: "urządzić", ua: "облаштувати", ru: "обустроить", en: "to furnish / arrange", img: "/words_a1_cz/zařídit.jpg" },
     ],
   },
   {

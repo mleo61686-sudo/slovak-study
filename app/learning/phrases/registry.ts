@@ -8,6 +8,9 @@ import { CS_A1_PHRASES } from "./cs/a1";
 import { CS_A2_PHRASES } from "./cs/a2";
 import { CS_B1_PHRASES } from "./cs/b1";
 import { PL_A0_PHRASES } from "./pl/a0";
+import { PL_A1_PHRASES } from "./pl/a1";
+import { PL_A2_PHRASES } from "./pl/a2";
+import { PL_B1_PHRASES } from "./pl/b1";
 
 export type Phrase = {
   sk: string;
@@ -49,6 +52,9 @@ const CS_PHRASES_BY_BAND: PhraseRegistry = {
 // ====================================
 const PL_PHRASES_BY_BAND: PhraseRegistry = {
   a0: PL_A0_PHRASES,
+  a1: PL_A1_PHRASES,
+  a2: PL_A2_PHRASES,
+  b1: PL_B1_PHRASES,
 };
 
 const PHRASES_BY_COURSE: Record<CourseId, PhraseRegistry> = {
