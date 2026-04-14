@@ -78,6 +78,13 @@ import { CS_B1_BUILD_UA_SENTENCES_5 } from "./b1.cz/b1-5";
 import { CS_B1_BUILD_UA_SENTENCES_6 } from "./b1.cz/b1-6";
 import { CS_B1_BUILD_UA_SENTENCES_7 } from "./b1.cz/b1-7";
 
+import { PL_A0_BUILD_UA_SENTENCES_1 } from "./a0.pl/a0-1";
+import { PL_A0_BUILD_UA_SENTENCES_2 } from "./a0.pl/a0-2";
+import { PL_A0_BUILD_UA_SENTENCES_3 } from "./a0.pl/a0-3";
+import { PL_A0_BUILD_UA_SENTENCES_4 } from "./a0.pl/a0-4";
+import { PL_A0_BUILD_UA_SENTENCES_5 } from "./a0.pl/a0-5";
+import { PL_A0_BUILD_UA_SENTENCES_6 } from "./a0.pl/a0-6";
+
 export type BuildSentenceTranslationItem = {
   sk: string;
   ua: string;
@@ -536,7 +543,43 @@ const CS_REGISTRY: Record<string, BuildUaSentenceDict> = {
   "b1-35": CS_B1_BUILD_UA_SENTENCES_7,
 };
 
-const PL_REGISTRY: Record<string, BuildUaSentenceDict> = {};
+const PL_REGISTRY: Record<string, BuildUaSentenceDict> = {
+  "a0-1": PL_A0_BUILD_UA_SENTENCES_1,
+  "a0-2": PL_A0_BUILD_UA_SENTENCES_1,
+  "a0-3": PL_A0_BUILD_UA_SENTENCES_1,
+  "a0-4": PL_A0_BUILD_UA_SENTENCES_1,
+  "a0-5": PL_A0_BUILD_UA_SENTENCES_1,
+
+  "a0-6": PL_A0_BUILD_UA_SENTENCES_2,
+  "a0-7": PL_A0_BUILD_UA_SENTENCES_2,
+  "a0-8": PL_A0_BUILD_UA_SENTENCES_2,
+  "a0-9": PL_A0_BUILD_UA_SENTENCES_2,
+  "a0-10": PL_A0_BUILD_UA_SENTENCES_2,
+
+  "a0-11": PL_A0_BUILD_UA_SENTENCES_3,
+  "a0-12": PL_A0_BUILD_UA_SENTENCES_3,
+  "a0-13": PL_A0_BUILD_UA_SENTENCES_3,
+  "a0-14": PL_A0_BUILD_UA_SENTENCES_3,
+  "a0-15": PL_A0_BUILD_UA_SENTENCES_3,
+
+  "a0-16": PL_A0_BUILD_UA_SENTENCES_4,
+  "a0-17": PL_A0_BUILD_UA_SENTENCES_4,
+  "a0-18": PL_A0_BUILD_UA_SENTENCES_4,
+  "a0-19": PL_A0_BUILD_UA_SENTENCES_4,
+  "a0-20": PL_A0_BUILD_UA_SENTENCES_4,
+
+  "a0-21": PL_A0_BUILD_UA_SENTENCES_5,
+  "a0-22": PL_A0_BUILD_UA_SENTENCES_5,
+  "a0-23": PL_A0_BUILD_UA_SENTENCES_5,
+  "a0-24": PL_A0_BUILD_UA_SENTENCES_5,
+  "a0-25": PL_A0_BUILD_UA_SENTENCES_5,
+
+  "a0-26": PL_A0_BUILD_UA_SENTENCES_6,
+  "a0-27": PL_A0_BUILD_UA_SENTENCES_6,
+  "a0-28": PL_A0_BUILD_UA_SENTENCES_6,
+  "a0-29": PL_A0_BUILD_UA_SENTENCES_6,
+  "a0-30": PL_A0_BUILD_UA_SENTENCES_6,
+};
 
 export function getBuildUaSentencesForLevel(
   courseId: string,
