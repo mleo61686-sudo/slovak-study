@@ -504,7 +504,7 @@ export const PL_B2_SOURCE: Lesson[] = [
       { sk: "kort tenisowy", ua: "тенісний корт", ru: "теннисный корт", en: "tennis court", img: "/words_b2/tenisový kurt.jpg" },
       { sk: "rakieta", ua: "ракетка", ru: "ракетка", en: "racket", img: "/words_b2/raketa.jpg" },
       { sk: "piłka", ua: "м’яч", ru: "мяч", en: "ball", img: "/words_b2/loptička.jpg" },
-      { sk: "wniosek", ua: "подача", ru: "подача", en: "serve", img: "/words_b2/podanie.jpg" },
+      { sk: "serwis", ua: "подача", ru: "подача", en: "serve", img: "/words_b2/podanie.jpg" },
       { sk: "set", ua: "сет", ru: "сет", en: "set", img: "/words_b2/set.jpg" },
       { sk: "turniej", ua: "турнір", ru: "турнир", en: "tournament", img: "/words_b2/turnaj.jpg" },
       { sk: "przeciwnik", ua: "суперник", ru: "соперник", en: "opponent", img: "/words_b2/súper.jpg" },
@@ -694,7 +694,7 @@ export const PL_B2_SOURCE: Lesson[] = [
     title: { ua: "Урок 44 — Право", ru: "Урок 44 — Право", en: "Lesson 44 — Law" },
     words: [
       { sk: "ustawodawstwo", ua: "законодавство", ru: "законодательство", en: "legislation", img: "/words_b2/legislatíva.jpg" },
-      { sk: "przestępstwo", ua: "кримінальний злочин", ru: "уголовное преступление", en: "criminal offense", img: "/words_b2/trestný čin.jpg" },
+      { sk: "czyn karalny", ua: "кримінальний злочин", ru: "уголовное преступление", en: "criminal offense", img: "/words_b2/trestný čin.jpg" },
       { sk: "śledczy", ua: "слідчий", ru: "следователь", en: "investigator", img: "/words_b2/vyšetrovateľ.jpg" },
       { sk: "sąd", ua: "суд", ru: "суд", en: "court", img: "/words_b2/súd.jpg" },
       { sk: "wyrok", ua: "вирок", ru: "приговор", en: "sentence / judgment", img: "/words_b2/rozsudok.jpg" },
