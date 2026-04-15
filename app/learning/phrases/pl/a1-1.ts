@@ -144,12 +144,12 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Proszę", "mi", "pomóc", "z", "walizką", "."],
     },
 
-    [phraseKey("proszę", "a1-2")]: {
-        sk: "Proszę, to dla ciebie.",
+    [phraseKey("proszę bardzo", "a1-2")]: {
+        sk: "Proszę bardzo, to dla ciebie.",
         ua: "Прошу, це для тебе.",
         ru: "Пожалуйста, это для тебя.",
         en: "Here you go, this is for you.",
-        tokens: ["Proszę", ",", "to", "dla", "ciebie", "."],
+        tokens: ["Proszę", "bardzo", ",", "to", "dla", "ciebie", "."],
     },
 
     [phraseKey("w porządku", "a1-2")]: {
