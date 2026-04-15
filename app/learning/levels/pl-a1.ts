@@ -28,7 +28,7 @@ export const PL_A1_SOURCE: Lesson[] = [
       { sk: "mogę", ua: "можна", ru: "можно", en: "may I / can I", img: "/words_a1_cz/mohu.jpg" },
       { sk: "możecie", ua: "можете", ru: "можете", en: "can you", img: "/words_a1_cz/můžete.jpg" },
       { sk: "proszę mi pomóc", ua: "допоможіть мені", ru: "помогите мне", en: "help me", img: "/words_a1_cz/pomozte mi.jpg" },
-      { sk: "proszę", ua: "прошу / будь ласка (даючи щось)", ru: "пожалуйста (вот, когда даёте что-то)", en: "here you go", img: "/words_a1_cz/tady máte.jpg" },
+      { sk: "proszę bardzo", ua: "прошу / ось, тримай", ru: "пожалуйста / вот, держите", en: "here you go", img: "/words_a1_cz/tady máte.jpg" },
       { sk: "w porządku", ua: "в порядку", ru: "в порядке", en: "all right", img: "/words_a1_cz/v pořádku.jpg" },
       { sk: "jasne", ua: "ясно", ru: "ясно", en: "sure", img: "/words_a1/jasné.jpg" },
     ],
