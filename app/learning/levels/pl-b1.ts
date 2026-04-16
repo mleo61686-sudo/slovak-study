@@ -173,7 +173,7 @@ export const PL_B1_SOURCE: Lesson[] = [
       { sk: "trzęsienie ziemi", ua: "землетрус", ru: "землетрясение", en: "earthquake", img: "/words_b1/zemetrasenie.jpg" },
       { sk: "wilgotność", ua: "вологість", ru: "влажность", en: "humidity", img: "/words_b1/vlhkosť.jpg" },
       { sk: "topnienie", ua: "танення", ru: "таяние", en: "melting", img: "/words_b1/topenie.jpg" },
-      { sk: "powódź", ua: "затоплення", ru: "затопление", en: "flooding", img: "/words_b1/záplava.jpg" },
+      { sk: "zalanie", ua: "затоплення", ru: "затопление", en: "flooding", img: "/words_b1/záplava.jpg" },
       { sk: "katastrofa naturalna", ua: "природна катастрофа", ru: "природная катастрофа", en: "natural disaster", img: "/words_b1/prírodná katastrofa.jpg" },
     ],
   },

@@ -69,12 +69,12 @@ export const PL_B1_PHRASES_2: Record<string, Phrase> = {
         tokens: ["Topnienie", "śniegu", "przyspieszyło", ",", "ponieważ", "temperatura", "nagle", "wzrosła", "."],
     },
 
-    [phraseKey("powódź", "b1-11")]: {
-        sk: "Po ulewach nastąpiła powódź, która zalała ulice i piwnice.",
-        ua: "Після злив сталася повінь, яка затопила вулиці та підвали.",
-        ru: "После ливней произошло наводнение, которое затопило улицы и подвалы.",
-        en: "After the heavy rains, there was a flood that flooded the streets and basements.",
-        tokens: ["Po", "ulewach", "nastąpiła", "powódź", ",", "która", "zalała", "ulice", "i", "piwnice", "."],
+    [phraseKey("zalanie", "b1-11")]: {
+        sk: "Po ulewach nastąpiło zalanie, które objęło ulice i piwnice.",
+        ua: "Після злив сталося затоплення, яке охопило вулиці та підвали.",
+        ru: "После ливней произошло затопление, которое охватило улицы и подвалы.",
+        en: "After the heavy rains, there was flooding that affected the streets and basements.",
+        tokens: ["Po", "ulewach", "nastąpiło", "zalanie", ",", "które", "objęło", "ulice", "i", "piwnice", "."],
     },
 
     [phraseKey("katastrofa naturalna", "b1-11")]: {
