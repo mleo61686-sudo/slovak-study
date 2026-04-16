@@ -413,8 +413,12 @@ export type DictionaryEntry = Word & {
   }[];
 };
 
+function getCourseTerm(w: Word) {
+  return String(w.term ?? w.sk).trim();
+}
+
 function dictKey(w: Word) {
-  return String(w.sk).trim().toLowerCase();
+  return getCourseTerm(w).toLowerCase();
 }
 
 export function buildDictionaryFromLessonsByBand(
@@ -437,8 +441,13 @@ export function buildDictionaryFromLessonsByBand(
         const ref = { band, lessonId, lessonTitle: lesson.title };
 
         if (!existing) {
-          map.set(key, {
+          const normalized = {
             ...addRu([w])[0],
+            term: w.term ?? w.sk,
+          };
+
+          map.set(key, {
+            ...normalized,
             key,
             refs: [ref],
           });
@@ -448,6 +457,7 @@ export function buildDictionaryFromLessonsByBand(
         const already = existing.refs.some((r) => r.lessonId === ref.lessonId);
         if (!already) existing.refs.push(ref);
 
+        if (!existing.term && (w.term ?? w.sk)) existing.term = w.term ?? w.sk;
         if (!existing.img && w.img) existing.img = w.img;
         if (!existing.ipa && w.ipa) existing.ipa = w.ipa;
         if (!existing.imgCredit && w.imgCredit) existing.imgCredit = w.imgCredit;
@@ -459,7 +469,9 @@ export function buildDictionaryFromLessonsByBand(
     });
   });
 
-  return Array.from(map.values()).sort((a, b) => a.sk.localeCompare(b.sk, "sk"));
+  return Array.from(map.values()).sort((a, b) =>
+    String(a.term ?? a.sk).localeCompare(String(b.term ?? b.sk))
+  );
 }
 
 export function buildSrsWordsFromLessonsByBand(

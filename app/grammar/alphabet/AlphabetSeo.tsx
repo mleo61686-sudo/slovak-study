@@ -20,7 +20,7 @@ type Content = {
   outro: string;
 };
 
-type CourseContent = Record<"sk" | "cs", Content>;
+type CourseContent = Record<"sk" | "cs" | "pl", Content>;
 
 const CONTENT: Record<Lang, CourseContent> = {
   ua: {
@@ -140,6 +140,69 @@ const CONTENT: Record<Lang, CourseContent> = {
       nextLinks: [
         { href: "/grammar/verbs-present", label: "Дієслова теперішнього часу" },
         { href: "/grammar/cases", label: "Відмінки в чеській мові" },
+      ],
+      outro:
+        "Нижче на сторінці ти можеш пройти вправи, послухати вимову та закріпити знання на практиці.",
+    },
+    pl: {
+      title: "Польський алфавіт: повний гід з вимови",
+      intro: [
+        "Польський алфавіт — це основа вивчення польської мови. Якщо ти хочеш правильно читати, говорити та розуміти польську, потрібно знати літери, правила вимови та наголос.",
+        "На цій сторінці ти знайдеш пояснення букв польського алфавіту, особливості діакритики, правила читання, приклади та практичний тренажер.",
+      ],
+      sections: [
+        {
+          heading: "Скільки букв у польському алфавіті",
+          body: [
+            "Польська мова використовує латиницю з діакритичними знаками. Окрім стандартних букв, є спеціальні літери: ą, ć, ę, ł, ń, ó, ś, ź, ż, а також характерні сполучення cz, sz, rz, ch.",
+            "У польській мові важливу роль відіграють носові голосні ą та ę, а також літера ł, яка часто звучить як «в».",
+          ],
+        },
+        {
+          heading: "Діакритика в польській мові",
+          bullets: [
+            "ą — носовий звук",
+            "ę — носовий звук",
+            "ć, ś, ń, ź — м’які приголосні",
+            "ł — звучить подібно до «в»",
+            "ó — зазвичай звучить як «у»",
+            "ż / rz — часто передають звук «ж»",
+          ],
+          body: [
+            "Саме ці літери й сполучення найчастіше викликають труднощі у початківців.",
+          ],
+        },
+        {
+          heading: "Сполучення CZ, SZ, RZ, CH",
+          body: ["У польській мові є дуже важливі сполучення букв:"],
+          bullets: [
+            "cz — вимовляється як «ч» (czas)",
+            "sz — як «ш» (szkoła)",
+            "rz — часто як «ж» (rzeka)",
+            "ch — як «х» (chleb)",
+          ],
+        },
+        {
+          heading: "Наголос у польській мові",
+          body: [
+            "У польській мові наголос у більшості слів падає на передостанній склад. Наприклад: wa-KA-cje, ko-BIE-ta, nau-CZY-ciel.",
+            "Це важлива відмінність від словацької та чеської мов, де наголос зазвичай стоїть на першому складі.",
+          ],
+        },
+        {
+          heading: "Типові помилки українців",
+          bullets: [
+            "Плутання sz і ś",
+            "Плутання cz і ć",
+            "Неправильне читання ł",
+            "Ігнорування носових голосних ą та ę",
+          ],
+        },
+      ],
+      nextLabel: "Що вивчати після алфавіту",
+      nextLinks: [
+        { href: "/grammar/verbs-present", label: "Дієслова теперішнього часу" },
+        { href: "/grammar/cases", label: "Відмінки в польській мові" },
       ],
       outro:
         "Нижче на сторінці ти можеш пройти вправи, послухати вимову та закріпити знання на практиці.",
@@ -268,6 +331,69 @@ const CONTENT: Record<Lang, CourseContent> = {
       outro:
         "Ниже на странице ты можешь пройти упражнения, послушать произношение и закрепить знания на практике.",
     },
+    pl: {
+      title: "Польский алфавит: полный гид по произношению",
+      intro: [
+        "Польский алфавит — основа изучения польского языка. Если ты хочешь правильно читать, говорить и понимать польский, нужно знать буквы, правила произношения и ударение.",
+        "На этой странице ты найдёшь объяснение букв польского алфавита, особенности диакритики, правила чтения, примеры и практический тренажёр.",
+      ],
+      sections: [
+        {
+          heading: "Сколько букв в польском алфавите",
+          body: [
+            "Польский язык использует латиницу с диакритическими знаками. Кроме стандартных букв, есть специальные: ą, ć, ę, ł, ń, ó, ś, ź, ż, а также характерные сочетания cz, sz, rz, ch.",
+            "В польском языке важную роль играют носовые гласные ą и ę, а также буква ł, которая часто звучит как «в».",
+          ],
+        },
+        {
+          heading: "Диакритика в польском языке",
+          bullets: [
+            "ą — носовой звук",
+            "ę — носовой звук",
+            "ć, ś, ń, ź — мягкие согласные",
+            "ł — часто звучит как «в»",
+            "ó — обычно звучит как «у»",
+            "ż / rz — часто передают звук «ж»",
+          ],
+          body: [
+            "Именно эти буквы и сочетания чаще всего вызывают трудности у начинающих.",
+          ],
+        },
+        {
+          heading: "Сочетания CZ, SZ, RZ, CH",
+          body: ["В польском языке есть очень важные сочетания букв:"],
+          bullets: [
+            "cz — произносится как «ч» (czas)",
+            "sz — как «ш» (szkoła)",
+            "rz — часто как «ж» (rzeka)",
+            "ch — как «х» (chleb)",
+          ],
+        },
+        {
+          heading: "Ударение в польском языке",
+          body: [
+            "В польском языке ударение в большинстве слов падает на предпоследний слог. Например: wa-KA-cje, ko-BIE-ta, nau-CZY-ciel.",
+            "Это важное отличие от словацкого и чешского языков, где ударение обычно стоит на первом слоге.",
+          ],
+        },
+        {
+          heading: "Типичные ошибки",
+          bullets: [
+            "Путаница sz и ś",
+            "Путаница cz и ć",
+            "Неправильное чтение ł",
+            "Игнорирование носовых гласных ą и ę",
+          ],
+        },
+      ],
+      nextLabel: "Что учить после алфавита",
+      nextLinks: [
+        { href: "/grammar/verbs-present", label: "Глаголы настоящего времени" },
+        { href: "/grammar/cases", label: "Падежи в польском языке" },
+      ],
+      outro:
+        "Ниже на странице ты можешь пройти упражнения, послушать произношение и закрепить знания на практике.",
+    },
   },
 
   en: {
@@ -391,6 +517,69 @@ const CONTENT: Record<Lang, CourseContent> = {
       outro:
         "Below on this page, you can complete exercises, listen to pronunciation, and reinforce what you have learned in practice.",
     },
+    pl: {
+      title: "Polish alphabet: complete pronunciation guide",
+      intro: [
+        "The Polish alphabet is the foundation of learning Polish. If you want to read, speak, and understand Polish correctly, you need to know the letters, pronunciation rules, and stress.",
+        "On this page, you will find an explanation of Polish alphabet letters, diacritics, reading rules, examples, and practical exercises.",
+      ],
+      sections: [
+        {
+          heading: "How many letters are in the Polish alphabet",
+          body: [
+            "Polish uses the Latin alphabet with diacritical marks. In addition to standard letters, there are special letters: ą, ć, ę, ł, ń, ó, ś, ź, ż, as well as characteristic combinations cz, sz, rz, ch.",
+            "In Polish, nasal vowels ą and ę play an important role, as well as the letter ł, which often sounds like “w”.",
+          ],
+        },
+        {
+          heading: "Diacritics in Polish",
+          bullets: [
+            "ą — nasal sound",
+            "ę — nasal sound",
+            "ć, ś, ń, ź — soft consonants",
+            "ł — often sounds like “w”",
+            "ó — usually sounds like “u”",
+            "ż / rz — often represent a “zh” sound",
+          ],
+          body: [
+            "These letters and combinations are the ones that most often cause difficulties for beginners.",
+          ],
+        },
+        {
+          heading: "Combinations CZ, SZ, RZ, CH",
+          body: ["In Polish, there are several very important letter combinations:"],
+          bullets: [
+            "cz — pronounced like “ch” (czas)",
+            "sz — like “sh” (szkoła)",
+            "rz — often like “zh” (rzeka)",
+            "ch — like “kh”/“h” (chleb)",
+          ],
+        },
+        {
+          heading: "Stress in Polish",
+          body: [
+            "In Polish, stress in most words falls on the penultimate syllable. For example: wa-KA-cje, ko-BIE-ta, nau-CZY-ciel.",
+            "This is an important difference from Slovak and Czech, where stress is usually on the first syllable.",
+          ],
+        },
+        {
+          heading: "Typical mistakes learners make",
+          bullets: [
+            "Confusing sz and ś",
+            "Confusing cz and ć",
+            "Reading ł incorrectly",
+            "Ignoring nasal vowels ą and ę",
+          ],
+        },
+      ],
+      nextLabel: "What to study after the alphabet",
+      nextLinks: [
+        { href: "/grammar/verbs-present", label: "Present tense verbs" },
+        { href: "/grammar/cases", label: "Cases in Polish" },
+      ],
+      outro:
+        "Below on this page, you can complete exercises, listen to pronunciation, and reinforce what you have learned in practice.",
+    },
   },
 };
 
@@ -408,7 +597,9 @@ function SectionBlock({ section }: { section: Section }) {
           {section.bullets.map((item) => (
             <li key={item}>
               <b>{item.split(" — ")[0]}</b>
-              {item.includes(" — ") ? ` — ${item.split(" — ").slice(1).join(" — ")}` : ""}
+              {item.includes(" — ")
+                ? ` — ${item.split(" — ").slice(1).join(" — ")}`
+                : ""}
             </li>
           ))}
         </ul>
@@ -422,7 +613,8 @@ export default function AlphabetSeo() {
   const { courseId } = useActiveCourse();
 
   const safeLang: Lang = lang === "ru" || lang === "en" ? lang : "ua";
-  const course: "sk" | "cs" = courseId === "cs" ? "cs" : "sk";
+  const course: "sk" | "cs" | "pl" =
+    courseId === "cs" ? "cs" : courseId === "pl" ? "pl" : "sk";
   const content = CONTENT[safeLang][course];
 
   return (

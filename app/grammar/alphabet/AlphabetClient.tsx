@@ -92,6 +92,18 @@ const CS_VOWELS: LetterRow[] = [
   { value: "ě", label: { ua: "є / пом’якшує попередній звук", ru: "е / смягчает предыдущий звук", en: "ě / softens the previous sound" }, example: "město" },
 ];
 
+const PL_VOWELS: LetterRow[] = [
+  { value: "a", label: { ua: "а", ru: "а", en: "a" }, example: "auto" },
+  { value: "ą", label: { ua: "носове «он/ом»", ru: "носовое «он/ом»", en: "nasal ą" }, example: "mąż" },
+  { value: "e", label: { ua: "е", ru: "е", en: "e" }, example: "ser" },
+  { value: "ę", label: { ua: "носове «ен/ем»", ru: "носовое «ен/ем»", en: "nasal ę" }, example: "język" },
+  { value: "i", label: { ua: "і", ru: "и", en: "i" }, example: "igła" },
+  { value: "o", label: { ua: "о", ru: "о", en: "o" }, example: "dom" },
+  { value: "ó", label: { ua: "у", ru: "у", en: "u / ó" }, example: "góra" },
+  { value: "u", label: { ua: "у", ru: "у", en: "u" }, example: "ulica" },
+  { value: "y", label: { ua: "и", ru: "ы", en: "y" }, example: "syn" },
+];
+
 const SK_CONSONANTS: LetterRow[] = [
   { value: "č", label: { ua: "ч", ru: "ч", en: "ch" }, example: "čaj" },
   { value: "š", label: { ua: "ш", ru: "ш", en: "sh" }, example: "škola" },
@@ -116,6 +128,19 @@ const CS_CONSONANTS: LetterRow[] = [
   { value: "ch", label: { ua: "х", ru: "х", en: "kh / ch" }, example: "chléb" },
 ];
 
+const PL_CONSONANTS: LetterRow[] = [
+  { value: "cz", label: { ua: "ч", ru: "ч", en: "ch" }, example: "czas" },
+  { value: "sz", label: { ua: "ш", ru: "ш", en: "sh" }, example: "szkoła" },
+  { value: "ż", label: { ua: "ж", ru: "ж", en: "zh" }, example: "żona" },
+  { value: "ź", label: { ua: "м’яке «жь/зь»", ru: "мягкое «жь/зь»", en: "soft ź" }, example: "źle" },
+  { value: "ć", label: { ua: "м’яке «чь»", ru: "мягкое «чь»", en: "soft ć" }, example: "ćma" },
+  { value: "ś", label: { ua: "м’яке «шь»", ru: "мягкое «шь»", en: "soft ś" }, example: "śniadanie" },
+  { value: "ń", label: { ua: "нь", ru: "нь", en: "soft ń" }, example: "koń" },
+  { value: "ł", label: { ua: "в / ў", ru: "в / ў", en: "w-like ł" }, example: "łódź" },
+  { value: "rz", label: { ua: "ж", ru: "ж", en: "zh / rz" }, example: "rzeka" },
+  { value: "ch", label: { ua: "х", ru: "х", en: "kh / ch" }, example: "chleb" },
+];
+
 const SK_PRACTICE_WORDS = [
   "práca",
   "škola",
@@ -136,6 +161,17 @@ const CS_PRACTICE_WORDS = [
   "chléb",
   "město",
   "učitel",
+];
+
+const PL_PRACTICE_WORDS = [
+  "praca",
+  "szkoła",
+  "człowiek",
+  "życie",
+  "dziękuję",
+  "chleb",
+  "miasto",
+  "nauczyciel",
 ];
 
 const SK_LETTER_QUESTIONS: Q[] = [
@@ -252,6 +288,63 @@ const CS_LETTER_QUESTIONS: Q[] = [
   },
 ];
 
+const PL_LETTER_QUESTIONS: Q[] = [
+  {
+    question: {
+      ua: "Обери букви для звука «ч»",
+      ru: "Выбери буквы для звука «ч»",
+      en: 'Choose the letters for the sound "ch"',
+    },
+    options: ["cz", "sz", "rz", "ch"],
+    correct: "cz",
+  },
+  {
+    question: {
+      ua: "Обери букви для звука «ш»",
+      ru: "Выбери буквы для звука «ш»",
+      en: 'Choose the letters for the sound "sh"',
+    },
+    options: ["cz", "sz", "ż", "ś"],
+    correct: "sz",
+  },
+  {
+    question: {
+      ua: "Обери букви для звука «ж»",
+      ru: "Выбери буквы для звука «ж»",
+      en: 'Choose the letters for the sound "zh"',
+    },
+    options: ["rz", "sz", "ć", "ń"],
+    correct: "rz",
+  },
+  {
+    question: {
+      ua: "Яка буква в польській часто звучить як «в»?",
+      ru: "Какая буква в польском часто звучит как «в»?",
+      en: "Which letter in Polish often sounds like “w”?",
+    },
+    options: ["ł", "l", "ń", "ź"],
+    correct: "ł",
+  },
+  {
+    question: {
+      ua: "Яка голосна є носовою?",
+      ru: "Какая гласная является носовой?",
+      en: "Which vowel is nasal?",
+    },
+    options: ["ą", "ó", "y", "u"],
+    correct: "ą",
+  },
+  {
+    question: {
+      ua: "Як пишеться звук «х» у польській?",
+      ru: "Как пишется звук «х» в польском?",
+      en: 'How is the "kh" sound written in Polish?',
+    },
+    options: ["h", "ch", "x", "kh"],
+    correct: "ch",
+  },
+];
+
 // ===== Audio helpers =====
 
 async function sha1Hex(input: string) {
@@ -292,10 +385,7 @@ function LetterList({
   );
 }
 
-const UI: Record<
-  string,
-  LocalizedText
-> = {
+const UI: Record<string, LocalizedText> = {
   titleSk: {
     ua: "Словацький алфавіт і вимова 🔤",
     ru: "Словацкий алфавит и произношение 🔤",
@@ -306,6 +396,11 @@ const UI: Record<
     ru: "Чешский алфавит и произношение 🔤",
     en: "Czech alphabet and pronunciation 🔤",
   },
+  titlePl: {
+    ua: "Польський алфавіт і вимова 🔤",
+    ru: "Польский алфавит и произношение 🔤",
+    en: "Polish alphabet and pronunciation 🔤",
+  },
   introSk: {
     ua: "Словацька мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
     ru: "Словацкий язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге.",
@@ -315,6 +410,11 @@ const UI: Record<
     ua: "Чеська мова використовує латиницю з діакритикою. Наголос майже завжди на першому складі.",
     ru: "Чешский язык использует латиницу с диакритикой. Ударение почти всегда на первом слоге.",
     en: "Czech uses the Latin alphabet with diacritics. Stress is almost always on the first syllable.",
+  },
+  introPl: {
+    ua: "Польська мова використовує латиницю з діакритикою. Наголос у більшості слів падає на передостанній склад.",
+    ru: "Польский язык использует латиницу с диакритикой. Ударение в большинстве слов падает на предпоследний слог.",
+    en: "Polish uses the Latin alphabet with diacritics. In most words, the stress falls on the penultimate syllable.",
   },
   section1: { ua: "1) Алфавіт", ru: "1) Алфавит", en: "1) Alphabet" },
   section2: { ua: "2) Голосні", ru: "2) Гласные", en: "2) Vowels" },
@@ -332,6 +432,11 @@ const UI: Record<
     ua: "У чеській мові наголос майже завжди на першому складі:",
     ru: "В чешском языке ударение почти всегда на первом слоге:",
     en: "In Czech, stress is almost always on the first syllable:",
+  },
+  stressPl: {
+    ua: "У польській мові наголос у більшості слів падає на передостанній склад:",
+    ru: "В польском языке ударение в большинстве слов падает на предпоследний слог:",
+    en: "In Polish, stress in most words falls on the penultimate syllable:",
   },
   miniIntro: {
     ua: "Тут можна реально потренуватись: тести + слухання + диктант.",
@@ -381,13 +486,19 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
   const uiLang = forcedLang ?? lang;
   const isCzech = courseId === "cs";
+  const isPolish = courseId === "pl";
 
-  const vowels = isCzech ? CS_VOWELS : SK_VOWELS;
-  const consonants = isCzech ? CS_CONSONANTS : SK_CONSONANTS;
-  const practiceWords = isCzech ? CS_PRACTICE_WORDS : SK_PRACTICE_WORDS;
+  const vowels = isPolish ? PL_VOWELS : isCzech ? CS_VOWELS : SK_VOWELS;
+  const consonants = isPolish ? PL_CONSONANTS : isCzech ? CS_CONSONANTS : SK_CONSONANTS;
+  const practiceWords = isPolish ? PL_PRACTICE_WORDS : isCzech ? CS_PRACTICE_WORDS : SK_PRACTICE_WORDS;
   const dictationPool = useMemo(
-    () => (isCzech ? CS_PRACTICE_WORDS : SK_PRACTICE_WORDS),
-    [isCzech]
+    () =>
+      isPolish
+        ? PL_PRACTICE_WORDS
+        : isCzech
+          ? CS_PRACTICE_WORDS
+          : SK_PRACTICE_WORDS,
+    [isCzech, isPolish]
   );
 
   const [tab, setTab] = useState<"quiz" | "listen" | "type">("quiz");
@@ -396,20 +507,35 @@ export default function AlphabetPage({ forcedLang }: Props) {
   const [qScore, setQScore] = useState(0);
   const [qDone, setQDone] = useState(false);
   const quiz = useMemo(
-    () => shuffle(isCzech ? CS_LETTER_QUESTIONS : SK_LETTER_QUESTIONS).slice(0, 6),
-    [isCzech]
+    () =>
+      shuffle(
+        isPolish
+          ? PL_LETTER_QUESTIONS
+          : isCzech
+            ? CS_LETTER_QUESTIONS
+            : SK_LETTER_QUESTIONS
+      ).slice(0, 6),
+    [isCzech, isPolish]
   );
 
   const listenRounds = useMemo(() => {
-    const rounds = isCzech
+    const rounds = isPolish
       ? [
+        { target: "cz", words: ["człowiek", "szkoła", "życie", "miasto"] },
+        { target: "sz", words: ["szkoła", "nauczyciel", "chleb", "życie"] },
+        { target: "ż", words: ["życie", "żona", "miasto", "praca"] },
+        { target: "rz", words: ["rzeka", "miasto", "szkoła", "chleb"] },
+        { target: "ch", words: ["chleb", "praca", "życie", "nauczyciel"] },
+      ]
+      : isCzech
+        ? [
           { target: "č", words: ["člověk", "škola", "život", "město"] },
           { target: "š", words: ["škola", "učitel", "chléb", "život"] },
           { target: "ž", words: ["život", "člověk", "město", "práce"] },
           { target: "ř", words: ["řeka", "město", "škola", "chléb"] },
           { target: "ch", words: ["chléb", "práce", "život", "učitel"] },
         ]
-      : [
+        : [
           { target: "č", words: ["človek", "škola", "život", "mesto"] },
           { target: "š", words: ["škola", "učiteľ", "chlieb", "život"] },
           { target: "ž", words: ["život", "človek", "mesto", "práca"] },
@@ -418,7 +544,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
         ];
 
     return shuffle(rounds);
-  }, [isCzech]);
+  }, [isCzech, isPolish]);
 
   const [lIndex, setLIndex] = useState(0);
   const [lScore, setLScore] = useState(0);
@@ -445,7 +571,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
     if (audioRef.current) {
       try {
         audioRef.current.pause();
-      } catch {}
+      } catch { }
       audioRef.current.currentTime = 0;
       audioRef.current = null;
     }
@@ -456,7 +582,11 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
     const clean = word.trim();
     const key = await sha1Hex(`word:${clean}`);
-    const base = isCzech ? "/audio/cs/words" : "/audio/words";
+    const base = isPolish
+      ? "/audio/pl/words"
+      : isCzech
+        ? "/audio/cs/words"
+        : "/audio/words";
     const src = `${base}/${key}.mp3`;
 
     const audio = new Audio(src);
@@ -464,7 +594,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
 
     try {
       await audio.play();
-    } catch {}
+    } catch { }
   };
 
   useEffect(() => {
@@ -522,19 +652,29 @@ export default function AlphabetPage({ forcedLang }: Props) {
     <div className="space-y-10">
       <div>
         <h1 className="text-2xl font-semibold">
-          {isCzech ? tr(UI.titleCs, uiLang) : tr(UI.titleSk, uiLang)}
+          {isPolish
+            ? tr(UI.titlePl, uiLang)
+            : isCzech
+              ? tr(UI.titleCs, uiLang)
+              : tr(UI.titleSk, uiLang)}
         </h1>
         <p className="mt-2 text-slate-700">
-          {isCzech ? tr(UI.introCs, uiLang) : tr(UI.introSk, uiLang)}
+          {isPolish
+            ? tr(UI.introPl, uiLang)
+            : isCzech
+              ? tr(UI.introCs, uiLang)
+              : tr(UI.introSk, uiLang)}
         </p>
       </div>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{tr(UI.section1, uiLang)}</h2>
         <div className="rounded-xl border bg-white p-4 text-sm leading-relaxed">
-          {!isCzech
-            ? "a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o, ó, ô, p, q, r, ŕ, s, š, t, ť, u, ú, v, w, x, y, ý, z, ž"
-            : "a, á, b, c, č, d, ď, e, é, ě, f, g, h, ch, i, í, j, k, l, m, n, ň, o, ó, p, q, r, ř, s, š, t, ť, u, ú, ů, v, w, x, y, ý, z, ž"}
+          {isPolish
+            ? "a, ą, b, c, ć, d, e, ę, f, g, h, i, j, k, l, ł, m, n, ń, o, ó, p, q, r, s, ś, t, u, v, w, x, y, z, ź, ż"
+            : isCzech
+              ? "a, á, b, c, č, d, ď, e, é, ě, f, g, h, ch, i, í, j, k, l, m, n, ň, o, ó, p, q, r, ř, s, š, t, ť, u, ú, ů, v, w, x, y, ý, z, ž"
+              : "a, á, ä, b, c, č, d, ď, e, é, f, g, h, ch, i, í, j, k, l, ľ, m, n, ň, o, ó, ô, p, q, r, ŕ, s, š, t, ť, u, ú, v, w, x, y, ý, z, ž"}
         </div>
       </section>
 
@@ -559,10 +699,14 @@ export default function AlphabetPage({ forcedLang }: Props) {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold">{tr(UI.section4, uiLang)}</h2>
         <div className="rounded-xl border bg-white p-4">
-          {isCzech ? tr(UI.stressCs, uiLang) : tr(UI.stressSk, uiLang)}
+          {isPolish
+            ? tr(UI.stressPl, uiLang)
+            : isCzech
+              ? tr(UI.stressCs, uiLang)
+              : tr(UI.stressSk, uiLang)}
           <div className="mt-2 flex items-center gap-2">
-            <b>{isCzech ? "PRA-ha" : "PRÁ-ca"}</b>
-            <SpeakButton text={isCzech ? "Praha" : "práca"} />
+            <b>{isPolish ? "wa-KA-cje" : isCzech ? "PRA-ha" : "PRÁ-ca"}</b>
+            <SpeakButton text={isPolish ? "wakacje" : isCzech ? "Praha" : "práca"} />
           </div>
         </div>
       </section>
@@ -592,25 +736,22 @@ export default function AlphabetPage({ forcedLang }: Props) {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setTab("quiz")}
-              className={`rounded-xl border px-3 py-2 text-sm ${
-                tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"
-              }`}
+              className={`rounded-xl border px-3 py-2 text-sm ${tab === "quiz" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {tr(UI.quiz, uiLang)}
             </button>
             <button
               onClick={() => setTab("listen")}
-              className={`rounded-xl border px-3 py-2 text-sm ${
-                tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
-              }`}
+              className={`rounded-xl border px-3 py-2 text-sm ${tab === "listen" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {tr(UI.listen, uiLang)}
             </button>
             <button
               onClick={() => setTab("type")}
-              className={`rounded-xl border px-3 py-2 text-sm ${
-                tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"
-              }`}
+              className={`rounded-xl border px-3 py-2 text-sm ${tab === "type" ? "bg-black text-white" : "hover:bg-slate-50"
+                }`}
             >
               {tr(UI.type, uiLang)}
             </button>
@@ -755,13 +896,12 @@ export default function AlphabetPage({ forcedLang }: Props) {
                     onChange={(e) => setInput(e.target.value)}
                     disabled={status !== "idle"}
                     placeholder={tr(UI.inputPlaceholder, uiLang)}
-                    className={`w-full rounded-xl border px-3 py-2 ${
-                      status === "correct"
+                    className={`w-full rounded-xl border px-3 py-2 ${status === "correct"
                         ? "border-green-500"
                         : status === "wrong"
-                        ? "border-red-500"
-                        : "border-slate-300"
-                    }`}
+                          ? "border-red-500"
+                          : "border-slate-300"
+                      }`}
                   />
 
                   {status === "idle" ? (

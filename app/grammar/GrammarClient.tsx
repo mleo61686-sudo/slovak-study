@@ -123,8 +123,68 @@ const CS_TOPICS: Topic[] = [
   },
 ];
 
+const PL_TOPICS: Topic[] = [
+  {
+    id: "alphabet",
+    title: {
+      ua: "Алфавіт і вимова",
+      ru: "Алфавит и произношение",
+      en: "Alphabet and pronunciation",
+    },
+    description: {
+      ua: "Основи читання і звуків у польській мові.",
+      ru: "Основы чтения и звуков в польском языке.",
+      en: "The basics of reading and sounds in Polish.",
+    },
+  },
+  {
+    id: "verbs-present",
+    title: {
+      ua: "Дієслова теперішнього часу",
+      ru: "Глаголы настоящего времени",
+      en: "Present tense verbs",
+    },
+    description: {
+      ua: "Як відмінюються дієслова в теперішньому часі.",
+      ru: "Как спрягаются глаголы в настоящем времени.",
+      en: "How verbs are conjugated in the present tense.",
+    },
+  },
+  {
+    id: "cases",
+    title: {
+      ua: "Відмінки",
+      ru: "Падежи",
+      en: "Cases",
+    },
+    description: {
+      ua: "7 відмінків у польській мові з прикладами.",
+      ru: "7 падежей в польском языке с примерами.",
+      en: "7 cases in Polish with examples.",
+    },
+  },
+  {
+    id: "slovak-slang",
+    title: {
+      ua: "Сленг і розмовна мова",
+      ru: "Сленг и разговорная речь",
+      en: "Slang and spoken language",
+    },
+    description: {
+      ua: "Живі фрази та вирази живої польської мови.",
+      ru: "Живые фразы и выражения живой польской речи.",
+      en: "Real-life phrases and expressions used in spoken Polish.",
+    },
+  },
+];
+
 const UI: Record<
-  "grammarSkTitle" | "grammarCsTitle" | "csIntro" | "skIntro",
+  | "grammarSkTitle"
+  | "grammarCsTitle"
+  | "grammarPlTitle"
+  | "skIntro"
+  | "csIntro"
+  | "plIntro",
   LocalizedText
 > = {
   grammarSkTitle: {
@@ -137,15 +197,25 @@ const UI: Record<
     ru: "Грамматика CZ",
     en: "Czech grammar",
   },
-  csIntro: {
-    ua: "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
-    ru: "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка.",
-    en: "Choose a topic and open a lesson with examples and a mini exercise for Czech.",
+  grammarPlTitle: {
+    ua: "Граматика PL",
+    ru: "Грамматика PL",
+    en: "Polish grammar",
   },
   skIntro: {
     ua: "Обери тему та відкрий урок з прикладами і міні-вправою.",
     ru: "Выбери тему и открой урок с примерами и мини-упражнением.",
     en: "Choose a topic and open a lesson with examples and a mini exercise.",
+  },
+  csIntro: {
+    ua: "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
+    ru: "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка.",
+    en: "Choose a topic and open a lesson with examples and a mini exercise for Czech.",
+  },
+  plIntro: {
+    ua: "Обери тему та відкрий урок з прикладами і міні-вправою для польської мови.",
+    ru: "Выбери тему и открой урок с примерами и мини-упражнением для польского языка.",
+    en: "Choose a topic and open a lesson with examples and a mini exercise for Polish.",
   },
 };
 
@@ -180,18 +250,32 @@ export default function GrammarClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const isCzech = courseId === "cs";
-  const topics = isCzech ? CS_TOPICS : SK_TOPICS;
+  const topics =
+    courseId === "cs"
+      ? CS_TOPICS
+      : courseId === "pl"
+        ? PL_TOPICS
+        : SK_TOPICS;
+
+  const title =
+    courseId === "cs"
+      ? tr(UI.grammarCsTitle, lang)
+      : courseId === "pl"
+        ? tr(UI.grammarPlTitle, lang)
+        : tr(UI.grammarSkTitle, lang);
+
+  const intro =
+    courseId === "cs"
+      ? tr(UI.csIntro, lang)
+      : courseId === "pl"
+        ? tr(UI.plIntro, lang)
+        : tr(UI.skIntro, lang);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">
-        {isCzech ? tr(UI.grammarCsTitle, lang) : tr(UI.grammarSkTitle, lang)}
-      </h1>
+      <h1 className="text-2xl font-semibold">{title}</h1>
 
-      <p className="text-slate-700">
-        {isCzech ? tr(UI.csIntro, lang) : tr(UI.skIntro, lang)}
-      </p>
+      <p className="text-slate-700">{intro}</p>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {topics.map((topic) => (

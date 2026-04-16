@@ -8,8 +8,10 @@ import { trWord } from "@/lib/src/tr";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import {
   BUILD_SAMPLES_CS,
+  BUILD_SAMPLES_PL,
   BUILD_SAMPLES_SK,
   CASES_CS,
+  CASES_PL,
   CASES_SK,
 } from "./cases-data";
 import {
@@ -33,6 +35,12 @@ const UI: Record<string, LocalizedText> = {
     ru: "Падежи (7 падежей в чешском)",
     en: "Cases (7 cases in Czech)",
   },
+  titlePl: {
+    ua: "Відмінки (7 падежів у польській)",
+    ru: "Падежи (7 падежей в польском)",
+    en: "Cases (7 cases in Polish)",
+  },
+
   introSk: {
     ua: "У словацькій 6 відмінків. Вони відповідають на питання (Kto? Čo? / Koho? Čoho? …) і змінюють закінчення слів.",
     ru: "В словацком 6 падежей. Они отвечают на вопросы (Kto? Čo? / Koho? Čoho? …) и меняют окончания слов.",
@@ -43,6 +51,12 @@ const UI: Record<string, LocalizedText> = {
     ru: "В чешском 7 падежей. Они отвечают на вопросы (Kdo? Co? / Koho? Čeho? …) и меняют окончания слов.",
     en: "Czech has 7 cases. They answer questions like (Kdo? Co? / Koho? Čeho? …) and change word endings.",
   },
+  introPl: {
+    ua: "У польській 7 відмінків. Вони відповідають на питання (Kto? Co? / Kogo? Czego? …) і змінюють закінчення слів.",
+    ru: "В польском 7 падежей. Они отвечают на вопросы (Kto? Co? / Kogo? Czego? …) и меняют окончания слов.",
+    en: "Polish has 7 cases. They answer questions like (Kto? Co? / Kogo? Czego? …) and change word endings.",
+  },
+
   section1: {
     ua: "1) Швидка таблиця",
     ru: "1) Быстрая таблица",
@@ -133,6 +147,7 @@ const UI: Record<string, LocalizedText> = {
     ru: "❌ Неправильно. Правильно:",
     en: "❌ Incorrect. Correct answer:",
   },
+
   tip1Sk: {
     ua: "Lokál завжди з прийменником: v/vo, na, o, po.",
     ru: "Lokál всегда с предлогом: v/vo, na, o, po.",
@@ -148,6 +163,7 @@ const UI: Record<string, LocalizedText> = {
     ru: "Inštrumentál часто с s/so: s kamarátom, so sestrou.",
     en: "Inštrumentál is often used with s/so: s kamarátom, so sestrou.",
   },
+
   tip1Cs: {
     ua: "Lokál у чеській завжди з прийменником: v/ve, na, o, po.",
     ru: "Lokál в чешском всегда с предлогом: v/ve, na, o, po.",
@@ -167,6 +183,27 @@ const UI: Record<string, LocalizedText> = {
     ua: "Vokativ використовується для звертання: Petře!, pane!, Jano!",
     ru: "Vokativ используется для обращения: Petře!, pane!, Jano!",
     en: "Vokativ is used for addressing someone: Petře!, pane!, Jano!",
+  },
+
+  tip1Pl: {
+    ua: "Miejscownik у польській завжди з прийменником: w/we, na, o, po.",
+    ru: "Miejscownik в польском всегда с предлогом: w/we, na, o, po.",
+    en: "Miejscownik in Polish is always used with a preposition: w/we, na, o, po.",
+  },
+  tip2Pl: {
+    ua: "Dopełniacz часто після bez, do, z/ze: bez wody, do pracy, z domu.",
+    ru: "Dopełniacz часто после bez, do, z/ze: bez wody, do pracy, z domu.",
+    en: "Dopełniacz often follows bez, do, z/ze: bez wody, do pracy, z domu.",
+  },
+  tip3Pl: {
+    ua: "Narzędnik часто з z/ze: z kolegą, ze siostrą.",
+    ru: "Narzędnik часто с z/ze: z kolegą, ze siostrą.",
+    en: "Narzędnik is often used with z/ze: z kolegą, ze siostrą.",
+  },
+  tip4Pl: {
+    ua: "Wołacz використовується для звертання: Piotrze!, Anno!, panie!",
+    ru: "Wołacz используется для обращения: Piotrze!, Anno!, panie!",
+    en: "Wołacz is used for addressing someone: Piotrze!, Anno!, panie!",
   },
 };
 
@@ -190,8 +227,14 @@ export default function CasesClient() {
   const { courseId } = useActiveCourse();
 
   const isCzech = courseId === "cs";
-  const cases = isCzech ? CASES_CS : CASES_SK;
-  const buildSamples = isCzech ? BUILD_SAMPLES_CS : BUILD_SAMPLES_SK;
+  const isPolish = courseId === "pl";
+
+  const cases = isCzech ? CASES_CS : isPolish ? CASES_PL : CASES_SK;
+  const buildSamples = isCzech
+    ? BUILD_SAMPLES_CS
+    : isPolish
+      ? BUILD_SAMPLES_PL
+      : BUILD_SAMPLES_SK;
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -243,11 +286,19 @@ export default function CasesClient() {
     <div className="space-y-10">
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold">
-          {isCzech ? tr(UI.titleCs, lang) : tr(UI.titleSk, lang)}
+          {isCzech
+            ? tr(UI.titleCs, lang)
+            : isPolish
+              ? tr(UI.titlePl, lang)
+              : tr(UI.titleSk, lang)}
         </h1>
 
         <p className="text-slate-700">
-          {isCzech ? tr(UI.introCs, lang) : tr(UI.introSk, lang)}
+          {isCzech
+            ? tr(UI.introCs, lang)
+            : isPolish
+              ? tr(UI.introPl, lang)
+              : tr(UI.introSk, lang)}
         </p>
       </div>
 
@@ -490,18 +541,25 @@ export default function CasesClient() {
 
         <div className="rounded-2xl border bg-white p-5 text-slate-700">
           <ul className="list-disc space-y-2 pl-5">
-            {!isCzech ? (
+            {!isCzech && !isPolish ? (
               <>
                 <li>{tr(UI.tip1Sk, lang)}</li>
                 <li>{tr(UI.tip2Sk, lang)}</li>
                 <li>{tr(UI.tip3Sk, lang)}</li>
               </>
-            ) : (
+            ) : isCzech ? (
               <>
                 <li>{tr(UI.tip1Cs, lang)}</li>
                 <li>{tr(UI.tip2Cs, lang)}</li>
                 <li>{tr(UI.tip3Cs, lang)}</li>
                 <li>{tr(UI.tip4Cs, lang)}</li>
+              </>
+            ) : (
+              <>
+                <li>{tr(UI.tip1Pl, lang)}</li>
+                <li>{tr(UI.tip2Pl, lang)}</li>
+                <li>{tr(UI.tip3Pl, lang)}</li>
+                <li>{tr(UI.tip4Pl, lang)}</li>
               </>
             )}
           </ul>
