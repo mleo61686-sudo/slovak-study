@@ -1,6 +1,7 @@
 export type W = { sk: string; ua: string; ru?: string; en?: string };
 
 export type PersonKey = "ja" | "ty" | "on" | "ona" | "ono" | "my" | "vy" | "oni";
+export type GrammarCourseId = "sk" | "cs" | "pl";
 
 export type ConjugationRow = {
   person: PersonKey;
@@ -18,7 +19,7 @@ export type VerbBlock = {
   examples: W[];
 };
 
-export const PRONOUNS: Record<PersonKey, W> = {
+export const PRONOUNS_SK: Record<PersonKey, W> = {
   ja: { sk: "ja", ua: "я", ru: "я", en: "I" },
   ty: { sk: "ty", ua: "ти", ru: "ты", en: "you" },
   on: { sk: "on", ua: "він", ru: "он", en: "he" },
@@ -29,14 +30,44 @@ export const PRONOUNS: Record<PersonKey, W> = {
   oni: { sk: "oni", ua: "вони", ru: "они", en: "they" },
 };
 
+export const PRONOUNS_CS: Record<PersonKey, W> = {
+  ja: { sk: "já", ua: "я", ru: "я", en: "I" },
+  ty: { sk: "ty", ua: "ти", ru: "ты", en: "you" },
+  on: { sk: "on", ua: "він", ru: "он", en: "he" },
+  ona: { sk: "ona", ua: "вона", ru: "она", en: "she" },
+  ono: { sk: "ono", ua: "воно", ru: "оно", en: "it" },
+  my: { sk: "my", ua: "ми", ru: "мы", en: "we" },
+  vy: { sk: "vy", ua: "ви", ru: "вы", en: "you" },
+  oni: { sk: "oni", ua: "вони", ru: "они", en: "they" },
+};
+
+export const PRONOUNS_PL: Record<PersonKey, W> = {
+  ja: { sk: "ja", ua: "я", ru: "я", en: "I" },
+  ty: { sk: "ty", ua: "ти", ru: "ты", en: "you" },
+  on: { sk: "on", ua: "він", ru: "он", en: "he" },
+  ona: { sk: "ona", ua: "вона", ru: "она", en: "she" },
+  ono: { sk: "ono", ua: "воно", ru: "оно", en: "it" },
+  my: { sk: "my", ua: "ми", ru: "мы", en: "we" },
+  vy: { sk: "wy", ua: "ви", ru: "вы", en: "you" },
+  oni: { sk: "oni", ua: "вони", ru: "они", en: "they" },
+};
+
+export const PRONOUNS_BY_COURSE: Record<GrammarCourseId, Record<PersonKey, W>> = {
+  sk: PRONOUNS_SK,
+  cs: PRONOUNS_CS,
+  pl: PRONOUNS_PL,
+};
+
 type UiLang = "ua" | "ru" | "en";
 
 type UiDict = {
   loading: string;
   titleSk: string;
   titleCs: string;
+  titlePl: string;
   subtitleSk: string;
   subtitleCs: string;
+  subtitlePl: string;
 
   s1: string;
   s2: string;
@@ -72,6 +103,7 @@ type UiDict = {
 
   cheatItemsSk: string[];
   cheatItemsCs: string[];
+  cheatItemsPl: string[];
 };
 
 export const UI: Record<UiLang, UiDict> = {
@@ -80,10 +112,13 @@ export const UI: Record<UiLang, UiDict> = {
 
     titleSk: "Дієслова теперішнього часу",
     titleCs: "Дієслова теперішнього часу",
+    titlePl: "Дієслова теперішнього часу",
     subtitleSk:
       "Дієслова в словацькій змінюються за особами (ja/ty/on…). Нижче — таблички + звук + вправи.",
     subtitleCs:
       "Дієслова в чеській змінюються за особами (já/ty/on…). Нижче — таблички + звук + вправи.",
+    subtitlePl:
+      "Дієслова в польській змінюються за особами (ja/ty/on…). Нижче — таблички + звук + вправи.",
 
     s1: "1) Особові займенники",
     s2: "2) Вибери дієслово",
@@ -127,6 +162,11 @@ export const UI: Record<UiLang, UiDict> = {
       "Заперечення: зазвичай ne- разом з дієсловом: dělám → nedělám. Для jít: jdu → nejdu.",
       "Питання: часто достатньо інтонації або знака питання: Jdete do města?",
     ],
+    cheatItemsPl: [
+      "У польській особу часто видно по закінченню: -m (ja), -sz (ty), -my (my), -cie (wy).",
+      "Заперечення зазвичай утворюється окремим słowom nie: robię → nie robię, idę → nie idę.",
+      "Питання часто можна зробити інтонацією або знаком питання: Idziecie do miasta?",
+    ],
   },
 
   ru: {
@@ -134,10 +174,13 @@ export const UI: Record<UiLang, UiDict> = {
 
     titleSk: "Глаголы настоящего времени",
     titleCs: "Глаголы настоящего времени",
+    titlePl: "Глаголы настоящего времени",
     subtitleSk:
       "Глаголы в словацком меняются по лицам (ja/ty/on…). Ниже — таблицы + звук + упражнения.",
     subtitleCs:
       "Глаголы в чешском меняются по лицам (já/ty/on…). Ниже — таблицы + звук + упражнения.",
+    subtitlePl:
+      "Глаголы в польском меняются по лицам (ja/ty/on…). Ниже — таблицы + звук + упражнения.",
 
     s1: "1) Личные местоимения",
     s2: "2) Выбери глагол",
@@ -181,6 +224,11 @@ export const UI: Record<UiLang, UiDict> = {
       "Отрицание: обычно ne- вместе с глаголом: dělám → nedělám. Для jít: jdu → nejdu.",
       "Вопрос: часто достаточно интонации или знака вопроса: Jdete do města?",
     ],
+    cheatItemsPl: [
+      "В польском лицо часто видно по окончанию: -m (ja), -sz (ty), -my (my), -cie (wy).",
+      "Отрицание обычно образуется отдельным словом nie: robię → nie robię, idę → nie idę.",
+      "Вопрос часто можно сделать интонацией или знаком вопроса: Idziecie do miasta?",
+    ],
   },
 
   en: {
@@ -188,10 +236,13 @@ export const UI: Record<UiLang, UiDict> = {
 
     titleSk: "Present Tense Verbs",
     titleCs: "Present Tense Verbs",
+    titlePl: "Present Tense Verbs",
     subtitleSk:
       "In Slovak, verbs change by person (ja/ty/on…). Below are tables, audio, and exercises.",
     subtitleCs:
       "In Czech, verbs change by person (já/ty/on…). Below are tables, audio, and exercises.",
+    subtitlePl:
+      "In Polish, verbs change by person (ja/ty/on…). Below are tables, audio, and exercises.",
 
     s1: "1) Personal pronouns",
     s2: "2) Choose a verb",
@@ -234,6 +285,11 @@ export const UI: Record<UiLang, UiDict> = {
       "In Czech, endings often show the person: -m (já), -š (ty), -me (my), -te (vy).",
       "Negation is usually made with ne- attached to the verb: dělám → nedělám. For jít: jdu → nejdu.",
       "Intonation or a question mark is often enough: Jdete do města?",
+    ],
+    cheatItemsPl: [
+      "In Polish, endings often show the person: -m (ja), -sz (ty), -my (my), -cie (wy).",
+      "Negation is usually made with a separate word nie: robię → nie robię, idę → nie idę.",
+      "Intonation or a question mark is often enough: Idziecie do miasta?",
     ],
   },
 };
@@ -300,6 +356,38 @@ export const BYT_NEG_CS: Record<string, string> = {
   Jsme: "Nejsme",
   Jste: "Nejste",
   Jsou: "Nejsou",
+};
+
+export const ISC_NEG_PL: Record<string, string> = {
+  "idę": "nie idę",
+  "idziesz": "nie idziesz",
+  "idzie": "nie idzie",
+  "idziemy": "nie idziemy",
+  "idziecie": "nie idziecie",
+  "idą": "nie idą",
+
+  "Idę": "Nie idę",
+  "Idziesz": "Nie idziesz",
+  "Idzie": "Nie idzie",
+  "Idziemy": "Nie idziemy",
+  "Idziecie": "Nie idziecie",
+  "Idą": "Nie idą",
+};
+
+export const BYC_NEG_PL: Record<string, string> = {
+  "jestem": "nie jestem",
+  "jesteś": "nie jesteś",
+  "jest": "nie jest",
+  "jesteśmy": "nie jesteśmy",
+  "jesteście": "nie jesteście",
+  "są": "nie są",
+
+  "Jestem": "Nie jestem",
+  "Jesteś": "Nie jesteś",
+  "Jest": "Nie jest",
+  "Jesteśmy": "Nie jesteśmy",
+  "Jesteście": "Nie jesteście",
+  "Są": "Nie są",
 };
 
 export const VERBS_SK: VerbBlock[] = [
@@ -745,5 +833,228 @@ export const VERBS_CS: VerbBlock[] = [
       { person: "oni", form: "jdou", full: "oni jdou", tr: { sk: "oni jdou", ua: "вони йдуть", ru: "они идут", en: "they go" } },
     ],
     examples: [{ sk: "Jdu do práce.", ua: "Я йду на роботу.", ru: "Я иду на работу.", en: "I am going to work." }],
+  },
+];
+
+export const VERBS_PL: VerbBlock[] = [
+  {
+    id: "pracowac",
+    infinitive: "pracować",
+    meaning: { sk: "pracować", ua: "працювати", ru: "работать", en: "to work" },
+    note: {
+      sk: "Tip: pracuję/pracujesz",
+      ua: "Типове польське дієслово: pracuję, pracujesz, pracuje…",
+      ru: "Типичный польский глагол: pracuję, pracujesz, pracuje…",
+      en: "Typical Polish verb: pracuję, pracujesz, pracuje…",
+    },
+    rows: [
+      { person: "ja", form: "pracuję", full: "ja pracuję", tr: { sk: "ja pracuję", ua: "я працюю", ru: "я работаю", en: "I work" } },
+      { person: "ty", form: "pracujesz", full: "ty pracujesz", tr: { sk: "ty pracujesz", ua: "ти працюєш", ru: "ты работаешь", en: "you work" } },
+      { person: "on", form: "pracuje", full: "on pracuje", tr: { sk: "on pracuje", ua: "він працює", ru: "он работает", en: "he works" } },
+      { person: "ona", form: "pracuje", full: "ona pracuje", tr: { sk: "ona pracuje", ua: "вона працює", ru: "она работает", en: "she works" } },
+      { person: "ono", form: "pracuje", full: "ono pracuje", tr: { sk: "ono pracuje", ua: "воно працює", ru: "оно работает", en: "it works" } },
+      { person: "my", form: "pracujemy", full: "my pracujemy", tr: { sk: "my pracujemy", ua: "ми працюємо", ru: "мы работаем", en: "we work" } },
+      { person: "vy", form: "pracujecie", full: "wy pracujecie", tr: { sk: "wy pracujecie", ua: "ви працюєте", ru: "вы работаете", en: "you work" } },
+      { person: "oni", form: "pracują", full: "oni pracują", tr: { sk: "oni pracują", ua: "вони працюють", ru: "они работают", en: "they work" } },
+    ],
+    examples: [{ sk: "Ja pracuję dzisiaj.", ua: "Я працюю сьогодні.", ru: "Я работаю сегодня.", en: "I work today." }],
+  },
+  {
+    id: "robic",
+    infinitive: "robić",
+    meaning: { sk: "robić", ua: "робити", ru: "делать", en: "to do" },
+    note: {
+      sk: "Tip: robię/robisz",
+      ua: "Дуже часте дієслово: robię, robisz, robi…",
+      ru: "Очень частый глагол: robię, robisz, robi…",
+      en: "Very common verb: robię, robisz, robi…",
+    },
+    rows: [
+      { person: "ja", form: "robię", full: "ja robię", tr: { sk: "ja robię", ua: "я роблю", ru: "я делаю", en: "I do" } },
+      { person: "ty", form: "robisz", full: "ty robisz", tr: { sk: "ty robisz", ua: "ти робиш", ru: "ты делаешь", en: "you do" } },
+      { person: "on", form: "robi", full: "on robi", tr: { sk: "on robi", ua: "він робить", ru: "он делает", en: "he does" } },
+      { person: "ona", form: "robi", full: "ona robi", tr: { sk: "ona robi", ua: "вона робить", ru: "она делает", en: "she does" } },
+      { person: "ono", form: "robi", full: "ono robi", tr: { sk: "ono robi", ua: "воно робить", ru: "оно делает", en: "it does" } },
+      { person: "my", form: "robimy", full: "my robimy", tr: { sk: "my robimy", ua: "ми робимо", ru: "мы делаем", en: "we do" } },
+      { person: "vy", form: "robicie", full: "wy robicie", tr: { sk: "wy robicie", ua: "ви робите", ru: "вы делаете", en: "you do" } },
+      { person: "oni", form: "robią", full: "oni robią", tr: { sk: "oni robią", ua: "вони роблять", ru: "они делают", en: "they do" } },
+    ],
+    examples: [{ sk: "Ja robię zadanie.", ua: "Я роблю завдання.", ru: "Я делаю задание.", en: "I do homework." }],
+  },
+  {
+    id: "byc",
+    infinitive: "być",
+    meaning: { sk: "być", ua: "бути", ru: "быть", en: "to be" },
+    note: {
+      sk: "Tip: jestem/jesteś/jest",
+      ua: "Нерегулярне: jestem, jesteś, jest…",
+      ru: "Нерегулярный: jestem, jesteś, jest…",
+      en: "Irregular: jestem, jesteś, jest…",
+    },
+    rows: [
+      { person: "ja", form: "jestem", full: "ja jestem", tr: { sk: "ja jestem", ua: "я є / я (...)", ru: "я (есть) / я (...)", en: "I am" } },
+      { person: "ty", form: "jesteś", full: "ty jesteś", tr: { sk: "ty jesteś", ua: "ти є / ти (...)", ru: "ты (есть) / ты (...)", en: "you are" } },
+      { person: "on", form: "jest", full: "on jest", tr: { sk: "on jest", ua: "він є", ru: "он есть", en: "he is" } },
+      { person: "ona", form: "jest", full: "ona jest", tr: { sk: "ona jest", ua: "вона є", ru: "она есть", en: "she is" } },
+      { person: "ono", form: "jest", full: "ono jest", tr: { sk: "ono jest", ua: "воно є", ru: "оно есть", en: "it is" } },
+      { person: "my", form: "jesteśmy", full: "my jesteśmy", tr: { sk: "my jesteśmy", ua: "ми є", ru: "мы есть", en: "we are" } },
+      { person: "vy", form: "jesteście", full: "wy jesteście", tr: { sk: "wy jesteście", ua: "ви є", ru: "вы есть", en: "you are" } },
+      { person: "oni", form: "są", full: "oni są", tr: { sk: "oni są", ua: "вони є", ru: "они есть", en: "they are" } },
+    ],
+    examples: [{ sk: "Ja jestem w domu.", ua: "Я вдома.", ru: "Я дома.", en: "I am at home." }],
+  },
+  {
+    id: "mieszkac",
+    infinitive: "mieszkać",
+    meaning: { sk: "mieszkać", ua: "жити (мешкати)", ru: "жить (проживать)", en: "to live" },
+    note: {
+      sk: "Tip: mieszkam/mieszkasz",
+      ua: "Про місце проживання: mieszkam, mieszkasz…",
+      ru: "Про место проживания: mieszkam, mieszkasz…",
+      en: "About where you live: mieszkam, mieszkasz…",
+    },
+    rows: [
+      { person: "ja", form: "mieszkam", full: "ja mieszkam", tr: { sk: "ja mieszkam", ua: "я живу", ru: "я живу", en: "I live" } },
+      { person: "ty", form: "mieszkasz", full: "ty mieszkasz", tr: { sk: "ty mieszkasz", ua: "ти живеш", ru: "ты живёшь", en: "you live" } },
+      { person: "on", form: "mieszka", full: "on mieszka", tr: { sk: "on mieszka", ua: "він живе", ru: "он живёт", en: "he lives" } },
+      { person: "ona", form: "mieszka", full: "ona mieszka", tr: { sk: "ona mieszka", ua: "вона живе", ru: "она живёт", en: "she lives" } },
+      { person: "ono", form: "mieszka", full: "ono mieszka", tr: { sk: "ono mieszka", ua: "воно живе", ru: "оно живёт", en: "it lives" } },
+      { person: "my", form: "mieszkamy", full: "my mieszkamy", tr: { sk: "my mieszkamy", ua: "ми живемо", ru: "мы живём", en: "we live" } },
+      { person: "vy", form: "mieszkacie", full: "wy mieszkacie", tr: { sk: "wy mieszkacie", ua: "ви живете", ru: "вы живёте", en: "you live" } },
+      { person: "oni", form: "mieszkają", full: "oni mieszkają", tr: { sk: "oni mieszkają", ua: "вони живуть", ru: "они живут", en: "they live" } },
+    ],
+    examples: [{ sk: "Ja mieszkam w Warszawie.", ua: "Я живу у Варшаві.", ru: "Я живу в Варшаве.", en: "I live in Warsaw." }],
+  },
+  {
+    id: "chodzic",
+    infinitive: "chodzić",
+    meaning: { sk: "chodzić", ua: "ходити", ru: "ходить", en: "to go / to walk" },
+    note: {
+      sk: "Tip: chodzę/chodzisz",
+      ua: "Регулярний рух: chodzę, chodzisz…",
+      ru: "Регулярное движение: chodzę, chodzisz…",
+      en: "Regular movement: chodzę, chodzisz…",
+    },
+    rows: [
+      { person: "ja", form: "chodzę", full: "ja chodzę", tr: { sk: "ja chodzę", ua: "я ходжу", ru: "я хожу", en: "I go / I walk" } },
+      { person: "ty", form: "chodzisz", full: "ty chodzisz", tr: { sk: "ty chodzisz", ua: "ти ходиш", ru: "ты ходишь", en: "you go / you walk" } },
+      { person: "on", form: "chodzi", full: "on chodzi", tr: { sk: "on chodzi", ua: "він ходить", ru: "он ходит", en: "he goes / he walks" } },
+      { person: "ona", form: "chodzi", full: "ona chodzi", tr: { sk: "ona chodzi", ua: "вона ходить", ru: "она ходит", en: "she goes / she walks" } },
+      { person: "ono", form: "chodzi", full: "ono chodzi", tr: { sk: "ono chodzi", ua: "воно ходить", ru: "оно ходит", en: "it goes / it walks" } },
+      { person: "my", form: "chodzimy", full: "my chodzimy", tr: { sk: "my chodzimy", ua: "ми ходимо", ru: "мы ходим", en: "we go / we walk" } },
+      { person: "vy", form: "chodzicie", full: "wy chodzicie", tr: { sk: "wy chodzicie", ua: "ви ходите", ru: "вы ходите", en: "you go / you walk" } },
+      { person: "oni", form: "chodzą", full: "oni chodzą", tr: { sk: "oni chodzą", ua: "вони ходять", ru: "они ходят", en: "they go / they walk" } },
+    ],
+    examples: [{ sk: "Chodzę do pracy.", ua: "Я ходжу на роботу.", ru: "Я хожу на работу.", en: "I go to work." }],
+  },
+  {
+    id: "uczyc",
+    infinitive: "uczyć",
+    meaning: { sk: "uczyć", ua: "вчити / навчати", ru: "учить / обучать", en: "to teach" },
+    note: {
+      sk: "Tip: uczę/uczysz",
+      ua: "Навчання: uczę, uczysz…",
+      ru: "Обучение: uczę, uczysz…",
+      en: "Teaching: uczę, uczysz…",
+    },
+    rows: [
+      { person: "ja", form: "uczę", full: "ja uczę", tr: { sk: "ja uczę", ua: "я вчу", ru: "я учу", en: "I teach" } },
+      { person: "ty", form: "uczysz", full: "ty uczysz", tr: { sk: "ty uczysz", ua: "ти вчиш", ru: "ты учишь", en: "you teach" } },
+      { person: "on", form: "uczy", full: "on uczy", tr: { sk: "on uczy", ua: "він вчить", ru: "он учит", en: "he teaches" } },
+      { person: "ona", form: "uczy", full: "ona uczy", tr: { sk: "ona uczy", ua: "вона вчить", ru: "она учит", en: "she teaches" } },
+      { person: "ono", form: "uczy", full: "ono uczy", tr: { sk: "ono uczy", ua: "воно вчить", ru: "оно учит", en: "it teaches" } },
+      { person: "my", form: "uczymy", full: "my uczymy", tr: { sk: "my uczymy", ua: "ми вчимо", ru: "мы учим", en: "we teach" } },
+      { person: "vy", form: "uczycie", full: "wy uczycie", tr: { sk: "wy uczycie", ua: "ви вчите", ru: "вы учите", en: "you teach" } },
+      { person: "oni", form: "uczą", full: "oni uczą", tr: { sk: "oni uczą", ua: "вони вчать", ru: "они учат", en: "they teach" } },
+    ],
+    examples: [{ sk: "Uczę dzieci.", ua: "Я навчаю дітей.", ru: "Я учу детей.", en: "I teach children." }],
+  },
+  {
+    id: "uczycsie",
+    infinitive: "uczyć się",
+    meaning: { sk: "uczyć się", ua: "вчитися", ru: "учиться", en: "to learn" },
+    note: {
+      sk: "Tip: się",
+      ua: "Зворотне: uczę się, uczysz się…",
+      ru: "Возвратное: uczę się, uczysz się…",
+      en: "Reflexive: uczę się, uczysz się…",
+    },
+    rows: [
+      { person: "ja", form: "uczę się", full: "ja uczę się", tr: { sk: "ja uczę się", ua: "я вчуся", ru: "я учусь", en: "I learn" } },
+      { person: "ty", form: "uczysz się", full: "ty uczysz się", tr: { sk: "ty uczysz się", ua: "ти вчишся", ru: "ты учишься", en: "you learn" } },
+      { person: "on", form: "uczy się", full: "on uczy się", tr: { sk: "on uczy się", ua: "він вчиться", ru: "он учится", en: "he learns" } },
+      { person: "ona", form: "uczy się", full: "ona uczy się", tr: { sk: "ona uczy się", ua: "вона вчиться", ru: "она учится", en: "she learns" } },
+      { person: "ono", form: "uczy się", full: "ono uczy się", tr: { sk: "ono uczy się", ua: "воно вчиться", ru: "оно учится", en: "it learns" } },
+      { person: "my", form: "uczymy się", full: "my uczymy się", tr: { sk: "my uczymy się", ua: "ми вчимося", ru: "мы учимся", en: "we learn" } },
+      { person: "vy", form: "uczycie się", full: "wy uczycie się", tr: { sk: "wy uczycie się", ua: "ви вчитеся", ru: "вы учитесь", en: "you learn" } },
+      { person: "oni", form: "uczą się", full: "oni uczą się", tr: { sk: "oni uczą się", ua: "вони вчаться", ru: "они учатся", en: "they learn" } },
+    ],
+    examples: [{ sk: "Uczę się polskiego.", ua: "Я вчу польську.", ru: "Я учу польский.", en: "I learn Polish." }],
+  },
+  {
+    id: "szukac",
+    infinitive: "szukać",
+    meaning: { sk: "szukać", ua: "шукати", ru: "искать", en: "to look for" },
+    note: {
+      sk: "Tip: szukam/szukasz",
+      ua: "Пошук: szukam, szukasz…",
+      ru: "Поиск: szukam, szukasz…",
+      en: "Looking for something: szukam, szukasz…",
+    },
+    rows: [
+      { person: "ja", form: "szukam", full: "ja szukam", tr: { sk: "ja szukam", ua: "я шукаю", ru: "я ищу", en: "I look for" } },
+      { person: "ty", form: "szukasz", full: "ty szukasz", tr: { sk: "ty szukasz", ua: "ти шукаєш", ru: "ты ищешь", en: "you look for" } },
+      { person: "on", form: "szuka", full: "on szuka", tr: { sk: "on szuka", ua: "він шукає", ru: "он ищет", en: "he looks for" } },
+      { person: "ona", form: "szuka", full: "ona szuka", tr: { sk: "ona szuka", ua: "вона шукає", ru: "она ищет", en: "she looks for" } },
+      { person: "ono", form: "szuka", full: "ono szuka", tr: { sk: "ono szuka", ua: "воно шукає", ru: "оно ищет", en: "it looks for" } },
+      { person: "my", form: "szukamy", full: "my szukamy", tr: { sk: "my szukamy", ua: "ми шукаємо", ru: "мы ищем", en: "we look for" } },
+      { person: "vy", form: "szukacie", full: "wy szukacie", tr: { sk: "wy szukacie", ua: "ви шукаєте", ru: "вы ищете", en: "you look for" } },
+      { person: "oni", form: "szukają", full: "oni szukają", tr: { sk: "oni szukają", ua: "вони шукають", ru: "они ищут", en: "they look for" } },
+    ],
+    examples: [{ sk: "Szukam pracy.", ua: "Я шукаю роботу.", ru: "Я ищу работу.", en: "I am looking for a job." }],
+  },
+  {
+    id: "miec",
+    infinitive: "mieć",
+    meaning: { sk: "mieć", ua: "мати", ru: "иметь", en: "to have" },
+    note: {
+      sk: "Tip: mam/masz/ma",
+      ua: "Корисне щодня: mam, masz, ma…",
+      ru: "Нужно каждый день: mam, masz, ma…",
+      en: "Useful every day: mam, masz, ma…",
+    },
+    rows: [
+      { person: "ja", form: "mam", full: "ja mam", tr: { sk: "ja mam", ua: "я маю", ru: "у меня есть", en: "I have" } },
+      { person: "ty", form: "masz", full: "ty masz", tr: { sk: "ty masz", ua: "ти маєш", ru: "у тебя есть", en: "you have" } },
+      { person: "on", form: "ma", full: "on ma", tr: { sk: "on ma", ua: "він має", ru: "у него есть", en: "he has" } },
+      { person: "ona", form: "ma", full: "ona ma", tr: { sk: "ona ma", ua: "вона має", ru: "у неё есть", en: "she has" } },
+      { person: "ono", form: "ma", full: "ono ma", tr: { sk: "ono ma", ua: "воно має", ru: "у него/неё есть", en: "it has" } },
+      { person: "my", form: "mamy", full: "my mamy", tr: { sk: "my mamy", ua: "ми маємо", ru: "у нас есть", en: "we have" } },
+      { person: "vy", form: "macie", full: "wy macie", tr: { sk: "wy macie", ua: "ви маєте", ru: "у вас есть", en: "you have" } },
+      { person: "oni", form: "mają", full: "oni mają", tr: { sk: "oni mają", ua: "вони мають", ru: "у них есть", en: "they have" } },
+    ],
+    examples: [{ sk: "Ja mam czas.", ua: "Я маю час.", ru: "У меня есть время.", en: "I have time." }],
+  },
+  {
+    id: "isc",
+    infinitive: "iść",
+    meaning: { sk: "iść", ua: "йти", ru: "идти", en: "to go" },
+    note: {
+      sk: "Tip: nie idę…",
+      ua: "Рух: idę, idziesz, idzie… (заперечення: nie idę, nie idziesz…).",
+      ru: "Движение: idę, idziesz, idzie… (отрицание: nie idę, nie idziesz…).",
+      en: "Movement: idę, idziesz, idzie… (negation: nie idę, nie idziesz…).",
+    },
+    rows: [
+      { person: "ja", form: "idę", full: "ja idę", tr: { sk: "ja idę", ua: "я йду", ru: "я иду", en: "I go" } },
+      { person: "ty", form: "idziesz", full: "ty idziesz", tr: { sk: "ty idziesz", ua: "ти йдеш", ru: "ты идёшь", en: "you go" } },
+      { person: "on", form: "idzie", full: "on idzie", tr: { sk: "on idzie", ua: "він йде", ru: "он идёт", en: "he goes" } },
+      { person: "ona", form: "idzie", full: "ona idzie", tr: { sk: "ona idzie", ua: "вона йде", ru: "она идёт", en: "she goes" } },
+      { person: "ono", form: "idzie", full: "ono idzie", tr: { sk: "ono idzie", ua: "воно йде", ru: "оно идёт", en: "it goes" } },
+      { person: "my", form: "idziemy", full: "my idziemy", tr: { sk: "my idziemy", ua: "ми йдемо", ru: "мы идём", en: "we go" } },
+      { person: "vy", form: "idziecie", full: "wy idziecie", tr: { sk: "wy idziecie", ua: "ви йдете", ru: "вы идёте", en: "you go" } },
+      { person: "oni", form: "idą", full: "oni idą", tr: { sk: "oni idą", ua: "вони йдуть", ru: "они идут", en: "they go" } },
+    ],
+    examples: [{ sk: "Idę do pracy.", ua: "Я йду на роботу.", ru: "Я иду на работу.", en: "I am going to work." }],
   },
 ];

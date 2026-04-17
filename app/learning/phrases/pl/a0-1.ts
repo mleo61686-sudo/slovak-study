@@ -278,12 +278,12 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
     tokens: ["Cena", "jest", "wysoka", "."],
   },
 
-  [phraseKey("zniżka", "a0-4")]: {
-    sk: "Dzisiaj jest zniżka.",
+  [phraseKey("promocja", "a0-4")]: {
+    sk: "Dzisiaj jest promocja.",
     ua: "Сьогодні є знижка.",
     ru: "Сегодня есть скидка.",
     en: "There is a discount today.",
-    tokens: ["Dzisiaj", "jest", "zniżka", "."],
+    tokens: ["Dzisiaj", "jest", "promocja", "."],
   },
 
   [phraseKey("torba", "a0-4")]: {
@@ -294,12 +294,12 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
     tokens: ["Potrzebuję", "dużej", "torby", "."],
   },
 
-  [phraseKey("blok", "a0-4")]: {
-    sk: "Poproszę blok.",
+  [phraseKey("paragon", "a0-4")]: {
+    sk: "Poproszę paragon.",
     ua: "Будь ласка, чек.",
     ru: "Дайте, пожалуйста, чек.",
     en: "Receipt, please.",
-    tokens: ["Poproszę", "blok", "."],
+    tokens: ["Poproszę", "paragon", "."],
   },
 
   [phraseKey("gotówka", "a0-4")]: {
@@ -520,7 +520,7 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
   },
 
   [phraseKey("autobus", "a0-7")]: {
-    sk: "Autobus już jedzie.",
+    sk: "Autobus już nadjeżdża.",
     ua: "Автобус уже їде.",
     ru: "Автобус уже едет.",
     en: "The bus is already coming.",
@@ -659,11 +659,11 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
   },
 
   [phraseKey("godzina", "a0-8")]: {
-    sk: "Mam jedną godzinę czasu.",
+    sk: "Mam jedną godzinę.",
     ua: "Я маю одну годину часу.",
     ru: "У меня есть один час времени.",
     en: "I have one hour of time.",
-    tokens: ["Mam", "jedną", "godzinę", "czasu", "."],
+    tokens: ["Mam", "jedną", "godzinę", "."],
   },
 
   // =========================
@@ -734,11 +734,11 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
   },
 
   [phraseKey("praca dorywcza", "a0-9")]: {
-    sk: "Mam pracę dorywczą w weekend.",
+    sk: "Mam pracę dorywczą w weekendy.",
     ua: "У мене є підробіток на вихідних.",
     ru: "У меня есть подработка на выходных.",
     en: "I have a part-time job on weekends.",
-    tokens: ["Mam", "pracę", "dorywczą", "w", "weekend", "."],
+    tokens: ["Mam", "pracę", "dorywczą", "w", "weekendy", "."],
   },
 
   [phraseKey("urlop", "a0-9")]: {
@@ -793,11 +793,11 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
   },
 
   [phraseKey("godzina", "a0-10")]: {
-    sk: "Ta godzina jest trudna.",
-    ua: "Цей урок складний.",
-    ru: "Этот урок сложный.",
-    en: "This lesson is difficult.",
-    tokens: ["Ta", "godzina", "jest", "trudna", "."],
+    sk: "Ta godzina jest ważna.",
+    ua: "Ця година важлива.",
+    ru: "Этот час важный.",
+    en: "This hour is important.",
+    tokens: ["Ta", "godzina", "jest", "ważna", "."],
   },
 
   [phraseKey("zadanie", "a0-10")]: {

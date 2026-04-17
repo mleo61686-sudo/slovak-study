@@ -6,10 +6,12 @@ import { useLanguage } from "@/lib/src/useLanguage";
 import { trWord } from "@/lib/src/tr";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import {
-  PRONOUNS,
+  PRONOUNS_BY_COURSE,
   UI,
   VERBS_CS,
+  VERBS_PL,
   VERBS_SK,
+  type GrammarCourseId,
   type PersonKey,
 } from "./verbs-present-data";
 import {
@@ -34,8 +36,11 @@ type QuizItem = {
 
 type UiLang = "ua" | "ru" | "en";
 
-const FALLBACK_SK = "Ja pracujem.";
-const FALLBACK_CS = "Já pracuji.";
+const FALLBACK_BY_COURSE: Record<GrammarCourseId, string> = {
+  sk: "Ja pracujem.",
+  cs: "Já pracuji.",
+  pl: "Ja pracuję.",
+};
 
 export default function VerbsPresentClient() {
   const { lang } = useLanguage();
@@ -43,8 +48,18 @@ export default function VerbsPresentClient() {
 
   const uiLang: UiLang = lang === "ru" || lang === "en" ? lang : "ua";
   const ui = UI[uiLang];
-  const isCzech = courseId === "cs";
-  const verbs = isCzech ? VERBS_CS : VERBS_SK;
+
+  const grammarCourseId: GrammarCourseId =
+    courseId === "cs" || courseId === "pl" ? courseId : "sk";
+
+  const verbs =
+    grammarCourseId === "cs"
+      ? VERBS_CS
+      : grammarCourseId === "pl"
+        ? VERBS_PL
+        : VERBS_SK;
+
+  const pronouns = PRONOUNS_BY_COURSE[grammarCourseId];
 
   const [activeVerbId, setActiveVerbId] = useState(verbs[0]?.id ?? "");
   const [quizVersion, setQuizVersion] = useState(0);
@@ -57,7 +72,7 @@ export default function VerbsPresentClient() {
 
   useEffect(() => {
     setActiveVerbId(verbs[0]?.id ?? "");
-  }, [courseId, verbs]);
+  }, [grammarCourseId, verbs]);
 
   const active =
     useMemo(
@@ -65,14 +80,11 @@ export default function VerbsPresentClient() {
       [activeVerbId, verbs]
     ) ?? verbs[0];
 
-  const pronounKeys = useMemo(
-    () => Object.keys(PRONOUNS) as PersonKey[],
-    []
-  );
+  const pronounKeys = useMemo(() => Object.keys(pronouns) as PersonKey[], [pronouns]);
 
   const examplesForSection4 = useMemo(
-    () => (active ? genExamplesFromRows(active, isCzech) : []),
-    [active, isCzech]
+    () => (active ? genExamplesFromRows(active, grammarCourseId) : []),
+    [active, grammarCourseId]
   );
 
   useEffect(() => {
@@ -82,7 +94,7 @@ export default function VerbsPresentClient() {
     setAnswers({});
     setChecked({});
     setBuild([]);
-  }, [active?.id, isCzech]);
+  }, [active?.id, grammarCourseId]);
 
   const quiz: QuizItem[] = useMemo(() => {
     if (!active) return [];
@@ -92,13 +104,13 @@ export default function VerbsPresentClient() {
   const currentEx =
     examplesForSection4[exIndex] ??
     examplesForSection4[0] ?? {
-      sk: isCzech ? FALLBACK_CS : FALLBACK_SK,
+      sk: FALLBACK_BY_COURSE[grammarCourseId],
       ua: "Я працюю.",
       ru: "Я работаю.",
       en: "I work.",
     };
 
-  const sentenceSource = currentEx.sk || (isCzech ? FALLBACK_CS : FALLBACK_SK);
+  const sentenceSource = currentEx.sk || FALLBACK_BY_COURSE[grammarCourseId];
 
   const sentenceParts = useMemo(
     () => makeSentenceParts(sentenceSource),
@@ -131,17 +143,32 @@ export default function VerbsPresentClient() {
     setSentenceVersion((v) => v + 1);
   };
 
-  const cheatItems = isCzech ? ui.cheatItemsCs : ui.cheatItemsSk;
+  const cheatItems =
+    grammarCourseId === "cs"
+      ? ui.cheatItemsCs
+      : grammarCourseId === "pl"
+        ? ui.cheatItemsPl
+        : ui.cheatItemsSk;
+
+  const title =
+    grammarCourseId === "cs"
+      ? ui.titleCs
+      : grammarCourseId === "pl"
+        ? ui.titlePl
+        : ui.titleSk;
+
+  const subtitle =
+    grammarCourseId === "cs"
+      ? ui.subtitleCs
+      : grammarCourseId === "pl"
+        ? ui.subtitlePl
+        : ui.subtitleSk;
 
   return (
     <div className="space-y-10">
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">
-          {isCzech ? ui.titleCs : ui.titleSk}
-        </h1>
-        <p className="text-slate-700">
-          {isCzech ? ui.subtitleCs : ui.subtitleSk}
-        </p>
+        <h1 className="text-2xl font-semibold">{title}</h1>
+        <p className="text-slate-700">{subtitle}</p>
       </div>
 
       <section className="space-y-4">
@@ -152,8 +179,8 @@ export default function VerbsPresentClient() {
               key={k}
               className="flex justify-between border-b px-5 py-3 last:border-b-0"
             >
-              <span className="font-medium">{PRONOUNS[k].sk}</span>
-              <span className="text-slate-600">{trWord(PRONOUNS[k], uiLang)}</span>
+              <span className="font-medium">{pronouns[k].sk}</span>
+              <span className="text-slate-600">{trWord(pronouns[k], uiLang)}</span>
             </div>
           ))}
         </div>
@@ -228,7 +255,7 @@ export default function VerbsPresentClient() {
 
         <div className="rounded-2xl border bg-white">
           {examplesForSection4.map((ex, i) => {
-            const neg = negateSentence(ex.sk, isCzech);
+            const neg = negateSentence(ex.sk, grammarCourseId);
             const q = makeQuestion(ex.sk);
 
             return (
@@ -293,7 +320,7 @@ export default function VerbsPresentClient() {
             {quiz.map((q) => (
               <div key={q.person} className="space-y-2 rounded-xl border p-4">
                 <div className="text-sm text-slate-500">
-                  {capFirst(PRONOUNS[q.person].sk)} + …
+                  {capFirst(pronouns[q.person].sk)} + …
                 </div>
 
                 <div className="flex flex-wrap gap-2">

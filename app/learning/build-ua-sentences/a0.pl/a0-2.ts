@@ -165,7 +165,7 @@ export const PL_A0_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     },
 
     [phraseKey("autobus", "a0-7")]: {
-        sk: "Autobus już jedzie.",
+        sk: "Autobus już nadjeżdża.",
         ua: "Автобус уже їде.",
         ru: "Автобус уже едет.",
         en: "The bus is already coming.",
@@ -389,7 +389,7 @@ export const PL_A0_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     },
 
     [phraseKey("godzina", "a0-8")]: {
-        sk: "Mam jedną godzinę czasu.",
+        sk: "Mam jedną godzinę.",
         ua: "Я маю одну годину часу.",
         ru: "У меня есть один час времени.",
         en: "I have one hour of time.",
@@ -509,7 +509,7 @@ export const PL_A0_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     },
 
     [phraseKey("praca dorywcza", "a0-9")]: {
-        sk: "Mam pracę dorywczą w weekend.",
+        sk: "Mam pracę dorywczą w weekendy.",
         ua: "У мене є підробіток на вихідних.",
         ru: "У меня есть подработка на выходных.",
         en: "I have a part-time job on weekends.",
@@ -603,7 +603,7 @@ export const PL_A0_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
     },
 
     [phraseKey("godzina", "a0-10")]: {
-        sk: "Ta godzina jest trudna.",
+        sk: "Ta godzina jest ważna.",
         ua: "Цей урок складний.",
         ru: "Этот урок сложный.",
         en: "This lesson is difficult.",

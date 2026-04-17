@@ -31,6 +31,12 @@ const UI: Record<string, LocalizedText> = {
     ru: "Сленг и разговорная речь 🇨🇿",
     en: "Slang and spoken language 🇨🇿",
   },
+  titlePl: {
+    ua: "Сленг і розмовна мова 🇵🇱",
+    ru: "Сленг и разговорная речь 🇵🇱",
+    en: "Slang and spoken language 🇵🇱",
+  },
+
   introSk: {
     ua: "Живі фрази та вирази, які ти реально почуєш у Словаччині: на роботі, в магазині, між друзями.",
     ru: "Живые фразы и выражения, которые ты реально услышишь в Словакии.",
@@ -41,6 +47,12 @@ const UI: Record<string, LocalizedText> = {
     ru: "Живые чешские разговорные фразы и сленг, которые реально используют в Чехии.",
     en: "Real Czech colloquial phrases and slang that people actually use in the Czech Republic.",
   },
+  introPl: {
+    ua: "Живі польські розмовні фрази та сленг, які реально використовують у Польщі.",
+    ru: "Живые польские разговорные фразы и сленг, которые реально используют в Польше.",
+    en: "Real Polish colloquial phrases and slang that people actually use in Poland.",
+  },
+
   practice: {
     ua: "Практикувати сленг →",
     ru: "Практиковать сленг →",
@@ -96,8 +108,11 @@ export default function SlangClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
-  const slang = getSlangByCourse(courseId);
-  const isCzech = courseId === "cs";
+  const activeCourseId = courseId === "cs" || courseId === "pl" ? courseId : "sk";
+  const slang = getSlangByCourse(activeCourseId);
+
+  const isCzech = activeCourseId === "cs";
+  const isPolish = activeCourseId === "pl";
 
   const [q, setQ] = useState("");
   const [level, setLevel] = useState<(typeof LEVELS)[number] | "ALL">("ALL");
@@ -108,7 +123,7 @@ export default function SlangClient() {
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [q, level, cat]);
+  }, [q, level, cat, activeCourseId]);
 
   const filtered = useMemo(() => {
     const query = q.toLowerCase().trim();
@@ -143,16 +158,24 @@ export default function SlangClient() {
     return `/practice?${params.toString()}`;
   }, [level, cat]);
 
+  const title = isCzech
+    ? tr(UI.titleCs, lang)
+    : isPolish
+      ? tr(UI.titlePl, lang)
+      : tr(UI.titleSk, lang);
+
+  const intro = isCzech
+    ? tr(UI.introCs, lang)
+    : isPolish
+      ? tr(UI.introPl, lang)
+      : tr(UI.introSk, lang);
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 py-10">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">
-          {isCzech ? tr(UI.titleCs, lang) : tr(UI.titleSk, lang)}
-        </h1>
+        <h1 className="text-3xl font-bold">{title}</h1>
 
-        <p className="text-slate-700">
-          {isCzech ? tr(UI.introCs, lang) : tr(UI.introSk, lang)}
-        </p>
+        <p className="text-slate-700">{intro}</p>
 
         <div className="flex flex-wrap gap-3 pt-2">
           <Link

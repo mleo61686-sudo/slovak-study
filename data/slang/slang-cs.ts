@@ -4,7 +4,7 @@ export const SLANG_CS: SlangItem[] = [
     {
         id: "cau",
         sk: "Čau",
-        ua: "Привіт / па",
+        ua: "Привіт / бувай",
         ru: "Привет / пока",
         en: "Hi / bye",
         exampleSk: "Čau, jak se máš?",

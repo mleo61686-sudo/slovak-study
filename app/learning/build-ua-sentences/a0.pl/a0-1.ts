@@ -443,8 +443,8 @@ export const PL_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     extraEnTokens: ["cash", "bag", "milk"],
   },
 
-  [phraseKey("zniżka", "a0-4")]: {
-    sk: "Dzisiaj jest zniżka.",
+  [phraseKey("promocja", "a0-4")]: {
+    sk: "Dzisiaj jest promocja.",
     ua: "Сьогодні є знижка.",
     ru: "Сегодня есть скидка.",
     en: "There is a discount today.",
@@ -469,8 +469,8 @@ export const PL_A0_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     extraEnTokens: ["receipt", "bread", "shop"],
   },
 
-  [phraseKey("blok", "a0-4")]: {
-    sk: "Poproszę blok.",
+  [phraseKey("paragon", "a0-4")]: {
+    sk: "Poproszę paragon.",
     ua: "Будь ласка, чек.",
     ru: "Дайте, пожалуйста, чек.",
     en: "Receipt, please.",

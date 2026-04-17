@@ -1,7 +1,9 @@
-import type { PersonKey, VerbBlock, W } from "./verbs-present-data";
+import type { GrammarCourseId, PersonKey, VerbBlock, W } from "./verbs-present-data";
 import {
+  BYC_NEG_PL,
   BYT_NEG_CS,
   BYT_NEG_SK,
+  ISC_NEG_PL,
   IST_NEG_SK,
   JIT_NEG_CS,
 } from "./verbs-present-data";
@@ -36,8 +38,12 @@ const PRON = new Set([
   "my",
   "vy",
   "oni",
+
   "Já",
   "já",
+
+  "Wy",
+  "wy",
 ]);
 
 type TailMap = Record<
@@ -183,7 +189,76 @@ const TAILS_CS: TailMap = {
   },
 };
 
-export function negateSentence(sentence: string, isCzech: boolean) {
+const TAILS_PL: TailMap = {
+  pracowac: {
+    sk: ["w pracy", "dzisiaj", "w Warszawie", "rano"],
+    ua: ["на роботі", "сьогодні", "у Варшаві", "зранку"],
+    ru: ["на работе", "сегодня", "в Варшаве", "утром"],
+    en: ["at work", "today", "in Warsaw", "in the morning"],
+  },
+  robic: {
+    sk: ["w domu", "zadanie", "to teraz", "w pracy"],
+    ua: ["вдома", "завдання", "це зараз", "на роботі"],
+    ru: ["дома", "задание", "это сейчас", "на работе"],
+    en: ["at home", "homework", "this now", "at work"],
+  },
+  byc: {
+    sk: ["w domu", "tutaj", "w mieście", "w pracy"],
+    ua: ["вдома", "тут", "у місті", "на роботі"],
+    ru: ["дома", "здесь", "в городе", "на работе"],
+    en: ["at home", "here", "in the city", "at work"],
+  },
+  mieszkac: {
+    sk: ["w Warszawie", "tutaj", "w mieście", "w domu"],
+    ua: ["у Варшаві", "тут", "у місті", "вдома"],
+    ru: ["в Варшаве", "здесь", "в городе", "дома"],
+    en: ["in Warsaw", "here", "in the city", "at home"],
+  },
+  chodzic: {
+    sk: ["do pracy", "do szkoły", "pieszo", "codziennie"],
+    ua: ["на роботу", "до школи", "пішки", "щодня"],
+    ru: ["на работу", "в школу", "пешком", "каждый день"],
+    en: ["to work", "to school", "on foot", "every day"],
+  },
+  uczyc: {
+    sk: ["dzieci", "polskiego", "dzisiaj", "w szkole"],
+    ua: ["дітей", "польської", "сьогодні", "у школі"],
+    ru: ["детей", "польскому", "сегодня", "в школе"],
+    en: ["children", "Polish", "today", "at school"],
+  },
+  uczycsie: {
+    sk: ["polskiego", "w domu", "dzisiaj", "w pracy"],
+    ua: ["польської", "вдома", "сьогодні", "на роботі"],
+    ru: ["польский", "дома", "сегодня", "на работе"],
+    en: ["Polish", "at home", "today", "at work"],
+  },
+  szukac: {
+    sk: ["pracy", "mieszkania", "klucza", "teraz"],
+    ua: ["роботу", "квартиру", "ключ", "зараз"],
+    ru: ["работу", "квартиру", "ключ", "сейчас"],
+    en: ["a job", "an apartment", "a key", "now"],
+  },
+  miec: {
+    sk: ["czas", "pracę", "bilet", "pytanie"],
+    ua: ["час", "роботу", "квиток", "питання"],
+    ru: ["время", "работу", "билет", "вопрос"],
+    en: ["time", "a job", "a ticket", "a question"],
+  },
+  isc: {
+    sk: ["do pracy", "do domu", "do miasta", "do sklepu"],
+    ua: ["на роботу", "додому", "у місто", "в магазин"],
+    ru: ["на работу", "домой", "в город", "в магазин"],
+    en: ["to work", "home", "to the city", "to the shop"],
+  },
+  default: {
+    sk: ["dzisiaj", "teraz", "w domu", "w pracy"],
+    ua: ["сьогодні", "зараз", "вдома", "на роботі"],
+    ru: ["сегодня", "сейчас", "дома", "на работе"],
+    en: ["today", "now", "at home", "at work"],
+  },
+};
+
+export function negateSentence(sentence: string, courseId: GrammarCourseId) {
   const s = sentence.trim();
   if (!s) return s;
 
@@ -194,7 +269,7 @@ export function negateSentence(sentence: string, isCzech: boolean) {
   const parts = core.split(/\s+/);
   const finish = (txt: string) => txt + (hasEnd ? end : "");
 
-  if (!isCzech) {
+  if (courseId === "sk") {
     if (
       parts.length >= 3 &&
       PRON.has(parts[0]) &&
@@ -220,7 +295,9 @@ export function negateSentence(sentence: string, isCzech: boolean) {
         return finish(parts.join(" "));
       }
     }
-  } else {
+  }
+
+  if (courseId === "cs") {
     for (let i = 0; i < Math.min(2, parts.length); i++) {
       if (JIT_NEG_CS[parts[i]]) {
         parts[i] = JIT_NEG_CS[parts[i]];
@@ -236,22 +313,47 @@ export function negateSentence(sentence: string, isCzech: boolean) {
     }
   }
 
+  if (courseId === "pl") {
+    for (let i = 0; i < Math.min(2, parts.length); i++) {
+      if (ISC_NEG_PL[parts[i]]) {
+        parts[i] = ISC_NEG_PL[parts[i]];
+        return finish(parts.join(" "));
+      }
+    }
+
+    for (let i = 0; i < Math.min(2, parts.length); i++) {
+      if (BYC_NEG_PL[parts[i]]) {
+        parts[i] = BYC_NEG_PL[parts[i]];
+        return finish(parts.join(" "));
+      }
+    }
+  }
+
   let verbIndex = 0;
 
   if (PRON.has(parts[0])) {
-    if (!isCzech && (parts[1] === "sa" || parts[1] === "si")) verbIndex = 2;
+    if (courseId === "sk" && (parts[1] === "sa" || parts[1] === "si")) verbIndex = 2;
     else verbIndex = 1;
   } else {
     verbIndex = 0;
   }
 
   if (verbIndex >= parts.length) {
-    return finish((isCzech ? "Ne " : "Ne ") + core);
+    return finish((courseId === "pl" ? "Nie " : "Ne ") + core);
   }
 
   const verb = parts[verbIndex];
 
-  if (/^ne/i.test(verb) || /^nie$/i.test(verb)) {
+  if (
+    /^ne/i.test(verb) ||
+    /^nie$/i.test(verb) ||
+    (courseId === "pl" && parts[verbIndex - 1]?.toLowerCase() === "nie")
+  ) {
+    return finish(parts.join(" "));
+  }
+
+  if (courseId === "pl") {
+    parts.splice(verbIndex, 0, verb[0] === verb[0].toUpperCase() ? "Nie" : "nie");
     return finish(parts.join(" "));
   }
 
@@ -289,9 +391,11 @@ export function makeSentenceParts(example: string) {
   return shuffle(example.replace(/[.!?]$/, "").split(" "));
 }
 
-export function genExamplesFromRows(active: VerbBlock, isCzech: boolean): W[] {
-  const tailsByVerb = isCzech ? TAILS_CS : TAILS_SK;
-  const tails = tailsByVerb[active.id] ?? tailsByVerb.default;
+export function genExamplesFromRows(active: VerbBlock, courseId: GrammarCourseId): W[] {
+  const tailsByCourse =
+    courseId === "cs" ? TAILS_CS : courseId === "pl" ? TAILS_PL : TAILS_SK;
+
+  const tails = tailsByCourse[active.id] ?? tailsByCourse.default;
   const wanted: PersonKey[] = ["ja", "ty", "on", "ona", "my", "vy", "oni"];
 
   const rowMap = new Map(active.rows.map((r) => [r.person, r]));
