@@ -109,7 +109,6 @@ import { PL_B1_BUILD_UA_SENTENCES_4 } from "./b1.pl/b1-4";
 import { PL_B1_BUILD_UA_SENTENCES_5 } from "./b1.pl/b1-5";
 import { PL_B1_BUILD_UA_SENTENCES_6 } from "./b1.pl/b1-6";
 import { PL_B1_BUILD_UA_SENTENCES_7 } from "./b1.pl/b1-7";
-
 import { PL_B2_BUILD_UA_SENTENCES_1 } from "./b2.pl/b2-1";
 import { PL_B2_BUILD_UA_SENTENCES_2 } from "./b2.pl/b2-2";
 import { PL_B2_BUILD_UA_SENTENCES_3 } from "./b2.pl/b2-3";
