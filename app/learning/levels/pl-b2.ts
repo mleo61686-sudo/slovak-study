@@ -518,7 +518,7 @@ export const PL_B2_SOURCE: Lesson[] = [
     title: { ua: "Урок 33 — Риболовля", ru: "Урок 33 — Рыбалка", en: "Lesson 33 — Fishing" },
     words: [
       { sk: "wędka", ua: "вудка", ru: "удочка", en: "fishing rod", img: "/words_b2/udica.jpg" },
-      { sk: "wyciągarka", ua: "котушка", ru: "катушка", en: "reel", img: "/words_b2/navijak.jpg" },
+      { sk: "kołowrotek", ua: "котушка", ru: "катушка", en: "reel", img: "/words_b2/navijak.jpg" },
       { sk: "haczyk", ua: "гачок", ru: "крючок", en: "hook", img: "/words_b2/háčik.jpg" },
       { sk: "przynęta", ua: "наживка", ru: "наживка", en: "bait", img: "/words_b2/návnada.jpg" },
       { sk: "połów", ua: "улов", ru: "улов", en: "catch", img: "/words_b2/úlovok.jpg" },

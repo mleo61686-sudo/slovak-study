@@ -350,7 +350,7 @@ export const PL_B1_SOURCE: Lesson[] = [
       { sk: "redaktor", ua: "редактор / журналіст", ru: "редактор / журналист", en: "editor / journalist", img: "/words_b1/redaktor.jpg" },
       { sk: "nagłówek", ua: "заголовок", ru: "заголовок", en: "headline", img: "/words_b1_cz/titulek.jpg" },
       { sk: "uwierzyć", ua: "повірити", ru: "поверить", en: "to believe", img: "/words_b1_cz/uvěřit.jpg" },
-      { sk: "idea publiczna", ua: "громадська думка", ru: "общественное мнение", en: "public opinion", img: "/words_b1_cz/veřejné mínění.jpg" },
+      { sk: "opinia publiczna", ua: "громадська думка", ru: "общественное мнение", en: "public opinion", img: "/words_b1_cz/veřejné mínění.jpg" },
     ],
   },
   {

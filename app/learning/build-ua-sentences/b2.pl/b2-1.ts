@@ -46,10 +46,10 @@ export const PL_B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("ustępstwo", "b2-1")]: {
         sk: "Musieliśmy zrobić pewne ustępstwo, aby rozmowy mogły zakończyć się sukcesem.",
-        ua: "Нам довелося піти на певну поступку, щоб розмова могла завершитися успішно.",
+        ua: "Нам довелося піти на певну поступку, щоб переговори могли завершитися успішно.",
         ru: "Нам пришлось пойти на определённую уступку, чтобы переговоры могли завершиться успешно.",
         en: "We had to make a certain concession so that the talks could end successfully.",
-        uaTokens: ["Нам", "довелося", "піти", "на", "певну", "поступку", ",", "щоб", "розмова", "могла", "завершитися", "успішно", "."],
+        uaTokens: ["Нам", "довелося", "піти", "на", "певну", "поступку", ",", "щоб", "переговори", "могли", "завершитися", "успішно", "."],
         ruTokens: ["Нам", "пришлось", "пойти", "на", "определённую", "уступку", ",", "чтобы", "переговоры", "могли", "завершиться", "успешно", "."],
         enTokens: ["We", "had", "to", "make", "a", "certain", "concession", "so", "that", "the", "talks", "could", "end", "successfully", "."],
         extraUaTokens: ["умову", "позицію", "результату"],
@@ -85,17 +85,16 @@ export const PL_B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("sprzeciwiać się", "b2-1")]: {
         sk: "Kilku uczestników nadal sprzeciwiało się zmianom mimo dodatkowych wyjaśnień.",
-        ua: "Кілька учасників і далі заперечували зміни, попри додаткові пояснення.",
+        ua: "Кілька учасників і далі заперечували проти змін, попри додаткові пояснення.",
         ru: "Несколько участников всё ещё возражали против изменений, несмотря на дополнительные объяснения.",
         en: "Several participants still objected to the changes despite additional explanations.",
-        uaTokens: ["Кілька", "учасників", "і", "далі", "заперечували", "зміни", ",", "попри", "додаткові", "пояснення", "."],
+        uaTokens: ["Кілька", "учасників", "і", "далі", "заперечували", "проти", "змін", ",", "попри", "додаткові", "пояснення", "."],
         ruTokens: ["Несколько", "участников", "всё", "ещё", "возражали", "против", "изменений", ",", "несмотря", "на", "дополнительные", "объяснения", "."],
         enTokens: ["Several", "participants", "still", "objected", "to", "the", "changes", "despite", "additional", "explanations", "."],
         extraUaTokens: ["пропозицію", "компроміс", "партнерами"],
         extraRuTokens: ["предложение", "компромисс", "партнёрами"],
         extraEnTokens: ["proposal", "compromise", "partners"],
     },
-
     [phraseKey("przyjąć propozycję", "b2-1")]: {
         sk: "Ostatecznie zarząd postanowił przyjąć propozycję przedstawioną przez partnerów.",
         ua: "Зрештою керівництво вирішило прийняти пропозицію, представлену партнерами.",
@@ -217,16 +216,16 @@ export const PL_B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     },
 
     [phraseKey("dalej", "b2-2")]: {
-        sk: "Jeśli będziemy odkładać decyzję dalej, problem stanie się jeszcze poważniejszy.",
-        ua: "Якщо ми й далі відкладатимемо рішення, проблема стане ще серйознішою.",
-        ru: "Если мы будем и дальше откладывать решение, проблема станет ещё серьёзнее.",
-        en: "If we keep postponing the decision further, the problem will become even more serious.",
-        uaTokens: ["Якщо", "ми", "й", "далі", "відкладатимемо", "рішення", ",", "проблема", "стане", "ще", "серйознішою", "."],
-        ruTokens: ["Если", "мы", "будем", "и", "дальше", "откладывать", "решение", ",", "проблема", "станет", "ещё", "серьёзнее", "."],
-        enTokens: ["If", "we", "keep", "postponing", "the", "decision", "further", ",", "the", "problem", "will", "become", "even", "more", "serious", "."],
-        extraUaTokens: ["загрозу", "ситуацію", "висновку"],
-        extraRuTokens: ["угрозу", "ситуацию", "выводу"],
-        extraEnTokens: ["threat", "situation", "conclusion"],
+        sk: "Jeśli sytuacja będzie się dalej pogarszać, trzeba będzie podjąć zdecydowane działania.",
+        ua: "Якщо ситуація й далі погіршуватиметься, доведеться вжити рішучих заходів.",
+        ru: "Если ситуация и дальше будет ухудшаться, придётся принять решительные меры.",
+        en: "If the situation keeps getting worse, decisive action will have to be taken.",
+        uaTokens: ["Якщо", "ситуація", "й", "далі", "погіршуватиметься", ",", "доведеться", "вжити", "рішучих", "заходів", "."],
+        ruTokens: ["Если", "ситуация", "и", "дальше", "будет", "ухудшаться", ",", "придётся", "принять", "решительные", "меры", "."],
+        enTokens: ["If", "the", "situation", "keeps", "getting", "worse", ",", "decisive", "action", "will", "have", "to", "be", "taken", "."],
+        extraUaTokens: ["загрозу", "проєкту", "висновку"],
+        extraRuTokens: ["угрозу", "проекта", "выводу"],
+        extraEnTokens: ["threat", "project", "conclusion"],
     },
 
     [phraseKey("wziąć odpowiedzialność", "b2-2")]: {
@@ -460,10 +459,10 @@ export const PL_B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         sk: "Czy możesz doprecyzować, co dokładnie masz na myśli w tym punkcie?",
         ua: "Чи можеш ти уточнити, що саме ти маєш на увазі в цьому пункті?",
         ru: "Можешь уточнить, что именно ты имеешь в виду в этом пункте?",
-        en: "Can you clarify what exactly you mean in this point?",
+        en: "Can you clarify what exactly you mean at this point?",
         uaTokens: ["Чи", "можеш", "ти", "уточнити", ",", "що", "саме", "ти", "маєш", "на", "увазі", "в", "цьому", "пункті", "?"],
         ruTokens: ["Можешь", "уточнить", ",", "что", "именно", "ты", "имеешь", "в", "виду", "в", "этом", "пункте", "?"],
-        enTokens: ["Can", "you", "clarify", "what", "exactly", "you", "mean", "in", "this", "point", "?"],
+        enTokens: ["Can", "you", "clarify", "what", "exactly", "you", "mean", "at", "this", "point", "?"],
         extraUaTokens: ["правило", "заяву", "сторін"],
         extraRuTokens: ["правило", "заявление", "сторон"],
         extraEnTokens: ["rule", "application", "sides"],
@@ -643,10 +642,10 @@ export const PL_B2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("oświadczenie firmy", "b2-5")]: {
         sk: "Oświadczenie firmy zostało opublikowane na stronie internetowej.",
-        ua: "Заяву компанії було опубліковано на сайті.",
+        ua: "Заяву компанії було опубліковано на вебсайті.",
         ru: "Заявление компании было опубликовано на сайте.",
         en: "The company statement was published on the website.",
-        uaTokens: ["Заяву", "компанії", "було", "опубліковано", "на", "сайті", "."],
+        uaTokens: ["Заяву", "компанії", "було", "опубліковано", "на", "вебсайті", "."],
         ruTokens: ["Заявление", "компании", "было", "опубликовано", "на", "сайте", "."],
         enTokens: ["The", "company", "statement", "was", "published", "on", "the", "website", "."],
         extraUaTokens: ["вимогу", "проблеми", "термін"],

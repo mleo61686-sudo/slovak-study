@@ -124,11 +124,11 @@ export const PL_B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("szacunek", "b2-21")]: {
         sk: "Według naszych szacunków projekt powinien zostać ukończony do końca miesiąca.",
-        ua: "За нашими оцінками, проєкт має бути завершений до кінця місяця.",
-        ru: "По нашим оценкам, проект должен быть завершён к концу месяца.",
+        ua: "За нашими підрахунками, проєкт має бути завершений до кінця місяця.",
+        ru: "По нашим подсчётам, проект должен быть завершён к концу месяца.",
         en: "According to our estimates, the project should be completed by the end of the month.",
-        uaTokens: ["За", "нашими", "оцінками", ",", "проєкт", "має", "бути", "завершений", "до", "кінця", "місяця", "."],
-        ruTokens: ["По", "нашим", "оценкам", ",", "проект", "должен", "быть", "завершён", "к", "концу", "месяца", "."],
+        uaTokens: ["За", "нашими", "підрахунками", ",", "проєкт", "має", "бути", "завершений", "до", "кінця", "місяця", "."],
+        ruTokens: ["По", "нашим", "подсчётам", ",", "проект", "должен", "быть", "завершён", "к", "концу", "месяца", "."],
         enTokens: ["According", "to", "our", "estimates", ",", "the", "project", "should", "be", "completed", "by", "the", "end", "of", "the", "month", "."],
         extraUaTokens: ["аналіз", "результат", "рішення"],
         extraRuTokens: ["анализ", "результат", "решение"],
@@ -312,10 +312,10 @@ export const PL_B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("tolerancyjny", "b2-23")]: {
         sk: "W dzisiejszym świecie warto być tolerancyjnym wobec innych kultur i poglądów.",
-        ua: "У сучасному світі варто бути толерантним до інших культур і поглядів.",
+        ua: "У сучасному світі варто бути толерантним щодо інших культур і поглядів.",
         ru: "В современном мире важно быть терпимым к другим культурам и взглядам.",
         en: "In today's world, it is worth being tolerant toward other cultures and opinions.",
-        uaTokens: ["У", "сучасному", "світі", "варто", "бути", "толерантним", "до", "інших", "культур", "і", "поглядів", "."],
+        uaTokens: ["У", "сучасному", "світі", "варто", "бути", "толерантним", "щодо", "інших", "культур", "і", "поглядів", "."],
         ruTokens: ["В", "современном", "мире", "важно", "быть", "терпимым", "к", "другим", "культурам", "и", "взглядам", "."],
         enTokens: ["In", "today's", "world", ",", "it", "is", "worth", "being", "tolerant", "toward", "other", "cultures", "and", "opinions", "."],
         extraUaTokens: ["суспільство", "цінність", "повага"],
@@ -452,10 +452,10 @@ export const PL_B2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("usługa online", "b2-24")]: {
         sk: "Ta usługa online pozwala szybko złożyć wniosek bez wychodzenia z domu.",
-        ua: "Цей онлайн-сервіс дозволяє швидко подати заявку, не виходячи з дому.",
+        ua: "Ця онлайн-послуга дозволяє швидко подати заявку, не виходячи з дому.",
         ru: "Этот онлайн-сервис позволяет быстро подать заявку, не выходя из дома.",
         en: "This online service allows you to quickly submit an application without leaving home.",
-        uaTokens: ["Цей", "онлайн-сервіс", "дозволяє", "швидко", "подати", "заявку", ",", "не", "виходячи", "з", "дому", "."],
+        uaTokens: ["Ця", "онлайн-послуга", "дозволяє", "швидко", "подати", "заявку", ",", "не", "виходячи", "з", "дому", "."],
         ruTokens: ["Этот", "онлайн-сервис", "позволяет", "быстро", "подать", "заявку", ",", "не", "выходя", "из", "дома", "."],
         enTokens: ["This", "online", "service", "allows", "you", "to", "quickly", "submit", "an", "application", "without", "leaving", "home", "."],
         extraUaTokens: ["інтернет", "послуга", "заявка"],

@@ -23,9 +23,9 @@ export const PL_B2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("pomnik", "b2-41")]: {
         sk: "Ten pomnik upamiętnia ważne wydarzenie, które odegrało dużą rolę w historii miasta.",
-        ua: "Ця скульптура вшановує важливу подію, яка відіграла велику роль в історії міста.",
-        ru: "Эта скульптура посвящена важному событию, сыгравшему большую роль в истории города.",
-        en: "This sculpture commemorates an important event that played a major role in the city's history.",
+        ua: "Цей пам’ятник вшановує важливу подію, яка відіграла велику роль в історії міста.",
+        ru: "Этот памятник увековечивает важное событие, сыгравшее большую роль в истории города.",
+        en: "This monument commemorates an important event that played a major role in the city's history.",
         tokens: ["Ten", "pomnik", "upamiętnia", "ważne", "wydarzenie", ",", "które", "odegrało", "dużą", "rolę", "w", "historii", "miasta", "."],
     },
 
@@ -162,7 +162,7 @@ export const PL_B2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("architekt", "b2-42")]: {
         sk: "Architekt musiał połączyć oczekiwania klienta z ograniczeniami technicznymi i budżetowymi.",
-        ua: "Архітектору довелося поєднати очікування клієнта з технічними та бюджетними обмеженнями.",
+        ua: "Архітектор мусив поєднати очікування клієнта з технічними та бюджетними обмеженнями.",
         ru: "Архитектору пришлось совместить ожидания клиента с техническими и бюджетными ограничениями.",
         en: "The architect had to combine the client's expectations with technical and budget constraints.",
         tokens: ["Architekt", "musiał", "połączyć", "oczekiwania", "klienta", "z", "ograniczeniami", "technicznymi", "i", "budżetowymi", "."],
@@ -264,9 +264,9 @@ export const PL_B2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("przestępstwo", "b2-44")]: {
         sk: "To przestępstwo zostało starannie zaplanowane, dlatego śledztwo trwało znacznie dłużej niż zwykle.",
-        ua: "Цей кримінальний злочин був ретельно спланований, тому розслідування тривало значно довше, ніж зазвичай.",
-        ru: "Это уголовное преступление было тщательно спланировано, поэтому расследование длилось значительно дольше обычного.",
-        en: "This criminal offense was carefully planned, so the investigation lasted much longer than usual.",
+        ua: "Цей злочин був ретельно спланований, тому розслідування тривало значно довше, ніж зазвичай.",
+        ru: "Это преступление было тщательно спланировано, поэтому расследование длилось значительно дольше обычного.",
+        en: "This crime was carefully planned, so the investigation lasted much longer than usual.",
         tokens: ["To", "przestępstwo", "zostało", "starannie", "zaplanowane", ",", "dlatego", "śledztwo", "trwało", "znacznie", "dłużej", "niż", "zwykle", "."],
     },
 
@@ -312,9 +312,9 @@ export const PL_B2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("czyn karalny", "b2-44")]: {
         sk: "Każdy czyn karalny powinien zostać dokładnie zbadany, zanim sprawa trafi do sądu.",
-        ua: "Кожен кримінальний злочин має бути ретельно розслідуваний, перш ніж справа потрапить до суду.",
-        ru: "Каждое уголовное преступление должно быть тщательно расследовано, прежде чем дело попадёт в суд.",
-        en: "Every criminal offense should be thoroughly investigated before the case goes to court.",
+        ua: "Кожне каране діяння має бути ретельно розслідуване, перш ніж справа потрапить до суду.",
+        ru: "Каждое наказуемое деяние должно быть тщательно расследовано, прежде чем дело попадёт в суд.",
+        en: "Every punishable act should be thoroughly investigated before the case goes to court.",
         tokens: ["Każdy", "czyn", "karalny", "powinien", "zostać", "dokładnie", "zbadany", ",", "zanim", "sprawa", "trafi", "do", "sądu", "."],
     },
 
@@ -432,9 +432,9 @@ export const PL_B2_PHRASES_5: Record<string, Phrase> = {
     },
     [phraseKey("pilot", "b2-46")]: {
         sk: "Pilot nie działa, musimy wymienić baterie.",
-        ua: "Контролер не працює, потрібно замінити батарейки.",
-        ru: "Контроллер не работает, нужно заменить батарейки.",
-        en: "The controller doesn't work, we need to change the batteries.",
+        ua: "Пульт не працює, потрібно замінити батарейки.",
+        ru: "Пульт не работает, нужно заменить батарейки.",
+        en: "The remote doesn't work, we need to change the batteries.",
         tokens: ["Pilot", "nie", "działa", ",", "musimy", "wymienić", "baterie", "."],
     },
     [phraseKey("gracz", "b2-46")]: {

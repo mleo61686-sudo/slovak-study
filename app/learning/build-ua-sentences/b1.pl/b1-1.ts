@@ -72,15 +72,16 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("wkład", "b1-1")]: {
         sk: "Twój wkład w projekt był bardzo ważny, dlatego dziękujemy za pomoc.",
-        ua: "Твій внесок у проєкт був дуже важливий, тому дякуємо за допомогу.",
+        ua: "Твій внесок у проєкт був дуже важливим, тому дякуємо за допомогу.",
         ru: "Твой вклад в проект был очень важен, поэтому спасибо за помощь.",
         en: "Your contribution to the project was very important, so thank you for your help.",
-        uaTokens: ["Твій", "внесок", "у", "проєкт", "був", "дуже", "важливий", ",", "тому", "дякуємо", "за", "допомогу", "."],
+        uaTokens: ["Твій", "внесок", "у", "проєкт", "був", "дуже", "важливим", ",", "тому", "дякуємо", "за", "допомогу", "."],
         ruTokens: ["Твой", "вклад", "в", "проект", "был", "очень", "важен", ",", "поэтому", "спасибо", "за", "помощь", "."],
         enTokens: ["Your", "contribution", "to", "the", "project", "was", "very", "important", ",", "so", "thank", "you", "for", "your", "help", "."],
         extraUaTokens: ["зарплата", "контракт", "працівник"],
         extraRuTokens: ["зарплата", "контракт", "сотрудник"],
         extraEnTokens: ["salary", "contract", "employee"],
+        uaAltAnswers: [["Твій", "внесок", "у", "проєкт", "був", "дуже", "важливим", ",", "тому", "за", "допомогу", "дякуємо", "."]],
     },
 
     [phraseKey("frekwencja", "b1-1")]: {
@@ -111,11 +112,11 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("przełożony", "b1-1")]: {
         sk: "Mój przełożony zawsze pomaga, gdy mam problem w pracy.",
-        ua: "Мій керівник завжди допомагає, коли в мене проблема на роботі.",
-        ru: "Мой начальник всегда помогает, когда у меня проблема на работе.",
+        ua: "Мій керівник завжди допомагає, коли в мене є проблема на роботі.",
+        ru: "Мой начальник всегда помогает, когда у меня есть проблема на работе.",
         en: "My supervisor always helps when I have a problem at work.",
-        uaTokens: ["Мій", "керівник", "завжди", "допомагає", ",", "коли", "в", "мене", "проблема", "на", "роботі", "."],
-        ruTokens: ["Мой", "начальник", "всегда", "помогает", ",", "когда", "у", "меня", "проблема", "на", "работе", "."],
+        uaTokens: ["Мій", "керівник", "завжди", "допомагає", ",", "коли", "в", "мене", "є", "проблема", "на", "роботі", "."],
+        ruTokens: ["Мой", "начальник", "всегда", "помогает", ",", "когда", "у", "меня", "есть", "проблема", "на", "работе", "."],
         enTokens: ["My", "supervisor", "always", "helps", "when", "I", "have", "a", "problem", "at", "work", "."],
         extraUaTokens: ["підлеглий", "бонуси", "нарада"],
         extraRuTokens: ["подчинённый", "бонусы", "совещание"],
@@ -282,10 +283,11 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         extraUaTokens: ["квиток", "митниця", "кордон"],
         extraRuTokens: ["билет", "таможня", "граница"],
         extraEnTokens: ["ticket", "customs", "border"],
+        uaAltAnswers: [["Моя", "ручна", "поклажа", "була", "занадто", "великою", ",", "тому", "мені", "довелося", "здати", "її", "."]],
     },
 
     [phraseKey("rozpoczęcie", "b1-3")]: {
-        sk: "Rozpoczęcie boarding’u zostało opóźnione, ponieważ samolot przyleciał późno.",
+        sk: "Rozpoczęcie boardingu zostało opóźnione, ponieważ samolot przyleciał późno.",
         ua: "Посадку затримали, оскільки літак прибув пізно.",
         ru: "Посадку задержали, так как самолёт прибыл поздно.",
         en: "Boarding was delayed because the plane arrived late.",
@@ -351,10 +353,10 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("kontrola bezpieczeństwa", "b1-3")]: {
         sk: "Kontrola bezpieczeństwa była bardzo dokładna, dlatego trwała długo.",
-        ua: "Контроль безпеки був дуже ретельний, тому тривав довго.",
+        ua: "Контроль безпеки був дуже ретельним, тому тривав довго.",
         ru: "Контроль безопасности был очень тщательным, поэтому длился долго.",
         en: "The security check was very thorough, so it took a long time.",
-        uaTokens: ["Контроль", "безпеки", "був", "дуже", "ретельний", ",", "тому", "тривав", "довго", "."],
+        uaTokens: ["Контроль", "безпеки", "був", "дуже", "ретельним", ",", "тому", "тривав", "довго", "."],
         ruTokens: ["Контроль", "безопасности", "был", "очень", "тщательным", ",", "поэтому", "длился", "долго", "."],
         enTokens: ["The", "security", "check", "was", "very", "thorough", ",", "so", "it", "took", "a", "long", "time", "."],
         extraUaTokens: ["кордон", "пасажир", "валіза"],
@@ -370,6 +372,7 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         uaTokens: ["Я", "забув", "роздрукувати", "посадковий", "талон", ",", "тому", "мусив", "зробити", "це", "в", "аеропорту", "."],
         ruTokens: ["Я", "забыл", "распечатать", "посадочный", "талон", ",", "поэтому", "сделал", "это", "в", "аэропорту", "."],
         enTokens: ["I", "forgot", "to", "print", "my", "boarding", "pass", ",", "so", "I", "had", "to", "do", "it", "at", "the", "airport", "."],
+        uaAltAnswers: [["Я", "забув", "роздрукувати", "посадковий", "талон", ",", "тому", "мусив", "це", "зробити", "в", "аеропорту", "."]],
         extraUaTokens: ["митниця", "багаж", "кордон"],
         extraRuTokens: ["таможня", "багаж", "граница"],
         extraEnTokens: ["customs", "luggage", "border"],
@@ -396,6 +399,7 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         uaTokens: ["Митний", "контроль", "пройшов", "швидко", ",", "оскільки", "я", "не", "мав", "нічого", "декларувати", "."],
         ruTokens: ["Таможенный", "контроль", "прошёл", "быстро", ",", "так", "как", "у", "меня", "не", "было", "ничего", "для", "декларации", "."],
         enTokens: ["Customs", "control", "went", "quickly", "because", "I", "had", "nothing", "to", "declare", "."],
+        uaAltAnswers: [["Митний", "контроль", "пройшов", "швидко", ",", "оскільки", "я", "нічого", "не", "мав", "декларувати", "."]],
         extraUaTokens: ["пасажир", "рейс", "аеропорт"],
         extraRuTokens: ["пассажир", "рейс", "аэропорт"],
         extraEnTokens: ["passenger", "flight", "airport"],
@@ -522,16 +526,16 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     },
 
     [phraseKey("przepis", "b1-4")]: {
-        sk: "Musisz przestrzegać przepisu lekarza, żeby szybko wyzdrowieć.",
-        ua: "Ти повинен дотримуватися призначення лікаря, щоб швидко одужати.",
-        ru: "Ты должен соблюдать назначение врача, чтобы быстрее выздороветь.",
-        en: "You must follow the doctor's instructions to recover quickly.",
-        uaTokens: ["Ти", "повинен", "дотримуватися", "призначення", "лікаря", ",", "щоб", "швидко", "одужати", "."],
-        ruTokens: ["Ты", "должен", "соблюдать", "назначение", "врача", ",", "чтобы", "быстрее", "выздороветь", "."],
-        enTokens: ["You", "must", "follow", "the", "doctor's", "instructions", "to", "recover", "quickly", "."],
-        extraUaTokens: ["ліки", "симптом", "огляд"],
-        extraRuTokens: ["лекарства", "симптом", "осмотр"],
-        extraEnTokens: ["medicine", "symptom", "examination"],
+        sk: "Musisz przestrzegać przepisu, żeby danie wyszło dobrze.",
+        ua: "Ти повинен дотримуватися рецепта, щоб страва вийшла добре.",
+        ru: "Ты должен следовать рецепту, чтобы блюдо получилось хорошо.",
+        en: "You must follow the recipe so that the dish turns out well.",
+        uaTokens: ["Ти", "повинен", "дотримуватися", "рецепта", ",", "щоб", "страва", "вийшла", "добре", "."],
+        ruTokens: ["Ты", "должен", "следовать", "рецепту", ",", "чтобы", "блюдо", "получилось", "хорошо", "."],
+        enTokens: ["You", "must", "follow", "the", "recipe", "so", "that", "the", "dish", "turns", "out", "well", "."],
+        extraUaTokens: ["інгредієнти", "кухня", "готувати"],
+        extraRuTokens: ["ингредиенты", "кухня", "готовить"],
+        extraEnTokens: ["ingredients", "kitchen", "cook"],
     },
 
     // =========================

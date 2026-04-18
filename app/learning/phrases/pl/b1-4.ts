@@ -213,17 +213,17 @@ export const PL_B1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("notatka", "b1-33")]: {
         sk: "Zrobiłem krótką notatkę, żeby niczego nie zapomnieć.",
-        ua: "Я зробив коротку примітку, щоб нічого не забути.",
+        ua: "Я зробив коротку нотатку, щоб нічого не забути.",
         ru: "Я сделал короткую заметку, чтобы ничего не забыть.",
         en: "I made a short note so I wouldn't forget anything.",
         tokens: ["Zrobiłem", "krótką", "notatkę", ",", "żeby", "niczego", "nie", "zapomnieć", "."],
     },
 
     [phraseKey("skrót", "b1-33")]: {
-        sk: "Nie wszystkie skróty są zrozumiałe dla każdego odbiorcy.",
-        ua: "Не всі скорочення зрозумілі для кожного читача.",
-        ru: "Не все сокращения понятны каждому читателю.",
-        en: "Not all abbreviations are understandable to every reader.",
+        sk: "Nie każdy skrót jest zrozumiały dla każdego odbiorcy.",
+        ua: "Не кожне скорочення зрозуміле для кожного читача.",
+        ru: "Не каждое сокращение понятно каждому читателю.",
+        en: "Not every abbreviation is understandable to every reader.",
         tokens: ["Nie", "wszystkie", "skróty", "są", "zrozumiałe", "dla", "każdego", "odbiorcy", "."],
     },
 

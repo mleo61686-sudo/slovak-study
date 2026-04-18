@@ -59,10 +59,10 @@ export const PL_B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("wygrać jackpot", "b2-36")]: {
         sk: "Niewielu ludzi naprawdę wierzy, że uda im się wygrać jackpot.",
-        ua: "Мало хто справді вірить, що йому вдасться виграти джекпот.",
+        ua: "Мало хто справді вірить, що їм вдасться виграти джекпот.",
         ru: "Немногие люди действительно верят, что им удастся выиграть джекпот.",
         en: "Few people truly believe that they will manage to win the jackpot.",
-        uaTokens: ["Мало", "хто", "справді", "вірить", ",", "що", "йому", "вдасться", "виграти", "джекпот", "."],
+        uaTokens: ["Мало", "хто", "справді", "вірить", ",", "що", "їм", "вдасться", "виграти", "джекпот", "."],
         ruTokens: ["Немногие", "люди", "действительно", "верят", ",", "что", "им", "удастся", "выиграть", "джекпот", "."],
         enTokens: ["Few", "people", "truly", "believe", "that", "they", "will", "manage", "to", "win", "the", "jackpot", "."],
         extraUaTokens: ["ставку", "ризик", "гроші"],
@@ -283,15 +283,14 @@ export const PL_B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
         extraRuTokens: ["долина", "горы", "пейзаж"],
         extraEnTokens: ["valley", "mountains", "landscape"],
     },
-
     [phraseKey("szczyt", "b2-38")]: {
         sk: "Na szczyt dotarliśmy tuż przed zachodem słońca i widok był niesamowity.",
-        ua: "На пагорб ми дісталися якраз перед заходом сонця, і краєвид був неймовірний.",
-        ru: "На холм мы добрались как раз перед закатом, и вид был невероятный.",
-        en: "We reached the hill just before sunset, and the view was amazing.",
-        uaTokens: ["На", "пагорб", "ми", "дісталися", "якраз", "перед", "заходом", "сонця", ",", "і", "краєвид", "був", "неймовірний", "."],
-        ruTokens: ["На", "холм", "мы", "добрались", "как", "раз", "перед", "закатом", ",", "и", "вид", "был", "невероятный", "."],
-        enTokens: ["We", "reached", "the", "hill", "just", "before", "sunset", ",", "and", "the", "view", "was", "amazing", "."],
+        ua: "На вершину ми дісталися якраз перед заходом сонця, і краєвид був неймовірний.",
+        ru: "На вершину мы добрались как раз перед закатом, и вид был невероятный.",
+        en: "We reached the peak just before sunset, and the view was amazing.",
+        uaTokens: ["На", "вершину", "ми", "дісталися", "якраз", "перед", "заходом", "сонця", ",", "і", "краєвид", "був", "неймовірний", "."],
+        ruTokens: ["На", "вершину", "мы", "добрались", "как", "раз", "перед", "закатом", ",", "и", "вид", "был", "невероятный", "."],
+        enTokens: ["We", "reached", "the", "peak", "just", "before", "sunset", ",", "and", "the", "view", "was", "amazing", "."],
         extraUaTokens: ["долина", "пейзаж", "хребет"],
         extraRuTokens: ["долина", "пейзаж", "хребет"],
         extraEnTokens: ["valley", "landscape", "ridge"],
@@ -458,17 +457,16 @@ export const PL_B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("fortepian", "b2-39")]: {
         sk: "Fortepian nadawał utworowi elegancji i głębokiego emocjonalnego brzmienia.",
-        ua: "Піаніно надавало твору елегантності й глибокого емоційного звучання.",
-        ru: "Пианино придавало произведению элегантность и глубокое эмоциональное звучание.",
+        ua: "Фортепіано надавало твору елегантності й глибокого емоційного звучання.",
+        ru: "Фортепиано придавало произведению элегантность и глубокое эмоциональное звучание.",
         en: "The piano gave the piece elegance and deep emotional sound.",
-        uaTokens: ["Піаніно", "надавало", "твору", "елегантності", "й", "глибокого", "емоційного", "звучання", "."],
-        ruTokens: ["Пианино", "придавало", "произведению", "элегантность", "и", "глубокое", "эмоциональное", "звучание", "."],
+        uaTokens: ["Фортепіано", "надавало", "твору", "елегантності", "й", "глибокого", "емоційного", "звучання", "."],
+        ruTokens: ["Фортепиано", "придавало", "произведению", "элегантность", "и", "глубокое", "эмоциональное", "звучание", "."],
         enTokens: ["The", "piano", "gave", "the", "piece", "elegance", "and", "deep", "emotional", "sound", "."],
         extraUaTokens: ["інструмент", "мелодія", "концерт"],
         extraRuTokens: ["инструмент", "мелодия", "концерт"],
         extraEnTokens: ["instrument", "melody", "concert"],
     },
-
     [phraseKey("koncert", "b2-39")]: {
         sk: "Koncert był wyprzedany na długo przed planowaną datą występu.",
         ua: "Концерт був розпроданий задовго до запланованої дати виступу.",
@@ -630,11 +628,11 @@ export const PL_B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("urządzenie", "b2-40")]: {
         sk: "To urządzenie zużywa mniej energii niż starsze modele tego samego typu.",
-        ua: "Цей електроприлад споживає менше енергії, ніж старіші моделі того ж типу.",
-        ru: "Этот электроприбор потребляет меньше энергии, чем более старые модели того же типа.",
+        ua: "Цей пристрій споживає менше енергії, ніж старіші моделі того ж типу.",
+        ru: "Это устройство потребляет меньше энергии, чем более старые модели того же типа.",
         en: "This appliance uses less energy than older models of the same type.",
-        uaTokens: ["Цей", "електроприлад", "споживає", "менше", "енергії", ",", "ніж", "старіші", "моделі", "того", "ж", "типу", "."],
-        ruTokens: ["Этот", "электроприбор", "потребляет", "меньше", "энергии", ",", "чем", "более", "старые", "модели", "того", "же", "типа", "."],
+        uaTokens: ["Цей", "пристрій", "споживає", "менше", "енергії", ",", "ніж", "старіші", "моделі", "того", "ж", "типу", "."],
+        ruTokens: ["Это", "устройство", "потребляет", "меньше", "энергии", ",", "чем", "более", "старые", "модели", "того", "же", "типа", "."],
         enTokens: ["This", "appliance", "uses", "less", "energy", "than", "older", "models", "of", "the", "same", "type", "."],
         extraUaTokens: ["струм", "енергія", "кабель"],
         extraRuTokens: ["ток", "энергия", "кабель"],
@@ -656,11 +654,11 @@ export const PL_B2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("włączyć prąd", "b2-40")]: {
         sk: "Technik musiał najpierw sprawdzić instalację, zanim mógł włączyć prąd.",
-        ua: "Технік спочатку мав перевірити проводку, перш ніж міг увімкнути струм.",
-        ru: "Техник сначала должен был проверить проводку, прежде чем смог включить ток.",
+        ua: "Технік спочатку мав перевірити проводку, перш ніж міг увімкнути електрику.",
+        ru: "Техник сначала должен был проверить проводку, прежде чем смог включить электричество.",
         en: "The technician first had to check the installation before he could turn on the power.",
-        uaTokens: ["Технік", "спочатку", "мав", "перевірити", "проводку", ",", "перш", "ніж", "міг", "увімкнути", "струм", "."],
-        ruTokens: ["Техник", "сначала", "должен", "был", "проверить", "проводку", ",", "прежде", "чем", "смог", "включить", "ток", "."],
+        uaTokens: ["Технік", "спочатку", "мав", "перевірити", "проводку", ",", "перш", "ніж", "міг", "увімкнути", "електрику", "."],
+        ruTokens: ["Техник", "сначала", "должен", "был", "проверить", "проводку", ",", "прежде", "чем", "смог", "включить", "электричество", "."],
         enTokens: ["The", "technician", "first", "had", "to", "check", "the", "installation", "before", "he", "could", "turn", "on", "the", "power", "."],
         extraUaTokens: ["кабель", "напруга", "пристрій"],
         extraRuTokens: ["кабель", "напряжение", "устройство"],

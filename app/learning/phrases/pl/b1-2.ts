@@ -98,8 +98,8 @@ export const PL_B1_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("oświadczenie", "b1-12")]: {
         sk: "Musiałem podpisać oświadczenie, że wszystkie dane są prawdziwe.",
-        ua: "Мені довелося підписати заяву, що всі дані є правдивими.",
-        ru: "Мне пришлось подписать заявление, что все данные являются правдивыми.",
+        ua: "Мені довелося підписати заяву, що всі дані правдиві.",
+        ru: "Мне пришлось подписать заявление, что все данные правдивы.",
         en: "I had to sign a statement that all the information was true.",
         tokens: ["Musiałem", "podpisać", "oświadczenie", ",", "że", "wszystkie", "dane", "są", "prawdziwe", "."],
     },
@@ -197,8 +197,8 @@ export const PL_B1_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("rozpatrzenie wniosku", "b1-13")]: {
         sk: "Rozpatrzenie wniosku trwało dłużej, niż się spodziewaliśmy.",
-        ua: "Обробка запиту тривала довше, ніж ми очікували.",
-        ru: "Рассмотрение запроса длилось дольше, чем мы ожидали.",
+        ua: "Розгляд заяви тривав довше, ніж ми очікували.",
+        ru: "Рассмотрение заявления длилось дольше, чем мы ожидали.",
         en: "Handling the request took longer than we expected.",
         tokens: ["Rozpatrzenie", "wniosku", "trwało", "dłużej", ",", "niż", "się", "spodziewaliśmy", "."],
     },
@@ -394,8 +394,8 @@ export const PL_B1_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("poprawić wydajność", "b1-15")]: {
         sk: "Chcę poprawić wydajność, dlatego trenuję według planu.",
-        ua: "Я хочу покращити результат, тому тренуюся за планом.",
-        ru: "Я хочу улучшить результат, поэтому тренируюсь по плану.",
+        ua: "Я хочу покращити результативність, тому тренуюся за планом.",
+        ru: "Я хочу улучшить результативность, поэтому тренируюсь по плану.",
         en: "I want to improve my performance, so I train according to a plan.",
         tokens: ["Chcę", "poprawić", "wydajność", ",", "dlatego", "trenuję", "według", "planu", "."],
     },
@@ -702,9 +702,9 @@ export const PL_B1_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("odczytać", "b1-19")]: {
         sk: "Żeby rozwiązać to zadanie, musisz najpierw odczytać właściwą wartość.",
-        ua: "Щоб розв’язати це завдання, ти повинен спочатку відняти правильне значення.",
-        ru: "Чтобы решить это задание, тебе нужно сначала вычесть правильное значение.",
-        en: "To solve this task, you first need to subtract the correct value.",
+        ua: "Щоб розв’язати це завдання, ти повинен спочатку зчитати правильне значення.",
+        ru: "Чтобы решить это задание, тебе нужно сначала считать правильное значение.",
+        en: "To solve this task, you first need to read the correct value.",
         tokens: ["Żeby", "rozwiązać", "to", "zadanie", ",", "musisz", "najpierw", "odczytać", "właściwą", "wartość", "."],
     },
 
@@ -716,10 +716,10 @@ export const PL_B1_PHRASES_2: Record<string, Phrase> = {
         tokens: ["Dzieci", "najpierw", "uczą", "się", "dodawać", ",", "a", "dopiero", "później", "mnożyć", "."],
     },
     [phraseKey("ułamek", "b1-19")]: {
-        sk: "Nie rozumiem ułamków, dlatego muszę je jeszcze przećwiczyć.",
-        ua: "Я не розумію дроби, тому мені потрібно ще їх потренувати.",
-        ru: "Я не понимаю дроби, поэтому мне нужно ещё их потренировать.",
-        en: "I don’t understand fractions, so I need to practice them more.",
+        sk: "Ten ułamek jest dla mnie trudny, dlatego muszę go jeszcze przećwiczyć.",
+        ua: "Цей дріб для мене складний, тому мені потрібно ще його потренувати.",
+        ru: "Эта дробь для меня сложная, поэтому мне нужно ещё её потренировать.",
+        en: "This fraction is difficult for me, so I need to practice it more.",
         tokens: ["Nie", "rozumiem", "ułamków", ",", "dlatego", "muszę", "je", "jeszcze", "przećwiczyć", "."],
     },
 

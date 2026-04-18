@@ -31,7 +31,7 @@ export const PL_B2_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("ustępstwo", "b2-1")]: {
         sk: "Musieliśmy zrobić pewne ustępstwo, aby rozmowy mogły zakończyć się sukcesem.",
-        ua: "Нам довелося піти на певну поступку, щоб розмова могла завершитися успішно.",
+        ua: "Нам довелося піти на певну поступку, щоб переговори могли завершитися успішно.",
         ru: "Нам пришлось пойти на определённую уступку, чтобы переговоры могли завершиться успешно.",
         en: "We had to make a certain concession so that the talks could end successfully.",
         tokens: ["Musieliśmy", "zrobić", "pewne", "ustępstwo", ",", "aby", "rozmowy", "mogły", "zakończyć", "się", "sukcesem", "."],
@@ -55,7 +55,7 @@ export const PL_B2_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("sprzeciwiać się", "b2-1")]: {
         sk: "Kilku uczestników nadal sprzeciwiało się zmianom mimo dodatkowych wyjaśnień.",
-        ua: "Кілька учасників і далі заперечували зміни, попри додаткові пояснення.",
+        ua: "Кілька учасників і далі заперечували проти змін, попри додаткові пояснення.",
         ru: "Несколько участников всё ещё возражали против изменений, несмотря на дополнительные объяснения.",
         en: "Several participants still objected to the changes despite additional explanations.",
         tokens: ["Kilku", "uczestników", "nadal", "sprzeciwiało", "się", "zmianom", "mimo", "dodatkowych", "wyjaśnień", "."],
@@ -137,11 +137,11 @@ export const PL_B2_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("dalej", "b2-2")]: {
-        sk: "Jeśli będziemy odkładać decyzję dalej, problem stanie się jeszcze poważniejszy.",
-        ua: "Якщо ми й далі відкладатимемо рішення, проблема стане ще серйознішою.",
-        ru: "Если мы будем и дальше откладывать решение, проблема станет ещё серьёзнее.",
-        en: "If we keep postponing the decision further, the problem will become even more serious.",
-        tokens: ["Jeśli", "będziemy", "odkładać", "decyzję", "dalej", ",", "problem", "stanie", "się", "jeszcze", "poważniejszy", "."],
+        sk: "Jeśli sytuacja będzie się dalej pogarszać, trzeba będzie podjąć zdecydowane działania.",
+        ua: "Якщо ситуація й далі погіршуватиметься, доведеться вжити рішучих заходів.",
+        ru: "Если ситуация и дальше будет ухудшаться, придётся принять решительные меры.",
+        en: "If the situation keeps getting worse, decisive action will have to be taken.",
+        tokens: ["Jeśli", "sytuacja", "będzie", "się", "dalej", "pogarszać", ",", "trzeba", "będzie", "podjąć", "zdecydowane", "działania", "."],
     },
 
     [phraseKey("wziąć odpowiedzialność", "b2-2")]: {
@@ -290,7 +290,7 @@ export const PL_B2_PHRASES_1: Record<string, Phrase> = {
         sk: "Czy możesz doprecyzować, co dokładnie masz na myśli w tym punkcie?",
         ua: "Чи можеш ти уточнити, що саме ти маєш на увазі в цьому пункті?",
         ru: "Можешь уточнить, что именно ты имеешь в виду в этом пункте?",
-        en: "Can you clarify what exactly you mean in this point?",
+        en: "Can you clarify what exactly you mean at this point?",
         tokens: ["Czy", "możesz", "doprecyzować", ",", "co", "dokładnie", "masz", "na", "myśli", "w", "tym", "punkcie", "?"],
     },
 
@@ -402,7 +402,7 @@ export const PL_B2_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("oświadczenie firmy", "b2-5")]: {
         sk: "Oświadczenie firmy zostało opublikowane na stronie internetowej.",
-        ua: "Заяву компанії було опубліковано на сайті.",
+        ua: "Заяву компанії було опубліковано на вебсайті.",
         ru: "Заявление компании было опубликовано на сайте.",
         en: "The company statement was published on the website.",
         tokens: ["Oświadczenie", "firmy", "zostało", "opublikowane", "na", "stronie", "internetowej", "."],
@@ -776,8 +776,8 @@ export const PL_B2_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("kompetencja", "b2-10")]: {
         sk: "Kompetencja jest bardzo ważna w tej branży.",
-        ua: "Професіоналізм дуже важливий у цій сфері.",
-        ru: "Профессионализм очень важен в этой сфере.",
+        ua: "Компетентність дуже важлива у цій сфері.",
+        ru: "Компетентность очень важна в этой сфере.",
         en: "Competence is very important in this field.",
         tokens: ["Kompetencja", "jest", "bardzo", "ważna", "w", "tej", "branży", "."],
     },

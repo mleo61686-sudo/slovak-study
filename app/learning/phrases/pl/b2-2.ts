@@ -132,15 +132,15 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
         sk: "Najważniejszym składnikiem tego dania są świeże warzywa.",
         ua: "Найважливішим інгредієнтом цієї страви є свіжі овочі.",
         ru: "Самым важным ингредиентом этого блюда являются свежие овощи.",
-        en: "The most important ingredient in this dish is fresh vegetables.",
+        en: "The most important ingredients in this dish are fresh vegetables.",
         tokens: ["Najważniejszym", "składnikiem", "tego", "dania", "są", "świeże", "warzywa", "."],
     },
 
     [phraseKey("recepta", "b2-12")]: {
-        sk: "Mam starą receptę na ciasto od mojej babci.",
-        ua: "У мене є старий рецепт пирога від бабусі.",
-        ru: "У меня есть старый рецепт пирога от бабушки.",
-        en: "I have an old cake recipe from my grandmother.",
+        sk: "Lekarz wystawił mi receptę na lek, który mam brać przez tydzień.",
+        ua: "Лікар виписав мені рецепт на ліки, які я маю приймати протягом тижня.",
+        ru: "Врач выписал мне рецепт на лекарство, которое я должен принимать в течение недели.",
+        en: "The doctor gave me a prescription for medicine that I have to take for a week.",
         tokens: ["Mam", "starą", "receptę", "na", "ciasto", "od", "mojej", "babci", "."],
     },
 
@@ -173,9 +173,9 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
     // =========================
     [phraseKey("wytrwałość", "b2-13")]: {
         sk: "Wytrwałość pomaga osiągać dobre wyniki w sporcie.",
-        ua: "Витривалість допомагає досягати хороших результатів у спорті.",
-        ru: "Выносливость помогает достигать хороших результатов в спорте.",
-        en: "Endurance helps achieve good results in sports.",
+        ua: "Наполегливість допомагає досягати хороших результатів у спорті.",
+        ru: "Упорство помогает достигать хороших результатов в спорте.",
+        en: "Perseverance helps achieve good results in sports.",
         tokens: ["Wytrwałość", "pomaga", "osiągać", "dobre", "wyniki", "w", "sporcie", "."],
     },
 
@@ -213,16 +213,16 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("wydajność", "b2-13")]: {
         sk: "Jego wydajność poprawiła się dzięki systematycznej pracy.",
-        ua: "Його результат покращився завдяки систематичній роботі.",
-        ru: "Его результат улучшился благодаря систематической работе.",
+        ua: "Його результативність покращилася завдяки систематичній роботі.",
+        ru: "Его результативность улучшилась благодаря систематической работе.",
         en: "His performance improved thanks to systematic work.",
         tokens: ["Jego", "wydajność", "poprawiła", "się", "dzięki", "systematycznej", "pracy", "."],
     },
 
     [phraseKey("poprawić wydajność", "b2-13")]: {
         sk: "Nowy plan treningowy ma poprawić wydajność całej drużyny.",
-        ua: "Новий план тренувань має покращити результат усієї команди.",
-        ru: "Новый тренировочный план должен улучшить результат всей команды.",
+        ua: "Новий план тренувань має покращити результативність усієї команди.",
+        ru: "Новый тренировочный план должен улучшить результативность всей команды.",
         en: "The new training plan should improve the whole team's performance.",
         tokens: ["Nowy", "plan", "treningowy", "ma", "poprawić", "wydajność", "całej", "drużyny", "."],
     },
@@ -288,9 +288,9 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("wyjście", "b2-14")]: {
         sk: "Poranne wyjście na szlak było bardzo wymagające.",
-        ua: "Ранковий підйом на маршрут був дуже складним.",
-        ru: "Утренний подъём на маршрут был очень трудным.",
-        en: "The morning ascent on the trail was very demanding.",
+        ua: "Ранковий вихід на маршрут був дуже складним.",
+        ru: "Утренний выход на маршрут был очень трудным.",
+        en: "The morning departure onto the trail was very demanding.",
         tokens: ["Poranne", "wyjście", "na", "szlak", "było", "bardzo", "wymagające", "."],
     },
 
@@ -303,11 +303,11 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
     },
 
     [phraseKey("chodnik", "b2-14")]: {
-        sk: "Ten chodnik prowadzi przez las aż do jeziora.",
-        ua: "Ця стежка веде через ліс аж до озера.",
-        ru: "Эта тропа ведёт через лес прямо к озеру.",
-        en: "This trail leads through the forest all the way to the lake.",
-        tokens: ["Ten", "chodnik", "prowadzi", "przez", "las", "aż", "do", "jeziora", "."],
+        sk: "Kamienny chodnik prowadził przez park aż do jeziora.",
+        ua: "Кам’яна доріжка вела через парк аж до озера.",
+        ru: "Каменная дорожка вела через парк прямо к озеру.",
+        en: "The stone path led through the park all the way to the lake.",
+        tokens: ["Kamienny", "chodnik", "prowadził", "przez", "park", "aż", "do", "jeziora", "."],
     },
 
     [phraseKey("górski", "b2-14")]: {
@@ -445,35 +445,35 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
     },
 
     [phraseKey("morela", "b2-16")]: {
-        sk: "Morele są często używane do przygotowywania dżemów.",
-        ua: "Абрикоси часто використовують для приготування джемів.",
-        ru: "Абрикосы часто используют для приготовления джемов.",
-        en: "Apricots are often used to make jams.",
-        tokens: ["Morele", "są", "często", "używane", "do", "przygotowywania", "dżemów", "."],
+        sk: "Morela jest często używana do przygotowywania dżemów.",
+        ua: "Абрикос часто використовують для приготування джемів.",
+        ru: "Абрикос часто используют для приготовления джемов.",
+        en: "Apricot is often used to make jams.",
+        tokens: ["Morele", "jest", "często", "używana", "do", "przygotowywania", "dżemów", "."],
     },
 
     [phraseKey("śliwka", "b2-16")]: {
-        sk: "Śliwki są idealne do wypieków i deserów.",
-        ua: "Сливи ідеально підходять для випічки та десертів.",
-        ru: "Сливы идеально подходят для выпечки и десертов.",
-        en: "Plums are perfect for baking and desserts.",
-        tokens: ["Śliwki", "są", "idealne", "do", "wypieków", "i", "deserów", "."],
+        sk: "Śliwka jest idealna do wypieków i deserów.",
+        ua: "Слива ідеально підходить для випічки та десертів.",
+        ru: "Слива идеально подходит для выпечки и десертов.",
+        en: "Plum is perfect for baking and desserts.",
+        tokens: ["Śliwka", "jest", "idealna", "do", "wypieków", "i", "deserów", "."],
     },
 
     [phraseKey("borówka", "b2-16")]: {
-        sk: "Borówki zawierają wiele witamin i są bardzo zdrowe.",
+        sk: "Borówka zawiera wiele witamin i jest bardzo zdrowa.",
         ua: "Чорниця містить багато вітамінів і дуже корисна.",
         ru: "Черника содержит много витаминов и очень полезна.",
-        en: "Blueberries contain many vitamins and are very healthy.",
-        tokens: ["Borówki", "zawierają", "wiele", "witamin", "i", "są", "bardzo", "zdrowe", "."],
+        en: "Blueberry contains many vitamins and is very healthy.",
+        tokens: ["Borówka", "zawiera", "wiele", "witamin", "i", "jest", "bardzo", "zdrowa", "."],
     },
 
     [phraseKey("malina", "b2-16")]: {
-        sk: "Maliny mają lekko kwaśny, ale przyjemny smak.",
+        sk: "Malina ma lekko kwaśny, ale przyjemny smak.",
         ua: "Малина має трохи кислий, але приємний смак.",
         ru: "Малина имеет слегка кислый, но приятный вкус.",
-        en: "Raspberries have a slightly sour but pleasant taste.",
-        tokens: ["Maliny", "mają", "lekko", "kwaśny", ",", "ale", "przyjemny", "smak", "."],
+        en: "Raspberry has a slightly sour but pleasant taste.",
+        tokens: ["Malina", "ma", "lekko", "kwaśny", "ale", "przyjemny", "smak", "."],
     },
 
     [phraseKey("ananas", "b2-16")]: {
@@ -520,11 +520,11 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
     },
 
     [phraseKey("pomidor", "b2-17")]: {
-        sk: "Pomidory są podstawą wielu potraw.",
-        ua: "Помідори є основою багатьох страв.",
-        ru: "Помидоры являются основой многих блюд.",
-        en: "Tomatoes are the base of many dishes.",
-        tokens: ["Pomidory", "są", "podstawą", "wielu", "potraw", "."],
+        sk: "Pomidor jest podstawą wielu potraw.",
+        ua: "Помідор є основою багатьох страв.",
+        ru: "Помидор является основой многих блюд.",
+        en: "Tomato is the base of many dishes.",
+        tokens: ["Pomidor", "jest", "podstawą", "wielu", "potraw", "."],
     },
 
     [phraseKey("papryka", "b2-17")]: {
@@ -688,7 +688,7 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
     [phraseKey("wzruszenie", "b2-19")]: {
         sk: "Film wywołał u mnie silne wzruszenie.",
         ua: "Фільм викликав у мене сильне зворушення.",
-        ru: "Фильм вызвал у меня сильное волнение.",
+        ru: "Фильм вызвал у меня сильную растроганность.",
         en: "The film moved me deeply.",
         tokens: ["Film", "wywołał", "u", "mnie", "silne", "wzruszenie", "."],
     },

@@ -47,7 +47,7 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("wkład", "b1-1")]: {
         sk: "Twój wkład w projekt był bardzo ważny, dlatego dziękujemy za pomoc.",
-        ua: "Твій внесок у проєкт був дуже важливий, тому дякуємо за допомогу.",
+        ua: "Твій внесок у проєкт був дуже важливим, тому дякуємо за допомогу.",
         ru: "Твой вклад в проект был очень важен, поэтому спасибо за помощь.",
         en: "Your contribution to the project was very important, so thank you for your help.",
         tokens: ["Twój", "wkład", "w", "projekt", "był", "bardzo", "ważny", ",", "dlatego", "dziękujemy", "za", "pomoc", "."],
@@ -71,8 +71,8 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("przełożony", "b1-1")]: {
         sk: "Mój przełożony zawsze pomaga, gdy mam problem w pracy.",
-        ua: "Мій керівник завжди допомагає, коли в мене проблема на роботі.",
-        ru: "Мой начальник всегда помогает, когда у меня проблема на работе.",
+        ua: "Мій керівник завжди допомагає, коли в мене є проблема на роботі.",
+        ru: "Мой начальник всегда помогает, когда у меня есть проблема на работе.",
         en: "My supervisor always helps when I have a problem at work.",
         tokens: ["Mój", "przełożony", "zawsze", "pomaga", ",", "gdy", "mam", "problem", "w", "pracy", "."],
     },
@@ -179,7 +179,7 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Mój", "bagaż", "podręczny", "był", "za", "duży", ",", "dlatego", "musiałem", "go", "nadać", "."],
     },
     [phraseKey("rozpoczęcie", "b1-3")]: {
-        sk: "Rozpoczęcie boarding’u zostało opóźnione, ponieważ samolot przyleciał późno.",
+        sk: "Rozpoczęcie boardingu zostało opóźnione, ponieważ samolot przyleciał późno.",
         ua: "Посадку затримали, оскільки літак прибув пізно.",
         ru: "Посадку задержали, так как самолёт прибыл поздно.",
         en: "Boarding was delayed because the plane arrived late.",
@@ -220,7 +220,7 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("kontrola bezpieczeństwa", "b1-3")]: {
         sk: "Kontrola bezpieczeństwa była bardzo dokładna, dlatego trwała długo.",
-        ua: "Контроль безпеки був дуже ретельний, тому тривав довго.",
+        ua: "Контроль безпеки був дуже ретельним, тому тривав довго.",
         ru: "Контроль безопасности был очень тщательным, поэтому длился долго.",
         en: "The security check was very thorough, so it took a long time.",
         tokens: ["Kontrola", "bezpieczeństwa", "była", "bardzo", "dokładna", ",", "dlatego", "trwała", "długo", "."],
@@ -326,10 +326,10 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("przepis", "b1-4")]: {
-        sk: "Musisz przestrzegać przepisu lekarza, żeby szybko wyzdrowieć.",
-        ua: "Ти повинен дотримуватися призначення лікаря, щоб швидко одужати.",
-        ru: "Ты должен соблюдать назначение врача, чтобы быстрее выздороветь.",
-        en: "You must follow the doctor's instructions to recover quickly.",
+        sk: "Musisz przestrzegać przepisu, żeby danie wyszło dobrze.",
+        ua: "Ти повинен дотримуватися рецепта, щоб страва вийшла добре.",
+        ru: "Ты должен следовать рецепту, чтобы блюдо получилось хорошо.",
+        en: "You must follow the recipe so that the dish turns out well.",
         tokens: ["Musisz", "przestrzegać", "przepisu", "lekarza", ",", "żeby", "szybko", "wyzdrowieć", "."],
     },
 
@@ -460,11 +460,11 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("znaczek", "b1-6")]: {
-        sk: "Dostałem dobry znaczek, ponieważ dobrze przygotowałem się do testu.",
-        ua: "Я отримав хорошу оцінку, оскільки добре підготувався до тесту.",
-        ru: "Я получил хорошую оценку, потому что хорошо подготовился к тесту.",
-        en: "I got a good grade because I prepared well for the test.",
-        tokens: ["Dostałem", "dobry", "znaczek", ",", "ponieważ", "dobrze", "przygotowałem", "się", "do", "testu", "."],
+        sk: "Na zeszycie był znaczek, który potwierdzał oddanie pracy na czas.",
+        ua: "На зошиті була позначка, яка підтверджувала здачу роботи вчасно.",
+        ru: "На тетради была отметка, которая подтверждала сдачу работы вовремя.",
+        en: "There was a mark on the notebook confirming the work was submitted on time.",
+        tokens: ["Na", "zeszycie", "był", "znaczek", ",", "który", "potwierdzał", "oddanie", "pracy", "na", "czas", "."],
     },
 
     [phraseKey("rocznik", "b1-6")]: {
@@ -535,11 +535,11 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("nagrać", "b1-7")]: {
-        sk: "Muszę nagrać plik, żeby wysłać go dalej.",
-        ua: "Мені потрібно завантажити файл, щоб відправити його далі.",
-        ru: "Мне нужно загрузить файл, чтобы отправить его дальше.",
-        en: "I need to upload the file to send it further.",
-        tokens: ["Muszę", "nagrać", "plik", ",", "żeby", "wysłać", "go", "dalej", "."],
+        sk: "Muszę nagrać wiadomość, żeby wysłać ją dalej.",
+        ua: "Мені потрібно записати повідомлення, щоб відправити його далі.",
+        ru: "Мне нужно записать сообщение, чтобы отправить его дальше.",
+        en: "I need to record a message to send it further.",
+        tokens: ["Muszę", "nagrać", "wiadomość", ",", "żeby", "wysłać", "ją", "dalej", "."],
     },
 
     [phraseKey("dzielić się", "b1-7")]: {
@@ -701,11 +701,11 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("serwis umowny", "b1-9")]: {
-        sk: "Serwis umowny gwarantuje wysoką jakość usług.",
-        ua: "Офіційний сервіс гарантує високу якість послуг.",
-        ru: "Официальный сервис гарантирует высокое качество услуг.",
-        en: "Authorized service guarantees high quality.",
-        tokens: ["Serwis", "umowny", "gwarantuje", "wysoką", "jakość", "usług", "."],
+        sk: "Serwis umowny obejmuje naprawy zapisane w warunkach umowy.",
+        ua: "Сервіс за договором охоплює ремонти, зазначені в умовах договору.",
+        ru: "Сервис по договору охватывает ремонты, указанные в условиях договора.",
+        en: "Contract service covers repairs specified in the terms of the agreement.",
+        tokens: ["Serwis", "umowny", "obejmuje", "naprawy", "zapisane", "w", "warunkach", "umowy", "."],
     },
 
     [phraseKey("awaria urządzenia", "b1-9")]: {

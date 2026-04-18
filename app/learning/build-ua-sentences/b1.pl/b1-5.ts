@@ -20,10 +20,10 @@ export const PL_B1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("Czechy", "b1-21")]: {
         sk: "Czechy odwiedziłem kilka razy, ponieważ mam tam znajomych.",
-        ua: "Чехію я відвідував кілька разів, бо маю там знайомих.",
+        ua: "Я відвідував Чехію кілька разів, бо маю там знайомих.",
         ru: "Чехию я посещал несколько раз, потому что у меня там есть знакомые.",
         en: "I have visited Czechia several times because I have friends there.",
-        uaTokens: ["Чехію", "я", "відвідував", "кілька", "разів", ",", "бо", "маю", "там", "знайомих", "."],
+        uaTokens: ["Я", "відвідував", "Чехію", "кілька", "разів", ",", "бо", "маю", "там", "знайомих", "."],
         ruTokens: ["Чехию", "я", "посещал", "несколько", "раз", ",", "потому", "что", "у", "меня", "там", "есть", "знакомые", "."],
         enTokens: ["I", "have", "visited", "Czechia", "several", "times", "because", "I", "have", "friends", "there", "."],
         extraUaTokens: ["країна", "кухнею", "лижах"],
@@ -139,13 +139,13 @@ export const PL_B1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     // LESSON 22 — Медіа та інформація
     // =========================
     [phraseKey("druk", "b1-22")]: {
-        sk: "Druk ma dziś mniejsze znaczenie niż internet, ale wciąż ma swoich odbiorców.",
-        ua: "Преса сьогодні має менше значення, ніж інтернет, але все ще має своїх читачів.",
-        ru: "Печать сегодня имеет меньшее значение, чем интернет, но всё ещё имеет свою аудиторию.",
-        en: "The press is less important today than the internet, but it still has its audience.",
-        uaTokens: ["Преса", "сьогодні", "має", "менше", "значення", ",", "ніж", "інтернет", ",", "але", "все", "ще", "має", "своїх", "читачів", "."],
-        ruTokens: ["Печать", "сегодня", "имеет", "меньшее", "значение", ",", "чем", "интернет", ",", "но", "всё", "ещё", "имеет", "свою", "аудиторию", "."],
-        enTokens: ["The", "press", "is", "less", "important", "today", "than", "the", "internet", ",", "but", "it", "still", "has", "its", "audience", "."],
+        sk: "Druk ma dziś mniejsze znaczenie niż internet, ale wciąż ma swoją publiczność.",
+        ua: "Друк сьогодні має менше значення, ніж інтернет, але все ще має свою аудиторію.",
+        ru: "Печатные СМИ сегодня имеют меньшее значение, чем интернет, но всё ещё имеют свою аудиторию.",
+        en: "Print media is less important today than the internet, but it still has its audience.",
+        uaTokens: ["Друк", "сьогодні", "має", "менше", "значення", ",", "ніж", "інтернет", ",", "але", "все", "ще", "має", "свою", "аудиторію", "."],
+        ruTokens: ["Печатные", "СМИ", "сегодня", "имеют", "меньшее", "значение", ",", "чем", "интернет", ",", "но", "всё", "ещё", "имеют", "свою", "аудиторию", "."],
+        enTokens: ["Print", "media", "is", "less", "important", "today", "than", "the", "internet", ",", "but", "it", "still", "has", "its", "audience", "."],
         extraUaTokens: ["газету", "заголовок", "політиків"],
         extraRuTokens: ["газету", "заголовок", "политиков"],
         extraEnTokens: ["newspaper", "headline", "politicians"],
@@ -255,8 +255,8 @@ export const PL_B1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
         extraEnTokens: ["headline", "editor", "opinion"],
     },
 
-    [phraseKey("idea publiczna", "b1-22")]: {
-        sk: "Idea publiczna może wpływać na decyzje polityków i działania mediów.",
+    [phraseKey("opinia publiczna", "b1-22")]: {
+        sk: "Opinia publiczna może wpływać na decyzje polityków i działania mediów.",
         ua: "Громадська думка може впливати на рішення політиків і дії медіа.",
         ru: "Общественное мнение может влиять на решения политиков и действия медиа.",
         en: "Public opinion can influence politicians' decisions and the actions of the media.",
@@ -338,10 +338,10 @@ export const PL_B1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("komentować", "b1-23")]: {
         sk: "Nie lubię komentować wszystkiego w internecie, bo wolę najpierw się zastanowić.",
-        ua: "Я не люблю все коментувати в інтернеті, бо спершу волію подумати.",
+        ua: "Я не люблю коментувати все в інтернеті, бо спершу волію подумати.",
         ru: "Я не люблю всё комментировать в интернете, потому что сначала предпочитаю подумать.",
         en: "I don't like commenting on everything online because I prefer to think first.",
-        uaTokens: ["Я", "не", "люблю", "все", "коментувати", "в", "інтернеті", ",", "бо", "спершу", "волію", "подумати", "."],
+        uaTokens: ["Я", "не", "люблю", "коментувати", "все", "в", "інтернеті", ",", "бо", "спершу", "волію", "подумати", "."],
         ruTokens: ["Я", "не", "люблю", "всё", "комментировать", "в", "интернете", ",", "потому", "что", "сначала", "предпочитаю", "подумать", "."],
         enTokens: ["I", "don't", "like", "commenting", "on", "everything", "online", "because", "I", "prefer", "to", "think", "first", "."],
         extraUaTokens: ["позначити", "контент", "профіль"],
@@ -363,13 +363,13 @@ export const PL_B1_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     },
 
     [phraseKey("dzielić się", "b1-23")]: {
-        sk: "Warto dzielić się ważnymi informacjami, ale tylko z zaufanych źródeł.",
-        ua: "Варто ділитися важливою інформацією, але лише з надійних джерел.",
-        ru: "Стоит делиться важной информацией, но только из надёжных источников.",
-        en: "It is worth sharing important information, but only from trusted sources.",
-        uaTokens: ["Варто", "ділитися", "важливою", "інформацією", ",", "але", "лише", "з", "надійних", "джерел", "."],
-        ruTokens: ["Стоит", "делиться", "важной", "информацией", ",", "но", "только", "из", "надёжных", "источников", "."],
-        enTokens: ["It", "is", "worth", "sharing", "important", "information", ",", "but", "only", "from", "trusted", "sources", "."],
+        sk: "Warto dzielić się ważnymi informacjami, ale tylko z zaufanymi osobami.",
+        ua: "Варто ділитися важливою інформацією, але лише з надійними людьми.",
+        ru: "Стоит делиться важной информацией, но только с надёжными людьми.",
+        en: "It is worth sharing important information, but only with trusted people.",
+        uaTokens: ["Варто", "ділитися", "важливою", "інформацією", ",", "але", "лише", "з", "надійними", "людьми", "."],
+        ruTokens: ["Стоит", "делиться", "важной", "информацией", ",", "но", "только", "с", "надёжными", "людьми", "."],
+        enTokens: ["It", "is", "worth", "sharing", "important", "information", ",", "but", "only", "with", "trusted", "people", "."],
         extraUaTokens: ["коментувати", "сповіщення", "вебсайт"],
         extraRuTokens: ["комментировать", "уведомление", "веб-сайт"],
         extraEnTokens: ["commenting", "notification", "website"],

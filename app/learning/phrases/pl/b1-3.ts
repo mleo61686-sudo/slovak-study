@@ -15,7 +15,7 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("Czechy", "b1-21")]: {
         sk: "Czechy odwiedziłem kilka razy, ponieważ mam tam znajomych.",
-        ua: "Чехію я відвідував кілька разів, бо маю там знайомих.",
+        ua: "Я відвідував Чехію кілька разів, бо маю там знайомих.",
         ru: "Чехию я посещал несколько раз, потому что у меня там есть знакомые.",
         en: "I have visited Czechia several times because I have friends there.",
         tokens: ["Czechy", "odwiedziłem", "kilka", "razy", ",", "ponieważ", "mam", "tam", "znajomych", "."],
@@ -89,10 +89,10 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
     // LESSON 22 — Медіа та інформація
     // =========================
     [phraseKey("druk", "b1-22")]: {
-        sk: "Druk ma dziś mniejsze znaczenie niż internet, ale wciąż ma swoich odbiorców.",
-        ua: "Преса сьогодні має менше значення, ніж інтернет, але все ще має своїх читачів.",
-        ru: "Печать сегодня имеет меньшее значение, чем интернет, но всё ещё имеет свою аудиторию.",
-        en: "The press is less important today than the internet, but it still has its audience.",
+        sk: "Druk ma dziś mniejsze znaczenie niż internet, ale wciąż ma swoją publiczność.",
+        ua: "Друк сьогодні має менше значення, ніж інтернет, але все ще має свою аудиторію.",
+        ru: "Печатные СМИ сегодня имеют меньшее значение, чем интернет, но всё ещё имеют свою аудиторию.",
+        en: "Print media is less important today than the internet, but it still has its audience.",
         tokens: ["Druk", "ma", "dziś", "mniejsze", "znaczenie", "niż", "internet", ",", "ale", "wciąż", "ma", "swoich", "odbiorców", "."],
     },
 
@@ -160,12 +160,12 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
         tokens: ["Nie", "warto", "od", "razu", "uwierzyć", "we", "wszystko", ",", "co", "pojawia", "się", "w", "mediach", "."],
     },
 
-    [phraseKey("idea publiczna", "b1-22")]: {
-        sk: "Idea publiczna może wpływać na decyzje polityków i działania mediów.",
+    [phraseKey("opinia publiczna", "b1-22")]: {
+        sk: "Opinia publiczna może wpływać na decyzje polityków i działania mediów.",
         ua: "Громадська думка може впливати на рішення політиків і дії медіа.",
         ru: "Общественное мнение может влиять на решения политиков и действия медиа.",
         en: "Public opinion can influence politicians' decisions and the actions of the media.",
-        tokens: ["Idea", "publiczna", "może", "wpływać", "na", "decyzje", "polityków", "i", "działania", "mediów", "."],
+        tokens: ["Opinia", "publiczna", "może", "wpływać", "na", "decyzje", "polityków", "i", "działania", "mediów", "."],
     },
 
     // =========================
@@ -213,7 +213,7 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("komentować", "b1-23")]: {
         sk: "Nie lubię komentować wszystkiego w internecie, bo wolę najpierw się zastanowić.",
-        ua: "Я не люблю все коментувати в інтернеті, бо спершу волію подумати.",
+        ua: "Я не люблю коментувати все в інтернеті, бо спершу волію подумати.",
         ru: "Я не люблю всё комментировать в интернете, потому что сначала предпочитаю подумать.",
         en: "I don't like commenting on everything online because I prefer to think first.",
         tokens: ["Nie", "lubię", "komentować", "wszystkiego", "w", "internecie", ",", "bo", "wolę", "najpierw", "się", "zastanowić", "."],
@@ -228,10 +228,10 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
     },
 
     [phraseKey("dzielić się", "b1-23")]: {
-        sk: "Warto dzielić się ważnymi informacjami, ale tylko z zaufanych źródeł.",
-        ua: "Варто ділитися важливою інформацією, але лише з надійних джерел.",
-        ru: "Стоит делиться важной информацией, но только из надёжных источников.",
-        en: "It is worth sharing important information, but only from trusted sources.",
+        sk: "Warto dzielić się ważnymi informacjami, ale tylko z zaufanymi osobami.",
+        ua: "Варто ділитися важливою інформацією, але лише з надійними людьми.",
+        ru: "Стоит делиться важной информацией, но только с надёжными людьми.",
+        en: "It is worth sharing important information, but only with trusted people.",
         tokens: ["Warto", "dzielić", "się", "ważnymi", "informacjami", ",", "ale", "tylko", "z", "zaufanych", "źródeł", "."],
     },
 
@@ -445,9 +445,9 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
     },
 
     [phraseKey("uprzedzenie", "b1-26")]: {
-        sk: "Uprzedzenia często prowadzą do problemów.",
-        ua: "Упередження часто призводять до проблем.",
-        ru: "Предрассудки часто приводят к проблемам.",
+        sk: "Uprzedzenie często prowadzi do problemów.",
+        ua: "Упередження часто призводить до проблем.",
+        ru: "Предрассудок часто приводит к проблемам.",
         en: "Prejudice often leads to problems.",
         tokens: ["Uprzedzenia", "często", "prowadzą", "do", "problemów", "."]
     },
@@ -470,8 +470,8 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("dyskryminacja", "b1-26")]: {
         sk: "Dyskryminacja nie powinna mieć miejsca.",
-        ua: "Дискримінації не повинно бути.",
-        ru: "Дискриминации не должно быть.",
+        ua: "Дискримінація не повинна мати місця.",
+        ru: "Дискриминация не должна иметь места.",
         en: "Discrimination should not exist.",
         tokens: ["Dyskryminacja", "nie", "powinna", "mieć", "miejsca", "."]
     },
@@ -553,8 +553,8 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("wypadek przy pracy", "b1-27")]: {
         sk: "Wypadek przy pracy był poważny.",
-        ua: "Виробнича травма була серйозною.",
-        ru: "Производственная травма была серьёзной.",
+        ua: "Нещасний випадок на роботі був серйозним.",
+        ru: "Несчастный случай на работе был серьёзным.",
         en: "The work accident was serious.",
         tokens: ["Wypadek", "przy", "pracy", "był", "poważny", "."]
     },
@@ -620,8 +620,8 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("na końcu", "b1-28")]: {
         sk: "Na końcu wszystko podsumujemy.",
-        ua: "Врешті все підсумуємо.",
-        ru: "В конце всё подытожим.",
+        ua: "Наприкінці ми все підсумуємо.",
+        ru: "В конце мы всё подытожим.",
         en: "Finally we summarize everything.",
         tokens: ["Na", "końcu", "wszystko", "podsumujemy", "."]
     },
@@ -754,8 +754,8 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
     // =========================
     [phraseKey("jeśli dobrze to rozumiem", "b1-30")]: {
         sk: "Jeśli dobrze to rozumiem, wszystko jest jasne.",
-        ua: "Якщо я правильно розумію, все зрозуміло.",
-        ru: "Если я правильно понимаю, всё ясно.",
+        ua: "Якщо я правильно це розумію, все зрозуміло.",
+        ru: "Если я правильно это понимаю, всё ясно.",
         en: "If I understand correctly, everything is clear.",
         tokens: ["Jeśli", "dobrze", "to", "rozumiem", ",", "wszystko", "jest", "jasne", "."]
     },

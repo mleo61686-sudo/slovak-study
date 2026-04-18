@@ -33,12 +33,12 @@ export const PL_B2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
 
     [phraseKey("pilot", "b2-46")]: {
         sk: "Pilot nie działa, musimy wymienić baterie.",
-        ua: "Контролер не працює, потрібно замінити батарейки.",
-        ru: "Контроллер не работает, нужно заменить батарейки.",
-        en: "The controller doesn't work, we need to change the batteries.",
-        uaTokens: ["Контролер", "не", "працює", ",", "потрібно", "замінити", "батарейки", "."],
-        ruTokens: ["Контроллер", "не", "работает", ",", "нужно", "заменить", "батарейки", "."],
-        enTokens: ["The", "controller", "doesn't", "work", ",", "we", "need", "to", "change", "the", "batteries", "."],
+        ua: "Пульт не працює, потрібно замінити батарейки.",
+        ru: "Пульт не работает, нужно заменить батарейки.",
+        en: "The remote doesn't work, we need to change the batteries.",
+        uaTokens: ["Пульт", "не", "працює", ",", "потрібно", "замінити", "батарейки", "."],
+        ruTokens: ["Пульт", "не", "работает", ",", "нужно", "заменить", "батарейки", "."],
+        enTokens: ["The", "remote", "doesn't", "work", ",", "we", "need", "to", "change", "the", "batteries", "."],
         extraUaTokens: ["консоль", "гравець", "рівень"],
         extraRuTokens: ["консоль", "игрок", "уровень"],
         extraEnTokens: ["console", "player", "level"],

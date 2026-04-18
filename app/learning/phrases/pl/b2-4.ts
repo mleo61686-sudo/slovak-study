@@ -7,7 +7,7 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
     // =========================
     [phraseKey("podanie", "b2-31")]: {
         sk: "Szybkie podanie całkowicie zaskoczyło obrońców przeciwnej drużyny.",
-        ua: "Швидкий пас повністю застав зненацька захисників команди суперника.",
+        ua: "Швидкий пас повністю заскочив захисників команди суперника зненацька.",
         ru: "Быстрый пас полностью застал врасплох защитников команды соперника.",
         en: "A quick pass completely surprised the opposing team's defenders.",
         tokens: ["Szybkie", "podanie", "całkowicie", "zaskoczyło", "obrońców", "przeciwnej", "drużyny", "."],
@@ -81,7 +81,7 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
         sk: "Cały mecz był bardzo wyrównany, ale końcówka należała do naszej drużyny.",
         ua: "Увесь матч був дуже рівним, але кінцівка належала нашій команді.",
         ru: "Весь матч был очень равным, но концовка осталась за нашей командой.",
-        en: "The whole match was very even, but the ending belonged to our team.",
+        en: "The whole match was very even, but the final moments belonged to our team.",
         tokens: ["Cały", "mecz", "był", "bardzo", "wyrównany", ",", "ale", "końcówka", "należała", "do", "naszej", "drużyny", "."],
     },
 
@@ -114,7 +114,7 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("serwis", "b2-32")]: {
         sk: "Jego serwis był tak precyzyjny i mocny, że przeciwnik nie miał żadnych szans na skuteczną odpowiedź.",
-        ua: "Його подача була настільки точною і сильною, що суперник не мав жодних шансів на ефективну відповідь.",
+        ua: "Його подача була настільки точною і сильною, що суперник не мав жодних шансів на вдалу відповідь.",
         ru: "Его подача была настолько точной и сильной, что соперник не имел никаких шансов на ответ.",
         en: "His serve was so precise and powerful that the opponent had no chance to respond effectively.",
         tokens: ["Jego", "serwis", "był", "tak", "precyzyjny", "i", "mocny", ",", "że", "przeciwnik", "nie", "miał", "żadnych", "szans", "na", "skuteczną", "odpowiedź", "."],
@@ -179,12 +179,12 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
         tokens: ["Nowa", "wędka", "była", "znacznie", "lżejsza", "i", "wygodniejsza", "podczas", "długiego", "łowienia", "."],
     },
 
-    [phraseKey("wyciągarka", "b2-33")]: {
-        sk: "Wyciągarka działała płynnie, dzięki czemu mógł szybko nawijać żyłkę.",
+    [phraseKey("Kołowrotek", "b2-33")]: {
+        sk: "Kołowrotek działał płynnie, dzięki czemu mógł szybko nawijać żyłkę.",
         ua: "Котушка працювала плавно, завдяки чому він міг швидко намотувати волосінь.",
         ru: "Катушка работала плавно, благодаря чему он мог быстро наматывать леску.",
         en: "The reel worked smoothly, allowing him to wind the line quickly.",
-        tokens: ["Wyciągarka", "działała", "płynnie", ",", "dzięki", "czemu", "mógł", "szybko", "nawijać", "żyłkę", "."],
+        tokens: ["Kołowrotek", "działał", "płynnie", ",", "dzięki", "czemu", "mógł", "szybko", "nawijać", "żyłkę", "."],
     },
 
     [phraseKey("haczyk", "b2-33")]: {
@@ -339,9 +339,9 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
     // =========================
     [phraseKey("łódź", "b2-35")]: {
         sk: "Ta łódź była wystarczająco duża, aby bezpiecznie przewieźć cały sprzęt.",
-        ua: "Цей корабель був достатньо великий, щоб безпечно перевезти все обладнання.",
-        ru: "Этот корабль был достаточно большим, чтобы безопасно перевезти всё оборудование.",
-        en: "This ship was large enough to safely carry all the equipment.",
+        ua: "Цей човен був достатньо великий, щоб безпечно перевезти все обладнання.",
+        ru: "Эта лодка была достаточно большой, чтобы безопасно перевезти всё оборудование.",
+        en: "This boat was large enough to safely carry all the equipment.",
         tokens: ["Ta", "łódź", "była", "wystarczająco", "duża", ",", "aby", "bezpiecznie", "przewieźć", "cały", "sprzęt", "."],
     },
 
@@ -454,7 +454,7 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("wygrać jackpot", "b2-36")]: {
         sk: "Niewielu ludzi naprawdę wierzy, że uda im się wygrać jackpot.",
-        ua: "Мало хто справді вірить, що йому вдасться виграти джекпот.",
+        ua: "Мало хто справді вірить, що їм вдасться виграти джекпот.",
         ru: "Немногие люди действительно верят, что им удастся выиграть джекпот.",
         en: "Few people truly believe that they will manage to win the jackpot.",
         tokens: ["Niewielu", "ludzi", "naprawdę", "wierzy", ",", "że", "uda", "im", "się", "wygrać", "jackpot", "."],
@@ -596,9 +596,9 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("szczyt", "b2-38")]: {
         sk: "Na szczyt dotarliśmy tuż przed zachodem słońca i widok był niesamowity.",
-        ua: "На пагорб ми дісталися якраз перед заходом сонця, і краєвид був неймовірний.",
-        ru: "На холм мы добрались как раз перед закатом, и вид был невероятный.",
-        en: "We reached the hill just before sunset, and the view was amazing.",
+        ua: "На вершину ми дісталися якраз перед заходом сонця, і краєвид був неймовірний.",
+        ru: "На вершину мы добрались как раз перед закатом, и вид был невероятный.",
+        en: "We reached the peak just before sunset, and the view was amazing.",
         tokens: ["Na", "szczyt", "dotarliśmy", "tuż", "przed", "zachodem", "słońca", "i", "widok", "był", "niesamowity", "."],
     },
 
@@ -703,8 +703,8 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("fortepian", "b2-39")]: {
         sk: "Fortepian nadawał utworowi elegancji i głębokiego emocjonalnego brzmienia.",
-        ua: "Піаніно надавало твору елегантності й глибокого емоційного звучання.",
-        ru: "Пианино придавало произведению элегантность и глубокое эмоциональное звучание.",
+        ua: "Фортепіано надавало твору елегантності й глибокого емоційного звучання.",
+        ru: "Фортепиано придавало произведению элегантность и глубокое эмоциональное звучание.",
         en: "The piano gave the piece elegance and deep emotional sound.",
         tokens: ["Fortepian", "nadawał", "utworowi", "elegancji", "i", "głębokiego", "emocjonalnego", "brzmienia", "."],
     },
@@ -810,8 +810,8 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("urządzenie", "b2-40")]: {
         sk: "To urządzenie zużywa mniej energii niż starsze modele tego samego typu.",
-        ua: "Цей електроприлад споживає менше енергії, ніж старіші моделі того ж типу.",
-        ru: "Этот электроприбор потребляет меньше энергии, чем более старые модели того же типа.",
+        ua: "Цей пристрій споживає менше енергії, ніж старіші моделі того ж типу.",
+        ru: "Это устройство потребляет меньше энергии, чем более старые модели того же типа.",
         en: "This appliance uses less energy than older models of the same type.",
         tokens: ["To", "urządzenie", "zużywa", "mniej", "energii", "niż", "starsze", "modele", "tego", "samego", "typu", "."],
     },
@@ -826,8 +826,8 @@ export const PL_B2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("włączyć prąd", "b2-40")]: {
         sk: "Technik musiał najpierw sprawdzić instalację, zanim mógł włączyć prąd.",
-        ua: "Технік спочатку мав перевірити проводку, перш ніж міг увімкнути струм.",
-        ru: "Техник сначала должен был проверить проводку, прежде чем смог включить ток.",
+        ua: "Технік спочатку мав перевірити проводку, перш ніж міг увімкнути електрику.",
+        ru: "Техник сначала должен был проверить проводку, прежде чем смог включить электричество.",
         en: "The technician first had to check the installation before he could turn on the power.",
         tokens: ["Technik", "musiał", "najpierw", "sprawdzić", "instalację", ",", "zanim", "mógł", "włączyć", "prąd", "."],
     },

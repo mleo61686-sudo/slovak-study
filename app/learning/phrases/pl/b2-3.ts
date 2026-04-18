@@ -79,8 +79,8 @@ export const PL_B2_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("szacunek", "b2-21")]: {
         sk: "Według naszych szacunków projekt powinien zostać ukończony do końca miesiąca.",
-        ua: "За нашими оцінками, проєкт має бути завершений до кінця місяця.",
-        ru: "По нашим оценкам, проект должен быть завершён к концу месяца.",
+        ua: "За нашими підрахунками, проєкт має бути завершений до кінця місяця.",
+        ru: "По нашим подсчётам, проект должен быть завершён к концу месяца.",
         en: "According to our estimates, the project should be completed by the end of the month.",
         tokens: ["Według", "naszych", "szacunków", "projekt", "powinien", "zostać", "ukończony", "do", "końca", "miesiąca", "."],
     },
@@ -197,7 +197,7 @@ export const PL_B2_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("tolerancyjny", "b2-23")]: {
         sk: "W dzisiejszym świecie warto być tolerancyjnym wobec innych kultur i poglądów.",
-        ua: "У сучасному світі варто бути толерантним до інших культур і поглядів.",
+        ua: "У сучасному світі варто бути толерантним щодо інших культур і поглядів.",
         ru: "В современном мире важно быть терпимым к другим культурам и взглядам.",
         en: "In today's world, it is worth being tolerant toward other cultures and opinions.",
         tokens: ["W", "dzisiejszym", "świecie", "warto", "być", "tolerancyjnym", "wobec", "innych", "kultur", "i", "poglądów", "."],
@@ -288,7 +288,7 @@ export const PL_B2_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("usługa online", "b2-24")]: {
         sk: "Ta usługa online pozwala szybko złożyć wniosek bez wychodzenia z domu.",
-        ua: "Цей онлайн-сервіс дозволяє швидко подати заявку, не виходячи з дому.",
+        ua: "Ця онлайн-послуга дозволяє швидко подати заявку, не виходячи з дому.",
         ru: "Этот онлайн-сервис позволяет быстро подать заявку, не выходя из дома.",
         en: "This online service allows you to quickly submit an application without leaving home.",
         tokens: ["Ta", "usługa", "online", "pozwala", "szybko", "złożyć", "wniosek", "bez", "wychodzenia", "z", "domu", "."],

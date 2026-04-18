@@ -7,17 +7,16 @@ export const PL_B2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     // =========================
     [phraseKey("podanie", "b2-31")]: {
         sk: "Szybkie podanie całkowicie zaskoczyło obrońców przeciwnej drużyny.",
-        ua: "Швидкий пас повністю застав зненацька захисників команди суперника.",
+        ua: "Швидкий пас повністю заскочив захисників команди суперника зненацька.",
         ru: "Быстрый пас полностью застал врасплох защитников команды соперника.",
         en: "A quick pass completely surprised the opposing team's defenders.",
-        uaTokens: ["Швидкий", "пас", "повністю", "застав", "зненацька", "захисників", "команди", "суперника", "."],
+        uaTokens: ["Швидкий", "пас", "повністю", "заскочив", "захисників", "команди", "суперника", "зненацька", "."],
         ruTokens: ["Быстрый", "пас", "полностью", "застал", "врасплох", "защитников", "команды", "соперника", "."],
         enTokens: ["A", "quick", "pass", "completely", "surprised", "the", "opposing", "team's", "defenders", "."],
         extraUaTokens: ["гол", "гра", "м’яч"],
         extraRuTokens: ["гол", "игра", "мяч"],
         extraEnTokens: ["goal", "game", "ball"],
     },
-
     [phraseKey("rzut rożny", "b2-31")]: {
         sk: "Po rzucie rożnym piłka trafiła idealnie pod nogi napastnika.",
         ua: "Після кутового м’яч ідеально потрапив під ноги нападника.",
@@ -126,10 +125,10 @@ export const PL_B2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
         sk: "Cały mecz był bardzo wyrównany, ale końcówka należała do naszej drużyny.",
         ua: "Увесь матч був дуже рівним, але кінцівка належала нашій команді.",
         ru: "Весь матч был очень равным, но концовка осталась за нашей командой.",
-        en: "The whole match was very even, but the ending belonged to our team.",
+        en: "The whole match was very even, but the final moments belonged to our team.",
         uaTokens: ["Увесь", "матч", "був", "дуже", "рівним", ",", "але", "кінцівка", "належала", "нашій", "команді", "."],
         ruTokens: ["Весь", "матч", "был", "очень", "равным", ",", "но", "концовка", "осталась", "за", "нашей", "командой", "."],
-        enTokens: ["The", "whole", "match", "was", "very", "even", ",", "but", "the", "ending", "belonged", "to", "our", "team", "."],
+        enTokens: ["The", "whole", "match", "was", "very", "even", ",", "but", "the", "final", "moments", "belonged", "to", "our", "team", "."],
         extraUaTokens: ["гол", "пас", "суддя"],
         extraRuTokens: ["гол", "пас", "судья"],
         extraEnTokens: ["goal", "pass", "referee"],
@@ -179,17 +178,16 @@ export const PL_B2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
     [phraseKey("serwis", "b2-32")]: {
         sk: "Jego serwis był tak precyzyjny i mocny, że przeciwnik nie miał żadnych szans na skuteczną odpowiedź.",
-        ua: "Його подача була настільки точною і сильною, що суперник не мав жодних шансів на ефективну відповідь.",
+        ua: "Його подача була настільки точною і сильною, що суперник не мав жодних шансів на вдалу відповідь.",
         ru: "Его подача была настолько точной и сильной, что соперник не имел никаких шансов на ответ.",
         en: "His serve was so precise and powerful that the opponent had no chance to respond effectively.",
-        uaTokens: ["Його", "подача", "була", "настільки", "точною", "і", "сильною", ",", "що", "суперник", "не", "мав", "жодних", "шансів", "на", "ефективну", "відповідь", "."],
+        uaTokens: ["Його", "подача", "була", "настільки", "точною", "і", "сильною", ",", "що", "суперник", "не", "мав", "жодних", "шансів", "на", "вдалу", "відповідь", "."],
         ruTokens: ["Его", "подача", "была", "настолько", "точной", "и", "сильной", ",", "что", "соперник", "не", "имел", "никаких", "шансов", "на", "ответ", "."],
         enTokens: ["His", "serve", "was", "so", "precise", "and", "powerful", "that", "the", "opponent", "had", "no", "chance", "to", "respond", "effectively", "."],
         extraUaTokens: ["м’яч", "турнір", "лінії"],
         extraRuTokens: ["мяч", "турнир", "линии"],
         extraEnTokens: ["ball", "tournament", "line"],
     },
-
     [phraseKey("set", "b2-32")]: {
         sk: "Drugi set był najbardziej wyrównany i trwał prawie godzinę.",
         ua: "Другий сет був найрівнішим і тривав майже годину.",
@@ -284,8 +282,8 @@ export const PL_B2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
         extraEnTokens: ["fish", "lake", "hook"],
     },
 
-    [phraseKey("wyciągarka", "b2-33")]: {
-        sk: "Wyciągarka działała płynnie, dzięki czemu mógł szybko nawijać żyłkę.",
+    [phraseKey("kołowrotek", "b2-33")]: {
+        sk: "Kołowrotek działał płynnie, dzięki czemu mógł szybko nawijać żyłkę.",
         ua: "Котушка працювала плавно, завдяки чому він міг швидко намотувати волосінь.",
         ru: "Катушка работала плавно, благодаря чему он мог быстро наматывать леску.",
         en: "The reel worked smoothly, allowing him to wind the line quickly.",
@@ -539,12 +537,12 @@ export const PL_B2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     // =========================
     [phraseKey("łódź", "b2-35")]: {
         sk: "Ta łódź była wystarczająco duża, aby bezpiecznie przewieźć cały sprzęt.",
-        ua: "Цей корабель був достатньо великий, щоб безпечно перевезти все обладнання.",
-        ru: "Этот корабль был достаточно большим, чтобы безопасно перевезти всё оборудование.",
-        en: "This ship was large enough to safely carry all the equipment.",
-        uaTokens: ["Цей", "корабель", "був", "достатньо", "великий", ",", "щоб", "безпечно", "перевезти", "все", "обладнання", "."],
-        ruTokens: ["Этот", "корабль", "был", "достаточно", "большим", ",", "чтобы", "безопасно", "перевезти", "всё", "оборудование", "."],
-        enTokens: ["This", "ship", "was", "large", "enough", "to", "safely", "carry", "all", "the", "equipment", "."],
+        ua: "Цей човен був достатньо великий, щоб безпечно перевезти все обладнання.",
+        ru: "Эта лодка была достаточно большой, чтобы безопасно перевезти всё оборудование.",
+        en: "This boat was large enough to safely carry all the equipment.",
+        uaTokens: ["Цей", "човен", "був", "достатньо", "великий", ",", "щоб", "безпечно", "перевезти", "все", "обладнання", "."],
+        ruTokens: ["Эта", "лодка", "была", "достаточно", "большой", ",", "чтобы", "безопасно", "перевезти", "всё", "оборудование", "."],
+        enTokens: ["This", "boat", "was", "large", "enough", "to", "safely", "carry", "all", "the", "equipment", "."],
         extraUaTokens: ["порт", "вода", "море"],
         extraRuTokens: ["порт", "вода", "море"],
         extraEnTokens: ["port", "water", "sea"],
