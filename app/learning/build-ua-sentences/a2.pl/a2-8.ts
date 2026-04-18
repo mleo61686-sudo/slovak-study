@@ -159,6 +159,8 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
         uaTokens: ["Офіціантка", "принесла", "нам", "меню", "дуже", "швидко", "."],
         ruTokens: ["Официантка", "принесла", "нам", "меню", "очень", "быстро", "."],
         enTokens: ["The", "waitress", "brought", "us", "the", "menu", "very", "quickly", "."],
+        uaAltAnswers: [["Офіціантка", "принесла", "нам", "дуже", "швидко", "меню", "."]],
+        ruAltAnswers: [["Официантка", "принесла", "нам", "очень", "быстро", "меню", "."]],
         extraUaTokens: ["обслуговування", "страва", "чайові"],
         extraRuTokens: ["обслуживание", "блюдо", "чаевые"],
         extraEnTokens: ["service", "dish", "tip"],
@@ -257,10 +259,10 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("delektować się", "a2-37")]: {
         sk: "Lubię delektować się kolacją bez pośpiechu.",
-        ua: "Я люблю смачно поїсти вечерю без поспіху.",
+        ua: "Я люблю насолоджуватися вечерею без поспіху.",
         ru: "Я люблю наслаждаться ужином без спешки.",
         en: "I like to enjoy dinner without rushing.",
-        uaTokens: ["Я", "люблю", "смачно", "поїсти", "вечерю", "без", "поспіху", "."],
+        uaTokens: ["Я", "люблю", "насолоджуватися", "вечерею", "без", "поспіху", "."],
         ruTokens: ["Я", "люблю", "наслаждаться", "ужином", "без", "спешки", "."],
         enTokens: ["I", "like", "to", "enjoy", "dinner", "without", "rushing", "."],
         extraUaTokens: ["страва", "меню", "закуску"],
@@ -279,8 +281,14 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
         uaTokens: ["Мені", "треба", "ще", "сьогодні", "йому", "подзвонити", "."],
         ruTokens: ["Мне", "нужно", "ещё", "сегодня", "ему", "позвонить", "."],
         enTokens: ["I", "need", "to", "call", "him", "later", "today", "."],
-        uaAltAnswers: [["Мені", "треба", "йому", "ще", "сьогодні", "подзвонити", "."]],
-        ruAltAnswers: [["Мне", "нужно", "ему", "ещё", "сегодня", "позвонить", "."]],
+        uaAltAnswers: [
+            ["Мені", "треба", "йому", "ще", "сьогодні", "подзвонити", "."],
+            ["Мені", "треба", "йому", "подзвонити", "ще", "сьогодні", "."]
+        ],
+        ruAltAnswers: [
+            ["Мне", "нужно", "ему", "ещё", "сегодня", "позвонить", "."],
+            ["Мне", "нужно", "ему", "позвонить", "ещё", "сегодня", "."]
+        ],
         extraUaTokens: ["повідомлення", "завтра", "бронювання"],
         extraRuTokens: ["сообщение", "завтра", "бронь"],
         extraEnTokens: ["message", "tomorrow", "reservation"],
@@ -525,11 +533,11 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("poprawić się", "a2-39")]: {
         sk: "Chcę poprawić się w mówieniu po polsku.",
-        ua: "Я хочу покращитися в розмовній польській.",
-        ru: "Я хочу улучшиться в разговорном польском.",
+        ua: "Я хочу покращити свою польську в розмові.",
+        ru: "Я хочу улучшить свой разговорный польский.",
         en: "I want to improve my spoken Polish.",
-        uaTokens: ["Я", "хочу", "покращитися", "в", "розмовній", "польській", "."],
-        ruTokens: ["Я", "хочу", "улучшиться", "в", "разговорном", "польском", "."],
+        uaTokens: ["Я", "хочу", "покращити", "свою", "польську", "в", "розмові", "."],
+        ruTokens: ["Я", "хочу", "улучшить", "свой", "разговорный", "польский", "."],
         enTokens: ["I", "want", "to", "improve", "my", "spoken", "Polish", "."],
         extraUaTokens: ["вимова", "словниковий", "мови"],
         extraRuTokens: ["произношение", "словарный", "языка"],
@@ -612,6 +620,8 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
         uaTokens: ["Нам", "довелося", "виселитися", "дуже", "рано", "вранці", "."],
         ruTokens: ["Нам", "пришлось", "выселиться", "очень", "рано", "утром", "."],
         enTokens: ["We", "had", "to", "check", "out", "very", "early", "in", "the", "morning", "."],
+        uaAltAnswers: [["Нам", "довелося", "виселитися", "вранці", "дуже", "рано", "."]],
+        ruAltAnswers: [["Нам", "пришлось", "выселиться", "утром", "очень", "рано", "."]],
         extraUaTokens: ["готель", "номер", "депозит"],
         extraRuTokens: ["отель", "номер", "депозит"],
         extraEnTokens: ["hotel", "room", "deposit"],
@@ -645,10 +655,10 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
 
     [phraseKey("słownictwo", "a2-40")]: {
         sk: "Codziennie uczę się nowego słownictwa.",
-        ua: "Щодня я вчу новий словниковий запас.",
+        ua: "Щодня я вчу нову лексику.",
         ru: "Каждый день я учу новую лексику.",
         en: "Every day I learn new vocabulary.",
-        uaTokens: ["Щодня", "я", "вчу", "новий", "словниковий", "запас", "."],
+        uaTokens: ["Щодня", "я", "вчу", "нову", "лексику", "."],
         ruTokens: ["Каждый", "день", "я", "учу", "новую", "лексику", "."],
         enTokens: ["Every", "day", "I", "learn", "new", "vocabulary", "."],
         extraUaTokens: ["вимова", "граматика", "приклад"],

@@ -140,7 +140,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Pojutrze mam wolne.",
         ua: "Післязавтра я вільний.",
         ru: "Послезавтра я свободен.",
-        en: "The day after tomorrow I am free.",
+        en: "I am free the day after tomorrow.",
         tokens: ["Pojutrze", "mam", "wolne", "."],
     },
 
@@ -207,7 +207,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Idę po schodach.",
         ua: "Я йду сходами.",
         ru: "Я иду по лестнице.",
-        en: "I am going up the stairs.",
+        en: "I am walking on the stairs.",
         tokens: ["Idę", "po", "schodach", "."],
     },
 
@@ -405,7 +405,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Chcę zarezerwować pokój.",
         ua: "Я хочу забронювати кімнату.",
         ru: "Я хочу забронировать номер.",
-        en: "I want to reserve a room.",
+        en: "I want to book a room.",
         tokens: ["Chcę", "zarezerwować", "pokój", "."],
     },
 
@@ -578,7 +578,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Masz do tego prawo.",
         ua: "Ти маєш на це право.",
         ru: "Ты имеешь на это право.",
-        en: "You have the right to it.",
+        en: "You have the right to do that.",
         tokens: ["Masz", "do", "tego", "prawo", "."],
     },
 
@@ -588,7 +588,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
     [phraseKey("rozumieć", "a1-18")]: {
         sk: "Nie rozumiem tego zdania.",
         ua: "Я не розумію цього речення.",
-        ru: "Я не понимаю это предложение.",
+        ru: "Я не понимаю этого предложения.",
         en: "I do not understand this sentence.",
         tokens: ["Nie", "rozumiem", "tego", "zdania", "."],
     },
@@ -661,7 +661,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Zostańmy w kontakcie.",
         ua: "Залишаймося на зв’язку.",
         ru: "Давай останемся на связи.",
-        en: "Let's stay in contact.",
+        en: "Let's stay in touch.",
         tokens: ["Zostańmy", "w", "kontakcie", "."],
     },
 
@@ -771,7 +771,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Wieczorem robię zakupy.",
         ua: "Увечері я роблю покупки.",
         ru: "Вечером я делаю покупки.",
-        en: "I do shopping in the evening.",
+        en: "I go shopping in the evening.",
         tokens: ["Wieczorem", "robię", "zakupy", "."],
     },
 
@@ -811,7 +811,7 @@ export const PL_A1_PHRASES_2: Record<string, Phrase> = {
         sk: "Lubię oglądać seriale.",
         ua: "Я люблю дивитися серіали.",
         ru: "Я люблю смотреть сериалы.",
-        en: "I like watching series.",
+        en: "I like watching TV series.",
         tokens: ["Lubię", "oglądać", "seriale", "."],
     },
 

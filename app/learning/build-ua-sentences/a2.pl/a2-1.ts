@@ -98,10 +98,10 @@ export const PL_A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
 
     [phraseKey("zepsuty", "a2-1")]: {
         sk: "Piekarnik jest zepsuty od zeszłego tygodnia.",
-        ua: "Духовка зламана з минулого тижня.",
+        ua: "Духовка зламана ще з минулого тижня.",
         ru: "Духовка сломана с прошлой недели.",
         en: "The oven has been broken since last week.",
-        uaTokens: ["Духовка", "зламана", "з", "минулого", "тижня", "."],
+        uaTokens: ["Духовка", "зламана", "ще", "з", "минулого", "тижня", "."],
         ruTokens: ["Духовка", "сломана", "с", "прошлой", "недели", "."],
         enTokens: ["The", "oven", "has", "been", "broken", "since", "last", "week", "."],
         extraUaTokens: ["ремонт", "машини", "сусід"],
@@ -117,11 +117,16 @@ export const PL_A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         uaTokens: ["Мій", "сусід", "завжди", "допомагає", "мені", "з", "важкими", "речами", "."],
         ruTokens: ["Мой", "сосед", "всегда", "помогает", "мне", "с", "тяжёлыми", "вещами", "."],
         enTokens: ["My", "neighbor", "always", "helps", "me", "with", "heavy", "things", "."],
+        uaAltAnswers: [
+            ["Мій", "сусід", "завжди", "мені", "допомагає", "з", "важкими", "речами", "."]
+        ],
+        ruAltAnswers: [
+            ["Мой", "сосед", "всегда", "мне", "помогает", "с", "тяжёлыми", "вещами", "."]
+        ],
         extraUaTokens: ["духовка", "оренду", "договір"],
         extraRuTokens: ["духовка", "аренду", "договор"],
         extraEnTokens: ["oven", "rent", "agreement"],
     },
-
     [phraseKey("przeprowadzka", "a2-1")]: {
         sk: "Przeprowadzka do nowego mieszkania była bardzo męcząca.",
         ua: "Переїзд до нової квартири був дуже виснажливим.",
@@ -483,7 +488,7 @@ export const PL_A2_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     },
 
     [phraseKey("stanowisko pracy", "a2-4")]: {
-        sk: "Aplikuję na stanowisko pracy w biurze.",
+        sk: "Aplikuję na stanowisko w biurze.",
         ua: "Я подаюся на посаду в офісі.",
         ru: "Я подаюсь на должность в офисе.",
         en: "I am applying for a job position in an office.",

@@ -140,11 +140,11 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
     // =========================
     [phraseKey("zdolność", "a2-32")]: {
         sk: "Ta zdolność bardzo przydaje się w tej pracy.",
-        ua: "Ця здатність дуже стає в пригоді на цій роботі.",
-        ru: "Эта способность очень пригодится на этой работе.",
+        ua: "Ця здатність дуже допомагає в цій роботі.",
+        ru: "Эта способность очень помогает в этой работе.",
         en: "This ability is very useful in this job.",
-        uaTokens: ["Ця", "здатність", "дуже", "стає", "в", "пригоді", "на", "цій", "роботі", "."],
-        ruTokens: ["Эта", "способность", "очень", "пригодится", "на", "этой", "работе", "."],
+        uaTokens: ["Ця", "здатність", "дуже", "допомагає", "в", "цій", "роботі", "."],
+        ruTokens: ["Эта", "способность", "очень", "помогает", "в", "этой", "работе", "."],
         enTokens: ["This", "ability", "is", "very", "useful", "in", "this", "job", "."],
         extraUaTokens: ["навичка", "досвід", "клієнти"],
         extraRuTokens: ["навык", "опыт", "клиенты"],
@@ -153,12 +153,12 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
     [phraseKey("umiejętność", "a2-32")]: {
         sk: "Dobra umiejętność komunikacji jest ważna w każdym zespole.",
-        ua: "Хороша навичка спілкування важлива в кожній команді.",
-        ru: "Хороший навык общения важен в каждой команде.",
-        en: "Good communication skill is important in every team.",
-        uaTokens: ["Хороша", "навичка", "спілкування", "важлива", "в", "кожній", "команді", "."],
-        ruTokens: ["Хороший", "навык", "общения", "важен", "в", "каждой", "команде", "."],
-        enTokens: ["Good", "communication", "skill", "is", "important", "in", "every", "team", "."],
+        ua: "Хороші навички спілкування важливі в кожній команді.",
+        ru: "Хорошие навыки общения важны в каждой команде.",
+        en: "Good communication skills are important in every team.",
+        uaTokens: ["Хороші", "навички", "спілкування", "важливі", "в", "кожній", "команді", "."],
+        ruTokens: ["Хорошие", "навыки", "общения", "важны", "в", "каждой", "команде", "."],
+        enTokens: ["Good", "communication", "skills", "are", "important", "in", "every", "team", "."],
         extraUaTokens: ["досвід", "контакт", "робота"],
         extraRuTokens: ["опыт", "контакт", "работа"],
         extraEnTokens: ["experience", "contact", "work"],
@@ -231,11 +231,11 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
     [phraseKey("komunikatywny", "a2-32")]: {
         sk: "Powinieneś być komunikatywny i otwarty na ludzi.",
-        ua: "Ти повинен бути комунікабельним і відкритим до людей.",
-        ru: "Ты должен быть коммуникабельным и открытым к людям.",
+        ua: "Ти повинен бути комунікабельним і відкритим до спілкування з людьми.",
+        ru: "Ты должен быть коммуникабельным и открытым к общению с людьми.",
         en: "You should be communicative and open to people.",
-        uaTokens: ["Ти", "повинен", "бути", "комунікабельним", "і", "відкритим", "до", "людей", "."],
-        ruTokens: ["Ты", "должен", "быть", "коммуникабельным", "и", "открытым", "к", "людям", "."],
+        uaTokens: ["Ти", "повинен", "бути", "комунікабельним", "і", "відкритим", "до", "спілкування", "з", "людьми", "."],
+        ruTokens: ["Ты", "должен", "быть", "коммуникабельным", "и", "открытым", "к", "общению", "с", "людьми", "."],
         enTokens: ["You", "should", "be", "communicative", "and", "open", "to", "people", "."],
         extraUaTokens: ["робота", "команда", "клієнти"],
         extraRuTokens: ["работа", "команда", "клиенты"],
@@ -292,6 +292,12 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
         uaTokens: ["Після", "роботи", "я", "хочу", "трохи", "відпочити", "."],
         ruTokens: ["После", "работы", "я", "хочу", "немного", "отдохнуть", "."],
         enTokens: ["After", "work", "I", "want", "to", "relax", "a", "little", "."],
+        uaAltAnswers: [
+            ["Після", "роботи", "я", "хочу", "відпочити", "трохи", "."]
+        ],
+        ruAltAnswers: [
+            ["После", "работы", "я", "хочу", "отдохнуть", "немного", "."]
+        ],
         extraUaTokens: ["сім’єю", "концерт", "виставка"],
         extraRuTokens: ["семьёй", "концерт", "выставка"],
         extraEnTokens: ["family", "concert", "exhibition"],
@@ -344,6 +350,12 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
         uaTokens: ["Я", "вже", "купив", "квиток", "на", "завтрашній", "концерт", "."],
         ruTokens: ["Я", "уже", "купил", "билет", "на", "завтрашний", "концерт", "."],
         enTokens: ["I", "have", "already", "bought", "a", "ticket", "for", "tomorrow's", "concert", "."],
+        uaAltAnswers: [
+            ["Я", "купив", "вже", "квиток", "на", "завтрашній", "концерт", "."]
+        ],
+        ruAltAnswers: [
+            ["Я", "купил", "уже", "билет", "на", "завтрашний", "концерт", "."]
+        ],
         extraUaTokens: ["подія", "виставка", "сім’єю"],
         extraRuTokens: ["событие", "выставка", "семьёй"],
         extraEnTokens: ["event", "exhibition", "family"],
@@ -419,11 +431,11 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
     [phraseKey("umówić termin", "a2-34")]: {
         sk: "Chcę umówić termin na przyszły tydzień.",
-        ua: "Я хочу записатися на час на наступний тиждень.",
-        ru: "Я хочу записаться на время на следующую неделю.",
+        ua: "Я хочу записатися на наступний тиждень.",
+        ru: "Я хочу записаться на следующую неделю.",
         en: "I want to book an appointment for next week.",
-        uaTokens: ["Я", "хочу", "записатися", "на", "час", "на", "наступний", "тиждень", "."],
-        ruTokens: ["Я", "хочу", "записаться", "на", "время", "на", "следующую", "неделю", "."],
+        uaTokens: ["Я", "хочу", "записатися", "на", "наступний", "тиждень", "."],
+        ruTokens: ["Я", "хочу", "записаться", "на", "следующую", "неделю", "."],
         enTokens: ["I", "want", "to", "book", "an", "appointment", "for", "next", "week", "."],
         extraUaTokens: ["сервісі", "ремонт", "ціни"],
         extraRuTokens: ["сервисе", "ремонт", "цены"],
@@ -434,10 +446,10 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
         sk: "Najpierw potrzebna jest dokładna diagnostyka.",
         ua: "Спочатку потрібна точна діагностика.",
         ru: "Сначала нужна точная диагностика.",
-        en: "First, an accurate diagnostics is needed.",
+        en: "First, accurate diagnostics are needed.",
         uaTokens: ["Спочатку", "потрібна", "точна", "діагностика", "."],
         ruTokens: ["Сначала", "нужна", "точная", "диагностика", "."],
-        enTokens: ["First", ",", "an", "accurate", "diagnostics", "is", "needed", "."],
+        enTokens: ["First", ",", "accurate", "diagnostics", "are", "needed", "."],
         extraUaTokens: ["ремонт", "двигуна", "гарантію"],
         extraRuTokens: ["ремонт", "двигателя", "гарантию"],
         extraEnTokens: ["repair", "engine", "warranty"],
@@ -565,11 +577,11 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
     [phraseKey("wyprzedane", "a2-35")]: {
         sk: "Niestety, wszystkie sztuki są już wyprzedane.",
-        ua: "На жаль, усі одиниці вже розпродані.",
-        ru: "К сожалению, все экземпляры уже распроданы.",
+        ua: "На жаль, усі товари вже розпродані.",
+        ru: "К сожалению, все товары уже распроданы.",
         en: "Unfortunately, all items are already sold out.",
-        uaTokens: ["На", "жаль", ",", "усі", "одиниці", "вже", "розпродані", "."],
-        ruTokens: ["К", "сожалению", ",", "все", "экземпляры", "уже", "распроданы", "."],
+        uaTokens: ["На", "жаль", ",", "усі", "товари", "вже", "розпродані", "."],
+        ruTokens: ["К", "сожалению", ",", "все", "товары", "уже", "распроданы", "."],
         enTokens: ["Unfortunately", ",", "all", "items", "are", "already", "sold", "out", "."],
         extraUaTokens: ["модель", "товар", "доставка"],
         extraRuTokens: ["модель", "товар", "доставка"],
@@ -591,10 +603,10 @@ export const PL_A2_BUILD_UA_SENTENCES_7: BuildUaSentenceDict = {
 
     [phraseKey("dostawa", "a2-35")]: {
         sk: "Dostawa powinna dotrzeć jutro rano.",
-        ua: "Поставка має прибути завтра вранці.",
+        ua: "Доставка має прибути завтра вранці.",
         ru: "Доставка должна прибыть завтра утром.",
         en: "The delivery should arrive tomorrow morning.",
-        uaTokens: ["Поставка", "має", "прибути", "завтра", "вранці", "."],
+        uaTokens: ["Доставка", "має", "прибути", "завтра", "вранці", "."],
         ruTokens: ["Доставка", "должна", "прибыть", "завтра", "утром", "."],
         enTokens: ["The", "delivery", "should", "arrive", "tomorrow", "morning", "."],
         extraUaTokens: ["товар", "модель", "магазин"],

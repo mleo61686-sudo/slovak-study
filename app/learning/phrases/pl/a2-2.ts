@@ -348,7 +348,7 @@ export const PL_A2_PHRASES_2: Record<string, Phrase> = {
     [phraseKey("aktualizacja", "a2-15")]: {
         sk: "Telefon potrzebuje aktualizacji systemu.",
         ua: "Телефон потребує оновлення системи.",
-        ru: "Телефону нужно обновление системы.",
+        ru: "Телефон нуждается в обновлении системы.",
         en: "The phone needs a system update.",
         tokens: ["Telefon", "potrzebuje", "aktualizacji", "systemu", "."],
     },
@@ -379,7 +379,7 @@ export const PL_A2_PHRASES_2: Record<string, Phrase> = {
 
     [phraseKey("zaciąć się", "a2-15")]: {
         sk: "Komputer zaciął się podczas pracy.",
-        ua: "Комп’ютер завис під час роботи.",
+        ua: "Комп’ютер зависнув під час роботи.",
         ru: "Компьютер завис во время работы.",
         en: "The computer froze while I was working.",
         tokens: ["Komputer", "zaciął", "się", "podczas", "pracy", "."],
@@ -410,10 +410,10 @@ export const PL_A2_PHRASES_2: Record<string, Phrase> = {
     },
 
     [phraseKey("odnowić", "a2-15")]: {
-        sk: "Muszę odnowić hasło do konta.",
-        ua: "Мені треба відновити пароль до акаунта.",
-        ru: "Мне нужно восстановить пароль к аккаунту.",
-        en: "I need to restore the account password.",
+        sk: "Muszę odnowić dostęp do konta.",
+        ua: "Мені треба відновити доступ до акаунта.",
+        ru: "Мне нужно восстановить доступ к аккаунту.",
+        en: "I need to restore access to the account.",
         tokens: ["Muszę", "odnowić", "hasło", "do", "konta", "."],
     },
     // =========================

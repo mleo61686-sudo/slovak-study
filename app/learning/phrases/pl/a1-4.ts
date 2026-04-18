@@ -49,7 +49,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
         sk: "Po pracy czuję zmęczenie.",
         ua: "Після роботи я відчуваю втому.",
         ru: "После работы я чувствую усталость.",
-        en: "I feel tiredness after work.",
+        en: "I feel tired after work.",
         tokens: ["Po", "pracy", "czuję", "zmęczenie", "."],
     },
 
@@ -63,7 +63,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("spokój", "a1-31")]: {
         sk: "Potrzebuję trochę spokoju.",
-        ua: "Мені потрібен трохи спокою.",
+        ua: "Мені потрібно трохи спокою.",
         ru: "Мне нужно немного покоя.",
         en: "I need a little calm.",
         tokens: ["Potrzebuję", "trochę", "spokoju", "."],
@@ -79,7 +79,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("entuzjazm", "a1-31")]: {
         sk: "Nowy projekt daje mi entuzjazm.",
-        ua: "Новий проєкт дає мені захоплення.",
+        ua: "Новий проєкт дає мені ентузіазм.",
         ru: "Новый проект даёт мне воодушевление.",
         en: "The new project gives me enthusiasm.",
         tokens: ["Nowy", "projekt", "daje", "mi", "entuzjazm", "."],
@@ -341,15 +341,15 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
         sk: "Muszę iść do urzędu.",
         ua: "Мені треба йти в установу.",
         ru: "Мне нужно идти в учреждение.",
-        en: "I need to go to the office.",
+        en: "I need to go to a government office.",
         tokens: ["Muszę", "iść", "do", "urzędu", "."],
     },
 
     [phraseKey("fryzjer", "a1-35")]: {
         sk: "Idę do fryzjera po pracy.",
-        ua: "Я йду в перукарню після роботи.",
-        ru: "Я иду в парикмахерскую после работы.",
-        en: "I am going to the hair salon after work.",
+        ua: "Я йду до перукаря після роботи.",
+        ru: "Я иду к парикмахеру после работы.",
+        en: "I am going to the hairdresser after work.",
         tokens: ["Idę", "do", "fryzjera", "po", "pracy", "."],
     },
 
@@ -363,9 +363,9 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("cukiernia", "a1-35")]: {
         sk: "W cukierni kupuję ciasto.",
-        ua: "У кондитерській я купую торт.",
-        ru: "В кондитерской я покупаю торт.",
-        en: "I buy cake at the pastry shop.",
+        ua: "У кондитерській я купую тістечко.",
+        ru: "В кондитерской я покупаю пирожное.",
+        en: "I buy a pastry at the pastry shop.",
         tokens: ["W", "cukierni", "kupuję", "ciasto", "."],
     },
 
@@ -413,7 +413,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
         sk: "Przejście podziemne jest pod ulicą.",
         ua: "Підземний перехід знаходиться під вулицею.",
         ru: "Подземный переход находится под улицей.",
-        en: "The underpass is under the street.",
+        en: "The underpass is beneath the street.",
         tokens: ["Przejście", "podziemne", "jest", "pod", "ulicą", "."],
     },
     // =========================
@@ -570,7 +570,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
         sk: "Jaki jest termin spotkania?",
         ua: "Який термін зустрічі?",
         ru: "Какой срок встречи?",
-        en: "What is the date of the meeting?",
+        en: "What is the deadline for the meeting?",
         tokens: ["Jaki", "jest", "termin", "spotkania", "?"],
     },
 
@@ -688,7 +688,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
         sk: "Mam jeszcze jedną możliwość.",
         ua: "У мене є ще одна можливість.",
         ru: "У меня есть ещё одна возможность.",
-        en: "I still have one more possibility.",
+        en: "I still have one more option.",
         tokens: ["Mam", "jeszcze", "jedną", "możliwość", "."],
     },
 
@@ -770,7 +770,7 @@ export const PL_A1_PHRASES_4: Record<string, Phrase> = {
     [phraseKey("pomóc", "a1-40")]: {
         sk: "Chcę ci pomóc.",
         ua: "Я хочу тобі допомогти.",
-        ru: "Я хочу тебе помочь.",
+        ru: "Я хочу помочь тебе.",
         en: "I want to help you.",
         tokens: ["Chcę", "ci", "pomóc", "."],
     },

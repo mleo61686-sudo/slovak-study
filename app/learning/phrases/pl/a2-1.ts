@@ -63,7 +63,7 @@ export const PL_A2_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("zepsuty", "a2-1")]: {
         sk: "Piekarnik jest zepsuty od zeszłego tygodnia.",
-        ua: "Духовка зламана з минулого тижня.",
+        ua: "Духовка зламана ще з минулого тижня.",
         ru: "Духовка сломана с прошлой недели.",
         en: "The oven has been broken since last week.",
         tokens: ["Piekarnik", "jest", "zepsuty", "od", "zeszłego", "tygodnia", "."],
@@ -303,7 +303,7 @@ export const PL_A2_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("stanowisko pracy", "a2-4")]: {
-        sk: "Aplikuję na stanowisko pracy w biurze.",
+        sk: "Aplikuję na stanowisko w biurze.",
         ua: "Я подаюся на посаду в офісі.",
         ru: "Я подаюсь на должность в офисе.",
         en: "I am applying for a job position in an office.",
@@ -429,9 +429,9 @@ export const PL_A2_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("dochód", "a2-6")]: {
         sk: "Mój miesięczny dochód nie jest stały.",
-        ua: "Мій місячний дохід не є стабільним.",
-        ru: "Мой месячный доход не является стабильным.",
-        en: "My monthly income is not stable.",
+        ua: "Мій місячний дохід не є постійним.",
+        ru: "Мой месячный доход не является постоянным.",
+        en: "My monthly income is not fixed.",
         tokens: ["Mój", "miesięczny", "dochód", "nie", "jest", "stały", "."],
     },
 

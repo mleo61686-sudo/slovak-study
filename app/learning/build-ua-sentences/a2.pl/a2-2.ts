@@ -20,12 +20,12 @@ export const PL_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
 
     [phraseKey("dochód", "a2-6")]: {
         sk: "Mój miesięczny dochód nie jest stały.",
-        ua: "Мій місячний дохід не є стабільним.",
-        ru: "Мой месячный доход не является стабильным.",
-        en: "My monthly income is not stable.",
-        uaTokens: ["Мій", "місячний", "дохід", "не", "є", "стабільним", "."],
-        ruTokens: ["Мой", "месячный", "доход", "не", "является", "стабильным", "."],
-        enTokens: ["My", "monthly", "income", "is", "not", "stable", "."],
+        ua: "Мій місячний дохід не є постійним.",
+        ru: "Мой месячный доход не является постоянным.",
+        en: "My monthly income is not fixed.",
+        uaTokens: ["Мій", "місячний", "дохід", "не", "є", "постійним", "."],
+        ruTokens: ["Мой", "месячный", "доход", "не", "является", "постоянным", "."],
+        enTokens: ["My", "monthly", "income", "is", "not", "fixed", "."],
         extraUaTokens: ["бюджет", "витрати", "відсотки"],
         extraRuTokens: ["бюджет", "расходы", "проценты"],
         extraEnTokens: ["budget", "expenses", "interest"],
@@ -198,6 +198,8 @@ export const PL_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
         uaTokens: ["Наприкінці", "зустрічі", "ми", "повинні", "все", "підсумувати", "."],
         ruTokens: ["В", "конце", "встречи", "мы", "должны", "всё", "подытожить", "."],
         enTokens: ["At", "the", "end", "of", "the", "meeting", "we", "need", "to", "summarize", "everything", "."],
+        uaAltAnswers: [["Наприкінці", "зустрічі", "ми", "повинні", "підсумувати", "все", "."]],
+        ruAltAnswers: [["В", "конце", "встречи", "мы", "должны", "подытожить", "всё", "."]],
         extraUaTokens: ["рішення", "позицію", "реагувати"],
         extraRuTokens: ["решение", "позицию", "реагировать"],
         extraEnTokens: ["solution", "position", "react"],
@@ -254,7 +256,7 @@ export const PL_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
         extraRuTokens: ["мнение", "решение", "позицию"],
         extraEnTokens: ["opinion", "solution", "position"],
     },
-
+    
     [phraseKey("reagować", "a2-7")]: {
         sk: "Trzeba szybko reagować w trudnych sytuacjach.",
         ua: "У складних ситуаціях треба швидко реагувати.",
@@ -263,6 +265,9 @@ export const PL_A2_BUILD_UA_SENTENCES_2: BuildUaSentenceDict = {
         uaTokens: ["У", "складних", "ситуаціях", "треба", "швидко", "реагувати", "."],
         ruTokens: ["В", "сложных", "ситуациях", "нужно", "быстро", "реагировать", "."],
         enTokens: ["You", "need", "to", "react", "quickly", "in", "difficult", "situations", "."],
+        uaAltAnswers: [["У", "складних", "ситуаціях", "треба", "реагувати", "швидко", "."]],
+        ruAltAnswers: [["В", "сложных", "ситуациях", "нужно", "реагировать", "быстро", "."]],
+        enAltAnswers: [["You", "need", "to", "react", "in", "difficult", "situations", "quickly", "."]],
         extraUaTokens: ["позицію", "рішення", "почекати"],
         extraRuTokens: ["позицию", "решение", "подождать"],
         extraEnTokens: ["position", "solution", "wait"],

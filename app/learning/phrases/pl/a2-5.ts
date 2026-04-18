@@ -71,8 +71,8 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("wytrwać", "a2-41")]: {
         sk: "Musisz wytrwać, nawet jeśli jest trudno.",
-        ua: "Ти повинен не здатися, навіть якщо важко.",
-        ru: "Ты должен не сдаваться, даже если трудно.",
+        ua: "Ти повинен витримати, навіть якщо важко.",
+        ru: "Ты должен выстоять, даже если трудно.",
         en: "You have to persevere, even if it is hard.",
         tokens: ["Musisz", "wytrwać", ",", "nawet", "jeśli", "jest", "trudno", "."],
     },
@@ -130,7 +130,7 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("dozwolone", "a2-42")]: {
         sk: "W tym miejscu parkowanie jest dozwolone.",
-        ua: "У цьому місці паркування дозволено.",
+        ua: "У цьому місці паркуватися дозволено.",
         ru: "В этом месте парковка разрешена.",
         en: "Parking is allowed in this place.",
         tokens: ["W", "tym", "miejscu", "parkowanie", "jest", "dozwolone", "."],
@@ -181,7 +181,7 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("rutyna", "a2-43")]: {
         sk: "Mam stałą rutynę każdego dnia.",
-        ua: "Я маю сталу рутину щодня.",
+        ua: "У мене є стала рутина щодня.",
         ru: "У меня есть постоянная рутина каждый день.",
         en: "I have a fixed routine every day.",
         tokens: ["Mam", "stałą", "rutynę", "każdego", "dnia", "."],
@@ -264,7 +264,7 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("uprzejmy", "a2-44")]: {
         sk: "Był bardzo uprzejmy dla wszystkich gości.",
-        ua: "Він був дуже ввічливим до всіх гостей.",
+        ua: "Він був дуже ввічливим з усіма гостями.",
         ru: "Он был очень вежлив со всеми гостями.",
         en: "He was very polite to all the guests.",
         tokens: ["Był", "bardzo", "uprzejmy", "dla", "wszystkich", "gości", "."],
@@ -380,7 +380,7 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
     [phraseKey("skutek", "a2-45")]: {
         sk: "To był skutek złej decyzji.",
         ua: "Це був наслідок поганого рішення.",
-        ru: "Это было последствие плохого решения.",
+        ru: "Это было следствием плохого решения.",
         en: "It was the consequence of a bad decision.",
         tokens: ["To", "był", "skutek", "złej", "decyzji", "."],
     },
@@ -521,9 +521,9 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
 
     [phraseKey("nawyk", "a2-47")]: {
         sk: "Ten nawyk jest przekazywany z pokolenia na pokolenie.",
-        ua: "Цей звичай передається з покоління в покоління.",
-        ru: "Этот обычай передаётся из поколения в поколение.",
-        en: "This custom is passed down from generation to generation.",
+        ua: "Ця звичка передається з покоління в покоління.",
+        ru: "Эта привычка передаётся из поколения в поколение.",
+        en: "This habit is passed down from generation to generation.",
         tokens: ["Ten", "nawyk", "jest", "przekazywany", "z", "pokolenia", "na", "pokolenie", "."],
     },
 

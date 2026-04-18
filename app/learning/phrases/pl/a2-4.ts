@@ -90,17 +90,17 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
     // =========================
     [phraseKey("zdolność", "a2-32")]: {
         sk: "Ta zdolność bardzo przydaje się w tej pracy.",
-        ua: "Ця здатність дуже стає в пригоді на цій роботі.",
-        ru: "Эта способность очень пригодится на этой работе.",
+        ua: "Ця здатність дуже допомагає в цій роботі.",
+        ru: "Эта способность очень помогает в этой работе.",
         en: "This ability is very useful in this job.",
         tokens: ["Ta", "zdolność", "bardzo", "przydaje", "się", "w", "tej", "pracy", "."],
     },
 
     [phraseKey("umiejętność", "a2-32")]: {
         sk: "Dobra umiejętność komunikacji jest ważna w każdym zespole.",
-        ua: "Хороша навичка спілкування важлива в кожній команді.",
-        ru: "Хороший навык общения важен в каждой команде.",
-        en: "Good communication skill is important in every team.",
+        ua: "Хороші навички спілкування важливі в кожній команді.",
+        ru: "Хорошие навыки общения важны в каждой команде.",
+        en: "Good communication skills are important in every team.",
         tokens: ["Dobra", "umiejętność", "komunikacji", "jest", "ważna", "w", "każdym", "zespole", "."],
     },
 
@@ -146,8 +146,8 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("komunikatywny", "a2-32")]: {
         sk: "Powinieneś być komunikatywny i otwarty na ludzi.",
-        ua: "Ти повинен бути комунікабельним і відкритим до людей.",
-        ru: "Ты должен быть коммуникабельным и открытым к людям.",
+        ua: "Ти повинен бути комунікабельним і відкритим до спілкування з людьми.",
+        ru: "Ты должен быть коммуникабельным и открытым к общению с людьми.",
         en: "You should be communicative and open to people.",
         tokens: ["Powinieneś", "być", "komunikatywny", "i", "otwarty", "na", "ludzi", "."],
     },
@@ -264,8 +264,8 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("umówić termin", "a2-34")]: {
         sk: "Chcę umówić termin na przyszły tydzień.",
-        ua: "Я хочу записатися на час на наступний тиждень.",
-        ru: "Я хочу записаться на время на следующую неделю.",
+        ua: "Я хочу записатися на наступний тиждень.",
+        ru: "Я хочу записаться на следующую неделю.",
         en: "I want to book an appointment for next week.",
         tokens: ["Chcę", "umówić", "termin", "na", "przyszły", "tydzień", "."],
     },
@@ -274,7 +274,7 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
         sk: "Najpierw potrzebna jest dokładna diagnostyka.",
         ua: "Спочатку потрібна точна діагностика.",
         ru: "Сначала нужна точная диагностика.",
-        en: "First, an accurate diagnostics is needed.",
+        en: "First, accurate diagnostics are needed.",
         tokens: ["Najpierw", "potrzebna", "jest", "dokładna", "diagnostyka", "."],
     },
 
@@ -355,8 +355,8 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("wyprzedane", "a2-35")]: {
         sk: "Niestety, wszystkie sztuki są już wyprzedane.",
-        ua: "На жаль, усі одиниці вже розпродані.",
-        ru: "К сожалению, все экземпляры уже распроданы.",
+        ua: "На жаль, усі товари вже розпродані.",
+        ru: "К сожалению, все товары уже распроданы.",
         en: "Unfortunately, all items are already sold out.",
         tokens: ["Niestety", ",", "wszystkie", "sztuki", "są", "już", "wyprzedane", "."],
     },
@@ -371,7 +371,7 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("dostawa", "a2-35")]: {
         sk: "Dostawa powinna dotrzeć jutro rano.",
-        ua: "Поставка має прибути завтра вранці.",
+        ua: "Доставка має прибути завтра вранці.",
         ru: "Доставка должна прибыть завтра утром.",
         en: "The delivery should arrive tomorrow morning.",
         tokens: ["Dostawa", "powinna", "dotrzeć", "jutro", "rano", "."],
@@ -577,7 +577,7 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("delektować się", "a2-37")]: {
         sk: "Lubię delektować się kolacją bez pośpiechu.",
-        ua: "Я люблю смачно поїсти вечерю без поспіху.",
+        ua: "Я люблю насолоджуватися вечерею без поспіху.",
         ru: "Я люблю наслаждаться ужином без спешки.",
         en: "I like to enjoy dinner without rushing.",
         tokens: ["Lubię", "delektować", "się", "kolacją", "bez", "pośpiechu", "."],
@@ -743,8 +743,8 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("poprawić się", "a2-39")]: {
         sk: "Chcę poprawić się w mówieniu po polsku.",
-        ua: "Я хочу покращитися в розмовній польській.",
-        ru: "Я хочу улучшиться в разговорном польском.",
+        ua: "Я хочу покращити свою польську в розмові.",
+        ru: "Я хочу улучшить свой разговорный польский.",
         en: "I want to improve my spoken Polish.",
         tokens: ["Chcę", "poprawić", "się", "w", "mówieniu", "po", "polsku", "."],
     },
@@ -818,7 +818,7 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
 
     [phraseKey("słownictwo", "a2-40")]: {
         sk: "Codziennie uczę się nowego słownictwa.",
-        ua: "Щодня я вчу новий словниковий запас.",
+        ua: "Щодня я вчу нову лексику.",
         ru: "Каждый день я учу новую лексику.",
         en: "Every day I learn new vocabulary.",
         tokens: ["Codziennie", "uczę", "się", "nowego", "słownictwa", "."],

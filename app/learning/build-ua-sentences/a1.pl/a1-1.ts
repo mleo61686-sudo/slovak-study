@@ -213,7 +213,6 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["Can", "you", "help", "me", "?"],
         uaAltAnswers: [["Можете", "допомогти", "мені", "?"]],
         ruAltAnswers: [["Можете", "помочь", "мне", "?"]],
-        enAltAnswers: [["Can", "you", "help", "me", "?"]],
         extraUaTokens: ["увійти", "все", "зроблю"],
         extraRuTokens: ["войти", "всё", "сделаю"],
         extraEnTokens: ["enter", "everything", "do"],
@@ -433,8 +432,8 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         extraEnTokens: ["cashier", "size", "phone"],
     },
 
-    [phraseKey("oddział", "a1-4")]: {
-        sk: "Szukam oddziału z ubraniami.",
+    [phraseKey("dział", "a1-4")]: {
+        sk: "Szukam działu z ubraniami.",
         ua: "Я шукаю відділ з одягом.",
         ru: "Я ищу отдел с одеждой.",
         en: "I am looking for the clothing department.",
@@ -459,8 +458,8 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         extraEnTokens: ["jacket", "product", "price"],
     },
 
-    [phraseKey("spróbować", "a1-4")]: {
-        sk: "Chcę spróbować tę kurtkę.",
+    [phraseKey("przymierzyć", "a1-4")]: {
+        sk: "Chcę przymierzyć tę kurtkę.",
         ua: "Я хочу приміряти цю куртку.",
         ru: "Я хочу примерить эту куртку.",
         en: "I want to try this jacket on.",
@@ -485,7 +484,6 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         enTokens: ["I", "want", "to", "exchange", "this", "product", "."],
         uaAltAnswers: [["Я", "хочу", "цей", "товар", "обміняти", "."]],
         ruAltAnswers: [["Я", "хочу", "этот", "товар", "обменять", "."]],
-        enAltAnswers: [["I", "want", "to", "exchange", "this", "product", "."]],
         extraUaTokens: ["куртку", "взуття", "касир"],
         extraRuTokens: ["куртку", "обувь", "кассир"],
         extraEnTokens: ["jacket", "shoes", "cashier"],
@@ -533,13 +531,13 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     },
 
     [phraseKey("naliczać", "a1-4")]: {
-        sk: "Kasjer nalicza cenę.",
-        ua: "Касир рахує ціну.",
+        sk: "Kasjer nalicza kwotę.",
+        ua: "Касир рахує суму.",
         ru: "Кассир считает сумму.",
-        en: "The cashier is charging the price.",
-        uaTokens: ["Касир", "рахує", "ціну", "."],
+        en: "The cashier is calculating the amount.",
+        uaTokens: ["Касир", "рахує", "суму", "."],
         ruTokens: ["Кассир", "считает", "сумму", "."],
-        enTokens: ["The", "cashier", "is", "charging", "the", "price", "."],
+        enTokens: ["The", "cashier", "is", "calculating", "the", "amount", "."],
         extraUaTokens: ["товар", "полиці", "телефон"],
         extraRuTokens: ["товар", "полке", "телефон"],
         extraEnTokens: ["product", "shelf", "phone"],
@@ -576,8 +574,8 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         extraEnTokens: ["soup", "dessert", "evening"],
     },
 
-    [phraseKey("załącznik", "a1-5")]: {
-        sk: "Jaki załącznik chcecie?",
+    [phraseKey("dodatek", "a1-5")]: {
+        sk: "Jaki dodatek chcecie?",
         ua: "Який гарнір ви хочете?",
         ru: "Какой гарнир вы хотите?",
         en: "Which side dish do you want?",
@@ -642,13 +640,13 @@ export const PL_A1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
     },
 
     [phraseKey("naliczać", "a1-5")]: {
-        sk: "Proszę naliczyć rachunek.",
-        ua: "Будь ласка, виставте рахунок.",
-        ru: "Пожалуйста, выставьте счёт.",
-        en: "Please bring the bill.",
-        uaTokens: ["Будь", "ласка", ",", "виставте", "рахунок", "."],
-        ruTokens: ["Пожалуйста", ",", "выставьте", "счёт", "."],
-        enTokens: ["Please", "bring", "the", "bill", "."],
+        sk: "Kelner nalicza rachunek.",
+        ua: "Офіціант рахує рахунок.",
+        ru: "Официант считает счёт.",
+        en: "The waiter is calculating the bill.",
+        uaTokens: ["Офіціант", "рахує", "рахунок", "."],
+        ruTokens: ["Официант", "считает", "счёт", "."],
+        enTokens: ["The", "waiter", "is", "calculating", "the", "bill", "."],
         extraUaTokens: ["суп", "десерт", "карткою"],
         extraRuTokens: ["суп", "десерт", "картой"],
         extraEnTokens: ["soup", "dessert", "card"],

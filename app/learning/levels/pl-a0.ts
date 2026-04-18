@@ -154,7 +154,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "nauczyciel", ua: "вчитель", ru: "учитель", en: "teacher", img: "/words/učiteľ.jpg" },
       { sk: "klasa", ua: "клас", ru: "класс", en: "classroom", img: "/words/trieda.jpg" },
       { sk: "przedmiot", ua: "предмет", ru: "предмет", en: "subject", img: "/words/predmet.jpg" },
-      { sk: "godzina", ua: "урок", ru: "урок", en: "lesson", img: "/words/hodina.jpg" },
+      { sk: "godzina", ua: "година", ru: "час", en: "lesson", img: "/words/hodina.jpg" },
       { sk: "zadanie", ua: "завдання / домашня робота", ru: "задание / домашняя работа", en: "task / homework", img: "/words/úloha.jpg" },
       { sk: "test", ua: "тест", ru: "тест", en: "test", img: "/words/test.jpg" },
       { sk: "zeszyt", ua: "зошит", ru: "тетрадь", en: "notebook", img: "/words_a0_cz/sešit.jpg" },
@@ -414,7 +414,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "śniadanie", ua: "сніданок", ru: "завтрак", en: "breakfast", img: "/words_a0_cz/snídaně.jpg" },
       { sk: "obiad", ua: "обід", ru: "обед", en: "lunch", img: "/words_a0_cz/oběd.jpg" },
       { sk: "kolacja", ua: "вечеря", ru: "ужин", en: "dinner", img: "/words_a0_cz/večeře.jpg" },
-      { sk: "konto", ua: "рахунок", ru: "счёт", en: "bill", img: "/words/účet.jpg" },
+      { sk: "rachunek", ua: "рахунок", ru: "счёт", en: "bill", img: "/words/účet.jpg" },
     ],
   },
   {

@@ -273,10 +273,10 @@ export const PL_A0_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
   // =========================
   [phraseKey("gospodarstwo domowe", "a0-18")]: {
     sk: "Prowadzę małe gospodarstwo domowe.",
-    ua: "Я веду маленький побут.",
+    ua: "Я веду невелике домашнє господарство.",
     ru: "Я веду небольшое домашнее хозяйство.",
     en: "I run a small household.",
-    uaTokens: ["Я", "веду", "маленький", "побут", "."],
+    uaTokens: ["Я", "веду", "невелике", "домашнє", "господарство", "."],
     ruTokens: ["Я", "веду", "небольшое", "домашнее", "хозяйство", "."],
     enTokens: ["I", "run", "a", "small", "household", "."],
     extraUaTokens: ["квартира", "тихо", "холодильнику"],

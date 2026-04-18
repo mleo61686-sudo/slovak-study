@@ -38,7 +38,7 @@ export const PL_A2_SOURCE: Lesson[] = [
     title: { ua: "Урок 3 — Місто та послуги", ru: "Урок 3 — Город и услуги", en: "Lesson 3 — City and services" },
     words: [
       { sk: "urząd miejski", ua: "міська рада/мерія", ru: "городская администрация / мэрия", en: "city hall / municipal office", img: "/words_a2_cz/městský úřad.jpg" },
-      { sk: "oddział", ua: "відділення/відділ", ru: "отдел / отделение", en: "department", img: "/words_a2_cz/oddělení.jpg" },
+      { sk: "dział", ua: "відділення/відділ", ru: "отдел / отделение", en: "department", img: "/words_a2_cz/oddělení.jpg" },
       { sk: "wnioskodawca", ua: "заявник", ru: "заявитель", en: "applicant", img: "/words_a2_cz/žadatel.jpg" },
       { sk: "wniosek", ua: "заява", ru: "заявление", en: "application", img: "/words_a2_cz/žádost.jpg" },
       { sk: "dokument", ua: "документ", ru: "документ", en: "document", img: "/words_a2/doklad.jpg" },
@@ -330,7 +330,7 @@ export const PL_A2_SOURCE: Lesson[] = [
       { sk: "elektryk", ua: "електрик", ru: "электрик", en: "electrician", img: "/words_a2/elektrikár.jpg" },
       { sk: "naprawić", ua: "відремонтувати", ru: "отремонтировать", en: "to repair", img: "/words_a2_cz/opravit.jpg" },
       { sk: "wymienić", ua: "замінити", ru: "заменить", en: "to replace", img: "/words_a2_cz/vyměnit.jpg" },
-      { sk: "przepływ", ua: "протікання", ru: "протечка", en: "leak", img: "/words_a2/prietok.jpg" },
+      { sk: "przepływ", ua: "потік", ru: "поток", en: "flow", img: "/words_a2/prietok.jpg" },
       { sk: "zatkanie", ua: "засмічення", ru: "засор", en: "blockage", img: "/words_a2/upchatie.jpg" },
       { sk: "przeciekać", ua: "протікати", ru: "протекать", en: "to leak", img: "/words_a2/zatekať.jpg" },
       { sk: "uszkodzenie", ua: "пошкодження", ru: "повреждение", en: "damage", img: "/words_a2/poškodenie.jpg" },

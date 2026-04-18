@@ -282,7 +282,7 @@ export const PL_A1_PHRASES_3: Record<string, Phrase> = {
         sk: "Rano jest już jasno.",
         ua: "Вранці вже ясно.",
         ru: "Утром уже светло.",
-        en: "It is already clear in the morning.",
+        en: "It is already light in the morning.",
         tokens: ["Rano", "jest", "już", "jasno", "."],
     },
 
@@ -322,7 +322,7 @@ export const PL_A1_PHRASES_3: Record<string, Phrase> = {
         sk: "Wieczorem przyszła burza.",
         ua: "Увечері прийшла буря.",
         ru: "Вечером началась буря.",
-        en: "A storm came in the evening.",
+        en: "A storm started in the evening.",
         tokens: ["Wieczorem", "przyszła", "burza", "."],
     },
 
@@ -405,7 +405,7 @@ export const PL_A1_PHRASES_3: Record<string, Phrase> = {
         sk: "Po biegu czuję pragnienie.",
         ua: "Після бігу я відчуваю спрагу.",
         ru: "После бега я чувствую жажду.",
-        en: "After running I feel thirst.",
+        en: "I feel thirsty after running.",
         tokens: ["Po", "biegu", "czuję", "pragnienie", "."],
     },
 
@@ -421,7 +421,7 @@ export const PL_A1_PHRASES_3: Record<string, Phrase> = {
     // =========================
     [phraseKey("płacić", "a1-26")]: {
         sk: "Wolę płacić kartą.",
-        ua: "Я віддаю перевагу платити карткою.",
+        ua: "Я волію платити карткою.",
         ru: "Я предпочитаю платить картой.",
         en: "I prefer to pay by card.",
         tokens: ["Wolę", "płacić", "kartą", "."],
@@ -479,7 +479,7 @@ export const PL_A1_PHRASES_3: Record<string, Phrase> = {
         sk: "Mam konto w tym banku.",
         ua: "У мене є рахунок у цьому банку.",
         ru: "У меня есть счёт в этом банке.",
-        en: "I have an account in this bank.",
+        en: "I have an account at this bank.",
         tokens: ["Mam", "konto", "w", "tym", "banku", "."],
     },
 
@@ -661,7 +661,7 @@ export const PL_A1_PHRASES_3: Record<string, Phrase> = {
         sk: "To jest mój cel podróży.",
         ua: "Це моя ціль подорожі.",
         ru: "Это моя цель поездки.",
-        en: "This is my travel destination.",
+        en: "This is the purpose of my trip.",
         tokens: ["To", "jest", "mój", "cel", "podróży", "."],
     },
 

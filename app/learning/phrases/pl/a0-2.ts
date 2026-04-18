@@ -72,7 +72,7 @@ export const PL_A0_PHRASES_2: Record<string, Phrase> = {
   [phraseKey("osiem", "a0-11")]: {
     sk: "Jest ósma, nie osiem.",
     ua: "Зараз восьма година, не вісім.",
-    ru: "Сейчас восемь часов, а не восемь штук.",
+    ru: "Сейчас восемь часов, а не просто восемь.",
     en: "It is eight o’clock, not eight items.",
     tokens: ["Jest", "ósma", ",", "nie", "osiem", "."],
   },
@@ -116,7 +116,7 @@ export const PL_A0_PHRASES_2: Record<string, Phrase> = {
     sk: "Lubię czerwony kolor.",
     ua: "Я люблю червоний колір.",
     ru: "Я люблю красный цвет.",
-    en: "I like the red color.",
+    en: "I like red.",
     tokens: ["Lubię", "czerwony", "kolor", "."],
   },
 
@@ -175,7 +175,7 @@ export const PL_A0_PHRASES_2: Record<string, Phrase> = {
     sk: "To ubranie jest nowe.",
     ua: "Цей одяг новий.",
     ru: "Эта одежда новая.",
-    en: "These clothes are new.",
+    en: "This clothing is new.",
     tokens: ["To", "ubranie", "jest", "nowe", "."],
   },
 
@@ -381,7 +381,7 @@ export const PL_A0_PHRASES_2: Record<string, Phrase> = {
     sk: "Czuję silny ból.",
     ua: "Я відчуваю сильний біль.",
     ru: "Я чувствую сильную боль.",
-    en: "I feel strong pain.",
+    en: "I feel severe pain.",
     tokens: ["Czuję", "silny", "ból", "."],
   },
 

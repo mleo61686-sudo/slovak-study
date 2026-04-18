@@ -25,7 +25,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Idę do sklepu.",
         ua: "Я йду до магазину.",
         ru: "Я иду в магазин.",
-        en: "I go to the shop.",
+        en: "I am going to the shop.",
         tokens: ["Idę", "do", "sklepu", "."],
     },
 
@@ -49,7 +49,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Spaceruję w parku.",
         ua: "Я гуляю в парку.",
         ru: "Я гуляю в парке.",
-        en: "I walk in the park.",
+        en: "I am walking in the park.",
         tokens: ["Spaceruję", "w", "parku", "."],
     },
 
@@ -57,7 +57,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Idę do banku.",
         ua: "Я йду до банку.",
         ru: "Я иду в банк.",
-        en: "I go to the bank.",
+        en: "I am going to the bank.",
         tokens: ["Idę", "do", "banku", "."],
     },
 
@@ -243,11 +243,11 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
     },
 
     [phraseKey("taniec", "a0-23")]: {
-        sk: "Lubię taniec.",
+        sk: "Lubię tańczyć.",
         ua: "Я люблю танці.",
         ru: "Я люблю танцы.",
         en: "I like dancing.",
-        tokens: ["Lubię", "taniec", "."],
+        tokens: ["Lubię", "tańczyć", "."],
     },
 
     // =========================
@@ -279,8 +279,8 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("pytać", "a0-24")]: {
         sk: "Chcę pytać o drogę.",
-        ua: "Я хочу запитати дорогу.",
-        ru: "Я хочу спросить дорогу.",
+        ua: "Я хочу запитати, як пройти.",
+        ru: "Я хочу спросить, как пройти.",
         en: "I want to ask for directions.",
         tokens: ["Chcę", "pytać", "o", "drogę", "."],
     },
@@ -380,7 +380,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Pociąg jedzie szybko.",
         ua: "Поїзд їде швидко.",
         ru: "Поезд едет быстро.",
-        en: "The train goes fast.",
+        en: "The train is going fast.",
         tokens: ["Pociąg", "jedzie", "szybko", "."],
     },
 
@@ -447,7 +447,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Idziemy do restauracji.",
         ua: "Ми йдемо в ресторан.",
         ru: "Мы идем в ресторан.",
-        en: "We go to the restaurant.",
+        en: "We are going to the restaurant.",
         tokens: ["Idziemy", "do", "restauracji", "."],
     },
 
@@ -491,12 +491,12 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         tokens: ["Jem", "kolację", "wieczorem", "."],
     },
 
-    [phraseKey("konto", "a0-26")]: {
-        sk: "Proszę o konto.",
+    [phraseKey("rachunek", "a0-26")]: {
+        sk: "Proszę o rachunek.",
         ua: "Прошу рахунок.",
         ru: "Счёт, пожалуйста.",
         en: "The bill, please.",
-        tokens: ["Proszę", "o", "konto", "."],
+        tokens: ["Proszę", "o", "rachunek", "."],
     },
 
     // =========================
@@ -527,11 +527,11 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
     },
 
     [phraseKey("płatność", "a0-27")]: {
-        sk: "Płatność jest gotowa.",
-        ua: "Платіж готовий.",
-        ru: "Платёж готов.",
-        en: "The payment is ready.",
-        tokens: ["Płatność", "jest", "gotowa", "."],
+        sk: "Płatność kartą jest możliwa.",
+        ua: "Оплата карткою можлива.",
+        ru: "Оплата картой возможна.",
+        en: "Payment by card is possible.",
+        tokens: ["Płatność", "kartą", "jest", "możliwa", "."],
     },
 
     [phraseKey("gotówka", "a0-27")]: {
@@ -554,7 +554,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Mam konto w banku.",
         ua: "У мене є рахунок у банку.",
         ru: "У меня есть счёт в банке.",
-        en: "I have an account in the bank.",
+        en: "I have a bank account.",
         tokens: ["Mam", "konto", "w", "banku", "."],
     },
 
@@ -562,7 +562,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Idę do banku.",
         ua: "Я йду до банку.",
         ru: "Я иду в банк.",
-        en: "I go to the bank.",
+        en: "I am going to the bank.",
         tokens: ["Idę", "do", "banku", "."],
     },
 
@@ -578,7 +578,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Mam duże wydatki.",
         ua: "У мене великі витрати.",
         ru: "У меня большие расходы.",
-        en: "I have big expenses.",
+        en: "I have high expenses.",
         tokens: ["Mam", "duże", "wydatki", "."],
     },
 
@@ -613,7 +613,7 @@ export const PL_A0_PHRASES_3: Record<string, Phrase> = {
         sk: "Mam internet.",
         ua: "У мене є інтернет.",
         ru: "У меня есть интернет.",
-        en: "I have internet.",
+        en: "I have the internet.",
         tokens: ["Mam", "internet", "."],
     },
 

@@ -47,7 +47,7 @@ export const PL_A2_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("przepływ", "a2-21")]: {
         sk: "Przepływ wody jest za słaby.",
-        ua: "Протікання води занадто слабке.",
+        ua: "Потік води занадто слабкий.",
         ru: "Поток воды слишком слабый.",
         en: "The water flow is too weak.",
         tokens: ["Przepływ", "wody", "jest", "za", "słaby", "."],
@@ -356,7 +356,7 @@ export const PL_A2_PHRASES_3: Record<string, Phrase> = {
     [phraseKey("połączenie", "a2-25")]: {
         sk: "To połączenie jest najszybsze.",
         ua: "Це сполучення найшвидше.",
-        ru: "Это сообщение самое быстрое.",
+        ru: "Это соединение самое быстрое.",
         en: "This connection is the fastest.",
         tokens: ["To", "połączenie", "jest", "najszybsze", "."],
     },
@@ -395,7 +395,7 @@ export const PL_A2_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("bilet powrotny", "a2-25")]: {
         sk: "Potrzebuję biletu powrotnego na poniedziałek.",
-        ua: "Мені потрібен квиток туди-назад на понеділок.",
+        ua: "Мені потрібен зворотний квиток на понеділок.",
         ru: "Мне нужен обратный билет на понедельник.",
         en: "I need a return ticket for Monday.",
         tokens: ["Potrzebuję", "biletu", "powrotnego", "na", "poniedziałek", "."],
@@ -634,7 +634,7 @@ export const PL_A2_PHRASES_3: Record<string, Phrase> = {
     },
 
     [phraseKey("pobrać plik", "a2-28")]: {
-        sk: "Nie chcę pobrać pliku z nieznanej strony.",
+        sk: "Nie chcę pobierać plików z nieznanych stron.",
         ua: "Я не хочу завантажувати файл з невідомого сайту.",
         ru: "Я не хочу скачивать файл с неизвестного сайта.",
         en: "I do not want to download a file from an unknown site.",
@@ -678,9 +678,9 @@ export const PL_A2_PHRASES_3: Record<string, Phrase> = {
 
     [phraseKey("zdenerwowany", "a2-29")]: {
         sk: "Byłem bardzo zdenerwowany przed rozmową.",
-        ua: "Я був дуже злий перед розмовою.",
-        ru: "Я был очень раздражён перед разговором.",
-        en: "I was very angry before the conversation.",
+        ua: "Я був дуже схвильований перед розмовою.",
+        ru: "Я был очень взволнован перед разговором.",
+        en: "I was very nervous before the conversation.",
         tokens: ["Byłem", "bardzo", "zdenerwowany", "przed", "rozmową", "."],
     },
 

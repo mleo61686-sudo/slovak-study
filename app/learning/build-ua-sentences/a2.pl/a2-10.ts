@@ -67,7 +67,7 @@ export const PL_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
         enTokens: ["I", "am", "not", "sure", "if", "this", "is", "a", "good", "choice", "."],
         extraUaTokens: ["відповіді", "вчора", "зовсім"],
         extraRuTokens: ["ответа", "вчера", "совсем"],
-        extraEnTokens: ["answer", "yesterday", "at", "all"],
+        extraEnTokens: ["answer", "yesterday", "at"],
     },
 
     [phraseKey("niepewność", "a2-46")]: {
@@ -130,11 +130,12 @@ export const PL_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
         uaTokens: ["Наприкінці", "ми", "зробили", "важливий", "висновок", "."],
         ruTokens: ["В", "конце", "мы", "сделали", "важный", "вывод", "."],
         enTokens: ["In", "the", "end", ",", "we", "reached", "an", "important", "conclusion", "."],
+        uaAltAnswers: [["Ми", "наприкінці", "зробили", "важливий", "висновок", "."]],
+        ruAltAnswers: [["Мы", "в", "конце", "сделали", "важный", "вывод", "."]],
         extraUaTokens: ["помилку", "вчора", "іншу"],
         extraRuTokens: ["ошибку", "вчера", "другую"],
         extraEnTokens: ["mistake", "yesterday", "another"],
     },
-
     // =========================
     // LESSON 47 — Культура та медіа
     // =========================
@@ -166,12 +167,12 @@ export const PL_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
 
     [phraseKey("nawyk", "a2-47")]: {
         sk: "Ten nawyk jest przekazywany z pokolenia na pokolenie.",
-        ua: "Цей звичай передається з покоління в покоління.",
-        ru: "Этот обычай передаётся из поколения в поколение.",
-        en: "This custom is passed down from generation to generation.",
-        uaTokens: ["Цей", "звичай", "передається", "з", "покоління", "в", "покоління", "."],
-        ruTokens: ["Этот", "обычай", "передаётся", "из", "поколения", "в", "поколение", "."],
-        enTokens: ["This", "custom", "is", "passed", "down", "from", "generation", "to", "generation", "."],
+        ua: "Ця звичка передається з покоління в покоління.",
+        ru: "Эта привычка передаётся из поколения в поколение.",
+        en: "This habit is passed down from generation to generation.",
+        uaTokens: ["Ця", "звичка", "передається", "з", "покоління", "в", "покоління", "."],
+        ruTokens: ["Эта", "привычка", "передаётся", "из", "поколения", "в", "поколение", "."],
+        enTokens: ["This", "habit", "is", "passed", "down", "from", "generation", "to", "generation", "."],
         extraUaTokens: ["традиція", "рідко", "зараз"],
         extraRuTokens: ["традиция", "редко", "сейчас"],
         extraEnTokens: ["tradition", "rarely", "now"],
@@ -185,6 +186,8 @@ export const PL_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
         uaTokens: ["Увечері", "я", "завжди", "дивлюся", "новини", "."],
         ruTokens: ["Вечером", "я", "всегда", "смотрю", "новости", "."],
         enTokens: ["I", "always", "watch", "the", "news", "in", "the", "evening", "."],
+        uaAltAnswers: [["Я", "увечері", "завжди", "дивлюся", "новини", "."]],
+        ruAltAnswers: [["Я", "вечером", "всегда", "смотрю", "новости", "."]],
         extraUaTokens: ["вранці", "фільми", "інколи"],
         extraRuTokens: ["утром", "фильмы", "иногда"],
         extraEnTokens: ["morning", "movies", "sometimes"],
@@ -503,6 +506,8 @@ export const PL_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
         uaTokens: ["Моя", "рекомендація", "—", "сьогодні", "залишитися", "вдома", "."],
         ruTokens: ["Моя", "рекомендация", "—", "сегодня", "остаться", "дома", "."],
         enTokens: ["My", "recommendation", "is", "to", "stay", "at", "home", "today", "."],
+        uaAltAnswers: [["Моя", "рекомендація", "—", "залишитися", "сьогодні", "вдома", "."]],
+        ruAltAnswers: [["Моя", "рекомендация", "—", "остаться", "сегодня", "дома", "."]],
         extraUaTokens: ["вийти", "надвір", "завтра"],
         extraRuTokens: ["выйти", "на улицу", "завтра"],
         extraEnTokens: ["go", "outside", "tomorrow"],
@@ -662,6 +667,8 @@ export const PL_A2_BUILD_UA_SENTENCES_10: BuildUaSentenceDict = {
         uaTokens: ["Через", "кілька", "днів", "я", "почав", "краще", "орієнтуватися", "в", "місті", "."],
         ruTokens: ["Через", "несколько", "дней", "я", "начал", "лучше", "ориентироваться", "в", "городе", "."],
         enTokens: ["After", "a", "few", "days", ",", "I", "started", "to", "find", "my", "way", "around", "the", "city", "better", "."],
+        uaAltAnswers: [["Через", "кілька", "днів", "я", "почав", "орієнтуватися", "краще", "в", "місті", "."]],
+        ruAltAnswers: [["Через", "несколько", "дней", "я", "начал", "ориентироваться", "лучше", "в", "городе", "."]],
         extraUaTokens: ["районі", "погано", "спочатку"],
         extraRuTokens: ["районе", "плохо", "сначала"],
         extraEnTokens: ["area", "badly", "initially"],

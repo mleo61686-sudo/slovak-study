@@ -72,10 +72,10 @@ export const PL_A2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("przepływ", "a2-21")]: {
         sk: "Przepływ wody jest za słaby.",
-        ua: "Протікання води занадто слабке.",
+        ua: "Потік води занадто слабкий.",
         ru: "Поток воды слишком слабый.",
         en: "The water flow is too weak.",
-        uaTokens: ["Протікання", "води", "занадто", "слабке", "."],
+        uaTokens: ["Потік", "води", "занадто", "слабкий", "."],
         ruTokens: ["Поток", "воды", "слишком", "слабый", "."],
         enTokens: ["The", "water", "flow", "is", "too", "weak", "."],
         extraUaTokens: ["труби", "кран", "поломка"],
@@ -250,9 +250,9 @@ export const PL_A2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
         uaTokens: ["У", "мене", "контрольний", "огляд", "у", "лікаря", "через", "два", "тижні", "."],
         ruTokens: ["У", "меня", "контрольный", "осмотр", "у", "врача", "через", "две", "недели", "."],
         enTokens: ["I", "have", "a", "check-up", "with", "the", "doctor", "in", "two", "weeks", "."],
-        extraUaTokens: ["операції", "лікаря", "антибіотики"],
-        extraRuTokens: ["операции", "врача", "антибиотики"],
-        extraEnTokens: ["operation", "doctor", "antibiotics"],
+        extraUaTokens: ["операції", "рецепта", "антибіотики"],
+        extraRuTokens: ["операции", "рецепта", "антибиотики"],
+        extraEnTokens: ["operation", "prescription", "antibiotics"],
     },
 
     [phraseKey("dochodzić do zdrowia", "a2-22")]: {
@@ -558,6 +558,12 @@ export const PL_A2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
         uaTokens: ["У", "Берліні", "в", "нас", "коротка", "пересадка", "."],
         ruTokens: ["В", "Берлине", "у", "нас", "короткая", "пересадка", "."],
         enTokens: ["We", "have", "a", "short", "transfer", "in", "Berlin", "."],
+        uaAltAnswers: [
+            ["У", "Берліні", "коротка", "пересадка", "в", "нас", "."]
+        ],
+        ruAltAnswers: [
+            ["В", "Берлине", "короткая", "пересадка", "у", "нас", "."]
+        ],
         extraUaTokens: ["маршрут", "поїзд", "рейс"],
         extraRuTokens: ["маршрут", "поезд", "рейс"],
         extraEnTokens: ["route", "train", "flight"],
@@ -566,10 +572,10 @@ export const PL_A2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
     [phraseKey("połączenie", "a2-25")]: {
         sk: "To połączenie jest najszybsze.",
         ua: "Це сполучення найшвидше.",
-        ru: "Это сообщение самое быстрое.",
+        ru: "Это соединение самое быстрое.",
         en: "This connection is the fastest.",
         uaTokens: ["Це", "сполучення", "найшвидше", "."],
-        ruTokens: ["Это", "сообщение", "самое", "быстрое", "."],
+        ruTokens: ["Это", "соединение", "самое", "быстрое", "."],
         enTokens: ["This", "connection", "is", "the", "fastest", "."],
         extraUaTokens: ["пересадка", "поїзд", "додатку"],
         extraRuTokens: ["пересадка", "поезд", "приложении"],
@@ -630,10 +636,10 @@ export const PL_A2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
 
     [phraseKey("bilet powrotny", "a2-25")]: {
         sk: "Potrzebuję biletu powrotnego na poniedziałek.",
-        ua: "Мені потрібен квиток туди-назад на понеділок.",
+        ua: "Мені потрібен зворотний квиток на понеділок.",
         ru: "Мне нужен обратный билет на понедельник.",
         en: "I need a return ticket for Monday.",
-        uaTokens: ["Мені", "потрібен", "квиток", "туди-назад", "на", "понеділок", "."],
+        uaTokens: ["Мені", "потрібен", "зворотний", "квиток", "на", "понеділок", "."],
         ruTokens: ["Мне", "нужен", "обратный", "билет", "на", "понедельник", "."],
         enTokens: ["I", "need", "a", "return", "ticket", "for", "Monday", "."],
         extraUaTokens: ["рейс", "автобус", "один"],

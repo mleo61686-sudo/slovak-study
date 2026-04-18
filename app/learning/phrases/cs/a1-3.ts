@@ -322,7 +322,7 @@ export const CS_A1_PHRASES_3: Record<string, Phrase> = {
     sk: "Večer přišla bouře.",
     ua: "Увечері прийшла буря.",
     ru: "Вечером пришла буря.",
-    en: "A storm came in the evening.",
+    en: "A storm started in the evening.",
     tokens: ["Večer", "přišla", "bouře", "."],
   },
 

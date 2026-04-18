@@ -270,12 +270,12 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Mleko", "stoi", "na", "regale", "."],
     },
 
-    [phraseKey("oddział", "a1-4")]: {
-        sk: "Szukam oddziału z ubraniami.",
+    [phraseKey("dział", "a1-4")]: {
+        sk: "Szukam działu z ubraniami.",
         ua: "Я шукаю відділ з одягом.",
         ru: "Я ищу отдел с одеждой.",
         en: "I am looking for the clothing department.",
-        tokens: ["Szukam", "oddziału", "z", "ubraniami", "."],
+        tokens: ["Szukam", "działu", "z", "ubraniami", "."],
     },
 
     [phraseKey("rozmiar", "a1-4")]: {
@@ -286,8 +286,8 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Jaki", "to", "rozmiar", "?"],
     },
 
-    [phraseKey("spróbować", "a1-4")]: {
-        sk: "Chcę spróbować tę kurtkę.",
+    [phraseKey("przymierzyć", "a1-4")]: {
+        sk: "Chcę przymierzyć tę kurtkę.",
         ua: "Я хочу приміряти цю куртку.",
         ru: "Я хочу примерить эту куртку.",
         en: "I want to try this jacket on.",
@@ -327,11 +327,11 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("naliczać", "a1-4")]: {
-        sk: "Kasjer nalicza cenę.",
-        ua: "Касир рахує ціну.",
+        sk: "Kasjer nalicza kwotę.",
+        ua: "Касир рахує суму.",
         ru: "Кассир считает сумму.",
-        en: "The cashier is charging the price.",
-        tokens: ["Kasjer", "nalicza", "cenę", "."],
+        en: "The cashier is calculating the amount.",
+        tokens: ["Kasjer", "nalicza", "kwotę", "."],
     },
 
     // =========================
@@ -353,8 +353,8 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["To", "jest", "duża", "porcja", "."],
     },
 
-    [phraseKey("załącznik", "a1-5")]: {
-        sk: "Jaki załącznik chcecie?",
+    [phraseKey("dodatek", "a1-5")]: {
+        sk: "Jaki dodatek chcecie?",
         ua: "Який гарнір ви хочете?",
         ru: "Какой гарнир вы хотите?",
         en: "Which side dish do you want?",
@@ -394,11 +394,11 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("naliczać", "a1-5")]: {
-        sk: "Proszę naliczyć rachunek.",
-        ua: "Будь ласка, виставте рахунок.",
-        ru: "Пожалуйста, выставьте счёт.",
-        en: "Please bring the bill.",
-        tokens: ["Proszę", "naliczyć", "rachunek", "."],
+        sk: "Kelner nalicza rachunek.",
+        ua: "Офіціант рахує рахунок.",
+        ru: "Официант считает счёт.",
+        en: "The waiter is calculating the bill.",
+        tokens: ["Kelner", "nalicza", "rachunek", "."],
     },
 
     [phraseKey("zapłacić", "a1-5")]: {
@@ -605,7 +605,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         sk: "Dziś pracuję w nadgodzinach.",
         ua: "Сьогодні я працюю понаднормово.",
         ru: "Сегодня я работаю сверхурочно.",
-        en: "Today I work overtime.",
+        en: "Today I am working overtime.",
         tokens: ["Dziś", "pracuję", "w", "nadgodzinach", "."],
     },
 
@@ -679,7 +679,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
     [phraseKey("szczęśliwy", "a1-9")]: {
         sk: "Jestem szczęśliwy.",
         ua: "Я щасливий.",
-        ru: "Я счастливый.",
+        ru: "Я счастлив.",
         en: "I am happy.",
         tokens: ["Jestem", "szczęśliwy", "."],
     },
@@ -694,7 +694,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("zdenerwowany", "a1-9")]: {
         sk: "Jestem zdenerwowany.",
-        ua: "Я злий.",
+        ua: "Я роздратований.",
         ru: "Я сердитый.",
         en: "I am angry.",
         tokens: ["Jestem", "zdenerwowany", "."],
@@ -763,7 +763,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         sk: "Jaki to kolor?",
         ua: "Який це колір?",
         ru: "Какой это цвет?",
-        en: "What kind of color is it?",
+        en: "What color is it?",
         tokens: ["Jaki", "to", "kolor", "?"],
     },
 
@@ -777,7 +777,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
 
     [phraseKey("gdzie jest", "a1-10")]: {
         sk: "Gdzie jest apteka?",
-        ua: "Де є аптека?",
+        ua: "Де аптека?",
         ru: "Где аптека?",
         en: "Where is the pharmacy?",
         tokens: ["Gdzie", "jest", "apteka", "?"],
@@ -819,7 +819,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         sk: "Oczywiście, że tak.",
         ua: "Звісно, що так.",
         ru: "Конечно, да.",
-        en: "Of course, yes.",
+        en: "Of course.",
         tokens: ["Oczywiście", ",", "że", "tak", "."],
     },
 

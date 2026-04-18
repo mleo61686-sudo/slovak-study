@@ -250,6 +250,12 @@ export const PL_A2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
         uaTokens: ["Через", "травму", "я", "зараз", "не", "можу", "тренуватися", "."],
         ruTokens: ["Из-за", "травмы", "я", "сейчас", "не", "могу", "тренироваться", "."],
         enTokens: ["Because", "of", "the", "injury", "I", "cannot", "train", "now", "."],
+        uaAltAnswers: [
+            ["Через", "травму", "я", "не", "можу", "зараз", "тренуватися", "."]
+        ],
+        ruAltAnswers: [
+            ["Из-за", "травмы", "я", "не", "могу", "сейчас", "тренироваться", "."]
+        ],
         extraUaTokens: ["здоровий", "завтра", "біг"],
         extraRuTokens: ["здоров", "завтра", "бег"],
         extraEnTokens: ["healthy", "tomorrow", "run"],
@@ -553,10 +559,10 @@ export const PL_A2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
     [phraseKey("aktualizacja", "a2-15")]: {
         sk: "Telefon potrzebuje aktualizacji systemu.",
         ua: "Телефон потребує оновлення системи.",
-        ru: "Телефону нужно обновление системы.",
+        ru: "Телефон нуждается в обновлении системы.",
         en: "The phone needs a system update.",
         uaTokens: ["Телефон", "потребує", "оновлення", "системи", "."],
-        ruTokens: ["Телефону", "нужно", "обновление", "системы", "."],
+        ruTokens: ["Телефон", "нуждается", "в", "обновлении", "системы", "."],
         enTokens: ["The", "phone", "needs", "a", "system", "update", "."],
         extraUaTokens: ["перезавантаження", "старої", "програми"],
         extraRuTokens: ["перезагрузка", "старой", "программы"],
@@ -604,10 +610,10 @@ export const PL_A2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
 
     [phraseKey("zaciąć się", "a2-15")]: {
         sk: "Komputer zaciął się podczas pracy.",
-        ua: "Комп’ютер завис під час роботи.",
+        ua: "Комп’ютер зависнув під час роботи.",
         ru: "Компьютер завис во время работы.",
         en: "The computer froze while I was working.",
-        uaTokens: ["Комп’ютер", "завис", "під", "час", "роботи", "."],
+        uaTokens: ["Комп’ютер", "зависнув", "під", "час", "роботи", "."],
         ruTokens: ["Компьютер", "завис", "во", "время", "работы", "."],
         enTokens: ["The", "computer", "froze", "while", "I", "was", "working", "."],
         extraUaTokens: ["телефон", "після", "оновлення"],
@@ -653,15 +659,14 @@ export const PL_A2_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
         extraRuTokens: ["сохранить", "важные", "документы"],
         extraEnTokens: ["save", "important", "documents"],
     },
-
     [phraseKey("odnowić", "a2-15")]: {
-        sk: "Muszę odnowić hasło do konta.",
-        ua: "Мені треба відновити пароль до акаунта.",
-        ru: "Мне нужно восстановить пароль к аккаунту.",
-        en: "I need to restore the account password.",
-        uaTokens: ["Мені", "треба", "відновити", "пароль", "до", "акаунта", "."],
-        ruTokens: ["Мне", "нужно", "восстановить", "пароль", "к", "аккаунту", "."],
-        enTokens: ["I", "need", "to", "restore", "the", "account", "password", "."],
+        sk: "Muszę odnowić dostęp do konta.",
+        ua: "Мені треба відновити доступ до акаунта.",
+        ru: "Мне нужно восстановить доступ к аккаунту.",
+        en: "I need to restore access to the account.",
+        uaTokens: ["Мені", "треба", "відновити", "доступ", "до", "акаунта", "."],
+        ruTokens: ["Мне", "нужно", "восстановить", "доступ", "к", "аккаунту", "."],
+        enTokens: ["I", "need", "to", "restore", "access", "to", "the", "account", "."],
         extraUaTokens: ["логін", "забути", "вчора"],
         extraRuTokens: ["логин", "забыть", "вчера"],
         extraEnTokens: ["login", "forget", "yesterday"],

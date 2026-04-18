@@ -111,11 +111,11 @@ export const PL_A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
 
     [phraseKey("wytrwać", "a2-41")]: {
         sk: "Musisz wytrwać, nawet jeśli jest trudno.",
-        ua: "Ти повинен не здатися, навіть якщо важко.",
-        ru: "Ты должен не сдаваться, даже если трудно.",
+        ua: "Ти повинен витримати, навіть якщо важко.",
+        ru: "Ты должен выстоять, даже если трудно.",
         en: "You have to persevere, even if it is hard.",
-        uaTokens: ["Ти", "повинен", "не", "здатися", ",", "навіть", "якщо", "важко", "."],
-        ruTokens: ["Ты", "должен", "не", "сдаваться", ",", "даже", "если", "трудно", "."],
+        uaTokens: ["Ти", "повинен", "витримати", ",", "навіть", "якщо", "важко", "."],
+        ruTokens: ["Ты", "должен", "выстоять", ",", "даже", "если", "трудно", "."],
         enTokens: ["You", "have", "to", "persevere", ",", "even", "if", "it", "is", "hard", "."],
         extraUaTokens: ["зупинитися", "рано", "завтра"],
         extraRuTokens: ["остановиться", "рано", "завтра"],
@@ -205,10 +205,10 @@ export const PL_A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
 
     [phraseKey("dozwolone", "a2-42")]: {
         sk: "W tym miejscu parkowanie jest dozwolone.",
-        ua: "У цьому місці паркування дозволено.",
+        ua: "У цьому місці паркуватися дозволено.",
         ru: "В этом месте парковка разрешена.",
         en: "Parking is allowed in this place.",
-        uaTokens: ["У", "цьому", "місці", "паркування", "дозволено", "."],
+        uaTokens: ["У", "цьому", "місці", "паркуватися", "дозволено", "."],
         ruTokens: ["В", "этом", "месте", "парковка", "разрешена", "."],
         enTokens: ["Parking", "is", "allowed", "in", "this", "place", "."],
         extraUaTokens: ["заборонено", "сьогодні", "вночі"],
@@ -286,10 +286,10 @@ export const PL_A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
 
     [phraseKey("rutyna", "a2-43")]: {
         sk: "Mam stałą rutynę każdego dnia.",
-        ua: "Я маю сталу рутину щодня.",
+        ua: "У мене є стала рутина щодня.",
         ru: "У меня есть постоянная рутина каждый день.",
         en: "I have a fixed routine every day.",
-        uaTokens: ["Я", "маю", "сталу", "рутину", "щодня", "."],
+        uaTokens: ["У", "мене", "є", "стала", "рутина", "щодня", "."],
         ruTokens: ["У", "меня", "есть", "постоянная", "рутина", "каждый", "день", "."],
         enTokens: ["I", "have", "a", "fixed", "routine", "every", "day", "."],
         extraUaTokens: ["хаос", "інколи", "ранком"],
@@ -419,10 +419,10 @@ export const PL_A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
 
     [phraseKey("uprzejmy", "a2-44")]: {
         sk: "Był bardzo uprzejmy dla wszystkich gości.",
-        ua: "Він був дуже ввічливим до всіх гостей.",
+        ua: "Він був дуже ввічливим з усіма гостями.",
         ru: "Он был очень вежлив со всеми гостями.",
         en: "He was very polite to all the guests.",
-        uaTokens: ["Він", "був", "дуже", "ввічливим", "до", "всіх", "гостей", "."],
+        uaTokens: ["Він", "був", "дуже", "ввічливим", "з", "усіма", "гостями", "."],
         ruTokens: ["Он", "был", "очень", "вежлив", "со", "всеми", "гостями", "."],
         enTokens: ["He", "was", "very", "polite", "to", "all", "the", "guests", "."],
         extraUaTokens: ["грубим", "клієнтів", "учора"],
@@ -577,7 +577,7 @@ export const PL_A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
     },
 
     [phraseKey("możliwość", "a2-45")]: {
-        sk: "To jedna z możliwych możliwości.",
+        sk: "To jedna z możliwości.",
         ua: "Це один із можливих варіантів.",
         ru: "Это один из возможных вариантов.",
         en: "This is one of the possible options.",
@@ -605,10 +605,10 @@ export const PL_A2_BUILD_UA_SENTENCES_9: BuildUaSentenceDict = {
     [phraseKey("skutek", "a2-45")]: {
         sk: "To był skutek złej decyzji.",
         ua: "Це був наслідок поганого рішення.",
-        ru: "Это было последствие плохого решения.",
+        ru: "Это было следствием плохого решения.",
         en: "It was the consequence of a bad decision.",
         uaTokens: ["Це", "був", "наслідок", "поганого", "рішення", "."],
-        ruTokens: ["Это", "было", "последствие", "плохого", "решения", "."],
+        ruTokens: ["Это", "было", "следствием", "плохого", "решения", "."],
         enTokens: ["It", "was", "the", "consequence", "of", "a", "bad", "decision", "."],
         extraUaTokens: ["причина", "правильного", "вибору"],
         extraRuTokens: ["причина", "правильного", "выбора"],
