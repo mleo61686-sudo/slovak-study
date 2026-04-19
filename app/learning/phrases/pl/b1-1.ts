@@ -326,11 +326,11 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
     },
 
     [phraseKey("przepis", "b1-4")]: {
-        sk: "Musisz przestrzegać przepisu, żeby danie wyszło dobrze.",
-        ua: "Ти повинен дотримуватися рецепта, щоб страва вийшла добре.",
-        ru: "Ты должен следовать рецепту, чтобы блюдо получилось хорошо.",
-        en: "You must follow the recipe so that the dish turns out well.",
-        tokens: ["Musisz", "przestrzegać", "przepisu", ",", "żeby", "danie", "wyszło", "dobrze", "."]
+        sk: "Lekarz wystawił mi przepis na nowe lekarstwo.",
+        ua: "Лікар виписав мені рецепт на нові ліки.",
+        ru: "Врач выписал мне рецепт на новое лекарство.",
+        en: "The doctor issued me a prescription for a new medicine.",
+        tokens: ["Lekarz", "wystawił", "mi", "przepis", "na", "nowe", "lekarstwo", "."]
     },
 
     // =========================

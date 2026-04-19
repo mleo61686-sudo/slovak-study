@@ -72,7 +72,7 @@ export const PL_A2_PHRASES_5: Record<string, Phrase> = {
     [phraseKey("wytrwać", "a2-41")]: {
         sk: "Musisz wytrwać, nawet jeśli jest trudno.",
         ua: "Ти повинен витримати, навіть якщо важко.",
-        ru: "Ты должен выстоять, даже если трудно.",
+        ru: "Ты должен выдержать, даже если трудно.",
         en: "You have to persevere, even if it is hard.",
         tokens: ["Musisz", "wytrwać", ",", "nawet", "jeśli", "jest", "trudno", "."],
     },

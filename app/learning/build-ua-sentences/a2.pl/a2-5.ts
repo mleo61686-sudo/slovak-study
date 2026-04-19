@@ -416,18 +416,17 @@ export const PL_A2_BUILD_UA_SENTENCES_5: BuildUaSentenceDict = {
         extraRuTokens: ["рецепт", "лук", "суп"],
         extraEnTokens: ["recipe", "onion", "soup"],
     },
-
     [phraseKey("przepis", "a2-24")]: {
-        sk: "Ten przepis jest bardzo prosty.",
-        ua: "Цей рецепт дуже простий.",
-        ru: "Этот рецепт очень простой.",
-        en: "This recipe is very simple.",
-        uaTokens: ["Цей", "рецепт", "дуже", "простий", "."],
-        ruTokens: ["Этот", "рецепт", "очень", "простой", "."],
-        enTokens: ["This", "recipe", "is", "very", "simple", "."],
-        extraUaTokens: ["інгредієнти", "цибулю", "торт"],
-        extraRuTokens: ["ингредиенты", "лук", "пирог"],
-        extraEnTokens: ["ingredients", "onion", "cake"],
+        sk: "Ten przepis jest ważny przez miesiąc.",
+        ua: "Цей рецепт дійсний протягом місяця.",
+        ru: "Этот рецепт действителен в течение месяца.",
+        en: "This prescription is valid for a month.",
+        uaTokens: ["Цей", "рецепт", "дійсний", "протягом", "місяця", "."],
+        ruTokens: ["Этот", "рецепт", "действителен", "в", "течение", "месяца", "."],
+        enTokens: ["This", "prescription", "is", "valid", "for", "a", "month", "."],
+        extraUaTokens: ["лікар", "новий", "таблетки"],
+        extraRuTokens: ["врач", "новый", "таблетки"],
+        extraEnTokens: ["doctor", "new", "pills"],
     },
 
     [phraseKey("pokroić", "a2-24")]: {
