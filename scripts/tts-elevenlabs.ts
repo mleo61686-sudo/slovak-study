@@ -7,7 +7,13 @@ dotenv.config({ path: ".env.local", override: true });
 import fs from "node:fs";
 import pLimit from "p-limit";
 
-import { ttsToFile, VOICE1, VOICE2, VOICE_CS } from "./tts/elevenlabs-client";
+import {
+  ttsToFile,
+  VOICE1,
+  VOICE2,
+  VOICE_CS,
+  VOICE_PL,
+} from "./tts/elevenlabs-client";
 import { pickVoiceId, ttsText } from "./tts/voices";
 import { outPath } from "./tts/hashing";
 
@@ -37,8 +43,20 @@ import { A2_PHRASES } from "../app/learning/phrases/a2";
 import { B1_PHRASES } from "../app/learning/phrases/b1";
 import { B2_PHRASES } from "../app/learning/phrases/b2";
 
+import { PL_A0_SOURCE } from "../app/learning/levels/pl-a0";
+import { PL_A1_SOURCE } from "../app/learning/levels/pl-a1";
+import { PL_A2_SOURCE } from "../app/learning/levels/pl-a2";
+import { PL_B1_SOURCE } from "../app/learning/levels/pl-b1";
+import { PL_B2_SOURCE } from "../app/learning/levels/pl-b2";
+
+import { PL_A0_PHRASES } from "../app/learning/phrases/pl/a0";
+import { PL_A1_PHRASES } from "../app/learning/phrases/pl/a1";
+import { PL_A2_PHRASES } from "../app/learning/phrases/pl/a2";
+import { PL_B1_PHRASES } from "../app/learning/phrases/pl/b1";
+import { PL_B2_PHRASES } from "../app/learning/phrases/pl/b2";
+
 type Item = { kind: "word" | "phrase"; text: string };
-type CourseId = "sk" | "cs";
+type CourseId = "sk" | "cs" | "pl";
 
 function norm(s: string) {
   return s.trim().normalize("NFC");
@@ -54,7 +72,15 @@ function wordText(w: any) {
 
 function collectSlangItems(): Item[] {
   const items: Item[] = [];
-  const allSlang = COURSE === "cs" ? SLANG_CS : SLANG_SK;
+
+  // Поки що slang є тільки для sk/cs.
+  // Для pl нічого не додаємо, щоб не згенерувати не той контент.
+  const allSlang =
+    COURSE === "cs"
+      ? SLANG_CS
+      : COURSE === "sk"
+        ? SLANG_SK
+        : [];
 
   for (const s of allSlang as any[]) {
     const wt = wordText(s);
@@ -101,6 +127,7 @@ async function main() {
   console.log("VOICE1 =", VOICE1);
   console.log("VOICE2 =", VOICE2);
   console.log("VOICE_CS =", VOICE_CS);
+  console.log("VOICE_PL =", VOICE_PL);
   console.log("VOICE2 enabled? =", VOICE2 !== VOICE1);
   console.log("COURSE =", COURSE);
   console.log("ALPHABET_ONLY =", ALPHABET_ONLY);
@@ -132,38 +159,74 @@ async function main() {
     const b = BAND.trim().toLowerCase();
     let bandItems: Item[] = [];
 
-    if (b === "b2") {
-      bandItems = [
-        ...collectFromLessons(B2_ALL as any[]),
-        ...collectFromPhraseDict(B2_PHRASES),
-      ];
-    } else if (b === "b1") {
-      bandItems = [
-        ...collectFromLessons(B1_ALL as any[]),
-        ...collectFromPhraseDict(B1_PHRASES),
-      ];
-    } else if (b === "a2") {
-      bandItems = [
-        ...collectFromLessons(A2_ALL as any[]),
-        ...collectFromPhraseDict(A2_PHRASES),
-      ];
-    } else if (b === "a1") {
-      bandItems = [
-        ...collectFromLessons(A1_ALL as any[]),
-        ...collectFromPhraseDict(A1_PHRASES),
-      ];
-    } else if (b === "a0") {
-      bandItems = [
-        ...collectFromLessons(A0_REAL_SOURCE as any[]),
-        ...collectFromPhraseDict(A0_PHRASES),
-      ];
-    } else if (b === "slang") {
-      bandItems = collectSlangItems();
-    } else if (b === "all") {
-      bandItems = items;
+    if (COURSE === "pl") {
+      if (b === "b2") {
+        bandItems = [
+          ...collectFromLessons(PL_B2_SOURCE as any[]),
+          ...collectFromPhraseDict(PL_B2_PHRASES),
+        ];
+      } else if (b === "b1") {
+        bandItems = [
+          ...collectFromLessons(PL_B1_SOURCE as any[]),
+          ...collectFromPhraseDict(PL_B1_PHRASES),
+        ];
+      } else if (b === "a2") {
+        bandItems = [
+          ...collectFromLessons(PL_A2_SOURCE as any[]),
+          ...collectFromPhraseDict(PL_A2_PHRASES),
+        ];
+      } else if (b === "a1") {
+        bandItems = [
+          ...collectFromLessons(PL_A1_SOURCE as any[]),
+          ...collectFromPhraseDict(PL_A1_PHRASES),
+        ];
+      } else if (b === "a0") {
+        bandItems = [
+          ...collectFromLessons(PL_A0_SOURCE as any[]),
+          ...collectFromPhraseDict(PL_A0_PHRASES),
+        ];
+      } else if (b === "slang") {
+        bandItems = collectSlangItems();
+      } else if (b === "all") {
+        bandItems = items;
+      } else {
+        console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|b2|slang|all`);
+        bandItems = items;
+      }
     } else {
-      console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|b2|slang|all`);
-      bandItems = items;
+      if (b === "b2") {
+        bandItems = [
+          ...collectFromLessons(B2_ALL as any[]),
+          ...collectFromPhraseDict(B2_PHRASES),
+        ];
+      } else if (b === "b1") {
+        bandItems = [
+          ...collectFromLessons(B1_ALL as any[]),
+          ...collectFromPhraseDict(B1_PHRASES),
+        ];
+      } else if (b === "a2") {
+        bandItems = [
+          ...collectFromLessons(A2_ALL as any[]),
+          ...collectFromPhraseDict(A2_PHRASES),
+        ];
+      } else if (b === "a1") {
+        bandItems = [
+          ...collectFromLessons(A1_ALL as any[]),
+          ...collectFromPhraseDict(A1_PHRASES),
+        ];
+      } else if (b === "a0") {
+        bandItems = [
+          ...collectFromLessons(A0_REAL_SOURCE as any[]),
+          ...collectFromPhraseDict(A0_PHRASES),
+        ];
+      } else if (b === "slang") {
+        bandItems = collectSlangItems();
+      } else if (b === "all") {
+        bandItems = items;
+      } else {
+        console.log(`⚠️ Unknown --band="${BAND}". Use: a0|a1|a2|b1|b2|slang|all`);
+        bandItems = items;
+      }
     }
 
     const uniq = new Map<string, Item>();

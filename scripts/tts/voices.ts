@@ -1,7 +1,7 @@
-import { VOICE1, VOICE2, VOICE_CS } from "./elevenlabs-client";
+import { VOICE1, VOICE2, VOICE_CS, VOICE_PL } from "./elevenlabs-client";
 
 export type ItemKind = "word" | "phrase";
-export type CourseId = "sk" | "cs";
+export type CourseId = "sk" | "cs" | "pl";
 
 function norm(s: string) {
   return s.trim().normalize("NFC");
@@ -208,9 +208,6 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ["misia", "mísiá"],
   ["experiment", "experímént"],
   ["kyselina", "kýselina"],
-
-
-
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {
@@ -231,6 +228,11 @@ export function pickVoiceId(course: CourseId, kind: ItemKind, text: string) {
   // увесь чеський курс іде окремим голосом
   if (course === "cs") {
     return VOICE_CS;
+  }
+
+  // увесь польський курс іде окремим голосом
+  if (course === "pl") {
+    return VOICE_PL;
   }
 
   // стара словацька логіка лишається як була

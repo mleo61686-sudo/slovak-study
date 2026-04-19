@@ -3,7 +3,7 @@ import path from "node:path";
 import fs from "node:fs";
 
 export type ItemKind = "word" | "phrase";
-export type CourseId = "sk" | "cs";
+export type CourseId = "sk" | "cs" | "pl";
 
 function sha1(input: string) {
   return crypto.createHash("sha1").update(input, "utf8").digest("hex");

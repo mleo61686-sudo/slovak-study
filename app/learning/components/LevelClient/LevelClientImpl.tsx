@@ -238,11 +238,11 @@ function getNextLevelId(levelId: string) {
 }
 
 const EXERCISES: ExerciseDef[] = [
-  { kind: "chooseTranslation", title: "chooseTranslation", mode: "perWord" },
-  { kind: "chooseSlovak", title: "chooseSlovak", mode: "perWord" },
-  { kind: "writeWord", title: "writeWord", mode: "perWord" },
-  { kind: "audioQuiz", title: "audioQuiz", mode: "perWord" },
-  { kind: "matchColumns", title: "matchColumns", mode: "perWord" },
+//  { kind: "chooseTranslation", title: "chooseTranslation", mode: "perWord" },
+//  { kind: "chooseSlovak", title: "chooseSlovak", mode: "perWord" },
+//  { kind: "writeWord", title: "writeWord", mode: "perWord" },
+//  { kind: "audioQuiz", title: "audioQuiz", mode: "perWord" },
+//  { kind: "matchColumns", title: "matchColumns", mode: "perWord" },
   { kind: "buildSentence", title: "buildSentence", mode: "perWord" },
   { kind: "buildUaSentence", title: "buildUaSentence", mode: "perWord" },
 ];

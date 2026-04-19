@@ -524,7 +524,7 @@ export const PL_B1_SOURCE: Lesson[] = [
       { sk: "cytat", ua: "цитата", ru: "цитата", en: "quote", img: "/words_b1/citát.jpg" },
       { sk: "notatka", ua: "примітка", ru: "заметка", en: "note", img: "/words_b1/poznámka.jpg" },
       { sk: "skrót", ua: "скорочення", ru: "сокращение", en: "abbreviation", img: "/words_b1_cz/zkratka.jpg" },
-      { sk: "ortografia", ua: "правопис", ru: "правописание", en: "spelling / orthography", img: "/words_b1/pravopis.jpg" },
+      { sk: "ortografia", ua: "правопис", ru: "правописание", en: "spelling", img: "/words_b1/pravopis.jpg" },
       { sk: "połączyć słowa", ua: "поєднати слова", ru: "соединить слова", en: "to connect words", img: "/words_b1_cz/spojit slova.jpg" },
       { sk: "wymówić", ua: "вимовити", ru: "произнести", en: "to pronounce", img: "/words_b1_cz/vyslovit.jpg" },
     ],

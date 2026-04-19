@@ -19,8 +19,20 @@ import { CS_A1_PHRASES as A1_PHRASES_CS } from "../../../app/learning/phrases/cs
 import { CS_A2_PHRASES as A2_PHRASES_CS } from "../../../app/learning/phrases/cs/a2";
 import { CS_B1_PHRASES as B1_PHRASES_CS } from "../../../app/learning/phrases/cs/b1";
 
+import { PL_A0_SOURCE as A0_PL } from "../../../app/learning/levels/pl-a0";
+import { PL_A1_SOURCE as A1_PL } from "../../../app/learning/levels/pl-a1";
+import { PL_A2_SOURCE as A2_PL } from "../../../app/learning/levels/pl-a2";
+import { PL_B1_SOURCE as B1_PL } from "../../../app/learning/levels/pl-b1";
+import { PL_B2_SOURCE as B2_PL } from "../../../app/learning/levels/pl-b2";
+
+import { PL_A0_PHRASES as A0_PHRASES_PL } from "../../../app/learning/phrases/pl/a0";
+import { PL_A1_PHRASES as A1_PHRASES_PL } from "../../../app/learning/phrases/pl/a1";
+import { PL_A2_PHRASES as A2_PHRASES_PL } from "../../../app/learning/phrases/pl/a2";
+import { PL_B1_PHRASES as B1_PHRASES_PL } from "../../../app/learning/phrases/pl/b1";
+import { PL_B2_PHRASES as B2_PHRASES_PL } from "../../../app/learning/phrases/pl/b2";
+
 export type Item = { kind: "word" | "phrase"; text: string };
-export type CourseId = "sk" | "cs";
+export type CourseId = "sk" | "cs" | "pl";
 
 type WordLike = {
   sk?: string;
@@ -46,6 +58,25 @@ function getCourseSources(course: CourseId) {
         A1_PHRASES_CS,
         A2_PHRASES_CS,
         B1_PHRASES_CS,
+      ],
+    };
+  }
+
+  if (course === "pl") {
+    return {
+      a0Lessons: A0_PL as any[],
+      allLessons: [
+        ...(A1_PL as any[]),
+        ...(A2_PL as any[]),
+        ...(B1_PL as any[]),
+        ...(B2_PL as any[]),
+      ],
+      phraseSources: [
+        A0_PHRASES_PL,
+        A1_PHRASES_PL,
+        A2_PHRASES_PL,
+        B1_PHRASES_PL,
+        B2_PHRASES_PL,
       ],
     };
   }
