@@ -291,7 +291,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         ua: "Я хочу приміряти цю куртку.",
         ru: "Я хочу примерить эту куртку.",
         en: "I want to try this jacket on.",
-        tokens: ["Chcę", "spróbować", "tę", "kurtkę", "."],
+        tokens: ["Chcę", "przymierzyć", "tę", "kurtkę", "."]
     },
 
     [phraseKey("wymienić", "a1-4")]: {
@@ -358,7 +358,7 @@ export const PL_A1_PHRASES_1: Record<string, Phrase> = {
         ua: "Який гарнір ви хочете?",
         ru: "Какой гарнир вы хотите?",
         en: "Which side dish do you want?",
-        tokens: ["Jaki", "załącznik", "chcecie", "?"],
+        tokens: ["Jaki", "dodatek", "chcecie", "?"],
     },
 
     [phraseKey("deser", "a1-5")]: {

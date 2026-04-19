@@ -524,7 +524,7 @@ export const PL_A0_PHRASES_1: Record<string, Phrase> = {
     ua: "Автобус уже під'їжджає.",
     ru: "Автобус уже подъезжает.",
     en: "The bus is already arriving.",
-    tokens: ["Autobus", "już", "jedzie", "."],
+    tokens: ["Autobus", "już", "nadjeżdża", "."],
   },
 
   [phraseKey("pociąg", "a0-7")]: {

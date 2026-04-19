@@ -224,7 +224,7 @@ export const PL_B1_PHRASES_4: Record<string, Phrase> = {
         ua: "Не кожне скорочення зрозуміле для кожного читача.",
         ru: "Не каждое сокращение понятно каждому читателю.",
         en: "Not every abbreviation is understandable to every reader.",
-        tokens: ["Nie", "wszystkie", "skróty", "są", "zrozumiałe", "dla", "każdego", "odbiorcy", "."],
+        tokens: ["Nie", "każdy", "skrót", "jest", "zrozumiały", "dla", "każdego", "odbiorcy", "."],
     },
 
     [phraseKey("ortografia", "b1-33")]: {

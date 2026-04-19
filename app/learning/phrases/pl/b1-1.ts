@@ -330,7 +330,7 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
         ua: "Ти повинен дотримуватися рецепта, щоб страва вийшла добре.",
         ru: "Ты должен следовать рецепту, чтобы блюдо получилось хорошо.",
         en: "You must follow the recipe so that the dish turns out well.",
-        tokens: ["Musisz", "przestrzegać", "przepisu", "lekarza", ",", "żeby", "szybko", "wyzdrowieć", "."],
+        tokens: ["Musisz", "przestrzegać", "przepisu", ",", "żeby", "danie", "wyszło", "dobrze", "."]
     },
 
     // =========================

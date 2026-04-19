@@ -141,7 +141,7 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
         ua: "Лікар виписав мені рецепт на ліки, які я маю приймати протягом тижня.",
         ru: "Врач выписал мне рецепт на лекарство, которое я должен принимать в течение недели.",
         en: "The doctor gave me a prescription for medicine that I have to take for a week.",
-        tokens: ["Mam", "starą", "receptę", "na", "ciasto", "od", "mojej", "babci", "."],
+        tokens: ["Lekarz", "wystawił", "mi", "receptę", "na", "lek", ",", "który", "mam", "brać", "przez", "tydzień", "."],
     },
 
     [phraseKey("przygotować jedzenie", "b2-12")]: {
@@ -449,7 +449,7 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
         ua: "Абрикос часто використовують для приготування джемів.",
         ru: "Абрикос часто используют для приготовления джемов.",
         en: "Apricot is often used to make jams.",
-        tokens: ["Morele", "jest", "często", "używana", "do", "przygotowywania", "dżemów", "."],
+        tokens: ["Morela", "jest", "często", "używana", "do", "przygotowywania", "dżemów", "."],
     },
 
     [phraseKey("śliwka", "b2-16")]: {
@@ -473,7 +473,7 @@ export const PL_B2_PHRASES_2: Record<string, Phrase> = {
         ua: "Малина має трохи кислий, але приємний смак.",
         ru: "Малина имеет слегка кислый, но приятный вкус.",
         en: "Raspberry has a slightly sour but pleasant taste.",
-        tokens: ["Malina", "ma", "lekko", "kwaśny", "ale", "przyjemny", "smak", "."],
+        tokens: ["Malina", "ma", "lekko", "kwaśny", ",", "ale", "przyjemny", "smak", "."],
     },
 
     [phraseKey("ananas", "b2-16")]: {

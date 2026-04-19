@@ -93,7 +93,7 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
         ua: "Друк сьогодні має менше значення, ніж інтернет, але все ще має свою аудиторію.",
         ru: "Печатные СМИ сегодня имеют меньшее значение, чем интернет, но всё ещё имеют свою аудиторию.",
         en: "Print media is less important today than the internet, but it still has its audience.",
-        tokens: ["Druk", "ma", "dziś", "mniejsze", "znaczenie", "niż", "internet", ",", "ale", "wciąż", "ma", "swoich", "odbiorców", "."],
+        tokens: ["Druk", "ma", "dziś", "mniejsze", "znaczenie", "niż", "internet", ",", "ale", "wciąż", "ma", "swoją", "publiczność", "."],
     },
 
     [phraseKey("gazeta", "b1-22")]: {
@@ -232,7 +232,7 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
         ua: "Варто ділитися важливою інформацією, але лише з надійними людьми.",
         ru: "Стоит делиться важной информацией, но только с надёжными людьми.",
         en: "It is worth sharing important information, but only with trusted people.",
-        tokens: ["Warto", "dzielić", "się", "ważnymi", "informacjami", ",", "ale", "tylko", "z", "zaufanych", "źródeł", "."],
+        tokens: ["Warto", "dzielić", "się", "ważnymi", "informacjami", ",", "ale", "tylko", "z", "zaufanymi", "osobami", "."],
     },
 
     [phraseKey("wiadomość", "b1-23")]: {
@@ -358,7 +358,7 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
         ua: "Я відчув полегшення, коли почув, що все буде добре.",
         ru: "Я почувствовал облегчение, когда услышал, что всё будет хорошо.",
         en: "I felt relief when I heard that everything would be fine.",
-        tokens: ["Poczułem", "ulgę", ",", "gdy", "usłyszałem", ",", "że", "wszystko", "będzie", "dobrze", "."],
+        tokens: ["Poczułem", "ulgę", ",", "gdy", "usłyszałem", "że", "wszystko", "będzie", "dobrze", "."],
     },
 
     [phraseKey("niepewność", "b1-25")]: {
@@ -449,7 +449,7 @@ export const PL_B1_PHRASES_3: Record<string, Phrase> = {
         ua: "Упередження часто призводить до проблем.",
         ru: "Предрассудок часто приводит к проблемам.",
         en: "Prejudice often leads to problems.",
-        tokens: ["Uprzedzenia", "często", "prowadzą", "do", "problemów", "."]
+        tokens: ["Uprzedzenie", "często", "prowadzi", "do", "problemów", "."]
     },
 
     [phraseKey("równość", "b1-26")]: {

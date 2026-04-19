@@ -638,7 +638,7 @@ export const PL_A2_PHRASES_3: Record<string, Phrase> = {
         ua: "Я не хочу завантажувати файл з невідомого сайту.",
         ru: "Я не хочу скачивать файл с неизвестного сайта.",
         en: "I do not want to download a file from an unknown site.",
-        tokens: ["Nie", "chcę", "pobrać", "pliku", "z", "nieznanej", "strony", "."],
+        tokens: ["Nie", "chcę", "pobierać", "plików", "z", "nieznanych", "stron", "."]
     },
 
     [phraseKey("wirus", "a2-28")]: {

@@ -307,7 +307,7 @@ export const PL_A2_PHRASES_1: Record<string, Phrase> = {
         ua: "Я подаюся на посаду в офісі.",
         ru: "Я подаюсь на должность в офисе.",
         en: "I am applying for a job position in an office.",
-        tokens: ["Aplikuję", "na", "stanowisko", "pracy", "w", "biurze", "."],
+        tokens: ["Aplikuję", "na", "stanowisko", "w", "biurze", "."]
     },
 
     [phraseKey("odpowiedzialność", "a2-4")]: {

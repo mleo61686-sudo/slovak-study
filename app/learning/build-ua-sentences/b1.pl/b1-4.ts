@@ -411,7 +411,7 @@ export const PL_B1_BUILD_UA_SENTENCES_4: BuildUaSentenceDict = {
     // LESSON 19 — Математика
     // =========================
     [phraseKey("równanie", "b1-19")]: {
-        sk: "To równanie wygląda trudno, ale da się je rozwiązać krok po kroku.",
+        sk: "To równanie wydaje się trudne, ale da się je rozwiązać krok po kroku.",
         ua: "Це рівняння виглядає складним, але його можна розв’язати крок за кроком.",
         ru: "Это уравнение выглядит сложным, но его можно решить шаг за шагом.",
         en: "This equation looks difficult, but it can be solved step by step.",

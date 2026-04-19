@@ -331,7 +331,7 @@ export const PL_B2_PHRASES_3: Record<string, Phrase> = {
         ua: "Цифрова технологія змінила спосіб, у який ми навчаємося, працюємо та спілкуємося.",
         ru: "Цифровая технология изменила то, как мы учимся, работаем и общаемся.",
         en: "Digital technology has changed the way we learn, work, and communicate.",
-        tokens: ["Technologia", "cyfrowa", "zmieniła", "sposób", ",", "w", "jaki", "uczymy", "się", ",", "pracujemy", "i", "komunikujemy", "."],
+        tokens: ["Technologia", "cyfrowa", "zmieniła", "sposób", ",", "w", "jaki", "uczymy", "się", ",", "pracujemy", "i", "komunikujemy", "się", "."],
     },
 
     // =========================
