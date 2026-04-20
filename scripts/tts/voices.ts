@@ -212,6 +212,7 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ['sweter', 'swéter'],
   ['park', 'párk'],
   ['dane', 'dáné'],
+  ['syrop', 'sýrop'],
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {
