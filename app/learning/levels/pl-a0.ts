@@ -11,7 +11,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "chleb", ua: "хліб", ru: "хлеб", en: "bread", img: "/words/bread.jpg" },
       { sk: "szkoła", ua: "школа", ru: "школа", en: "school", img: "/words/school.jpg" },
       { sk: "miasto", ua: "місто", ru: "город", en: "city", img: "/words/city.jpg" },
-      { sk: "czas", ua: "час", ru: "время", en: "time", img: "/words/čas.jpg" },
+      { sk: "czas", ua: "час", ru: "время", en: "time", img: "/words_pl/czas.jpg" },
       { sk: "dzień", ua: "день", ru: "день", en: "day", img: "/words/day.jpg" },
       { sk: "dobry", ua: "добрий", ru: "хороший", en: "good", img: "/words/good.jpg" },
       { sk: "pieniądze", ua: "гроші", ru: "деньги", en: "money", img: "/words_a0_cz/peníze.jpg" },

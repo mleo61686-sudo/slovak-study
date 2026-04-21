@@ -13,7 +13,7 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
         tokens: ["Mój", "czas", "pracy", "zaczyna", "się", "o", "ósmej", ",", "dlatego", "wstaję", "bardzo", "wcześnie", "."],
     },
 
-    [phraseKey("rozpoczęcie", "b1-1")]: {
+    [phraseKey("rozpoczęcie pracy", "b1-1")]: {
         sk: "Rozpoczęcie pracy zostało przesunięte, ponieważ firma nie była gotowa.",
         ua: "Початок роботи перенесли, оскільки компанія не була готова.",
         ru: "Начало работы перенесли, так как компания не была готова.",
@@ -178,7 +178,7 @@ export const PL_B1_PHRASES_1: Record<string, Phrase> = {
         en: "My carry-on luggage was too big, so I had to check it in.",
         tokens: ["Mój", "bagaż", "podręczny", "był", "za", "duży", ",", "dlatego", "musiałem", "go", "nadać", "."],
     },
-    [phraseKey("rozpoczęcie", "b1-3")]: {
+    [phraseKey("rozpoczęcie boardingu", "b1-3")]: {
         sk: "Rozpoczęcie boardingu zostało opóźnione, ponieważ samolot przyleciał późno.",
         ua: "Посадку затримали, оскільки літак прибув пізно.",
         ru: "Посадку задержали, так как самолёт прибыл поздно.",

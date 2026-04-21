@@ -18,7 +18,7 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         extraEnTokens: ["salary", "office", "contract"],
     },
 
-    [phraseKey("rozpoczęcie", "b1-1")]: {
+    [phraseKey("rozpoczęcie pracy", "b1-1")]: {
         sk: "Rozpoczęcie pracy zostało przesunięte, ponieważ firma nie była gotowa.",
         ua: "Початок роботи перенесли, оскільки компанія не була готова.",
         ru: "Начало работы перенесли, так как компания не была готова.",
@@ -286,7 +286,7 @@ export const PL_B1_BUILD_UA_SENTENCES_1: BuildUaSentenceDict = {
         uaAltAnswers: [["Моя", "ручна", "поклажа", "була", "занадто", "великою", ",", "тому", "мені", "довелося", "здати", "її", "."]],
     },
 
-    [phraseKey("rozpoczęcie", "b1-3")]: {
+    [phraseKey("rozpoczęcie boardingu", "b1-3")]: {
         sk: "Rozpoczęcie boardingu zostało opóźnione, ponieważ samolot przyleciał późno.",
         ua: "Посадку затримали, оскільки літак прибув пізно.",
         ru: "Посадку задержали, так как самолёт прибыл поздно.",

@@ -452,7 +452,7 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
         tokens: ["Nasz", "pokój", "ma", "piękny", "widok", "na", "morze", "."],
     },
 
-    [phraseKey("klucz/karta", "a2-36")]: {
+    [phraseKey("klucz-karta", "a2-36")]: {
         sk: "Zgubiłem klucz i potrzebuję nowej karty.",
         ua: "Я загубив ключ і мені потрібна нова картка.",
         ru: "Я потерял ключ, и мне нужна новая карта.",
@@ -511,7 +511,7 @@ export const PL_A2_PHRASES_4: Record<string, Phrase> = {
         tokens: ["Obsługa", "w", "tej", "restauracji", "jest", "bardzo", "miła", "."],
     },
 
-    [phraseKey("kelner/kelnerka", "a2-37")]: {
+    [phraseKey("kelner-kelnerka", "a2-37")]: {
         sk: "Kelnerka przyniosła nam menu bardzo szybko.",
         ua: "Офіціантка принесла нам меню дуже швидко.",
         ru: "Официантка принесла нам меню очень быстро.",

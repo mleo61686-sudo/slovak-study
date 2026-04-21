@@ -57,7 +57,7 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
         extraEnTokens: ["hotel", "balcony", "card"],
     },
 
-    [phraseKey("klucz/karta", "a2-36")]: {
+    [phraseKey("klucz-karta", "a2-36")]: {
         sk: "Zgubiłem klucz i potrzebuję nowej karty.",
         ua: "Я загубив ключ і мені потрібна нова картка.",
         ru: "Я потерял ключ, и мне нужна новая карта.",
@@ -151,7 +151,7 @@ export const PL_A2_BUILD_UA_SENTENCES_8: BuildUaSentenceDict = {
         extraEnTokens: ["waitress", "menu", "tip"],
     },
 
-    [phraseKey("kelner/kelnerka", "a2-37")]: {
+    [phraseKey("kelner-kelnerka", "a2-37")]: {
         sk: "Kelnerka przyniosła nam menu bardzo szybko.",
         ua: "Офіціантка принесла нам меню дуже швидко.",
         ru: "Официантка принесла нам меню очень быстро.",
