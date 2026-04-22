@@ -78,7 +78,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "warzywa", ua: "овочі", ru: "овощи", en: "vegetables", img: "/words_pl/warzywa.jpg" },
       { sk: "woda", ua: "вода", ru: "вода", en: "water", img: "/words/water.jpg" },
       { sk: "kawa", ua: "кава", ru: "кофе", en: "coffee", img: "/words_pl/kawa.jpg" },
-      { sk: "herbata", ua: "чай", ru: "чай", en: "tea", img: "/words/čaj.jpg" },
+      { sk: "herbata", ua: "чай", ru: "чай", en: "tea", img: "/words_pl1/herbata.jpg" },
     ],
   },
   {
