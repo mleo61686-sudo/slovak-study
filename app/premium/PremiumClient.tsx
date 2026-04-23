@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Lang = "ua" | "ru" | "en";
-type Currency = "eur" | "usd" | "uah";
+type Currency = "eur" | "usd" | "uah" | "pln" | "czk";
 type Interval = "month" | "year";
 
 type SessionUserLike = {
@@ -57,7 +57,7 @@ type FeatureRow = {
   premium: string;
 };
 
-const YEARLY_DISPLAY_PRICE: Record<Currency, string> = {
+const YEARLY_DISPLAY_PRICE: Partial<Record<Currency, string>> = {
   eur: "€79",
   usd: "$89",
   uah: "₴3490",
@@ -67,6 +67,8 @@ const MONTHLY_DISPLAY_PRICE: Record<Currency, string> = {
   eur: "€7.99",
   usd: "$8.99",
   uah: "₴349",
+  pln: "34 zł",
+  czk: "199 Kč",
 };
 
 const T: Record<Lang, PremiumTranslations> = {
@@ -93,7 +95,7 @@ const T: Record<Lang, PremiumTranslations> = {
     planHint: "Можна скасувати будь-коли.",
 
     priceNote:
-      "Обери валюту: EUR / USD / UAH • Оплата через Stripe • можна скасувати будь-коли",
+      "Обери валюту: EUR / USD / UAH / PLN / CZK • Оплата через Stripe • можна скасувати будь-коли",
 
     buy: (currencyLabel: string, price: string, interval: Interval) =>
       interval === "year"
@@ -115,7 +117,8 @@ const T: Record<Lang, PremiumTranslations> = {
     premiumBetter: "краще",
     yearlyHint: "Річний план — найкращий вибір, якщо вчишся серйозно.",
     monthlyHint: "Можна перейти на річний план у будь-який момент.",
-    currencyHint: "Вгорі можна обрати EUR/USD/UAH та місячний/річний план.",
+    currencyHint:
+      "Вгорі можна обрати EUR/USD/UAH/PLN/CZK. Для PLN і CZK доступний лише місячний план.",
   },
   ru: {
     topTitle: "Premium ⭐",
@@ -140,7 +143,7 @@ const T: Record<Lang, PremiumTranslations> = {
     planHint: "Можно отменить в любой момент.",
 
     priceNote:
-      "Выбери валюту: EUR / USD / UAH • Оплата через Stripe • можно отменить в любой момент",
+      "Выбери валюту: EUR / USD / UAH / PLN / CZK • Оплата через Stripe • можно отменить в любой момент",
 
     buy: (currencyLabel: string, price: string, interval: Interval) =>
       interval === "year"
@@ -162,7 +165,8 @@ const T: Record<Lang, PremiumTranslations> = {
     premiumBetter: "лучше",
     yearlyHint: "Годовой план — лучший выбор, если учишься всерьёз.",
     monthlyHint: "Можно перейти на годовой план в любое время.",
-    currencyHint: "Можно выбрать EUR/USD/UAH и месячный/годовой план вверху.",
+    currencyHint:
+      "Вверху можно выбрать EUR/USD/UAH/PLN/CZK. Для PLN и CZK доступен только месячный план.",
   },
   en: {
     topTitle: "Premium ⭐",
@@ -187,7 +191,7 @@ const T: Record<Lang, PremiumTranslations> = {
     planHint: "You can cancel anytime.",
 
     priceNote:
-      "Choose currency: EUR / USD / UAH • Payment via Stripe • cancel anytime",
+      "Choose currency: EUR / USD / UAH / PLN / CZK • Payment via Stripe • cancel anytime",
 
     buy: (currencyLabel: string, price: string, interval: Interval) =>
       interval === "year"
@@ -209,7 +213,8 @@ const T: Record<Lang, PremiumTranslations> = {
     premiumBetter: "better",
     yearlyHint: "The yearly plan is the best choice if you’re learning seriously.",
     monthlyHint: "You can switch to the yearly plan at any time.",
-    currencyHint: "You can choose EUR/USD/UAH and monthly/yearly above.",
+    currencyHint:
+      "You can choose EUR/USD/UAH/PLN/CZK above. PLN and CZK are available only for the monthly plan.",
   },
 };
 
@@ -217,6 +222,8 @@ const CURRENCY_LABEL: Record<Currency, string> = {
   eur: "EUR",
   usd: "USD",
   uah: "UAH",
+  pln: "PLN",
+  czk: "CZK",
 };
 
 const FEATURES: readonly FeatureRow[] = [
@@ -296,6 +303,13 @@ export default function PremiumClient() {
     return interval === "year" ? YEARLY_DISPLAY_PRICE : MONTHLY_DISPLAY_PRICE;
   }, [interval]);
 
+  const visibleCurrencies = useMemo<Currency[]>(() => {
+    if (interval === "year") {
+      return ["eur", "usd", "uah"];
+    }
+    return ["eur", "usd", "uah", "pln", "czk"];
+  }, [interval]);
+
   async function handleCheckout(currency: Currency) {
     setLoading(currency);
     try {
@@ -305,7 +319,10 @@ export default function PremiumClient() {
         body: JSON.stringify({ currency, interval }),
       });
 
-      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+      };
 
       if (!res.ok || !data?.url) {
         console.error("Checkout error:", { status: res.status, data });
@@ -323,7 +340,10 @@ export default function PremiumClient() {
     setLoading("portal");
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
-      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+      };
 
       if (!res.ok || !data?.url) {
         console.error("Portal error:", { status: res.status, data });
@@ -420,35 +440,24 @@ export default function PremiumClient() {
               </div>
             ) : !isPremium ? (
               <>
-                <button
-                  onClick={() => handleCheckout("eur")}
-                  disabled={!!loading}
-                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
-                >
-                  {loading === "eur"
-                    ? t.opening
-                    : t.buy(CURRENCY_LABEL.eur, displayPrice.eur, interval)}
-                </button>
+                {visibleCurrencies.map((currency) => {
+                  const price = displayPrice[currency];
 
-                <button
-                  onClick={() => handleCheckout("usd")}
-                  disabled={!!loading}
-                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
-                >
-                  {loading === "usd"
-                    ? t.opening
-                    : t.buy(CURRENCY_LABEL.usd, displayPrice.usd, interval)}
-                </button>
+                  if (!price) return null;
 
-                <button
-                  onClick={() => handleCheckout("uah")}
-                  disabled={!!loading}
-                  className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
-                >
-                  {loading === "uah"
-                    ? t.opening
-                    : t.buy(CURRENCY_LABEL.uah, displayPrice.uah, interval)}
-                </button>
+                  return (
+                    <button
+                      key={currency}
+                      onClick={() => handleCheckout(currency)}
+                      disabled={!!loading}
+                      className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
+                    >
+                      {loading === currency
+                        ? t.opening
+                        : t.buy(CURRENCY_LABEL[currency], price, interval)}
+                    </button>
+                  );
+                })}
               </>
             ) : (
               <button
@@ -519,7 +528,7 @@ export default function PremiumClient() {
 
           <div className="flex flex-col items-center gap-3 pt-2">
             <button
-              onClick={() => handleCheckout("eur")}
+              onClick={() => handleCheckout(interval === "year" ? "eur" : "eur")}
               disabled={!!loading}
               className="inline-flex h-11 items-center justify-center rounded-2xl bg-black px-8 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
             >

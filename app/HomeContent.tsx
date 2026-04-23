@@ -87,7 +87,7 @@ const t: Record<Lang, HomeTranslations> = {
       "📊 Статистика, серії та рекорди",
       "🔊 Озвучка слів (Premium)",
     ],
-    premiumPriceNote: "7.99€ / місяць • можна скасувати будь-коли",
+    premiumPriceNote: "EUR / USD / UAH / PLN / CZK • місячний і річний план • можна скасувати будь-коли",
     premiumCta: "Спробувати Premium →",
     trainerLocked: "Тренажер 🔒",
 
@@ -193,7 +193,7 @@ const t: Record<Lang, HomeTranslations> = {
       "📊 Статистика, серии и рекорды",
       "🔊 Озвучка слов (Premium)",
     ],
-    premiumPriceNote: "7.99€ / месяц • можно отменить в любой момент",
+    premiumPriceNote: "EUR / USD / UAH / PLN / CZK • месячный и годовой план • можно отменить в любой момент",
     premiumCta: "Попробовать Premium →",
     trainerLocked: "Тренажёр 🔒",
 
@@ -300,7 +300,7 @@ const t: Record<Lang, HomeTranslations> = {
       "📊 Statistics, streaks, and records",
       "🔊 Word audio (Premium)",
     ],
-    premiumPriceNote: "€7.99 / month • cancel anytime",
+    premiumPriceNote: "EUR / USD / UAH / PLN / CZK • monthly and yearly plans • cancel anytime",
     premiumCta: "Try Premium →",
     trainerLocked: "Trainer 🔒",
 

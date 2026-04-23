@@ -154,6 +154,14 @@ export default function UserMenu({
         <div className="border-t border-slate-200" />
 
         <Link
+          href="/account"
+          className="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-100"
+          onClick={() => onNavigate?.()}
+        >
+          {t.profile}
+        </Link>
+
+        <Link
           href="/learn"
           className="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-100"
           onClick={() => onNavigate?.()}
@@ -211,6 +219,14 @@ export default function UserMenu({
           </div>
 
           <div className="border-t" />
+
+          <Link
+            href="/account"
+            className="block px-4 py-2 text-sm hover:bg-slate-50"
+            onClick={() => setOpen(false)}
+          >
+            {t.profile}
+          </Link>
 
           <Link
             href="/learn"

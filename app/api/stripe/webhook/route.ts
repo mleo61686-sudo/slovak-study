@@ -8,12 +8,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2026-01-28.clover",
 });
 
-function addOneMonth(d: Date) {
-  const x = new Date(d);
-  x.setMonth(x.getMonth() + 1);
-  return x;
-}
-
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = (await headers()).get("stripe-signature");
@@ -31,11 +25,9 @@ export async function POST(req: Request) {
     return new Response("Invalid signature", { status: 400 });
   }
 
-  // ✅ 1) checkout завершено: включаємо premium + зберігаємо customer/subscription
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    // ✅ FIX: нормалізуємо email (інакше findUnique може не знайти користувача)
     const rawEmail =
       session.customer_details?.email || session.customer_email || null;
     const email = rawEmail ? rawEmail.trim().toLowerCase() : null;
@@ -46,22 +38,33 @@ export async function POST(req: Request) {
     const stripeSubscriptionId =
       typeof session.subscription === "string" ? session.subscription : null;
 
+    let premiumUntil: Date | null = null;
+
+    if (stripeSubscriptionId) {
+      try {
+        const subscription = await stripe.subscriptions.retrieve(
+          stripeSubscriptionId
+        );
+
+        const periodEndSec = (subscription as any).current_period_end as
+          | number
+          | undefined;
+
+        premiumUntil = periodEndSec ? new Date(periodEndSec * 1000) : null;
+      } catch (err) {
+        console.error("Failed to retrieve subscription in checkout.session.completed:", err);
+      }
+    }
+
     if (email) {
       const user = await prisma.user.findUnique({ where: { email } });
 
       if (user) {
-        const base =
-          user.premiumUntil && user.premiumUntil > new Date()
-            ? user.premiumUntil
-            : new Date();
-
         await prisma.user.update({
           where: { email },
           data: {
             isPremium: true,
-            premiumUntil: addOneMonth(base),
-
-            // ✅ важливо для Customer Portal
+            premiumUntil: premiumUntil ?? user.premiumUntil ?? new Date(),
             stripeCustomerId: stripeCustomerId ?? user.stripeCustomerId ?? null,
             stripeSubscriptionId:
               stripeSubscriptionId ?? user.stripeSubscriptionId ?? null,
@@ -71,7 +74,6 @@ export async function POST(req: Request) {
     }
   }
 
-  // ✅ 2) підписка оновилась (cancel_at_period_end / period_end / status)
   if (event.type === "customer.subscription.updated") {
     const sub = event.data.object as Stripe.Subscription;
 
@@ -80,11 +82,9 @@ export async function POST(req: Request) {
 
     const stripeSubscriptionId = sub.id;
 
-    // ✅ TS types можуть не містити current_period_end, тому беремо через any
     const periodEndSec = (sub as any).current_period_end as number | undefined;
     const periodEnd = periodEndSec ? new Date(periodEndSec * 1000) : null;
 
-    // premium активний якщо subscription active/trialing
     const active = sub.status === "active" || sub.status === "trialing";
 
     if (stripeCustomerId) {
@@ -98,7 +98,7 @@ export async function POST(req: Request) {
           where: { id: user.id },
           data: {
             stripeSubscriptionId,
-            isPremium: active ? true : false,
+            isPremium: active,
             premiumUntil: active ? periodEnd : null,
           },
         });
@@ -106,7 +106,6 @@ export async function POST(req: Request) {
     }
   }
 
-  // ✅ 3) підписка видалена (повне скасування / закінчилась)
   if (event.type === "customer.subscription.deleted") {
     const sub = event.data.object as Stripe.Subscription;
 

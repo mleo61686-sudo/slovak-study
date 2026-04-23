@@ -1,4 +1,3 @@
-// app/api/stripe/portal/route.ts
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { auth } from "@/auth";
@@ -36,7 +35,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const origin = req.headers.get("origin") ?? "http://localhost:3000";
+    const origin = req.headers.get("origin") ?? process.env.APP_URL;
+    if (!origin) {
+      return NextResponse.json(
+        { ok: false, error: "APP_URL_NOT_CONFIGURED" },
+        { status: 500 }
+      );
+    }
 
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,

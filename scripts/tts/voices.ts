@@ -233,6 +233,7 @@ export const TTS_OVERRIDES = new Map<string, string>([
   ['thriller', 'tríler'],
   ['horror', 'ho ŕor'],
   ['pilot', 'pílot'],
+  ['vlak', 'vlák'],
 ]);
 
 export function ttsText(kind: ItemKind, text: string) {
