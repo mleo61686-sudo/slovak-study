@@ -1,8 +1,9 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
+
 
 type Lang = "ua" | "ru" | "en";
 
@@ -28,6 +29,12 @@ type TDict = {
   premium: string;
   free: string;
 
+  editName: string;
+  saveName: string;
+  savingName: string;
+  nameHint: string;
+  nameSuccess: string;
+
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
@@ -43,6 +50,7 @@ type TDict = {
   opening: string;
   saving: string;
   success: string;
+  profileBadge: string;
 
   errMissing: string;
   errMismatch: string;
@@ -50,6 +58,11 @@ type TDict = {
   errWrongCurrent: string;
   errSameAsCurrent: string;
   errGeneric: string;
+
+  errNameRequired: string;
+  errNameTooShort: string;
+  errNameTooLong: string;
+  errNameGeneric: string;
 };
 
 const T: Record<Lang, TDict> = {
@@ -69,6 +82,12 @@ const T: Record<Lang, TDict> = {
     premium: "Premium",
     free: "Free",
 
+    editName: "Змінити ім’я",
+    saveName: "Зберегти ім’я →",
+    savingName: "Зберігаю ім’я…",
+    nameHint: "Ім’я має містити від 2 до 40 символів.",
+    nameSuccess: "Ім’я успішно оновлено.",
+
     currentPassword: "Поточний пароль",
     newPassword: "Новий пароль",
     confirmPassword: "Повтори новий пароль",
@@ -85,6 +104,7 @@ const T: Record<Lang, TDict> = {
     opening: "Відкриваю…",
     saving: "Зберігаю…",
     success: "Пароль успішно змінено.",
+    profileBadge: "Профіль Flunio",
 
     errMissing: "Заповни всі поля.",
     errMismatch: "Нові паролі не співпадають.",
@@ -92,6 +112,11 @@ const T: Record<Lang, TDict> = {
     errWrongCurrent: "Поточний пароль невірний.",
     errSameAsCurrent: "Новий пароль має відрізнятися від поточного.",
     errGeneric: "Не вдалося змінити пароль.",
+
+    errNameRequired: "Введи ім’я.",
+    errNameTooShort: "Ім’я занадто коротке.",
+    errNameTooLong: "Ім’я занадто довге.",
+    errNameGeneric: "Не вдалося оновити ім’я.",
   },
   ru: {
     title: "Профиль",
@@ -109,6 +134,12 @@ const T: Record<Lang, TDict> = {
     premium: "Premium",
     free: "Free",
 
+    editName: "Изменить имя",
+    saveName: "Сохранить имя →",
+    savingName: "Сохраняю имя…",
+    nameHint: "Имя должно содержать от 2 до 40 символов.",
+    nameSuccess: "Имя успешно обновлено.",
+
     currentPassword: "Текущий пароль",
     newPassword: "Новый пароль",
     confirmPassword: "Повтори новый пароль",
@@ -125,6 +156,7 @@ const T: Record<Lang, TDict> = {
     opening: "Открываю…",
     saving: "Сохраняю…",
     success: "Пароль успешно изменён.",
+    profileBadge: "Профиль Flunio",
 
     errMissing: "Заполни все поля.",
     errMismatch: "Новые пароли не совпадают.",
@@ -132,6 +164,11 @@ const T: Record<Lang, TDict> = {
     errWrongCurrent: "Текущий пароль неверный.",
     errSameAsCurrent: "Новый пароль должен отличаться от текущего.",
     errGeneric: "Не удалось сменить пароль.",
+
+    errNameRequired: "Введите имя.",
+    errNameTooShort: "Имя слишком короткое.",
+    errNameTooLong: "Имя слишком длинное.",
+    errNameGeneric: "Не удалось обновить имя.",
   },
   en: {
     title: "Account",
@@ -149,6 +186,12 @@ const T: Record<Lang, TDict> = {
     premium: "Premium",
     free: "Free",
 
+    editName: "Edit name",
+    saveName: "Save name →",
+    savingName: "Saving name…",
+    nameHint: "Your name should contain 2 to 40 characters.",
+    nameSuccess: "Name updated successfully.",
+
     currentPassword: "Current password",
     newPassword: "New password",
     confirmPassword: "Repeat new password",
@@ -165,6 +208,7 @@ const T: Record<Lang, TDict> = {
     opening: "Opening…",
     saving: "Saving…",
     success: "Password changed successfully.",
+    profileBadge: "Flunio Profile",
 
     errMissing: "Please fill in all fields.",
     errMismatch: "New passwords do not match.",
@@ -172,6 +216,11 @@ const T: Record<Lang, TDict> = {
     errWrongCurrent: "Current password is incorrect.",
     errSameAsCurrent: "New password must be different from the current password.",
     errGeneric: "Could not change password.",
+
+    errNameRequired: "Please enter your name.",
+    errNameTooShort: "Name is too short.",
+    errNameTooLong: "Name is too long.",
+    errNameGeneric: "Could not update name.",
   },
 };
 
@@ -196,10 +245,12 @@ function PasswordField({
   label,
   value,
   onChange,
+  autoComplete,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  autoComplete?: string;
 }) {
   return (
     <label className="grid gap-1.5">
@@ -208,6 +259,8 @@ function PasswordField({
         type="password"
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        autoComplete={autoComplete}
+        minLength={8}
         className="min-h-11 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-0 transition focus:border-slate-900"
       />
     </label>
@@ -216,13 +269,37 @@ function PasswordField({
 
 export default function AccountClient() {
   const { lang } = useLanguage();
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
 
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
 
   const user = session?.user as SessionUserLike | undefined;
   const isPremium = !!user?.isPremium;
+
+  const initialName = user?.name?.trim() || "";
+  const displayEmail = user?.email?.trim() || "—";
+
+  const [nameValue, setNameValue] = useState(initialName);
+  const [savingName, setSavingName] = useState(false);
+  const [nameError, setNameError] = useState("");
+  const [nameSuccess, setNameSuccess] = useState("");
+  const normalizedInitialName = initialName.trim();
+  const normalizedNameValue = nameValue.trim();
+
+  const isNameUnchanged = normalizedNameValue === normalizedInitialName;
+  const isNameInvalid = normalizedNameValue.length < 2 || normalizedNameValue.length > 40;
+  const canSaveName = !savingName && !isNameUnchanged && !isNameInvalid;
+
+  const displayName = useMemo(() => {
+    const trimmed = nameValue.trim();
+    return trimmed || t.userFallback;
+  }, [nameValue, t.userFallback]);
+
+  const avatarLetter = useMemo(() => {
+    const first = displayName.charAt(0);
+    return first ? first.toUpperCase() : "U";
+  }, [displayName]);
 
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -233,6 +310,11 @@ export default function AccountClient() {
   const [savingPassword, setSavingPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
+  const canSubmitPassword =
+    !savingPassword &&
+    !!currentPassword &&
+    !!newPassword &&
+    !!confirmPassword;
 
   async function handleManageSubscription() {
     if (!isPremium) {
@@ -272,6 +354,88 @@ export default function AccountClient() {
       await signOut({ callbackUrl: "/login" });
     } finally {
       setLoggingOut(false);
+    }
+  }
+
+  async function handleSaveName(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    setNameError("");
+    setNameSuccess("");
+
+    const trimmed = nameValue.trim();
+
+    if (!trimmed) {
+      setNameError(t.errNameRequired);
+      return;
+    }
+
+    if (trimmed.length < 2) {
+      setNameError(t.errNameTooShort);
+      return;
+    }
+
+    if (trimmed.length > 40) {
+      setNameError(t.errNameTooLong);
+      return;
+    }
+
+    if (trimmed === normalizedInitialName) {
+      return;
+    }
+
+    try {
+      setSavingName(true);
+
+      const res = await fetch("/api/account/update-name", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: trimmed,
+        }),
+      });
+
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        code?: string;
+        name?: string;
+      };
+
+      if (!res.ok || !data?.ok) {
+        switch (data?.code) {
+          case "NAME_REQUIRED":
+            setNameError(t.errNameRequired);
+            break;
+          case "NAME_TOO_SHORT":
+            setNameError(t.errNameTooShort);
+            break;
+          case "NAME_TOO_LONG":
+            setNameError(t.errNameTooLong);
+            break;
+          default:
+            setNameError(t.errNameGeneric);
+            break;
+        }
+        return;
+      }
+
+      const nextName = data.name?.trim() || trimmed;
+      setNameValue(nextName);
+      setNameSuccess(t.nameSuccess);
+
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          name: nextName,
+        },
+      });
+    } catch {
+      setNameError(t.errNameGeneric);
+    } finally {
+      setSavingName(false);
     }
   }
 
@@ -358,11 +522,41 @@ export default function AccountClient() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {t.title}
-          </h1>
+      <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-100 px-8 py-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-900 text-3xl font-bold text-white shadow-sm">
+                {avatarLetter}
+              </div>
+
+              <div className="space-y-1">
+                <div className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                  {t.profileBadge}
+                </div>
+                <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                  {displayName}
+                </h1>
+                <p className="break-all text-sm text-slate-600 sm:text-base">
+                  {displayEmail}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex">
+              <div
+                className={`inline-flex rounded-full px-4 py-2 text-sm font-semibold ${isPremium
+                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                  : "bg-slate-100 text-slate-700 ring-1 ring-slate-200"
+                  }`}
+              >
+                {isPremium ? t.premium : t.free}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-8 py-6">
           <p className="text-slate-600">{t.subtitle}</p>
         </div>
       </section>
@@ -373,16 +567,66 @@ export default function AccountClient() {
             {t.accountCard}
           </h2>
 
-          <div className="mt-4 grid gap-3">
-            <InfoRow
-              label={t.name}
-              value={user?.name?.trim() || t.userFallback}
-            />
-            <InfoRow label={t.email} value={user?.email?.trim() || "—"} />
+          <div className="mt-4 grid gap-4">
+            <InfoRow label={t.email} value={displayEmail} />
             <InfoRow
               label={t.status}
               value={isPremium ? t.premium : t.free}
             />
+
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <form onSubmit={handleSaveName} className="grid gap-3">
+                <div className="space-y-1">
+                  <div className="text-sm font-semibold text-slate-900">
+                    {t.editName}
+                  </div>
+                  <div className="text-sm text-slate-600">{t.nameHint}</div>
+                </div>
+
+                <label className="grid gap-1.5">
+                  <span className="text-sm font-medium text-slate-700">
+                    {t.name}
+                  </span>
+                  <input
+                    type="text"
+                    value={nameValue}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setNameValue(next);
+
+                      if (nameError) setNameError("");
+
+                      if (nameSuccess && next.trim() !== normalizedInitialName) {
+                        setNameSuccess("");
+                      }
+                    }}
+                    minLength={2}
+                    maxLength={40}
+                    className="min-h-11 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-0 transition focus:border-slate-900"
+                  />
+                </label>
+
+                {nameError ? (
+                  <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {nameError}
+                  </div>
+                ) : null}
+
+                {nameSuccess ? (
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    {nameSuccess}
+                  </div>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={!canSaveName}
+                  className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {savingName ? t.savingName : t.saveName}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
@@ -400,7 +644,7 @@ export default function AccountClient() {
             <button
               onClick={handleManageSubscription}
               disabled={loadingPortal}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-black disabled:opacity-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-black disabled:opacity-50"
               type="button"
             >
               {loadingPortal
@@ -426,19 +670,34 @@ export default function AccountClient() {
               <PasswordField
                 label={t.currentPassword}
                 value={currentPassword}
-                onChange={setCurrentPassword}
+                onChange={(v) => {
+                  setCurrentPassword(v);
+                  if (passwordError) setPasswordError("");
+                  if (passwordSuccess) setPasswordSuccess("");
+                }}
+                autoComplete="current-password"
               />
 
               <PasswordField
                 label={t.newPassword}
                 value={newPassword}
-                onChange={setNewPassword}
+                onChange={(v) => {
+                  setNewPassword(v);
+                  if (passwordError) setPasswordError("");
+                  if (passwordSuccess) setPasswordSuccess("");
+                }}
+                autoComplete="new-password"
               />
 
               <PasswordField
                 label={t.confirmPassword}
                 value={confirmPassword}
-                onChange={setConfirmPassword}
+                onChange={(v) => {
+                  setConfirmPassword(v);
+                  if (passwordError) setPasswordError("");
+                  if (passwordSuccess) setPasswordSuccess("");
+                }}
+                autoComplete="new-password"
               />
 
               {passwordError ? (
@@ -455,8 +714,8 @@ export default function AccountClient() {
 
               <button
                 type="submit"
-                disabled={savingPassword}
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 disabled:opacity-50"
+                disabled={!canSubmitPassword}
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {savingPassword ? t.saving : t.changePassword}
               </button>
@@ -473,7 +732,7 @@ export default function AccountClient() {
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 hover:bg-red-100 disabled:opacity-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
               type="button"
             >
               {loggingOut ? t.opening : t.logout}

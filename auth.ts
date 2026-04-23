@@ -47,16 +47,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.name = user.name ?? null;
+      }
+
+      if (trigger === "update" && session?.user?.name) {
+        token.name = session.user.name;
       }
 
       const email = typeof token.email === "string" ? token.email : null;
       token.isAdmin = isAdminEmail(email);
 
-      // якщо нема id — гість
       if (!token.id) {
         token.isPremium = false;
         token.premiumUntil = null;
@@ -65,9 +69,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       const now = Date.now();
       const last = (token.premiumCheckedAt as number | undefined) ?? 0;
-      const REFRESH_EVERY_MS = 15 * 60 * 1000; // 15 хв
+      const REFRESH_EVERY_MS = 15 * 60 * 1000;
 
-      // ✅ не ліземо в БД кожного разу
       if (last && now - last < REFRESH_EVERY_MS) return token;
 
       try {
@@ -80,7 +83,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.premiumUntil = dbUser?.premiumUntil ?? null;
         token.premiumCheckedAt = now;
       } catch {
-        // ✅ якщо БД недоступна — не валимо сесію
         token.isPremium = Boolean(token.isPremium);
         token.premiumUntil = (token.premiumUntil as any) ?? null;
       }
@@ -91,6 +93,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.name = typeof token.name === "string" ? token.name : null;
+        session.user.email = typeof token.email === "string" ? token.email : "";
         session.user.isPremium = Boolean(token.isPremium);
         session.user.premiumUntil = token.premiumUntil as Date | null;
         session.user.isAdmin = Boolean(token.isAdmin);
