@@ -29,10 +29,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
 
-    // чеська SEO (НОВЕ)
+    // чеська SEO
     `${baseUrl}/learn-czech`,
     `${baseUrl}/vyvchennia-cheskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-cheskoi-movy-online`,
+
+    // польська SEO
+    `${baseUrl}/learn-polish`,
+    `${baseUrl}/vyvchennia-polskoi-movy-online`,
+    `${baseUrl}/ru/vyvchennia-polskoi-movy-online`,
 
     // RU основні
     `${baseUrl}/ru/learning`,

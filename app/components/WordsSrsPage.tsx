@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import SpeakButton from "@/app/components/SpeakButton";
 import type { Word } from "@/app/learning/data";
 import type { CourseId } from "@/app/learning/courses/registry";
@@ -51,6 +51,7 @@ const I18N: Record<
   Lang,
   {
     title: string;
+    subtitle: string;
     today: string;
     back: string;
     add30: string;
@@ -59,12 +60,16 @@ const I18N: Record<
     learned: string;
     due: string;
     left: string;
+    progress: string;
     showAnswer: string;
+    tapToReveal: string;
     noDueTitle: string;
     noDueText: string;
     sessionDone: string;
+    sessionDoneText: string;
     nextSession: string;
     skip: string;
+    skipHint: string;
     forgot: string;
     hard: string;
     good: string;
@@ -75,27 +80,34 @@ const I18N: Record<
     nextTomorrow: string;
     nextIn: (days: number) => string;
     nextSoon: string;
+    almostDone: (left: number) => string;
     needLoginTitle: string;
     needLoginText: string;
     login: string;
   }
 > = {
   ua: {
-    title: "Слова (SRS)",
+    title: "Повторення слів",
+    subtitle: "Flunio показує слова тоді, коли їх найкраще повторити.",
     today: "На сьогодні",
     back: "Назад",
-    add30: "Додати 30",
+    add30: "Додати 30 нових слів",
     total: "Всього слів",
     mastered: "Вивчив",
     learned: "Вчив",
     due: "На сьогодні",
     left: "Залишилось",
+    progress: "Прогрес сеансу",
     showAnswer: "Показати відповідь",
-    noDueTitle: "🎉 Немає слів для повторення сьогодні",
-    noDueText: "Натисни “Додати 30”.",
-    sessionDone: "✅ Сеанс завершено",
+    tapToReveal: "Натисни на картку, щоб побачити переклад",
+    noDueTitle: "🎉 Слів для повторення поки немає",
+    noDueText:
+      "Додай перші 30 слів, і Flunio почне показувати їх для повторення у правильний час.",
+    sessionDone: "🎉 Сеанс завершено",
+    sessionDoneText: "Круто! Ти закріпив слова на сьогодні.",
     nextSession: "Взяти наступні",
     skip: "Пропустити",
+    skipHint: "показати пізніше",
     forgot: "Забув",
     hard: "Важко",
     good: "Добре",
@@ -103,30 +115,37 @@ const I18N: Record<
     dailyLimit: "Ліміт нових слів на сьогодні вичерпано 🙂",
     noNew: "Немає нових слів 🙂",
     repeatAgainThisSession: "🔁 Повторимо ще раз у цьому сеансі",
-    nextTomorrow: "⏳ Наступне повторення — завтра",
-    nextIn: (days: number) => `📆 Наступне повторення через ${days} днів`,
+    nextTomorrow: "✅ Добре! Наступне повторення — завтра",
+    nextIn: (days: number) => `🚀 Чудово! Наступне повторення через ${days} днів`,
     nextSoon: `⏳ Наступне повторення через ${FORGOT_MINUTES} хв`,
+    almostDone: (left: number) => `🔥 Майже готово — залишилось ${left}`,
     needLoginTitle: "Потрібен вхід",
     needLoginText:
-      "SRS-прогрес зберігається по акаунту. Увійди, щоб продовжити.",
+      "Прогрес повторення слів зберігається по акаунту. Увійди, щоб продовжити.",
     login: "Увійти →",
   },
   ru: {
-    title: "Слова (SRS)",
+    title: "Повторение слов",
+    subtitle: "Flunio показывает слова тогда, когда их лучше всего повторить.",
     today: "На сегодня",
     back: "Назад",
-    add30: "Добавить 30",
+    add30: "Добавить 30 новых слов",
     total: "Всего слов",
     learned: "Учил",
     mastered: "Выучил",
     due: "На сегодня",
     left: "Осталось",
+    progress: "Прогресс сеанса",
     showAnswer: "Показать ответ",
-    noDueTitle: "🎉 Сегодня нет слов для повторения",
-    noDueText: "Нажми “Добавить 30”.",
-    sessionDone: "✅ Сеанс завершён",
+    tapToReveal: "Нажми на карточку, чтобы увидеть перевод",
+    noDueTitle: "🎉 Слов для повторения пока нет",
+    noDueText:
+      "Добавь первые 30 слов, и Flunio начнёт показывать их для повторения в нужное время.",
+    sessionDone: "🎉 Сеанс завершён",
+    sessionDoneText: "Отлично! Ты закрепил слова на сегодня.",
     nextSession: "Взять следующие",
     skip: "Пропустить",
+    skipHint: "показать позже",
     forgot: "Забыл",
     hard: "Сложно",
     good: "Хорошо",
@@ -134,30 +153,37 @@ const I18N: Record<
     dailyLimit: "Лимит новых слов на сегодня исчерпан 🙂",
     noNew: "Нет новых слов 🙂",
     repeatAgainThisSession: "🔁 Повторим ещё раз в этом сеансе",
-    nextTomorrow: "⏳ Следующее повторение — завтра",
-    nextIn: (days: number) => `📆 Следующее повторение через ${days} дней`,
+    nextTomorrow: "✅ Хорошо! Следующее повторение — завтра",
+    nextIn: (days: number) => `🚀 Отлично! Следующее повторение через ${days} дней`,
     nextSoon: `⏳ Следующее повторение через ${FORGOT_MINUTES} мин`,
+    almostDone: (left: number) => `🔥 Почти готово — осталось ${left}`,
     needLoginTitle: "Нужен вход",
     needLoginText:
-      "SRS-прогресс сохраняется по аккаунту. Войдите, чтобы продолжить.",
+      "Прогресс повторения слов сохраняется по аккаунту. Войдите, чтобы продолжить.",
     login: "Войти →",
   },
   en: {
-    title: "Words (SRS)",
-    today: "For today",
+    title: "Word review",
+    subtitle: "Flunio shows words when it is the best time to review them.",
+    today: "Today",
     back: "Back",
-    add30: "Add 30",
+    add30: "Add 30 new words",
     total: "Total words",
     learned: "Learned",
     mastered: "Mastered",
     due: "Due today",
-    left: "Left",
+    left: "Remaining",
+    progress: "Session progress",
     showAnswer: "Show answer",
-    noDueTitle: "🎉 No words to review today",
-    noDueText: 'Press "Add 30".',
-    sessionDone: "✅ Session completed",
+    tapToReveal: "Tap the card to reveal the translation",
+    noDueTitle: "🎉 No words to review yet",
+    noDueText:
+      "Add your first 30 words, and Flunio will start showing them at the right time for review.",
+    sessionDone: "🎉 Session completed",
+    sessionDoneText: "Great job! You reviewed your words for today.",
     nextSession: "Take next batch",
     skip: "Skip",
+    skipHint: "show later",
     forgot: "Forgot",
     hard: "Hard",
     good: "Good",
@@ -165,12 +191,13 @@ const I18N: Record<
     dailyLimit: "Daily limit of new words reached 🙂",
     noNew: "No new words 🙂",
     repeatAgainThisSession: "🔁 We’ll repeat it again in this session",
-    nextTomorrow: "⏳ Next review — tomorrow",
-    nextIn: (days: number) => `📆 Next review in ${days} days`,
+    nextTomorrow: "✅ Good! Next review — tomorrow",
+    nextIn: (days: number) => `🚀 Great! Next review in ${days} days`,
     nextSoon: `⏳ Next review in ${FORGOT_MINUTES} min`,
+    almostDone: (left: number) => `🔥 Almost done — ${left} left`,
     needLoginTitle: "Login required",
     needLoginText:
-      "SRS progress is saved per account. Log in to continue.",
+      "Word review progress is saved per account. Log in to continue.",
     login: "Log in →",
   },
 };
@@ -292,7 +319,9 @@ function loadDb(userId: string, courseId: CourseId): Record<string, SrsState> {
           localStorage.removeItem(legacyDailySessionKey(userId));
         }
       }
-    } catch { }
+    } catch {
+      // legacy migration is best-effort only
+    }
   }
 
   try {
@@ -431,6 +460,7 @@ export default function WordsSrsPage({
 
   const [lastInfo, setLastInfo] = useState<string>("");
   const [isGrading, setIsGrading] = useState(false);
+  const [sessionSize, setSessionSize] = useState(0);
 
   const [stats, setStats] = useState<Stats>({
     total: allWords.length,
@@ -489,6 +519,7 @@ export default function WordsSrsPage({
     setShow(false);
     setLastInfo("");
     setIsGrading(false);
+    setSessionSize(limited.length);
 
     setStats(computeStats(updated, allWords.length));
   }
@@ -611,6 +642,10 @@ export default function WordsSrsPage({
   }
 
   const left = current ? queue.length : 0;
+  const reviewed = sessionSize > 0 ? Math.max(0, sessionSize - left) : 0;
+  const progressPercent =
+    sessionSize > 0 ? Math.min(100, Math.round((reviewed / sessionSize) * 100)) : 0;
+
   const translation = current ? getTranslation(current, lang) : "";
   const term = current ? getTerm(current) : "";
   const ipa = current && "ipa" in current ? current.ipa : undefined;
@@ -618,13 +653,17 @@ export default function WordsSrsPage({
   if (needLogin) {
     return (
       <main className="mx-auto max-w-3xl p-4">
-        <div className="rounded-2xl border bg-white p-6">
-          <div className="text-lg font-semibold">{t.needLoginTitle}</div>
-          <div className="mt-2 text-sm text-slate-600">{t.needLoginText}</div>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="text-lg font-semibold text-slate-900">
+            {t.needLoginTitle}
+          </div>
+          <div className="mt-2 text-sm leading-6 text-slate-600">
+            {t.needLoginText}
+          </div>
           <div className="mt-4">
             <Link
               href="/login"
-              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm text-white hover:opacity-90"
+              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
             >
               {t.login}
             </Link>
@@ -636,138 +675,251 @@ export default function WordsSrsPage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-6 p-4">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold">🧠 {t.title}</h1>
-          <div className="text-sm text-gray-600">
-            {t.today}: <b>{Math.min(stats.due, DAILY_REVIEW_LIMIT)}</b> · {t.left}:{" "}
-            <b>{left}</b>
+      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+              🧠 {t.title}
+            </h1>
+            <p className="max-w-xl text-sm leading-6 text-slate-600">
+              {t.subtitle}
+            </p>
+            <div className="text-sm text-slate-600">
+              {t.today}: <b>{Math.min(stats.due, DAILY_REVIEW_LIMIT)}</b> ·{" "}
+              {t.left}: <b>{left}</b>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => addNewWordsRandom(30)}
+              className="rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black active:scale-[0.98]"
+              type="button"
+            >
+              ＋ {t.add30}
+            </button>
+
+            <Link
+              href={backHref}
+              className="rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
+            >
+              ← {t.back}
+            </Link>
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => addNewWordsRandom(30)}
-            className="rounded-xl bg-slate-900 px-3 py-2 text-sm text-white hover:opacity-90"
-          >
-            ＋ {t.add30}
-          </button>
+        <div className="mt-5 space-y-2">
+          <div className="flex items-center justify-between text-xs font-medium text-slate-500">
+            <span>{t.progress}</span>
+            <span>
+              {reviewed}/{sessionSize || 0}
+            </span>
+          </div>
 
-          <Link
-            href={backHref}
-            className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
-          >
-            ← {t.back}
-          </Link>
-        </div>
-      </div>
+          <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+            <div
+              className="h-full rounded-full bg-slate-900 transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
 
-      <div className="grid gap-2 sm:grid-cols-4">
-        <div className="rounded-xl border bg-white p-3">
-          <div className="text-xs text-gray-500">{t.total}</div>
-          <div className="text-xl font-semibold">{stats.total}</div>
+          {current && left <= 5 && left > 0 ? (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+              {t.almostDone(left)}
+            </div>
+          ) : null}
         </div>
-        <div className="rounded-xl border bg-white p-3">
-          <div className="text-xs text-gray-500">{t.learned}</div>
-          <div className="text-xl font-semibold">{stats.learned}</div>
+      </section>
+
+      <section className="grid gap-2 sm:grid-cols-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="text-xs text-slate-500">{t.total}</div>
+          <div className="text-xl font-semibold text-slate-900">
+            {stats.total}
+          </div>
         </div>
-        <div className="rounded-xl border bg-white p-3">
-          <div className="text-xs text-gray-500">{t.mastered}</div>
-          <div className="text-xl font-semibold">{stats.mastered}</div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="text-xs text-slate-500">{t.learned}</div>
+          <div className="text-xl font-semibold text-slate-900">
+            {stats.learned}
+          </div>
         </div>
-        <div className="rounded-xl border bg-white p-3">
-          <div className="text-xs text-gray-500">{t.due}</div>
-          <div className="text-xl font-semibold">
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="text-xs text-slate-500">{t.mastered}</div>
+          <div className="text-xl font-semibold text-slate-900">
+            {stats.mastered}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="text-xs text-slate-500">{t.due}</div>
+          <div className="text-xl font-semibold text-slate-900">
             {Math.min(stats.due, DAILY_REVIEW_LIMIT)}
           </div>
         </div>
-      </div>
+      </section>
 
       {!current ? (
         Math.min(stats.due, DAILY_REVIEW_LIMIT) === 0 ? (
-          <div className="rounded-2xl border bg-white p-6">
-            <div className="text-lg">{t.noDueTitle}</div>
-            <div className="mt-2 text-sm text-gray-600">{t.noDueText}</div>
-          </div>
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+            <div className="text-xl font-semibold text-slate-900">
+              {t.noDueTitle}
+            </div>
+            <div className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+              {t.noDueText}
+            </div>
+
+            <div className="mt-5">
+              <button
+                onClick={() => addNewWordsRandom(30)}
+                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black active:scale-[0.98]"
+                type="button"
+              >
+                ＋ {t.add30}
+              </button>
+            </div>
+          </section>
         ) : (
-          <div className="rounded-2xl border bg-white p-6">
-            <div className="text-lg">{t.sessionDone}</div>
-            <div className="mt-3">
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+            <div className="text-2xl font-bold text-slate-900">
+              {t.sessionDone}
+            </div>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {t.sessionDoneText}
+            </p>
+
+            <div className="mt-5">
               <button
                 onClick={() => startNewSession()}
-                className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black active:scale-[0.98]"
+                type="button"
               >
                 {t.nextSession}
               </button>
             </div>
-          </div>
+          </section>
         )
       ) : (
-        <div className="space-y-4 rounded-2xl border bg-white p-6">
-          <div className="text-sm text-gray-500">
-            {t.left}: {queue.length}
+        <section className="space-y-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-3 text-sm text-slate-500">
+            <span>
+              {t.left}: <b>{queue.length}</b>
+            </span>
+            <span>
+              {reviewed}/{sessionSize || 0}
+            </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="text-3xl font-bold">{term}</div>
-            <SpeakButton text={term} />
-            {show && ipa && <span className="text-sm text-slate-500">{ipa}</span>}
-          </div>
+          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="text-4xl font-bold tracking-tight text-slate-900">
+                {term}
+              </div>
 
-          {lastInfo && <div className="text-sm text-slate-600">{lastInfo}</div>}
+              <SpeakButton text={term} />
+
+              {show && ipa ? (
+                <span className="rounded-full bg-white px-3 py-1 text-sm text-slate-500 ring-1 ring-slate-200">
+                  {ipa}
+                </span>
+              ) : null}
+            </div>
+
+            {lastInfo ? (
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700">
+                {lastInfo}
+              </div>
+            ) : null}
+
+            {!show ? (
+              <div
+                onClick={() => setShow(true)}
+                className="mt-6 cursor-pointer rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center transition hover:border-slate-400 hover:bg-slate-50 active:scale-[0.99]"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") setShow(true);
+                }}
+              >
+                <div className="text-base font-semibold text-slate-900">
+                  {t.showAnswer}
+                </div>
+                <div className="mt-1 text-sm text-slate-500">
+                  {t.tapToReveal}
+                </div>
+              </div>
+            ) : (
+              <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+                <div className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                  {t.showAnswer}
+                </div>
+                <div className="mt-1 text-2xl font-bold text-emerald-800">
+                  {translation}
+                </div>
+              </div>
+            )}
+          </div>
 
           {!show ? (
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setShow(true)}
-                className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black active:scale-[0.98]"
+                type="button"
               >
                 {t.showAnswer}
               </button>
+
               <button
                 onClick={skip}
-                className="rounded-xl border px-4 py-2 hover:bg-slate-50"
+                className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
+                type="button"
               >
-                {t.skip}
+                {t.skip} · {t.skipHint}
               </button>
             </div>
           ) : (
-            <>
-              <div className="text-xl text-green-700">{translation}</div>
+            <div className="grid gap-2 sm:grid-cols-4">
+              <button
+                disabled={isGrading}
+                onClick={() => grade(0)}
+                className="rounded-2xl bg-red-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
+                type="button"
+              >
+                {t.forgot}
+              </button>
 
-              <div className="flex flex-wrap gap-2">
-                <button
-                  disabled={isGrading}
-                  onClick={() => grade(0)}
-                  className="rounded-xl bg-red-600 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {t.forgot}
-                </button>
-                <button
-                  disabled={isGrading}
-                  onClick={() => grade(1)}
-                  className="rounded-xl bg-orange-500 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {t.hard}
-                </button>
-                <button
-                  disabled={isGrading}
-                  onClick={() => grade(2)}
-                  className="rounded-xl bg-green-600 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {t.good}
-                </button>
-                <button
-                  disabled={isGrading}
-                  onClick={() => grade(3)}
-                  className="rounded-xl bg-emerald-700 px-4 py-2 text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {t.easy}
-                </button>
-              </div>
-            </>
+              <button
+                disabled={isGrading}
+                onClick={() => grade(1)}
+                className="rounded-2xl bg-orange-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
+                type="button"
+              >
+                {t.hard}
+              </button>
+
+              <button
+                disabled={isGrading}
+                onClick={() => grade(2)}
+                className="rounded-2xl bg-green-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-green-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
+                type="button"
+              >
+                {t.good}
+              </button>
+
+              <button
+                disabled={isGrading}
+                onClick={() => grade(3)}
+                className="rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
+                type="button"
+              >
+                {t.easy}
+              </button>
+            </div>
           )}
-        </div>
+        </section>
       )}
     </main>
   );
