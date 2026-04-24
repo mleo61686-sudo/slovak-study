@@ -53,6 +53,34 @@ const T: Record<
   },
 };
 
+function AvatarCircle({
+  avatarUrl,
+  initial,
+  size = "sm",
+}: {
+  avatarUrl: string;
+  initial: string;
+  size?: "sm" | "md";
+}) {
+  const sizeClass = size === "md" ? "h-10 w-10" : "h-9 w-9";
+
+  return (
+    <div
+      className={`flex ${sizeClass} items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white`}
+    >
+      {avatarUrl ? (
+        <img
+          src={avatarUrl}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        initial
+      )}
+    </div>
+  );
+}
+
 export default function UserMenu({
   name,
   email,
@@ -68,9 +96,57 @@ export default function UserMenu({
 
   const [open, setOpen] = useState(false);
   const [loadingPortal, setLoadingPortal] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
 
   const initial = (name || email || "?").charAt(0).toUpperCase();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadAvatar() {
+      try {
+        const res = await fetch("/api/account/update-avatar", {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          avatarUrl?: string | null;
+        };
+
+        if (!cancelled && res.ok && data?.ok && data.avatarUrl) {
+          setAvatarUrl(data.avatarUrl);
+        }
+      } catch {
+        // avatar is optional
+      }
+    }
+
+    loadAvatar();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    function handleAvatarUpdated(event: Event) {
+      const customEvent = event as CustomEvent<{ avatarUrl?: string }>;
+      const nextAvatarUrl = customEvent.detail?.avatarUrl;
+
+      if (typeof nextAvatarUrl === "string") {
+        setAvatarUrl(nextAvatarUrl);
+      }
+    }
+
+    window.addEventListener("flunio:avatarUpdated", handleAvatarUpdated);
+
+    return () => {
+      window.removeEventListener("flunio:avatarUpdated", handleAvatarUpdated);
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -144,11 +220,15 @@ export default function UserMenu({
   if (mobile) {
     return (
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-        <div className="px-4 py-3">
-          <div className="font-medium text-slate-900">
-            {name || t.userFallback}
+        <div className="flex items-center gap-3 px-4 py-3">
+          <AvatarCircle avatarUrl={avatarUrl} initial={initial} size="md" />
+
+          <div className="min-w-0">
+            <div className="truncate font-medium text-slate-900">
+              {name || t.userFallback}
+            </div>
+            <div className="break-all text-sm text-slate-500">{email}</div>
           </div>
-          <div className="break-all text-sm text-slate-500">{email}</div>
         </div>
 
         <div className="border-t border-slate-200" />
@@ -201,11 +281,11 @@ export default function UserMenu({
     <div className="relative ml-auto" ref={menuRef}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white"
+        className="rounded-full transition hover:scale-[1.03]"
         type="button"
         aria-label="User menu"
       >
-        {initial}
+        <AvatarCircle avatarUrl={avatarUrl} initial={initial} />
       </button>
 
       {open && (
@@ -213,9 +293,15 @@ export default function UserMenu({
           className="absolute right-0 top-full mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
-          <div className="px-4 py-3 text-sm">
-            <div className="font-medium">{name || t.userFallback}</div>
-            <div className="truncate text-slate-500">{email}</div>
+          <div className="flex items-center gap-3 px-4 py-3 text-sm">
+            <AvatarCircle avatarUrl={avatarUrl} initial={initial} size="md" />
+
+            <div className="min-w-0">
+              <div className="truncate font-medium">
+                {name || t.userFallback}
+              </div>
+              <div className="truncate text-slate-500">{email}</div>
+            </div>
           </div>
 
           <div className="border-t" />
