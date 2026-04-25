@@ -1,10 +1,10 @@
 "use client";
 
-import { COURSE_REGISTRY } from "@/app/learning/courses/registry";
 import {
-  setStoredCourseId,
+  COURSE_REGISTRY,
   type CourseId,
-} from "@/app/learning/courses/useActiveCourse";
+} from "@/app/learning/courses/registry";
+import { setStoredCourseId } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Lang = "ua" | "ru" | "en";
@@ -68,6 +68,12 @@ const dict = {
 
 const COURSE_ORDER = ["sk", "cs", "pl"] as const satisfies readonly CourseId[];
 
+const COURSE_FLAGS: Record<CourseId, string> = {
+  sk: "https://flagcdn.com/w40/sk.png",
+  cs: "https://flagcdn.com/w40/cz.png",
+  pl: "https://flagcdn.com/w40/pl.png",
+};
+
 export default function LearnPage() {
   const { lang } = useLanguage();
   const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
@@ -105,7 +111,11 @@ export default function LearnPage() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2 text-xl font-semibold text-slate-900">
-                    <span>{c.emoji}</span>
+                    <img
+                      src={COURSE_FLAGS[c.id]}
+                      alt=""
+                      className="h-5 w-7 rounded-sm object-cover shadow-sm"
+                    />
                     <span>{c.title}</span>
                   </div>
 

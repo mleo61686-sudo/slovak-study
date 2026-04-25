@@ -1,15 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
-import {
-  getUserLevel,
-  getXpState,
-  type XpState,
-} from "@/app/components/words-srs/words-srs-storage";
 
 type Props = {
   name?: string | null;
@@ -30,10 +25,6 @@ const T: Record<
     manageSubHint: string;
     logout: string;
     userFallback: string;
-    level: string;
-    xp: string;
-    nextLevel: string;
-    maxLevel: string;
   }
 > = {
   ua: {
@@ -43,10 +34,6 @@ const T: Record<
     manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
     logout: "Вийти",
     userFallback: "Користувач",
-    level: "Рівень",
-    xp: "XP",
-    nextLevel: "до наступного рівня",
-    maxLevel: "Максимальний рівень",
   },
   ru: {
     profile: "Профиль",
@@ -55,10 +42,6 @@ const T: Record<
     manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
     logout: "Выйти",
     userFallback: "Пользователь",
-    level: "Уровень",
-    xp: "XP",
-    nextLevel: "до следующего уровня",
-    maxLevel: "Максимальный уровень",
   },
   en: {
     profile: "Profile",
@@ -67,10 +50,6 @@ const T: Record<
     manageSubHint: "Change plan • cancel • update card • invoices",
     logout: "Log out",
     userFallback: "User",
-    level: "Level",
-    xp: "XP",
-    nextLevel: "to next level",
-    maxLevel: "Max level",
   },
 };
 
@@ -78,18 +57,22 @@ function AvatarCircle({
   avatarUrl,
   initial,
   size = "sm",
+  loaded = true,
 }: {
   avatarUrl: string;
   initial: string;
   size?: "sm" | "md";
+  loaded?: boolean;
 }) {
   const sizeClass = size === "md" ? "h-10 w-10" : "h-9 w-9";
 
   return (
     <div
-      className={`flex ${sizeClass} items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white`}
+      className={`flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white`}
     >
-      {avatarUrl ? (
+      {!loaded ? (
+        <div className="h-full w-full animate-pulse bg-slate-200" />
+      ) : avatarUrl ? (
         <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
       ) : (
         initial
@@ -110,44 +93,14 @@ export default function UserMenu({
   const t = T[L];
 
   const router = useRouter();
-  const { data: session } = useSession();
-  const userId = String(session?.user?.id ?? "");
 
   const [open, setOpen] = useState(false);
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [avatarVersion, setAvatarVersion] = useState(Date.now());
-  const [xp, setXp] = useState<XpState>({ totalXp: 0 });
-
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const initial = (name || email || "?").charAt(0).toUpperCase();
-  const levelInfo = getUserLevel(xp.totalXp);
-  const levelTitle = levelInfo.title[L] ?? levelInfo.title.ua;
-  const xpToNext = Math.max(0, levelInfo.nextLevelXp - xp.totalXp);
-  const isMaxLevel = levelInfo.progressPercent >= 100;
-
-  const displayAvatarUrl = avatarUrl
-    ? `${avatarUrl}${avatarUrl.includes("?") ? "&" : "?"}v=${avatarVersion}`
-    : "";
-
-  useEffect(() => {
-    if (!userId) return;
-
-    setXp(getXpState(userId));
-
-    function handleSrsChanged() {
-      setXp(getXpState(userId));
-    }
-
-    window.addEventListener("slovakStudy:srsChanged", handleSrsChanged);
-    window.addEventListener("storage", handleSrsChanged);
-
-    return () => {
-      window.removeEventListener("slovakStudy:srsChanged", handleSrsChanged);
-      window.removeEventListener("storage", handleSrsChanged);
-    };
-  }, [userId]);
 
   useEffect(() => {
     let cancelled = false;
@@ -164,12 +117,15 @@ export default function UserMenu({
           avatarUrl?: string | null;
         };
 
-        if (!cancelled && res.ok && data?.ok && data.avatarUrl) {
-          setAvatarUrl(data.avatarUrl);
-          setAvatarVersion(Date.now());
+        if (!cancelled && res.ok && data?.ok) {
+          setAvatarUrl(data.avatarUrl ?? "");
         }
       } catch {
         // avatar is optional
+      } finally {
+        if (!cancelled) {
+          setAvatarLoaded(true);
+        }
       }
     }
 
@@ -187,7 +143,7 @@ export default function UserMenu({
 
       if (typeof nextAvatarUrl === "string") {
         setAvatarUrl(nextAvatarUrl);
-        setAvatarVersion(Date.now());
+        setAvatarLoaded(true);
       }
     }
 
@@ -270,49 +226,19 @@ export default function UserMenu({
   if (mobile) {
     return (
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-        <div className="px-4 py-3">
-          <div className="flex items-center gap-3">
-            <AvatarCircle avatarUrl={displayAvatarUrl} initial={initial} size="md" />
+        <div className="flex items-center gap-3 px-4 py-3">
+          <AvatarCircle
+            avatarUrl={avatarUrl}
+            initial={initial}
+            size="md"
+            loaded={avatarLoaded}
+          />
 
-            <div className="min-w-0">
-              <div className="truncate font-semibold text-slate-900">
-                {name || t.userFallback}
-              </div>
-              <div className="break-all text-sm text-slate-500">{email}</div>
+          <div className="min-w-0">
+            <div className="truncate font-medium text-slate-900">
+              {name || t.userFallback}
             </div>
-          </div>
-
-          <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                  {t.level}
-                </div>
-                <div className="truncate text-sm font-bold text-amber-950">
-                  ⭐ {levelInfo.level} · {levelTitle}
-                </div>
-              </div>
-
-              <div className="shrink-0 text-right">
-                <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                  {t.xp}
-                </div>
-                <div className="text-sm font-bold text-amber-950">
-                  {xp.totalXp}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-amber-100">
-              <div
-                className="h-full rounded-full bg-amber-500 transition-all duration-300"
-                style={{ width: `${levelInfo.progressPercent}%` }}
-              />
-            </div>
-
-            <div className="mt-1 text-xs text-amber-800">
-              {isMaxLevel ? t.maxLevel : `${xpToNext} XP ${t.nextLevel}`}
-            </div>
+            <div className="break-all text-sm text-slate-500">{email}</div>
           </div>
         </div>
 
@@ -370,57 +296,31 @@ export default function UserMenu({
         type="button"
         aria-label="User menu"
       >
-        <AvatarCircle avatarUrl={displayAvatarUrl} initial={initial} />
+        <AvatarCircle
+          avatarUrl={avatarUrl}
+          initial={initial}
+          loaded={avatarLoaded}
+        />
       </button>
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-80 overflow-hidden rounded-xl border bg-white shadow-lg"
+          className="absolute right-0 top-full mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
-          <div className="px-4 py-4 text-sm">
-            <div className="flex items-center gap-3">
-              <AvatarCircle avatarUrl={displayAvatarUrl} initial={initial} size="md" />
+          <div className="flex items-center gap-3 px-4 py-3 text-sm">
+            <AvatarCircle
+              avatarUrl={avatarUrl}
+              initial={initial}
+              size="md"
+              loaded={avatarLoaded}
+            />
 
-              <div className="min-w-0">
-                <div className="truncate font-semibold text-slate-900">
-                  {name || t.userFallback}
-                </div>
-                <div className="truncate text-slate-500">{email}</div>
+            <div className="min-w-0">
+              <div className="truncate font-medium">
+                {name || t.userFallback}
               </div>
-            </div>
-
-            <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3">
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                    {t.level}
-                  </div>
-                  <div className="truncate text-sm font-bold text-amber-950">
-                    ⭐ {levelInfo.level} · {levelTitle}
-                  </div>
-                </div>
-
-                <div className="shrink-0 text-right">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
-                    {t.xp}
-                  </div>
-                  <div className="text-sm font-bold text-amber-950">
-                    {xp.totalXp}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-amber-100">
-                <div
-                  className="h-full rounded-full bg-amber-500 transition-all duration-300"
-                  style={{ width: `${levelInfo.progressPercent}%` }}
-                />
-              </div>
-
-              <div className="mt-1 text-xs text-amber-800">
-                {isMaxLevel ? t.maxLevel : `${xpToNext} XP ${t.nextLevel}`}
-              </div>
+              <div className="truncate text-slate-500">{email}</div>
             </div>
           </div>
 
