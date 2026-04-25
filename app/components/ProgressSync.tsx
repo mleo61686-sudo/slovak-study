@@ -213,16 +213,35 @@ export default function ProgressSync() {
         setActiveUserId(userId);
         activeKey.current = keyFor(userId);
 
-        if (data?.lessonsProgress) {
-          localStorage.setItem(
-            activeKey.current,
-            JSON.stringify({
-              version: 1,
-              updatedAt: Date.now(),
-              lessons: data.lessonsProgress,
-              srs: {},
-            })
-          );
+        const serverLessons =
+          data?.lessonsProgress && typeof data.lessonsProgress === "object"
+            ? data.lessonsProgress
+            : {};
+
+        const localRaw = localStorage.getItem(activeKey.current);
+        const localLessons = extractLessonsProgress(localRaw);
+
+        const mergedLessons = {
+          ...serverLessons,
+          ...localLessons,
+        };
+
+        localStorage.setItem(
+          activeKey.current,
+          JSON.stringify({
+            version: 1,
+            updatedAt: Date.now(),
+            lessons: mergedLessons,
+            srs: {},
+          })
+        );
+
+        const localHasSomethingServerDoesNot = Object.keys(localLessons).some(
+          (lessonId) => !(lessonId in serverLessons)
+        );
+
+        if (localHasSomethingServerDoesNot) {
+          window.dispatchEvent(new CustomEvent(PROGRESS_EVENT));
         }
 
         if (typeof data?.xpTotal === "number" && userId) {
