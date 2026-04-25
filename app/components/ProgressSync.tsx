@@ -110,7 +110,7 @@ const PENDING_KEY = "slovakStudy.pendingSync";
 function savePending(data: any) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify(data));
-  } catch {}
+  } catch { }
 }
 function getPending() {
   try {
@@ -123,7 +123,7 @@ function getPending() {
 function clearPending() {
   try {
     localStorage.removeItem(PENDING_KEY);
-  } catch {}
+  } catch { }
 }
 
 // ✅ завжди повертає object
@@ -323,12 +323,18 @@ export default function ProgressSync() {
     }
     window.addEventListener("focus", onFocus);
 
+    // ✅ 🔥 авто-синхронізація кожні 15 секунд (ВАЖЛИВО ДЛЯ multi-device)
+    const interval = setInterval(() => {
+      load();
+    }, 15000);
+
     return () => {
       cancelled = true;
       window.removeEventListener(PROGRESS_EVENT, onProgressChanged);
       window.removeEventListener(XP_SYNC_EVENT, onProgressChanged);
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("focus", onFocus);
+      clearInterval(interval); // 🔥 важливо
       cancelTimer();
     };
   }, [status, session?.user?.email]);
