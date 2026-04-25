@@ -116,6 +116,7 @@ export default function UserMenu({
   const [open, setOpen] = useState(false);
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarVersion, setAvatarVersion] = useState(Date.now());
   const [xp, setXp] = useState<XpState>({ totalXp: 0 });
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -125,6 +126,10 @@ export default function UserMenu({
   const levelTitle = levelInfo.title[L] ?? levelInfo.title.ua;
   const xpToNext = Math.max(0, levelInfo.nextLevelXp - xp.totalXp);
   const isMaxLevel = levelInfo.progressPercent >= 100;
+
+  const displayAvatarUrl = avatarUrl
+    ? `${avatarUrl}${avatarUrl.includes("?") ? "&" : "?"}v=${avatarVersion}`
+    : "";
 
   useEffect(() => {
     if (!userId) return;
@@ -161,6 +166,7 @@ export default function UserMenu({
 
         if (!cancelled && res.ok && data?.ok && data.avatarUrl) {
           setAvatarUrl(data.avatarUrl);
+          setAvatarVersion(Date.now());
         }
       } catch {
         // avatar is optional
@@ -181,6 +187,7 @@ export default function UserMenu({
 
       if (typeof nextAvatarUrl === "string") {
         setAvatarUrl(nextAvatarUrl);
+        setAvatarVersion(Date.now());
       }
     }
 
@@ -265,7 +272,7 @@ export default function UserMenu({
       <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
         <div className="px-4 py-3">
           <div className="flex items-center gap-3">
-            <AvatarCircle avatarUrl={avatarUrl} initial={initial} size="md" />
+            <AvatarCircle avatarUrl={displayAvatarUrl} initial={initial} size="md" />
 
             <div className="min-w-0">
               <div className="truncate font-semibold text-slate-900">
@@ -363,7 +370,7 @@ export default function UserMenu({
         type="button"
         aria-label="User menu"
       >
-        <AvatarCircle avatarUrl={avatarUrl} initial={initial} />
+        <AvatarCircle avatarUrl={displayAvatarUrl} initial={initial} />
       </button>
 
       {open && (
@@ -373,7 +380,7 @@ export default function UserMenu({
         >
           <div className="px-4 py-4 text-sm">
             <div className="flex items-center gap-3">
-              <AvatarCircle avatarUrl={avatarUrl} initial={initial} size="md" />
+              <AvatarCircle avatarUrl={displayAvatarUrl} initial={initial} size="md" />
 
               <div className="min-w-0">
                 <div className="truncate font-semibold text-slate-900">
