@@ -30,6 +30,7 @@ type LearningDict = {
   premiumActive: string;
   availableNow: string;
   lastDone: string;
+  dailyLimit: string;
 };
 
 type SessionUserLike = {
@@ -42,6 +43,11 @@ type LessonStats = {
   lastWrong: number;
   lastTotal: number;
 };
+
+const DAILY_FREE_LIMIT = 2;
+
+const PROGRESS_EVENT = "slovakStudy:progressChanged";
+const SYNC_EVENT = "slovakStudy:syncState";
 
 const dict: Record<Lang, LearningDict> = {
   ua: {
@@ -61,6 +67,7 @@ const dict: Record<Lang, LearningDict> = {
     premiumActive: "⭐ Premium активний — безліміт доступу",
     availableNow: "Доступний зараз:",
     lastDone: "Останній пройдений:",
+    dailyLimit: "Ліміт на сьогодні вичерпано 🔒",
   },
   ru: {
     title: "Обучение 📚",
@@ -79,6 +86,7 @@ const dict: Record<Lang, LearningDict> = {
     premiumActive: "⭐ Premium активен — безлимитный доступ",
     availableNow: "Доступно сейчас:",
     lastDone: "Последний пройденный:",
+    dailyLimit: "Лимит на сегодня исчерпан 🔒",
   },
   en: {
     title: "Learning 📚",
@@ -97,6 +105,7 @@ const dict: Record<Lang, LearningDict> = {
     premiumActive: "⭐ Premium active — unlimited access",
     availableNow: "Available now:",
     lastDone: "Last completed:",
+    dailyLimit: "Daily limit reached 🔒",
   },
 };
 
@@ -204,6 +213,24 @@ function getLocalized(value: LocalizedText, lang: Lang) {
   return value[lang] ?? value.ua ?? value.ru ?? "";
 }
 
+async function getServerDailyCount() {
+  try {
+    const res = await fetch("/api/progress", {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) return 0;
+
+    const data = await res.json();
+
+    return typeof data?.dailyCount === "number" ? data.dailyCount : 0;
+  } catch {
+    return 0;
+  }
+}
+
 export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const router = useRouter();
   const { data: session } = useSession();
@@ -234,19 +261,47 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   }, [arePremiumBandsLocked, isAdmin]);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
+  const [dailyCount, setDailyCount] = useState(0);
+
   const { lang } = useLanguage() as { lang: Lang };
   const t = dict[lang];
 
   useEffect(() => {
-    const refresh = () => setProgress(getLessonsProgress());
+    let cancelled = false;
+
+    const refresh = async () => {
+      setProgress(getLessonsProgress());
+
+      const count = await getServerDailyCount();
+      if (!cancelled) setDailyCount(count);
+    };
 
     refresh();
+
+    const onSyncState = (event: Event) => {
+      const detail = (event as CustomEvent<{ state?: string }>).detail;
+
+      if (detail?.state === "idle") {
+        refresh();
+      }
+    };
+
     window.addEventListener("focus", refresh);
+    window.addEventListener("storage", refresh);
+    window.addEventListener(PROGRESS_EVENT, refresh);
+    window.addEventListener(SYNC_EVENT, onSyncState);
     document.addEventListener("visibilitychange", refresh);
 
+    const interval = window.setInterval(refresh, 3000);
+
     return () => {
+      cancelled = true;
       window.removeEventListener("focus", refresh);
+      window.removeEventListener("storage", refresh);
+      window.removeEventListener(PROGRESS_EVENT, refresh);
+      window.removeEventListener(SYNC_EVENT, onSyncState);
       document.removeEventListener("visibilitychange", refresh);
+      window.clearInterval(interval);
     };
   }, []);
 
@@ -283,9 +338,20 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
 
   const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
+  const hasReachedDailyLimit =
+    !isPremium && !isAdmin && dailyCount >= DAILY_FREE_LIMIT;
+
   function isLessonUnlockedGlobal(lessonId: string) {
     if (isPremium || isAdmin) return true;
+
+    const done = isDone(lessonId);
+
+    // Уже пройдені уроки можна повторювати навіть після daily limit.
+    if (done) return true;
+
+    if (hasReachedDailyLimit) return false;
     if (isPremiumLesson(lessonId)) return false;
+
     return compareLevel(lessonId, allowed) <= 0;
   }
 
@@ -307,6 +373,12 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
       {isPremium && (
         <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
           {t.premiumActive}
+        </div>
+      )}
+
+      {hasReachedDailyLimit && (
+        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+          {t.dailyLimit}
         </div>
       )}
 
@@ -399,6 +471,13 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                     const isStart = lesson.id === allowed && !done;
                     const lessonPath = `/learning/${lesson.id}`;
 
+                    const lockedText =
+                      hasReachedDailyLimit && !done
+                        ? t.dailyLimit
+                        : isPremiumLesson(lesson.id)
+                        ? t.premiumOnly
+                        : t.locked;
+
                     return (
                       <div
                         key={lesson.id}
@@ -441,9 +520,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                               disabled
                               className="rounded-xl border px-4 py-2 text-sm text-slate-600"
                             >
-                              {isPremiumLesson(lesson.id)
-                                ? t.premiumOnly
-                                : t.locked}
+                              {lockedText}
                             </button>
                           )}
                         </div>

@@ -11,6 +11,10 @@ import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 const FREE_A2_LESSONS = 10;
+const DAILY_FREE_LIMIT = 2;
+
+const PROGRESS_EVENT = "slovakStudy:progressChanged";
+const SYNC_EVENT = "slovakStudy:syncState";
 
 function isPremiumLesson(lessonId: string) {
   const match = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(
@@ -26,6 +30,24 @@ function isPremiumLesson(lessonId: string) {
   if (band === "a2" && n > FREE_A2_LESSONS) return true;
 
   return false;
+}
+
+async function getServerDailyCount() {
+  try {
+    const res = await fetch("/api/progress", {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!res.ok) return 0;
+
+    const data = await res.json();
+
+    return typeof data?.dailyCount === "number" ? data.dailyCount : 0;
+  } catch {
+    return 0;
+  }
 }
 
 export default function BandPage() {
@@ -57,19 +79,49 @@ export default function BandPage() {
   }, []);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
+  const [dailyCount, setDailyCount] = useState(0);
 
   useEffect(() => {
-    const refresh = () => setProgress(getLessonsProgress());
+    let cancelled = false;
+
+    const refresh = async () => {
+      setProgress(getLessonsProgress());
+
+      const count = await getServerDailyCount();
+      if (!cancelled) setDailyCount(count);
+    };
 
     refresh();
+
+    const onSyncState = (event: Event) => {
+      const detail = (event as CustomEvent<{ state?: string }>).detail;
+
+      if (detail?.state === "idle") {
+        refresh();
+      }
+    };
+
     window.addEventListener("focus", refresh);
+    window.addEventListener("storage", refresh);
+    window.addEventListener(PROGRESS_EVENT, refresh);
+    window.addEventListener(SYNC_EVENT, onSyncState);
     document.addEventListener("visibilitychange", refresh);
 
+    const interval = window.setInterval(refresh, 3000);
+
     return () => {
+      cancelled = true;
       window.removeEventListener("focus", refresh);
+      window.removeEventListener("storage", refresh);
+      window.removeEventListener(PROGRESS_EVENT, refresh);
+      window.removeEventListener(SYNC_EVENT, onSyncState);
       document.removeEventListener("visibilitychange", refresh);
+      window.clearInterval(interval);
     };
   }, []);
+
+  const hasReachedDailyLimit =
+    !isPremium && !isAdmin && dailyCount >= DAILY_FREE_LIMIT;
 
   const isDone = (id: string) => {
     const key = id.toLowerCase();
@@ -174,6 +226,16 @@ export default function BandPage() {
                 : "Premium active — all lessons are unlocked"}
             </div>
           )}
+
+          {hasReachedDailyLimit && (
+            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+              {lang === "ua"
+                ? "Ліміт на сьогодні вичерпано 🔒"
+                : lang === "ru"
+                ? "Лимит на сегодня исчерпан 🔒"
+                : "Daily limit reached 🔒"}
+            </div>
+          )}
         </div>
 
         <Link
@@ -208,10 +270,27 @@ export default function BandPage() {
           const lockedByPremium =
             !isPremium && !isAdmin && isPremiumLesson(lesson.id);
 
-          const locked = lockedByProgress || lockedByPremium;
+          const lockedByDailyLimit = hasReachedDailyLimit && !done;
+
+          const locked =
+            lockedByProgress || lockedByPremium || lockedByDailyLimit;
 
           const cardClass = "rounded-2xl border bg-white p-4 hover:bg-slate-50";
           const lessonTitle = lesson.title[lang] ?? lesson.title.ua;
+
+          const lockedText = lockedByDailyLimit
+            ? lang === "ua"
+              ? "Ліміт на сьогодні"
+              : lang === "ru"
+              ? "Лимит на сегодня"
+              : "Daily limit"
+            : lockedByPremium
+            ? "Premium"
+            : lang === "ua"
+            ? "Закрито"
+            : lang === "ru"
+            ? "Закрыто"
+            : "Locked";
 
           if (locked) {
             return (
@@ -237,18 +316,7 @@ export default function BandPage() {
                 )}
 
                 <div className="mt-3 inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm">
-                  {lockedByPremium
-                    ? lang === "ua"
-                      ? "Premium"
-                      : lang === "ru"
-                      ? "Premium"
-                      : "Premium"
-                    : lang === "ua"
-                    ? "Закрито"
-                    : lang === "ru"
-                    ? "Закрыто"
-                    : "Locked"}{" "}
-                  🔒
+                  {lockedText} 🔒
                 </div>
 
                 {lockedByPremium && (
