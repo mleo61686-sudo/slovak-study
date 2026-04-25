@@ -7,13 +7,14 @@ import { getSrsWordsForCourse } from "@/app/learning/courses/dictionary";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
-import type { SrsState } from "@/lib/srs/srsWords";
+import type { SrsState } from "@/app/components/words-srs/words-srs-logic";
 import {
-  isLearned,
-  isMastered,
+  getTodayKey,
+} from "@/app/components/words-srs/words-srs-logic";
+import {
+  getDailySession,
   loadDb as loadSrsDb,
-  migrateSrsIfNeeded,
-} from "@/lib/srs/srsWords";
+} from "@/app/components/words-srs/words-srs-storage";
 import { getLessonsProgress } from "@/lib/src/progress";
 
 type Stats = {
@@ -109,45 +110,35 @@ const I18N: Record<
   },
 };
 
-function getTodayKey() {
-  return new Date().toISOString().slice(0, 10);
+function isLearned(s: SrsState) {
+  return (s.reps ?? 0) >= 1;
 }
 
-function getDailySession(userId: string): { date: string; ids: string[] } | null {
-  try {
-    const raw = localStorage.getItem(`slovakStudy.srsDailySession:${userId}`);
-    if (!raw) return null;
-    const s = JSON.parse(raw);
-    if (s?.date === getTodayKey() && Array.isArray(s?.ids)) return s;
-    return null;
-  } catch {
-    return null;
-  }
+function isMastered(s: SrsState) {
+  return (s.reps ?? 0) >= 3;
 }
 
 function computeStats(
   db: Record<string, SrsState>,
   totalWords: number,
-  userId: string
+  userId: string,
+  courseId: "sk" | "cs" | "pl"
 ): Stats {
   const now = Date.now();
   const all = Object.values(db);
 
   const learned = all.filter(isLearned).length;
   const mastered = all.filter(isMastered).length;
-
   const realDue = all.filter((s) => s.dueAt <= now).length;
 
-  const daily = getDailySession(userId);
+  const daily = getDailySession(userId, courseId);
   const due =
-    daily && daily.ids.length > 0
+    daily && daily.date === getTodayKey() && daily.ids.length > 0
       ? daily.ids.length
       : Math.min(realDue, DAILY_REVIEW_LIMIT);
 
   return { total: totalWords, learned, mastered, due };
 }
-
-// ===== Premium lesson analytics =====
 
 function parseDoneAt(v: unknown): string | null {
   if (v === true) return null;
@@ -167,6 +158,7 @@ function parseDoneAt(v: unknown): string | null {
 
     const updatedAt =
       typeof record.updatedAt === "string" ? record.updatedAt : null;
+
     if (updatedAt) {
       const day = updatedAt.slice(0, 10);
       if (/^\d{4}-\d{2}-\d{2}$/.test(day)) return day;
@@ -198,6 +190,7 @@ function computeLessonAnalytics(): LessonAnalytics {
   ).length;
 
   const dateSet = new Set<string>();
+
   for (const v of values) {
     const day = parseDoneAt(v);
     if (day) dateSet.add(day);
@@ -215,9 +208,11 @@ function computeLessonAnalytics(): LessonAnalytics {
 
   let bestStreak = 1;
   let run = 1;
+
   for (let i = 1; i < days.length; i++) {
     if (days[i] === days[i - 1] + 1) run += 1;
     else run = 1;
+
     if (run > bestStreak) bestStreak = run;
   }
 
@@ -232,12 +227,11 @@ function computeLessonAnalytics(): LessonAnalytics {
 
     currentStreak = 1;
     let cursor = lastInt;
+
     while (intSet.has(cursor - 1)) {
       currentStreak += 1;
       cursor -= 1;
     }
-  } else {
-    currentStreak = 0;
   }
 
   return { lessonsDone, studyDays, currentStreak, bestStreak };
@@ -303,22 +297,28 @@ export default function WordsStats() {
       const userId = String(session?.user?.id ?? "");
       if (!userId) return;
 
-      migrateSrsIfNeeded(userId);
+      const db = loadSrsDb(userId, courseId);
 
-      const db = loadSrsDb(userId);
-      setStats(computeStats(db, allWords.length, userId));
+      setStats(computeStats(db, allWords.length, userId, courseId));
       setLessonA(computeLessonAnalytics());
     };
 
     update();
+
     window.addEventListener("focus", update);
     window.addEventListener("storage", update);
+    window.addEventListener("slovakStudy:srsChanged", update);
+    window.addEventListener("slovakStudy:progressChanged", update);
+    window.addEventListener("slovakStudy:courseChanged", update);
 
     return () => {
       window.removeEventListener("focus", update);
       window.removeEventListener("storage", update);
+      window.removeEventListener("slovakStudy:srsChanged", update);
+      window.removeEventListener("slovakStudy:progressChanged", update);
+      window.removeEventListener("slovakStudy:courseChanged", update);
     };
-  }, [allWords.length, status, session]);
+  }, [allWords.length, status, session, courseId]);
 
   const progress =
     stats.total === 0 ? 0 : Math.round((stats.mastered / stats.total) * 100);

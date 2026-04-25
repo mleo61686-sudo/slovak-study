@@ -9,6 +9,8 @@ import { auth } from "@/auth";
 
 type LessonsProgress = Record<string, any>;
 
+const FREE_A2_LESSONS = 10;
+
 function getLessonFromLessonsByBand(lessonsByBand: Record<string, any[]>, id: string) {
   const raw = String(id).toLowerCase();
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/.exec(raw);
@@ -33,6 +35,16 @@ function parseLevelId(id: string) {
   const m = /^([a-z]\d)-(\d+)$/.exec(id.toLowerCase());
   if (!m) return null;
   return { band: m[1], n: Number(m[2]) };
+}
+
+function isPremiumLevel(id: string) {
+  const parsed = parseLevelId(id);
+  if (!parsed) return false;
+
+  if (parsed.band === "b1" || parsed.band === "b2") return true;
+  if (parsed.band === "a2" && parsed.n > FREE_A2_LESSONS) return true;
+
+  return false;
 }
 
 function bandOrder(band: string) {
@@ -178,6 +190,10 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const hasPremium =
     user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
+  if (!hasPremium && isPremiumLevel(levelId)) {
+    redirect("/premium");
+  }
+
   const row = await prisma.userProgress.upsert({
     where: { userId: user.id },
     update: {},
@@ -251,6 +267,9 @@ export default async function Page({ params }: { params: Promise<{ level: string
     if (nextId === levelId) {
       canGoNext = false;
       lockedReason = "Скоро додамо наступний рівень/уроки.";
+    } else if (isPremiumLevel(nextId)) {
+      canGoNext = false;
+      lockedReason = "Наступні уроки доступні лише з Premium.";
     } else if (compareLevel(nextId, allowed) === 1) {
       canGoNext = false;
       lockedReason = "Спочатку пройди попередні уроки/рівні (послідовно).";

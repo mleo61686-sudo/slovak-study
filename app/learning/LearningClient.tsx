@@ -100,6 +100,8 @@ const dict: Record<Lang, LearningDict> = {
   },
 };
 
+const FREE_A2_LESSONS = 10;
+
 // Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
 const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b1: 35,
@@ -110,6 +112,16 @@ function parseLevelId(id: string) {
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(String(id).toLowerCase());
   if (!m) return null;
   return { band: m[1].toLowerCase(), n: Number(m[2]) };
+}
+
+function isPremiumLesson(lessonId: string) {
+  const parsed = parseLevelId(lessonId);
+  if (!parsed) return false;
+
+  if (parsed.band === "b1" || parsed.band === "b2") return true;
+  if (parsed.band === "a2" && parsed.n > FREE_A2_LESSONS) return true;
+
+  return false;
 }
 
 function bandOrder(band: string) {
@@ -272,7 +284,8 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
   function isLessonUnlockedGlobal(lessonId: string) {
-    if (isPremium) return true;
+    if (isPremium || isAdmin) return true;
+    if (isPremiumLesson(lessonId)) return false;
     return compareLevel(lessonId, allowed) <= 0;
   }
 
@@ -428,7 +441,9 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                               disabled
                               className="rounded-xl border px-4 py-2 text-sm text-slate-600"
                             >
-                              {t.locked}
+                              {isPremiumLesson(lesson.id)
+                                ? t.premiumOnly
+                                : t.locked}
                             </button>
                           )}
                         </div>

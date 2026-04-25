@@ -1,38 +1,49 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
+// helper для A2
+function getA2LessonNumber(pathname: string) {
+  const match = pathname.match(/^\/learning\/a2-(\d+)(?:\/)?$/);
+  return match ? Number(match[1]) : null;
+}
+
 export default auth((req) => {
   const pathname = req.nextUrl.pathname;
 
   // 🔒 Premium only — тренажер
   if (pathname.startsWith("/practice")) {
     if (!req.auth) return NextResponse.redirect(new URL("/login", req.url));
-    if (!req.auth.user?.isPremium)
+    if (!req.auth.user?.isPremium) {
       return NextResponse.redirect(new URL("/premium", req.url));
+    }
   }
 
-  // 🔒 Premium only — A1, A2, B1, B2 рівні (списки уроків)
+  // 🔒 Premium only — B1/B2 списки рівнів
   if (
-    pathname.startsWith("/learning/levels/a1") ||
-    pathname.startsWith("/learning/levels/a2") ||
     pathname.startsWith("/learning/levels/b1") ||
     pathname.startsWith("/learning/levels/b2")
   ) {
     if (!req.auth) return NextResponse.redirect(new URL("/login", req.url));
-    if (!req.auth.user?.isPremium)
+    if (!req.auth.user?.isPremium) {
       return NextResponse.redirect(new URL("/premium", req.url));
+    }
   }
 
-  // 🔒 Premium only — A1, A2, B1, B2 уроки (конкретні уроки)
+  // 🔒 Premium only — A2 після 10 уроку
+  const a2LessonNumber = getA2LessonNumber(pathname);
+  const isPaidA2Lesson =
+    typeof a2LessonNumber === "number" && a2LessonNumber > 10;
+
+  // 🔒 Premium only — уроки
   if (
-    pathname.startsWith("/learning/a1-") ||
-    pathname.startsWith("/learning/a2-") ||
+    isPaidA2Lesson ||
     pathname.startsWith("/learning/b1-") ||
     pathname.startsWith("/learning/b2-")
   ) {
     if (!req.auth) return NextResponse.redirect(new URL("/login", req.url));
-    if (!req.auth.user?.isPremium)
+    if (!req.auth.user?.isPremium) {
       return NextResponse.redirect(new URL("/premium", req.url));
+    }
   }
 
   return NextResponse.next();
@@ -42,14 +53,12 @@ export const config = {
   matcher: [
     "/practice/:path*",
 
-    // Premium protection (levels pages)
-    "/learning/levels/a1/:path*",
+    // списки рівнів
     "/learning/levels/a2/:path*",
     "/learning/levels/b1/:path*",
     "/learning/levels/b2/:path*",
 
-    // Premium protection (lesson pages)
-    "/learning/a1-:path*",
+    // уроки
     "/learning/a2-:path*",
     "/learning/b1-:path*",
     "/learning/b2-:path*",

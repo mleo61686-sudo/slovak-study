@@ -10,6 +10,24 @@ import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
 
+const FREE_A2_LESSONS = 10;
+
+function isPremiumLesson(lessonId: string) {
+  const match = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(
+    String(lessonId).toLowerCase()
+  );
+
+  if (!match) return false;
+
+  const band = match[1].toLowerCase();
+  const n = Number(match[2]);
+
+  if (band === "b1" || band === "b2") return true;
+  if (band === "a2" && n > FREE_A2_LESSONS) return true;
+
+  return false;
+}
+
 export default function BandPage() {
   const params = useParams<{ band?: string }>();
   const bandId = String(params?.band || "").trim().toLowerCase();
@@ -17,7 +35,18 @@ export default function BandPage() {
   const { lang } = useLanguage();
 
   const { data: session } = useSession();
-  const isPremium = (session?.user as any)?.isPremium === true;
+  const user = session?.user as any;
+  const isPremium = user?.isPremium === true;
+
+  const adminEmails = useMemo(() => {
+    return (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean);
+  }, []);
+
+  const myEmail = String(user?.email ?? "").toLowerCase();
+  const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
 
   const band = useMemo(() => {
     return CEFR_LEVELS.find((b) => b.id === bandId) ?? null;
@@ -118,8 +147,12 @@ export default function BandPage() {
     <div className="mx-auto max-w-4xl px-4 py-10">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">{band.title[lang] ?? band.title.ua}</h1>
-          <p className="mt-2 text-slate-600">{band.subtitle[lang] ?? band.subtitle.ua}</p>
+          <h1 className="text-3xl font-bold">
+            {band.title[lang] ?? band.title.ua}
+          </h1>
+          <p className="mt-2 text-slate-600">
+            {band.subtitle[lang] ?? band.subtitle.ua}
+          </p>
           <p className="mt-2 text-sm text-slate-500">
             {lang === "ua"
               ? "Прогрес"
@@ -169,7 +202,13 @@ export default function BandPage() {
           const stats = getStats(lesson.id);
 
           const prev = band.lessons[idx - 1];
-          const locked = !isPremium && idx > 0 && prev && !isDone(prev.id);
+          const lockedByProgress =
+            !isPremium && !isAdmin && idx > 0 && prev && !isDone(prev.id);
+
+          const lockedByPremium =
+            !isPremium && !isAdmin && isPremiumLesson(lesson.id);
+
+          const locked = lockedByProgress || lockedByPremium;
 
           const cardClass = "rounded-2xl border bg-white p-4 hover:bg-slate-50";
           const lessonTitle = lesson.title[lang] ?? lesson.title.ua;
@@ -198,13 +237,32 @@ export default function BandPage() {
                 )}
 
                 <div className="mt-3 inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm">
-                  {lang === "ua"
+                  {lockedByPremium
+                    ? lang === "ua"
+                      ? "Premium"
+                      : lang === "ru"
+                      ? "Premium"
+                      : "Premium"
+                    : lang === "ua"
                     ? "Закрито"
                     : lang === "ru"
                     ? "Закрыто"
                     : "Locked"}{" "}
                   🔒
                 </div>
+
+                {lockedByPremium && (
+                  <Link
+                    href="/premium"
+                    className="mt-3 inline-flex rounded-xl bg-black px-3 py-2 text-sm font-medium text-white"
+                  >
+                    {lang === "ua"
+                      ? "Купити Premium"
+                      : lang === "ru"
+                      ? "Купить Premium"
+                      : "Buy Premium"}
+                  </Link>
+                )}
               </div>
             );
           }
@@ -229,7 +287,8 @@ export default function BandPage() {
 
               {stats && (
                 <div className="mt-1 text-xs text-slate-500">
-                  ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} / {stats.lastTotal}
+                  ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
+                  {stats.lastTotal}
                 </div>
               )}
             </Link>

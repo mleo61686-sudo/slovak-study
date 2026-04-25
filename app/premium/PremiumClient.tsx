@@ -79,9 +79,9 @@ const T: Record<Lang, PremiumTranslations> = {
     badge: "Premium",
     title: "Навчання без обмежень 🚀",
     subtitle:
-      "Відкрий усі рівні A0–B2 одразу та проходь уроки без денного ліміту.",
+      "Відкрий повний A2, B1–B2 та проходь уроки без денного ліміту.",
     bullets: [
-      "🔓 Всі рівні та уроки відкриті одразу (A0–B2)",
+      "🔓 Повний доступ до A2, B1 та B2",
       "🚫 Без денного ліміту на нові уроки",
       "🏋️ Повний доступ до тренажера",
       "🔁 Повторення тільки помилок",
@@ -127,9 +127,9 @@ const T: Record<Lang, PremiumTranslations> = {
     badge: "Premium",
     title: "Обучение без ограничений 🚀",
     subtitle:
-      "Открой все уровни A0–B2 сразу и проходи уроки без дневного лимита.",
+      "Открой полный A2, B1–B2 и проходи уроки без дневного лимита.",
     bullets: [
-      "🔓 Все уровни и уроки открыты сразу (A0–B2)",
+      "🔓 Полный доступ к A2, B1 и B2",
       "🚫 Без дневного лимита на новые уроки",
       "🏋️ Полный доступ к тренажёру",
       "🔁 Повторять только ошибки",
@@ -175,9 +175,9 @@ const T: Record<Lang, PremiumTranslations> = {
     badge: "Premium",
     title: "Learning without limits 🚀",
     subtitle:
-      "Unlock all A0–B2 levels at once and go through lessons without a daily limit.",
+      "Unlock full A2, B1–B2, and go through lessons without a daily limit.",
     bullets: [
-      "🔓 All levels and lessons unlocked instantly (A0–B2)",
+      "🔓 Full access to A2, B1, and B2",
       "🚫 No daily limit on new lessons",
       "🏋️ Full access to the trainer",
       "🔁 Review only mistakes",
@@ -232,7 +232,7 @@ const FEATURES: readonly FeatureRow[] = [
     ua: "Доступ до рівнів",
     ru: "Доступ к уровням",
     en: "Access to levels",
-    free: "A0–A2",
+    free: "A0–A2(1-10 Lessons)",
     premium: "A0–B2",
   },
   {

@@ -34,6 +34,7 @@ export default function AccountClient() {
   const displayEmail = user?.email?.trim() || "—";
 
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
   const [nameValue, setNameValue] = useState(initialName);
   const [savingName, setSavingName] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -124,6 +125,7 @@ export default function AccountClient() {
     if (status !== "authenticated") return;
 
     let cancelled = false;
+    setAvatarLoaded(false);
 
     async function loadAvatar() {
       try {
@@ -137,11 +139,17 @@ export default function AccountClient() {
           avatarUrl?: string | null;
         };
 
-        if (!cancelled && res.ok && data?.ok && data.avatarUrl) {
+        if (cancelled) return;
+
+        if (res.ok && data?.ok && data.avatarUrl) {
           setAvatarUrl(data.avatarUrl);
+        } else {
+          setAvatarUrl("");
         }
       } catch {
-        // avatar is optional
+        if (!cancelled) setAvatarUrl("");
+      } finally {
+        if (!cancelled) setAvatarLoaded(true);
       }
     }
 
@@ -484,7 +492,9 @@ export default function AccountClient() {
           <div className="grid gap-6 md:grid-cols-[120px_1fr] md:items-start">
             <div className="flex flex-col items-center gap-2 md:pt-10">
               <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-slate-900 text-3xl font-bold text-white shadow-sm transition duration-200 hover:scale-[1.03]">
-                {avatarUrl ? (
+                {!avatarLoaded ? (
+                  <div className="h-full w-full animate-pulse bg-slate-300" />
+                ) : avatarUrl ? (
                   <img
                     src={avatarUrl}
                     alt={displayName}

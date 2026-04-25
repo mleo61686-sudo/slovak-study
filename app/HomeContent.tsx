@@ -56,15 +56,15 @@ const t: Record<Lang, HomeTranslations> = {
   ua: {
     h1: "Вивчай словацьку, чеську та польську з нуля до B2 — для роботи, життя та переїзду",
     heroP:
-      "Flunio — це онлайн платформа для вивчення словацької, чеської та польської мов: уроки A0–B2, словник, граматика та вправи. Почни безкоштовно і займайся всього 10 хвилин на день.",
+      "Flunio — онлайн платформа для вивчення словацької, чеської та польської мов: короткі уроки, словник, граматика, озвучка та вправи для щоденної практики.",
     ctaLearning: "Перейти до навчання 🚀",
     ctaDict: "Відкрити словник",
     ctaGrammar: "Перейти до граматики",
 
     free: [
-      "Словацький, чеський і польський курси вже доступні",
-      "Рівні A0–A2 безкоштовно",
-      "2 нові уроки щодня без оплати",
+      "Короткі уроки по 10 слів без перевантаження",
+      "Словник, граматика та приклади речень в одному місці",
+      "Практика з озвучкою, прогресом і повторенням помилок",
     ],
 
     seoH2: "Онлайн курс словацької, чеської та польської мов",
@@ -87,7 +87,8 @@ const t: Record<Lang, HomeTranslations> = {
       "📊 Статистика, серії та рекорди",
       "🔊 Озвучка слів (Premium)",
     ],
-    premiumPriceNote: "EUR / USD / UAH / PLN / CZK • місячний і річний план • можна скасувати будь-коли",
+    premiumPriceNote:
+      "EUR / USD / UAH / PLN / CZK • місячний і річний план • можна скасувати будь-коли",
     premiumCta: "Спробувати Premium →",
     trainerLocked: "Тренажер 🔒",
 
@@ -162,15 +163,15 @@ const t: Record<Lang, HomeTranslations> = {
   ru: {
     h1: "Изучай словацкий, чешский и польский с нуля до B2 — для работы, жизни и переезда",
     heroP:
-      "Flunio — это онлайн платформа для изучения словацкого, чешского и польского языков: уроки A0–B2, словарь, грамматика и упражнения. Начни бесплатно и занимайся всего 10 минут в день.",
+      "Flunio — онлайн платформа для изучения словацкого, чешского и польского языков: короткие уроки, словарь, грамматика, озвучка и упражнения для ежедневной практики.",
     ctaLearning: "Перейти к обучению 🚀",
     ctaDict: "Открыть словарь",
     ctaGrammar: "Перейти к грамматике",
 
     free: [
-      "Словацкий, чешский и польский курсы уже доступны",
-      "Уровни A0–A2 бесплатно",
-      "2 новых урока ежедневно без оплаты",
+      "Короткие уроки по 10 слов без перегруза",
+      "Словарь, грамматика и примеры предложений в одном месте",
+      "Практика с озвучкой, прогрессом и повторением ошибок",
     ],
 
     seoH2: "Онлайн курс словацкого, чешского и польского языков",
@@ -193,7 +194,8 @@ const t: Record<Lang, HomeTranslations> = {
       "📊 Статистика, серии и рекорды",
       "🔊 Озвучка слов (Premium)",
     ],
-    premiumPriceNote: "EUR / USD / UAH / PLN / CZK • месячный и годовой план • можно отменить в любой момент",
+    premiumPriceNote:
+      "EUR / USD / UAH / PLN / CZK • месячный и годовой план • можно отменить в любой момент",
     premiumCta: "Попробовать Premium →",
     trainerLocked: "Тренажёр 🔒",
 
@@ -269,15 +271,15 @@ const t: Record<Lang, HomeTranslations> = {
   en: {
     h1: "Learn Slovak, Czech, and Polish from zero to B2 — for work, life, and relocation",
     heroP:
-      "Flunio is an online platform for learning Slovak, Czech, and Polish: A0–B2 lessons, dictionary, grammar, and exercises. Start for free and study in just 10 minutes a day.",
+      "Flunio is an online platform for learning Slovak, Czech, and Polish: short lessons, dictionary, grammar, audio, and exercises for daily practice.",
     ctaLearning: "Go to learning 🚀",
     ctaDict: "Open dictionary",
     ctaGrammar: "Go to grammar",
 
     free: [
-      "Slovak, Czech, and Polish courses are already available",
-      "A0–A2 levels are free",
-      "2 new lessons daily without payment",
+      "Short 10-word lessons without overload",
+      "Dictionary, grammar, and example sentences in one place",
+      "Practice with audio, progress tracking, and mistake review",
     ],
 
     seoH2: "Online Slovak, Czech, and Polish course",
@@ -300,7 +302,8 @@ const t: Record<Lang, HomeTranslations> = {
       "📊 Statistics, streaks, and records",
       "🔊 Word audio (Premium)",
     ],
-    premiumPriceNote: "EUR / USD / UAH / PLN / CZK • monthly and yearly plans • cancel anytime",
+    premiumPriceNote:
+      "EUR / USD / UAH / PLN / CZK • monthly and yearly plans • cancel anytime",
     premiumCta: "Try Premium →",
     trainerLocked: "Trainer 🔒",
 
@@ -376,7 +379,7 @@ const t: Record<Lang, HomeTranslations> = {
 
 function StatPill({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow">
       <div className="text-sm font-semibold text-slate-900">{k}</div>
       <div className="text-xs text-slate-600">{v}</div>
     </div>
@@ -415,24 +418,34 @@ export default function HomeContent({
           <div className="flex flex-wrap gap-3 pt-1">
             <Link
               href="/learning"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-black"
-            >
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-black active:translate-y-0"            >
               {tr.ctaLearning}
             </Link>
 
             <Link
               href="/dictionary"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-slate-50 active:translate-y-0"
             >
               {tr.ctaDict}
             </Link>
 
             <Link
               href="/grammar"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-slate-50 active:translate-y-0"
             >
               {tr.ctaGrammar}
             </Link>
+          </div>
+
+          <div className="mt-3 inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <span>💡</span>
+            <span>
+              {lang === "ua"
+                ? "Щоб змінити курс, натисни на аватар зверху праворуч і обери «Обрати курс»."
+                : lang === "ru"
+                  ? "Чтобы сменить курс, нажми на аватар сверху справа и выбери «Выбрать курс»."
+                  : "To change the course, click your avatar in the top right and choose “Select course”."}
+            </span>
           </div>
 
           <div className="mt-4 space-y-1 text-sm text-slate-700">
@@ -495,14 +508,14 @@ export default function HomeContent({
             <div className="flex flex-col gap-3 sm:pt-2">
               <Link
                 href="/premium"
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black hover:opacity-90"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black transition hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0"
               >
                 {tr.premiumCta}
               </Link>
 
               <Link
                 href="/premium"
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/15 active:translate-y-0"
               >
                 {tr.trainerLocked}
               </Link>
@@ -516,7 +529,7 @@ export default function HomeContent({
 
         <Link
           href="/grammar"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
         >
           <div className="text-2xl">📘</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.grammarTitle}</h2>
@@ -526,7 +539,7 @@ export default function HomeContent({
 
         <Link
           href="/dictionary"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
         >
           <div className="text-2xl">📚</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.dictTitle}</h2>
@@ -536,7 +549,7 @@ export default function HomeContent({
 
         <Link
           href="/learning"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-slate-50"
+          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
         >
           <div className="text-2xl">🏋️</div>
           <h2 className="mt-3 text-lg font-semibold">{tr.levelsTitle}</h2>
@@ -561,7 +574,7 @@ export default function HomeContent({
               <Link
                 key={card.href}
                 href={card.href}
-                className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:bg-white"
+                className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
               >
                 <h3 className="text-base font-semibold text-slate-900">
                   {card.title}
@@ -581,4 +594,4 @@ export default function HomeContent({
       </section>
     </div>
   );
-}
+} 
