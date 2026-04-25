@@ -8,6 +8,55 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-04-25",
+    title: {
+      ua: "Велике оновлення: польський курс, профіль і новий тренажер",
+      ru: "Большое обновление: польский курс, профиль и новый тренажёр",
+      en: "Major update: Polish course, profile, and new trainer",
+    },
+    items: {
+      ua: [
+        "Додано повноцінний курс польської мови — тепер доступні слова, уроки та вправи для ще однієї мови",
+        "Flunio переходить у фінальну модель мов: словацька, чеська та польська — нові мови більше не плануються, фокус на якості та розвитку цих курсів",
+        "Сторінки «Дієслова (теперішній час)» та «Сленг і розмовна мова» поки що без озвучки тільки у польському курсі — вона буде додана пізніше",
+        "Сильно покращено тренажер: додано швидкий режим (Blitz), покращено реакцію на відповіді та загальну динаміку тренування",
+        "Додано звуковий фідбек на відповіді — тренування стало більш живим і інтерактивним",
+        "Покращено перевірку відповідей — тепер ще стабільніше працює ввід без діакритики",
+        "Додано сторінку профілю: тепер можна змінити аватар, ім’я та керувати акаунтом",
+        "У профілі зʼявився рівень користувача та система прогресу — видно, скільки XP потрібно до наступного рівня",
+        "Усього доступно 20 рівнів, для досягнення максимального рівня потрібно набрати 70 000 XP",
+        "Рівень напряму залежить від повторення слів — чим більше тренуєшся, тим швидше ростеш",
+        "Система повторення слів на головній сторінці була значно оновлена: додано XP, серії (streak) та відчуття реального прогресу",
+      ],
+      ru: [
+        "Добавлен полноценный курс польского языка — теперь доступны слова, уроки и упражнения для ещё одного языка",
+        "Flunio переходит к финальной модели языков: словацкий, чешский и польский — новые языки больше не планируются, фокус на качестве",
+        "Страницы «Глаголы (настоящее время)» и «Сленг и разговорная речь» временно без озвучки только в польском курсе — она будет добавлена позже",
+        "Сильно улучшен тренажёр: добавлен быстрый режим (Blitz), улучшена реакция и динамика тренировки",
+        "Добавлен звуковой фидбек — тренировки стали более живыми и интерактивными",
+        "Улучшена проверка ответов — ввод без диакритики работает ещё стабильнее",
+        "Добавлена страница профиля: теперь можно менять аватар, имя и управлять аккаунтом",
+        "В профиле появился уровень пользователя и система прогресса — видно, сколько XP нужно до следующего уровня",
+        "Всего доступно 20 уровней, для достижения максимального уровня требуется 70 000 XP",
+        "Уровень напрямую зависит от повторения слов — чем больше тренируешься, тем быстрее растёшь",
+        "Система повторения слов на главной странице была значительно улучшена: добавлены XP, серии (streak) и ощущение прогресса",
+      ],
+      en: [
+        "A full Polish language course has been added — new words, lessons, and exercises are now available",
+        "Flunio is moving to its final language set: Slovak, Czech, and Polish — no new languages are planned, focus is now on quality",
+        "The “Verbs (present tense)” and “Slang and spoken language” pages are currently without audio only in the Polish course — it will be added later",
+        "The practice trainer has been significantly improved: a fast mode (Blitz) was added along with better responsiveness and flow",
+        "Sound feedback has been added — training now feels more dynamic and interactive",
+        "Answer validation has been improved — typing without diacritics works even more reliably",
+        "A new profile page has been added — you can now change your avatar, name, and manage your account",
+        "User level and progress system are now visible in the profile — you can see how much XP is needed for the next level",
+        "There are 20 levels in total, and reaching the maximum level requires 70,000 XP",
+        "Your level directly depends on word review — the more you practice, the faster you progress",
+        "The word review system on the homepage has been significantly upgraded: XP, streaks, and a stronger sense of progression have been added",
+      ],
+    },
+  },
+  {
     date: "2026-04-08",
     title: {
       ua: "Оновлення: додано англійську та покращено тренажер",

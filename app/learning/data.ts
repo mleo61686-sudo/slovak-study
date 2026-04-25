@@ -1,5 +1,5 @@
 // app/learning/data.ts
-import { WORDS } from "../data/words";
+
 import { A0_REAL_SOURCE } from "./levels/a0";
 import { A1_ALL } from "./levels/a1";
 import { A2_ALL } from "./levels/a2";
@@ -238,21 +238,7 @@ const A0_REAL: Lesson[] = (A0_REAL_SOURCE as LessonSource[]).map((l) => ({
   words: addRu(l.words),
 }));
 
-const realUsed = new Set<string>(A0_REAL.flatMap((l) => l.words.map(keyOf)));
 
-const BANK = addRu(WORDS)
-  .filter((w) => w.sk && w.ua)
-  .filter((w, idx, arr) => {
-    const k = keyOf(w);
-    return idx === arr.findIndex((x) => keyOf(x) === k);
-  })
-  .filter((w) => !realUsed.has(keyOf(w)));
-
-const neededLessons = LESSONS_PER_BAND.a0 - A0_REAL.length;
-const neededWords = neededLessons * WORDS_PER_LESSON;
-
-const bankSlice = BANK.slice(0, neededWords);
-const bankChunks = chunk(bankSlice, WORDS_PER_LESSON);
 
 function makeLessonTitle(n: number, topic: LocalizedText): LocalizedText {
   return {
@@ -276,13 +262,10 @@ const A0_ALL: Lesson[] = Array.from({ length: LESSONS_PER_BAND.a0 }, (_, i) => {
     };
   }
 
-  const chunkIndex = n - (A0_REAL.length + 1);
-  const words = fillTo10(bankChunks[chunkIndex] ?? [], n);
-
   return {
     id: String(n),
     title: makeLessonTitle(n, topic),
-    words,
+    words: fillTo10([], n),
   };
 });
 

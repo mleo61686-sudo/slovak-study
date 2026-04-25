@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
 
@@ -11,22 +12,22 @@ const LANGUAGES: {
   flagSrc: string;
   label: string;
 }[] = [
-  {
-    code: "ua",
-    flagSrc: "https://flagcdn.com/w40/ua.png",
-    label: "Українська",
-  },
-  {
-    code: "ru",
-    flagSrc: "https://flagcdn.com/w40/ru.png",
-    label: "Русский",
-  },
-  {
-    code: "en",
-    flagSrc: "https://flagcdn.com/w40/gb.png",
-    label: "English",
-  },
-];
+    {
+      code: "ua",
+      flagSrc: "https://flagcdn.com/w40/ua.png",
+      label: "Українська",
+    },
+    {
+      code: "ru",
+      flagSrc: "https://flagcdn.com/w40/ru.png",
+      label: "Русский",
+    },
+    {
+      code: "en",
+      flagSrc: "https://flagcdn.com/w40/gb.png",
+      label: "English",
+    },
+  ];
 
 type Props = {
   mobile?: boolean;
@@ -34,6 +35,7 @@ type Props = {
 
 export default function LanguageMenu({ mobile = false }: Props) {
   const { lang, setLang } = useLanguage();
+  const router = useRouter();
   const current: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
 
   const [open, setOpen] = useState(false);
@@ -118,6 +120,7 @@ export default function LanguageMenu({ mobile = false }: Props) {
                   onClick={() => {
                     setLang(item.code);
                     setOpen(false);
+                    router.refresh();
                   }}
                   className={[
                     "flex min-h-11 w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm font-medium transition",

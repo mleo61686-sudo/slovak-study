@@ -5,353 +5,50 @@ import Link from "next/link";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { SLANG_SK, SLANG_CS } from "@/data/slang";
-import type { Word } from "@/app/learning/data";
-import type { CourseId } from "@/app/learning/courses/registry";
 
-type Lang = "ua" | "ru" | "en";
-type Mode = "mcq" | "typing";
-type SessionMode = "mixed" | "mcq" | "typing";
+import { UI } from "./practice-texts";
+import type {
+  Lang,
+  PracticeClientProps,
+  PracticeMistake,
+  PracticeStats,
+  SessionMode,
+  SessionQuestionBase,
+} from "./practice-types";
+import { loadStats, saveStats } from "./practice-storage";
+import { getTerm, getTrans, norm } from "./practice-utils";
+import { buildSessionBase, makePromptAndHelper } from "./practice-session";
 
-type SessionQuestionBase =
-  | {
-      id: string;
-      mode: "mcq";
-      sk: string;
-      ua: string;
-      ru: string;
-      en: string;
-      options: string[];
-    }
-  | {
-      id: string;
-      mode: "typing";
-      sk: string;
-      ua: string;
-      ru: string;
-      en: string;
-    };
+const BLITZ_SECONDS = 60;
 
-type PracticeClientProps = {
-  initialCourseId: CourseId;
-  initialWords: Word[];
-  pack: string | null;
-  slangLevel: string | null;
-  slangCat: string | null;
-};
-
-const UI = {
-  ua: {
-    title: "Тренування 🏋️",
-    loading: "Завантаження…",
-    notEnoughTitle: "Недостатньо слів для тренування.",
-    notEnoughHint: "Додай хоча б 4 слова з перекладом для UA, RU або EN.",
-    wordsSrs: "🧠 Words (SRS)",
-
-    setupTitle: "Налаштування тренування",
-    setupCount: "Кількість питань",
-    setupMode: "Режим",
-    modeMixed: "Mixed (і вибір, і ввід)",
-    modeMcq: "Лише вибір відповіді",
-    modeTyping: "Лише ввід слова",
-    start: "Почати ▶",
-
-    progress: "Прогрес",
-    accuracy: "Точність",
-    streak: "Серія",
-    bestStreak: "Краща серія",
-    record: "Рекорд",
-    bestScore: "Найкращий результат",
-    skip: "Пропустити →",
-
-    resultTitle: "Результат 🏁",
-    yourResult: "Твій результат",
-    tryAgain: "Нове тренування ↻",
-    retryMistakes: "Повторити тільки помилки 🔁",
-    mistakesTitle: "Помилки",
-    noMistakes: "Помилок немає — топ! ✅",
-
-    questionLabel: "Питання",
-    mcqBadge: "Вибір відповіді",
-    typingBadge: "Ввід слова",
-    listen: "Слухати правильну відповідь (після відповіді):",
-    next: "Далі →",
-    check: "Перевірити ✓",
-    placeholder: "Введи слово мовою курсу...",
-    correct: "Правильно!",
-    wrongPrefix: "Неправильно. Правильна відповідь:",
-    yourAnswer: "Твоя відповідь:",
-    helper: (sk: string, tr: string) => `Мовою курсу: ${sk} — «${tr}»`,
-    revealLock: "Відповідай, щоб відкрити озвучку",
-    hintNoDiacritics: "Можна без діакритики",
-  },
-  ru: {
-    title: "Тренировка 🏋️",
-    loading: "Загрузка…",
-    notEnoughTitle: "Недостаточно слов для тренировки.",
-    notEnoughHint: "Добавь хотя бы 4 слова с переводом для UA, RU или EN.",
-    wordsSrs: "🧠 Words (SRS)",
-
-    setupTitle: "Настройки тренировки",
-    setupCount: "Количество вопросов",
-    setupMode: "Режим",
-    modeMixed: "Mixed (и выбор, и ввод)",
-    modeMcq: "Только выбор ответа",
-    modeTyping: "Только ввод слова",
-    start: "Начать ▶",
-
-    progress: "Прогресс",
-    accuracy: "Точность",
-    streak: "Серия",
-    bestStreak: "Лучшая серия",
-    record: "Рекорд",
-    bestScore: "Лучший результат",
-    skip: "Пропустить →",
-
-    resultTitle: "Результат 🏁",
-    yourResult: "Твой результат",
-    tryAgain: "Новая тренировка ↻",
-    retryMistakes: "Повторить только ошибки 🔁",
-    mistakesTitle: "Ошибки",
-    noMistakes: "Ошибок нет — отлично! ✅",
-
-    questionLabel: "Вопрос",
-    mcqBadge: "Выбор ответа",
-    typingBadge: "Ввод слова",
-    listen: "Слушать правильный ответ (после ответа):",
-    next: "Далее →",
-    check: "Проверить ✓",
-    placeholder: "Введи слово на языке курса...",
-    correct: "Правильно!",
-    wrongPrefix: "Неверно. Правильный ответ:",
-    yourAnswer: "Твой ответ:",
-    helper: (sk: string, tr: string) => `На языке курса: ${sk} — «${tr}»`,
-    revealLock: "Ответь, чтобы открыть озвучку",
-    hintNoDiacritics: "Можно без диакритики",
-  },
-  en: {
-    title: "Practice 🏋️",
-    loading: "Loading…",
-    notEnoughTitle: "Not enough words for practice.",
-    notEnoughHint: "Add at least 4 words with UA, RU or EN translation.",
-    wordsSrs: "🧠 Words (SRS)",
-
-    setupTitle: "Practice settings",
-    setupCount: "Number of questions",
-    setupMode: "Mode",
-    modeMixed: "Mixed (choice and typing)",
-    modeMcq: "Multiple choice only",
-    modeTyping: "Typing only",
-    start: "Start ▶",
-
-    progress: "Progress",
-    accuracy: "Accuracy",
-    streak: "Streak",
-    bestStreak: "Best streak",
-    record: "Record",
-    bestScore: "Best score",
-    skip: "Skip →",
-
-    resultTitle: "Result 🏁",
-    yourResult: "Your result",
-    tryAgain: "New practice ↻",
-    retryMistakes: "Retry mistakes only 🔁",
-    mistakesTitle: "Mistakes",
-    noMistakes: "No mistakes — great! ✅",
-
-    questionLabel: "Question",
-    mcqBadge: "Multiple choice",
-    typingBadge: "Typing",
-    listen: "Listen to the correct answer (after answering):",
-    next: "Next →",
-    check: "Check ✓",
-    placeholder: "Type the course language word...",
-    correct: "Correct!",
-    wrongPrefix: "Wrong. Correct answer:",
-    yourAnswer: "Your answer:",
-    helper: (sk: string, tr: string) => `In the course language: ${sk} — “${tr}”`,
-    revealLock: "Answer first to unlock audio",
-    hintNoDiacritics: "You can type without diacritics",
-  },
-} as const;
-
-const LS_KEY = "slovakStudy.practiceStats.v1";
-
-type PracticeStats = {
-  bestAccuracyPct: number;
-  bestStreak: number;
-  bestScore: number;
-};
-
-function loadStats(): PracticeStats {
-  if (typeof window === "undefined") {
-    return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
-  }
+function playFeedbackSound(ok: boolean) {
+  if (typeof window === "undefined") return;
 
   try {
-    const raw = window.localStorage.getItem(LS_KEY);
-    if (!raw) return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
 
-    const parsed = JSON.parse(raw);
-    return {
-      bestAccuracyPct: Number(parsed?.bestAccuracyPct) || 0,
-      bestStreak: Number(parsed?.bestStreak) || 0,
-      bestScore: Number(parsed?.bestScore) || 0,
-    };
-  } catch {
-    return { bestAccuracyPct: 0, bestStreak: 0, bestScore: 0 };
-  }
-}
+    if (!AudioContextClass) return;
 
-function saveStats(next: PracticeStats) {
-  try {
-    window.localStorage.setItem(LS_KEY, JSON.stringify(next));
-  } catch {}
-}
+    const ctx = new AudioContextClass();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
 
-function stripDiacritics(s: string) {
-  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
+    oscillator.type = "sine";
+    oscillator.frequency.value = ok ? 720 : 180;
 
-function norm(s: string) {
-  return stripDiacritics(s)
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
-}
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(ok ? 0.12 : 0.18, ctx.currentTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.16);
 
-function shuffle<T>(arr: T[]) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
 
-function sample<T>(arr: T[], n: number) {
-  return shuffle(arr).slice(0, Math.min(n, arr.length));
-}
-
-function getTerm(word: Word): string {
-  return String((word as { term?: string; sk?: string }).term ?? word.sk ?? "").trim();
-}
-
-function getTrans(word: Word, lang: Lang): string | null {
-  const value =
-    lang === "en"
-      ? word.en ?? word.ua
-      : lang === "ru"
-      ? word.ru ?? word.ua
-      : word.ua;
-
-  return typeof value === "string" && value.trim() ? value : null;
-}
-
-function getCourseLanguageName(courseId: CourseId, uiLang: Lang): string {
-  const names = {
-    sk: {
-      ua: "словацькою",
-      ru: "по-словацки",
-      en: "in Slovak",
-    },
-    cs: {
-      ua: "чеською",
-      ru: "по-чешски",
-      en: "in Czech",
-    },
-    pl: {
-      ua: "польською",
-      ru: "по-польски",
-      en: "in Polish",
-    },
-  } as const;
-
-  return names[courseId][uiLang];
-}
-
-function buildSessionBase(
-  words: Word[],
-  count: number,
-  sessionMode: SessionMode,
-  sourceTermList?: string[]
-): SessionQuestionBase[] {
-  const pool = words
-    .map((w, idx) => {
-      const term = getTerm(w);
-      return {
-        ...w,
-        __term: term,
-        __id: `${term || "x"}-${idx}`,
-        __ua: getTrans(w, "ua"),
-        __ru: getTrans(w, "ru"),
-        __en: getTrans(w, "en"),
-      };
-    })
-    .filter((w) => w.__term && w.__ua && w.__ru && w.__en);
-
-  if (pool.length < 4) return [];
-
-  const filteredPool = sourceTermList?.length
-    ? pool.filter((w) => sourceTermList.includes(w.__term))
-    : pool;
-
-  const picked = sample(filteredPool, count);
-
-  return picked.map((w, i) => {
-    let mode: Mode;
-
-    if (sessionMode === "mcq") mode = "mcq";
-    else if (sessionMode === "typing") mode = "typing";
-    else mode = i % 3 === 0 ? "typing" : "mcq";
-
-    if (mode === "typing") {
-      return {
-        id: `${w.__id}-typing`,
-        mode: "typing",
-        sk: w.__term,
-        ua: w.__ua!,
-        ru: w.__ru!,
-        en: w.__en!,
-      };
-    }
-
-    const distractors = sample(
-      pool.filter((x) => x.__term !== w.__term).map((x) => x.__term),
-      3
-    );
-
-    const options = shuffle([w.__term, ...distractors]).slice(0, 4);
-
-    return {
-      id: `${w.__id}-mcq`,
-      mode: "mcq",
-      sk: w.__term,
-      ua: w.__ua!,
-      ru: w.__ru!,
-      en: w.__en!,
-      options,
-    };
-  });
-}
-
-function makePromptAndHelper(
-  q: SessionQuestionBase,
-  lang: Lang,
-  courseId: CourseId
-) {
-  const tr = lang === "en" ? q.en : lang === "ru" ? q.ru : q.ua;
-  const t = UI[lang];
-  const courseLangName = getCourseLanguageName(courseId, lang);
-
-  return {
-    prompt:
-      lang === "en"
-        ? `How do you say “${tr}” ${courseLangName}?`
-        : lang === "ru"
-        ? `Как сказать «${tr}» ${courseLangName}?`
-        : `Як сказати «${tr}» ${courseLangName}?`,
-    helper: t.helper(q.sk, tr),
-  };
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.17);
+  } catch { }
 }
 
 export default function PracticeClient({
@@ -374,6 +71,7 @@ export default function PracticeClient({
 
   const [phase, setPhase] = useState<"setup" | "quiz" | "result">("setup");
   const [session, setSession] = useState<SessionQuestionBase[]>([]);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
   useEffect(() => {
     setReady(true);
@@ -400,9 +98,7 @@ export default function PracticeClient({
   const [typedChecked, setTypedChecked] = useState<null | { ok: boolean }>(null);
   const [revealAutoKey, setRevealAutoKey] = useState(0);
 
-  const [mistakes, setMistakes] = useState<
-    { sk: string; ua: string; ru: string; en: string; mode: Mode; your?: string }[]
-  >([]);
+  const [mistakes, setMistakes] = useState<PracticeMistake[]>([]);
 
   const poolCount = useMemo(() => {
     const pool = words
@@ -417,6 +113,7 @@ export default function PracticeClient({
   }, [words]);
 
   const notEnough = poolCount < 4;
+  const isBlitz = sessionMode === "blitz";
 
   const slangTermList = useMemo(() => {
     if (pack !== "slang") return null;
@@ -443,9 +140,15 @@ export default function PracticeClient({
   const progressPct = session.length
     ? Math.round((current / session.length) * 100)
     : 0;
-  const accuracyPct = session.length
-    ? Math.round((score / session.length) * 100)
-    : 0;
+
+  const accuracyPct = session.length ? Math.round((score / session.length) * 100) : 0;
+
+  const streakLevel = useMemo(() => {
+    if (streak >= 10) return "legend";
+    if (streak >= 5) return "fire";
+    if (streak >= 3) return "warm";
+    return "none";
+  }, [streak]);
 
   const canRevealAnswer = useMemo(() => {
     if (!qBase) return false;
@@ -453,8 +156,113 @@ export default function PracticeClient({
     return !!selected;
   }, [qBase, selected]);
 
+  const resultMood = useMemo(() => {
+    if (accuracyPct >= 95) {
+      return {
+        emoji: "🏆",
+        title:
+          uiLang === "en"
+            ? "Perfect run!"
+            : uiLang === "ru"
+              ? "Идеальный раунд!"
+              : "Ідеальний раунд!",
+        text:
+          uiLang === "en"
+            ? "You crushed this training. Can you repeat it?"
+            : uiLang === "ru"
+              ? "Ты разнёс эту тренировку. Сможешь повторить?"
+              : "Ти розніс це тренування. Зможеш повторити?",
+      };
+    }
+
+    if (accuracyPct >= 80) {
+      return {
+        emoji: "🔥",
+        title:
+          uiLang === "en"
+            ? "On fire!"
+            : uiLang === "ru"
+              ? "Ты в огне!"
+              : "Ти у вогні!",
+        text:
+          uiLang === "en"
+            ? "Strong result. One more round could be even better."
+            : uiLang === "ru"
+              ? "Сильный результат. Ещё один раунд может быть ещё лучше."
+              : "Сильний результат. Ще один раунд може бути ще кращим.",
+      };
+    }
+
+    if (accuracyPct >= 60) {
+      return {
+        emoji: "💪",
+        title:
+          uiLang === "en"
+            ? "Good fight!"
+            : uiLang === "ru"
+              ? "Хорошая попытка!"
+              : "Хороша спроба!",
+        text:
+          uiLang === "en"
+            ? "You are close. Replay the same setup and push higher."
+            : uiLang === "ru"
+              ? "Ты близко. Повтори те же настройки и подними результат."
+              : "Ти близько. Повтори ті самі налаштування і підніми результат.",
+      };
+    }
+
+    return {
+      emoji: "🎯",
+      title:
+        uiLang === "en"
+          ? "Warm-up round"
+          : uiLang === "ru"
+            ? "Разогревочный раунд"
+            : "Розігрівочний раунд",
+      text:
+        uiLang === "en"
+          ? "Mistakes are the best target. Retry them now."
+          : uiLang === "ru"
+            ? "Ошибки — лучшая цель. Повтори их сейчас."
+            : "Помилки — найкраща ціль. Повтори їх зараз.",
+    };
+  }, [accuracyPct, uiLang]);
+
+  function finalizeRecords() {
+    const finalScore = score;
+    const finalBestStreak = bestStreakSession;
+    const finalAccuracy = session.length
+      ? Math.round((finalScore / session.length) * 100)
+      : 0;
+
+    setStats((prev) => {
+      const next: PracticeStats = {
+        bestAccuracyPct: Math.max(prev.bestAccuracyPct, finalAccuracy),
+        bestStreak: Math.max(prev.bestStreak, finalBestStreak),
+        bestScore: Math.max(prev.bestScore, finalScore),
+      };
+      if (typeof window !== "undefined") saveStats(next);
+      return next;
+    });
+  }
+
+  function finishSession() {
+    setTimeLeft(null);
+    setPhase("result");
+    finalizeRecords();
+  }
+
+  function resetAnswerState() {
+    setSelected(null);
+    setTyped("");
+    setTypedChecked(null);
+  }
+
   function startNew(customTermList?: string[]) {
-    const built = buildSessionBase(words, questionCount, sessionMode, customTermList);
+    const countForSession =
+      sessionMode === "blitz" ? Math.min(Math.max(poolCount, questionCount), 60) : questionCount;
+
+    const built = buildSessionBase(words, countForSession, sessionMode, customTermList);
 
     setSession(built);
     setCurrent(0);
@@ -464,28 +272,25 @@ export default function PracticeClient({
     setStreak(0);
     setBestStreakSession(0);
 
-    setSelected(null);
-    setTyped("");
-    setTypedChecked(null);
+    resetAnswerState();
 
     if (built.length < 4) {
+      setTimeLeft(null);
       setPhase("setup");
       return;
     }
 
+    setTimeLeft(sessionMode === "blitz" ? BLITZ_SECONDS : null);
     setPhase("quiz");
   }
 
   function goNext() {
     const next = current + 1;
-    setSelected(null);
-    setTyped("");
-    setTypedChecked(null);
+    resetAnswerState();
     setCurrent(next);
 
     if (next >= session.length) {
-      setPhase("result");
-      finalizeRecords();
+      finishSession();
     }
   }
 
@@ -493,14 +298,11 @@ export default function PracticeClient({
     setStreak(0);
 
     const next = current + 1;
-    setSelected(null);
-    setTyped("");
-    setTypedChecked(null);
+    resetAnswerState();
     setCurrent(next);
 
     if (next >= session.length) {
-      setPhase("result");
-      finalizeRecords();
+      finishSession();
     }
   }
 
@@ -524,6 +326,7 @@ export default function PracticeClient({
     setRevealAutoKey((k) => k + 1);
 
     const ok = option === qBase.sk;
+    playFeedbackSound(ok);
     onAnswered(ok);
 
     if (!ok) {
@@ -539,12 +342,19 @@ export default function PracticeClient({
         },
       ]);
     }
+
+    if (isBlitz) {
+      window.setTimeout(() => {
+        goNext();
+      }, 550);
+    }
   }
 
   function checkTyping() {
     if (!qBase || qBase.mode !== "typing") return;
 
     const ok = norm(typed) === norm(qBase.sk);
+    playFeedbackSound(ok);
     setTypedChecked({ ok });
 
     onAnswered(ok);
@@ -562,32 +372,36 @@ export default function PracticeClient({
         },
       ]);
     }
+
+    if (isBlitz) {
+      window.setTimeout(() => {
+        goNext();
+      }, 650);
+    }
   }
 
-  function finalizeRecords() {
-    const finalScore = score;
-    const finalBestStreak = bestStreakSession;
-    const finalAccuracy = session.length
-      ? Math.round((finalScore / session.length) * 100)
-      : 0;
+  useEffect(() => {
+    if (phase !== "quiz") return;
+    if (timeLeft === null) return;
 
-    setStats((prev) => {
-      const next: PracticeStats = {
-        bestAccuracyPct: Math.max(prev.bestAccuracyPct, finalAccuracy),
-        bestStreak: Math.max(prev.bestStreak, finalBestStreak),
-        bestScore: Math.max(prev.bestScore, finalScore),
-      };
-      if (typeof window !== "undefined") saveStats(next);
-      return next;
-    });
-  }
+    if (timeLeft <= 0) {
+      finishSession();
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setTimeLeft((value) => (value === null ? null : value - 1));
+    }, 1000);
+
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, timeLeft]);
 
   useEffect(() => {
     if (phase !== "quiz") return;
     if (!session.length) return;
     if (current < session.length) return;
-    setPhase("result");
-    finalizeRecords();
+    finishSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, current, session.length]);
 
@@ -632,12 +446,23 @@ export default function PracticeClient({
                 value={questionCount}
                 onChange={(e) => setQuestionCount(Number(e.target.value))}
                 className="w-full rounded-xl border px-3 py-2"
+                disabled={isBlitz}
               >
                 <option value={8}>8</option>
                 <option value={12}>12</option>
                 <option value={16}>16</option>
                 <option value={20}>20</option>
               </select>
+
+              {isBlitz ? (
+                <div className="text-xs text-slate-500">
+                  {uiLang === "en"
+                    ? "Blitz uses a 60-second timer instead of a fixed question count."
+                    : uiLang === "ru"
+                      ? "Blitz использует таймер 60 секунд вместо фиксированного количества вопросов."
+                      : "Blitz використовує таймер 60 секунд замість фіксованої кількості питань."}
+                </div>
+              ) : null}
             </div>
 
             <div className="space-y-2">
@@ -650,6 +475,7 @@ export default function PracticeClient({
                 <option value="mixed">{t.modeMixed}</option>
                 <option value="mcq">{t.modeMcq}</option>
                 <option value="typing">{t.modeTyping}</option>
+                <option value="blitz">{t.modeBlitz}</option>
               </select>
             </div>
           </div>
@@ -683,6 +509,16 @@ export default function PracticeClient({
         <section className="space-y-4 rounded-2xl border bg-white p-6">
           <h2 className="text-xl font-semibold">{t.resultTitle}</h2>
 
+          <div className="rounded-2xl border bg-gradient-to-br from-slate-50 to-white p-4">
+            <div className="flex items-start gap-3">
+              <div className="text-4xl">{resultMood.emoji}</div>
+              <div>
+                <div className="text-lg font-semibold">{resultMood.title}</div>
+                <p className="mt-1 text-sm text-slate-600">{resultMood.text}</p>
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-wrap gap-3 text-sm">
             <div className="rounded-xl border bg-slate-50 px-3 py-2">
               {t.yourResult}: <b>{score}</b> / {session.length}
@@ -712,13 +548,29 @@ export default function PracticeClient({
 
           <div className="flex flex-wrap gap-2">
             <button
+              onClick={() => startNew(slangTermList ?? undefined)}
+              className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+            >
+              {uiLang === "en"
+                ? "Play again 🔁"
+                : uiLang === "ru"
+                  ? "Ещё раз 🔁"
+                  : "Ще раз 🔁"}
+            </button>
+
+            <button
               onClick={() => {
                 setPhase("setup");
                 setSession([]);
+                setTimeLeft(null);
               }}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+              className="rounded-xl border px-4 py-2 hover:bg-slate-50"
             >
-              {t.tryAgain}
+              {uiLang === "en"
+                ? "Change settings ⚙️"
+                : uiLang === "ru"
+                  ? "Изменить настройки ⚙️"
+                  : "Змінити налаштування ⚙️"}
             </button>
 
             <button
@@ -774,7 +626,11 @@ export default function PracticeClient({
 
               <div className="flex items-center gap-2">
                 <div className="rounded-full border px-3 py-1">
-                  {qBase.mode === "mcq" ? t.mcqBadge : t.typingBadge}
+                  {isBlitz
+                    ? t.blitzBadge
+                    : qBase.mode === "mcq"
+                      ? t.mcqBadge
+                      : t.typingBadge}
                 </div>
 
                 <button
@@ -786,6 +642,24 @@ export default function PracticeClient({
               </div>
             </div>
 
+            {isBlitz && timeLeft !== null ? (
+              <div className="rounded-2xl border bg-slate-950 px-4 py-3 text-white">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-medium">⚡ {t.blitzBadge}</span>
+                  <span className="font-semibold">
+                    ⏱️ {t.timeLeft}: {timeLeft}s
+                  </span>
+                </div>
+
+                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/20">
+                  <div
+                    className="h-2 bg-white transition-all"
+                    style={{ width: `${Math.max(0, (timeLeft / BLITZ_SECONDS) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            ) : null}
+
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
               <div
                 className="h-2 bg-slate-900"
@@ -793,9 +667,21 @@ export default function PracticeClient({
               />
             </div>
 
-            <div className="text-xs text-slate-600">
-              {t.progress}: {progressPct}% • {t.accuracy}: {accuracyPct}% • {t.streak}:{" "}
-              <b>{streak}</b> • {t.bestStreak}: <b>{bestStreakSession}</b>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-slate-600">
+                {t.progress}: {progressPct}% • {t.accuracy}: {accuracyPct}%
+              </span>
+
+              <span
+                className={`rounded-full px-2 py-1 text-xs font-medium
+                  ${streakLevel === "legend" ? "bg-purple-100 text-purple-700" : ""}
+                  ${streakLevel === "fire" ? "bg-orange-100 text-orange-700" : ""}
+                  ${streakLevel === "warm" ? "bg-green-100 text-green-700" : ""}
+                  ${streakLevel === "none" ? "bg-slate-100 text-slate-600" : ""}
+                `}
+              >
+                🔥 {streak}
+              </span>
             </div>
           </div>
 
@@ -813,7 +699,7 @@ export default function PracticeClient({
                     {canRevealAnswer ? (
                       <SpeakButton
                         text={qBase.sk}
-                        autoPlayKey={qBase.mode === "mcq" ? revealAutoKey : undefined}
+                        autoPlayKey={!isBlitz && qBase.mode === "mcq" ? revealAutoKey : undefined}
                       />
                     ) : (
                       <button
@@ -853,10 +739,13 @@ export default function PracticeClient({
                               }
                             }}
                             className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition
-${isCorrect ? "border-green-400 bg-green-100" : ""}
-${isWrong ? "border-red-400 bg-red-100" : ""}
-${!selected ? "cursor-pointer hover:bg-slate-50" : "cursor-default opacity-95"}
-`}
+                              ${isCorrect ? "border-green-400 bg-green-100" : ""}
+                              ${isWrong ? "border-red-400 bg-red-100" : ""}
+                              ${!selected
+                                ? "cursor-pointer hover:bg-slate-50"
+                                : "cursor-default opacity-95"
+                              }
+                            `}
                           >
                             <span className="font-medium">{option}</span>
 
@@ -883,6 +772,25 @@ ${!selected ? "cursor-pointer hover:bg-slate-50" : "cursor-default opacity-95"}
                     </div>
 
                     {selected && (
+                      <div
+                        className={`text-sm font-medium ${selected === qBase.sk ? "text-green-600" : "text-red-600"
+                          }`}
+                      >
+                        {selected === qBase.sk
+                          ? uiLang === "en"
+                            ? "Nice! 🔥"
+                            : uiLang === "ru"
+                              ? "Отлично! 🔥"
+                              : "Клас! 🔥"
+                          : uiLang === "en"
+                            ? "Oops 😅"
+                            : uiLang === "ru"
+                              ? "Ошибка 😅"
+                              : "Помилка 😅"}
+                      </div>
+                    )}
+
+                    {selected && !isBlitz && (
                       <div className="space-y-3">
                         <div className="rounded-xl border bg-slate-50 px-4 py-3 text-sm text-gray-700">
                           {helper}
@@ -893,6 +801,12 @@ ${!selected ? "cursor-pointer hover:bg-slate-50" : "cursor-default opacity-95"}
                         >
                           {t.next}
                         </button>
+                      </div>
+                    )}
+
+                    {selected && isBlitz && (
+                      <div className="rounded-xl border bg-slate-50 px-4 py-3 text-sm text-gray-700">
+                        {helper}
                       </div>
                     )}
                   </>
@@ -920,27 +834,39 @@ ${!selected ? "cursor-pointer hover:bg-slate-50" : "cursor-default opacity-95"}
                       ) : (
                         <div className="space-y-3">
                           <div
-                            className={`rounded-xl border px-4 py-3 text-sm ${
-                              typedChecked.ok
-                                ? "border-green-400 bg-green-100"
-                                : "border-red-400 bg-red-100"
-                            }`}
+                            className={`rounded-xl border px-4 py-3 text-sm ${typedChecked.ok
+                              ? "border-green-400 bg-green-100"
+                              : "border-red-400 bg-red-100"
+                              }`}
                           >
-                            {typedChecked.ok
-                              ? t.correct
-                              : `${t.wrongPrefix} ${qBase.sk}`}
+                            <div className="text-sm font-medium">
+                              {typedChecked.ok
+                                ? uiLang === "en"
+                                  ? "Perfect! ⚡"
+                                  : uiLang === "ru"
+                                    ? "Идеально! ⚡"
+                                    : "Ідеально! ⚡"
+                                : uiLang === "en"
+                                  ? "Not quite 😅"
+                                  : uiLang === "ru"
+                                    ? "Не совсем 😅"
+                                    : "Майже 😅"}
+                            </div>
+                            {typedChecked.ok ? t.correct : `${t.wrongPrefix} ${qBase.sk}`}
                           </div>
 
                           <div className="rounded-xl border bg-slate-50 px-4 py-3 text-sm text-gray-700">
                             {helper}
                           </div>
 
-                          <button
-                            onClick={goNext}
-                            className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
-                          >
-                            {t.next}
-                          </button>
+                          {!isBlitz ? (
+                            <button
+                              onClick={goNext}
+                              className="rounded-xl bg-slate-900 px-4 py-2 text-white hover:opacity-90"
+                            >
+                              {t.next}
+                            </button>
+                          ) : null}
                         </div>
                       )}
                     </div>
