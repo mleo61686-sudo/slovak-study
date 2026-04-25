@@ -79,7 +79,7 @@ export default function BandPage() {
   }, []);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
-  const [dailyCount, setDailyCount] = useState(0);
+  const [dailyCount, setDailyCount] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -121,7 +121,9 @@ export default function BandPage() {
   }, []);
 
   const hasReachedDailyLimit =
-    !isPremium && !isAdmin && dailyCount >= DAILY_FREE_LIMIT;
+    !isPremium &&
+    !isAdmin &&
+    (dailyCount === null || dailyCount >= DAILY_FREE_LIMIT);
 
   const isDone = (id: string) => {
     const key = id.toLowerCase();
@@ -155,15 +157,15 @@ export default function BandPage() {
           {lang === "ua"
             ? "Рівень не знайдено"
             : lang === "ru"
-            ? "Уровень не найден"
-            : "Level not found"}
+              ? "Уровень не найден"
+              : "Level not found"}
         </h1>
         <p className="mt-2 text-slate-600">
           {lang === "ua"
             ? "Спробуй повернутися назад."
             : lang === "ru"
-            ? "Попробуй вернуться назад."
-            : "Try going back."}
+              ? "Попробуй вернуться назад."
+              : "Try going back."}
         </p>
 
         <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-700">
@@ -176,8 +178,8 @@ export default function BandPage() {
               {lang === "ua"
                 ? "Доступні рівні:"
                 : lang === "ru"
-                ? "Доступные уровни:"
-                : "Available levels:"}
+                  ? "Доступные уровни:"
+                  : "Available levels:"}
             </span>{" "}
             {visibleBandIds.join(", ")}
           </div>
@@ -209,8 +211,8 @@ export default function BandPage() {
             {lang === "ua"
               ? "Прогрес"
               : lang === "ru"
-              ? "Прогресс"
-              : "Progress"}
+                ? "Прогресс"
+                : "Progress"}
             : {doneCount}/{band.lessons.length} ·{" "}
             {lang === "ua" ? "Слів" : lang === "ru" ? "Слов" : "Words"}:{" "}
             {band.lessons.length * 10}
@@ -222,8 +224,8 @@ export default function BandPage() {
               {lang === "ua"
                 ? "Premium активний — всі уроки відкриті"
                 : lang === "ru"
-                ? "Premium активен — все уроки открыты"
-                : "Premium active — all lessons are unlocked"}
+                  ? "Premium активен — все уроки открыты"
+                  : "Premium active — all lessons are unlocked"}
             </div>
           )}
 
@@ -232,8 +234,8 @@ export default function BandPage() {
               {lang === "ua"
                 ? "Ліміт на сьогодні вичерпано 🔒"
                 : lang === "ru"
-                ? "Лимит на сегодня исчерпан 🔒"
-                : "Daily limit reached 🔒"}
+                  ? "Лимит на сегодня исчерпан 🔒"
+                  : "Daily limit reached 🔒"}
             </div>
           )}
         </div>
@@ -282,15 +284,15 @@ export default function BandPage() {
             ? lang === "ua"
               ? "Ліміт на сьогодні"
               : lang === "ru"
-              ? "Лимит на сегодня"
-              : "Daily limit"
+                ? "Лимит на сегодня"
+                : "Daily limit"
             : lockedByPremium
-            ? "Premium"
-            : lang === "ua"
-            ? "Закрито"
-            : lang === "ru"
-            ? "Закрыто"
-            : "Locked";
+              ? "Premium"
+              : lang === "ua"
+                ? "Закрито"
+                : lang === "ru"
+                  ? "Закрыто"
+                  : "Locked";
 
           if (locked) {
             return (
@@ -327,8 +329,8 @@ export default function BandPage() {
                     {lang === "ua"
                       ? "Купити Premium"
                       : lang === "ru"
-                      ? "Купить Premium"
-                      : "Buy Premium"}
+                        ? "Купить Premium"
+                        : "Buy Premium"}
                   </Link>
                 )}
               </div>

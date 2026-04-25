@@ -206,7 +206,7 @@ export async function PUT(req: Request) {
     return NextResponse.json({ ok: false, code: "USER_ID_MISMATCH" }, { status: 409 });
   }
 
-  const lessonsProgress: LessonsProgress =
+  const clientLessonsProgress: LessonsProgress =
     body?.lessonsProgress && typeof body.lessonsProgress === "object"
       ? body.lessonsProgress
       : {};
@@ -235,6 +235,10 @@ export async function PUT(req: Request) {
             });
 
             const prevLessons = (prevRow?.lessonsProgress ?? {}) as LessonsProgress;
+            const lessonsProgress: LessonsProgress = {
+              ...prevLessons,
+              ...clientLessonsProgress,
+            };
             const prevXp = prevRow?.xp ?? 0;
             const nextXp = xpTotal === null ? prevXp : Math.max(prevXp, xpTotal);
 

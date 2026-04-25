@@ -261,7 +261,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   }, [arePremiumBandsLocked, isAdmin]);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
-  const [dailyCount, setDailyCount] = useState(0);
+  const [dailyCount, setDailyCount] = useState<number | null>(null);
 
   const { lang } = useLanguage() as { lang: Lang };
   const t = dict[lang];
@@ -339,7 +339,9 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
   const hasReachedDailyLimit =
-    !isPremium && !isAdmin && dailyCount >= DAILY_FREE_LIMIT;
+    !isPremium &&
+    !isAdmin &&
+    (dailyCount === null || dailyCount >= DAILY_FREE_LIMIT);
 
   function isLessonUnlockedGlobal(lessonId: string) {
     if (isPremium || isAdmin) return true;
@@ -475,15 +477,14 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       hasReachedDailyLimit && !done
                         ? t.dailyLimit
                         : isPremiumLesson(lesson.id)
-                        ? t.premiumOnly
-                        : t.locked;
+                          ? t.premiumOnly
+                          : t.locked;
 
                     return (
                       <div
                         key={lesson.id}
-                        className={`rounded-2xl border p-4 ${
-                          unlocked ? "hover:bg-slate-50" : "opacity-60"
-                        }`}
+                        className={`rounded-2xl border p-4 ${unlocked ? "hover:bg-slate-50" : "opacity-60"
+                          }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-medium">
