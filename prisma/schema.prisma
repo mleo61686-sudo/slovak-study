@@ -36,6 +36,9 @@ model UserProgress {
   lastUnlockedLevel String?
   dailyDate         DateTime?
   dailyCount        Int       @default(0)
+
+  // ✅ глобальний XP користувача між усіма курсами
+  xp Int @default(0)
 }
 
 model PasswordResetToken {

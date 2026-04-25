@@ -1,19 +1,75 @@
 /**
- * API route для читання і синхронізації lesson progress користувача.
+ * ⚠️ CRITICAL FILE — LESSON PROGRESS + XP SYNC (НЕ ЛАМАТИ БЕЗ РОЗУМІННЯ)
  *
- * Що робить:
- * GET повертає поточний userProgress із БД, а PUT синхронізує lessonsProgress
- * з localStorage/клієнта, оновлює unlock наступного уроку і контролює daily limit.
+ * Це головний файл, який відповідає за:
+ * - прогрес уроків (lessonsProgress)
+ * - розблокування наступного уроку (lastUnlockedLevel)
+ * - daily limit (2 уроки для free)
+ * - XP користувача (xp)
  *
- * Як працює:
- * Через auth() знаходить user, читає/оновлює userProgress у Prisma,
- * перевіряє allowed lesson, чи урок став done саме зараз, і для free
- * застосовує ліміт 2 нових уроки на день; для premium діє bypass.
+ * 👉 Це core-логіка всього навчання.
  *
- * Пов’язані файли:
- * - app/api/progress/lesson-done/route.ts
- * - ProgressSync / saveProgress / LevelClient
- * - Prisma models: user, userProgress
+ * -------------------------------
+ * ЯК ПРАЦЮЄ:
+ *
+ * GET:
+ * - повертає повний прогрес користувача
+ * - використовується в ProgressSync (pull на клієнт)
+ *
+ * PUT:
+ * - приймає lessonsProgress + xpTotal з клієнта
+ * - визначає, чи завершено новий урок
+ * - оновлює:
+ *    - lessonsProgress
+ *    - lastUnlockedLevel
+ *    - dailyCount / dailyDate
+ *    - xp (тільки якщо більше попереднього)
+ *
+ * -------------------------------
+ * ⚠️ ДУЖЕ ВАЖЛИВО:
+ *
+ * ❌ НЕ МІНЯТИ формат lessonsProgress
+ * ❌ НЕ МІНЯТИ логіку "allowed lesson"
+ * ❌ НЕ прибирати перевірку doneNow / donePrev
+ *
+ * ❌ НЕ міняти:
+ *    nextLevelId()
+ *    parseLevelId()
+ *
+ * ❌ НЕ ламати daily limit логіку
+ *
+ * ❌ НЕ зменшувати xp:
+ *    xp = Math.max(prevXp, xpTotal)
+ *
+ * ❌ НЕ прибирати transaction (Serializable)
+ *
+ * -------------------------------
+ * ⚠️ МОЖЛИВІ НАСЛІДКИ ПОМИЛОК:
+ *
+ * - користувач втрачає прогрес ❌
+ * - відкриваються всі уроки одразу ❌
+ * - daily limit не працює ❌
+ * - XP скидається або “стрибає” ❌
+ *
+ * -------------------------------
+ * ✅ ПІСЛЯ БУДЬ-ЯКИХ ЗМІН:
+ *
+ * 1. npm run build
+ *
+ * 2. ТЕСТ ОБОВʼЯЗКОВО:
+ *    - ПК → пройти урок
+ *    - мобілка → перевірити sync
+ *
+ * 3. Перевір:
+ *    - unlock наступного уроку
+ *    - daily limit
+ *    - XP не падає
+ *
+ * -------------------------------
+ * Пов’язані критичні файли:
+ * - app/components/ProgressSync.tsx
+ * - words-srs-storage.ts (XP)
+ * - prisma/schema.prisma (UserProgress)
  */
 
 import { NextResponse } from "next/server";
@@ -107,6 +163,7 @@ export async function GET() {
     ok: true,
     userId: user.id,
     lessonsProgress: row?.lessonsProgress ?? null,
+    xpTotal: row?.xp ?? 0,
     updatedAt: row?.updatedAt ?? null,
     lastUnlockedLevel: row?.lastUnlockedLevel ?? null,
     dailyDate: row?.dailyDate ?? null,
@@ -154,6 +211,11 @@ export async function PUT(req: Request) {
       ? body.lessonsProgress
       : {};
 
+  const xpTotal =
+    typeof body?.xpTotal === "number"
+      ? Math.max(0, Math.floor(body.xpTotal))
+      : null;
+
   const today = new Date();
 
   try {
@@ -168,10 +230,13 @@ export async function PUT(req: Request) {
                 lastUnlockedLevel: true,
                 dailyDate: true,
                 dailyCount: true,
+                xp: true,
               },
             });
 
             const prevLessons = (prevRow?.lessonsProgress ?? {}) as LessonsProgress;
+            const prevXp = prevRow?.xp ?? 0;
+            const nextXp = xpTotal === null ? prevXp : Math.max(prevXp, xpTotal);
 
             const sameDay = prevRow?.dailyDate ? isSameDay(prevRow.dailyDate, today) : false;
             const currentDailyCount = sameDay ? (prevRow?.dailyCount ?? 0) : 0;
@@ -210,17 +275,20 @@ export async function PUT(req: Request) {
                   lastUnlockedLevel: allowed,
                   dailyDate: today,
                   dailyCount: userHasPremium ? 0 : 1,
+                  xp: nextXp,
                 },
                 update: {
                   lessonsProgress,
                   lastUnlockedLevel: allowed,
                   dailyDate: userHasPremium ? prevRow?.dailyDate ?? today : today,
                   dailyCount: userHasPremium ? prevRow?.dailyCount ?? 0 : currentDailyCount + 1,
+                  xp: nextXp,
                 },
                 select: {
                   updatedAt: true,
                   lastUnlockedLevel: true,
                   dailyCount: true,
+                  xp: true,
                 },
               });
 
@@ -231,6 +299,7 @@ export async function PUT(req: Request) {
                   updatedAt: saved.updatedAt,
                   lastUnlockedLevel: saved.lastUnlockedLevel,
                   dailyCount: saved.dailyCount,
+                  xpTotal: saved.xp,
                 },
               };
             }
@@ -238,14 +307,14 @@ export async function PUT(req: Request) {
             // ✅ інакше — просто синк (без unlock)
             const saved = await tx.userProgress.upsert({
               where: { userId: user.id },
-              create: { userId: user.id, lessonsProgress },
-              update: { lessonsProgress },
-              select: { updatedAt: true },
+              create: { userId: user.id, lessonsProgress, xp: nextXp },
+              update: { lessonsProgress, xp: nextXp },
+              select: { updatedAt: true, xp: true },
             });
 
             return {
               status: 200,
-              payload: { ok: true, updatedAt: saved.updatedAt },
+              payload: { ok: true, updatedAt: saved.updatedAt, xpTotal: saved.xp },
             };
           },
           { isolationLevel: "Serializable" }

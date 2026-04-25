@@ -1,15 +1,83 @@
 /**
- * ProgressSync – синхронізація lesson progress між localStorage і сервером.
+ * ⚠️ CRITICAL FILE — CLIENT PROGRESS SYNC (НЕ ЛАМАТИ БЕЗ РОЗУМІННЯ)
  *
- * Що робить:
- * Підтягує userProgress після логіну, записує його в localStorage,
- * відправляє зміни прогресу на /api/progress і тримає sync state для UI.
+ * Це клієнтський “двигун синхронізації” між:
+ * - localStorage (джерело змін на фронті)
+ * - сервером (/api/progress)
  *
- * Пов’язані файли:
+ * 👉 Відповідає за:
+ * - синхронізацію lesson progress
+ * - синхронізацію XP
+ * - pending retry (якщо не відправилось)
+ * - debounce запитів (щоб не спамити API)
+ *
+ * --------------------------------
+ * ЯК ПРАЦЮЄ:
+ *
+ * 1. Після логіну → GET /api/progress
+ *    → записує lessonsProgress в localStorage
+ *    → записує XP
+ *
+ * 2. При будь-якій зміні:
+ *    - slovakStudy:progressChanged
+ *    - XP_SYNC_EVENT
+ *    - storage event
+ *
+ *    → викликається pushToServer()
+ *
+ * 3. pushToServer():
+ *    → бере дані з localStorage
+ *    → відправляє PUT /api/progress
+ *    → якщо fail → кладеться в pending
+ *
+ * 4. retryPending:
+ *    → при наступному load повторює sync
+ *
+ * --------------------------------
+ * ⚠️ ДУЖЕ ВАЖЛИВО:
+ *
+ * ❌ НЕ міняти ключі localStorage:
+ *    slovakStudy.{userId}.progress
+ *
+ * ❌ НЕ прибирати:
+ *    PROGRESS_EVENT
+ *    XP_SYNC_EVENT
+ *    storage listener
+ *
+ * ❌ НЕ змінювати debounce (600ms) без причини
+ *
+ * ❌ НЕ прибирати pending логіку
+ *
+ * ❌ НЕ міняти payload:
+ *    { userId, lessonsProgress, xpTotal }
+ *
+ * --------------------------------
+ * ⚠️ МОЖЛИВІ ПРОБЛЕМИ ПРИ ПОМИЛКАХ:
+ *
+ * - прогрес не синхрониться між ПК і мобілкою ❌
+ * - XP не зберігається ❌
+ * - подвійні або втрачені уроки ❌
+ * - infinite запити ❌
+ *
+ * --------------------------------
+ * ✅ ПІСЛЯ БУДЬ-ЯКИХ ЗМІН:
+ *
+ * 1. npm run build
+ *
+ * 2. тест:
+ *    - ПК → пройти урок
+ *    - мобілка → оновити → перевірити
+ *
+ * 3. перевір:
+ *    - XP синхрониться
+ *    - урок відкрився
+ *    - немає подвійних PUT запитів
+ *
+ * --------------------------------
+ * Пов’язані критичні файли:
  * - app/api/progress/route.ts
- * - lib/src/progress.ts
- * - SyncBadge.tsx
- * - saveProgress / LevelClient / lesson progress components
+ * - words-srs-storage.ts
+ * - LevelClient / saveProgress
  */
 
 "use client";
@@ -17,6 +85,11 @@
 import { useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { setActiveUserId } from "@/lib/src/progress";
+import {
+  getXpState,
+  setXpState,
+  XP_SYNC_EVENT,
+} from "@/app/components/words-srs/words-srs-storage";
 
 const GUEST_KEY = "slovakStudy.guest.progress";
 const keyFor = (userId?: string | null) =>
@@ -152,6 +225,10 @@ export default function ProgressSync() {
           );
         }
 
+        if (typeof data?.xpTotal === "number" && userId) {
+          setXpState(userId, { totalXp: data.xpTotal }, { emit: false });
+        }
+
         // 🔁 після успішного GET пробуємо дослати pending
         await retryPendingIfAny(userId);
 
@@ -197,7 +274,11 @@ export default function ProgressSync() {
         const raw = localStorage.getItem(keySnapshot);
         const lessonsProgress = extractLessonsProgress(raw);
 
-        const payload = { userId: uidSnapshot, lessonsProgress };
+        const payload = {
+          userId: uidSnapshot,
+          lessonsProgress,
+          xpTotal: getXpState(uidSnapshot).totalXp,
+        };
 
         try {
           const res = await fetch("/api/progress", {
@@ -233,6 +314,7 @@ export default function ProgressSync() {
     }
 
     window.addEventListener(PROGRESS_EVENT, onProgressChanged);
+    window.addEventListener(XP_SYNC_EVENT, onProgressChanged);
     window.addEventListener("storage", onStorage);
 
     // ✅ при поверненні на вкладку — load + retry pending
@@ -244,6 +326,7 @@ export default function ProgressSync() {
     return () => {
       cancelled = true;
       window.removeEventListener(PROGRESS_EVENT, onProgressChanged);
+      window.removeEventListener(XP_SYNC_EVENT, onProgressChanged);
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("focus", onFocus);
       cancelTimer();
