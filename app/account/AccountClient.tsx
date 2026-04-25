@@ -1,12 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { InfoRow, PasswordField } from "./account-ui";
 import { T, type Lang } from "./account-texts";
+import {
+  getUserLevel,
+  getXpState,
+  type XpState,
+} from "@/app/components/words-srs/words-srs-storage";
 
 type SessionUserLike = {
+  id?: string | null;
   name?: string | null;
   email?: string | null;
   isPremium?: boolean;
@@ -20,6 +27,7 @@ export default function AccountClient() {
   const t = T[L];
 
   const user = session?.user as SessionUserLike | undefined;
+  const userId = String(user?.id ?? "");
   const isPremium = !!user?.isPremium;
 
   const initialName = user?.name?.trim() || "";
@@ -30,6 +38,7 @@ export default function AccountClient() {
   const [savingName, setSavingName] = useState(false);
   const [nameError, setNameError] = useState("");
   const [nameSuccess, setNameSuccess] = useState("");
+  const [xp, setXp] = useState<XpState>({ totalXp: 0 });
 
   const normalizedInitialName = initialName.trim();
   const normalizedNameValue = nameValue.trim();
@@ -49,6 +58,33 @@ export default function AccountClient() {
     return first ? first.toUpperCase() : "U";
   }, [displayName]);
 
+  const levelInfo = useMemo(() => getUserLevel(xp.totalXp), [xp.totalXp]);
+  const levelTitle = levelInfo.title[L] ?? levelInfo.title.ua;
+  const xpToNext = Math.max(0, levelInfo.nextLevelXp - xp.totalXp);
+
+  const levelLabel =
+    L === "ru" ? "Уровень" : L === "en" ? "Level" : "Рівень";
+  const xpLabel = L === "ru" ? "Опыт" : L === "en" ? "XP" : "Досвід";
+  const nextLevelLabel =
+    L === "ru"
+      ? "до следующего уровня"
+      : L === "en"
+        ? "to next level"
+        : "до наступного рівня";
+  const levelHelpText =
+    L === "ru"
+      ? "Получай XP во время повторения слов на главной странице — так растёт твой уровень."
+      : L === "en"
+        ? "Earn XP by reviewing words on the main page — that is how your level grows."
+        : "Отримуй XP під час повторення слів на головній сторінці — так зростає твій рівень.";
+
+  const goToReviewLabel =
+    L === "ru"
+      ? "Перейти к повторению"
+      : L === "en"
+        ? "Go to word review"
+        : "Перейти до повторення";
+
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -64,6 +100,25 @@ export default function AccountClient() {
 
   const canSubmitPassword =
     !savingPassword && !!currentPassword && !!newPassword && !!confirmPassword;
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    if (!userId) return;
+
+    setXp(getXpState(userId));
+
+    function handleSrsChanged() {
+      setXp(getXpState(userId));
+    }
+
+    window.addEventListener("slovakStudy:srsChanged", handleSrsChanged);
+    window.addEventListener("storage", handleSrsChanged);
+
+    return () => {
+      window.removeEventListener("slovakStudy:srsChanged", handleSrsChanged);
+      window.removeEventListener("storage", handleSrsChanged);
+    };
+  }, [status, userId]);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -425,76 +480,125 @@ export default function AccountClient() {
   return (
     <div className="mx-auto max-w-5xl space-y-8">
       <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
-        <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-100 px-8 py-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-slate-900 text-3xl font-bold text-white shadow-sm transition duration-200 hover:scale-[1.03]">
-                  {avatarUrl ? (
-                    <img
-                      src={avatarUrl}
-                      alt={displayName}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    avatarLetter
-                  )}
-                </div>
-
-                <label className="cursor-pointer rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
-                  {uploadingAvatar ? t.uploadingAvatar : t.changeAvatar}
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    className="hidden"
-                    disabled={uploadingAvatar}
-                    onChange={handleAvatarChange}
+        <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-100 px-5 py-6 sm:px-8 sm:py-8">
+          <div className="grid gap-6 md:grid-cols-[120px_1fr] md:items-start">
+            <div className="flex flex-col items-center gap-2 md:pt-10">
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-slate-900 text-3xl font-bold text-white shadow-sm transition duration-200 hover:scale-[1.03]">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={displayName}
+                    className="h-full w-full object-cover"
                   />
-                </label>
+                ) : (
+                  avatarLetter
+                )}
               </div>
 
-              <div className="space-y-1">
-                <div className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 shadow-sm">
-                  {t.profileBadge}
-                </div>
-
-                <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-                  {displayName}
-                </h1>
-
-                <p className="break-all text-sm text-slate-600 sm:text-base">
-                  {displayEmail}
-                </p>
-
-                {avatarError ? (
-                  <div className="rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
-                    {avatarError}
-                  </div>
-                ) : null}
-
-                {avatarSuccess ? (
-                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
-                    {avatarSuccess}
-                  </div>
-                ) : null}
-              </div>
+              <label className="cursor-pointer rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+                {uploadingAvatar ? t.uploadingAvatar : t.changeAvatar}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  disabled={uploadingAvatar}
+                  onChange={handleAvatarChange}
+                />
+              </label>
             </div>
 
-            <div className="flex">
-              <div
-                className={`inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition ${
-                  isPremium
+            <div className="min-w-0">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 text-center sm:text-left">
+                  <div className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 shadow-sm">
+                    {t.profileBadge}
+                  </div>
+
+                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                    {displayName}
+                  </h1>
+
+                  <p className="break-all text-sm text-slate-600 sm:text-base">
+                    {displayEmail}
+                  </p>
+                </div>
+
+                <div
+                  className={`mx-auto inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition sm:mx-0 ${isPremium
                     ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
                     : "bg-slate-100 text-slate-700 ring-1 ring-slate-200"
-                }`}
-              >
-                {isPremium ? t.premium : t.free}
+                    }`}
+                >
+                  {isPremium ? t.premium : t.free}
+                </div>
               </div>
+
+              <div className="mt-5 max-w-2xl rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 p-4 shadow-sm">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                      {levelLabel}
+                    </div>
+
+                    <div className="mt-1 text-xl font-bold text-slate-950">
+                      ⭐ {levelInfo.level} — {levelTitle}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-amber-200 bg-white px-3 py-1.5 shadow-sm">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                      {xpLabel}
+                    </div>
+                    <div className="text-lg font-bold text-slate-950">
+                      {xp.totalXp} XP
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 h-2 overflow-hidden rounded-full bg-amber-100">
+                  <div
+                    className="h-full rounded-full bg-amber-500 transition-all duration-300"
+                    style={{ width: `${levelInfo.progressPercent}%` }}
+                  />
+                </div>
+
+                <div className="mt-2 text-xs font-medium text-amber-800">
+                  {levelInfo.level >= 6
+                    ? "Max level"
+                    : `${xpToNext} XP ${nextLevelLabel}`}
+                </div>
+
+                <div className="mt-3 flex flex-col gap-3 rounded-2xl border border-amber-100 bg-white/70 px-3 py-3 text-xs leading-5 text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="flex items-start gap-2">
+                    <span>💡</span>
+                    <span>{levelHelpText}</span>
+                  </span>
+
+                  <Link
+                    href="/"
+                    className="inline-flex shrink-0 justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black active:scale-[0.98]"
+                  >
+                    {goToReviewLabel}
+                  </Link>
+                </div>
+              </div>
+
+              {avatarError ? (
+                <div className="mt-3 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                  {avatarError}
+                </div>
+              ) : null}
+
+              {avatarSuccess ? (
+                <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                  {avatarSuccess}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
 
-        <div className="px-8 py-6">
+        <div className="px-5 py-5 sm:px-8 sm:py-6">
           <p className="text-slate-600">{t.subtitle}</p>
         </div>
       </section>
