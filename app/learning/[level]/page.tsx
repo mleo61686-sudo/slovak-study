@@ -46,6 +46,10 @@ function isPremiumLevel(id: string) {
 
   return false;
 }
+function isFreeStarterUnlimitedLesson(id: string) {
+  const parsed = parseLevelId(id);
+  return parsed?.band === "a0" && parsed.n >= 1 && parsed.n <= 10;
+}
 
 function bandOrder(band: string) {
   const m = /^([ab])(\d)$/.exec(band.toLowerCase());
@@ -254,10 +258,14 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const dailyCount =
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
 
-  if (!hasPremium && compareLevel(levelId, allowed) === 0 && dailyCount >= 2) {
+  if (
+    !hasPremium &&
+    compareLevel(levelId, allowed) === 0 &&
+    !isFreeStarterUnlimitedLesson(levelId) &&
+    dailyCount >= 2
+  ) {
     redirect("/learning/limit");
   }
-
   const nextId = nextLevelId(levelId);
 
   let canGoNext = true;
@@ -275,7 +283,12 @@ export default async function Page({ params }: { params: Promise<{ level: string
       lockedReason = "Спочатку пройди попередні уроки/рівні (послідовно).";
     }
 
-    if (canGoNext && nextId === allowed && dailyCount >= 2) {
+    if (
+      canGoNext &&
+      nextId === allowed &&
+      !isFreeStarterUnlimitedLesson(nextId) &&
+      dailyCount >= 2
+    ) {
       canGoNext = false;
       lockedReason = "Ліміт 2 нових уроки на день для безкоштовної версії.";
     }

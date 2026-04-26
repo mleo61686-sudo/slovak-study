@@ -237,14 +237,22 @@ function getNextLevelId(levelId: string) {
   return levelId;
 }
 
+function isFreeStarterUnlimitedLesson(levelId: string) {
+  const m = /^a0-(\d+)$/i.exec(String(levelId).toLowerCase());
+  if (!m) return false;
+
+  const n = Number(m[1]);
+  return n >= 1 && n <= 10;
+}
+
 const EXERCISES: ExerciseDef[] = [
   { kind: "chooseTranslation", title: "chooseTranslation", mode: "perWord" },
-  { kind: "chooseSlovak", title: "chooseSlovak", mode: "perWord" },
-  { kind: "writeWord", title: "writeWord", mode: "perWord" },
-  { kind: "audioQuiz", title: "audioQuiz", mode: "perWord" },
-  { kind: "matchColumns", title: "matchColumns", mode: "perWord" },
-  { kind: "buildSentence", title: "buildSentence", mode: "perWord" },
-  { kind: "buildUaSentence", title: "buildUaSentence", mode: "perWord" },
+  //  { kind: "chooseSlovak", title: "chooseSlovak", mode: "perWord" },
+  //  { kind: "writeWord", title: "writeWord", mode: "perWord" },
+  //  { kind: "audioQuiz", title: "audioQuiz", mode: "perWord" },
+  //  { kind: "matchColumns", title: "matchColumns", mode: "perWord" },
+  //  { kind: "buildSentence", title: "buildSentence", mode: "perWord" },
+  //  { kind: "buildUaSentence", title: "buildUaSentence", mode: "perWord" },
 ];
 
 function getExerciseTitle(
@@ -473,13 +481,14 @@ export default function LevelClient({
         if (res.ok && data?.ok) {
           const dailyCount =
             typeof data?.dailyCount === "number" ? data.dailyCount : 0;
-          const freeCanGoNext = dailyCount < 2;
 
-          if (!canGoNext && freeCanGoNext) {
+          const nextIsStarterUnlimited = isFreeStarterUnlimitedLesson(nextLevelId);
+          const freeCanGoNext = nextIsStarterUnlimited || dailyCount < 2;
+          if (freeCanGoNext) {
             setCanGoNextNow(true);
             setLockedReasonNow(undefined);
           } else {
-            setCanGoNextNow(canGoNext || freeCanGoNext);
+            setCanGoNextNow(canGoNext);
           }
         }
       } catch (e) {

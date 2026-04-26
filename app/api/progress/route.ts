@@ -8,68 +8,6 @@
  * - XP користувача (xp)
  *
  * 👉 Це core-логіка всього навчання.
- *
- * -------------------------------
- * ЯК ПРАЦЮЄ:
- *
- * GET:
- * - повертає повний прогрес користувача
- * - використовується в ProgressSync (pull на клієнт)
- *
- * PUT:
- * - приймає lessonsProgress + xpTotal з клієнта
- * - визначає, чи завершено новий урок
- * - оновлює:
- *    - lessonsProgress
- *    - lastUnlockedLevel
- *    - dailyCount / dailyDate
- *    - xp (тільки якщо більше попереднього)
- *
- * -------------------------------
- * ⚠️ ДУЖЕ ВАЖЛИВО:
- *
- * ❌ НЕ МІНЯТИ формат lessonsProgress
- * ❌ НЕ МІНЯТИ логіку "allowed lesson"
- * ❌ НЕ прибирати перевірку doneNow / donePrev
- *
- * ❌ НЕ міняти:
- *    nextLevelId()
- *    parseLevelId()
- *
- * ❌ НЕ ламати daily limit логіку
- *
- * ❌ НЕ зменшувати xp:
- *    xp = Math.max(prevXp, xpTotal)
- *
- * ❌ НЕ прибирати transaction (Serializable)
- *
- * -------------------------------
- * ⚠️ МОЖЛИВІ НАСЛІДКИ ПОМИЛОК:
- *
- * - користувач втрачає прогрес ❌
- * - відкриваються всі уроки одразу ❌
- * - daily limit не працює ❌
- * - XP скидається або “стрибає” ❌
- *
- * -------------------------------
- * ✅ ПІСЛЯ БУДЬ-ЯКИХ ЗМІН:
- *
- * 1. npm run build
- *
- * 2. ТЕСТ ОБОВʼЯЗКОВО:
- *    - ПК → пройти урок
- *    - мобілка → перевірити sync
- *
- * 3. Перевір:
- *    - unlock наступного уроку
- *    - daily limit
- *    - XP не падає
- *
- * -------------------------------
- * Пов’язані критичні файли:
- * - app/components/ProgressSync.tsx
- * - words-srs-storage.ts (XP)
- * - prisma/schema.prisma (UserProgress)
  */
 
 import { NextResponse } from "next/server";
@@ -118,6 +56,12 @@ function hasPremium(user: { isPremium: boolean; premiumUntil: Date | null }) {
   return user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 }
 
+// ✅ Перші 10 уроків A0 не рахуються в daily limit для free користувачів
+function isFreeStarterUnlimitedLesson(levelId: string) {
+  const p = parseLevelId(levelId);
+  return p?.band === "a0" && p.n >= 1 && p.n <= 10;
+}
+
 // ✅ Retry helper for Prisma deadlocks / write conflicts (P2034)
 async function withRetry<T>(fn: () => Promise<T>, retries = 5) {
   let lastErr: any;
@@ -128,10 +72,8 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 5) {
     } catch (e: any) {
       lastErr = e;
 
-      // Prisma P2034 = write conflict / deadlock
       if (e?.code !== "P2034") throw e;
 
-      // backoff: 50, 100, 200, 400, 800 ms
       const delay = 50 * Math.pow(2, i);
       await new Promise((r) => setTimeout(r, delay));
     }
@@ -179,7 +121,6 @@ export async function PUT(req: Request) {
     return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  // ✅ user + premium
   const user = await prisma.user.findUnique({
     where: { email },
     select: { id: true, isPremium: true, premiumUntil: true },
@@ -249,13 +190,10 @@ export async function PUT(req: Request) {
               ? nextLevelId(prevRow.lastUnlockedLevel)
               : "a0-1";
 
-            // ✅ супер-важливо: перевіряємо тільки allowed
             const doneNow = isDone(lessonsProgress[allowed]);
             const donePrev = isDone(prevLessons[allowed]);
 
-            // Якщо урок "allowed" став done зараз — це завершення нового уроку
             if (doneNow && !donePrev) {
-              // додаткова валідація
               if (!parseLevelId(allowed)) {
                 return {
                   status: 400,
@@ -263,8 +201,11 @@ export async function PUT(req: Request) {
                 };
               }
 
-              // free ліміт (premium bypass)
-              if (!userHasPremium && currentDailyCount >= 2) {
+              const isStarterUnlimited = isFreeStarterUnlimitedLesson(allowed);
+              const shouldCountDaily = !userHasPremium && !isStarterUnlimited;
+
+              // free ліміт після перших 10 уроків A0
+              if (shouldCountDaily && currentDailyCount >= 2) {
                 return {
                   status: 429,
                   payload: { ok: false, code: "DAILY_LIMIT", limit: 2 },
@@ -277,15 +218,17 @@ export async function PUT(req: Request) {
                   userId: user.id,
                   lessonsProgress,
                   lastUnlockedLevel: allowed,
-                  dailyDate: today,
-                  dailyCount: userHasPremium ? 0 : 1,
+                  dailyDate: shouldCountDaily ? today : null,
+                  dailyCount: shouldCountDaily ? 1 : 0,
                   xp: nextXp,
                 },
                 update: {
                   lessonsProgress,
                   lastUnlockedLevel: allowed,
-                  dailyDate: userHasPremium ? prevRow?.dailyDate ?? today : today,
-                  dailyCount: userHasPremium ? prevRow?.dailyCount ?? 0 : currentDailyCount + 1,
+                  dailyDate: shouldCountDaily ? today : prevRow?.dailyDate ?? null,
+                  dailyCount: shouldCountDaily
+                    ? currentDailyCount + 1
+                    : prevRow?.dailyCount ?? 0,
                   xp: nextXp,
                 },
                 select: {
@@ -308,7 +251,6 @@ export async function PUT(req: Request) {
               };
             }
 
-            // ✅ інакше — просто синк (без unlock)
             const saved = await tx.userProgress.upsert({
               where: { userId: user.id },
               create: { userId: user.id, lessonsProgress, xp: nextXp },

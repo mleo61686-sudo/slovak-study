@@ -16,18 +16,30 @@ const DAILY_FREE_LIMIT = 2;
 const PROGRESS_EVENT = "slovakStudy:progressChanged";
 const SYNC_EVENT = "slovakStudy:syncState";
 
-function isPremiumLesson(lessonId: string) {
+function parseLevelId(lessonId: string) {
   const match = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(
     String(lessonId).toLowerCase()
   );
 
-  if (!match) return false;
+  if (!match) return null;
 
-  const band = match[1].toLowerCase();
-  const n = Number(match[2]);
+  return {
+    band: match[1].toLowerCase(),
+    n: Number(match[2]),
+  };
+}
 
-  if (band === "b1" || band === "b2") return true;
-  if (band === "a2" && n > FREE_A2_LESSONS) return true;
+function isFreeStarterUnlimitedLesson(lessonId: string) {
+  const parsed = parseLevelId(lessonId);
+  return parsed?.band === "a0" && parsed.n >= 1 && parsed.n <= 10;
+}
+
+function isPremiumLesson(lessonId: string) {
+  const parsed = parseLevelId(lessonId);
+  if (!parsed) return false;
+
+  if (parsed.band === "b1" || parsed.band === "b2") return true;
+  if (parsed.band === "a2" && parsed.n > FREE_A2_LESSONS) return true;
 
   return false;
 }
@@ -123,7 +135,8 @@ export default function BandPage() {
   const hasReachedDailyLimit =
     !isPremium &&
     !isAdmin &&
-    (dailyCount === null || dailyCount >= DAILY_FREE_LIMIT);
+    dailyCount !== null &&
+    dailyCount >= DAILY_FREE_LIMIT;
 
   const isDone = (id: string) => {
     const key = id.toLowerCase();
@@ -272,7 +285,15 @@ export default function BandPage() {
           const lockedByPremium =
             !isPremium && !isAdmin && isPremiumLesson(lesson.id);
 
-          const lockedByDailyLimit = hasReachedDailyLimit && !done;
+          const lessonUsesDailyLimit =
+            !isFreeStarterUnlimitedLesson(lesson.id);
+
+          const lockedByDailyLimit =
+            !isPremium &&
+            !isAdmin &&
+            !done &&
+            lessonUsesDailyLimit &&
+            (dailyCount === null || dailyCount >= DAILY_FREE_LIMIT);
 
           const locked =
             lockedByProgress || lockedByPremium || lockedByDailyLimit;

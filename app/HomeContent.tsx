@@ -21,7 +21,7 @@ type HomeTranslations = {
   ctaLearning: string;
   ctaDict: string;
   ctaGrammar: string;
-
+  starterBadge: string;
   free: string[];
 
   seoH2: string;
@@ -60,7 +60,7 @@ const t: Record<Lang, HomeTranslations> = {
     ctaLearning: "Перейти до навчання 🚀",
     ctaDict: "Відкрити словник",
     ctaGrammar: "Перейти до граматики",
-
+    starterBadge: "🚀 Перші 10 уроків у кожному курсі — без ліміту",
     free: [
       "Короткі уроки по 10 слів без перевантаження",
       "Словник, граматика та приклади речень в одному місці",
@@ -167,7 +167,7 @@ const t: Record<Lang, HomeTranslations> = {
     ctaLearning: "Перейти к обучению 🚀",
     ctaDict: "Открыть словарь",
     ctaGrammar: "Перейти к грамматике",
-
+    starterBadge: "🚀 Первые 10 уроков в каждом курсе — без лимита",
     free: [
       "Короткие уроки по 10 слов без перегруза",
       "Словарь, грамматика и примеры предложений в одном месте",
@@ -275,7 +275,7 @@ const t: Record<Lang, HomeTranslations> = {
     ctaLearning: "Go to learning 🚀",
     ctaDict: "Open dictionary",
     ctaGrammar: "Go to grammar",
-
+    starterBadge: "🚀 First 10 lessons in each course — unlimited",
     free: [
       "Short 10-word lessons without overload",
       "Dictionary, grammar, and example sentences in one place",
@@ -436,16 +436,21 @@ export default function HomeContent({
               {tr.ctaGrammar}
             </Link>
           </div>
+          <div className="mt-4 flex flex-col items-start gap-3">
+            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-900 shadow-sm">
+              <span>{tr.starterBadge}</span>
+            </div>
 
-          <div className="mt-3 inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            <span>💡</span>
-            <span>
-              {lang === "ua"
-                ? "Щоб змінити курс, натисни на аватар зверху праворуч і обери «Обрати курс»."
-                : lang === "ru"
-                  ? "Чтобы сменить курс, нажми на аватар сверху справа и выбери «Выбрать курс»."
-                  : "To change the course, click your avatar in the top right and choose “Select course”."}
-            </span>
+            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <span>💡</span>
+              <span>
+                {lang === "ua"
+                  ? "Щоб змінити курс, натисни на аватар зверху праворуч і обери «Обрати курс»."
+                  : lang === "ru"
+                    ? "Чтобы сменить курс, нажми на аватар сверху справа и выбери «Выбрать курс»."
+                    : "To change the course, click your avatar in the top right and choose “Select course”."}
+              </span>
+            </div>
           </div>
 
           <div className="mt-4 space-y-1 text-sm text-slate-700">

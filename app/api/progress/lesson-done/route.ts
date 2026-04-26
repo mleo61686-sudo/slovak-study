@@ -36,6 +36,13 @@ function isSameDay(a: Date, b: Date) {
 function toDayKey(d: Date) {
   return d.toISOString().slice(0, 10); // YYYY-MM-DD
 }
+function isFreeStarterUnlimitedLesson(id: string) {
+  const m = /^a0-(\d+)$/i.exec(String(id).toLowerCase());
+  if (!m) return false;
+
+  const n = Number(m[1]);
+  return n >= 1 && n <= 10;
+}
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -96,15 +103,16 @@ export async function POST(req: Request) {
   // ✅ по даті рахуємо current dailyCount
   const currentCount =
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
+  const shouldCountDaily = !hasPremium && !isFreeStarterUnlimitedLesson(id);
 
   // ✅ Серверний ліміт для FREE (преміум байпас)
-  if (!hasPremium && currentCount >= 2) {
+  if (shouldCountDaily && currentCount >= 2) {
     return NextResponse.json({ ok: false, code: "DAILY_LIMIT", limit: 2 }, { status: 429 });
   }
 
   // ✅ FREE: збільшуємо ліміт тільки для нових уроків
   // ✅ PREMIUM: ліміт не важливий
-  const nextCount = currentCount + (hasPremium ? 0 : 1);
+  const nextCount = currentCount + (shouldCountDaily ? 1 : 0);
 
   // ✅ позначаємо урок як done + фіксуємо дату (для streak/records)
   const prevObj =
@@ -125,14 +133,14 @@ export async function POST(req: Request) {
     data: {
       lessonsProgress: nextLp,
       dailyDate: today,
-      dailyCount: hasPremium ? currentCount : nextCount,
+      dailyCount: nextCount,
       lastUnlockedLevel: id,
     },
   });
 
   return NextResponse.json({
     ok: true,
-    dailyCount: hasPremium ? currentCount : nextCount,
+    dailyCount: nextCount,
     alreadyDone: false,
   });
 }

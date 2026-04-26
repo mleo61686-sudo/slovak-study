@@ -123,6 +123,11 @@ function parseLevelId(id: string) {
   return { band: m[1].toLowerCase(), n: Number(m[2]) };
 }
 
+function isFreeStarterUnlimitedLesson(lessonId: string) {
+  const parsed = parseLevelId(lessonId);
+  return parsed?.band === "a0" && parsed.n >= 1 && parsed.n <= 10;
+}
+
 function isPremiumLesson(lessonId: string) {
   const parsed = parseLevelId(lessonId);
   if (!parsed) return false;
@@ -338,10 +343,15 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
 
   const lastDone = useMemo(() => getLastDone(progress), [progress]);
 
+  const isDailyCountLoading = dailyCount === null;
+  const isAllowedStarterUnlimited = isFreeStarterUnlimitedLesson(allowed);
+
   const hasReachedDailyLimit =
     !isPremium &&
     !isAdmin &&
-    (dailyCount === null || dailyCount >= DAILY_FREE_LIMIT);
+    !isAllowedStarterUnlimited &&
+    dailyCount !== null &&
+    dailyCount >= DAILY_FREE_LIMIT;
 
   function isLessonUnlockedGlobal(lessonId: string) {
     if (isPremium || isAdmin) return true;
@@ -351,8 +361,17 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
     // Уже пройдені уроки можна повторювати навіть після daily limit.
     if (done) return true;
 
-    if (hasReachedDailyLimit) return false;
     if (isPremiumLesson(lessonId)) return false;
+
+    // Перші 10 уроків A0 можна проходити без daily limit.
+    if (isFreeStarterUnlimitedLesson(lessonId)) {
+      return compareLevel(lessonId, allowed) <= 0;
+    }
+
+    // Для уроків після стартової фази чекаємо dailyCount,
+    // щоб не було короткого "мигання" кнопки доступу.
+    if (isDailyCountLoading) return false;
+    if (dailyCount >= DAILY_FREE_LIMIT) return false;
 
     return compareLevel(lessonId, allowed) <= 0;
   }
@@ -473,8 +492,11 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                     const isStart = lesson.id === allowed && !done;
                     const lessonPath = `/learning/${lesson.id}`;
 
+                    const lessonUsesDailyLimit =
+                      !isFreeStarterUnlimitedLesson(lesson.id);
+
                     const lockedText =
-                      hasReachedDailyLimit && !done
+                      hasReachedDailyLimit && !done && lessonUsesDailyLimit
                         ? t.dailyLimit
                         : isPremiumLesson(lesson.id)
                           ? t.premiumOnly
@@ -483,8 +505,9 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                     return (
                       <div
                         key={lesson.id}
-                        className={`rounded-2xl border p-4 ${unlocked ? "hover:bg-slate-50" : "opacity-60"
-                          }`}
+                        className={`rounded-2xl border p-4 ${
+                          unlocked ? "hover:bg-slate-50" : "opacity-60"
+                        }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-medium">
