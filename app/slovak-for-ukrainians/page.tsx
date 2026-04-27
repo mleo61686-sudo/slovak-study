@@ -5,18 +5,18 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Словацька мова: навчання онлайн A0–B2 | Flunio",
+  title: "Словацька мова онлайн з нуля A0–B2 | Flunio",
   description:
-    "Словацька мова онлайн: навчання A0–B2, уроки, словник, граматика, вправи та прогрес. Підійде для життя, роботи й навчання у Словаччині.",
+    "Вивчай словацьку мову онлайн у Flunio: короткі уроки A0–B2, словник, граматика, вправи, озвучка та прогрес для щоденного навчання.",
 
   alternates: {
     canonical: `${SITE_URL}/slovak-for-ukrainians`,
   },
 
   openGraph: {
-    title: "Словацька мова онлайн (A0–B2) | Flunio",
+    title: "Словацька мова онлайн з нуля A0–B2 | Flunio",
     description:
-      "Уроки A0–B2, словник і граматика — вчи словацьку системно, з вправами та прогресом.",
+      "Словацька мова онлайн: уроки, словник, граматика, вправи, озвучка та прогрес в одному місці.",
     url: `${SITE_URL}/slovak-for-ukrainians`,
     siteName: "Flunio",
     type: "website",
@@ -27,24 +27,24 @@ export const metadata: Metadata = {
 
 const FAQ = [
   {
-    q: "Чи підходить Flunio, якщо я живу/планую жити у Словаччині?",
-    a: "Так. Тут фокус на практичній лексиці та граматиці для життя, роботи й документів: короткі уроки, вправи та озвучка.",
+    q: "Чи можна вивчати словацьку мову онлайн з нуля?",
+    a: "Так. У Flunio можна почати з рівня A0: базові слова, короткі уроки, озвучка, вправи та поступовий перехід до A1, A2, B1 і B2.",
   },
   {
-    q: "З чого краще почати?",
-    a: "Почни з рівня A0: пройди 5–10 уроків і роби вправи щодня по 10–20 хвилин.",
+    q: "Скільки часу потрібно займатися щодня?",
+    a: "Оптимально 10–20 хвилин на день. Регулярні короткі заняття зазвичай працюють краще, ніж довгі, але рідкісні сесії.",
   },
   {
-    q: "Чи є переклад українською?",
-    a: "Так, усі слова мають український переклад, а в словнику можна швидко шукати й слухати вимову.",
+    q: "Що входить у навчання?",
+    a: "На платформі є уроки по рівнях, словник, граматика з прикладами, озвучка слів і фраз, а також вправи для повторення.",
   },
   {
-    q: "Чи є граматика з прикладами?",
-    a: "Так. У розділі граматики є теми з прикладами, озвучкою і міні-вправами.",
+    q: "Чи підходить Flunio для життя або роботи у Словаччині?",
+    a: "Так. Курс допомагає вивчати практичну лексику для побуту, роботи, навчання, документів, транспорту та щоденного спілкування.",
   },
   {
     q: "Чи зберігається прогрес?",
-    a: "Так, прогрес уроків зберігається, щоб ти бачив що пройдено і що повторити.",
+    a: "Так, прогрес уроків зберігається, щоб ти бачив пройдені теми та міг повертатися до повторення.",
   },
 ];
 
@@ -63,7 +63,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10 space-y-10">
+    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10">
       <Script
         id="faq-schema-uk-slovak-for-ukrainians"
         type="application/ld+json"
@@ -71,56 +71,47 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="space-y-3">
-        <h1 className="text-3xl sm:text-4xl font-extrabold">
-          Словацька мова — навчання онлайн (A0–B2)
+      <section className="space-y-4">
+        <h1 className="text-3xl font-extrabold sm:text-4xl">
+          Словацька мова онлайн — навчання з нуля до B2
         </h1>
 
         <p className="text-slate-700">
-          Flunio — тренажер для системного вивчення словацької:
-          короткі уроки, озвучка, вправи, словник та граматика.
-          Підійде, якщо ти живеш або плануєш жити у Словаччині
-          та хочеш швидко підтягнути мову.
+          Flunio допомагає вивчати словацьку мову онлайн системно і без хаосу.
+          Замість випадкових списків слів, відео та складних граматичних таблиць
+          ти можеш проходити короткі уроки, слухати вимову, виконувати вправи та
+          поступово будувати словниковий запас.
         </p>
 
         <p className="text-slate-700">
-          Детальний опис формату навчання дивись на сторінці{" "}
-          <Link href="/vyvchennia-slovatskoi-movy-online" className="underline">
-            вивчення словацької мови онлайн
-          </Link>.
+          Курс підходить для тих, хто починає з нуля, хоче покращити щоденне
+          спілкування або вивчає словацьку для життя, роботи, навчання чи
+          документів у Словаччині. Почни з A0 і рухайся далі до A1, A2, B1 та B2
+          у своєму темпі.
         </p>
 
-        <div className="flex flex-wrap gap-2 pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link
-            className="px-4 py-2 rounded-xl bg-black text-white"
+            className="rounded-xl bg-black px-4 py-2 text-white"
             href="/learning"
           >
             Почати навчання
           </Link>
 
-          <Link
-            className="px-4 py-2 rounded-xl border"
-            href="/learning/levels/a0"
-          >
+          <Link className="rounded-xl border px-4 py-2" href="/learning/a0-1">
             Старт з A0 →
           </Link>
 
-          <Link
-            className="px-4 py-2 rounded-xl border"
-            href="/dictionary"
-          >
+          <Link className="rounded-xl border px-4 py-2" href="/dictionary">
             Словник
           </Link>
 
-          <Link
-            className="px-4 py-2 rounded-xl border"
-            href="/grammar"
-          >
+          <Link className="rounded-xl border px-4 py-2" href="/grammar">
             Граматика
           </Link>
 
           <Link
-            className="px-4 py-2 rounded-xl border"
+            className="rounded-xl border px-4 py-2"
             href="/ru/slovak-for-ukrainians"
           >
             Русская версия →
@@ -130,81 +121,207 @@ export default function Page() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">
-            1) Практика для життя
-          </h2>
+          <h2 className="text-lg font-bold">1) Уроки словацької по рівнях</h2>
           <p className="mt-2 text-slate-700">
-            Лексика і теми, які реально потрібні у Словаччині:
-            робота, документи, побут.
+            Матеріал організований від A0 до B2, щоб ти завжди розумів, що
+            вчити далі. Це допомагає рухатися послідовно, а не стрибати між
+            випадковими темами.
           </p>
         </div>
 
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">
-            2) Короткі уроки
-          </h2>
+          <h2 className="text-lg font-bold">2) Коротка щоденна практика</h2>
           <p className="mt-2 text-slate-700">
-            По 10 слів на урок + вправи —
-            легко займатися щодня без вигорання.
+            Уроки короткі, тому їх легко проходити щодня. 10–20 хвилин на день
+            достатньо, щоб поступово накопичувати словниковий запас і не
+            вигорати.
           </p>
         </div>
 
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">
-            3) Озвучка
-          </h2>
+          <h2 className="text-lg font-bold">3) Озвучка слів і фраз</h2>
           <p className="mt-2 text-slate-700">
-            Слухай вимову слів і фраз та повторюй —
-            це швидко прокачує слух.
+            Словацьку важливо не тільки читати, а й чути. Озвучка допомагає
+            звикати до вимови, повторювати слова вголос і краще сприймати мову
+            на слух.
           </p>
         </div>
 
         <div className="rounded-2xl border bg-white p-5">
-          <h2 className="font-bold text-lg">
-            4) Словник + граматика
-          </h2>
+          <h2 className="text-lg font-bold">4) Словник і граматика разом</h2>
           <p className="mt-2 text-slate-700">
-            Швидкий пошук слів і теми граматики з прикладами —
-            все в одному місці.
+            У Flunio є уроки, словник, граматичні теми та вправи. Це дозволяє
+            не просто запам’ятовувати слова, а й розуміти, як використовувати їх
+            у реченнях.
           </p>
         </div>
       </section>
 
       <section className="rounded-2xl border bg-white p-6 space-y-4">
         <h2 className="text-2xl font-bold">
-          Як почати (план на 7 днів)
+          Як почати вивчати словацьку мову онлайн
         </h2>
 
-        <ol className="list-decimal pl-5 space-y-2 text-slate-700">
-          <li>День 1: пройди 2 уроки A0.</li>
-          <li>День 2–3: ще 2–4 уроки + вправи.</li>
-          <li>День 4: відкрий граматику і повтори слова.</li>
-          <li>
-            День 5–6: продовжуй A0 +
-            слухай озвучку і повторюй уголос.
-          </li>
-          <li>
-            День 7: закріпи —
-            пройди вправи по попередніх уроках.
-          </li>
+        <p className="text-slate-700">
+          Якщо ти починаєш з нуля, не варто одразу намагатися вивчити всю
+          граматику. Спочатку краще створити базу: найчастіші слова, прості
+          фрази, вимова та базові конструкції. Коли в пам’яті вже є приклади,
+          граматика сприймається значно легше.
+        </p>
+
+        <ol className="list-decimal space-y-2 pl-5 text-slate-700">
+          <li>Почни з A0, якщо вивчаєш словацьку з нуля.</li>
+          <li>Проходь невеликі уроки з корисними словами.</li>
+          <li>Слухай озвучку і повторюй слова вголос.</li>
+          <li>Роби вправи одразу після уроку.</li>
+          <li>Користуйся словником для пошуку і повторення.</li>
+          <li>Відкривай граматику, коли потрібно зрозуміти правило.</li>
+          <li>Переходь до A1, A2, B1 і B2 поступово, без поспіху.</li>
         </ol>
+
+        <div className="pt-2">
+          <Link
+            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
+            href="/learning/a0-1"
+          >
+            Перейти до A0 →
+          </Link>
+        </div>
       </section>
 
       <section className="rounded-2xl border bg-white p-6 space-y-4">
         <h2 className="text-2xl font-bold">
-          FAQ
+          Що найскладніше у словацькій для початківців?
         </h2>
+
+        <p className="text-slate-700">
+          Словацька мова має багато спільного з іншими слов’янськими мовами, але
+          все одно потребує системного підходу. Найчастіше складність викликають
+          відмінки, закінчення слів, форми дієслів і вимова окремих звуків. Це
+          нормально: такі речі краще засвоюються поступово, через приклади та
+          регулярне повторення.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border p-4">
+            <h3 className="font-semibold">Вимова</h3>
+            <p className="mt-2 text-sm text-slate-700">
+              У словацькій є довгі голосні, м’які звуки та літери č, š, ž, ľ,
+              ô. Озвучка допомагає звикнути до них швидше.
+            </p>
+          </div>
+
+          <div className="rounded-xl border p-4">
+            <h3 className="font-semibold">Відмінки</h3>
+            <p className="mt-2 text-sm text-slate-700">
+              Іменники та прикметники змінюються залежно від ролі у реченні.
+              Це легше зрозуміти через готові приклади.
+            </p>
+          </div>
+
+          <div className="rounded-xl border p-4">
+            <h3 className="font-semibold">Дієслова</h3>
+            <p className="mt-2 text-sm text-slate-700">
+              Дієслова змінюються за особами, часом і значенням. Починати
+              краще з найчастіших дієслів у теперішньому часі.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-2xl border bg-white p-6 space-y-4">
+        <h2 className="text-2xl font-bold">
+          Словацька лексика для реальних ситуацій
+        </h2>
+
+        <p className="text-slate-700">
+          Хороше навчання словацької має давати не тільки окремі слова, а й
+          лексику для реального життя: знайомство, покупки, транспорт, житло,
+          робота, навчання, документи та щоденне спілкування.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-xl border p-4">
+            <h3 className="font-semibold">Щоденна словацька</h3>
+            <p className="mt-2 text-slate-700">
+              Вчи слова і фрази для привітань, їжі, сім’ї, покупок, житла,
+              транспорту та повсякденних розмов.
+            </p>
+          </div>
+
+          <div className="rounded-xl border p-4">
+            <h3 className="font-semibold">Словацька для роботи й навчання</h3>
+            <p className="mt-2 text-slate-700">
+              Поступово додавай слова для інструкцій, графіків, документів,
+              комунікації, навчання і робочих ситуацій.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-2xl border bg-white p-6 space-y-4">
+        <h2 className="text-2xl font-bold">
+          Граматика має допомагати, а не блокувати навчання
+        </h2>
+
+        <p className="text-slate-700">
+          Граматика важлива, але її краще вивчати тоді, коли вона пояснює вже
+          знайомі приклади. Спочатку можна накопичувати слова і фрази, а потім
+          відкривати граматичні теми, щоб зрозуміти, чому речення побудоване
+          саме так.
+        </p>
+
+        <p className="text-slate-700">
+          Такий підхід особливо корисний для словацької, бо відмінки, дієслова
+          і закінчення легше засвоюються не як суха теорія, а через контекст і
+          повторення.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/grammar" className="rounded-xl border px-4 py-2">
+            Відкрити граматику
+          </Link>
+
+          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
+            Відкрити словник
+          </Link>
+
+          <Link href="/practice" className="rounded-xl border px-4 py-2">
+            Перейти до вправ
+          </Link>
+        </div>
+      </section>
+
+      <section className="rounded-2xl border bg-white p-6 space-y-4">
+        <h2 className="text-2xl font-bold">
+          Кому підійде навчання словацької у Flunio
+        </h2>
+
+        <div className="space-y-3 text-slate-700">
+          <p>
+            Flunio підійде тим, хто хоче вивчати словацьку онлайн у простому,
+            структурованому і практичному форматі. Це хороший варіант, якщо ти
+            починаєш з нуля, повертаєшся до мови після перерви або хочеш
+            створити стабільну звичку щоденного навчання.
+          </p>
+
+          <p>
+            Курс також корисний, якщо словацька потрібна для повсякденного
+            життя, роботи, навчання, документів, подорожей або базового
+            спілкування. Можна рухатися у власному темпі та повертатися до
+            попередніх уроків для повторення.
+          </p>
+        </div>
+      </section>
+
+      <section className="rounded-2xl border bg-white p-6 space-y-4">
+        <h2 className="text-2xl font-bold">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
             <div key={item.q} className="rounded-xl border p-4">
-              <div className="font-semibold">
-                {item.q}
-              </div>
-
-              <div className="mt-2 text-slate-700">
-                {item.a}
-              </div>
+              <div className="font-semibold">{item.q}</div>
+              <div className="mt-2 text-slate-700">{item.a}</div>
             </div>
           ))}
         </div>
