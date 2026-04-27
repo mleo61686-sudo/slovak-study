@@ -97,21 +97,21 @@ const keyFor = (userId?: string | null) =>
 
 const PROGRESS_EVENT = "slovakStudy:progressChanged";
 
-// ✅ UI state
 const SYNC_EVENT = "slovakStudy:syncState";
 type SyncState = "idle" | "syncing" | "error";
+
 function emitSyncState(state: SyncState) {
   window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: { state } }));
 }
 
-// ✅ pending
 const PENDING_KEY = "slovakStudy.pendingSync";
 
 function savePending(data: any) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify(data));
-  } catch { }
+  } catch {}
 }
+
 function getPending() {
   try {
     const raw = localStorage.getItem(PENDING_KEY);
@@ -120,20 +120,23 @@ function getPending() {
     return null;
   }
 }
+
 function clearPending() {
   try {
     localStorage.removeItem(PENDING_KEY);
-  } catch { }
+  } catch {}
 }
 
-// ✅ завжди повертає object
 function extractLessonsProgress(raw: string | null) {
   if (!raw) return {};
+
   try {
     const parsed = JSON.parse(raw);
+
     if (parsed && typeof parsed === "object" && "lessons" in parsed) {
       return (parsed as any).lessons ?? {};
     }
+
     return parsed ?? {};
   } catch {
     return {};
@@ -143,12 +146,11 @@ function extractLessonsProgress(raw: string | null) {
 export default function ProgressSync() {
   const { status, data: session } = useSession();
 
-  const timer = useRef<any>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const activeKey = useRef<string>(GUEST_KEY);
   const activeUid = useRef<string | null>(null);
-
-  // щоб не робити зайві GET-и на кожен ререндер
   const lastSyncEmail = useRef<string | null>(null);
+  const loadInFlight = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -160,10 +162,18 @@ export default function ProgressSync() {
       }
     }
 
-    async function retryPendingIfAny(userId: string | null) {
+    function resetToGuest() {
+      cancelTimer();
+      lastSyncEmail.current = null;
+      activeUid.current = null;
+      activeKey.current = GUEST_KEY;
+      setActiveUserId(null);
+      emitSyncState("idle");
+    }
+
+    async function retryPendingIfAny(userId: string) {
       const pending = getPending();
-      if (!pending?.userId) return;
-      if (pending.userId !== userId) return;
+      if (!pending?.userId || pending.userId !== userId) return;
 
       try {
         const res = await fetch("/api/progress", {
@@ -174,12 +184,14 @@ export default function ProgressSync() {
         });
 
         if (res.ok) clearPending();
-      } catch {
-        // лишаємо pending
-      }
+      } catch {}
     }
 
-    async function load(attempt = 0) {
+    async function load() {
+      if (loadInFlight.current) return;
+      if (status !== "authenticated") return;
+
+      loadInFlight.current = true;
       emitSyncState("syncing");
 
       try {
@@ -189,23 +201,27 @@ export default function ProgressSync() {
           cache: "no-store",
         });
 
-        if (!res.ok) {
-          // після логіну cookies інколи “докочуються”
-          if (
-            !cancelled &&
-            (res.status === 401 || res.status === 403) &&
-            attempt < 10
-          ) {
-            setTimeout(() => load(attempt + 1), 300);
-            return;
-          }
+        // ❗ КЛЮЧОВИЙ ФІКС
+        if (res.status === 401) {
+          resetToGuest();
+          loadInFlight.current = false;
+          return;
+        }
 
+        if (!res.ok) {
           emitSyncState("error");
+          loadInFlight.current = false;
           return;
         }
 
         const data = await res.json();
-        const userId: string | null = data?.userId ?? null;
+        const userId: string = data?.userId;
+
+        if (!userId) {
+          resetToGuest();
+          loadInFlight.current = false;
+          return;
+        }
 
         if (activeUid.current !== userId) cancelTimer();
 
@@ -236,46 +252,22 @@ export default function ProgressSync() {
           })
         );
 
-        const localHasSomethingServerDoesNot = Object.keys(localLessons).some(
-          (lessonId) => !(lessonId in serverLessons)
-        );
-
-        if (localHasSomethingServerDoesNot) {
-          window.dispatchEvent(new CustomEvent(PROGRESS_EVENT));
-        }
-
-        if (typeof data?.xpTotal === "number" && userId) {
+        if (typeof data?.xpTotal === "number") {
           setXpState(userId, { totalXp: data.xpTotal }, { emit: false });
         }
 
-        // 🔁 після успішного GET пробуємо дослати pending
         await retryPendingIfAny(userId);
 
         emitSyncState("idle");
       } catch {
         emitSyncState("error");
+      } finally {
+        loadInFlight.current = false;
       }
     }
 
-    // ⬇️ чекаємо статус NextAuth
-    if (status === "loading") return;
-
-    if (status === "unauthenticated") {
-      lastSyncEmail.current = null;
-      activeUid.current = null;
-      setActiveUserId(null);
-      activeKey.current = GUEST_KEY;
-      emitSyncState("idle");
-      return;
-    }
-
-    const email = session?.user?.email ?? null;
-    if (email && lastSyncEmail.current !== email) {
-      lastSyncEmail.current = email;
-      load();
-    }
-
     function pushToServer() {
+      if (status !== "authenticated") return;
       const uidSnapshot = activeUid.current;
       const keySnapshot = activeKey.current;
 
@@ -284,7 +276,6 @@ export default function ProgressSync() {
       if (timer.current) clearTimeout(timer.current);
 
       timer.current = setTimeout(async () => {
-        // захист від переключення акаунта
         if (activeUid.current !== uidSnapshot) return;
         if (activeKey.current !== keySnapshot) return;
 
@@ -307,6 +298,12 @@ export default function ProgressSync() {
             body: JSON.stringify(payload),
           });
 
+          // ❗ не ретраїмо 401
+          if (res.status === 401) {
+            resetToGuest();
+            return;
+          }
+
           if (!res.ok) {
             savePending(payload);
             emitSyncState("error");
@@ -322,27 +319,37 @@ export default function ProgressSync() {
       }, 600);
     }
 
-    // ✅ головний тригер
+    if (status === "loading") return;
+
+    if (status === "unauthenticated") {
+      resetToGuest();
+      return;
+    }
+
+    const email = session?.user?.email ?? null;
+
+    if (email && lastSyncEmail.current !== email) {
+      lastSyncEmail.current = email;
+      load();
+    }
+
     function onProgressChanged() {
       pushToServer();
     }
 
-    // ✅ “страховка”: у тебе saveProgress диспатчить storage в цій вкладці
     function onStorage() {
       pushToServer();
+    }
+
+    function onFocus() {
+      load();
     }
 
     window.addEventListener(PROGRESS_EVENT, onProgressChanged);
     window.addEventListener(XP_SYNC_EVENT, onProgressChanged);
     window.addEventListener("storage", onStorage);
-
-    // ✅ при поверненні на вкладку — load + retry pending
-    function onFocus() {
-      load();
-    }
     window.addEventListener("focus", onFocus);
 
-    // ✅ 🔥 авто-синхронізація кожні 15 секунд (ВАЖЛИВО ДЛЯ multi-device)
     const interval = setInterval(() => {
       load();
     }, 15000);
@@ -353,7 +360,7 @@ export default function ProgressSync() {
       window.removeEventListener(XP_SYNC_EVENT, onProgressChanged);
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("focus", onFocus);
-      clearInterval(interval); // 🔥 важливо
+      clearInterval(interval);
       cancelTimer();
     };
   }, [status, session?.user?.email]);
