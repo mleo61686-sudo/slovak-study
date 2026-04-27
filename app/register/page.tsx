@@ -258,6 +258,11 @@ export default function RegisterPage() {
       return;
     }
 
+    // ✅ запускаємо onboarding тільки для нових зареєстрованих користувачів
+    localStorage.setItem("flunio:onboarding:pending", "1");
+    localStorage.removeItem("flunio:onboarding");
+
+
     const login = await signIn("credentials", {
       email: e2,
       password: pw,
@@ -302,13 +307,12 @@ export default function RegisterPage() {
                   onClick={() => onSelectCourse(courseId)}
                   disabled={!isLive}
                   aria-disabled={!isLive}
-                  className={`group relative rounded-2xl border p-4 text-left transition-all duration-200 ${
-                    !isLive
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-70"
-                      : isActive
-                        ? "border-slate-900 bg-slate-50 shadow-sm ring-2 ring-slate-200"
-                        : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm"
-                  }`}
+                  className={`group relative rounded-2xl border p-4 text-left transition-all duration-200 ${!isLive
+                    ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-70"
+                    : isActive
+                      ? "border-slate-900 bg-slate-50 shadow-sm ring-2 ring-slate-200"
+                      : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm"
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <FlagIcon courseId={courseId} title={course.title} />
@@ -371,9 +375,8 @@ export default function RegisterPage() {
               {t.email}
             </label>
             <input
-              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${
-                emailOk ? "" : "border-red-400"
-              }`}
+              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${emailOk ? "" : "border-red-400"
+                }`}
               placeholder="name@example.com"
               value={email}
               onChange={(e) => {

@@ -36,6 +36,11 @@ export default function NavbarClient() {
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       if (!open) return;
+
+      const target = e.target as HTMLElement | null;
+
+      if (target?.closest("[data-onboarding-overlay='true']")) return;
+
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
@@ -54,9 +59,41 @@ export default function NavbarClient() {
     };
   }, [open]);
 
+  useEffect(() => {
+    function openForOnboarding() {
+      setOpen(true);
+    }
+
+    function closeForOnboarding() {
+      setOpen(false);
+    }
+
+    window.addEventListener(
+      "flunio:onboarding:open-mobile-menu",
+      openForOnboarding
+    );
+
+    window.addEventListener(
+      "flunio:onboarding:close-mobile-menu",
+      closeForOnboarding
+    );
+
+    return () => {
+      window.removeEventListener(
+        "flunio:onboarding:open-mobile-menu",
+        openForOnboarding
+      );
+
+      window.removeEventListener(
+        "flunio:onboarding:close-mobile-menu",
+        closeForOnboarding
+      );
+    };
+  }, []);
+
   return (
     <>
-      <div className="hidden sm:flex items-center gap-3">
+      <div className="hidden items-center gap-3 sm:flex">
         <nav className="flex items-center gap-1">
           {nav.map((item) => (
             <Link
@@ -99,17 +136,18 @@ export default function NavbarClient() {
                 href="/login"
                 className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
               >
-                <span className="inline-block min-w-[60px] text-center whitespace-nowrap">
+                <span className="inline-block min-w-[60px] whitespace-nowrap text-center">
                   <NavLabel k="login" />
                 </span>
               </Link>
+
               <LanguageMenu />
             </>
           )}
         </div>
       </div>
 
-      <div className="sm:hidden flex items-center gap-2" ref={menuRef}>
+      <div className="flex items-center gap-2 sm:hidden" ref={menuRef}>
         <LanguageMenu mobile />
 
         <button
@@ -117,6 +155,7 @@ export default function NavbarClient() {
           className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-lg hover:bg-slate-100"
           aria-label="Menu"
           type="button"
+          data-onboarding="mobile-menu"
         >
           ☰
         </button>

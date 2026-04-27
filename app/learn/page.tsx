@@ -92,39 +92,45 @@ export default function LearnPage() {
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           {t.title}
         </h1>
+
         <p className="mt-2 text-base text-slate-600">{t.subtitle}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {COURSE_ORDER.map((id) => {
-          const c = COURSE_REGISTRY[id];
-          const isLive = c.status === "live";
+        {COURSE_ORDER.map((id, index) => {
+          const course = COURSE_REGISTRY[id];
+          const isLive = course.status === "live";
 
           return (
             <button
-              key={c.id}
-              onClick={() => chooseCourse(c.id, isLive)}
+              key={course.id}
+              onClick={() => chooseCourse(course.id, isLive)}
               className="rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-[2px] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
               disabled={!isLive}
               type="button"
+              data-onboarding={
+                isLive && index === 0 ? "course-card" : undefined
+              }
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2 text-xl font-semibold text-slate-900">
                     <img
-                      src={COURSE_FLAGS[c.id]}
+                      src={COURSE_FLAGS[course.id]}
                       alt=""
                       className="h-5 w-7 rounded-sm object-cover shadow-sm"
+                      loading="lazy"
                     />
-                    <span>{c.title}</span>
+
+                    <span>{course.title}</span>
                   </div>
 
                   <div className="mt-1 text-sm text-slate-500">
-                    {t.subtitles[c.id]}
+                    {t.subtitles[course.id]}
                   </div>
 
                   <div className="mt-3 text-sm text-slate-600">
-                    {t.descriptions[c.id]}
+                    {t.descriptions[course.id]}
                   </div>
                 </div>
 

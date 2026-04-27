@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -98,8 +98,8 @@ export default function UserMenu({
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [avatarLoaded, setAvatarLoaded] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
 
+  const menuRef = useRef<HTMLDivElement>(null);
   const initial = (name || email || "?").charAt(0).toUpperCase();
 
   useEffect(() => {
@@ -123,9 +123,7 @@ export default function UserMenu({
       } catch {
         // avatar is optional
       } finally {
-        if (!cancelled) {
-          setAvatarLoaded(true);
-        }
+        if (!cancelled) setAvatarLoaded(true);
       }
     }
 
@@ -155,8 +153,13 @@ export default function UserMenu({
   }, []);
 
   useEffect(() => {
+    if (mobile) return;
+
     function handleClickOutside(event: MouseEvent) {
-      if (mobile) return;
+      const target = event.target as HTMLElement | null;
+
+      if (target?.closest("[data-onboarding-overlay='true']")) return;
+
       if (
         open &&
         menuRef.current &&
@@ -167,17 +170,58 @@ export default function UserMenu({
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [open, mobile]);
 
   useEffect(() => {
+    if (mobile) return;
+
     function handleEsc(event: KeyboardEvent) {
-      if (mobile) return;
       if (event.key === "Escape") setOpen(false);
     }
 
     document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [mobile]);
+
+  useEffect(() => {
+    if (mobile) return;
+
+    function openForOnboarding() {
+      setOpen(true);
+    }
+
+    function closeForOnboarding() {
+      setOpen(false);
+    }
+
+    window.addEventListener(
+      "flunio:onboarding:open-user-menu",
+      openForOnboarding
+    );
+
+    window.addEventListener(
+      "flunio:onboarding:close-user-menu",
+      closeForOnboarding
+    );
+
+    return () => {
+      window.removeEventListener(
+        "flunio:onboarding:open-user-menu",
+        openForOnboarding
+      );
+
+      window.removeEventListener(
+        "flunio:onboarding:close-user-menu",
+        closeForOnboarding
+      );
+    };
   }, [mobile]);
 
   async function openPortal() {
@@ -256,6 +300,7 @@ export default function UserMenu({
           href="/learn"
           className="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-100"
           onClick={() => onNavigate?.()}
+          data-onboarding="choose-course"
         >
           {t.chooseLanguage}
         </Link>
@@ -295,6 +340,7 @@ export default function UserMenu({
         className="rounded-full transition hover:scale-[1.03]"
         type="button"
         aria-label="User menu"
+        data-onboarding="avatar"
       >
         <AvatarCircle
           avatarUrl={avatarUrl}
@@ -305,7 +351,7 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
+          className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="flex items-center gap-3 px-4 py-3 text-sm">
@@ -338,6 +384,7 @@ export default function UserMenu({
             href="/learn"
             className="block px-4 py-2 text-sm hover:bg-slate-50"
             onClick={() => setOpen(false)}
+            data-onboarding="choose-course"
           >
             {t.chooseLanguage}
           </Link>

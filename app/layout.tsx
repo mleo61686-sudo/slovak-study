@@ -10,6 +10,7 @@ import SrsSync from "./components/SrsSync";
 import CourseBootstrap from "@/app/components/CourseBootstrap";
 import MainShell from "@/app/components/MainShell";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import OnboardingOverlay from "./components/OnboardingOverlay";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://flunio.com"),
@@ -143,6 +144,7 @@ export default function RootLayout({
           <Navbar />
           <ProgressSync />
           <SrsSync />
+          <OnboardingOverlay />
 
           <MainShell>{children}</MainShell>
         </SessionProviderClient>
