@@ -23,6 +23,9 @@ type HomeTranslations = {
   ctaGrammar: string;
   starterBadge: string;
   free: string[];
+  telegramTitle: string;
+  telegramDesc: string;
+  telegramCta: string;
 
   seoH2: string;
   seoP1: string;
@@ -101,6 +104,10 @@ const t: Record<Lang, HomeTranslations> = {
     open: "Відкрити →",
     start: "Почати →",
     whatsNew: "Що нового",
+    telegramTitle: "Flunio в Telegram 📢",
+    telegramDesc:
+      "Новини платформи, плани розвитку, апдейти та корисний контент для вивчення мов.",
+    telegramCta: "Підписатися →",
 
     popularTitleByCourse: {
       sk: "Популярні сторінки для старту",
@@ -209,6 +216,10 @@ const t: Record<Lang, HomeTranslations> = {
     open: "Открыть →",
     start: "Начать →",
     whatsNew: "Что нового",
+    telegramTitle: "Flunio в Telegram 📢",
+    telegramDesc:
+      "Новости платформы, планы развития, апдейты и полезный контент для изучения языков.",
+    telegramCta: "Подписаться →",
 
     popularTitleByCourse: {
       sk: "Популярные страницы для старта",
@@ -317,6 +328,10 @@ const t: Record<Lang, HomeTranslations> = {
     open: "Open →",
     start: "Start →",
     whatsNew: "What’s new",
+    telegramTitle: "Flunio on Telegram 📢",
+    telegramDesc:
+      "Platform news, development plans, updates, and useful language-learning content.",
+    telegramCta: "Subscribe →",
 
     popularTitleByCourse: {
       sk: "Popular pages to start with",
@@ -471,6 +486,27 @@ export default function HomeContent({
                 </span>
               )}
             </Link>
+          </div>
+          <div className="mt-3 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4 shadow-sm">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="text-sm font-bold text-slate-900">
+                  {tr.telegramTitle}
+                </div>
+                <div className="mt-1 max-w-2xl text-sm text-slate-700">
+                  {tr.telegramDesc}
+                </div>
+              </div>
+
+              <a
+                href="https://t.me/flunio_languages"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-sky-600 active:translate-y-0"
+              >
+                {tr.telegramCta}
+              </a>
+            </div>
           </div>
 
           <div className="grid gap-3 pt-3 sm:grid-cols-3">
