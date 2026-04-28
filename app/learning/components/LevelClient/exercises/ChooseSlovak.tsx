@@ -8,6 +8,24 @@ import { ResultBox, SpeakCentered } from "./shared";
 
 type CourseId = "sk" | "cs" | "pl";
 
+const courseLangName: Record<CourseId, Record<Lang, string>> = {
+  sk: {
+    ua: "словацькою",
+    ru: "по-словацки",
+    en: "in Slovak",
+  },
+  cs: {
+    ua: "чеською",
+    ru: "по-чешски",
+    en: "in Czech",
+  },
+  pl: {
+    ua: "польською",
+    ru: "по-польски",
+    en: "in Polish",
+  },
+};
+
 export default function ChooseSlovak({
   word,
   words,
@@ -41,12 +59,14 @@ export default function ChooseSlovak({
 
   const answered = status !== "idle";
 
+  const courseLang = courseLangName[courseId] ?? courseLangName.sk;
+
   const title =
     lang === "en"
-      ? "Choose the word in the course language:"
+      ? `Choose the word ${courseLang.en}:`
       : lang === "ru"
-        ? "Выбери слово по-словацки:"
-        : "Обери слово словацькою:";
+        ? `Выбери слово ${courseLang.ru}:`
+        : `Обери слово ${courseLang.ua}:`;
 
   const correctLabel =
     lang === "en" ? "Correct:" : lang === "ru" ? "Правильно:" : "Правильно:";

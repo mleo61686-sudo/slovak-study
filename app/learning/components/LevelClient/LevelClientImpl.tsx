@@ -820,6 +820,7 @@ export default function LevelClient({
             onNext={nextPerWord}
             quizAutoKey={quizAutoKey}
             audioUnlocked={audioUnlocked}
+            courseId={courseId}
           />
         )}
 
@@ -830,6 +831,7 @@ export default function LevelClient({
             onNext={nextPerWord}
             quizAutoKey={quizAutoKey}
             audioUnlocked={audioUnlocked}
+            courseId={courseId}
           />
         )}
 

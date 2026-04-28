@@ -8,6 +8,24 @@ import { trWord, playLocal } from "../helpers";
 
 type CourseId = "sk" | "cs" | "pl";
 
+const courseLangName: Record<CourseId, Record<Lang, string>> = {
+  sk: {
+    ua: "словацькою",
+    ru: "по-словацки",
+    en: "in Slovak",
+  },
+  cs: {
+    ua: "чеською",
+    ru: "по-чешски",
+    en: "in Czech",
+  },
+  pl: {
+    ua: "польською",
+    ru: "по-польски",
+    en: "in Polish",
+  },
+};
+
 export default function WriteWord({
   word,
   onNext,
@@ -65,13 +83,15 @@ export default function WriteWord({
         ? "border-red-500"
         : "border-slate-300";
 
+  const courseLang = courseLangName[courseId] ?? courseLangName.sk;
+
   const t = {
     title:
       lang === "en"
-        ? "Write it in the course language:"
+        ? `Write it ${courseLang.en}:`
         : lang === "ru"
-          ? "Напиши по-словацки:"
-          : "Напиши словацькою:",
+          ? `Напиши ${courseLang.ru}:`
+          : `Напиши ${courseLang.ua}:`,
     placeholder:
       lang === "en"
         ? "Type the word..."
