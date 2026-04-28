@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { UPDATES, type UpdateItem } from "./updates";
 import { useLanguage } from "@/lib/src/useLanguage";
 
@@ -114,6 +114,8 @@ export default function UpdatesPage() {
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const tr = I18N[L];
 
+  const detailsRef = useRef<HTMLElement | null>(null);
+
   const sorted = useMemo(() => {
     return [...UPDATES].sort((a, b) => (a.date < b.date ? 1 : -1));
   }, []);
@@ -142,6 +144,22 @@ export default function UpdatesPage() {
   const active = useMemo(() => {
     return sorted.find((u) => u.date === activeDate) ?? sorted[0] ?? null;
   }, [sorted, activeDate]);
+
+  function selectUpdate(date: string) {
+    setActiveDate(date);
+
+    window.setTimeout(() => {
+      const el = detailsRef.current;
+      if (!el) return;
+
+      const y = el.getBoundingClientRect().top + window.scrollY - 90;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
+    }, 180);
+  }
 
   if (!sorted.length) {
     return (
@@ -205,7 +223,7 @@ export default function UpdatesPage() {
                           <button
                             key={u.date}
                             type="button"
-                            onClick={() => setActiveDate(u.date)}
+                            onClick={() => selectUpdate(u.date)}
                             className={[
                               "w-full rounded-2xl border px-3 py-2 text-left transition",
                               isActive
@@ -254,7 +272,7 @@ export default function UpdatesPage() {
             </div>
           </aside>
 
-          <main className="min-w-0 space-y-4">
+          <main ref={detailsRef} className="min-w-0 scroll-mt-24 space-y-4">
             {active && (
               <article className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">

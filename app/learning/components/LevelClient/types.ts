@@ -3,6 +3,7 @@ export type Word = {
   ua: string;
   ru?: string;
   en?: string;
+  hintUa?: string;
   ipa?: string;
   img?: string;
   imgCredit?: string;

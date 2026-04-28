@@ -626,20 +626,28 @@ export default function LevelClient({
                     : "translate-y-1 opacity-85",
                 ].join(" ")}
               >
-                <div className="flex items-center justify-center">
-                  <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
-                    {word.sk}
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center justify-center">
+                    <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
+                      {word.sk}
+                    </div>
+
+                    <div className="ml-5 shrink-0 sm:ml-6">
+                      <SpeakButton
+                        text={word.sk}
+                        autoPlayKey={audioUnlocked ? word.sk : undefined}
+                      />
+                    </div>
                   </div>
 
-                  <div className="ml-5 shrink-0 sm:ml-6">
-                    <SpeakButton
-                      text={word.sk}
-                      autoPlayKey={audioUnlocked ? word.sk : undefined}
-                    />
-                  </div>
+                  {courseId === "pl" && word.hintUa && (
+                    <div className="mt-2 text-center text-sm italic text-slate-400 sm:text-base">
+                      [{word.hintUa}]
+                    </div>
+                  )}
                 </div>
 
-                <div className="mt-3 text-center text-lg leading-tight text-slate-600 sm:text-xl">
+                <div className="mt-3 text-center text-xl font-semibold leading-tight text-black sm:text-2xl">
                   {trWord(word, lang)}
                 </div>
               </div>

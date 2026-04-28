@@ -12,6 +12,7 @@ type Word = {
   ru?: string;
   en?: string;
   ipa?: string;
+  hintUa?: string;
   img?: string;
   imgCredit?: string;
   phrase?: {
@@ -133,6 +134,7 @@ function main() {
         if (w.ru) props.push(`ru: ${escapeTsString(w.ru)}`);
         if (w.en) props.push(`en: ${escapeTsString(w.en)}`);
         if (w.ipa) props.push(`ipa: ${escapeTsString(w.ipa)}`);
+        if (w.hintUa) props.push(`hintUa: ${escapeTsString(w.hintUa)}`);
         if (w.img) props.push(`img: ${escapeTsString(w.img)}`);
         if (w.imgCredit) props.push(`imgCredit: ${escapeTsString(w.imgCredit)}`);
 

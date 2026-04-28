@@ -8,6 +8,34 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-04-28",
+    title: {
+      ua: "Оновлення: допомога новим користувачам, аудіо та покращення зручності",
+      ru: "Обновление: помощь новым пользователям, аудио и удобство",
+      en: "Update: new user guidance, audio improvements, and UX enhancements",
+    },
+    items: {
+      ua: [
+        "Додано підказки після реєстрації — новим користувачам тепер легше зрозуміти, як почати навчання",
+        "Покращено відтворення аудіо: перше натискання — звичайна швидкість, повторне — повільніше для кращого розуміння",
+        "Додано транскрипцію для польського курсу (поки що для рівня A0, далі буде розширюватися)",
+        "У мобільній версії покращено сторінку оновлень — після вибору новини сторінка автоматично прокручується до опису",
+      ],
+      ru: [
+        "Добавлены подсказки после регистрации — новым пользователям теперь проще понять, как начать обучение",
+        "Улучшено воспроизведение аудио: первое нажатие — обычная скорость, повторное — медленнее для лучшего понимания",
+        "Добавлена транскрипция для польского курса (пока только для уровня A0, далее будет расширяться)",
+        "В мобильной версии улучшена страница обновлений — после выбора новости страница автоматически прокручивается к описанию",
+      ],
+      en: [
+        "Guidance tips have been added after registration — new users can now better understand how to start learning",
+        "Audio playback has been improved: first tap plays at normal speed, second tap plays slower for better understanding",
+        "Transcription has been added for the Polish course (currently A0 only, more levels coming soon)",
+        "The updates page has been improved on mobile — selecting an update now automatically scrolls to the details",
+      ],
+    },
+  },
+  {
     date: "2026-04-25",
     title: {
       ua: "Велике оновлення: польський курс, профіль і новий тренажер",

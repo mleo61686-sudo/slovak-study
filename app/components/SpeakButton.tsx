@@ -18,6 +18,9 @@ const courseCache = {
   initialized: false,
 };
 
+const NORMAL_PLAYBACK_RATE = 1;
+const SLOW_PLAYBACK_RATE = 0.75;
+
 async function sha1Hex(input: string) {
   const data = new TextEncoder().encode(input);
   const hash = await crypto.subtle.digest("SHA-1", data);
@@ -91,6 +94,9 @@ export default function SpeakButton({
   const playIdRef = useRef(0);
   const mountedRef = useRef(true);
 
+  // 1-й клік normal, 2-й slow, 3-й normal, 4-й slow...
+  const manualPlayCountRef = useRef(0);
+
   const [loading, setLoading] = useState(false);
   const cleanText = useMemo(() => text?.trim() ?? "", [text]);
 
@@ -107,53 +113,66 @@ export default function SpeakButton({
     }
   }, []);
 
-  const play = useCallback(async () => {
-    if (!cleanText) return;
+  const play = useCallback(
+    async (isAutoPlay = false) => {
+      if (!cleanText) return;
 
-    const myPlayId = ++playIdRef.current;
-    stop();
+      const myPlayId = ++playIdRef.current;
+      stop();
 
-    if (mountedRef.current) setLoading(true);
+      if (mountedRef.current) setLoading(true);
 
-    try {
-      const course = getCourseFromCookie();
-      const urls = await buildLocalUrlsCached(cleanText, kind, course);
+      try {
+        const course = getCourseFromCookie();
+        const urls = await buildLocalUrlsCached(cleanText, kind, course);
 
-      if (myPlayId !== playIdRef.current) return;
+        if (myPlayId !== playIdRef.current) return;
 
-      let lastError: unknown = null;
-      let played = false;
+        let lastError: unknown = null;
+        let played = false;
 
-      for (const url of urls) {
-        try {
-          const a = new Audio(url);
-          audioRef.current = a;
-          a.preload = "none";
+        if (!isAutoPlay) {
+          manualPlayCountRef.current += 1;
+        }
 
-          await a.play();
-          played = true;
-          break;
-        } catch (err) {
-          lastError = err;
+        const shouldPlaySlow =
+          !isAutoPlay && manualPlayCountRef.current % 2 === 0;
+
+        for (const url of urls) {
+          try {
+            const a = new Audio(url);
+            audioRef.current = a;
+            a.preload = "none";
+            a.playbackRate = shouldPlaySlow
+              ? SLOW_PLAYBACK_RATE
+              : NORMAL_PLAYBACK_RATE;
+
+            await a.play();
+            played = true;
+            break;
+          } catch (err) {
+            lastError = err;
+          }
+        }
+
+        if (!played && lastError) {
+          throw lastError;
+        }
+      } catch (e: any) {
+        if (e?.name === "AbortError") return;
+
+        const msg = String(e?.message ?? "");
+        if (msg.includes("interrupted") || msg.includes("pause()")) return;
+
+        console.error("Audio play failed:", e);
+      } finally {
+        if (myPlayId === playIdRef.current && mountedRef.current) {
+          setLoading(false);
         }
       }
-
-      if (!played && lastError) {
-        throw lastError;
-      }
-    } catch (e: any) {
-      if (e?.name === "AbortError") return;
-
-      const msg = String(e?.message ?? "");
-      if (msg.includes("interrupted") || msg.includes("pause()")) return;
-
-      console.error("Audio play failed:", e);
-    } finally {
-      if (myPlayId === playIdRef.current && mountedRef.current) {
-        setLoading(false);
-      }
-    }
-  }, [cleanText, kind, stop]);
+    },
+    [cleanText, kind, stop]
+  );
 
   useEffect(() => {
     mountedRef.current = true;
@@ -171,7 +190,7 @@ export default function SpeakButton({
     if (lastAutoKeyRef.current === nextKey) return;
     lastAutoKeyRef.current = nextKey;
 
-    play().catch(() => {});
+    play(true).catch(() => {});
   }, [autoPlayKey, cleanText, kind, play]);
 
   if (asChild) {
@@ -200,7 +219,7 @@ export default function SpeakButton({
   return (
     <button
       type="button"
-      onClick={play}
+      onClick={() => play()}
       title={btnTitle}
       className={className}
       disabled={loading}
