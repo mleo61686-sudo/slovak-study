@@ -28,6 +28,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/learn-slovak`,
     `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
+    `${baseUrl}/yak-vyvchyty-slovatsku-movu`,
+    `${baseUrl}/slovatski-slova-z-perekladom`,
+    `${baseUrl}/pomylky-v-slovatskii-movi`,
 
     // чеська SEO
     `${baseUrl}/learn-czech`,
