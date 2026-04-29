@@ -14,9 +14,9 @@ export default function MainShell({
   return (
     <main
       className={[
-        "mx-auto w-full max-w-6xl px-4",
+        "mx-auto w-full max-w-6xl px-4 text-slate-50",
         isLessonPage
-          ? "py-4 min-h-[70vh]"   // 🔥 ключ
+          ? "min-h-[70vh] py-4"
           : "flex-1 py-8 sm:py-12",
       ].join(" ")}
     >

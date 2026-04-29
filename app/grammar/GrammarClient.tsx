@@ -301,23 +301,20 @@ function tr(text: LocalizedText, lang: Lang) {
   return text[lang] ?? text.ua ?? "";
 }
 
-function TopicCard({
-  topic,
-  lang,
-}: {
-  topic: Topic;
-  lang: Lang;
-}) {
+function TopicCard({ topic, lang }: { topic: Topic; lang: Lang }) {
   return (
     <Link
       href={`/grammar/${topic.id}`}
-      className="rounded-2xl border bg-white p-5 shadow-sm transition hover:bg-slate-50"
+      className="group rounded-2xl border border-white/10 bg-white/5 p-5 text-white shadow-[0_0_18px_rgba(34,211,238,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
     >
       <div className="flex items-start justify-between gap-3">
         <h2 className="text-lg font-semibold">{tr(topic.title, lang)}</h2>
+        <span className="text-cyan-200 opacity-0 transition group-hover:opacity-100">
+          →
+        </span>
       </div>
 
-      <p className="mt-1 text-sm text-slate-600">
+      <p className="mt-1 text-sm text-white/65">
         {tr(topic.description, lang)}
       </p>
     </Link>
@@ -329,11 +326,7 @@ export default function GrammarClient() {
   const { courseId } = useActiveCourse();
 
   const topics =
-    courseId === "cs"
-      ? CS_TOPICS
-      : courseId === "pl"
-        ? PL_TOPICS
-        : SK_TOPICS;
+    courseId === "cs" ? CS_TOPICS : courseId === "pl" ? PL_TOPICS : SK_TOPICS;
 
   const title =
     courseId === "cs"
@@ -350,10 +343,11 @@ export default function GrammarClient() {
         : tr(UI.skIntro, lang);
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">{title}</h1>
-
-      <p className="text-slate-700">{intro}</p>
+    <div className="space-y-6 text-white">
+      <section className="flunio-card rounded-3xl p-6">
+        <h1 className="text-2xl font-semibold">{title}</h1>
+        <p className="mt-2 text-white/65">{intro}</p>
+      </section>
 
       <div className="grid gap-4 sm:grid-cols-2">
         {topics.map((topic) => (

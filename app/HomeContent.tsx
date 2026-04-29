@@ -3,6 +3,9 @@ import WordsStatsClient from "./components/home/WordsStatsClient";
 
 type Lang = "ua" | "ru" | "en";
 type SeoCourseId = "sk" | "cs" | "pl";
+type HomeVisualStyle = "flunio" | "minimal";
+
+const HOME_VISUAL_STYLE: HomeVisualStyle = "flunio";
 
 type PopularCard = {
   href: string;
@@ -394,10 +397,38 @@ const t: Record<Lang, HomeTranslations> = {
 
 function StatPill({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow">
-      <div className="text-sm font-semibold text-slate-900">{k}</div>
-      <div className="text-xs text-slate-600">{v}</div>
+    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10">
+      <div className="text-sm font-semibold text-white">{k}</div>
+      <div className="text-xs text-white/60">{v}</div>
     </div>
+  );
+}
+
+function FeatureCard({
+  href,
+  icon,
+  title,
+  desc,
+  action,
+}: {
+  href: string;
+  icon: string;
+  title: string;
+  desc: string;
+  action: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group block rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/40 hover:bg-white/10"
+    >
+      <div className="text-2xl">{icon}</div>
+      <h2 className="mt-3 text-lg font-semibold">{title}</h2>
+      <p className="mt-1 text-sm text-white/65">{desc}</p>
+      <div className="mt-4 text-sm font-semibold text-cyan-200 transition group-hover:text-cyan-100">
+        {action}
+      </div>
+    </Link>
   );
 }
 
@@ -411,52 +442,57 @@ export default function HomeContent({
   courseId: string;
 }) {
   const tr = t[lang];
-  const showSeoBlock = courseId === "sk" || courseId === "cs" || courseId === "pl";
+  const showSeoBlock =
+    courseId === "sk" || courseId === "cs" || courseId === "pl";
+
   const seoCourseId: SeoCourseId =
     courseId === "cs" ? "cs" : courseId === "pl" ? "pl" : "sk";
 
   return (
     <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8">
-        <div className="pointer-events-none absolute top-0 right-0 h-32 w-32 rounded-full bg-amber-200/15 blur-xl" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-32 w-32 rounded-full bg-slate-200/25 blur-xl" />
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-7 text-white sm:p-8">
+        <div className="pointer-events-none absolute inset-0 rounded-3xl border border-cyan-400/40 shadow-[0_0_35px_rgba(34,211,238,0.24)]" />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-10 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative space-y-5">
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          <h1 className="text-[31px] font-semibold leading-tight tracking-tight text-white sm:text-5xl">
             {tr.h1}
           </h1>
 
-          <p className="max-w-2xl text-base text-slate-700 sm:text-lg">
+          <p className="max-w-2xl text-base text-white/75 sm:text-lg">
             {tr.heroP}
           </p>
 
           <div className="flex flex-wrap gap-3 pt-1">
             <Link
               href="/learning"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-black active:translate-y-0"            >
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition hover:-translate-y-0.5 active:translate-y-0"
+            >
               {tr.ctaLearning}
             </Link>
 
             <Link
               href="/dictionary"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-slate-50 active:translate-y-0"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
             >
               {tr.ctaDict}
             </Link>
 
             <Link
               href="/grammar"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-slate-50 active:translate-y-0"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
             >
               {tr.ctaGrammar}
             </Link>
           </div>
+
           <div className="mt-4 flex flex-col items-start gap-3">
-            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-900 shadow-sm">
+            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white shadow-sm backdrop-blur">
               <span>{tr.starterBadge}</span>
             </div>
 
-            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 backdrop-blur">
               <span>💡</span>
               <span>
                 {lang === "ua"
@@ -468,32 +504,36 @@ export default function HomeContent({
             </div>
           </div>
 
-          <div className="mt-4 space-y-1 text-sm text-slate-700">
+          <div className="mt-4 space-y-1 text-sm text-white/75">
             {tr.free.map((item) => (
-              <div key={item}>✅ {item}</div>
+              <div key={item} className="flex items-start gap-2">
+                <span className="text-emerald-400">✔</span>
+                <span>{item}</span>
+              </div>
             ))}
           </div>
 
           <div className="mt-3 min-h-[44px]">
             <Link
               href="/updates"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
             >
               ✨ {tr.whatsNew}
               {latestBadge && (
-                <span className="rounded-full bg-amber-200 px-2 py-0.5 font-bold text-amber-900">
+                <span className="rounded-full bg-cyan-400/20 px-2 py-0.5 font-bold text-cyan-100">
                   {latestBadge}
                 </span>
               )}
             </Link>
           </div>
-          <div className="mt-3 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-4 shadow-sm">
+
+          <div className="mt-3 rounded-2xl border border-cyan-400/25 bg-white/5 px-4 py-4 shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="text-sm font-bold text-slate-900">
+                <div className="text-sm font-bold text-white">
                   {tr.telegramTitle}
                 </div>
-                <div className="mt-1 max-w-2xl text-sm text-slate-700">
+                <div className="mt-1 max-w-2xl text-sm text-white/65">
                   {tr.telegramDesc}
                 </div>
               </div>
@@ -502,7 +542,7 @@ export default function HomeContent({
                 href="https://t.me/flunio_languages"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-2xl bg-sky-500 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-sky-600 active:translate-y-0"
+                className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 {tr.telegramCta}
               </a>
@@ -518,45 +558,44 @@ export default function HomeContent({
       </section>
 
       <section className="relative">
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm">
-          <div className="pointer-events-none absolute -top-20 left-10 h-40 w-40 rounded-full bg-amber-400/15 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-20 right-10 h-40 w-40 rounded-full bg-sky-400/10 blur-2xl" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+        <div className="flunio-card relative overflow-hidden rounded-3xl p-8 text-white">
+          <div className="pointer-events-none absolute -top-20 left-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 right-10 h-40 w-40 rounded-full bg-cyan-400/15 blur-3xl" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-4">
-              <div className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+              <div className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-semibold text-white">
                 Premium
               </div>
 
               <h2 className="text-2xl font-semibold">{tr.premiumTitle}</h2>
-              <p className="max-w-2xl text-white/80">{tr.premiumSubtitle}</p>
+              <p className="max-w-2xl text-white/75">{tr.premiumSubtitle}</p>
 
               <ul className="grid gap-2 sm:grid-cols-2">
                 {tr.premiumBullets.map((item) => (
                   <li
                     key={item}
-                    className="rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white/90"
+                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/85"
                   >
                     {item}
                   </li>
                 ))}
               </ul>
 
-              <div className="text-sm text-white/70">{tr.premiumPriceNote}</div>
+              <div className="text-sm text-white/55">{tr.premiumPriceNote}</div>
             </div>
 
             <div className="flex flex-col gap-3 sm:pt-2">
               <Link
                 href="/premium"
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 py-3 text-sm font-semibold text-black transition hover:-translate-y-0.5 hover:opacity-90 active:translate-y-0"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 {tr.premiumCta}
               </Link>
 
               <Link
                 href="/premium"
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/15 active:translate-y-0"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
               >
                 {tr.trainerLocked}
               </Link>
@@ -568,44 +607,38 @@ export default function HomeContent({
       <section className="grid gap-4 sm:grid-cols-3">
         <WordsStatsClient />
 
-        <Link
+        <FeatureCard
           href="/grammar"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
-        >
-          <div className="text-2xl">📘</div>
-          <h2 className="mt-3 text-lg font-semibold">{tr.grammarTitle}</h2>
-          <p className="mt-1 text-sm text-slate-700">{tr.grammarDesc}</p>
-          <div className="mt-4 text-sm font-semibold">{tr.open}</div>
-        </Link>
+          icon="📘"
+          title={tr.grammarTitle}
+          desc={tr.grammarDesc}
+          action={tr.open}
+        />
 
-        <Link
+        <FeatureCard
           href="/dictionary"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
-        >
-          <div className="text-2xl">📚</div>
-          <h2 className="mt-3 text-lg font-semibold">{tr.dictTitle}</h2>
-          <p className="mt-1 text-sm text-slate-700">{tr.dictDesc}</p>
-          <div className="mt-4 text-sm font-semibold">{tr.open}</div>
-        </Link>
+          icon="📚"
+          title={tr.dictTitle}
+          desc={tr.dictDesc}
+          action={tr.open}
+        />
 
-        <Link
+        <FeatureCard
           href="/learning"
-          className="block rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
-        >
-          <div className="text-2xl">🏋️</div>
-          <h2 className="mt-3 text-lg font-semibold">{tr.levelsTitle}</h2>
-          <p className="mt-1 text-sm text-slate-700">{tr.levelsDesc}</p>
-          <div className="mt-4 text-sm font-semibold">{tr.start}</div>
-        </Link>
+          icon="🏋️"
+          title={tr.levelsTitle}
+          desc={tr.levelsDesc}
+          action={tr.start}
+        />
       </section>
 
       {showSeoBlock && (
-        <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <section className="flunio-card rounded-3xl p-8 text-white">
           <div className="mb-6">
             <h2 className="text-xl font-semibold">
               {tr.popularTitleByCourse[seoCourseId]}
             </h2>
-            <p className="mt-2 text-slate-700">
+            <p className="mt-2 text-white/65">
               {tr.popularDescByCourse[seoCourseId]}
             </p>
           </div>
@@ -615,24 +648,26 @@ export default function HomeContent({
               <Link
                 key={card.href}
                 href={card.href}
-                className="block rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                className="block rounded-2xl border border-white/10 bg-white/5 p-5 text-white transition hover:-translate-y-0.5 hover:bg-white/10"
               >
-                <h3 className="text-base font-semibold text-slate-900">
+                <h3 className="text-base font-semibold text-white">
                   {card.title}
                 </h3>
-                <p className="mt-2 text-sm text-slate-700">{card.desc}</p>
-                <div className="mt-4 text-sm font-semibold">{tr.open}</div>
+                <p className="mt-2 text-sm text-white/65">{card.desc}</p>
+                <div className="mt-4 text-sm font-semibold text-cyan-200">
+                  {tr.open}
+                </div>
               </Link>
             ))}
           </div>
         </section>
       )}
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="flunio-card rounded-3xl p-8 text-white">
         <h2 className="mb-3 text-xl font-semibold">{tr.seoH2}</h2>
-        <p className="mb-3 text-slate-700">{tr.seoP1}</p>
-        <p className="text-slate-700">{tr.seoP2}</p>
+        <p className="mb-3 text-white/65">{tr.seoP1}</p>
+        <p className="text-white/65">{tr.seoP2}</p>
       </section>
     </div>
   );
-} 
+}

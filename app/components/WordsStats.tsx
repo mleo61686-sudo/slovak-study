@@ -8,9 +8,7 @@ import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
 import type { SrsState } from "@/app/components/words-srs/words-srs-logic";
-import {
-  getTodayKey,
-} from "@/app/components/words-srs/words-srs-logic";
+import { getTodayKey } from "@/app/components/words-srs/words-srs-logic";
 import {
   getDailySession,
   loadDb as loadSrsDb,
@@ -239,11 +237,11 @@ function computeLessonAnalytics(): LessonAnalytics {
 
 function StatTile({ label, value }: { label: string; value: number }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3">
-      <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[11px] text-slate-500">
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur">
+      <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[11px] text-white/55">
         {label}
       </div>
-      <div className="mt-1 text-2xl font-semibold leading-none tabular-nums">
+      <div className="mt-1 text-2xl font-semibold leading-none text-white tabular-nums">
         {value}
       </div>
     </div>
@@ -326,23 +324,23 @@ export default function WordsStats() {
   const showPremiumBlock = status !== "loading";
 
   return (
-    <section className="min-w-0 space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section className="flunio-card min-w-0 space-y-4 rounded-3xl p-6 text-white">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">📊 {t.title}</h2>
 
         {stats.due > 0 ? (
           <Link
             href="/words"
-            className="rounded-xl bg-black px-4 py-2 text-sm text-white hover:opacity-90"
+            className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5"
           >
             {t.repeat} {stats.due} →
           </Link>
         ) : (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm text-green-600">{t.done}</span>
+            <span className="text-sm text-emerald-300">{t.done}</span>
             <Link
               href="/words"
-              className="rounded-xl border border-slate-200 px-4 py-2 text-sm hover:bg-slate-50"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/85 transition hover:bg-white/10"
             >
               {t.addNew} →
             </Link>
@@ -358,12 +356,12 @@ export default function WordsStats() {
       </div>
 
       <div className="space-y-1">
-        <div className="text-xs text-slate-500">
+        <div className="text-xs text-white/55">
           {t.progress}: {progress}%
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-2 bg-black transition-all"
+            className="h-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 transition-all"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -372,12 +370,14 @@ export default function WordsStats() {
       {showPremiumBlock ? (
         <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between gap-3">
-            <div className="text-sm font-semibold">⭐ {t.premiumTitle}</div>
+            <div className="text-sm font-semibold text-white">
+              ⭐ {t.premiumTitle}
+            </div>
 
             {!isPremium ? (
               <Link
                 href="/premium"
-                className="rounded-full border border-slate-200 px-3 py-1 text-xs hover:bg-slate-50"
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/85 transition hover:bg-white/10"
               >
                 {t.premiumLocked}
               </Link>
@@ -404,7 +404,7 @@ export default function WordsStats() {
           </div>
 
           {!isPremium ? (
-            <div className="text-xs text-slate-500">{t.premiumHint}</div>
+            <div className="text-xs text-white/55">{t.premiumHint}</div>
           ) : null}
         </div>
       ) : null}

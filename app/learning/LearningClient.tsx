@@ -45,7 +45,6 @@ type LessonStats = {
 };
 
 const DAILY_FREE_LIMIT = 2;
-
 const PROGRESS_EVENT = "slovakStudy:progressChanged";
 const SYNC_EVENT = "slovakStudy:syncState";
 
@@ -111,7 +110,6 @@ const dict: Record<Lang, LearningDict> = {
 
 const FREE_A2_LESSONS = 10;
 
-// Тут задаємо, скільки уроків "офіційно" показувати в UI для рівня
 const LESSONS_LIMITS: Partial<Record<string, number>> = {
   b1: 35,
   b2: 50,
@@ -357,19 +355,14 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
     if (isPremium || isAdmin) return true;
 
     const done = isDone(lessonId);
-
-    // Уже пройдені уроки можна повторювати навіть після daily limit.
     if (done) return true;
 
     if (isPremiumLesson(lessonId)) return false;
 
-    // Перші 10 уроків A0 можна проходити без daily limit.
     if (isFreeStarterUnlimitedLesson(lessonId)) {
       return compareLevel(lessonId, allowed) <= 0;
     }
 
-    // Для уроків після стартової фази чекаємо dailyCount,
-    // щоб не було короткого "мигання" кнопки доступу.
     if (isDailyCountLoading) return false;
     if (dailyCount >= DAILY_FREE_LIMIT) return false;
 
@@ -383,33 +376,37 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-3xl font-bold">{t.title}</h1>
-      <p className="mt-2 text-slate-600">{t.subtitle}</p>
+    <div className="mx-auto max-w-3xl px-4 py-10 text-white">
+      <div className="flunio-card rounded-3xl p-6">
+        <h1 className="text-3xl font-bold">{t.title}</h1>
+        <p className="mt-2 text-white/65">{t.subtitle}</p>
 
-      <p className="mt-3 text-sm text-slate-500">
-        {t.done} <span className="font-medium">{completedCount}</span>
-      </p>
+        <p className="mt-3 text-sm text-white/55">
+          {t.done} <span className="font-semibold text-white">{completedCount}</span>
+        </p>
 
-      {isPremium && (
-        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-          {t.premiumActive}
+        <div className="mt-3 flex flex-wrap gap-2">
+          {isPremium && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300/25 bg-yellow-300/10 px-3 py-1 text-xs font-semibold text-yellow-100">
+              {t.premiumActive}
+            </div>
+          )}
+
+          {hasReachedDailyLimit && (
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/75">
+              {t.dailyLimit}
+            </div>
+          )}
         </div>
-      )}
 
-      {hasReachedDailyLimit && (
-        <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-          {t.dailyLimit}
+        <div className="mt-3 text-xs text-white/50">
+          {t.availableNow} <span className="font-semibold text-cyan-200">{allowed}</span>
+          {lastDone ? (
+            <span className="ml-2 text-white/40">
+              · {t.lastDone} {lastDone}
+            </span>
+          ) : null}
         </div>
-      )}
-
-      <div className="mt-2 text-xs text-slate-500">
-        {t.availableNow} <span className="font-medium">{allowed}</span>
-        {lastDone ? (
-          <span className="ml-2 text-slate-400">
-            · {t.lastDone} {lastDone}
-          </span>
-        ) : null}
       </div>
 
       <div className="mt-8 space-y-8">
@@ -423,18 +420,18 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
           return (
             <section
               key={band.id}
-              className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-md"
+              className="flunio-card rounded-3xl p-6 text-white"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-xl font-semibold">
                     {getLocalized(band.title, lang)}
                   </h2>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-white/65">
                     {getLocalized(band.subtitle, lang)}
                   </p>
 
-                  <p className="mt-2 text-xs text-slate-500">
+                  <p className="mt-2 text-xs text-white/50">
                     {t.lessons} {lessonsTotal} · {t.words} {wordsTotal}
                   </p>
                 </div>
@@ -445,7 +442,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       type="button"
                       onClick={() => goTo("/premium")}
                       disabled={isPending}
-                      className="rounded-xl bg-black px-3 py-1 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+                      className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-1 text-xs font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {t.buyPremium}
                     </button>
@@ -454,31 +451,33 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       type="button"
                       onClick={() => goTo(`/learning/levels/${band.id}`)}
                       disabled={isPending}
-                      className="rounded-xl border px-3 py-1 text-xs font-medium hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/85 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {t.allLessons}
                     </button>
                   )}
 
-                  <span className="rounded-full border px-3 py-1 text-xs text-slate-600">
+                  <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
                     {band.id.toUpperCase()}
                   </span>
                 </div>
               </div>
 
               {band.lessons.length === 0 ? (
-                <div className="mt-5 rounded-2xl border bg-slate-50 p-4 text-sm text-slate-600">
+                <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/65">
                   {t.soon}
                 </div>
               ) : isBandDisabled ? (
-                <div className="mt-5 flex items-center justify-between rounded-2xl border bg-slate-50 p-4">
-                  <div className="text-sm font-medium">🔒 {t.premiumOnly}</div>
+                <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div className="text-sm font-medium text-white/85">
+                    🔒 {t.premiumOnly}
+                  </div>
 
                   <button
                     type="button"
                     onClick={() => goTo("/premium")}
                     disabled={isPending}
-                    className="rounded-xl bg-black px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {t.buyPremium}
                   </button>
@@ -505,21 +504,24 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                     return (
                       <div
                         key={lesson.id}
-                        className={`rounded-2xl border p-4 ${
-                          unlocked ? "hover:bg-slate-50" : "opacity-60"
-                        }`}
+                        className={[
+                          "rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur transition",
+                          unlocked
+                            ? "hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
+                            : "opacity-50",
+                        ].join(" ")}
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="font-medium">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="font-medium text-white">
                             {getLocalized(lesson.title, lang)} {done ? "✅" : ""}
                           </div>
-                          <div className="text-sm text-slate-500">
+                          <div className="text-sm text-white/50">
                             {t.wordsCount(lesson.wordsCount)}
                           </div>
                         </div>
 
                         {stats && (
-                          <div className="mt-1 text-xs text-slate-500">
+                          <div className="mt-1 text-xs text-white/50">
                             ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
                             {stats.lastTotal}
                           </div>
@@ -531,10 +533,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                               type="button"
                               onClick={() => goTo(lessonPath)}
                               disabled={isPending}
-                              className={[
-                                "rounded-xl px-4 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60",
-                                "bg-black",
-                              ].join(" ")}
+                              className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                               {isStart ? t.start : t.repeat}
                             </button>
@@ -542,7 +541,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                             <button
                               type="button"
                               disabled
-                              className="rounded-xl border px-4 py-2 text-sm text-slate-600"
+                              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/55"
                             >
                               {lockedText}
                             </button>

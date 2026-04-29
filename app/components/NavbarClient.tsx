@@ -38,7 +38,6 @@ export default function NavbarClient() {
       if (!open) return;
 
       const target = e.target as HTMLElement | null;
-
       if (target?.closest("[data-onboarding-overlay='true']")) return;
 
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -99,7 +98,7 @@ export default function NavbarClient() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+              className="rounded-xl px-3 py-2 text-sm font-medium text-white/75 transition hover:bg-white/10 hover:text-white"
             >
               <span className="inline-block min-w-[88px] text-center">
                 <NavLabel k={item.key} />
@@ -110,7 +109,7 @@ export default function NavbarClient() {
           {isAdmin && (
             <Link
               href="/admin/reports"
-              className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+              className="rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-white hover:bg-white/10"
               title="Bug reports"
             >
               🛠️ <NavLabel k="reports" />
@@ -134,7 +133,7 @@ export default function NavbarClient() {
             <>
               <Link
                 href="/login"
-                className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-xl px-3 py-2 text-sm font-medium text-white/75 transition hover:bg-white/10 hover:text-white"
               >
                 <span className="inline-block min-w-[60px] whitespace-nowrap text-center">
                   <NavLabel k="login" />
@@ -152,7 +151,7 @@ export default function NavbarClient() {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-lg hover:bg-slate-100"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-lg text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:bg-white/10"
           aria-label="Menu"
           type="button"
           data-onboarding="mobile-menu"
@@ -161,13 +160,13 @@ export default function NavbarClient() {
         </button>
 
         {open && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-[min(92vw,360px)] rounded-2xl border bg-white p-2 shadow-lg">
+          <div className="absolute right-0 top-full z-50 mt-2 w-[min(92vw,360px)] rounded-2xl border border-white/10 bg-[#080d24]/95 p-2 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
             <nav className="flex flex-col">
               {nav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                  className="rounded-xl px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   <span className="inline-block min-w-[88px] whitespace-nowrap">
@@ -179,7 +178,7 @@ export default function NavbarClient() {
               {isAdmin && (
                 <Link
                   href="/admin/reports"
-                  className="mt-1 rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold hover:bg-slate-100"
+                  className="mt-1 rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-white hover:bg-white/10"
                   onClick={() => setOpen(false)}
                 >
                   🛠️ <NavLabel k="reports" />
@@ -205,7 +204,7 @@ export default function NavbarClient() {
               ) : (
                 <Link
                   href="/login"
-                  className="block rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                  className="block rounded-xl px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   <span className="inline-block min-w-[60px] whitespace-nowrap">

@@ -1,15 +1,30 @@
 @import "tailwindcss";
 
-/* 🔒 Фіксуємо світлу тему */
+/* ============================= */
+/* 🌌 Flunio Global Theme        */
+/* ============================= */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #050816;
+  --foreground: #f8fafc;
+
+  --flunio-bg: #050816;
+  --flunio-bg-soft: #080d24;
+  --flunio-card: rgba(255, 255, 255, 0.06);
+  --flunio-border: rgba(34, 211, 238, 0.35);
+  --flunio-text: #f8fafc;
+  --flunio-muted: rgba(248, 250, 252, 0.72);
 }
 
-/* 🚫 Забороняємо горизонтальний зсув */
 html,
 body {
   overflow-x: hidden;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.16), transparent 32%),
+    radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.16), transparent 30%),
+    linear-gradient(135deg, #050816 0%, #080d24 45%, #12051f 100%);
+  color: var(--foreground);
 }
 
 @supports (overflow: clip) {
@@ -23,9 +38,40 @@ body {
   color: var(--foreground);
 }
 
+/* ============================= */
+/* 🧊 Flunio reusable utilities  */
+/* ============================= */
+
+.flunio-card {
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  background:
+    radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.18), transparent 32%),
+    rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 34px rgba(34, 211, 238, 0.14);
+  backdrop-filter: blur(18px);
+}
+
+.flunio-card-soft {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(16px);
+}
+
+.flunio-gradient-text {
+  background: linear-gradient(90deg, #22d3ee, #3b82f6, #d946ef);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.flunio-glow {
+  box-shadow:
+    0 0 22px rgba(34, 211, 238, 0.25),
+    0 0 38px rgba(217, 70, 239, 0.12);
+}
 
 /* ============================= */
-/* 🔵 Smooth Infinite Marquee   */
+/* 🔵 Smooth Infinite Marquee    */
 /* ============================= */
 
 .marquee {
@@ -36,7 +82,7 @@ body {
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: marquee-scroll 26s linear infinite; /* повільніше */
+  animation: marquee-scroll 26s linear infinite;
 }
 
 .marquee__group {
@@ -44,7 +90,7 @@ body {
   align-items: center;
   flex-shrink: 0;
   gap: 3rem;
-  padding: 0.6rem 3rem; /* висота банера */
+  padding: 0.6rem 3rem;
 }
 
 .marquee__item {
@@ -53,11 +99,11 @@ body {
   font-weight: 700;
 }
 
-/* рухаємо рівно на ширину ОДНІЄЇ групи */
 @keyframes marquee-scroll {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }

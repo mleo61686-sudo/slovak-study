@@ -122,31 +122,33 @@ export default function DictionaryClient({
   const canLoadMore = visible.length < filtered.length;
 
   return (
-    <div className="mx-auto w-[min(100vw-2rem,56rem)] space-y-6">
-      <h1 className="text-2xl font-semibold">{t.title}</h1>
+    <div className="mx-auto w-[min(100vw-2rem,56rem)] space-y-6 text-white">
+      <section className="flunio-card rounded-3xl p-6">
+        <h1 className="text-2xl font-semibold">{t.title}</h1>
 
-      <div className="w-full self-stretch space-y-2">
-        <input
-          value={q}
-          onChange={(e) => {
-            setQ(e.target.value);
-            setLimit(STEP);
-          }}
-          placeholder={t.placeholder(searchSourceLabel)}
-          className="w-full rounded-2xl border bg-white px-4 py-3 outline-none focus:ring-2"
-        />
+        <div className="mt-5 w-full self-stretch space-y-2">
+          <input
+            value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setLimit(STEP);
+            }}
+            placeholder={t.placeholder(searchSourceLabel)}
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/35 backdrop-blur transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20"
+          />
 
-        <div className="text-sm text-slate-500">
-          {t.found} {filtered.length}
+          <div className="text-sm text-white/55">
+            {t.found} <span className="font-semibold text-cyan-200">{filtered.length}</span>
+          </div>
         </div>
-      </div>
+      </section>
 
       {visible.length === 1 ? (
-        <div className="w-full self-stretch rounded-2xl border bg-white p-4">
+        <div className="flunio-card rounded-2xl p-4 text-white">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold">
+                <span className="text-lg font-semibold text-white">
                   {visible[0].term ?? visible[0].sk}
                 </span>
 
@@ -157,10 +159,10 @@ export default function DictionaryClient({
               </div>
 
               {visible[0].ipa && (
-                <span className="text-xs text-slate-500">{visible[0].ipa}</span>
+                <span className="text-xs text-white/45">{visible[0].ipa}</span>
               )}
 
-              <span className="text-slate-700">
+              <span className="text-white/70">
                 {getWordTranslation(visible[0], lang)}
               </span>
             </div>
@@ -171,26 +173,23 @@ export default function DictionaryClient({
           {visible.map((word) => (
             <div
               key={word.key ?? word.term ?? word.sk}
-              className="w-full rounded-2xl border bg-white p-4"
+              className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_0_18px_rgba(34,211,238,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
             >
               <div className="flex items-start justify-between gap-3">
-                <div className="flex flex-col">
+                <div className="flex min-w-0 flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-semibold">
+                    <span className="truncate text-lg font-semibold text-white">
                       {word.term ?? word.sk}
                     </span>
 
-                    <SpeakButton
-                      text={word.term ?? word.sk ?? ""}
-                      kind="word"
-                    />
+                    <SpeakButton text={word.term ?? word.sk ?? ""} kind="word" />
                   </div>
 
                   {word.ipa && (
-                    <span className="text-xs text-slate-500">{word.ipa}</span>
+                    <span className="text-xs text-white/45">{word.ipa}</span>
                   )}
 
-                  <span className="text-slate-700">
+                  <span className="text-white/70">
                     {getWordTranslation(word, lang)}
                   </span>
                 </div>
@@ -205,7 +204,7 @@ export default function DictionaryClient({
           <button
             type="button"
             onClick={() => setLimit((v) => v + STEP)}
-            className="rounded-2xl border bg-white px-5 py-3 text-sm font-medium transition-transform duration-100 hover:bg-slate-50 active:scale-95"
+            className="rounded-2xl border border-cyan-400/35 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:scale-95"
           >
             {t.showMore(filtered.length - visible.length)}
           </button>
