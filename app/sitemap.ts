@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/grammar/verbs-present`,
     `${baseUrl}/grammar/cases`,
     `${baseUrl}/grammar/slovak-slang`,
+    `${baseUrl}/grammar/verbs-past`,
 
     // словацька SEO
     `${baseUrl}/learn-slovak`,

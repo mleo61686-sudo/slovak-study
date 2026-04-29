@@ -41,6 +41,19 @@ const SK_TOPICS: Topic[] = [
     },
   },
   {
+    id: "verbs-past",
+    title: {
+      ua: "Минулий час",
+      ru: "Прошедшее время",
+      en: "Past tense",
+    },
+    description: {
+      ua: "Як сказати: я робив, я була, ми пішли.",
+      ru: "Как сказать: я делал, я была, мы пошли.",
+      en: "How to say: I did, I was, we went.",
+    },
+  },
+  {
     id: "cases",
     title: {
       ua: "Відмінки",
@@ -77,9 +90,9 @@ const CS_TOPICS: Topic[] = [
       en: "Alphabet and pronunciation",
     },
     description: {
-      ua: "Основи читання і звуків у чеській мові.",
-      ru: "Основы чтения и звуков в чешском языке.",
-      en: "The basics of reading and sounds in Czech.",
+      ua: "Як читати чеські літери, наголос і звуки без плутанини.",
+      ru: "Как читать чешские буквы, ударение и звуки без путаницы.",
+      en: "How to read Czech letters, stress, and sounds without confusion.",
     },
   },
   {
@@ -90,9 +103,22 @@ const CS_TOPICS: Topic[] = [
       en: "Present tense verbs",
     },
     description: {
-      ua: "Як відмінюються дієслова в теперішньому часі.",
-      ru: "Как спрягаются глаголы в настоящем времени.",
-      en: "How verbs are conjugated in the present tense.",
+      ua: "Як сказати: я роблю, ти робиш, він робить — і не плутатися.",
+      ru: "Как сказать: я делаю, ты делаешь, он делает — и не путаться.",
+      en: "How to say: I do, you do, he does — without getting confused.",
+    },
+  },
+  {
+    id: "verbs-past",
+    title: {
+      ua: "Минулий час",
+      ru: "Прошедшее время",
+      en: "Past tense",
+    },
+    description: {
+      ua: "Як сказати: я робив, я була, ми пішли.",
+      ru: "Как сказать: я делал, я была, мы пошли.",
+      en: "How to say: I did, I was, we went.",
     },
   },
   {
@@ -103,9 +129,9 @@ const CS_TOPICS: Topic[] = [
       en: "Cases",
     },
     description: {
-      ua: "7 відмінків у чеській мові з прикладами.",
-      ru: "7 падежей в чешском языке с примерами.",
-      en: "7 cases in Czech with examples.",
+      ua: "Коли змінюється форма слова і як це побачити в реченні.",
+      ru: "Когда меняется форма слова и как увидеть это в предложении.",
+      en: "When word forms change and how to notice it in a sentence.",
     },
   },
   {
@@ -116,9 +142,9 @@ const CS_TOPICS: Topic[] = [
       en: "Slang and spoken language",
     },
     description: {
-      ua: "Живі фрази та вирази живої чеської мови.",
-      ru: "Живые фразы и выражения живой чешской речи.",
-      en: "Real-life phrases and expressions used in spoken Czech.",
+      ua: "Живі слова й фрази, які часто звучать у реальному спілкуванні.",
+      ru: "Живые слова и фразы, которые часто звучат в реальном общении.",
+      en: "Everyday words and phrases you will hear in real conversations.",
     },
   },
 ];
@@ -148,6 +174,19 @@ const PL_TOPICS: Topic[] = [
       ua: "Як відмінюються дієслова в теперішньому часі.",
       ru: "Как спрягаются глаголы в настоящем времени.",
       en: "How verbs are conjugated in the present tense.",
+    },
+  },
+  {
+    id: "verbs-past",
+    title: {
+      ua: "Минулий час",
+      ru: "Прошедшее время",
+      en: "Past tense",
+    },
+    description: {
+      ua: "Як сказати: я робив, я була, ми пішли.",
+      ru: "Как сказать: я делал, я была, мы пошли.",
+      en: "How to say: I did, I was, we went.",
     },
   },
   {
@@ -203,19 +242,19 @@ const UI: Record<
     en: "Polish grammar",
   },
   skIntro: {
-    ua: "Обери тему та відкрий урок з прикладами і міні-вправою.",
-    ru: "Выбери тему и открой урок с примерами и мини-упражнением.",
-    en: "Choose a topic and open a lesson with examples and a mini exercise.",
+    ua: "Обери тему граматики та розбери правило на простих прикладах.",
+    ru: "Выбери тему грамматики и разбери правило на простых примерах.",
+    en: "Choose a grammar topic and understand the rule through simple examples.",
   },
   csIntro: {
-    ua: "Обери тему та відкрий урок з прикладами і міні-вправою для чеської мови.",
-    ru: "Выбери тему и открой урок с примерами и мини-упражнением для чешского языка.",
-    en: "Choose a topic and open a lesson with examples and a mini exercise for Czech.",
+    ua: "Обери тему чеської граматики та розбери правило на простих прикладах.",
+    ru: "Выбери тему чешской грамматики и разбери правило на простых примерах.",
+    en: "Choose a Czech grammar topic and understand the rule through simple examples.",
   },
   plIntro: {
-    ua: "Обери тему та відкрий урок з прикладами і міні-вправою для польської мови.",
-    ru: "Выбери тему и открой урок с примерами и мини-упражнением для польского языка.",
-    en: "Choose a topic and open a lesson with examples and a mini exercise for Polish.",
+    ua: "Обери тему польської граматики та розбери правило на простих прикладах.",
+    ru: "Выбери тему польской грамматики и разбери правило на простых примерах.",
+    en: "Choose a Polish grammar topic and understand the rule through simple examples.",
   },
 };
 
