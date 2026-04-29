@@ -54,6 +54,19 @@ const SK_TOPICS: Topic[] = [
     },
   },
   {
+    id: "verbs-future",
+    title: {
+      ua: "Майбутній час",
+      ru: "Будущее время",
+      en: "Future tense",
+    },
+    description: {
+      ua: "Як сказати: я буду робити, я зроблю, ми підемо.",
+      ru: "Как сказать: я буду делать, я сделаю, мы пойдём.",
+      en: "How to say: I will do, I will finish, we will go.",
+    },
+  },
+  {
     id: "cases",
     title: {
       ua: "Відмінки",
@@ -122,6 +135,19 @@ const CS_TOPICS: Topic[] = [
     },
   },
   {
+    id: "verbs-future",
+    title: {
+      ua: "Майбутній час",
+      ru: "Будущее время",
+      en: "Future tense",
+    },
+    description: {
+      ua: "Як сказати: я буду робити, я зроблю, ми підемо.",
+      ru: "Как сказать: я буду делать, я сделаю, мы пойдём.",
+      en: "How to say: I will do, I will finish, we will go.",
+    },
+  },
+  {
     id: "cases",
     title: {
       ua: "Відмінки",
@@ -187,6 +213,19 @@ const PL_TOPICS: Topic[] = [
       ua: "Як сказати: я робив, я була, ми пішли.",
       ru: "Как сказать: я делал, я была, мы пошли.",
       en: "How to say: I did, I was, we went.",
+    },
+  },
+  {
+    id: "verbs-future",
+    title: {
+      ua: "Майбутній час",
+      ru: "Будущее время",
+      en: "Future tense",
+    },
+    description: {
+      ua: "Як сказати: я буду робити, я зроблю, ми підемо.",
+      ru: "Как сказать: я буду делать, я сделаю, мы пойдём.",
+      en: "How to say: I will do, I will finish, we will go.",
     },
   },
   {
