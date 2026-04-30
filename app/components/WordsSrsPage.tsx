@@ -309,30 +309,26 @@ export default function WordsSrsPage({
         : "Днів підряд";
 
   const dailyGoalLabel =
-    lang === "ru"
-      ? "Сегодня"
-      : lang === "en"
-        ? "Today"
-        : "Сьогодні";
+    lang === "ru" ? "Сегодня" : lang === "en" ? "Today" : "Сьогодні";
 
   const xpLabel = lang === "ru" ? "Опыт" : lang === "en" ? "XP" : "Досвід";
 
   if (needLogin) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-4 sm:p-4">
-        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <div className="text-lg font-semibold text-slate-900">
+        <div className="flunio-card rounded-3xl p-5 text-white sm:p-6">
+          <div className="text-lg font-semibold text-white">
             {t.needLoginTitle}
           </div>
 
-          <div className="mt-2 text-sm leading-6 text-slate-600">
+          <div className="mt-2 text-sm leading-6 text-white/65">
             {t.needLoginText}
           </div>
 
           <div className="mt-4">
             <Link
               href="/login"
-              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+              className="inline-flex rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98]"
             >
               {t.login}
             </Link>
@@ -344,27 +340,30 @@ export default function WordsSrsPage({
 
   return (
     <main className="mx-auto max-w-3xl space-y-4 px-4 py-4 sm:space-y-6 sm:p-4">
-      <section className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <section className="flunio-card rounded-3xl p-4 text-white sm:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-1">
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+            <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
               🧠 {t.title}
             </h1>
 
-            <p className="max-w-xl text-sm leading-6 text-slate-600">
+            <p className="max-w-xl text-sm leading-6 text-white/65">
               {t.subtitle}
             </p>
 
-            <div className="text-sm text-slate-600">
-              {t.today}: <b>{Math.min(stats.due, DAILY_REVIEW_LIMIT)}</b> ·{" "}
-              {t.left}: <b>{left}</b>
+            <div className="text-sm text-white/60">
+              {t.today}:{" "}
+              <b className="text-white">
+                {Math.min(stats.due, DAILY_REVIEW_LIMIT)}
+              </b>{" "}
+              · {t.left}: <b className="text-white">{left}</b>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-end">
             <button
               onClick={() => addNewWordsRandom(30)}
-              className="min-h-11 w-full rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold leading-5 text-white shadow-sm transition hover:bg-black active:scale-[0.98] sm:w-auto"
+              className="min-h-11 w-full rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold leading-5 text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
               type="button"
             >
               ＋ {t.add30}
@@ -372,7 +371,7 @@ export default function WordsSrsPage({
 
             <Link
               href={backHref}
-              className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98] sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/70 backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white active:scale-[0.98] sm:w-auto"
             >
               ← {t.back}
             </Link>
@@ -380,22 +379,22 @@ export default function WordsSrsPage({
         </div>
 
         <div className="mt-5 space-y-2">
-          <div className="flex items-center justify-between text-xs font-medium text-slate-500">
+          <div className="flex items-center justify-between text-xs font-medium text-white/50">
             <span>{t.progress}</span>
             <span>
               {reviewed}/{sessionSize || 0}
             </span>
           </div>
 
-          <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+          <div className="h-2 overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-slate-900 transition-all duration-300"
+              className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
 
           {current && left <= 5 && left > 0 ? (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-800">
+            <div className="rounded-2xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs font-medium text-amber-100">
               {t.almostDone(left)}
             </div>
           ) : null}
@@ -416,19 +415,19 @@ export default function WordsSrsPage({
 
       {!current ? (
         Math.min(stats.due, DAILY_REVIEW_LIMIT) === 0 ? (
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 text-center shadow-sm sm:p-6">
-            <div className="text-xl font-semibold text-slate-900">
+          <section className="flunio-card rounded-3xl p-5 text-center text-white sm:p-6">
+            <div className="text-xl font-semibold text-white">
               {t.noDueTitle}
             </div>
 
-            <div className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+            <div className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/65">
               {t.noDueText}
             </div>
 
             <div className="mt-5">
               <button
                 onClick={() => addNewWordsRandom(30)}
-                className="min-h-11 w-full rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black active:scale-[0.98] sm:w-auto"
+                className="min-h-11 w-full rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
                 type="button"
               >
                 ＋ {t.add30}
@@ -436,19 +435,19 @@ export default function WordsSrsPage({
             </div>
           </section>
         ) : (
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 text-center shadow-sm sm:p-6">
-            <div className="text-2xl font-bold text-slate-900">
+          <section className="flunio-card rounded-3xl p-5 text-center text-white sm:p-6">
+            <div className="text-2xl font-bold text-white">
               {t.sessionDone}
             </div>
 
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+            <p className="mt-2 text-sm leading-6 text-white/65">
               {t.sessionDoneText}
             </p>
 
             <div className="mt-5">
               <button
                 onClick={() => startNewSession()}
-                className="min-h-11 w-full rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black active:scale-[0.98] sm:w-auto"
+                className="min-h-11 w-full rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
                 type="button"
               >
                 {t.nextSession}
