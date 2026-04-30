@@ -39,16 +39,16 @@ type IdleWindow = Window & {
 
 function ExerciseLoading() {
   return (
-    <div className="rounded-2xl bg-white">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
       <div className="animate-pulse space-y-4">
-        <div className="h-6 w-56 rounded bg-slate-200" />
-        <div className="mx-auto h-[220px] w-full max-w-[320px] rounded-2xl bg-slate-200" />
-        <div className="mx-auto h-10 w-10 rounded-full bg-slate-200" />
+        <div className="h-6 w-56 rounded bg-white/10" />
+        <div className="mx-auto h-[220px] w-full max-w-[320px] rounded-2xl bg-white/10" />
+        <div className="mx-auto h-10 w-10 rounded-full bg-white/10" />
         <div className="space-y-3">
-          <div className="h-12 w-full rounded-xl bg-slate-200" />
-          <div className="h-12 w-full rounded-xl bg-slate-200" />
-          <div className="h-12 w-full rounded-xl bg-slate-200" />
-          <div className="h-12 w-full rounded-xl bg-slate-200" />
+          <div className="h-12 w-full rounded-xl bg-white/10" />
+          <div className="h-12 w-full rounded-xl bg-white/10" />
+          <div className="h-12 w-full rounded-xl bg-white/10" />
+          <div className="h-12 w-full rounded-xl bg-white/10" />
         </div>
       </div>
     </div>
@@ -560,11 +560,11 @@ export default function LevelClient({
 
     return (
       <div
-        className="space-y-3 sm:space-y-6"
+        className="space-y-3 text-white sm:space-y-6"
         onPointerDownCapture={unlockInsideLesson}
         onKeyDownCapture={unlockInsideLesson}
       >
-        <div className="sticky top-2 z-10 rounded-xl border bg-white/90 px-4 py-2 text-sm font-semibold backdrop-blur">
+        <div className="sticky top-2 z-10 rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur">
           {t.viewed}: {wordIndex + 1}/{words.length}
         </div>
 
@@ -574,81 +574,86 @@ export default function LevelClient({
               <button
                 disabled={isFirst}
                 onClick={goPrevWord}
-                className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.08)] backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {t.back}
               </button>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[760px] rounded-3xl border bg-white px-3 py-3 text-center shadow-sm sm:px-6 sm:py-6">
-              {word?.img ? (
-                <div className="flex flex-col items-center gap-2">
-                  <div className="relative flex min-h-[360px] w-full items-center justify-center overflow-hidden rounded-2xl bg-slate-50 px-1 py-1 sm:min-h-[420px]">
-                    {!learnImageLoaded && (
-                      <div className="absolute inset-0 animate-pulse bg-slate-200/70" />
-                    )}
+            <div className="flunio-card relative mx-auto w-full max-w-[760px] overflow-hidden rounded-3xl px-3 py-3 text-center sm:px-6 sm:py-6">
+              <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-fuchsia-500/20 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-cyan-400/20 blur-3xl" />
 
-                    <Image
-                      src={word.img}
-                      alt={word.sk}
-                      width={1200}
-                      height={900}
-                      onLoad={() => setLearnImageLoaded(true)}
-                      className={[
-                        "max-h-[340px] w-full max-w-[92%] rounded-2xl bg-white object-contain transition-all duration-500 sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
-                        learnImageLoaded
-                          ? "opacity-100 blur-0 scale-100"
-                          : "opacity-0 blur-sm scale-[1.02]",
-                      ].join(" ")}
-                      priority={wordIndex === 0}
-                      fetchPriority={wordIndex === 0 ? "high" : "auto"}
-                      sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
-                    />
-                  </div>
-
-                  {word.imgCredit && (
-                    <div className="text-xs text-slate-500">{word.imgCredit}</div>
-                  )}
-                </div>
-              ) : (
-                <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl border bg-slate-50 text-slate-400 sm:min-h-[420px]">
+              <div className="relative">
+                {word?.img ? (
                   <div className="flex flex-col items-center gap-2">
-                    <div className="text-5xl">📷</div>
-                  </div>
-                </div>
-              )}
+                    <div className="relative flex min-h-[360px] w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 px-1 py-1 sm:min-h-[420px]">
+                      {!learnImageLoaded && (
+                        <div className="absolute inset-0 animate-pulse bg-white/10" />
+                      )}
 
-              <div
-                className={[
-                  "mt-4 flex flex-col items-center transition-all duration-300",
-                  learnImageLoaded
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-1 opacity-85",
-                ].join(" ")}
-              >
-                <div className="flex flex-col items-center">
-                  <div className="flex items-center justify-center">
-                    <div className="break-words text-3xl font-bold leading-none sm:text-4xl">
-                      {word.sk}
-                    </div>
-
-                    <div className="ml-5 shrink-0 sm:ml-6">
-                      <SpeakButton
-                        text={word.sk}
-                        autoPlayKey={audioUnlocked ? word.sk : undefined}
+                      <Image
+                        src={word.img}
+                        alt={word.sk}
+                        width={1200}
+                        height={900}
+                        onLoad={() => setLearnImageLoaded(true)}
+                        className={[
+                          "max-h-[340px] w-full max-w-[92%] rounded-2xl object-contain transition-all duration-500 sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
+                          learnImageLoaded
+                            ? "opacity-100 blur-0 scale-100"
+                            : "opacity-0 blur-sm scale-[1.02]",
+                        ].join(" ")}
+                        priority={wordIndex === 0}
+                        fetchPriority={wordIndex === 0 ? "high" : "auto"}
+                        sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
                       />
                     </div>
+
+                    {word.imgCredit && (
+                      <div className="text-xs text-white/45">{word.imgCredit}</div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex min-h-[360px] w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white/40 sm:min-h-[420px]">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="text-5xl">📷</div>
+                    </div>
+                  </div>
+                )}
+
+                <div
+                  className={[
+                    "mt-4 flex flex-col items-center transition-all duration-300",
+                    learnImageLoaded
+                      ? "translate-y-0 opacity-100"
+                      : "translate-y-1 opacity-85",
+                  ].join(" ")}
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-center justify-center">
+                      <div className="break-words text-3xl font-bold leading-none text-white sm:text-4xl">
+                        {word.sk}
+                      </div>
+
+                      <div className="ml-5 shrink-0 sm:ml-6">
+                        <SpeakButton
+                          text={word.sk}
+                          autoPlayKey={audioUnlocked ? word.sk : undefined}
+                        />
+                      </div>
+                    </div>
+
+                    {courseId === "pl" && word.hintUa && (
+                      <div className="mt-2 text-center text-sm italic text-white/45 sm:text-base">
+                        [{word.hintUa}]
+                      </div>
+                    )}
                   </div>
 
-                  {courseId === "pl" && word.hintUa && (
-                    <div className="mt-2 text-center text-sm italic text-slate-400 sm:text-base">
-                      [{word.hintUa}]
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-3 text-center text-xl font-semibold leading-tight text-black sm:text-2xl">
-                  {trWord(word, lang)}
+                  <div className="mt-3 text-center text-xl font-semibold leading-tight text-cyan-100 sm:text-2xl">
+                    {trWord(word, lang)}
+                  </div>
                 </div>
               </div>
             </div>
@@ -657,14 +662,14 @@ export default function LevelClient({
               {isLast ? (
                 <button
                   onClick={startQuiz}
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-black px-5 py-3 text-sm font-medium text-white shadow-sm transition hover:bg-slate-900"
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5"
                 >
                   {t.startExercises}
                 </button>
               ) : (
                 <button
                   onClick={goNextWord}
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border bg-white px-5 py-3 text-sm font-medium shadow-sm transition hover:bg-slate-50"
+                  className="inline-flex min-h-[52px] items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.08)] backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10"
                 >
                   {t.next}
                 </button>
@@ -676,7 +681,7 @@ export default function LevelClient({
             <button
               disabled={isFirst}
               onClick={goPrevWord}
-              className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="min-h-[44px] rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t.back}
             </button>
@@ -684,14 +689,14 @@ export default function LevelClient({
             {isLast ? (
               <button
                 onClick={startQuiz}
-                className="min-h-[44px] rounded-2xl bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-900"
+                className="min-h-[44px] rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]"
               >
                 {t.startExercises}
               </button>
             ) : (
               <button
                 onClick={goNextWord}
-                className="min-h-[44px] rounded-2xl border bg-white px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
+                className="min-h-[44px] rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
               >
                 {t.next}
               </button>
@@ -709,19 +714,22 @@ export default function LevelClient({
 
   if (finished) {
     return (
-      <div className="space-y-3 rounded-2xl border bg-white p-6">
-        <div className="text-xl font-semibold">{t.levelDone}</div>
-        <div className="text-slate-600">
-          {t.result}: <b>{score}</b> / <b>{totalQuestions}</b>
+      <div className="flunio-card space-y-4 rounded-3xl p-6 text-white">
+        <div className="text-xl font-semibold text-white">{t.levelDone}</div>
+
+        <div className="text-white/65">
+          {t.result}:{" "}
+          <b className="text-white">{score}</b> /{" "}
+          <b className="text-white">{totalQuestions}</b>
         </div>
 
         {savingNext ? (
-          <div className="text-sm text-slate-500">{t.saving}</div>
+          <div className="text-sm text-white/50">{t.saving}</div>
         ) : null}
 
         {!canGoNextNow && (
-          <div className="rounded-xl border bg-slate-50 p-3 text-sm text-slate-700">
-            <div className="font-semibold">{t.nextLockedTitle}</div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
+            <div className="font-semibold text-white">{t.nextLockedTitle}</div>
             <div className="mt-1">{lockedReasonNow ?? t.nextLockedDefault}</div>
           </div>
         )}
@@ -730,7 +738,7 @@ export default function LevelClient({
           <button
             onClick={resetToLearn}
             disabled={isNavigating}
-            className="rounded-xl border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {t.reviewAgain}
           </button>
@@ -738,10 +746,10 @@ export default function LevelClient({
           <button
             onClick={() => goTo(nextLevelId)}
             className={[
-              "rounded-xl px-4 py-2 text-white disabled:cursor-not-allowed",
+              "rounded-xl px-4 py-2 text-sm font-semibold text-white transition disabled:cursor-not-allowed",
               canGoNextNow && !savingNext && !isNavigating
-                ? "bg-black"
-                : "bg-black/40",
+                ? "bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 shadow-[0_0_18px_rgba(59,130,246,0.35)] hover:-translate-y-0.5"
+                : "border border-white/10 bg-white/5 text-white/45",
             ].join(" ")}
             disabled={!canGoNextNow || savingNext || isNavigating}
             title={!canGoNextNow ? t.notAvailableFree : undefined}
@@ -753,7 +761,7 @@ export default function LevelClient({
             <button
               onClick={() => goTo(onLockedNextRedirect)}
               disabled={isNavigating}
-              className="rounded-xl border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {t.toLessonsList}
             </button>
@@ -765,11 +773,11 @@ export default function LevelClient({
 
   return (
     <div
-      className="space-y-4 rounded-2xl border bg-white p-6"
+      className="flunio-card space-y-4 rounded-3xl p-6 text-white"
       onPointerDownCapture={unlockInsideLesson}
       onKeyDownCapture={unlockInsideLesson}
     >
-      <div className="text-sm text-slate-500">
+      <div className="text-sm text-white/50">
         {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} • {exerciseTitle} •{" "}
         {exercise.mode === "perWord" ? (
           <>
@@ -779,6 +787,7 @@ export default function LevelClient({
           <>{t.lesson}</>
         )}
       </div>
+
       <style>{exerciseEnterStyle}</style>
 
       <ReportErrorButton
@@ -799,7 +808,7 @@ export default function LevelClient({
 
       <div
         key={exerciseScreenKey}
-        className="rounded-2xl transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
+        className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
       >
         {exercise.kind === "chooseTranslation" && (
           <ChooseTranslation

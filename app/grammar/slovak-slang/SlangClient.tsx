@@ -100,6 +100,18 @@ const UI: Record<string, LocalizedText> = {
   },
 };
 
+const card =
+  "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
+
+const softCard =
+  "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+
+const ghostButton =
+  "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+
+const activeButton =
+  "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0";
+
 function tr(text: LocalizedText, lang: Lang) {
   return text[lang] ?? text.ua ?? "";
 }
@@ -171,39 +183,52 @@ export default function SlangClient() {
       : tr(UI.introSk, lang);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 py-10">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold">{title}</h1>
+    <div className="mx-auto max-w-5xl space-y-6 py-10 text-white">
+      <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
-        <p className="text-slate-700">{intro}</p>
+        <div className="relative space-y-4">
+          <div className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+            Grammar · Slang
+          </div>
 
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href={practiceHref}
-            className="inline-flex items-center justify-center rounded-xl bg-black px-4 py-2 text-sm text-white transition hover:bg-black/90"
-          >
-            {tr(UI.practice, lang)}
-          </Link>
+          <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
+            {title}
+          </h1>
 
-          <div className="self-center text-sm text-slate-500">
-            {tr(UI.totals, lang)}: {slang.length} • {tr(UI.shown, lang)}: {filtered.length}
+          <p className="max-w-3xl text-base leading-relaxed text-white/70">
+            {intro}
+          </p>
+
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Link href={practiceHref} className={activeButton}>
+              {tr(UI.practice, lang)}
+            </Link>
+
+            <div className="self-center rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/60 backdrop-blur">
+              {tr(UI.totals, lang)}:{" "}
+              <span className="font-semibold text-cyan-100">{slang.length}</span>{" "}
+              • {tr(UI.shown, lang)}:{" "}
+              <span className="font-semibold text-cyan-100">{filtered.length}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="rounded-2xl border bg-white p-4 shadow-sm">
+      <div className={`${card} p-4`}>
         <div className="grid gap-3 md:grid-cols-3">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder={tr(UI.searchPlaceholder, lang)}
-            className="h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-black/10"
+            className="h-11 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white outline-none placeholder:text-white/35 transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20"
           />
 
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value as (typeof LEVELS)[number] | "ALL")}
-            className="h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-black/10"
+            className="h-11 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 text-sm text-white outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20"
           >
             <option value="ALL">{tr(UI.levelAll, lang)}</option>
 
@@ -217,7 +242,7 @@ export default function SlangClient() {
           <select
             value={cat}
             onChange={(e) => setCat(e.target.value as SlangCategory | "ALL")}
-            className="h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-black/10"
+            className="h-11 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 text-sm text-white outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20"
           >
             <option value="ALL">{tr(UI.categoryAll, lang)}</option>
 
@@ -244,7 +269,7 @@ export default function SlangClient() {
         <div className="flex justify-center pt-3">
           <button
             onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
-            className="rounded-xl border px-4 py-2 text-sm hover:bg-slate-50"
+            className={ghostButton}
           >
             {tr(UI.showMore, lang)}
           </button>
@@ -252,7 +277,7 @@ export default function SlangClient() {
       )}
 
       {filtered.length === 0 && (
-        <div className="rounded-2xl border bg-white p-6 text-slate-600">
+        <div className={`${card} p-6 text-white/65`}>
           {tr(UI.nothingFound, lang)}
         </div>
       )}
@@ -279,52 +304,52 @@ function SlangCard({ item }: { item: SlangItem }) {
       : null;
 
   return (
-    <div className="space-y-3 rounded-2xl border bg-white p-5 shadow-sm">
+    <div className={`${card} space-y-4 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10`}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-lg font-semibold">{item.sk}</div>
-          <div className="text-slate-700">{meaning}</div>
+          <div className="text-lg font-semibold text-cyan-100">{item.sk}</div>
+          <div className="mt-1 text-white/70">{meaning}</div>
         </div>
 
         <SpeakButton
           text={item.sk}
           asChild
           label="🔊"
-          className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
+          className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white transition hover:bg-white/15"
         />
       </div>
 
-      <div className="rounded-xl bg-slate-50 p-3">
-        <div className="text-xs uppercase tracking-wide text-slate-500">
+      <div className={`${softCard} p-3`}>
+        <div className="text-xs font-semibold uppercase tracking-wide text-white/45">
           {tr(UI.example, lang)}
         </div>
 
-        <div className="text-sm italic text-slate-700">{item.exampleSk}</div>
-        <div className="text-sm text-slate-500">{example}</div>
+        <div className="mt-2 text-sm italic text-white/80">{item.exampleSk}</div>
+        <div className="mt-1 text-sm text-white/50">{example}</div>
 
-        <div className="pt-2">
+        <div className="pt-3">
           <SpeakButton
             kind="phrase"
             text={item.exampleSk}
             asChild
             label="🔊"
-            className="rounded-lg border bg-white px-2 py-1 text-xs hover:bg-slate-50"
+            className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs text-white transition hover:bg-white/15"
           />
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 text-xs">
-        <span className="rounded-full border px-2 py-1 text-slate-600">
+        <span className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 font-semibold text-cyan-100">
           {item.level}
         </span>
 
-        <span className="rounded-full border px-2 py-1 text-slate-600">
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/65">
           {tr(CAT_LABEL[item.category], lang)}
         </span>
       </div>
 
       {caution && (
-        <div className="text-sm text-amber-700">
+        <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">
           ⚠ {caution}
         </div>
       )}

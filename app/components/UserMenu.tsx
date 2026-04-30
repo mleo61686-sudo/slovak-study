@@ -68,10 +68,10 @@ function AvatarCircle({
 
   return (
     <div
-      className={`flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white`}
+      className={`flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-500 via-blue-500 to-fuchsia-500 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]`}
     >
       {!loaded ? (
-        <div className="h-full w-full animate-pulse bg-slate-200" />
+        <div className="h-full w-full animate-pulse bg-white/20" />
       ) : avatarUrl ? (
         <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
       ) : (
@@ -269,7 +269,7 @@ export default function UserMenu({
 
   if (mobile) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur">
         <div className="flex items-center gap-3 px-4 py-3">
           <AvatarCircle
             avatarUrl={avatarUrl}
@@ -279,18 +279,18 @@ export default function UserMenu({
           />
 
           <div className="min-w-0">
-            <div className="truncate font-medium text-slate-900">
+            <div className="truncate font-medium text-white">
               {name || t.userFallback}
             </div>
-            <div className="break-all text-sm text-slate-500">{email}</div>
+            <div className="break-all text-sm text-white/50">{email}</div>
           </div>
         </div>
 
-        <div className="border-t border-slate-200" />
+        <div className="border-t border-white/10" />
 
         <Link
           href="/account"
-          className="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-100"
+          className="block px-4 py-3 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
           onClick={() => onNavigate?.()}
         >
           {t.profile}
@@ -298,7 +298,7 @@ export default function UserMenu({
 
         <Link
           href="/learn"
-          className="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-100"
+          className="block px-4 py-3 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
           onClick={() => onNavigate?.()}
           data-onboarding="choose-course"
         >
@@ -308,23 +308,23 @@ export default function UserMenu({
         <button
           onClick={openPortal}
           disabled={loadingPortal}
-          className="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+          className="w-full px-4 py-3 text-left text-sm text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
           type="button"
         >
           <div className="font-medium">{t.manageSub}</div>
-          <div className="mt-0.5 text-xs text-slate-500">
+          <div className="mt-0.5 text-xs text-white/45">
             {t.manageSubHint}
           </div>
         </button>
 
-        <div className="border-t border-slate-200" />
+        <div className="border-t border-white/10" />
 
         <button
           onClick={() => {
             onNavigate?.();
             signOut({ callbackUrl: "/login" });
           }}
-          className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-slate-100"
+          className="w-full px-4 py-3 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
           type="button"
         >
           {t.logout}
@@ -351,7 +351,7 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-xl border bg-white shadow-lg"
+          className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/95 text-white shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="flex items-center gap-3 px-4 py-3 text-sm">
@@ -363,18 +363,18 @@ export default function UserMenu({
             />
 
             <div className="min-w-0">
-              <div className="truncate font-medium">
+              <div className="truncate font-medium text-white">
                 {name || t.userFallback}
               </div>
-              <div className="truncate text-slate-500">{email}</div>
+              <div className="truncate text-white/50">{email}</div>
             </div>
           </div>
 
-          <div className="border-t" />
+          <div className="border-t border-white/10" />
 
           <Link
             href="/account"
-            className="block px-4 py-2 text-sm hover:bg-slate-50"
+            className="block px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
             onClick={() => setOpen(false)}
           >
             {t.profile}
@@ -382,7 +382,7 @@ export default function UserMenu({
 
           <Link
             href="/learn"
-            className="block px-4 py-2 text-sm hover:bg-slate-50"
+            className="block px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
             onClick={() => setOpen(false)}
             data-onboarding="choose-course"
           >
@@ -392,18 +392,18 @@ export default function UserMenu({
           <button
             onClick={openPortal}
             disabled={loadingPortal}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-slate-50 disabled:opacity-50"
+            className="w-full px-4 py-2 text-left text-sm text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
             type="button"
           >
             <div className="font-medium">{t.manageSub}</div>
-            <div className="text-xs text-slate-500">{t.manageSubHint}</div>
+            <div className="text-xs text-white/45">{t.manageSubHint}</div>
           </button>
 
-          <div className="border-t" />
+          <div className="border-t border-white/10" />
 
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-slate-50"
+            className="w-full px-4 py-2 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
             type="button"
           >
             {t.logout}

@@ -9,21 +9,9 @@ import { trWord, playLocal } from "../helpers";
 type CourseId = "sk" | "cs" | "pl";
 
 const courseLangName: Record<CourseId, Record<Lang, string>> = {
-  sk: {
-    ua: "словацькою",
-    ru: "по-словацки",
-    en: "in Slovak",
-  },
-  cs: {
-    ua: "чеською",
-    ru: "по-чешски",
-    en: "in Czech",
-  },
-  pl: {
-    ua: "польською",
-    ru: "по-польски",
-    en: "in Polish",
-  },
+  sk: { ua: "словацькою", ru: "по-словацки", en: "in Slovak" },
+  cs: { ua: "чеською", ru: "по-чешски", en: "in Czech" },
+  pl: { ua: "польською", ru: "по-польски", en: "in Polish" },
 };
 
 export default function WriteWord({
@@ -56,10 +44,7 @@ export default function WriteWord({
   }
 
   function normalize(s: string) {
-    return stripDiacritics(s)
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ");
+    return stripDiacritics(s).trim().toLowerCase().replace(/\s+/g, " ");
   }
 
   async function check() {
@@ -78,10 +63,10 @@ export default function WriteWord({
 
   const inputClass =
     status === "correct"
-      ? "border-green-500"
+      ? "border-emerald-400/60 ring-2 ring-emerald-400/20"
       : status === "wrong"
-        ? "border-red-500"
-        : "border-slate-300";
+        ? "border-rose-400/60 ring-2 ring-rose-400/20"
+        : "border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20";
 
   const courseLang = courseLangName[courseId] ?? courseLangName.sk;
 
@@ -112,8 +97,7 @@ export default function WriteWord({
         : lang === "ru"
           ? "❌ Неправильно. Правильно:"
           : "❌ Неправильно. Правильно:",
-    next:
-      lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Далі →",
+    next: lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Далі →",
     hint:
       lang === "en"
         ? "You can type without diacritics"
@@ -125,8 +109,8 @@ export default function WriteWord({
   return (
     <>
       <div className="space-y-2.5 sm:space-y-3">
-        <div className="text-lg font-semibold leading-snug">
-          {t.title} <span className="font-bold">{trWord(word, lang)}</span>
+        <div className="text-lg font-semibold leading-snug text-white">
+          {t.title} <span className="font-bold text-cyan-100">{trWord(word, lang)}</span>
         </div>
 
         <div className="flex justify-start">
@@ -143,16 +127,16 @@ export default function WriteWord({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={status !== "idle"}
-          className={`w-full rounded-2xl border px-4 py-2.5 text-[17px] outline-none transition sm:py-3 ${inputClass}`}
+          className={`w-full rounded-2xl border bg-white/5 px-4 py-2.5 text-[17px] text-white outline-none transition placeholder:text-white/35 disabled:opacity-60 sm:py-3 ${inputClass}`}
           placeholder={t.placeholder}
         />
 
-        <div className="text-sm leading-snug text-slate-500">{t.hint}</div>
+        <div className="text-sm leading-snug text-white/50">{t.hint}</div>
 
         {status === "idle" ? (
           <button
             onClick={check}
-            className="rounded-2xl bg-black px-5 py-2.5 text-white transition disabled:opacity-50 sm:px-5 sm:py-2.5"
+            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 disabled:opacity-50 sm:px-5 sm:py-2.5"
             disabled={!value.trim()}
           >
             {t.check}
@@ -160,19 +144,19 @@ export default function WriteWord({
         ) : (
           <div className="mt-2 space-y-3">
             {status === "correct" ? (
-              <div className="rounded-xl border border-green-200 bg-green-50 px-3 py-2 font-semibold text-green-700">
+              <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-3 py-2 font-semibold text-emerald-200">
                 {t.correctPrefix} <b>{correctAnswer}</b>
               </div>
             ) : (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 font-semibold text-red-700">
+              <div className="rounded-xl border border-rose-300/25 bg-rose-400/10 px-3 py-2 font-semibold text-rose-200">
                 {t.wrongPrefix} <b>{correctAnswer}</b>
               </div>
             )}
 
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <button
                 onClick={next}
-                className="rounded-2xl bg-black px-5 py-2.5 text-white transition"
+                className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5"
               >
                 {t.next}
               </button>

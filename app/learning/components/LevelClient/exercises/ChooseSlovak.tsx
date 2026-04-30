@@ -9,21 +9,9 @@ import { ResultBox, SpeakCentered } from "./shared";
 type CourseId = "sk" | "cs" | "pl";
 
 const courseLangName: Record<CourseId, Record<Lang, string>> = {
-  sk: {
-    ua: "словацькою",
-    ru: "по-словацки",
-    en: "in Slovak",
-  },
-  cs: {
-    ua: "чеською",
-    ru: "по-чешски",
-    en: "in Czech",
-  },
-  pl: {
-    ua: "польською",
-    ru: "по-польски",
-    en: "in Polish",
-  },
+  sk: { ua: "словацькою", ru: "по-словацки", en: "in Slovak" },
+  cs: { ua: "чеською", ru: "по-чешски", en: "in Czech" },
+  pl: { ua: "польською", ru: "по-польски", en: "in Polish" },
 };
 
 export default function ChooseSlovak({
@@ -58,7 +46,6 @@ export default function ChooseSlovak({
   }, [word.sk]);
 
   const answered = status !== "idle";
-
   const courseLang = courseLangName[courseId] ?? courseLangName.sk;
 
   const title =
@@ -73,9 +60,10 @@ export default function ChooseSlovak({
 
   return (
     <>
-      <div className="space-y-3">
-        <div className="text-lg font-semibold leading-snug">
-          {title} <span className="font-bold">{trWord(word, lang)}</span>
+      <div className="space-y-3 text-white">
+        <div className="text-lg font-semibold leading-snug text-white">
+          {title}{" "}
+          <span className="font-bold text-cyan-100">{trWord(word, lang)}</span>
         </div>
 
         <div className="flex justify-center">
@@ -104,9 +92,13 @@ export default function ChooseSlovak({
               }
             }}
             className={[
-              "rounded-2xl border px-4 py-3 text-left text-[17px] transition sm:px-5 sm:py-3.5",
-              answered ? "cursor-not-allowed opacity-60" : "hover:bg-slate-50",
-              picked === opt ? "border-black ring-2 ring-black/10" : "",
+              "rounded-2xl border px-4 py-3 text-left text-[17px] font-semibold text-white transition sm:px-5 sm:py-3.5",
+              answered
+                ? "cursor-not-allowed opacity-60"
+                : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+              picked === opt
+                ? "border-cyan-400/50 bg-cyan-400/10 ring-2 ring-cyan-400/20"
+                : "",
             ].join(" ")}
           >
             {opt}
@@ -122,8 +114,8 @@ export default function ChooseSlovak({
             lang={lang}
             extra={
               status === "wrong" ? (
-                <div className="text-sm text-slate-700">
-                  {correctLabel} <b>{word.sk}</b>
+                <div className="text-sm text-white/70">
+                  {correctLabel} <b className="text-white">{word.sk}</b>
                 </div>
               ) : null
             }

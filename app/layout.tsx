@@ -62,7 +62,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#050816", // темний фон Flunio
 };
 
 export const revalidate = 3600;
@@ -138,7 +138,10 @@ export default function RootLayout({
         />
       </head>
 
-      <body suppressHydrationWarning className="min-h-screen flex flex-col">
+      <body
+        suppressHydrationWarning
+        className="min-h-screen flex flex-col bg-[#050816] text-white"
+      >
         <SessionProviderClient>
           <CourseBootstrap />
           <Navbar />

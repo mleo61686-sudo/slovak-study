@@ -376,7 +376,8 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 text-white">
+    <div className="mx-auto max-w-3xl px-4 py-10 text-white relative">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10 blur-3xl" />
       <div className="flunio-card rounded-3xl p-6">
         <h1 className="text-3xl font-bold">{t.title}</h1>
         <p className="mt-2 text-white/65">{t.subtitle}</p>

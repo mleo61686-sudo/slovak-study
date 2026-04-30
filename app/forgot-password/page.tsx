@@ -70,46 +70,59 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex h-[calc(100dvh-64px-64px)] items-center justify-center overflow-hidden px-4 py-6">
+    <div className="flex min-h-[calc(100dvh-64px-64px)] items-center justify-center overflow-hidden px-4 py-8 text-white">
       <div className="w-full max-w-md">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-semibold">{t.title}</h1>
-          <p className="mt-2 text-sm text-slate-600">{t.hint}</p>
+        <div className="flunio-card relative overflow-hidden rounded-3xl p-6">
+          <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-14 -left-10 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
-          {done ? (
-            <div className="mt-6 text-slate-700">{t.ok}</div>
-          ) : (
-            <div className="mt-6 space-y-3">
-              <label className="block text-sm font-medium text-slate-700">
-                {t.email}
-              </label>
+          <div className="relative">
+            <h1 className="text-2xl font-semibold tracking-tight text-white">
+              {t.title}
+            </h1>
 
-              <input
-                className="w-full rounded-xl border bg-white px-3 py-2"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                autoComplete="email"
-              />
+            <p className="mt-2 text-sm text-white/65">{t.hint}</p>
 
-              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
-                <button
-                  onClick={submit}
-                  disabled={!email.trim() || loading}
-                  className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
-                >
-                  {t.btn}
-                </button>
-
-                <Link href="/login" className="text-sm underline">
-                  {t.back}
-                </Link>
+            {done ? (
+              <div className="mt-6 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 px-4 py-3 text-sm font-medium text-emerald-100">
+                {t.ok}
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="mt-6 space-y-3">
+                <label className="block text-sm font-medium text-white/75">
+                  {t.email}
+                </label>
+
+                <input
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35 outline-none backdrop-blur transition focus:border-cyan-400/50 focus:bg-white/10 focus:shadow-[0_0_18px_rgba(34,211,238,0.18)]"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  autoComplete="email"
+                />
+
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
+                  <button
+                    onClick={submit}
+                    disabled={!email.trim() || loading}
+                    className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                  >
+                    {loading ? "..." : t.btn}
+                  </button>
+
+                  <Link
+                    href="/login"
+                    className="text-sm font-semibold text-cyan-200 underline-offset-4 transition hover:text-cyan-100 hover:underline"
+                  >
+                    {t.back}
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-500">{t.footer}</p>
+        <p className="mt-6 text-center text-xs text-white/45">{t.footer}</p>
       </div>
     </div>
   );

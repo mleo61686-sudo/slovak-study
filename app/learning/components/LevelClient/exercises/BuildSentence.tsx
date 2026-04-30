@@ -143,23 +143,23 @@ export default function BuildSentence({
   const builtPretty = picked.join(" ").replace(/\s+([.,!?;:])/g, "$1");
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 text-white">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="space-y-2">
-          <div className="text-lg font-semibold leading-snug">{ui.title}</div>
-
-          <div className="text-sm text-slate-500">
-            {ui.targetLabel}:{" "}
-            <span className="font-medium text-slate-800">{phrase.target}</span>
+          <div className="text-lg font-semibold leading-snug text-white">
+            {ui.title}
           </div>
 
-
+          <div className="text-sm text-white/55">
+            {ui.targetLabel}:{" "}
+            <span className="font-medium text-cyan-100">{phrase.target}</span>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           <button
             onClick={clear}
-            className="rounded-2xl border px-4 py-2.5 text-sm font-medium transition hover:bg-slate-50"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
           >
             {ui.clear}
           </button>
@@ -168,14 +168,14 @@ export default function BuildSentence({
             <button
               onClick={check}
               disabled={picked.length === 0}
-              className="rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-900 disabled:opacity-50"
+              className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {ui.check}
             </button>
           ) : (
             <button
               onClick={next}
-              className="rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-900"
+              className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5"
             >
               {ui.next}
             </button>
@@ -183,17 +183,17 @@ export default function BuildSentence({
         </div>
       </div>
 
-      <div className="rounded-2xl border bg-slate-50/60 p-4 shadow-sm sm:p-5">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_0_18px_rgba(34,211,238,0.08)] backdrop-blur sm:p-5">
         <div className="space-y-3">
-          <div className="text-sm font-medium text-slate-500">
+          <div className="text-sm font-medium text-white/55">
             {ui.yourSentence}
           </div>
 
-          <div className="min-h-[32px] text-lg font-semibold text-slate-900 sm:text-[28px]">
+          <div className="min-h-[32px] text-lg font-semibold text-white sm:text-[28px]">
             {picked.length ? builtPretty : ui.dash}
           </div>
 
-          <div className="text-sm text-slate-500">{ui.hint}</div>
+          <div className="text-sm text-white/45">{ui.hint}</div>
         </div>
       </div>
 
@@ -202,7 +202,7 @@ export default function BuildSentence({
           <button
             key={`${t}-${idx}`}
             onClick={() => pickToken(t, idx)}
-            className="rounded-xl border bg-white px-3 py-2 text-sm font-medium transition hover:bg-slate-50 active:scale-[0.97]"
+            className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10 active:scale-[0.97]"
           >
             {t}
           </button>
@@ -213,7 +213,7 @@ export default function BuildSentence({
         <button
           onClick={unpickLast}
           disabled={picked.length === 0 || status !== "idle"}
-          className="rounded-2xl border px-4 py-2.5 text-sm font-medium transition hover:bg-slate-50 disabled:opacity-50"
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {ui.back}
         </button>
@@ -221,13 +221,13 @@ export default function BuildSentence({
 
       {status === "correct" && (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 font-medium text-green-700">
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-400/10 px-3 py-2 font-semibold text-emerald-200">
             <span>{ui.correct}</span>
           </div>
 
           <button
             onClick={replay}
-            className="rounded-2xl border border-green-300 bg-white px-4 py-2.5 text-sm font-medium text-green-700 transition hover:bg-green-50"
+            className="rounded-2xl border border-emerald-400/25 bg-white/5 px-4 py-2.5 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-400/10"
           >
             {ui.listenAgain}
           </button>
@@ -236,14 +236,15 @@ export default function BuildSentence({
 
       {status === "wrong" && (
         <div className="space-y-3">
-          <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 font-medium text-red-700">
-            {ui.wrongPrefix} <b>{tokensToSentence(baseTokens)}</b>
+          <div className="rounded-xl border border-rose-400/25 bg-rose-400/10 px-3 py-2 font-semibold text-rose-200">
+            {ui.wrongPrefix}{" "}
+            <b className="text-white">{tokensToSentence(baseTokens)}</b>
           </div>
 
           <div className="flex gap-2">
             <button
               onClick={replay}
-              className="rounded-2xl border border-red-200 bg-white px-4 py-2.5 text-sm font-medium transition hover:bg-red-50"
+              className="rounded-2xl border border-rose-400/25 bg-white/5 px-4 py-2.5 text-sm font-semibold text-rose-100 transition hover:bg-rose-400/10"
             >
               {ui.listenAgain}
             </button>

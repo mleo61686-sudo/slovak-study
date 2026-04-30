@@ -790,6 +790,18 @@ const DATA: Record<CourseId, VerbPastBlock[]> = {
     ],
 };
 
+const card =
+    "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
+
+const softCard =
+    "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+
+const ghostButton =
+    "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+
+const activeButton =
+    "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]";
+
 function normalizeCourse(courseId: string): CourseId {
     if (courseId === "cs" || courseId === "pl") return courseId;
     return "sk";
@@ -827,34 +839,56 @@ export default function VerbsPastClient() {
     }
 
     return (
-        <div className="space-y-10">
-            <div className="space-y-2">
-                <h1 className="text-2xl font-semibold">{ui.title}</h1>
-                <p className="max-w-3xl text-slate-700">{ui.subtitle}</p>
+        <div className="space-y-10 text-white">
+            <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
+                <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
+
+                <div className="relative">
+                    <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                        Grammar · Past tense
+                    </div>
+
+                    <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+                        {ui.title}
+                    </h1>
+
+                    <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70">
+                        {ui.subtitle}
+                    </p>
+                </div>
             </div>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold">{ui.s1}</h2>
+                <h2 className="text-xl font-semibold text-white">{ui.s1}</h2>
 
                 <div className="grid gap-4 lg:grid-cols-2">
-                    <div className="rounded-2xl border bg-white p-5">
-                        <div className="font-semibold">{ui.pattern}</div>
+                    <div className={`${card} p-5`}>
+                        <div className="font-semibold text-white">{ui.pattern}</div>
 
                         <div className="mt-4 grid gap-3">
                             {ui.formulaItems.map((item) => (
-                                <div key={item} className="rounded-xl border bg-slate-50 px-4 py-3 text-slate-700">
+                                <div
+                                    key={item}
+                                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
+                                >
                                     {item}
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border bg-white p-5">
-                        <div className="font-semibold">{ui.noteTitle}</div>
+                    <div className={`${card} p-5`}>
+                        <div className="font-semibold text-white">{ui.noteTitle}</div>
 
-                        <ul className="mt-4 list-disc space-y-2 pl-5 text-slate-700">
+                        <ul className="mt-4 space-y-2">
                             {ui.noteItems.slice(0, 3).map((item) => (
-                                <li key={item}>{item}</li>
+                                <li
+                                    key={item}
+                                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
+                                >
+                                    {item}
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -862,10 +896,10 @@ export default function VerbsPastClient() {
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold">{ui.s2}</h2>
+                <h2 className="text-xl font-semibold text-white">{ui.s2}</h2>
 
-                <div className="rounded-2xl border bg-white p-5">
-                    <div className="text-sm text-slate-500">{ui.chooseVerb}</div>
+                <div className={`${card} p-5`}>
+                    <div className="text-sm font-semibold text-white/50">{ui.chooseVerb}</div>
 
                     <div className="mt-3 flex flex-wrap gap-2">
                         {verbs.map((v) => (
@@ -876,12 +910,7 @@ export default function VerbsPastClient() {
                                     setActiveId(v.id);
                                     setShowAnswer(false);
                                 }}
-                                className={[
-                                    "rounded-xl border px-3 py-2 text-sm transition",
-                                    active.id === v.id
-                                        ? "border-slate-900 bg-slate-900 text-white"
-                                        : "hover:bg-slate-50",
-                                ].join(" ")}
+                                className={active.id === v.id ? activeButton : ghostButton}
                             >
                                 {v.infinitive}
                             </button>
@@ -889,41 +918,41 @@ export default function VerbsPastClient() {
                     </div>
 
                     <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                        <div className="rounded-xl border p-4">
-                            <div className="text-sm text-slate-500">{ui.infinitive}</div>
-                            <div className="text-lg font-semibold">{active.infinitive}</div>
-                            <div className="mt-1 text-slate-600">{tr(active.meaning, uiLang)}</div>
+                        <div className={`${softCard} p-4`}>
+                            <div className="text-sm text-white/50">{ui.infinitive}</div>
+                            <div className="text-lg font-semibold text-cyan-100">{active.infinitive}</div>
+                            <div className="mt-1 text-white/65">{tr(active.meaning, uiLang)}</div>
                         </div>
 
-                        <div className="rounded-xl border p-4">
-                            <div className="text-sm text-slate-500">{ui.rule}</div>
-                            <div className="text-lg font-semibold">{active.rule.sk}</div>
-                            <div className="mt-1 text-slate-600">{tr(active.rule, uiLang)}</div>
+                        <div className={`${softCard} p-4`}>
+                            <div className="text-sm text-white/50">{ui.rule}</div>
+                            <div className="text-lg font-semibold text-cyan-100">{active.rule.sk}</div>
+                            <div className="mt-1 text-white/65">{tr(active.rule, uiLang)}</div>
                         </div>
 
-                        <div className="rounded-xl border p-4">
-                            <div className="text-sm text-slate-500">{ui.pattern}</div>
-                            <div className="font-semibold">{active.pattern.sk}</div>
-                            <div className="mt-1 text-slate-600">{tr(active.pattern, uiLang)}</div>
+                        <div className={`${softCard} p-4`}>
+                            <div className="text-sm text-white/50">{ui.pattern}</div>
+                            <div className="font-semibold text-cyan-100">{active.pattern.sk}</div>
+                            <div className="mt-1 text-white/65">{tr(active.pattern, uiLang)}</div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold">{ui.s3}</h2>
-                <p className="text-slate-600">{ui.examplesHint}</p>
+                <h2 className="text-xl font-semibold text-white">{ui.s3}</h2>
+                <p className="text-white/60">{ui.examplesHint}</p>
 
                 <div className="grid gap-4 md:grid-cols-3">
                     {active.rows.map((row) => (
-                        <div key={row.form} className="rounded-2xl border bg-white p-5">
+                        <div key={row.form} className={`${card} p-5`}>
                             <div className="text-2xl">{row.emoji}</div>
-                            <div className="mt-2 text-sm text-slate-500">{tr(row.label, uiLang)}</div>
-                            <div className="mt-1 text-lg font-semibold">{row.form}</div>
+                            <div className="mt-2 text-sm text-white/50">{tr(row.label, uiLang)}</div>
+                            <div className="mt-1 text-lg font-semibold text-cyan-100">{row.form}</div>
 
-                            <div className="mt-4 rounded-xl border bg-slate-50 p-4">
-                                <div className="font-medium">{row.example.sk}</div>
-                                <div className="mt-1 text-sm text-slate-500">{tr(row.example, uiLang)}</div>
+                            <div className={`${softCard} mt-4 p-4`}>
+                                <div className="font-semibold text-white">{row.example.sk}</div>
+                                <div className="mt-1 text-sm text-white/55">{tr(row.example, uiLang)}</div>
                             </div>
                         </div>
                     ))}
@@ -931,11 +960,11 @@ export default function VerbsPastClient() {
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold">{ui.s4}</h2>
+                <h2 className="text-xl font-semibold text-white">{ui.s4}</h2>
 
-                <div className="rounded-2xl border bg-white p-5">
-                    <div className="text-sm text-slate-500">{ui.practice}</div>
-                    <div className="mt-2 text-lg font-semibold">
+                <div className={`${card} p-5`}>
+                    <div className="text-sm text-white/50">{ui.practice}</div>
+                    <div className="mt-2 text-lg font-semibold text-white">
                         {tr(currentPractice.example, uiLang)}
                     </div>
 
@@ -943,7 +972,7 @@ export default function VerbsPastClient() {
                         <button
                             type="button"
                             onClick={() => setShowAnswer(true)}
-                            className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
+                            className={activeButton}
                         >
                             {ui.show}
                         </button>
@@ -951,17 +980,17 @@ export default function VerbsPastClient() {
                         <button
                             type="button"
                             onClick={nextPractice}
-                            className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
+                            className={ghostButton}
                         >
                             {ui.next}
                         </button>
                     </div>
 
                     {showAnswer && (
-                        <div className="mt-4 rounded-xl border bg-slate-50 p-4">
-                            <div className="text-sm text-slate-500">{ui.answer}</div>
-                            <div className="font-semibold">{currentPractice.example.sk}</div>
-                            <div className="mt-1 text-sm text-slate-500">
+                        <div className={`${softCard} mt-4 p-4`}>
+                            <div className="text-sm text-white/50">{ui.answer}</div>
+                            <div className="font-semibold text-cyan-100">{currentPractice.example.sk}</div>
+                            <div className="mt-1 text-sm text-white/55">
                                 {currentPractice.form}
                             </div>
                         </div>
@@ -970,12 +999,17 @@ export default function VerbsPastClient() {
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold">{ui.noteTitle}</h2>
+                <h2 className="text-xl font-semibold text-white">{ui.noteTitle}</h2>
 
-                <div className="rounded-2xl border bg-white p-5 text-slate-700">
-                    <ul className="list-disc space-y-2 pl-5">
+                <div className={`${card} p-5`}>
+                    <ul className="space-y-2">
                         {ui.noteItems.map((item) => (
-                            <li key={item}>{item}</li>
+                            <li
+                                key={item}
+                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
+                            >
+                                {item}
+                            </li>
                         ))}
                     </ul>
                 </div>

@@ -53,8 +53,10 @@ export default function AudioQuiz({
 
   return (
     <>
-      <div className="space-y-3 sm:space-y-4">
-        <div className="text-lg font-semibold leading-snug">{title}</div>
+      <div className="space-y-3 text-white sm:space-y-4">
+        <div className="text-lg font-semibold leading-snug text-white">
+          {title}
+        </div>
 
         <div className="flex justify-center">
           <SpeakCentered
@@ -83,9 +85,13 @@ export default function AudioQuiz({
                 }
               }}
               className={[
-                "rounded-2xl border px-4 py-3 text-left text-[17px] transition sm:px-5 sm:py-3.5",
-                answered ? "cursor-not-allowed opacity-60" : "hover:bg-slate-50",
-                picked === opt ? "border-black ring-2 ring-black/10" : "",
+                "rounded-2xl border px-4 py-3 text-left text-[17px] font-semibold text-white transition sm:px-5 sm:py-3.5",
+                answered
+                  ? "cursor-not-allowed opacity-60"
+                  : "hover:border-cyan-400/35 hover:bg-white/10",
+                picked === opt
+                  ? "border-cyan-400/45 bg-cyan-400/10 shadow-[0_0_18px_rgba(34,211,238,0.16)]"
+                  : "border-white/10 bg-white/5",
               ].join(" ")}
             >
               {opt}
@@ -101,8 +107,8 @@ export default function AudioQuiz({
               lang={lang}
               extra={
                 status === "wrong" ? (
-                  <div className="text-sm text-slate-700">
-                    {correctLabel} <b>{word.sk}</b>
+                  <div className="text-sm text-white/70">
+                    {correctLabel} <b className="text-white">{word.sk}</b>
                   </div>
                 ) : null
               }

@@ -12,22 +12,22 @@ const LANGUAGES: {
   flagSrc: string;
   label: string;
 }[] = [
-    {
-      code: "ua",
-      flagSrc: "https://flagcdn.com/w40/ua.png",
-      label: "Українська",
-    },
-    {
-      code: "ru",
-      flagSrc: "https://flagcdn.com/w40/ru.png",
-      label: "Русский",
-    },
-    {
-      code: "en",
-      flagSrc: "https://flagcdn.com/w40/gb.png",
-      label: "English",
-    },
-  ];
+  {
+    code: "ua",
+    flagSrc: "https://flagcdn.com/w40/ua.png",
+    label: "Українська",
+  },
+  {
+    code: "ru",
+    flagSrc: "https://flagcdn.com/w40/ru.png",
+    label: "Русский",
+  },
+  {
+    code: "en",
+    flagSrc: "https://flagcdn.com/w40/gb.png",
+    label: "English",
+  },
+];
 
 type Props = {
   mobile?: boolean;
@@ -74,10 +74,8 @@ export default function LanguageMenu({ mobile = false }: Props) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={[
-          "inline-flex items-center justify-center border border-slate-200 bg-white hover:bg-slate-50",
-          mobile
-            ? "h-10 w-10 rounded-xl"
-            : "h-9 w-9 rounded-full",
+          "inline-flex items-center justify-center border border-white/10 bg-white/5 shadow-sm backdrop-blur transition hover:border-cyan-400/40 hover:bg-white/10",
+          mobile ? "h-10 w-10 rounded-xl" : "h-9 w-9 rounded-full",
         ].join(" ")}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -97,13 +95,13 @@ export default function LanguageMenu({ mobile = false }: Props) {
       {open && (
         <div
           className={[
-            "absolute top-full z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lg",
+            "absolute top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/95 p-2 text-white shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl",
             mobile ? "right-0 w-52" : "right-0 w-56",
           ].join(" ")}
           style={{ maxWidth: "calc(100vw - 16px)" }}
           role="menu"
         >
-          <div className="px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-white/45">
             Interface language
           </div>
 
@@ -125,8 +123,8 @@ export default function LanguageMenu({ mobile = false }: Props) {
                   className={[
                     "flex min-h-11 w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm font-medium transition",
                     isActive
-                      ? "bg-slate-900 text-white"
-                      : "text-slate-800 hover:bg-slate-50",
+                      ? "bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 text-white shadow-[0_0_18px_rgba(59,130,246,0.25)]"
+                      : "text-white/75 hover:bg-white/10 hover:text-white",
                   ].join(" ")}
                 >
                   <span className="flex items-center gap-3">
@@ -141,9 +139,7 @@ export default function LanguageMenu({ mobile = false }: Props) {
                     <span>{item.label}</span>
                   </span>
 
-                  <span
-                    className={isActive ? "text-white/90" : "text-slate-400"}
-                  >
+                  <span className={isActive ? "text-white" : "text-white/35"}>
                     {isActive ? "✓" : ""}
                   </span>
                 </button>

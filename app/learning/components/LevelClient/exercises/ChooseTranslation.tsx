@@ -64,23 +64,23 @@ export default function ChooseTranslation({
     <>
       <div
         className={[
-          "text-lg font-semibold transition-all duration-300",
+          "text-lg font-semibold text-white transition-all duration-300",
           word.img
             ? imageLoaded
-              ? "opacity-100 translate-y-0"
-              : "opacity-90 translate-y-1"
-            : "opacity-100 translate-y-0",
+              ? "translate-y-0 opacity-100"
+              : "translate-y-1 opacity-90"
+            : "translate-y-0 opacity-100",
         ].join(" ")}
       >
-        {chooseLabel} <span className="font-bold">{word.sk}</span>
+        {chooseLabel} <span className="font-bold text-cyan-100">{word.sk}</span>
       </div>
 
       {word.img ? (
         <div className="mt-2 flex flex-col items-center gap-2">
           <div className="mx-auto w-full max-w-[320px]">
-            <div className="relative min-h-[180px] overflow-hidden rounded-2xl bg-slate-100">
+            <div className="relative min-h-[180px] overflow-hidden rounded-2xl border border-white/10 bg-white/5">
               {!imageLoaded && (
-                <div className="absolute inset-0 animate-pulse bg-slate-200/70" />
+                <div className="absolute inset-0 animate-pulse bg-white/10" />
               )}
 
               <Image
@@ -90,19 +90,17 @@ export default function ChooseTranslation({
                 height={900}
                 onLoad={() => setImageLoaded(true)}
                 className={[
-                  "h-auto w-full rounded-2xl bg-white transition-all duration-500",
+                  "h-auto w-full rounded-2xl bg-white/5 transition-all duration-500",
                   imageLoaded
-                    ? "opacity-100 blur-0 scale-100"
-                    : "opacity-0 blur-sm scale-[1.02]",
+                    ? "scale-100 opacity-100 blur-0"
+                    : "scale-[1.02] opacity-0 blur-sm",
                 ].join(" ")}
               />
             </div>
           </div>
 
           {word.imgCredit && (
-            <div className="text-xs text-slate-500">
-              {word.imgCredit}
-            </div>
+            <div className="text-xs text-white/45">{word.imgCredit}</div>
           )}
         </div>
       ) : null}
@@ -112,21 +110,19 @@ export default function ChooseTranslation({
           "mt-2 transition-all duration-300",
           word.img
             ? imageLoaded
-              ? "opacity-100 translate-y-0"
-              : "opacity-90 translate-y-1"
-            : "opacity-100 translate-y-0",
+              ? "translate-y-0 opacity-100"
+              : "translate-y-1 opacity-90"
+            : "translate-y-0 opacity-100",
         ].join(" ")}
       >
         <SpeakCentered
           text={word.sk}
           kind="word"
-          autoPlayKey={
-            audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined
-          }
+          autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
         />
       </div>
 
-      <div className="grid gap-3 mt-3">
+      <div className="mt-3 grid gap-3">
         {options.map((opt) => (
           <button
             key={opt}
@@ -143,9 +139,13 @@ export default function ChooseTranslation({
               }
             }}
             className={[
-              "rounded-xl border px-4 py-3 text-left transition",
-              answered ? "opacity-60 cursor-not-allowed" : "hover:bg-slate-50",
-              picked === opt ? "border-black ring-2 ring-black/10" : "",
+              "rounded-2xl border px-4 py-3 text-left font-semibold text-white transition",
+              answered
+                ? "cursor-not-allowed opacity-60"
+                : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+              picked === opt
+                ? "border-cyan-400/50 bg-cyan-400/10 ring-2 ring-cyan-400/20"
+                : "",
             ].join(" ")}
           >
             {opt}
@@ -160,8 +160,8 @@ export default function ChooseTranslation({
           lang={lang}
           extra={
             status === "wrong" ? (
-              <div className="text-sm text-slate-700">
-                {correctLabel} <b>{correctText}</b>
+              <div className="text-sm text-white/70">
+                {correctLabel} <b className="text-white">{correctText}</b>
               </div>
             ) : null
           }

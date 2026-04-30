@@ -18,7 +18,7 @@ export default function PremiumButton() {
   return (
     <button
       onClick={() => router.push("/premium")}
-      className="rounded-xl bg-yellow-500 px-3 py-2 text-sm font-semibold text-black transition hover:bg-yellow-400"
+      className="rounded-xl bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400 px-3 py-2 text-sm font-semibold text-black shadow-[0_0_18px_rgba(251,191,36,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_28px_rgba(251,191,36,0.7)] active:scale-[0.98]"
     >
       {label}
     </button>

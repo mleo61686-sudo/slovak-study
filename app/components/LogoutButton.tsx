@@ -27,7 +27,7 @@ export default function LogoutButton() {
         await signOut({ redirect: false });
         window.location.href = "/login";
       }}
-      className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-left text-sm font-medium text-white/70 backdrop-blur transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-300"
       type="button"
     >
       {t.logout}

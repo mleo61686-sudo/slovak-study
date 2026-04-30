@@ -87,13 +87,24 @@ export default function LearnPage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          {t.title}
-        </h1>
+    <main className="mx-auto w-full max-w-3xl px-4 py-10 text-white">
+      <div className="flunio-card relative mb-8 overflow-hidden rounded-3xl p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
-        <p className="mt-2 text-base text-slate-600">{t.subtitle}</p>
+        <div className="relative">
+          <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+            Flunio · Courses
+          </div>
+
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            {t.title}
+          </h1>
+
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/70">
+            {t.subtitle}
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -105,7 +116,7 @@ export default function LearnPage() {
             <button
               key={course.id}
               onClick={() => chooseCourse(course.id, isLive)}
-              className="rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-[2px] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-3xl border border-white/10 bg-white/5 p-5 text-left text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!isLive}
               type="button"
               data-onboarding={
@@ -114,7 +125,7 @@ export default function LearnPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2 text-xl font-semibold text-slate-900">
+                  <div className="flex items-center gap-2 text-xl font-semibold text-white">
                     <img
                       src={COURSE_FLAGS[course.id]}
                       alt=""
@@ -125,17 +136,17 @@ export default function LearnPage() {
                     <span>{course.title}</span>
                   </div>
 
-                  <div className="mt-1 text-sm text-slate-500">
+                  <div className="mt-1 text-sm text-cyan-100/80">
                     {t.subtitles[course.id]}
                   </div>
 
-                  <div className="mt-3 text-sm text-slate-600">
+                  <div className="mt-3 text-sm leading-relaxed text-white/65">
                     {t.descriptions[course.id]}
                   </div>
                 </div>
 
                 {!isLive && (
-                  <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                  <span className="shrink-0 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/60">
                     {t.comingSoon}
                   </span>
                 )}

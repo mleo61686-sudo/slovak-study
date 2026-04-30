@@ -63,7 +63,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10">
+    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10 text-white">
       <Script
         id="faq-schema-polish-en"
         type="application/ld+json"
@@ -71,251 +71,210 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="space-y-4">
-        <h1 className="text-3xl font-extrabold sm:text-4xl">
-          Learn Polish online — structured course from A0 to B2
-        </h1>
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
-        <p className="text-slate-700">
-          Flunio helps you learn Polish online in a structured and practical
-          way. Instead of jumping between random word lists, videos and grammar
-          explanations, you can follow short lessons, practice vocabulary, listen
-          to pronunciation and build your Polish step by step.
-        </p>
+        <div className="relative space-y-4">
+          <div className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+            Flunio · Polish course
+          </div>
 
-        <p className="text-slate-700">
-          The Polish course is useful for learners who want to start from
-          scratch, improve everyday communication or prepare for life, work,
-          study or travel in Poland. You can begin with A0 basics and gradually
-          move through A1, A2, B1 and B2.
-        </p>
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl">
+            Learn Polish online — structured course from A0 to B2
+          </h1>
 
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/learning"
-            className="rounded-xl bg-black px-4 py-2 text-white"
-          >
-            Start learning Polish
-          </Link>
+          <p className="text-white/70">
+            Flunio helps you learn Polish online in a structured and practical
+            way. Instead of jumping between random word lists, videos and grammar
+            explanations, you can follow short lessons, practice vocabulary,
+            listen to pronunciation and build your Polish step by step.
+          </p>
 
-          <Link href="/learning/a0-1" className="rounded-xl border px-4 py-2">
-            Start with A0 →
-          </Link>
+          <p className="text-white/70">
+            The Polish course is useful for learners who want to start from
+            scratch, improve everyday communication or prepare for life, work,
+            study or travel in Poland.
+          </p>
 
-          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
-            Polish dictionary
-          </Link>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Link
+              href="/learning"
+              className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]"
+            >
+              Start learning Polish
+            </Link>
 
-          <Link href="/grammar" className="rounded-xl border px-4 py-2">
-            Polish grammar
-          </Link>
+            {[
+              ["Start with A0 →", "/learning/a0-1"],
+              ["Polish dictionary", "/dictionary"],
+              ["Polish grammar", "/grammar"],
+            ].map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border bg-white p-5">
-          <h2 className="text-lg font-bold">1) Polish lessons by level</h2>
-          <p className="mt-2 text-slate-700">
-            Lessons are organized from A0 to B2, so you always know what to
-            learn next. This helps you avoid chaos and build Polish vocabulary
-            and grammar in a logical order.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border bg-white p-5">
-          <h2 className="text-lg font-bold">2) Short daily practice</h2>
-          <p className="mt-2 text-slate-700">
-            Each lesson is short enough for daily learning. You can study for
-            10–20 minutes, complete exercises and return the next day without
-            feeling overloaded.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border bg-white p-5">
-          <h2 className="text-lg font-bold">3) Audio pronunciation</h2>
-          <p className="mt-2 text-slate-700">
-            Polish pronunciation can be difficult at first. Audio helps you hear
-            how words and phrases sound, repeat them aloud and improve your
-            listening skills.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border bg-white p-5">
-          <h2 className="text-lg font-bold">4) Vocabulary and grammar together</h2>
-          <p className="mt-2 text-slate-700">
-            Flunio combines vocabulary, grammar, dictionary search and practice
-            exercises, so you can learn words and understand how to use them in
-            real sentences.
-          </p>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
-          How to start learning Polish online
-        </h2>
-
-        <p className="text-slate-700">
-          If you are a beginner, the best way to start is not to memorize long
-          grammar rules immediately. First, build a base: common words, simple
-          phrases, pronunciation and basic sentence patterns. After that,
-          grammar becomes easier because you already recognize the words in
-          context.
-        </p>
-
-        <ol className="list-decimal space-y-2 pl-5 text-slate-700">
-          <li>Start with A0 if you are learning Polish from scratch.</li>
-          <li>Learn a small group of useful words in each lesson.</li>
-          <li>Listen to the audio and repeat words aloud.</li>
-          <li>Complete exercises right after the lesson.</li>
-          <li>Use the dictionary when you want to search or review words.</li>
-          <li>Open grammar pages when you need a clear explanation.</li>
-          <li>Move to A1, A2, B1 and B2 gradually, without rushing.</li>
-        </ol>
-
-        <div className="pt-2">
-          <Link
-            href="/learning/a0-1"
-            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
+        {[
+          ["1) Polish lessons by level", "Lessons are organized from A0 to B2, so you always know what to learn next. This helps you avoid chaos and build Polish vocabulary and grammar in a logical order."],
+          ["2) Short daily practice", "Each lesson is short enough for daily learning. You can study for 10–20 minutes, complete exercises and return the next day without feeling overloaded."],
+          ["3) Audio pronunciation", "Polish pronunciation can be difficult at first. Audio helps you hear how words and phrases sound, repeat them aloud and improve your listening skills."],
+          ["4) Vocabulary and grammar together", "Flunio combines vocabulary, grammar, dictionary search and practice exercises, so you can learn words and understand how to use them in real sentences."],
+        ].map(([title, text]) => (
+          <div
+            key={title}
+            className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur"
           >
-            Go to A0 lessons →
-          </Link>
-        </div>
+            <h2 className="text-lg font-bold text-cyan-100">{title}</h2>
+            <p className="mt-2 text-white/70">{text}</p>
+          </div>
+        ))}
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      {[
+        {
+          title: "How to start learning Polish online",
+          body: (
+            <>
+              <p>
+                If you are a beginner, the best way to start is not to memorize
+                long grammar rules immediately. First, build a base: common
+                words, simple phrases, pronunciation and basic sentence patterns.
+              </p>
+
+              <ol className="list-decimal space-y-2 pl-5">
+                <li>Start with A0 if you are learning Polish from scratch.</li>
+                <li>Learn a small group of useful words in each lesson.</li>
+                <li>Listen to the audio and repeat words aloud.</li>
+                <li>Complete exercises right after the lesson.</li>
+                <li>Use the dictionary when you want to search or review words.</li>
+                <li>Open grammar pages when you need a clear explanation.</li>
+                <li>Move to A1, A2, B1 and B2 gradually.</li>
+              </ol>
+
+              <Link
+                href="/learning/a0-1"
+                className="inline-flex rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 font-semibold text-white"
+              >
+                Go to A0 lessons →
+              </Link>
+            </>
+          ),
+        },
+        {
+          title: "Learn Polish vocabulary for real situations",
+          body: (
+            <p>
+              A good Polish course should not only teach isolated words. You need
+              vocabulary for real situations: introducing yourself, shopping,
+              using transport, talking about work, handling documents and daily
+              communication.
+            </p>
+          ),
+        },
+        {
+          title: "Use grammar when it actually helps",
+          body: (
+            <>
+              <p>
+                Grammar is important, but it should support your learning instead
+                of blocking it. With Flunio, you can first learn useful words and
+                phrases, then open grammar topics when you want to understand why
+                a sentence is built in a certain way.
+              </p>
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                {[
+                  ["Open grammar topics", "/grammar"],
+                  ["Search vocabulary", "/dictionary"],
+                  ["Practice exercises", "/practice"],
+                ].map(([label, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </>
+          ),
+        },
+        {
+          title: "Who this Polish course is for",
+          body: (
+            <>
+              <p>
+                Flunio is a good option for learners who want a simple,
+                structured and practical way to study Polish online without
+                overload.
+              </p>
+              <p>
+                The course can also help if you need Polish for everyday life in
+                Poland, work communication, study, documents, travel or basic
+                conversations.
+              </p>
+            </>
+          ),
+        },
+      ].map((section) => (
+        <section
+          key={section.title}
+          className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur"
+        >
+          <h2 className="text-2xl font-bold text-white">{section.title}</h2>
+          <div className="space-y-4 text-white/70">{section.body}</div>
+        </section>
+      ))}
+
+      <section className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur">
         <h2 className="text-2xl font-bold">
           What makes Polish challenging for beginners?
         </h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/70">
           Polish is a Slavic language with rich grammar and pronunciation that
           can feel unusual at first. Learners often notice special sounds,
-          changing word endings, verb forms and cases. This is normal. The key
-          is to learn Polish in small steps and connect grammar with real
-          examples.
+          changing word endings, verb forms and cases.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Pronunciation</h3>
-            <p className="mt-2 text-sm text-slate-700">
-              Polish has sounds and letter combinations such as sz, cz, rz, ż,
-              ś, ć and ł. Audio practice helps you recognize and repeat them.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Cases</h3>
-            <p className="mt-2 text-sm text-slate-700">
-              Nouns and adjectives change depending on their role in a sentence.
-              This becomes easier with examples and repetition.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Verb forms</h3>
-            <p className="mt-2 text-sm text-slate-700">
-              Polish verbs change by person, tense and meaning. Start with
-              common verbs and simple present tense patterns.
-            </p>
-          </div>
+          {[
+            ["Pronunciation", "Polish has sounds and letter combinations such as sz, cz, rz, ż, ś, ć and ł."],
+            ["Cases", "Nouns and adjectives change depending on their role in a sentence."],
+            ["Verb forms", "Polish verbs change by person, tense and meaning."],
+          ].map(([title, text]) => (
+            <div
+              key={title}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4"
+            >
+              <h3 className="font-semibold text-cyan-100">{title}</h3>
+              <p className="mt-2 text-sm text-white/65">{text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
-          Learn Polish vocabulary for real situations
-        </h2>
-
-        <p className="text-slate-700">
-          A good Polish course should not only teach isolated words. You need
-          vocabulary that helps you understand real situations: introducing
-          yourself, asking for information, shopping, using transport, talking
-          about work, handling documents and communicating in everyday life.
-        </p>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Everyday Polish</h3>
-            <p className="mt-2 text-slate-700">
-              Learn common words and phrases for greetings, food, shopping,
-              family, housing, transport and daily routines.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Polish for work and study</h3>
-            <p className="mt-2 text-slate-700">
-              Build vocabulary connected with jobs, schedules, instructions,
-              documents, school, communication and practical tasks.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
-          Use grammar when it actually helps
-        </h2>
-
-        <p className="text-slate-700">
-          Grammar is important, but it should support your learning instead of
-          blocking it. With Flunio, you can first learn useful words and phrases,
-          then open grammar topics when you want to understand why a sentence is
-          built in a certain way.
-        </p>
-
-        <p className="text-slate-700">
-          This approach is especially useful for Polish because grammar becomes
-          easier when you already have examples in your memory. You can connect
-          rules with words you have seen before instead of learning theory in
-          isolation.
-        </p>
-
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/grammar" className="rounded-xl border px-4 py-2">
-            Open grammar topics
-          </Link>
-
-          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
-            Search vocabulary
-          </Link>
-
-          <Link href="/practice" className="rounded-xl border px-4 py-2">
-            Practice exercises
-          </Link>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Who this Polish course is for</h2>
-
-        <div className="space-y-3 text-slate-700">
-          <p>
-            Flunio is a good option for learners who want a simple, structured
-            and practical way to study Polish online without overload. It is
-            useful if you are starting from zero, returning to Polish after a
-            break or trying to build a regular study habit.
-          </p>
-
-          <p>
-            The course can also help if you need Polish for everyday life in
-            Poland, work communication, study, documents, travel or basic
-            conversations. You can learn at your own pace and return to previous
-            lessons whenever you need revision.
-          </p>
-        </div>
-      </section>
-
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur">
         <h2 className="text-2xl font-bold">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
-            <div key={item.q} className="rounded-xl border p-4">
-              <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-slate-700">{item.a}</div>
+            <div
+              key={item.q}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4"
+            >
+              <div className="font-semibold text-cyan-100">{item.q}</div>
+              <div className="mt-2 text-white/70">{item.a}</div>
             </div>
           ))}
         </div>

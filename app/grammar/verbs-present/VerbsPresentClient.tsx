@@ -41,7 +41,17 @@ const FALLBACK_BY_COURSE: Record<GrammarCourseId, string> = {
   cs: "Já pracuji.",
   pl: "Ja pracuję.",
 };
+const card =
+  "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
 
+const softCard =
+  "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+
+const ghostButton =
+  "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+
+const activeButton =
+  "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]";
 export default function VerbsPresentClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
@@ -164,32 +174,52 @@ export default function VerbsPresentClient() {
         ? ui.subtitlePl
         : ui.subtitleSk;
 
+
   return (
-    <div className="space-y-10">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">{title}</h1>
-        <p className="text-slate-700">{subtitle}</p>
+    <div className="space-y-10 text-white">
+      <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
+
+        <div className="relative">
+          <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+            Grammar · Present tense
+          </div>
+
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+            {title}
+          </h1>
+
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70">
+            {subtitle}
+          </p>
+        </div>
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{ui.s1}</h2>
-        <div className="rounded-2xl border bg-white">
+        <h2 className="text-xl font-semibold text-white">{ui.s1}</h2>
+
+        <div className={card}>
           {pronounKeys.map((k) => (
             <div
               key={k}
-              className="flex justify-between border-b px-5 py-3 last:border-b-0"
+              className="flex justify-between gap-4 border-b border-white/10 px-5 py-4 last:border-b-0"
             >
-              <span className="font-medium">{pronouns[k].sk}</span>
-              <span className="text-slate-600">{trWord(pronouns[k], uiLang)}</span>
+              <span className="font-semibold text-cyan-100">
+                {pronouns[k].sk}
+              </span>
+              <span className="text-white/65">
+                {trWord(pronouns[k], uiLang)}
+              </span>
             </div>
           ))}
         </div>
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{ui.s2}</h2>
+        <h2 className="text-xl font-semibold text-white">{ui.s2}</h2>
 
-        <div className="rounded-2xl border bg-white p-3">
+        <div className={`${card} p-3`}>
           <div className="flex flex-wrap gap-2">
             {verbs.map((v) => {
               const activeTab = v.id === activeVerbId;
@@ -198,12 +228,7 @@ export default function VerbsPresentClient() {
                   key={v.id}
                   type="button"
                   onClick={() => setActiveVerbId(v.id)}
-                  className={[
-                    "rounded-xl border px-3 py-2 text-sm",
-                    activeTab
-                      ? "border-slate-900 bg-slate-900 text-white"
-                      : "hover:bg-slate-50",
-                  ].join(" ")}
+                  className={activeTab ? activeButton : ghostButton}
                 >
                   {v.infinitive}
                 </button>
@@ -212,17 +237,18 @@ export default function VerbsPresentClient() {
           </div>
 
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            <div className="rounded-xl border p-4">
-              <div className="text-sm text-slate-500">{ui.infinitive}</div>
-              <div className="text-lg font-semibold">{active?.infinitive}</div>
-              <div className="mt-1 text-slate-600">
+            <div className={`${softCard} p-4`}>
+              <div className="text-sm text-white/50">{ui.infinitive}</div>
+              <div className="text-lg font-semibold text-cyan-100">
+                {active?.infinitive}
+              </div>
+              <div className="mt-1 text-white/65">
                 {active ? trWord(active.meaning, uiLang) : "—"}
               </div>
             </div>
-
-            <div className="rounded-xl border p-4">
-              <div className="text-sm text-slate-500">{ui.hint}</div>
-              <div className="text-slate-700">
+            <div className={`${softCard} p-4`}>
+              <div className="text-sm text-white/50">{ui.hint}</div>
+              <div className="text-white/65">
                 {active?.note ? trWord(active.note, uiLang) : "—"}
               </div>
             </div>
@@ -231,19 +257,23 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{ui.s3}</h2>
-        <div className="rounded-2xl border bg-white">
+        <h2 className="text-xl font-semibold text-white">{ui.s3}</h2>
+
+        <div className={card}>
           {active?.rows.map((row) => (
             <div
               key={row.person}
-              className="flex items-center justify-between border-b px-5 py-3 last:border-b-0"
+              className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 last:border-b-0"
             >
               <div className="min-w-0">
-                <div className="font-medium">
-                  <span className="text-slate-900">{capFirst(row.full)}</span>
+                <div className="font-semibold text-cyan-100">
+                  {capFirst(row.full)}
                 </div>
-                <div className="text-sm text-slate-500">{trWord(row.tr, uiLang)}</div>
+                <div className="text-sm text-white/55">
+                  {trWord(row.tr, uiLang)}
+                </div>
               </div>
+
               <SpeakButton text={row.full} kind="phrase" />
             </div>
           ))}
@@ -251,9 +281,9 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{ui.s4}</h2>
+        <h2 className="text-xl font-semibold text-white">{ui.s4}</h2>
 
-        <div className="rounded-2xl border bg-white">
+        <div className={card}>
           {examplesForSection4.map((ex, i) => {
             const neg = negateSentence(ex.sk, grammarCourseId);
             const q = makeQuestion(ex.sk);
@@ -261,29 +291,38 @@ export default function VerbsPresentClient() {
             return (
               <div
                 key={`${active?.id ?? "verb"}-${i}`}
-                className="space-y-2 border-b px-5 py-4 last:border-b-0"
+                className="space-y-3 border-b border-white/10 px-5 py-5 last:border-b-0"
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="font-medium">{ex.sk}</div>
-                    <div className="text-sm text-slate-500">{trWord(ex, uiLang)}</div>
+                    <div className="font-semibold text-white">{ex.sk}</div>
+                    <div className="text-sm text-white/55">
+                      {trWord(ex, uiLang)}
+                    </div>
                   </div>
+
                   <SpeakButton text={ex.sk} kind="phrase" />
                 </div>
 
                 <div className="grid gap-2 sm:grid-cols-2">
-                  <div className="rounded-xl border px-4 py-3">
-                    <div className="mb-1 text-xs text-slate-500">{ui.negation}</div>
+                  <div className={`${softCard} px-4 py-3`}>
+                    <div className="mb-1 text-xs font-semibold text-white/45">
+                      {ui.negation}
+                    </div>
+
                     <div className="flex items-center justify-between gap-3">
-                      <div className="font-medium">{neg}</div>
+                      <div className="font-semibold text-cyan-100">{neg}</div>
                       <SpeakButton text={neg} kind="phrase" />
                     </div>
                   </div>
 
-                  <div className="rounded-xl border px-4 py-3">
-                    <div className="mb-1 text-xs text-slate-500">{ui.question}</div>
+                  <div className={`${softCard} px-4 py-3`}>
+                    <div className="mb-1 text-xs font-semibold text-white/45">
+                      {ui.question}
+                    </div>
+
                     <div className="flex items-center justify-between gap-3">
-                      <div className="font-medium">{q}</div>
+                      <div className="font-semibold text-cyan-100">{q}</div>
                       <SpeakButton text={q} kind="phrase" />
                     </div>
                   </div>
@@ -295,31 +334,30 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">{ui.s5}</h2>
+        <h2 className="text-xl font-semibold text-white">{ui.s5}</h2>
 
-        <div className="space-y-4 rounded-2xl border bg-white p-5">
+        <div className={`${card} space-y-4 p-5`}>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="font-semibold">{ui.quizA}</div>
-              <div className="text-sm text-slate-500">
+              <div className="font-semibold text-white">{ui.quizA}</div>
+              <div className="text-sm text-white/50">
                 {ui.score}:{" "}
-                <span className="font-medium text-slate-900">{correctCount}</span> /{" "}
-                {quiz.length}
+                <span className="font-semibold text-cyan-100">
+                  {correctCount}
+                </span>{" "}
+                / {quiz.length}
               </div>
             </div>
-            <button
-              type="button"
-              onClick={handleResetQuiz}
-              className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
-            >
+
+            <button type="button" onClick={handleResetQuiz} className={ghostButton}>
               {ui.reset}
             </button>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             {quiz.map((q) => (
-              <div key={q.person} className="space-y-2 rounded-xl border p-4">
-                <div className="text-sm text-slate-500">
+              <div key={q.person} className={`${softCard} space-y-2 p-4`}>
+                <div className="text-sm text-white/50">
                   {capFirst(pronouns[q.person].sk)} + …
                 </div>
 
@@ -338,12 +376,13 @@ export default function VerbsPresentClient() {
                           setChecked((c) => ({ ...c, [q.person]: true }));
                         }}
                         className={[
-                          "rounded-xl border px-3 py-2 text-sm",
-                          picked
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "hover:bg-slate-50",
-                          show && opt === q.correct ? "ring-2 ring-emerald-400" : "",
-                          show && picked && !isCorrect ? "ring-2 ring-rose-400" : "",
+                          picked ? activeButton : ghostButton,
+                          show && opt === q.correct
+                            ? "ring-2 ring-emerald-400"
+                            : "",
+                          show && picked && !isCorrect
+                            ? "ring-2 ring-rose-400"
+                            : "",
                         ].join(" ")}
                       >
                         {opt}
@@ -355,13 +394,15 @@ export default function VerbsPresentClient() {
                 {checked[q.person] && (
                   <div className="mt-1 text-xs">
                     {answers[q.person] === q.correct ? (
-                      <span className="font-medium text-emerald-600">
+                      <span className="font-semibold text-emerald-300">
                         {ui.correctYes}
                       </span>
                     ) : (
-                      <span className="text-rose-600">
+                      <span className="text-rose-300">
                         {ui.correctNo} {ui.correctForm}:{" "}
-                        <span className="font-medium">{q.correct}</span>
+                        <span className="font-semibold text-white">
+                          {q.correct}
+                        </span>
                       </span>
                     )}
                   </div>
@@ -371,38 +412,37 @@ export default function VerbsPresentClient() {
           </div>
         </div>
 
-        <div className="space-y-4 rounded-2xl border bg-white p-5">
-          <div className="flex items-center justify-between gap-3">
+        <div className={`${card} space-y-4 p-5`}>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="font-semibold">{ui.quizB}</div>
-              <div className="text-sm text-slate-500">
-                {ui.target}: <span className="font-medium text-slate-900">{targetTr}</span>
+              <div className="font-semibold text-white">{ui.quizB}</div>
+              <div className="text-sm text-white/50">
+                {ui.target}:{" "}
+                <span className="font-semibold text-cyan-100">
+                  {targetTr}
+                </span>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setBuild([])}
-                className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
-              >
+              <button type="button" onClick={() => setBuild([])} className={ghostButton}>
                 {ui.clear}
               </button>
 
-              <button
-                type="button"
-                onClick={handleNextSentence}
-                className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
-              >
+              <button type="button" onClick={handleNextSentence} className={ghostButton}>
                 {ui.next}
               </button>
             </div>
           </div>
 
-          <div className="rounded-xl border p-4">
-            <div className="mb-2 text-sm text-slate-500">{ui.yourSentence}</div>
+          <div className={`${softCard} p-4`}>
+            <div className="mb-2 text-sm text-white/50">{ui.yourSentence}</div>
+
             <div className="flex items-center justify-between gap-3">
-              <div className="font-medium">{builtSentence || "—"}</div>
+              <div className="font-semibold text-white">
+                {builtSentence || "—"}
+              </div>
+
               {builtSentence ? (
                 <SpeakButton text={builtSentence + "."} kind="phrase" />
               ) : null}
@@ -410,11 +450,13 @@ export default function VerbsPresentClient() {
 
             <div className="mt-3 text-sm">
               {builtSentence === targetSk ? (
-                <span className="font-medium text-emerald-600">{ui.correct}</span>
+                <span className="font-semibold text-emerald-300">
+                  {ui.correct}
+                </span>
               ) : builtSentence.length > 0 ? (
-                <span className="text-slate-500">{ui.wrongHint}</span>
+                <span className="text-white/50">{ui.wrongHint}</span>
               ) : (
-                <span className="text-slate-500">{ui.clickWords}</span>
+                <span className="text-white/50">{ui.clickWords}</span>
               )}
             </div>
           </div>
@@ -425,7 +467,7 @@ export default function VerbsPresentClient() {
                 key={`${w}-${idx}`}
                 type="button"
                 onClick={() => setBuild((b) => [...b, w])}
-                className="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50"
+                className={ghostButton}
               >
                 {w}
               </button>
@@ -435,11 +477,17 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold">{ui.s6}</h2>
-        <div className="rounded-2xl border bg-white p-5 text-slate-700">
-          <ul className="list-disc space-y-2 pl-5">
+        <h2 className="text-xl font-semibold text-white">{ui.s6}</h2>
+
+        <div className={`${card} p-5`}>
+          <ul className="space-y-2">
             {cheatItems.map((item, i) => (
-              <li key={i}>{item}</li>
+              <li
+                key={i}
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
+              >
+                {item}
+              </li>
             ))}
           </ul>
         </div>

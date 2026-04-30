@@ -478,8 +478,8 @@ export default function AccountClient() {
   if (status === "loading") {
     return (
       <div className="mx-auto max-w-5xl space-y-6">
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="text-center text-slate-600">{t.loading}</div>
+        <div className="flunio-card rounded-3xl p-8 text-white">
+          <div className="text-center text-white/65">{t.loading}</div>
         </div>
       </div>
     );
@@ -487,13 +487,13 @@ export default function AccountClient() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
-        <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-100 px-5 py-6 sm:px-8 sm:py-8">
+      <section className="flunio-card overflow-hidden rounded-3xl text-white transition hover:shadow-[0_0_28px_rgba(34,211,238,0.12)]">
+        <div className="border-b border-white/10 bg-white/5 px-5 py-6 sm:px-8 sm:py-8">
           <div className="grid gap-6 md:grid-cols-[120px_1fr] md:items-start">
             <div className="flex flex-col items-center gap-2 md:pt-10">
-              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-slate-900 text-3xl font-bold text-white shadow-sm transition duration-200 hover:scale-[1.03]">
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-500 via-blue-500 to-fuchsia-500 text-3xl font-bold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition duration-200 hover:scale-[1.03]">
                 {!avatarLoaded ? (
-                  <div className="h-full w-full animate-pulse bg-slate-300" />
+                  <div className="h-full w-full animate-pulse bg-white/20" />
                 ) : avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -505,7 +505,7 @@ export default function AccountClient() {
                 )}
               </div>
 
-              <label className="cursor-pointer rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+              <label className="cursor-pointer rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/70 shadow-sm backdrop-blur transition hover:border-cyan-400/40 hover:bg-white/10 hover:text-white">
                 {uploadingAvatar ? t.uploadingAvatar : t.changeAvatar}
                 <input
                   type="file"
@@ -520,65 +520,65 @@ export default function AccountClient() {
             <div className="min-w-0">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0 text-center sm:text-left">
-                  <div className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 shadow-sm">
+                  <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/60 shadow-sm backdrop-blur">
                     {t.profileBadge}
                   </div>
 
-                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                  <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                     {displayName}
                   </h1>
 
-                  <p className="break-all text-sm text-slate-600 sm:text-base">
+                  <p className="break-all text-sm text-white/60 sm:text-base">
                     {displayEmail}
                   </p>
                 </div>
 
                 <div
                   className={`mx-auto inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition sm:mx-0 ${isPremium
-                    ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
-                    : "bg-slate-100 text-slate-700 ring-1 ring-slate-200"
+                    ? "border border-emerald-400/25 bg-emerald-400/10 text-emerald-200"
+                    : "border border-white/10 bg-white/5 text-white/65"
                     }`}
                 >
                   {isPremium ? t.premium : t.free}
                 </div>
               </div>
 
-              <div className="mt-5 max-w-2xl rounded-3xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 p-4 shadow-sm">
+              <div className="mt-5 max-w-2xl rounded-3xl border border-amber-300/20 bg-amber-300/10 p-4 shadow-[0_0_20px_rgba(251,191,36,0.12)] backdrop-blur">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-amber-200">
                       {levelLabel}
                     </div>
 
-                    <div className="mt-1 text-xl font-bold text-slate-950">
+                    <div className="mt-1 text-xl font-bold text-white">
                       ⭐ {levelInfo.level} — {levelTitle}
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-amber-200 bg-white px-3 py-1.5 shadow-sm">
+                  <div className="rounded-xl border border-amber-300/20 bg-white/5 px-3 py-1.5 shadow-sm">
                     <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
                       {xpLabel}
                     </div>
-                    <div className="text-lg font-bold text-slate-950">
+                    <div className="text-lg font-bold text-white">
                       {xp.totalXp} XP
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-amber-100">
+                <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-amber-500 transition-all duration-300"
+                    className="h-full rounded-full bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 transition-all duration-300"
                     style={{ width: `${levelInfo.progressPercent}%` }}
                   />
                 </div>
 
-                <div className="mt-2 text-xs font-medium text-amber-800">
+                <div className="mt-2 text-xs font-medium text-amber-100/80">
                   {levelInfo.level >= 6
                     ? "Max level"
                     : `${xpToNext} XP ${nextLevelLabel}`}
                 </div>
 
-                <div className="mt-3 flex flex-col gap-3 rounded-2xl border border-amber-100 bg-white/70 px-3 py-3 text-xs leading-5 text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-3 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 text-xs leading-5 text-white/65 sm:flex-row sm:items-center sm:justify-between">
                   <span className="flex items-start gap-2">
                     <span>💡</span>
                     <span>{levelHelpText}</span>
@@ -586,7 +586,7 @@ export default function AccountClient() {
 
                   <Link
                     href="/"
-                    className="inline-flex shrink-0 justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-black active:scale-[0.98]"
+                    className="inline-flex shrink-0 justify-center rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.3)] transition hover:-translate-y-0.5 active:scale-[0.98]"
                   >
                     {goToReviewLabel}
                   </Link>
@@ -594,13 +594,13 @@ export default function AccountClient() {
               </div>
 
               {avatarError ? (
-                <div className="mt-3 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                <div className="mt-3 rounded-2xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
                   {avatarError}
                 </div>
               ) : null}
 
               {avatarSuccess ? (
-                <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-700">
+                <div className="mt-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-xs text-emerald-200">
                   {avatarSuccess}
                 </div>
               ) : null}
@@ -609,13 +609,13 @@ export default function AccountClient() {
         </div>
 
         <div className="px-5 py-5 sm:px-8 sm:py-6">
-          <p className="text-slate-600">{t.subtitle}</p>
+          <p className="text-white/65">{t.subtitle}</p>
         </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-          <h2 className="text-xl font-semibold text-slate-900">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {t.accountCard}
           </h2>
 
@@ -623,17 +623,17 @@ export default function AccountClient() {
             <InfoRow label={t.email} value={displayEmail} />
             <InfoRow label={t.status} value={isPremium ? t.premium : t.free} />
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <form onSubmit={handleSaveName} className="grid gap-3">
                 <div className="space-y-1">
-                  <div className="text-sm font-semibold text-slate-900">
+                  <div className="text-sm font-semibold text-white">
                     {t.editName}
                   </div>
-                  <div className="text-sm text-slate-600">{t.nameHint}</div>
+                  <div className="text-sm text-white/60">{t.nameHint}</div>
                 </div>
 
                 <label className="grid gap-1.5">
-                  <span className="text-sm font-medium text-slate-700">
+                  <span className="text-sm font-medium text-white/70">
                     {t.name}
                   </span>
                   <input
@@ -651,18 +651,18 @@ export default function AccountClient() {
                     }}
                     minLength={2}
                     maxLength={40}
-                    className="min-h-11 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-100"
+                    className="min-h-11 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none backdrop-blur transition focus:border-cyan-400/50 focus:bg-white/10 focus:shadow-[0_0_18px_rgba(34,211,238,0.18)]"
                   />
                 </label>
 
                 {nameError ? (
-                  <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  <div className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                     {nameError}
                   </div>
                 ) : null}
 
                 {nameSuccess ? (
-                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                  <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
                     {nameSuccess}
                   </div>
                 ) : null}
@@ -670,7 +670,7 @@ export default function AccountClient() {
                 <button
                   type="submit"
                   disabled={!canSaveName}
-                  className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition active:scale-[0.98] hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:active:scale-100"
+                  className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-white/5 disabled:active:scale-100"
                 >
                   {savingName ? t.savingName : t.saveName}
                 </button>
@@ -679,8 +679,8 @@ export default function AccountClient() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-          <h2 className="text-xl font-semibold text-slate-900">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {t.subscriptionCard}
           </h2>
 
@@ -693,7 +693,7 @@ export default function AccountClient() {
             <button
               onClick={handleManageSubscription}
               disabled={loadingPortal}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition active:scale-[0.98] hover:bg-black hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:active:scale-100"
               type="button"
             >
               {loadingPortal
@@ -705,13 +705,13 @@ export default function AccountClient() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-          <h2 className="text-xl font-semibold text-slate-900">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {t.securityCard}
           </h2>
 
           <div className="mt-4 space-y-4">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/65">
               {t.securityHint}
             </div>
 
@@ -750,13 +750,13 @@ export default function AccountClient() {
               />
 
               {passwordError ? (
-                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                   {passwordError}
                 </div>
               ) : null}
 
               {passwordSuccess ? (
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
                   {passwordSuccess}
                 </div>
               ) : null}
@@ -764,7 +764,7 @@ export default function AccountClient() {
               <button
                 type="submit"
                 disabled={!canSubmitPassword}
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition active:scale-[0.98] hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:active:scale-100"
+                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-white/5 disabled:active:scale-100"
               >
                 {savingPassword ? t.saving : t.changePassword}
               </button>
@@ -772,8 +772,8 @@ export default function AccountClient() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-          <h2 className="text-xl font-semibold text-slate-900">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10">
+          <h2 className="text-xl font-semibold text-white">
             {t.sessionCard}
           </h2>
 
@@ -781,7 +781,7 @@ export default function AccountClient() {
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition active:scale-[0.98] hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-red-400/30 bg-red-500/10 px-5 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/15 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
               type="button"
             >
               {loggingOut ? t.opening : t.logout}

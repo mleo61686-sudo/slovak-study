@@ -84,10 +84,10 @@ export default function TopicProgress({ topicId, passedSignal }: Props) {
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center justify-between rounded-2xl border bg-white p-4 shadow-sm">
+    <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur">
       <div>
         <div className="font-semibold">{t.title}</div>
-        <div className="text-sm text-slate-600">
+        <div className="text-sm text-white/70">
           {isDone ? t.done : t.notDone}
         </div>
       </div>
@@ -96,7 +96,7 @@ export default function TopicProgress({ topicId, passedSignal }: Props) {
         <button
           type="button"
           onClick={markDone}
-          className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+          className="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2 text-sm font-semibold text-black shadow-[0_0_12px_rgba(34,211,238,0.4)] transition hover:brightness-110"
         >
           {t.markDone}
         </button>

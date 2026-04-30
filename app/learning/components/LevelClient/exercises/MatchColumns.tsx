@@ -155,12 +155,14 @@ export default function MatchColumns({
     const isWrong = wrongPair?.l === sk;
 
     return [
-      "w-full text-left rounded-xl border px-4 py-3 transition",
+      "w-full rounded-2xl border px-4 py-3 text-left font-semibold text-white transition",
       locked || isMatched || isResolving
-        ? "opacity-50 cursor-not-allowed bg-slate-50"
-        : "hover:bg-slate-50",
-      isSelected ? "border-green-600 ring-4 ring-green-200 bg-green-50" : "",
-      isWrong ? "border-red-500 bg-red-50" : "",
+        ? "cursor-not-allowed border-white/10 bg-white/5 opacity-45"
+        : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+      isSelected
+        ? "border-emerald-400/50 bg-emerald-400/10 ring-2 ring-emerald-400/20"
+        : "",
+      isWrong ? "border-rose-400/60 bg-rose-400/10" : "",
     ].join(" ");
   }
 
@@ -170,36 +172,39 @@ export default function MatchColumns({
     const isWrong = wrongPair?.r === tr;
 
     return [
-      "w-full text-left rounded-xl border px-4 py-3 transition",
+      "w-full rounded-2xl border px-4 py-3 text-left font-semibold text-white transition",
       locked || isMatched || isResolving
-        ? "opacity-50 cursor-not-allowed bg-slate-50"
-        : "hover:bg-slate-50",
-      isSelected ? "border-black ring-2 ring-black/10 bg-slate-50" : "",
-      isWrong ? "border-red-500 bg-red-50" : "",
+        ? "cursor-not-allowed border-white/10 bg-white/5 opacity-45"
+        : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+      isSelected
+        ? "border-cyan-400/50 bg-cyan-400/10 ring-2 ring-cyan-400/20"
+        : "",
+      isWrong ? "border-rose-400/60 bg-rose-400/10" : "",
     ].join(" ");
   }
 
   const canNext = locked;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-white">
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-lg font-semibold">{t.title}</div>
-          <div className="text-sm text-slate-500">
+
+          <div className="text-sm text-white/55">
             {t.correct}: {correctCount} / {words.length}
             <span className="mx-2">•</span>
             {t.wrongs}: {wrongCount} / {MAX_WRONG}
           </div>
 
           {doneByWrong && (
-            <div className="mt-1 text-sm font-semibold text-red-600">
+            <div className="mt-1 text-sm font-semibold text-rose-300">
               {t.limitReached}
             </div>
           )}
 
           {doneAll && (
-            <div className="mt-1 text-sm font-semibold text-green-700">
+            <div className="mt-1 text-sm font-semibold text-emerald-300">
               {t.allDone}
             </div>
           )}
@@ -209,7 +214,7 @@ export default function MatchColumns({
           <button
             onClick={clearSelection}
             disabled={locked || isResolving}
-            className="rounded-xl border px-4 py-2 disabled:opacity-50"
+            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/85 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t.clear}
           </button>
@@ -217,7 +222,7 @@ export default function MatchColumns({
           <button
             disabled={!canNext}
             onClick={() => onDone(correctCount)}
-            className="rounded-xl bg-black px-4 py-2 text-white disabled:opacity-50"
+            className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t.next}
           </button>

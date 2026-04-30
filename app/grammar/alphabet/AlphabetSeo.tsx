@@ -585,25 +585,37 @@ const CONTENT: Record<Lang, CourseContent> = {
 
 function SectionBlock({ section }: { section: Section }) {
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl font-semibold">{section.heading}</h3>
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-[0_0_24px_rgba(34,211,238,0.06)] backdrop-blur">
+      <h3 className="text-xl font-semibold text-white">{section.heading}</h3>
 
-      {section.body?.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
-      ))}
+      <div className="mt-4 space-y-3 text-sm leading-relaxed text-white/70 sm:text-base">
+        {section.body?.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
 
-      {section.bullets ? (
-        <ul className="list-disc space-y-2 pl-6">
-          {section.bullets.map((item) => (
-            <li key={item}>
-              <b>{item.split(" — ")[0]}</b>
-              {item.includes(" — ")
-                ? ` — ${item.split(" — ").slice(1).join(" — ")}`
-                : ""}
-            </li>
-          ))}
-        </ul>
-      ) : null}
+        {section.bullets ? (
+          <ul className="space-y-2">
+            {section.bullets.map((item) => {
+              const [first, ...rest] = item.split(" — ");
+
+              return (
+                <li
+                  key={item}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                >
+                  <span className="font-semibold text-cyan-100">{first}</span>
+                  {rest.length ? (
+                    <span className="text-white/70">
+                      {" "}
+                      — {rest.join(" — ")}
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -618,33 +630,53 @@ export default function AlphabetSeo() {
   const content = CONTENT[safeLang][course];
 
   return (
-    <section className="space-y-10 text-slate-800">
-      <div className="space-y-4">
-        <h2 className="text-3xl font-semibold">{content.title}</h2>
+    <section className="space-y-6 text-white">
+      <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
-        {content.intro.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+        <div className="relative space-y-4">
+          <div className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+            SEO guide · Alphabet
+          </div>
+
+          <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white">
+            {content.title}
+          </h2>
+
+          <div className="space-y-3 text-sm leading-relaxed text-white/70 sm:text-base">
+            {content.intro.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
       </div>
 
       {content.sections.map((section) => (
         <SectionBlock key={section.heading} section={section} />
       ))}
 
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold">{content.nextLabel}</h3>
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-[0_0_24px_rgba(34,211,238,0.06)] backdrop-blur">
+        <h3 className="text-xl font-semibold text-white">
+          {content.nextLabel}
+        </h3>
 
-        <ul className="list-disc space-y-2 pl-6">
+        <ul className="mt-4 space-y-2">
           {content.nextLinks.map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className="underline">
-                {link.label}
+              <Link
+                href={link.href}
+                className="inline-flex rounded-2xl border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-400/15"
+              >
+                {link.label} →
               </Link>
             </li>
           ))}
         </ul>
 
-        <p>{content.outro}</p>
+        <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base">
+          {content.outro}
+        </p>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactElement } from "react";
 import { notFound } from "next/navigation";
 import { SITE_URL } from "@/lib/site";
 
@@ -10,7 +11,7 @@ type TopicConfig = {
   title: string;
   description: string;
   path: string;
-  render: () => React.ReactElement;
+  render: () => ReactElement;
 };
 
 type TopicSlug = "alphabet" | "verbs-present" | "cases";

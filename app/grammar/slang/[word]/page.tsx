@@ -41,28 +41,35 @@ export default async function SlangWordPage({ params }: PageProps) {
 
   return (
     <main className="mx-auto max-w-3xl space-y-6 px-4 py-10">
-      <h1 className="text-3xl font-bold">{item.sk}</h1>
+      {/* HEADER */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <h1 className="text-3xl font-bold text-white">{item.sk}</h1>
 
-      <div className="text-lg text-slate-700">
-        {item.ua} / {item.ru} / {item.en}
+        <div className="mt-2 text-lg text-white/70">
+          {item.ua} / {item.ru} / {item.en}
+        </div>
       </div>
 
-      <div className="rounded-xl bg-slate-50 p-4">
-        <div className="text-sm text-slate-500">Приклад</div>
+      {/* EXAMPLE */}
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
+        <div className="text-sm text-white/50 mb-2">Приклад</div>
 
-        <div className="text-lg">{item.exampleSk}</div>
+        <div className="text-lg font-medium text-white">
+          {item.exampleSk}
+        </div>
 
-        <div className="text-slate-600">
+        <div className="text-white/70">
           {item.exampleUa} / {item.exampleRu} / {item.exampleEn}
         </div>
       </div>
 
+      {/* TAGS */}
       <div className="flex gap-2 text-sm">
-        <span className="rounded-full border px-3 py-1">
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/70">
           {item.level}
         </span>
 
-        <span className="rounded-full border px-3 py-1">
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/70">
           {item.category}
         </span>
       </div>

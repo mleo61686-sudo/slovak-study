@@ -297,10 +297,10 @@ export default function OnboardingOverlay() {
 
   return (
     <div data-onboarding-overlay="true">
-      <div className="fixed inset-0 z-[9998] bg-black/50" />
+      <div className="fixed inset-0 z-[9998] bg-black/65 backdrop-blur-[2px]" />
 
       <div
-        className="pointer-events-none fixed z-[9999] rounded-xl border-2 border-sky-400 shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] transition-all duration-200"
+        className="pointer-events-none fixed z-[9999] rounded-2xl border-2 border-cyan-400 shadow-[0_0_24px_rgba(34,211,238,0.55),0_0_0_9999px_rgba(0,0,0,0.55)] transition-all duration-200"
         style={{
           top: rect.top - 6,
           left: rect.left - 6,
@@ -310,19 +310,19 @@ export default function OnboardingOverlay() {
       />
 
       <div
-        className="fixed z-[10000] max-w-xs rounded-xl bg-white p-4 shadow-xl"
+        className="fixed z-[10000] max-w-xs rounded-2xl border border-white/10 bg-[#0b1020]/95 p-4 text-white shadow-[0_0_28px_rgba(34,211,238,0.22)] backdrop-blur-xl"
         style={{
           top: tooltipTop,
           left: tooltipLeft,
           width: tooltipWidth,
         }}
       >
-        <div className="text-sm font-medium text-slate-900">{step.text}</div>
+        <div className="text-sm font-medium text-white/85">{step.text}</div>
 
         <div className="mt-3 flex justify-between gap-2">
           <button
             onClick={finish}
-            className="text-xs text-slate-500 hover:text-slate-700"
+            className="text-xs font-medium text-white/45 transition hover:text-white/75"
             type="button"
           >
             {SKIP_TEXT[safeLang]}
@@ -330,7 +330,7 @@ export default function OnboardingOverlay() {
 
           <button
             onClick={next}
-            className="rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-sky-700"
+            className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
             type="button"
           >
             {step.button}
