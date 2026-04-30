@@ -140,7 +140,7 @@ export default function RootLayout({
 
       <body
         suppressHydrationWarning
-        className="min-h-screen flex flex-col bg-[#050816] text-white"
+        className="theme-flunio min-h-screen flex flex-col"
       >
         <SessionProviderClient>
           <CourseBootstrap />

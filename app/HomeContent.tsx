@@ -397,9 +397,9 @@ const t: Record<Lang, HomeTranslations> = {
 
 function StatPill({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10">
-      <div className="text-sm font-semibold text-white">{k}</div>
-      <div className="text-xs text-white/60">{v}</div>
+    <div className="theme-home-soft-card rounded-2xl px-4 py-3 shadow-sm transition hover:-translate-y-0.5">
+      <div className="theme-text text-sm font-semibold">{k}</div>
+      <div className="theme-text-muted text-xs">{v}</div>
     </div>
   );
 }
@@ -420,12 +420,12 @@ function FeatureCard({
   return (
     <Link
       href={href}
-      className="group block rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/40 hover:bg-white/10"
+      className="theme-home-soft-card group block rounded-3xl p-6 shadow-[0_0_24px_rgba(34,211,238,0.08)] transition hover:-translate-y-0.5"
     >
       <div className="text-2xl">{icon}</div>
-      <h2 className="mt-3 text-lg font-semibold">{title}</h2>
-      <p className="mt-1 text-sm text-white/65">{desc}</p>
-      <div className="mt-4 text-sm font-semibold text-cyan-200 transition group-hover:text-cyan-100">
+      <h2 className="theme-text mt-3 text-lg font-semibold">{title}</h2>
+      <p className="theme-text-muted mt-1 text-sm">{desc}</p>
+      <div className="theme-action-link mt-4 text-sm font-semibold transition">
         {action}
       </div>
     </Link>
@@ -450,17 +450,17 @@ export default function HomeContent({
 
   return (
     <div className="space-y-8">
-      <section className="flunio-card relative overflow-hidden rounded-3xl p-7 text-white sm:p-8">
-        <div className="pointer-events-none absolute inset-0 rounded-3xl border border-cyan-400/40 shadow-[0_0_35px_rgba(34,211,238,0.24)]" />
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-7 sm:p-8">
+        <div className="theme-home-glow-border pointer-events-none absolute inset-0 rounded-3xl" />
         <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 -left-10 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative space-y-5">
-          <h1 className="text-[31px] font-semibold leading-tight tracking-tight text-white sm:text-5xl">
+          <h1 className="theme-text text-[31px] font-semibold leading-tight tracking-tight sm:text-5xl">
             {tr.h1}
           </h1>
 
-          <p className="max-w-2xl text-base text-white/75 sm:text-lg">
+          <p className="theme-text-muted max-w-2xl text-base sm:text-lg">
             {tr.heroP}
           </p>
 
@@ -474,25 +474,25 @@ export default function HomeContent({
 
             <Link
               href="/dictionary"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
+              className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
             >
               {tr.ctaDict}
             </Link>
 
             <Link
               href="/grammar"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
+              className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
             >
               {tr.ctaGrammar}
             </Link>
           </div>
 
           <div className="mt-4 flex flex-col items-start gap-3">
-            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white shadow-sm backdrop-blur">
+            <div className="theme-home-soft-card inline-flex max-w-2xl items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold shadow-sm">
               <span>{tr.starterBadge}</span>
             </div>
 
-            <div className="inline-flex max-w-2xl items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 backdrop-blur">
+            <div className="theme-home-soft-card inline-flex max-w-2xl items-center gap-2 rounded-2xl px-4 py-3 text-sm">
               <span>💡</span>
               <span>
                 {lang === "ua"
@@ -504,7 +504,7 @@ export default function HomeContent({
             </div>
           </div>
 
-          <div className="mt-4 space-y-1 text-sm text-white/75">
+          <div className="theme-text-muted mt-4 space-y-1 text-sm">
             {tr.free.map((item) => (
               <div key={item} className="flex items-start gap-2">
                 <span className="text-emerald-400">✔</span>
@@ -516,24 +516,24 @@ export default function HomeContent({
           <div className="mt-3 min-h-[44px]">
             <Link
               href="/updates"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
+              className="theme-secondary-button inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition"
             >
               ✨ {tr.whatsNew}
               {latestBadge && (
-                <span className="rounded-full bg-cyan-400/20 px-2 py-0.5 font-bold text-cyan-100">
+                <span className="rounded-full bg-cyan-400/20 px-2 py-0.5 font-bold text-cyan-700">
                   {latestBadge}
                 </span>
               )}
             </Link>
           </div>
 
-          <div className="mt-3 rounded-2xl border border-cyan-400/25 bg-white/5 px-4 py-4 shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur">
+          <div className="theme-home-soft-card mt-3 rounded-2xl px-4 py-4 shadow-[0_0_20px_rgba(34,211,238,0.08)]">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="text-sm font-bold text-white">
+                <div className="theme-text text-sm font-bold">
                   {tr.telegramTitle}
                 </div>
-                <div className="mt-1 max-w-2xl text-sm text-white/65">
+                <div className="theme-text-muted mt-1 max-w-2xl text-sm">
                   {tr.telegramDesc}
                 </div>
               </div>
@@ -557,32 +557,38 @@ export default function HomeContent({
         </div>
       </section>
 
-      <section className="relative">
-        <div className="flunio-card relative overflow-hidden rounded-3xl p-8 text-white">
+      <section>
+        <div className="flunio-card relative overflow-hidden rounded-3xl p-8">
           <div className="pointer-events-none absolute -top-20 left-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 right-10 h-40 w-40 rounded-full bg-cyan-400/15 blur-3xl" />
 
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-4">
-              <div className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-semibold text-white">
+              <div className="theme-home-soft-card inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
                 Premium
               </div>
 
-              <h2 className="text-2xl font-semibold">{tr.premiumTitle}</h2>
-              <p className="max-w-2xl text-white/75">{tr.premiumSubtitle}</p>
+              <h2 className="theme-text text-2xl font-semibold">
+                {tr.premiumTitle}
+              </h2>
+              <p className="theme-text-muted max-w-2xl">
+                {tr.premiumSubtitle}
+              </p>
 
               <ul className="grid gap-2 sm:grid-cols-2">
                 {tr.premiumBullets.map((item) => (
                   <li
                     key={item}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/85"
+                    className="theme-home-soft-card rounded-2xl px-4 py-2.5 text-sm"
                   >
                     {item}
                   </li>
                 ))}
               </ul>
 
-              <div className="text-sm text-white/55">{tr.premiumPriceNote}</div>
+              <div className="theme-text-subtle text-sm">
+                {tr.premiumPriceNote}
+              </div>
             </div>
 
             <div className="flex flex-col gap-3 sm:pt-2">
@@ -595,7 +601,7 @@ export default function HomeContent({
 
               <Link
                 href="/premium"
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
+                className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 {tr.trainerLocked}
               </Link>
@@ -633,12 +639,12 @@ export default function HomeContent({
       </section>
 
       {showSeoBlock && (
-        <section className="flunio-card rounded-3xl p-8 text-white">
+        <section className="flunio-card rounded-3xl p-8">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold">
+            <h2 className="theme-text text-xl font-semibold">
               {tr.popularTitleByCourse[seoCourseId]}
             </h2>
-            <p className="mt-2 text-white/65">
+            <p className="theme-text-muted mt-2">
               {tr.popularDescByCourse[seoCourseId]}
             </p>
           </div>
@@ -648,13 +654,13 @@ export default function HomeContent({
               <Link
                 key={card.href}
                 href={card.href}
-                className="block rounded-2xl border border-white/10 bg-white/5 p-5 text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+                className="theme-home-soft-card block rounded-2xl p-5 transition hover:-translate-y-0.5"
               >
-                <h3 className="text-base font-semibold text-white">
+                <h3 className="theme-text text-base font-semibold">
                   {card.title}
                 </h3>
-                <p className="mt-2 text-sm text-white/65">{card.desc}</p>
-                <div className="mt-4 text-sm font-semibold text-cyan-200">
+                <p className="theme-text-muted mt-2 text-sm">{card.desc}</p>
+                <div className="theme-action-link mt-4 text-sm font-semibold">
                   {tr.open}
                 </div>
               </Link>
@@ -663,10 +669,10 @@ export default function HomeContent({
         </section>
       )}
 
-      <section className="flunio-card rounded-3xl p-8 text-white">
-        <h2 className="mb-3 text-xl font-semibold">{tr.seoH2}</h2>
-        <p className="mb-3 text-white/65">{tr.seoP1}</p>
-        <p className="text-white/65">{tr.seoP2}</p>
+      <section className="flunio-card rounded-3xl p-8">
+        <h2 className="theme-text mb-3 text-xl font-semibold">{tr.seoH2}</h2>
+        <p className="theme-text-muted mb-3">{tr.seoP1}</p>
+        <p className="theme-text-muted">{tr.seoP2}</p>
       </section>
     </div>
   );

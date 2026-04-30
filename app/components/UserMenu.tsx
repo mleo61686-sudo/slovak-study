@@ -15,6 +15,9 @@ type Props = {
 };
 
 type Lang = "ua" | "ru" | "en";
+type AppTheme = "flunio" | "simple";
+
+const THEME_KEY = "flunio.theme";
 
 const T: Record<
   Lang,
@@ -52,6 +55,39 @@ const T: Record<
     userFallback: "User",
   },
 };
+
+function ThemeToggle() {
+  const [theme, setTheme] = useState<AppTheme>("flunio");
+
+  useEffect(() => {
+    const saved = localStorage.getItem(THEME_KEY) as AppTheme | null;
+    const nextTheme = saved === "simple" ? "simple" : "flunio";
+
+    setTheme(nextTheme);
+    document.body.classList.remove("theme-flunio", "theme-simple");
+    document.body.classList.add(`theme-${nextTheme}`);
+  }, []);
+
+  function toggleTheme() {
+    const nextTheme: AppTheme = theme === "flunio" ? "simple" : "flunio";
+
+    setTheme(nextTheme);
+    localStorage.setItem(THEME_KEY, nextTheme);
+
+    document.body.classList.remove("theme-flunio", "theme-simple");
+    document.body.classList.add(`theme-${nextTheme}`);
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="theme-menu-item w-full px-4 py-2 text-left text-sm transition"
+    >
+      {theme === "flunio" ? "☀️ Simple theme" : "🌌 Flunio theme"}
+    </button>
+  );
+}
 
 function AvatarCircle({
   avatarUrl,
@@ -269,7 +305,7 @@ export default function UserMenu({
 
   if (mobile) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur">
+      <div className="theme-menu-panel overflow-hidden rounded-2xl backdrop-blur">
         <div className="flex items-center gap-3 px-4 py-3">
           <AvatarCircle
             avatarUrl={avatarUrl}
@@ -279,18 +315,18 @@ export default function UserMenu({
           />
 
           <div className="min-w-0">
-            <div className="truncate font-medium text-white">
+            <div className="theme-text truncate font-medium">
               {name || t.userFallback}
             </div>
-            <div className="break-all text-sm text-white/50">{email}</div>
+            <div className="theme-text-muted break-all text-sm">{email}</div>
           </div>
         </div>
 
-        <div className="border-t border-white/10" />
+        <div className="theme-divider" />
 
         <Link
           href="/account"
-          className="block px-4 py-3 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
+          className="theme-menu-item block px-4 py-3 text-sm transition"
           onClick={() => onNavigate?.()}
         >
           {t.profile}
@@ -298,7 +334,7 @@ export default function UserMenu({
 
         <Link
           href="/learn"
-          className="block px-4 py-3 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
+          className="theme-menu-item block px-4 py-3 text-sm transition"
           onClick={() => onNavigate?.()}
           data-onboarding="choose-course"
         >
@@ -308,16 +344,20 @@ export default function UserMenu({
         <button
           onClick={openPortal}
           disabled={loadingPortal}
-          className="w-full px-4 py-3 text-left text-sm text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
+          className="theme-menu-item w-full px-4 py-3 text-left text-sm transition disabled:opacity-50"
           type="button"
         >
           <div className="font-medium">{t.manageSub}</div>
-          <div className="mt-0.5 text-xs text-white/45">
+          <div className="theme-text-subtle mt-0.5 text-xs">
             {t.manageSubHint}
           </div>
         </button>
 
-        <div className="border-t border-white/10" />
+        <div className="theme-divider" />
+
+        <ThemeToggle />
+
+        <div className="theme-divider" />
 
         <button
           onClick={() => {
@@ -351,7 +391,7 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/95 text-white shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl"
+          className="theme-menu-panel absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
           <div className="flex items-center gap-3 px-4 py-3 text-sm">
@@ -363,18 +403,18 @@ export default function UserMenu({
             />
 
             <div className="min-w-0">
-              <div className="truncate font-medium text-white">
+              <div className="theme-text truncate font-medium">
                 {name || t.userFallback}
               </div>
-              <div className="truncate text-white/50">{email}</div>
+              <div className="theme-text-muted truncate">{email}</div>
             </div>
           </div>
 
-          <div className="border-t border-white/10" />
+          <div className="theme-divider" />
 
           <Link
             href="/account"
-            className="block px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
+            className="theme-menu-item block px-4 py-2 text-sm transition"
             onClick={() => setOpen(false)}
           >
             {t.profile}
@@ -382,7 +422,7 @@ export default function UserMenu({
 
           <Link
             href="/learn"
-            className="block px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
+            className="theme-menu-item block px-4 py-2 text-sm transition"
             onClick={() => setOpen(false)}
             data-onboarding="choose-course"
           >
@@ -392,14 +432,18 @@ export default function UserMenu({
           <button
             onClick={openPortal}
             disabled={loadingPortal}
-            className="w-full px-4 py-2 text-left text-sm text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-50"
+            className="theme-menu-item w-full px-4 py-2 text-left text-sm transition disabled:opacity-50"
             type="button"
           >
             <div className="font-medium">{t.manageSub}</div>
-            <div className="text-xs text-white/45">{t.manageSubHint}</div>
+            <div className="theme-text-subtle text-xs">{t.manageSubHint}</div>
           </button>
 
-          <div className="border-t border-white/10" />
+          <div className="theme-divider" />
+
+          <ThemeToggle />
+
+          <div className="theme-divider" />
 
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
