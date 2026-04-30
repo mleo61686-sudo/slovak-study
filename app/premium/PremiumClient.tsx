@@ -279,7 +279,7 @@ const FEATURES: readonly FeatureRow[] = [
 
 function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">
+    <span className="inline-flex items-center rounded-full border border-amber-300/30 bg-amber-400/15 px-2 py-0.5 text-xs font-bold text-amber-100">
       {children}
     </span>
   );
@@ -363,10 +363,10 @@ export default function PremiumClient() {
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           {t.topTitle}
         </h1>
-        <p className="text-slate-600">{t.topSubtitle}</p>
+        <p className="text-white/65">{t.topSubtitle}</p>
       </header>
 
-      <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white shadow-sm">
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-8 text-white shadow-[0_0_30px_rgba(34,211,238,0.10)]">
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-4">
             <div className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
@@ -450,7 +450,7 @@ export default function PremiumClient() {
                       key={currency}
                       onClick={() => handleCheckout(currency)}
                       disabled={!!loading}
-                      className="inline-flex h-11 items-center justify-center rounded-2xl bg-amber-400 px-6 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
+                      className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-6 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
                     >
                       {loading === currency
                         ? t.opening
@@ -463,7 +463,7 @@ export default function PremiumClient() {
               <button
                 onClick={handleManage}
                 disabled={!!loading}
-                className="inline-flex h-11 items-center justify-center rounded-2xl bg-emerald-500 px-6 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 px-6 text-sm font-semibold text-white shadow-[0_0_20px_rgba(16,185,129,0.25)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
               >
                 {loading === "portal" ? t.opening : t.manage}
               </button>
@@ -486,19 +486,19 @@ export default function PremiumClient() {
       </section>
 
       {!isPremium ? (
-        <section className="space-y-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <section className="flunio-card space-y-4 rounded-3xl p-6 text-white">
           <div className="space-y-1 text-center">
             <h2 className="text-2xl font-semibold">{t.compareTitle}</h2>
-            <p className="text-sm text-slate-600">{t.compareSubtitle}</p>
+            <p className="text-sm text-white/65">{t.compareSubtitle}</p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] border-collapse overflow-hidden rounded-2xl">
               <thead>
-                <tr className="bg-slate-50 text-sm">
+                <tr className="border-b border-white/10 bg-white/5 text-sm text-white/75">
                   <th className="p-4 text-left">{t.colFeature}</th>
                   <th className="p-4 text-center">{t.colFree}</th>
-                  <th className="bg-amber-50 p-4 text-center">
+                  <th className="bg-amber-400/10 p-4 text-center text-white">
                     <div className="inline-flex items-center justify-center gap-2">
                       {t.colPremium} <Badge>{t.premiumBetter}</Badge>
                     </div>
@@ -508,16 +508,16 @@ export default function PremiumClient() {
 
               <tbody>
                 {FEATURES.map((f) => (
-                  <tr key={f.key} className="border-t">
-                    <td className="p-4 text-sm text-slate-900">
+                  <tr key={f.key} className="border-t border-white/10">
+                    <td className="p-4 text-sm text-white">
                       {L === "ru" ? f.ru : L === "en" ? f.en : f.ua}
                     </td>
 
-                    <td className="p-4 text-center text-sm text-slate-700">
+                    <td className="p-4 text-center text-sm text-white/65">
                       {f.free}
                     </td>
 
-                    <td className="bg-amber-50 p-4 text-center text-sm font-semibold text-slate-900">
+                    <td className="bg-amber-400/10 p-4 text-center text-sm font-semibold text-amber-100">
                       {f.premium}
                     </td>
                   </tr>
@@ -530,12 +530,12 @@ export default function PremiumClient() {
             <button
               onClick={() => handleCheckout(interval === "year" ? "eur" : "eur")}
               disabled={!!loading}
-              className="inline-flex h-11 items-center justify-center rounded-2xl bg-black px-8 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-8 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
             >
               {loading ? t.opening : t.ctaAfterCompare}
             </button>
 
-            <div className="text-center text-xs text-slate-500">
+            <div className="text-center text-xs text-white/50">
               {t.currencyHint}
             </div>
           </div>

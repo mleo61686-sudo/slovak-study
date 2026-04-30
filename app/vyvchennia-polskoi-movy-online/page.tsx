@@ -67,7 +67,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10">
+    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 text-white">
       <Script
         id="faq-schema-polish-uk"
         type="application/ld+json"
@@ -75,19 +75,19 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-8">
         <h1 className="text-3xl font-extrabold sm:text-4xl">
           Вивчення польської мови онлайн — курс з нуля до B2
         </h1>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Flunio допомагає вивчати польську мову онлайн системно і без хаосу.
           Замість випадкових списків слів, відео та складних граматичних
           пояснень ти можеш проходити короткі уроки, слухати вимову, виконувати
           вправи та поступово будувати словниковий запас.
         </p>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Курс підходить для тих, хто починає з нуля, хоче покращити щоденне
           спілкування або вивчає польську для життя, роботи, навчання чи
           документів у Польщі. Почни з A0 і рухайся далі до A1, A2, B1 та B2 у
@@ -97,26 +97,35 @@ export default function Page() {
         <div className="flex flex-wrap gap-3 pt-2">
           <Link
             href="/learning"
-            className="rounded-xl bg-black px-4 py-2 text-white"
+            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
           >
             Почати навчання
           </Link>
 
-          <Link href="/learning/a0-1" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/learning/a0-1"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Почати з A0 →
           </Link>
 
-          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/dictionary"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Словник
           </Link>
 
-          <Link href="/grammar" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/grammar"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Граматика
           </Link>
 
           <Link
             href="/ru/vyvchennia-polskoi-movy-online"
-            className="rounded-xl border px-4 py-2"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
           >
             Русская версия →
           </Link>
@@ -124,36 +133,36 @@ export default function Page() {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border bg-white p-5">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
           <h2 className="text-lg font-bold">1) Уроки польської по рівнях</h2>
-          <p className="mt-2 text-slate-700">
+          <p className="mt-2 text-white/65">
             Матеріал організований від A0 до B2, щоб ти завжди розумів, що
             вчити далі. Це допомагає рухатися послідовно, а не стрибати між
             випадковими темами.
           </p>
         </div>
 
-        <div className="rounded-2xl border bg-white p-5">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
           <h2 className="text-lg font-bold">2) Коротка щоденна практика</h2>
-          <p className="mt-2 text-slate-700">
+          <p className="mt-2 text-white/65">
             Уроки короткі, тому їх легко проходити щодня. 10–20 хвилин на день
             достатньо, щоб поступово накопичувати словниковий запас і не
             вигорати.
           </p>
         </div>
 
-        <div className="rounded-2xl border bg-white p-5">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
           <h2 className="text-lg font-bold">3) Озвучка слів і фраз</h2>
-          <p className="mt-2 text-slate-700">
+          <p className="mt-2 text-white/65">
             Польську важливо не тільки читати, а й чути. Озвучка допомагає
             звикати до вимови, повторювати слова вголос і краще сприймати мову
             на слух.
           </p>
         </div>
 
-        <div className="rounded-2xl border bg-white p-5">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
           <h2 className="text-lg font-bold">4) Словник і граматика разом</h2>
-          <p className="mt-2 text-slate-700">
+          <p className="mt-2 text-white/65">
             У Flunio є уроки, словник, граматичні теми та вправи. Це дозволяє
             не просто запам’ятовувати слова, а й розуміти, як використовувати їх
             у реченнях.
@@ -161,19 +170,19 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Як почати вивчати польську мову онлайн
         </h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Якщо ти починаєш з нуля, не варто одразу намагатися вивчити всю
           граматику. Спочатку краще створити базу: найчастіші слова, прості
           фрази, вимова та базові конструкції. Коли в пам’яті вже є приклади,
           граматика сприймається значно легше.
         </p>
 
-        <ol className="list-decimal space-y-2 pl-5 text-slate-700">
+        <ol className="list-decimal space-y-2 pl-5 text-white/65">
           <li>Почни з A0, якщо вивчаєш польську з нуля.</li>
           <li>Проходь невеликі уроки з корисними словами.</li>
           <li>Слухай озвучку і повторюй слова вголос.</li>
@@ -186,19 +195,19 @@ export default function Page() {
         <div className="pt-2">
           <Link
             href="/learning/a0-1"
-            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
+            className="inline-flex rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
           >
             Перейти до A0 →
           </Link>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Що найскладніше у польській для початківців?
         </h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Польська мова має багато спільного з іншими слов’янськими мовами, але
           все одно потребує системного підходу. Найчастіше складність викликають
           вимова, буквосполучення, відмінки, закінчення слів і форми дієслів.
@@ -207,25 +216,25 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <h3 className="font-semibold">Вимова</h3>
-            <p className="mt-2 text-sm text-slate-700">
+            <p className="mt-2 text-sm text-white/65">
               У польській є характерні звуки та буквосполучення sz, cz, rz, ż,
               ś, ć, ł. Озвучка допомагає швидше звикнути до вимови.
             </p>
           </div>
 
-          <div className="rounded-xl border p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <h3 className="font-semibold">Відмінки</h3>
-            <p className="mt-2 text-sm text-slate-700">
+            <p className="mt-2 text-sm text-white/65">
               Іменники та прикметники змінюються залежно від ролі у реченні. Це
               легше зрозуміти через готові приклади.
             </p>
           </div>
 
-          <div className="rounded-xl border p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <h3 className="font-semibold">Дієслова</h3>
-            <p className="mt-2 text-sm text-slate-700">
+            <p className="mt-2 text-sm text-white/65">
               Дієслова змінюються за особами, часом і значенням. Починати краще
               з найчастіших дієслів у теперішньому часі.
             </p>
@@ -233,29 +242,29 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Польська лексика для реальних ситуацій
         </h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Хороше навчання польської має давати не тільки окремі слова, а й
           лексику для реального життя: знайомство, покупки, транспорт, житло,
           робота, навчання, документи та щоденне спілкування.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <h3 className="font-semibold">Щоденна польська</h3>
-            <p className="mt-2 text-slate-700">
+            <p className="mt-2 text-white/65">
               Вчи слова і фрази для привітань, їжі, сім’ї, покупок, житла,
               транспорту та повсякденних розмов.
             </p>
           </div>
 
-          <div className="rounded-xl border p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <h3 className="font-semibold">Польська для роботи й навчання</h3>
-            <p className="mt-2 text-slate-700">
+            <p className="mt-2 text-white/65">
               Поступово додавай слова для інструкцій, графіків, документів,
               комунікації, навчання і робочих ситуацій.
             </p>
@@ -263,45 +272,54 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Граматика має допомагати, а не блокувати навчання
         </h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Граматика важлива, але її краще вивчати тоді, коли вона пояснює вже
           знайомі приклади. Спочатку можна накопичувати слова і фрази, а потім
           відкривати граматичні теми, щоб зрозуміти, чому речення побудоване
           саме так.
         </p>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Такий підхід особливо корисний для польської, бо відмінки, дієслова і
           закінчення легше засвоюються не як суха теорія, а через контекст і
           повторення.
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/grammar" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/grammar"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Відкрити граматику
           </Link>
 
-          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/dictionary"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Відкрити словник
           </Link>
 
-          <Link href="/practice" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/practice"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Перейти до вправ
           </Link>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Кому підійде навчання польської у Flunio
         </h2>
 
-        <div className="space-y-3 text-slate-700">
+        <div className="space-y-3 text-white/65">
           <p>
             Flunio підійде тим, хто хоче вивчати польську онлайн у простому,
             структурованому і практичному форматі. Це хороший варіант, якщо ти
@@ -318,14 +336,17 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
-            <div key={item.q} className="rounded-xl border p-4">
+            <div
+              key={item.q}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur"
+            >
               <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-slate-700">{item.a}</div>
+              <div className="mt-2 text-white/65">{item.a}</div>
             </div>
           ))}
         </div>

@@ -162,7 +162,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10">
+    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 text-white">
       <Script
         id="faq-schema-slovatski-slova-z-perekladom"
         type="application/ld+json"
@@ -170,18 +170,18 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-8">
         <h1 className="text-3xl font-extrabold sm:text-4xl">
           Словацькі слова з перекладом українською
         </h1>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Якщо ти тільки починаєш вивчати словацьку мову, найкраще почати з
           базових слів для щоденного життя. Саме вони допомагають розуміти прості
           фрази, будувати перші речення і швидше звикати до словацької.
         </p>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Нижче зібрані словацькі слова з перекладом українською за темами:
           привітання, сім’я, дім, їжа, транспорт, робота, дієслова та
           прикметники. Це хороша база для рівня A0–A1.
@@ -190,18 +190,21 @@ export default function Page() {
         <div className="flex flex-wrap gap-3 pt-2">
           <Link
             href="/learning/a0-1"
-            className="rounded-xl bg-black px-4 py-2 text-white"
+            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
           >
             Почати уроки A0 →
           </Link>
 
-          <Link href="/dictionary" className="rounded-xl border px-4 py-2">
+          <Link
+            href="/dictionary"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+          >
             Відкрити словник
           </Link>
 
           <Link
             href="/yak-vyvchyty-slovatsku-movu"
-            className="rounded-xl border px-4 py-2"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
           >
             Як вивчити словацьку
           </Link>
@@ -210,12 +213,15 @@ export default function Page() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         {sections.map((section) => (
-          <div key={section.title} className="rounded-2xl border bg-white p-5">
+          <div
+            key={section.title}
+            className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur"
+          >
             <h2 className="text-lg font-bold">{section.title}</h2>
 
-            <div className="mt-4 overflow-hidden rounded-xl border">
+            <div className="mt-4 overflow-hidden rounded-2xl border border-white/10">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 text-left">
+                <thead className="bg-white/5 text-left text-white/75">
                   <tr>
                     <th className="px-3 py-2 font-semibold">Словацькою</th>
                     <th className="px-3 py-2 font-semibold">Українською</th>
@@ -223,9 +229,9 @@ export default function Page() {
                 </thead>
                 <tbody>
                   {section.words.map(([sk, ua]) => (
-                    <tr key={sk} className="border-t">
-                      <td className="px-3 py-2 font-medium">{sk}</td>
-                      <td className="px-3 py-2 text-slate-700">{ua}</td>
+                    <tr key={sk} className="border-t border-white/10">
+                      <td className="px-3 py-2 font-medium text-white">{sk}</td>
+                      <td className="px-3 py-2 text-white/65">{ua}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -235,18 +241,18 @@ export default function Page() {
         ))}
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Як правильно вчити словацькі слова
         </h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Не варто просто читати великий список слів один раз. Так слова швидко
           забуваються. Краще вчити невеликі групи, слухати вимову, повторювати
           уголос і одразу використовувати слова у вправах або простих реченнях.
         </p>
 
-        <ul className="list-disc space-y-2 pl-5 text-slate-700">
+        <ul className="list-disc space-y-2 pl-5 text-white/65">
           <li>Вчи 10–20 нових слів за раз, а не сотню одразу.</li>
           <li>Повторюй старі слова через день, тиждень і місяць.</li>
           <li>Слухай вимову, бо словацьку важливо не тільки читати.</li>
@@ -257,53 +263,54 @@ export default function Page() {
         <div className="pt-2">
           <Link
             href="/learning"
-            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
+            className="inline-flex rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
           >
             Вчити слова у Flunio →
           </Link>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">
           Типові помилки при вивченні словацьких слів
         </h2>
 
-        <div className="space-y-3 text-slate-700">
+        <div className="space-y-3 text-white/65">
           <p>
-            <strong>1. Вчити слова без контексту.</strong> Краще запам’ятати не
-            тільки слово <em>dom</em>, а й просту фразу: <em>Som doma</em> — я
-            вдома.
+            <strong className="text-white">1. Вчити слова без контексту.</strong>{" "}
+            Краще запам’ятати не тільки слово <em>dom</em>, а й просту фразу:{" "}
+            <em>Som doma</em> — я вдома.
           </p>
 
           <p>
-            <strong>2. Не слухати вимову.</strong> Деякі слова виглядають
-            зрозуміло, але звучать інакше, ніж очікує україномовний студент.
+            <strong className="text-white">2. Не слухати вимову.</strong> Деякі
+            слова виглядають зрозуміло, але звучать інакше, ніж очікує
+            україномовний студент.
           </p>
 
           <p>
-            <strong>3. Плутати схожі слова.</strong> У словацькій є слова, які
-            схожі на українські, але можуть мати інше значення або вживатися в
-            іншій ситуації.
+            <strong className="text-white">3. Плутати схожі слова.</strong> У
+            словацькій є слова, які схожі на українські, але можуть мати інше
+            значення або вживатися в іншій ситуації.
           </p>
 
           <p>
-            <strong>4. Не повторювати.</strong> Навіть прості слова забуваються,
-            якщо не повертатися до них регулярно.
+            <strong className="text-white">4. Не повторювати.</strong> Навіть
+            прості слова забуваються, якщо не повертатися до них регулярно.
           </p>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">Що вчити після базових слів?</h2>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Коли ти вже знаєш перші слова, переходь до коротких фраз і простих
           речень. Наприклад: як представитися, запитати дорогу, купити щось у
           магазині, відповісти на роботі або пояснити базову ситуацію.
         </p>
 
-        <p className="text-slate-700">
+        <p className="text-white/65">
           Далі варто поступово додавати граматику: дієслова, відмінки, порядок
           слів і прості питання. Але граматика краще працює тоді, коли в тебе
           вже є словникова база.
@@ -312,42 +319,45 @@ export default function Page() {
         <div className="grid gap-3 sm:grid-cols-2">
           <Link
             href="/slovak-grammar"
-            className="rounded-xl border p-4 hover:bg-slate-50"
+            className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
           >
             Словацька граматика →
           </Link>
 
           <Link
             href="/vyvchennia-slovatskoi-movy-online"
-            className="rounded-xl border p-4 hover:bg-slate-50"
+            className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
           >
             Вивчення словацької онлайн →
           </Link>
 
           <Link
             href="/slovak-for-ukrainians"
-            className="rounded-xl border p-4 hover:bg-slate-50"
+            className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
           >
             Словацька для українців →
           </Link>
 
           <Link
             href="/practice"
-            className="rounded-xl border p-4 hover:bg-slate-50"
+            className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
           >
             Вправи для повторення →
           </Link>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
+      <section className="flunio-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-bold">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
-            <div key={item.q} className="rounded-xl border p-4">
+            <div
+              key={item.q}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur"
+            >
               <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-slate-700">{item.a}</div>
+              <div className="mt-2 text-white/65">{item.a}</div>
             </div>
           ))}
         </div>

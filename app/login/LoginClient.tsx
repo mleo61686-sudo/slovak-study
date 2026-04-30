@@ -138,83 +138,107 @@ export default function LoginClient() {
 
   return (
     <div className="mx-auto max-w-md py-10">
-      <div className="rounded-2xl border bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-extrabold">{t.title}</h1>
-        <p className="mt-1 text-sm text-slate-600">{t.hint}</p>
+      <div className="flunio-card relative overflow-hidden rounded-3xl p-6 text-white shadow-[0_0_30px_rgba(34,211,238,0.10)] sm:p-7">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
-        <form onSubmit={onSubmit} className="mt-6 grid gap-4">
-          <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.email}
-            </label>
-            <input
-              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${
-                emailOk ? "" : "border-red-400"
-              }`}
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              autoComplete="email"
-              required
-            />
-            {!emailOk && (
-              <div className="text-xs text-red-600">{t.invalidEmailShort}</div>
-            )}
+        <div className="relative">
+          <div className="mb-6">
+            <div className="mb-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
+              Flunio
+            </div>
+
+            <h1 className="text-2xl font-extrabold tracking-tight text-white">
+              {t.title}
+            </h1>
+            <p className="mt-1 text-sm text-white/65">{t.hint}</p>
           </div>
 
-          <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.password}
-            </label>
+          <form onSubmit={onSubmit} className="grid gap-4">
+            <div className="grid gap-1.5">
+              <label className="text-sm font-medium text-white/75">
+                {t.email}
+              </label>
 
-            <div className="relative">
               <input
-                className="h-11 w-full rounded-xl border px-3 pr-24 outline-none focus:ring-2 focus:ring-slate-200"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type={showPw ? "text" : "password"}
-                autoComplete="current-password"
+                className={`h-11 rounded-2xl border bg-white/5 px-3 text-sm text-white outline-none backdrop-blur placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20 ${
+                  emailOk ? "border-white/10" : "border-red-400/70"
+                }`}
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                autoComplete="email"
                 required
               />
-              <button
-                type="button"
-                onClick={() => setShowPw((v) => !v)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+
+              {!emailOk && (
+                <div className="text-xs text-red-300">
+                  {t.invalidEmailShort}
+                </div>
+              )}
+            </div>
+
+            <div className="grid gap-1.5">
+              <label className="text-sm font-medium text-white/75">
+                {t.password}
+              </label>
+
+              <div className="relative">
+                <input
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-white/5 px-3 pr-24 text-sm text-white outline-none backdrop-blur placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPw ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPw((v) => !v)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/75 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+                >
+                  {showPw ? t.hide : t.show}
+                </button>
+              </div>
+            </div>
+
+            <button
+              disabled={loading}
+              className="mt-1 h-11 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
+              type="submit"
+            >
+              {loading ? t.signingIn : t.signIn}
+            </button>
+
+            {msg && (
+              <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-sm text-red-200 backdrop-blur">
+                {msg}
+              </div>
+            )}
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70 backdrop-blur">
+              {t.noAccount}{" "}
+              <Link
+                className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+                href="/register"
               >
-                {showPw ? t.hide : t.show}
-              </button>
+                {t.register}
+              </Link>
             </div>
-          </div>
 
-          <button
-            disabled={loading}
-            className="h-11 rounded-xl bg-slate-900 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
-            type="submit"
-          >
-            {loading ? t.signingIn : t.signIn}
-          </button>
-
-          {msg && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {msg}
+            <div className="text-sm">
+              <Link
+                href="/forgot-password"
+                className="font-medium text-white/60 underline decoration-white/20 underline-offset-4 transition hover:text-cyan-100"
+              >
+                {t.forgot}
+              </Link>
             </div>
-          )}
-
-          <div className="text-sm text-slate-700">
-            {t.noAccount}{" "}
-            <Link className="font-semibold underline" href="/register">
-              {t.register}
-            </Link>
-          </div>
-
-          <div className="text-sm">
-            <Link href="/forgot-password" className="text-slate-600 underline">
-              {t.forgot}
-            </Link>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

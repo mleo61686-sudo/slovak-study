@@ -148,7 +148,7 @@ function FlagIcon({ courseId, title }: { courseId: CourseId; title: string }) {
     <img
       src={src}
       alt={title}
-      className="h-8 w-12 rounded-md border border-slate-200 object-cover shadow-sm"
+      className="h-8 w-12 rounded-md border border-white/10 object-cover shadow-sm"
       loading="lazy"
     />
   );
@@ -283,12 +283,12 @@ export default function RegisterPage() {
 
   return (
     <div className="mx-auto max-w-2xl py-10">
-      <div className="rounded-3xl border bg-white p-6 shadow-sm sm:p-7">
+      <div className="flunio-card rounded-3xl p-6 text-white sm:p-7">
         <h1 className="text-3xl font-extrabold tracking-tight">{t.title}</h1>
-        <p className="mt-2 text-sm text-slate-600">{t.subtitle}</p>
+        <p className="mt-2 text-sm text-white/65">{t.subtitle}</p>
 
         <div className="mt-7">
-          <div className="text-sm font-semibold text-slate-800">
+          <div className="text-sm font-semibold text-white/80">
             {t.chooseCourse}
           </div>
 
@@ -308,10 +308,10 @@ export default function RegisterPage() {
                   disabled={!isLive}
                   aria-disabled={!isLive}
                   className={`group relative rounded-2xl border p-4 text-left transition-all duration-200 ${!isLive
-                    ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-70"
+                    ? "cursor-not-allowed border-white/10 bg-white/5 opacity-50"
                     : isActive
-                      ? "border-slate-900 bg-slate-50 shadow-sm ring-2 ring-slate-200"
-                      : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-sm"
+                      ? "border-cyan-400/45 bg-cyan-400/10 shadow-[0_0_22px_rgba(34,211,238,0.18)] ring-2 ring-cyan-400/20"
+                      : "border-white/10 bg-white/5 hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
                     }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -319,30 +319,30 @@ export default function RegisterPage() {
 
                     <div className="flex items-center gap-2">
                       {!isLive && (
-                        <span className="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-500">
+                        <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-white/50">
                           {t.soon}
                         </span>
                       )}
 
                       {isActive && isLive && (
-                        <span className="rounded-full bg-slate-900 px-2 py-1 text-[11px] font-medium text-white">
+                        <span className="rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-2 py-1 text-[11px] font-semibold text-white">
                           {t.selected}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="mt-4 text-lg font-bold text-slate-900">
+                  <div className="mt-4 text-lg font-bold text-white">
                     {course.title}
                   </div>
 
                   {"nativeTitle" in course && course.nativeTitle ? (
-                    <div className="mt-1 text-sm text-slate-500">
+                    <div className="mt-1 text-sm text-white/55">
                       {String(course.nativeTitle)}
                     </div>
                   ) : null}
 
-                  <div className="mt-4 text-xs font-medium uppercase tracking-wide text-slate-400">
+                  <div className="mt-4 text-xs font-medium uppercase tracking-wide text-white/40">
                     {courseId.toUpperCase()}
                   </div>
                 </button>
@@ -350,16 +350,16 @@ export default function RegisterPage() {
             })}
           </div>
 
-          <div className="mt-2 text-xs text-slate-500">{t.courseHint}</div>
+          <div className="mt-2 text-xs text-white/50">{t.courseHint}</div>
         </div>
 
         <form onSubmit={onSubmit} className="mt-7 grid gap-4">
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
+            <label className="text-sm font-medium text-white/70">
               {t.name}
             </label>
             <input
-              className="h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200"
+              className="h-11 rounded-2xl border border-white/10 bg-slate-950/60 px-3 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
               placeholder={t.name}
               value={name}
               onChange={(e) => {
@@ -371,11 +371,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.email}
-            </label>
+            <label className="text-sm font-medium text-white/70">{t.email}</label>
             <input
-              className={`h-11 rounded-xl border px-3 outline-none focus:ring-2 focus:ring-slate-200 ${emailOk ? "" : "border-red-400"
+              className={`h-11 rounded-2xl border bg-slate-950/60 px-3 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20 ${emailOk ? "border-white/10" : "border-red-400/70"
                 }`}
               placeholder="name@example.com"
               value={email}
@@ -388,20 +386,18 @@ export default function RegisterPage() {
               required
             />
             {!emailOk && (
-              <div className="text-xs text-red-600">
+              <div className="text-xs text-red-300">
                 {ERROR_TEXT.INVALID_EMAIL[L]}
               </div>
             )}
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.password}
-            </label>
+            <label className="text-sm font-medium text-white/70">{t.password}</label>
 
             <div className="relative">
               <input
-                className="h-11 w-full rounded-xl border px-3 pr-24 outline-none focus:ring-2 focus:ring-slate-200"
+                className="h-11 w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 pr-24 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                 placeholder="••••••••"
                 value={pw}
                 onChange={(e) => {
@@ -415,31 +411,29 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setShowPw((v) => !v)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
               >
                 {showPw ? t.hide : t.show}
               </button>
             </div>
 
             <div className="mt-2 grid gap-1">
-              <div className="h-2 w-full rounded-full bg-slate-100">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-2 rounded-full bg-slate-900 transition-all"
+                  className="h-2 rounded-full bg-gradient-to-r from-cyan-400 via-blue-400 to-fuchsia-400 transition-all"
                   style={{ width: `${(pwScore / 5) * 100}%` }}
                 />
               </div>
-              <div className="text-xs text-slate-600">{t.pwRuleHint}</div>
+              <div className="text-xs text-white/50">{t.pwRuleHint}</div>
             </div>
           </div>
 
           <div className="grid gap-1">
-            <label className="text-sm font-medium text-slate-700">
-              {t.password2}
-            </label>
+            <label className="text-sm font-medium text-white/70">{t.password2}</label>
 
             <div className="relative">
               <input
-                className="h-11 w-full rounded-xl border px-3 pr-24 outline-none focus:ring-2 focus:ring-slate-200"
+                className="h-11 w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 pr-24 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                 placeholder="••••••••"
                 value={pw2}
                 onChange={(e) => {
@@ -453,14 +447,14 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setShowPw2((v) => !v)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
               >
                 {showPw2 ? t.hide : t.show}
               </button>
             </div>
 
             {pw2.length > 0 && pw !== pw2 && (
-              <div className="text-xs text-red-600">
+              <div className="text-xs text-red-300">
                 {ERROR_TEXT.PASSWORD_MISMATCH[L]}
               </div>
             )}
@@ -468,21 +462,24 @@ export default function RegisterPage() {
 
           <button
             disabled={loading}
-            className="h-11 rounded-xl bg-slate-900 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60"
+            className="h-11 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
             type="submit"
           >
             {loading ? t.creating : t.create}
           </button>
 
           {errorText && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-sm text-red-200">
               {errorText}
             </div>
           )}
 
-          <div className="text-sm text-slate-700">
+          <div className="text-sm text-white/65">
             {t.have}{" "}
-            <Link className="font-semibold underline" href="/login">
+            <Link
+              className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 hover:text-cyan-100"
+              href="/login"
+            >
               {t.login}
             </Link>
           </div>

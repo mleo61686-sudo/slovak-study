@@ -130,7 +130,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10">
+    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 text-white">
       <Script
         id="faq-schema-pomylky-v-slovatskii-movi"
         type="application/ld+json"
@@ -138,228 +138,248 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="space-y-4">
-        <h1 className="text-3xl font-extrabold sm:text-4xl">
-          Типові помилки в словацькій мові
-        </h1>
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-7 sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
 
-        <p className="text-slate-700">
-          Словацька мова здається близькою до української, але саме через цю
-          схожість часто виникають помилки. Людина думає, що можна перекласти
-          фразу дослівно, але словацькою це звучить неприродно або неправильно.
-        </p>
+        <div className="relative space-y-4">
+          <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
+            Flunio Grammar
+          </div>
 
-        <p className="text-slate-700">
-          Нижче — часті помилки у словацькій мові, які роблять початківці:
-          неправильні форми слів, дослівний переклад, плутанина між схожими
-          словами та типові проблеми з прийменниками.
-        </p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            Типові помилки в словацькій мові
+          </h1>
 
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/learning/a0-1"
-            className="rounded-xl bg-black px-4 py-2 text-white"
-          >
-            Почати з A0 →
-          </Link>
+          <p className="text-white/70">
+            Словацька мова здається близькою до української, але саме через цю
+            схожість часто виникають помилки. Людина думає, що можна перекласти
+            фразу дослівно, але словацькою це звучить неприродно або неправильно.
+          </p>
 
-          <Link
-            href="/yak-vyvchyty-slovatsku-movu"
-            className="rounded-xl border px-4 py-2"
-          >
-            Як вивчити словацьку
-          </Link>
+          <p className="text-white/70">
+            Нижче — часті помилки у словацькій мові, які роблять початківці:
+            неправильні форми слів, дослівний переклад, плутанина між схожими
+            словами та типові проблеми з прийменниками.
+          </p>
 
-          <Link
-            href="/slovatski-slova-z-perekladom"
-            className="rounded-xl border px-4 py-2"
-          >
-            Словацькі слова
-          </Link>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Link
+              href="/learning/a0-1"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+            >
+              Почати з A0 →
+            </Link>
 
-          <Link href="/slovak-grammar" className="rounded-xl border px-4 py-2">
-            Граматика
-          </Link>
+            <Link
+              href="/yak-vyvchyty-slovatsku-movu"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              Як вивчити словацьку
+            </Link>
+
+            <Link
+              href="/slovatski-slova-z-perekladom"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              Словацькі слова
+            </Link>
+
+            <Link
+              href="/slovak-grammar"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              Граматика
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
+      <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-2xl font-bold text-white">
           Чому виникають помилки у словацькій?
         </h2>
 
-        <p className="text-slate-700">
-          Багато українців швидко впізнають словацькі слова, бо мови мають
-          спільне слов’янське коріння. Але схожість не означає, що можна завжди
-          перекладати буквально. У словацькій є свої форми, прийменники,
-          закінчення та сталі фрази.
-        </p>
+        <div className="mt-4 space-y-3 text-white/70">
+          <p>
+            Багато українців швидко впізнають словацькі слова, бо мови мають
+            спільне слов’янське коріння. Але схожість не означає, що можна
+            завжди перекладати буквально.
+          </p>
 
-        <p className="text-slate-700">
-          Найкращий спосіб уникати помилок — вчити не тільки окремі слова, а й
-          готові приклади речень. Так ти бачиш, як слово реально працює у
-          фразі.
-        </p>
+          <p>
+            Найкращий спосіб уникати помилок — вчити не тільки окремі слова, а й
+            готові приклади речень. Так ти бачиш, як слово реально працює у
+            фразі.
+          </p>
+        </div>
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold text-white">
           Часті помилки: неправильно → правильно
         </h2>
 
         <div className="space-y-4">
           {mistakes.map((item) => (
-            <div key={item.wrong} className="rounded-2xl border bg-white p-5">
+            <div
+              key={item.wrong}
+              className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur"
+            >
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-red-100 bg-red-50 p-4">
-                  <div className="text-sm font-semibold text-red-700">
+                <div className="rounded-2xl border border-red-400/25 bg-red-500/10 p-4">
+                  <div className="text-sm font-semibold text-red-300">
                     Неправильно
                   </div>
-                  <div className="mt-1 text-lg font-bold text-red-900">
+                  <div className="mt-1 text-lg font-bold text-red-100">
                     {item.wrong}
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-                  <div className="text-sm font-semibold text-emerald-700">
+                <div className="rounded-2xl border border-emerald-400/25 bg-emerald-500/10 p-4">
+                  <div className="text-sm font-semibold text-emerald-300">
                     Правильно
                   </div>
-                  <div className="mt-1 text-lg font-bold text-emerald-900">
+                  <div className="mt-1 text-lg font-bold text-emerald-100">
                     {item.correct}
                   </div>
                 </div>
               </div>
 
-              <p className="mt-3 text-slate-700">
-                <strong>Переклад:</strong> {item.ua}
+              <p className="mt-3 text-white/70">
+                <strong className="text-white">Переклад:</strong> {item.ua}
               </p>
 
-              <p className="mt-2 text-slate-700">
-                <strong>Пояснення:</strong> {item.note}
+              <p className="mt-2 text-white/70">
+                <strong className="text-white">Пояснення:</strong> {item.note}
               </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
+      <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-2xl font-bold text-white">
           5 правил, які допоможуть уникати помилок
         </h2>
 
-        <ol className="list-decimal space-y-3 pl-5 text-slate-700">
+        <ol className="mt-4 list-decimal space-y-3 pl-5 text-white/70">
           <li>
-            <strong>Не перекладай усе дослівно.</strong> Фраза, яка звучить
-            нормально українською, може бути неприродною словацькою.
+            <strong className="text-white">Не перекладай усе дослівно.</strong>{" "}
+            Фраза, яка звучить нормально українською, може бути неприродною
+            словацькою.
           </li>
           <li>
-            <strong>Вчи слова у реченнях.</strong> Окреме слово — це тільки
-            половина знання. Важливо бачити його форму у фразі.
+            <strong className="text-white">Вчи слова у реченнях.</strong> Окреме
+            слово — це тільки половина знання. Важливо бачити його форму у
+            фразі.
           </li>
           <li>
-            <strong>Слухай вимову.</strong> Деякі слова легко впізнати на
-            письмі, але важче зрозуміти на слух.
+            <strong className="text-white">Слухай вимову.</strong> Деякі слова
+            легко впізнати на письмі, але важче зрозуміти на слух.
           </li>
           <li>
-            <strong>Звертай увагу на прийменники.</strong> Наприклад: do práce,
-            v autobuse, na Slovensku.
+            <strong className="text-white">Звертай увагу на прийменники.</strong>{" "}
+            Наприклад: do práce, v autobuse, na Slovensku.
           </li>
           <li>
-            <strong>Повторюй правильні приклади.</strong> Краще запам’ятати одну
-            правильну фразу, ніж десять окремих слів без контексту.
+            <strong className="text-white">Повторюй правильні приклади.</strong>{" "}
+            Краще запам’ятати одну правильну фразу, ніж десять окремих слів без
+            контексту.
           </li>
         </ol>
 
-        <div className="pt-2">
+        <div className="pt-5">
           <Link
             href="/learning"
-            className="inline-flex rounded-xl bg-black px-4 py-2 text-white"
+            className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
           >
             Практикуватися у Flunio →
           </Link>
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">
+      <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-2xl font-bold text-white">
           Які теми найчастіше викликають труднощі?
         </h2>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Відмінки</h3>
-            <p className="mt-2 text-sm text-slate-700">
-              Форми слів змінюються залежно від ролі у реченні: do práce, v
-              autobuse, mám kávu.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Дієслова</h3>
-            <p className="mt-2 text-sm text-slate-700">
-              Не всі дієслова працюють так само, як в українській. Наприклад:
-              učiť sa slovenčinu.
-            </p>
-          </div>
-
-          <div className="rounded-xl border p-4">
-            <h3 className="font-semibold">Схожі слова</h3>
-            <p className="mt-2 text-sm text-slate-700">
-              Деякі слова схожі на українські, але мають інше значення або інше
-              вживання.
-            </p>
-          </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              title: "Відмінки",
+              text: "Форми слів змінюються залежно від ролі у реченні: do práce, v autobuse, mám kávu.",
+            },
+            {
+              title: "Дієслова",
+              text: "Не всі дієслова працюють так само, як в українській. Наприклад: učiť sa slovenčinu.",
+            },
+            {
+              title: "Схожі слова",
+              text: "Деякі слова схожі на українські, але мають інше значення або інше вживання.",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-400/35 hover:bg-white/10"
+            >
+              <h3 className="font-semibold text-white">{item.title}</h3>
+              <p className="mt-2 text-sm text-white/65">{item.text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">Що вчити далі?</h2>
+      <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-2xl font-bold text-white">Що вчити далі?</h2>
 
-        <p className="text-slate-700">
+        <p className="mt-3 text-white/70">
           Щоб робити менше помилок, варто поєднувати лексику, граматику і
           практику. Почни з базових слів, потім додавай короткі фрази, а
           граматику вчи через приклади.
         </p>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Link
-            href="/slovatski-slova-z-perekladom"
-            className="rounded-xl border p-4 hover:bg-slate-50"
-          >
-            Словацькі слова з перекладом →
-          </Link>
-
-          <Link
-            href="/yak-vyvchyty-slovatsku-movu"
-            className="rounded-xl border p-4 hover:bg-slate-50"
-          >
-            Як вивчити словацьку з нуля →
-          </Link>
-
-          <Link
-            href="/slovak-grammar"
-            className="rounded-xl border p-4 hover:bg-slate-50"
-          >
-            Словацька граматика →
-          </Link>
-
-          <Link
-            href="/dictionary"
-            className="rounded-xl border p-4 hover:bg-slate-50"
-          >
-            Словацький словник →
-          </Link>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {[
+            {
+              href: "/slovatski-slova-z-perekladom",
+              label: "Словацькі слова з перекладом →",
+            },
+            {
+              href: "/yak-vyvchyty-slovatsku-movu",
+              label: "Як вивчити словацьку з нуля →",
+            },
+            {
+              href: "/slovak-grammar",
+              label: "Словацька граматика →",
+            },
+            {
+              href: "/dictionary",
+              label: "Словацький словник →",
+            },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">FAQ</h2>
+      <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-2xl font-bold text-white">FAQ</h2>
 
-        <div className="space-y-4">
+        <div className="mt-4 space-y-4">
           {FAQ.map((item) => (
-            <div key={item.q} className="rounded-xl border p-4">
-              <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-slate-700">{item.a}</div>
+            <div
+              key={item.q}
+              className="rounded-2xl border border-white/10 bg-white/5 p-4"
+            >
+              <div className="font-semibold text-white">{item.q}</div>
+              <div className="mt-2 text-white/65">{item.a}</div>
             </div>
           ))}
         </div>

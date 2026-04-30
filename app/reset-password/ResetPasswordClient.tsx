@@ -54,7 +54,7 @@ const dict: Record<Lang, ResetPasswordI18n> = {
     show: "Показать",
     hide: "Скрыть",
     min8: "Минимум 8 символов",
-    weak: "Пароль слишком слабый",
+    weak: "Пароль слишком слабкий",
     footer: "© 2026 Flunio — изучай языки каждый день.",
   },
   en: {
@@ -126,55 +126,58 @@ export default function ResetPasswordClient() {
 
   if (!token) {
     return (
-      <main className="min-h-[calc(100vh-64px)] bg-slate-50 flex items-center justify-center px-4 py-10">
+      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 py-10 text-white">
         <div className="w-full max-w-md">
-          <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
-            <div className="text-xl font-semibold">{t.bad}</div>
+          <div className="flunio-card rounded-3xl p-6">
+            <div className="text-xl font-semibold text-white">{t.bad}</div>
 
             <div className="mt-4">
-              <Link href="/login" className="text-sm underline">
+              <Link
+                href="/login"
+                className="text-sm font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+              >
                 {t.back}
               </Link>
             </div>
           </div>
 
-          <p className="mt-6 text-center text-xs text-slate-500">
-            {t.footer}
-          </p>
+          <p className="mt-6 text-center text-xs text-white/45">{t.footer}</p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-50 flex items-center justify-center px-4 py-10">
+    <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 py-10 text-white">
       <div className="w-full max-w-md">
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
-          <h1 className="text-2xl font-semibold">{t.title}</h1>
-          <p className="mt-2 text-sm text-slate-600">{t.subtitle}</p>
+        <div className="flunio-card rounded-3xl p-6">
+          <h1 className="text-2xl font-semibold text-white">{t.title}</h1>
+          <p className="mt-2 text-sm text-white/65">{t.subtitle}</p>
 
           {status === "ok" ? (
             <div className="mt-6 space-y-4">
-              <div className="text-slate-700">{t.ok}</div>
+              <div className="rounded-2xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+                {t.ok}
+              </div>
 
               <button
                 onClick={() => router.push("/login")}
-                className="px-4 py-2 rounded-xl bg-black text-white"
+                className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 {t.back}
               </button>
             </div>
           ) : (
             <div className="mt-6 space-y-4">
-              <div className="grid gap-1">
-                <label className="block text-sm font-medium text-slate-700">
+              <div className="grid gap-1.5">
+                <label className="block text-sm font-medium text-white/70">
                   {t.pass}
                 </label>
 
                 <div className="relative">
                   <input
                     type={showPw ? "text" : "password"}
-                    className="w-full border rounded-xl px-3 py-2 pr-24"
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 pr-24 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
@@ -182,37 +185,37 @@ export default function ResetPasswordClient() {
                   <button
                     type="button"
                     onClick={() => setShowPw((v) => !v)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-100"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
                   >
                     {showPw ? t.hide : t.show}
                   </button>
                 </div>
 
                 {!pwOk && password.length > 0 && (
-                  <div className="text-xs text-red-600">{t.min8}</div>
+                  <div className="text-xs text-red-300">{t.min8}</div>
                 )}
               </div>
 
-              <div className="grid gap-1">
-                <label className="block text-sm font-medium text-slate-700">
+              <div className="grid gap-1.5">
+                <label className="block text-sm font-medium text-white/70">
                   {t.pass2}
                 </label>
 
                 <input
                   type={showPw ? "text" : "password"}
-                  className="w-full border rounded-xl px-3 py-2"
+                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                   value={password2}
                   onChange={(e) => setPassword2(e.target.value)}
                   autoComplete="new-password"
                 />
 
                 {password2.length > 0 && !same && (
-                  <div className="text-xs text-red-600">{t.mismatch}</div>
+                  <div className="text-xs text-red-300">{t.mismatch}</div>
                 )}
               </div>
 
               {status === "bad" && (
-                <div className="text-sm text-red-600">
+                <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                   {errorCode === "PASSWORD_MISMATCH"
                     ? t.mismatch
                     : errorCode === "WEAK_PASSWORD"
@@ -221,16 +224,19 @@ export default function ResetPasswordClient() {
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
                 <button
                   onClick={submit}
                   disabled={!canSubmit}
-                  className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+                  className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
                 >
                   {t.btn}
                 </button>
 
-                <Link href="/login" className="text-sm underline">
+                <Link
+                  href="/login"
+                  className="text-sm font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+                >
                   {t.back}
                 </Link>
               </div>
@@ -238,7 +244,7 @@ export default function ResetPasswordClient() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-500">{t.footer}</p>
+        <p className="mt-6 text-center text-xs text-white/45">{t.footer}</p>
       </div>
     </main>
   );

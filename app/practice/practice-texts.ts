@@ -3,7 +3,7 @@ export const UI = {
     title: "Тренування 🏋️",
     loading: "Завантаження…",
     notEnoughTitle: "Недостатньо слів для тренування.",
-    notEnoughHint: "Додай хоча б 4 слова з перекладом для UA, RU або EN.",
+    notEnoughHint: "Додай хоча б 4 слова з перекладом, щоб почати тренування.",
     wordsSrs: "🧠 Повторення слів",
 
     setupTitle: "Налаштування тренування",
@@ -50,8 +50,8 @@ export const UI = {
     title: "Тренировка 🏋️",
     loading: "Загрузка…",
     notEnoughTitle: "Недостаточно слов для тренировки.",
-    notEnoughHint: "Добавь хотя бы 4 слова с переводом для UA, RU или EN.",
-    wordsSrs: "🧠 Повторение Слов",
+    notEnoughHint: "Добавь хотя бы 4 слова с переводом, чтобы начать тренировку.",
+    wordsSrs: "🧠 Повторение слов",
 
     setupTitle: "Настройки тренировки",
     setupCount: "Количество вопросов",
@@ -97,7 +97,7 @@ export const UI = {
     title: "Practice 🏋️",
     loading: "Loading…",
     notEnoughTitle: "Not enough words for practice.",
-    notEnoughHint: "Add at least 4 words with UA, RU or EN translation.",
+    notEnoughHint: "Add at least 4 words with translations to start practicing.",
     wordsSrs: "🧠 Words Review",
 
     setupTitle: "Practice settings",

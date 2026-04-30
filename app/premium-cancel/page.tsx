@@ -40,21 +40,21 @@ export default function PremiumCancel() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flunio-card rounded-3xl p-6 text-white">
         <h1 className="text-2xl font-bold">{t.title}</h1>
-        <p className="mt-2 text-slate-600">{t.text}</p>
+        <p className="mt-2 text-white/65">{t.text}</p>
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href="/premium"
-            className="inline-flex h-11 items-center justify-center rounded-2xl bg-black px-5 text-sm font-semibold text-white hover:opacity-90"
+            className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
           >
             {t.tryAgain}
           </Link>
 
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-900 hover:bg-slate-50"
+            className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 text-sm font-semibold text-white hover:bg-white/10 transition"
           >
             {t.backHome}
           </Link>
