@@ -354,16 +354,15 @@ async function sha1Hex(input: string) {
   return hashArr.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 const card =
-  "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
+  "flunio-card rounded-3xl shadow-[0_0_24px_rgba(34,211,238,0.08)]";
 
-const softCard =
-  "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+const softCard = "theme-home-soft-card rounded-2xl";
 
 const ghostButton =
-  "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+  "theme-secondary-button rounded-xl px-4 py-2 text-sm font-semibold transition";
 
 const activeButton =
-  "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]";
+  "theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold transition";
 
 function LetterList({
   items,
@@ -379,17 +378,17 @@ function LetterList({
       {items.map((item) => (
         <div
           key={item.value}
-          className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 last:border-b-0"
+          className="flex items-center justify-between gap-4 border-b border-slate-200/20 px-5 py-4 last:border-b-0"
         >
           <div>
-            <div className="text-lg font-semibold text-white">
-              <span className="text-cyan-200">{item.value}</span>{" "}
-              <span className="text-white/50">—</span> {tr(item.label, lang)}
+            <div className="text-lg font-semibold theme-text">
+              <span className="theme-accent-text">{item.value}</span>{" "}
+              <span className="theme-text-muted">—</span> {tr(item.label, lang)}
             </div>
 
-            <div className="mt-1 text-sm text-white/55">
+            <div className="mt-1 text-sm theme-text-muted">
               {exampleLabel}{" "}
-              <span className="font-medium text-white/80">{item.example}</span>
+              <span className="font-medium theme-text-muted">{item.example}</span>
             </div>
           </div>
 
@@ -664,17 +663,17 @@ export default function AlphabetPage({ forcedLang }: Props) {
   };
 
   return (
-    <div className="space-y-10 text-white">
+    <div className="space-y-10 theme-text">
       <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative">
-          <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+          <div className="theme-pill mb-4 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
             Grammar · Alphabet
           </div>
 
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight theme-text sm:text-4xl">
             {isPolish
               ? tr(UI.titlePl, uiLang)
               : isCzech
@@ -682,7 +681,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                 : tr(UI.titleSk, uiLang)}
           </h1>
 
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed theme-text-muted">
             {isPolish
               ? tr(UI.introPl, uiLang)
               : isCzech
@@ -693,11 +692,11 @@ export default function AlphabetPage({ forcedLang }: Props) {
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section1, uiLang)}
         </h2>
 
-        <div className={`${softCard} p-4 text-sm leading-relaxed text-white/75`}>
+        <div className={`${softCard} p-4 text-sm leading-relaxed theme-text-muted`}>
           {isPolish
             ? "a, ą, b, c, ć, d, e, ę, f, g, h, i, j, k, l, ł, m, n, ń, o, ó, p, q, r, s, ś, t, u, v, w, x, y, z, ź, ż"
             : isCzech
@@ -707,7 +706,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section2, uiLang)}
         </h2>
         <LetterList
@@ -718,7 +717,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section3, uiLang)}
         </h2>
         <LetterList
@@ -729,11 +728,11 @@ export default function AlphabetPage({ forcedLang }: Props) {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section4, uiLang)}
         </h2>
 
-        <div className={`${softCard} p-5 text-white/75`}>
+        <div className={`${softCard} p-5 theme-text-muted`}>
           {isPolish
             ? tr(UI.stressPl, uiLang)
             : isCzech
@@ -753,7 +752,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section5, uiLang)}
         </h2>
 
@@ -761,9 +760,9 @@ export default function AlphabetPage({ forcedLang }: Props) {
           {practiceWords.map((word) => (
             <div
               key={word}
-              className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 last:border-b-0"
+              className="flex items-center justify-between gap-4 border-b border-slate-200/20 px-5 py-4 last:border-b-0"
             >
-              <span className="font-semibold text-white">{word}</span>
+              <span className="font-semibold theme-text">{word}</span>
               <SpeakButton text={word} />
             </div>
           ))}
@@ -773,10 +772,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
       <section className={`${card} space-y-4 p-4 sm:p-6`}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h2 className="text-xl font-semibold text-white">
+            <h2 className="text-xl font-semibold theme-text">
               {tr(UI.section6, uiLang)}
             </h2>
-            <p className="mt-1 text-sm text-white/60">
+            <p className="mt-1 text-sm theme-text-muted">
               {tr(UI.miniIntro, uiLang)}
             </p>
           </div>
@@ -807,13 +806,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
           <div className="space-y-4">
             {!qDone ? (
               <>
-                <div className="text-sm text-white/50">
+                <div className="text-sm theme-text-muted">
                   {tr(UI.question, uiLang)} {qIndex + 1} / {quiz.length} •{" "}
                   {tr(UI.score, uiLang)}: {qScore}
                 </div>
 
                 <div className={`${softCard} p-4`}>
-                  <div className="font-semibold text-white">
+                  <div className="font-semibold theme-text">
                     {tr(quiz[qIndex].question, uiLang)}
                   </div>
 
@@ -829,7 +828,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                           if (last) setQDone(true);
                           else setQIndex((i) => i + 1);
                         }}
-                        className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
+                        className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left font-semibold theme-text transition hover:border-cyan-400/35 hover:bg-white/10"
                       >
                         {opt}
                       </button>
@@ -843,10 +842,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
               </>
             ) : (
               <div className={`${softCard} space-y-3 p-4`}>
-                <div className="text-lg font-semibold text-white">
+                <div className="text-lg font-semibold theme-text">
                   {tr(UI.done, uiLang)}
                 </div>
-                <div className="text-white/70">
+                <div className="theme-text-muted">
                   {tr(UI.result, uiLang)}: <b>{qScore}</b> /{" "}
                   <b>{quiz.length}</b>
                 </div>
@@ -862,13 +861,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
           <div className="space-y-4">
             {!lDone ? (
               <>
-                <div className="text-sm text-white/50">
+                <div className="text-sm theme-text-muted">
                   {tr(UI.round, uiLang)} {lIndex + 1} /{" "}
                   {listenRounds.length} • {tr(UI.score, uiLang)}: {lScore}
                 </div>
 
                 <div className={`${softCard} space-y-3 p-4`}>
-                  <div className="font-semibold text-white">
+                  <div className="font-semibold theme-text">
                     {tr(UI.listenPrompt, uiLang)}{" "}
                     <span className="text-cyan-200">
                       "{listenRounds[lIndex].target}"
@@ -891,7 +890,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                               if (last) setLDone(true);
                               else setLIndex((i) => i + 1);
                             }}
-                            className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-white transition hover:border-cyan-400/35 hover:bg-white/10"
+                            className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left theme-text transition hover:border-cyan-400/35 hover:bg-white/10"
                             type="button"
                           >
                             <span className="font-semibold">{word}</span>
@@ -910,10 +909,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
               </>
             ) : (
               <div className={`${softCard} space-y-3 p-4`}>
-                <div className="text-lg font-semibold text-white">
+                <div className="text-lg font-semibold theme-text">
                   {tr(UI.done, uiLang)}
                 </div>
-                <div className="text-white/70">
+                <div className="theme-text-muted">
                   {tr(UI.result, uiLang)}: <b>{lScore}</b> /{" "}
                   <b>{listenRounds.length}</b>
                 </div>
@@ -929,13 +928,13 @@ export default function AlphabetPage({ forcedLang }: Props) {
           <div className="space-y-4">
             {!tDone ? (
               <>
-                <div className="text-sm text-white/50">
+                <div className="text-sm theme-text-muted">
                   {tr(UI.word, uiLang)} {tIndex + 1} / {typeWords.length} •{" "}
                   {tr(UI.score, uiLang)}: {tScore}
                 </div>
 
                 <div className={`${softCard} space-y-3 p-4`}>
-                  <div className="font-semibold text-white">
+                  <div className="font-semibold theme-text">
                     {tr(UI.dictationPrompt, uiLang)}
                   </div>
 
@@ -948,11 +947,11 @@ export default function AlphabetPage({ forcedLang }: Props) {
                     onChange={(e) => setInput(e.target.value)}
                     disabled={status !== "idle"}
                     placeholder={tr(UI.inputPlaceholder, uiLang)}
-                    className={`w-full rounded-xl border bg-white/5 px-3 py-2 text-white placeholder:text-white/35 outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20 disabled:opacity-60 ${status === "correct"
-                        ? "border-emerald-400/70"
-                        : status === "wrong"
-                          ? "border-red-400/70"
-                          : "border-white/10"
+                    className={`theme-input w-full rounded-xl border px-3 py-2 outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20 disabled:opacity-60 ${status === "correct"
+                      ? "border-emerald-400/70"
+                      : status === "wrong"
+                        ? "border-red-400/70"
+                        : ""
                       }`}
                   />
 
@@ -977,7 +976,7 @@ export default function AlphabetPage({ forcedLang }: Props) {
                       ) : (
                         <div className="font-semibold text-red-300">
                           ❌ {tr(UI.wrongPrefix, uiLang)}{" "}
-                          <b className="text-white">{typeWords[tIndex]}</b>
+                          <b className="theme-text">{typeWords[tIndex]}</b>
                         </div>
                       )}
 
@@ -1018,10 +1017,10 @@ export default function AlphabetPage({ forcedLang }: Props) {
               </>
             ) : (
               <div className={`${softCard} space-y-3 p-4`}>
-                <div className="text-lg font-semibold text-white">
+                <div className="text-lg font-semibold theme-text">
                   {tr(UI.done, uiLang)}
                 </div>
-                <div className="text-white/70">
+                <div className="theme-text-muted">
                   {tr(UI.result, uiLang)}: <b>{tScore}</b> /{" "}
                   <b>{typeWords.length}</b>
                 </div>

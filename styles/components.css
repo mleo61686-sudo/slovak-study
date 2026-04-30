@@ -1,0 +1,185 @@
+.theme-flunio .flunio-card {
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    background:
+        radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.18), transparent 32%),
+        rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 34px rgba(34, 211, 238, 0.14);
+    backdrop-filter: blur(18px);
+}
+
+.theme-simple .flunio-card {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+.theme-flunio .flunio-card-soft {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.055);
+    backdrop-filter: blur(16px);
+}
+
+.theme-simple .flunio-card-soft {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #0f172a;
+}
+
+.theme-flunio .theme-menu-panel {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(11, 16, 32, 0.95);
+    color: white;
+}
+
+.theme-simple .theme-menu-panel {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.theme-flunio .theme-menu-item {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.theme-flunio .theme-menu-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.theme-simple .theme-menu-item {
+    color: #334155;
+}
+
+.theme-simple .theme-menu-item:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.theme-flunio .theme-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-simple .theme-divider {
+    border-top: 1px solid #e2e8f0;
+}
+
+.flunio-gradient-text {
+    background: linear-gradient(90deg, #22d3ee, #3b82f6, #d946ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.flunio-glow {
+    box-shadow:
+        0 0 22px rgba(34, 211, 238, 0.25),
+        0 0 38px rgba(217, 70, 239, 0.12);
+}
+
+.marquee {
+    overflow: hidden;
+}
+
+.marquee__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: marquee-scroll 26s linear infinite;
+}
+
+.marquee__group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 3rem;
+    padding: 0.6rem 3rem;
+}
+
+.marquee__item {
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.theme-flunio .theme-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+}
+
+.theme-simple .theme-footer {
+    border-top: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+.theme-flunio .theme-footer-link {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.theme-flunio .theme-footer-link:hover {
+    color: white;
+}
+
+.theme-simple .theme-footer-link {
+    color: #64748b;
+}
+
+.theme-simple .theme-footer-link:hover {
+    color: #0f172a;
+}
+
+.theme-flunio .theme-progress-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-simple .theme-progress-track {
+    background: #e2e8f0;
+}
+
+.theme-flunio .theme-input {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.theme-simple .theme-input {
+    border-color: #cbd5e1;
+    background: white;
+    color: #0f172a;
+}
+
+.theme-input::placeholder {
+    color: #94a3b8;
+}
+
+.theme-flunio .theme-pill {
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    background: rgba(34, 211, 238, 0.1);
+    color: #cffafe;
+}
+
+.theme-simple .theme-pill {
+    border: 1px solid #bae6fd;
+    background: #ecfeff;
+    color: #0369a1;
+}
+
+.theme-flunio .theme-accent-text {
+    color: #a5f3fc;
+}
+
+.theme-simple .theme-accent-text {
+    color: #0284c7;
+}

@@ -1,0 +1,47 @@
+:root {
+  --background: #050816;
+  --foreground: #f8fafc;
+}
+
+body.theme-flunio {
+  --background: #050816;
+  --foreground: #f8fafc;
+
+  background:
+    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.16), transparent 32%),
+    radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.16), transparent 30%),
+    linear-gradient(135deg, #050816 0%, #080d24 45%, #12051f 100%);
+  color: var(--foreground);
+}
+
+body.theme-simple {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  background: #f8fafc;
+  color: var(--foreground);
+}
+
+.theme-flunio .theme-text {
+  color: white;
+}
+
+.theme-simple .theme-text {
+  color: #0f172a;
+}
+
+.theme-flunio .theme-text-muted {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.theme-simple .theme-text-muted {
+  color: #64748b;
+}
+
+.theme-flunio .theme-text-subtle {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.theme-simple .theme-text-subtle {
+  color: #64748b;
+}

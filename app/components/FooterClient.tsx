@@ -47,10 +47,10 @@ export default function FooterClient() {
   const dict = t[safeLang];
 
   return (
-    <footer className="border-t border-white/10 bg-white/5 backdrop-blur">
-      <div className="mx-auto max-w-5xl px-4 py-6 text-sm text-white/60">
+    <footer className="theme-footer">
+      <div className="mx-auto max-w-5xl px-4 py-6 text-sm">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="text-left">
+          <div className="theme-text-muted text-left">
             © {new Date().getFullYear()} Flunio — {dict.slogan}
           </div>
 
@@ -58,34 +58,19 @@ export default function FooterClient() {
             aria-label="Footer"
             className="grid grid-cols-2 gap-x-6 gap-y-2 text-left sm:flex sm:flex-wrap sm:items-center sm:justify-end"
           >
-            <a
-              className="transition hover:text-white hover:underline"
-              href="/learn"
-            >
+            <a className="theme-footer-link transition hover:underline" href="/learn">
               {dict.courses}
             </a>
-            <a
-              className="transition hover:text-white hover:underline"
-              href="/grammar"
-            >
+            <a className="theme-footer-link transition hover:underline" href="/grammar">
               {dict.grammar}
             </a>
-            <a
-              className="transition hover:text-white hover:underline"
-              href="/dictionary"
-            >
+            <a className="theme-footer-link transition hover:underline" href="/dictionary">
               {dict.dictionary}
             </a>
-            <a
-              className="transition hover:text-white hover:underline"
-              href="/practice"
-            >
+            <a className="theme-footer-link transition hover:underline" href="/practice">
               {dict.practice}
             </a>
-            <a
-              className="transition hover:text-white hover:underline"
-              href="/support"
-            >
+            <a className="theme-footer-link transition hover:underline" href="/support">
               {dict.support}
             </a>
           </nav>

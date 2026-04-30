@@ -1,0 +1,16 @@
+html,
+body {
+  overflow-x: hidden;
+  min-height: 100%;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+body {
+  color: var(--foreground);
+}

@@ -305,16 +305,18 @@ function TopicCard({ topic, lang }: { topic: Topic; lang: Lang }) {
   return (
     <Link
       href={`/grammar/${topic.id}`}
-      className="group rounded-2xl border border-white/10 bg-white/5 p-5 text-white shadow-[0_0_18px_rgba(34,211,238,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
+      className="theme-home-soft-card group rounded-2xl p-5 shadow-[0_0_18px_rgba(34,211,238,0.06)] transition hover:-translate-y-0.5"
     >
       <div className="flex items-start justify-between gap-3">
-        <h2 className="text-lg font-semibold">{tr(topic.title, lang)}</h2>
-        <span className="text-cyan-200 opacity-0 transition group-hover:opacity-100">
+        <h2 className="theme-text text-lg font-semibold">
+          {tr(topic.title, lang)}
+        </h2>
+        <span className="theme-action-link opacity-0 transition group-hover:opacity-100">
           →
         </span>
       </div>
 
-      <p className="mt-1 text-sm text-white/65">
+      <p className="theme-text-muted mt-1 text-sm">
         {tr(topic.description, lang)}
       </p>
     </Link>
@@ -343,10 +345,10 @@ export default function GrammarClient() {
         : tr(UI.skIntro, lang);
 
   return (
-    <div className="space-y-6 text-white">
+    <div className="space-y-6">
       <section className="flunio-card rounded-3xl p-6">
-        <h1 className="text-2xl font-semibold">{title}</h1>
-        <p className="mt-2 text-white/65">{intro}</p>
+        <h1 className="theme-text text-2xl font-semibold">{title}</h1>
+        <p className="theme-text-muted mt-2">{intro}</p>
       </section>
 
       <div className="grid gap-4 sm:grid-cols-2">

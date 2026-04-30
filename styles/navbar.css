@@ -1,0 +1,73 @@
+.theme-flunio .theme-nav-link {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.theme-flunio .theme-nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.theme-simple .theme-nav-link {
+    color: #334155;
+}
+
+.theme-simple .theme-nav-link:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.theme-flunio .theme-nav-button {
+    border-color: rgba(255, 255, 255, 0.15);
+    color: white;
+}
+
+.theme-flunio .theme-nav-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-simple .theme-nav-button {
+    border-color: #cbd5e1;
+    color: #0f172a;
+    background: white;
+}
+
+.theme-simple .theme-nav-button:hover {
+    background: #f8fafc;
+}
+
+.theme-flunio .theme-icon-button {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.12);
+}
+
+.theme-flunio .theme-icon-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-simple .theme-icon-button {
+    border-color: #cbd5e1;
+    background: white;
+    color: #0f172a;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.theme-simple .theme-icon-button:hover {
+    background: #f8fafc;
+}
+
+/* 🌌 Flunio navbar */
+.theme-flunio .theme-navbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(5, 8, 22, 0.85);
+    color: white;
+}
+
+/* ☀️ Simple navbar */
+.theme-simple .theme-navbar {
+    border-bottom: 1px solid #e2e8f0;
+    background: rgba(255, 255, 255, 0.9);
+    color: #0f172a;
+    backdrop-filter: blur(10px);
+}

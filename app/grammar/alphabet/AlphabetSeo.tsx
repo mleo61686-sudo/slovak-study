@@ -585,10 +585,10 @@ const CONTENT: Record<Lang, CourseContent> = {
 
 function SectionBlock({ section }: { section: Section }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-[0_0_24px_rgba(34,211,238,0.06)] backdrop-blur">
-      <h3 className="text-xl font-semibold text-white">{section.heading}</h3>
+    <div className="theme-home-soft-card rounded-3xl p-5 shadow-[0_0_24px_rgba(34,211,238,0.06)]">
+      <h3 className="theme-text text-xl font-semibold">{section.heading}</h3>
 
-      <div className="mt-4 space-y-3 text-sm leading-relaxed text-white/70 sm:text-base">
+      <div className="theme-text-muted mt-4 space-y-3 text-sm leading-relaxed sm:text-base">
         {section.body?.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
@@ -601,11 +601,13 @@ function SectionBlock({ section }: { section: Section }) {
               return (
                 <li
                   key={item}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                  className="theme-home-soft-card rounded-2xl px-4 py-3"
                 >
-                  <span className="font-semibold text-cyan-100">{first}</span>
+                  <span className="theme-action-link font-semibold">
+                    {first}
+                  </span>
                   {rest.length ? (
-                    <span className="text-white/70">
+                    <span className="theme-text-muted">
                       {" "}
                       — {rest.join(" — ")}
                     </span>
@@ -630,21 +632,21 @@ export default function AlphabetSeo() {
   const content = CONTENT[safeLang][course];
 
   return (
-    <section className="space-y-6 text-white">
+    <section className="space-y-6">
       <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative space-y-4">
-          <div className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+          <div className="theme-pill inline-flex rounded-full px-3 py-1 text-xs font-semibold">
             SEO guide · Alphabet
           </div>
 
-          <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white">
+          <h2 className="theme-text text-3xl font-semibold leading-tight tracking-tight">
             {content.title}
           </h2>
 
-          <div className="space-y-3 text-sm leading-relaxed text-white/70 sm:text-base">
+          <div className="theme-text-muted space-y-3 text-sm leading-relaxed sm:text-base">
             {content.intro.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -656,8 +658,8 @@ export default function AlphabetSeo() {
         <SectionBlock key={section.heading} section={section} />
       ))}
 
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-[0_0_24px_rgba(34,211,238,0.06)] backdrop-blur">
-        <h3 className="text-xl font-semibold text-white">
+      <div className="theme-home-soft-card rounded-3xl p-5 shadow-[0_0_24px_rgba(34,211,238,0.06)]">
+        <h3 className="theme-text text-xl font-semibold">
           {content.nextLabel}
         </h3>
 
@@ -666,7 +668,7 @@ export default function AlphabetSeo() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="inline-flex rounded-2xl border border-cyan-400/25 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-100 transition hover:border-cyan-300/50 hover:bg-cyan-400/15"
+                className="theme-secondary-button inline-flex rounded-2xl px-4 py-2 text-sm font-semibold transition"
               >
                 {link.label} →
               </Link>
@@ -674,7 +676,7 @@ export default function AlphabetSeo() {
           ))}
         </ul>
 
-        <p className="mt-4 text-sm leading-relaxed text-white/70 sm:text-base">
+        <p className="theme-text-muted mt-4 text-sm leading-relaxed sm:text-base">
           {content.outro}
         </p>
       </div>

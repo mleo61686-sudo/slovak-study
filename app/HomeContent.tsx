@@ -3,9 +3,6 @@ import WordsStatsClient from "./components/home/WordsStatsClient";
 
 type Lang = "ua" | "ru" | "en";
 type SeoCourseId = "sk" | "cs" | "pl";
-type HomeVisualStyle = "flunio" | "minimal";
-
-const HOME_VISUAL_STYLE: HomeVisualStyle = "flunio";
 
 type PopularCard = {
   href: string;
@@ -467,7 +464,7 @@ export default function HomeContent({
           <div className="flex flex-wrap gap-3 pt-1">
             <Link
               href="/learning"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.45)] transition hover:-translate-y-0.5 active:translate-y-0"
+              className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
             >
               {tr.ctaLearning}
             </Link>
@@ -520,7 +517,7 @@ export default function HomeContent({
             >
               ✨ {tr.whatsNew}
               {latestBadge && (
-                <span className="rounded-full bg-cyan-400/20 px-2 py-0.5 font-bold text-cyan-700">
+                <span className="theme-latest-badge rounded-full px-2 py-0.5 font-bold">
                   {latestBadge}
                 </span>
               )}
@@ -594,7 +591,7 @@ export default function HomeContent({
             <div className="flex flex-col gap-3 sm:pt-2">
               <Link
                 href="/premium"
-                className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+                className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 {tr.premiumCta}
               </Link>
