@@ -115,6 +115,13 @@ const mistakes = [
   },
 ];
 
+const card = "flunio-card rounded-3xl";
+const softCard = "theme-home-soft-card rounded-2xl";
+const primaryButton =
+  "theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const secondaryButton =
+  "theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+
 export default function Page() {
   const faqSchema = {
     "@context": "https://schema.org",
@@ -130,7 +137,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 text-white">
+    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
         id="faq-schema-pomylky-v-slovatskii-movi"
         type="application/ld+json"
@@ -143,64 +150,52 @@ export default function Page() {
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative space-y-4">
-          <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
+          <div className="theme-pill inline-flex rounded-full px-3 py-1 text-xs font-semibold">
             Flunio Grammar
           </div>
 
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-extrabold tracking-tight theme-text sm:text-4xl">
             Типові помилки в словацькій мові
           </h1>
 
-          <p className="text-white/70">
+          <p className="theme-text-muted">
             Словацька мова здається близькою до української, але саме через цю
             схожість часто виникають помилки. Людина думає, що можна перекласти
             фразу дослівно, але словацькою це звучить неприродно або неправильно.
           </p>
 
-          <p className="text-white/70">
+          <p className="theme-text-muted">
             Нижче — часті помилки у словацькій мові, які роблять початківці:
             неправильні форми слів, дослівний переклад, плутанина між схожими
             словами та типові проблеми з прийменниками.
           </p>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link
-              href="/learning/a0-1"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
-            >
+            <Link href="/learning/a0-1" className={primaryButton}>
               Почати з A0 →
             </Link>
 
-            <Link
-              href="/yak-vyvchyty-slovatsku-movu"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10"
-            >
+            <Link href="/yak-vyvchyty-slovatsku-movu" className={secondaryButton}>
               Як вивчити словацьку
             </Link>
 
-            <Link
-              href="/slovatski-slova-z-perekladom"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10"
-            >
+            <Link href="/slovatski-slova-z-perekladom" className={secondaryButton}>
               Словацькі слова
             </Link>
 
-            <Link
-              href="/slovak-grammar"
-              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-cyan-400/40 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10"
-            >
+            <Link href="/slovak-grammar" className={secondaryButton}>
               Граматика
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="flunio-card rounded-3xl p-6">
-        <h2 className="text-2xl font-bold text-white">
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Чому виникають помилки у словацькій?
         </h2>
 
-        <div className="mt-4 space-y-3 text-white/70">
+        <div className="mt-4 space-y-3 theme-text-muted">
           <p>
             Багато українців швидко впізнають словацькі слова, бо мови мають
             спільне слов’янське коріння. Але схожість не означає, що можна
@@ -216,22 +211,19 @@ export default function Page() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="text-2xl font-bold theme-text">
           Часті помилки: неправильно → правильно
         </h2>
 
         <div className="space-y-4">
           {mistakes.map((item) => (
-            <div
-              key={item.wrong}
-              className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_0_20px_rgba(34,211,238,0.08)] backdrop-blur"
-            >
+            <div key={item.wrong} className={`${card} p-5`}>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl border border-red-400/25 bg-red-500/10 p-4">
                   <div className="text-sm font-semibold text-red-300">
                     Неправильно
                   </div>
-                  <div className="mt-1 text-lg font-bold text-red-100">
+                  <div className="mt-1 text-lg font-bold text-red-300">
                     {item.wrong}
                   </div>
                 </div>
@@ -240,67 +232,64 @@ export default function Page() {
                   <div className="text-sm font-semibold text-emerald-300">
                     Правильно
                   </div>
-                  <div className="mt-1 text-lg font-bold text-emerald-100">
+                  <div className="mt-1 text-lg font-bold text-emerald-300">
                     {item.correct}
                   </div>
                 </div>
               </div>
 
-              <p className="mt-3 text-white/70">
-                <strong className="text-white">Переклад:</strong> {item.ua}
+              <p className="mt-3 theme-text-muted">
+                <strong className="theme-text">Переклад:</strong> {item.ua}
               </p>
 
-              <p className="mt-2 text-white/70">
-                <strong className="text-white">Пояснення:</strong> {item.note}
+              <p className="mt-2 theme-text-muted">
+                <strong className="theme-text">Пояснення:</strong> {item.note}
               </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="flunio-card rounded-3xl p-6">
-        <h2 className="text-2xl font-bold text-white">
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           5 правил, які допоможуть уникати помилок
         </h2>
 
-        <ol className="mt-4 list-decimal space-y-3 pl-5 text-white/70">
+        <ol className="mt-4 list-decimal space-y-3 pl-5 theme-text-muted">
           <li>
-            <strong className="text-white">Не перекладай усе дослівно.</strong>{" "}
+            <strong className="theme-text">Не перекладай усе дослівно.</strong>{" "}
             Фраза, яка звучить нормально українською, може бути неприродною
             словацькою.
           </li>
           <li>
-            <strong className="text-white">Вчи слова у реченнях.</strong> Окреме
+            <strong className="theme-text">Вчи слова у реченнях.</strong> Окреме
             слово — це тільки половина знання. Важливо бачити його форму у
             фразі.
           </li>
           <li>
-            <strong className="text-white">Слухай вимову.</strong> Деякі слова
+            <strong className="theme-text">Слухай вимову.</strong> Деякі слова
             легко впізнати на письмі, але важче зрозуміти на слух.
           </li>
           <li>
-            <strong className="text-white">Звертай увагу на прийменники.</strong>{" "}
+            <strong className="theme-text">Звертай увагу на прийменники.</strong>{" "}
             Наприклад: do práce, v autobuse, na Slovensku.
           </li>
           <li>
-            <strong className="text-white">Повторюй правильні приклади.</strong>{" "}
+            <strong className="theme-text">Повторюй правильні приклади.</strong>{" "}
             Краще запам’ятати одну правильну фразу, ніж десять окремих слів без
             контексту.
           </li>
         </ol>
 
         <div className="pt-5">
-          <Link
-            href="/learning"
-            className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
-          >
+          <Link href="/learning" className={primaryButton}>
             Практикуватися у Flunio →
           </Link>
         </div>
       </section>
 
-      <section className="flunio-card rounded-3xl p-6">
-        <h2 className="text-2xl font-bold text-white">
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Які теми найчастіше викликають труднощі?
         </h2>
 
@@ -319,21 +308,18 @@ export default function Page() {
               text: "Деякі слова схожі на українські, але мають інше значення або інше вживання.",
             },
           ].map((item) => (
-            <div
-              key={item.title}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-400/35 hover:bg-white/10"
-            >
-              <h3 className="font-semibold text-white">{item.title}</h3>
-              <p className="mt-2 text-sm text-white/65">{item.text}</p>
+            <div key={item.title} className={`${softCard} p-4 transition`}>
+              <h3 className="font-semibold theme-text">{item.title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{item.text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="flunio-card rounded-3xl p-6">
-        <h2 className="text-2xl font-bold text-white">Що вчити далі?</h2>
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">Що вчити далі?</h2>
 
-        <p className="mt-3 text-white/70">
+        <p className="mt-3 theme-text-muted">
           Щоб робити менше помилок, варто поєднувати лексику, граматику і
           практику. Почни з базових слів, потім додавай короткі фрази, а
           граматику вчи через приклади.
@@ -358,28 +344,21 @@ export default function Page() {
               label: "Словацький словник →",
             },
           ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
-            >
+            <Link key={item.href} href={item.href} className={`${softCard} p-4 transition hover:-translate-y-0.5`}>
               {item.label}
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="flunio-card rounded-3xl p-6">
-        <h2 className="text-2xl font-bold text-white">FAQ</h2>
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="mt-4 space-y-4">
           {FAQ.map((item) => (
-            <div
-              key={item.q}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4"
-            >
-              <div className="font-semibold text-white">{item.q}</div>
-              <div className="mt-2 text-white/65">{item.a}</div>
+            <div key={item.q} className={`${softCard} p-4`}>
+              <div className="font-semibold theme-text">{item.q}</div>
+              <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
         </div>

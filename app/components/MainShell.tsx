@@ -14,7 +14,7 @@ export default function MainShell({
   return (
     <main
       className={[
-        "mx-auto w-full max-w-6xl px-4 text-white",
+        "mx-auto w-full max-w-6xl px-4 theme-text",
         "transition-colors duration-300",
         isLessonPage
           ? "min-h-[70vh] py-4"

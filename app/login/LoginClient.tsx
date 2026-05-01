@@ -138,31 +138,31 @@ export default function LoginClient() {
 
   return (
     <div className="mx-auto max-w-md py-10">
-      <div className="flunio-card relative overflow-hidden rounded-3xl p-6 text-white shadow-[0_0_30px_rgba(34,211,238,0.10)] sm:p-7">
+      <div className="flunio-card relative overflow-hidden rounded-3xl p-6 theme-text shadow-[0_0_30px_rgba(34,211,238,0.10)] sm:p-7">
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative">
           <div className="mb-6">
-            <div className="mb-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-cyan-100 backdrop-blur">
+            <div className="theme-pill mb-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
               Flunio
             </div>
 
-            <h1 className="text-2xl font-extrabold tracking-tight text-white">
+            <h1 className="text-2xl font-extrabold tracking-tight theme-text">
               {t.title}
             </h1>
-            <p className="mt-1 text-sm text-white/65">{t.hint}</p>
+            <p className="mt-1 text-sm theme-text-muted">{t.hint}</p>
           </div>
 
           <form onSubmit={onSubmit} className="grid gap-4">
             <div className="grid gap-1.5">
-              <label className="text-sm font-medium text-white/75">
+              <label className="text-sm font-medium theme-text-muted">
                 {t.email}
               </label>
 
               <input
-                className={`h-11 rounded-2xl border bg-white/5 px-3 text-sm text-white outline-none backdrop-blur placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20 ${
-                  emailOk ? "border-white/10" : "border-red-400/70"
+                className={`theme-input h-11 rounded-2xl px-3 text-sm outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20 ${
+                  emailOk ? "" : "border-red-400/70"
                 }`}
                 placeholder="name@example.com"
                 value={email}
@@ -180,13 +180,13 @@ export default function LoginClient() {
             </div>
 
             <div className="grid gap-1.5">
-              <label className="text-sm font-medium text-white/75">
+              <label className="text-sm font-medium theme-text-muted">
                 {t.password}
               </label>
 
               <div className="relative">
                 <input
-                  className="h-11 w-full rounded-2xl border border-white/10 bg-white/5 px-3 pr-24 text-sm text-white outline-none backdrop-blur placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                  className="theme-input h-11 w-full rounded-2xl px-3 pr-24 text-sm outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -198,7 +198,7 @@ export default function LoginClient() {
                 <button
                   type="button"
                   onClick={() => setShowPw((v) => !v)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/75 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+                  className="theme-secondary-button absolute right-2 top-1/2 -translate-y-1/2 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition"
                 >
                   {showPw ? t.hide : t.show}
                 </button>
@@ -207,22 +207,22 @@ export default function LoginClient() {
 
             <button
               disabled={loading}
-              className="mt-1 h-11 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
+              className="theme-primary-button mt-1 h-11 rounded-2xl text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
               type="submit"
             >
               {loading ? t.signingIn : t.signIn}
             </button>
 
             {msg && (
-              <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-sm text-red-200 backdrop-blur">
+              <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-3 py-2 text-sm text-red-300 backdrop-blur">
                 {msg}
               </div>
             )}
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70 backdrop-blur">
+            <div className="theme-home-soft-card rounded-2xl px-4 py-3 text-sm theme-text-muted">
               {t.noAccount}{" "}
               <Link
-                className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+                className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
                 href="/register"
               >
                 {t.register}
@@ -232,7 +232,7 @@ export default function LoginClient() {
             <div className="text-sm">
               <Link
                 href="/forgot-password"
-                className="font-medium text-white/60 underline decoration-white/20 underline-offset-4 transition hover:text-cyan-100"
+                className="font-medium theme-text-muted underline underline-offset-4 transition hover:opacity-80"
               >
                 {t.forgot}
               </Link>

@@ -48,6 +48,16 @@ const FAQ = [
   },
 ];
 
+const card = "flunio-card rounded-3xl";
+
+const softCard = "theme-home-soft-card rounded-2xl";
+
+const primaryButton =
+  "theme-primary-button rounded-xl px-4 py-2 font-semibold";
+
+const secondaryButton =
+  "theme-secondary-button rounded-xl px-4 py-2 font-semibold";
+
 export default function Page() {
   const faqSchema = {
     "@context": "https://schema.org",
@@ -63,7 +73,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10 text-white">
+    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10 theme-text">
       <Script
         id="faq-schema-polish-en"
         type="application/ld+json"
@@ -76,32 +86,29 @@ export default function Page() {
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative space-y-4">
-          <div className="inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+          <div className="theme-pill inline-flex rounded-full px-3 py-1 text-xs font-semibold">
             Flunio · Polish course
           </div>
 
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-extrabold leading-tight tracking-tight theme-text sm:text-4xl">
             Learn Polish online — structured course from A0 to B2
           </h1>
 
-          <p className="text-white/70">
+          <p className="theme-text-muted">
             Flunio helps you learn Polish online in a structured and practical
             way. Instead of jumping between random word lists, videos and grammar
             explanations, you can follow short lessons, practice vocabulary,
             listen to pronunciation and build your Polish step by step.
           </p>
 
-          <p className="text-white/70">
+          <p className="theme-text-muted">
             The Polish course is useful for learners who want to start from
             scratch, improve everyday communication or prepare for life, work,
             study or travel in Poland.
           </p>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link
-              href="/learning"
-              className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]"
-            >
+            <Link href="/learning" className={primaryButton}>
               Start learning Polish
             </Link>
 
@@ -110,11 +117,7 @@ export default function Page() {
               ["Polish dictionary", "/dictionary"],
               ["Polish grammar", "/grammar"],
             ].map(([label, href]) => (
-              <Link
-                key={href}
-                href={href}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
-              >
+              <Link key={href} href={href} className={secondaryButton}>
                 {label}
               </Link>
             ))}
@@ -124,17 +127,26 @@ export default function Page() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         {[
-          ["1) Polish lessons by level", "Lessons are organized from A0 to B2, so you always know what to learn next. This helps you avoid chaos and build Polish vocabulary and grammar in a logical order."],
-          ["2) Short daily practice", "Each lesson is short enough for daily learning. You can study for 10–20 minutes, complete exercises and return the next day without feeling overloaded."],
-          ["3) Audio pronunciation", "Polish pronunciation can be difficult at first. Audio helps you hear how words and phrases sound, repeat them aloud and improve your listening skills."],
-          ["4) Vocabulary and grammar together", "Flunio combines vocabulary, grammar, dictionary search and practice exercises, so you can learn words and understand how to use them in real sentences."],
+          [
+            "1) Polish lessons by level",
+            "Lessons are organized from A0 to B2, so you always know what to learn next. This helps you avoid chaos and build Polish vocabulary and grammar in a logical order.",
+          ],
+          [
+            "2) Short daily practice",
+            "Each lesson is short enough for daily learning. You can study for 10–20 minutes, complete exercises and return the next day without feeling overloaded.",
+          ],
+          [
+            "3) Audio pronunciation",
+            "Polish pronunciation can be difficult at first. Audio helps you hear how words and phrases sound, repeat them aloud and improve your listening skills.",
+          ],
+          [
+            "4) Vocabulary and grammar together",
+            "Flunio combines vocabulary, grammar, dictionary search and practice exercises, so you can learn words and understand how to use them in real sentences.",
+          ],
         ].map(([title, text]) => (
-          <div
-            key={title}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur"
-          >
-            <h2 className="text-lg font-bold text-cyan-100">{title}</h2>
-            <p className="mt-2 text-white/70">{text}</p>
+          <div key={title} className={`${card} p-5`}>
+            <h2 className="text-lg font-bold theme-accent-text">{title}</h2>
+            <p className="mt-2 theme-text-muted">{text}</p>
           </div>
         ))}
       </section>
@@ -160,10 +172,7 @@ export default function Page() {
                 <li>Move to A1, A2, B1 and B2 gradually.</li>
               </ol>
 
-              <Link
-                href="/learning/a0-1"
-                className="inline-flex rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 font-semibold text-white"
-              >
+              <Link href="/learning/a0-1" className={primaryButton}>
                 Go to A0 lessons →
               </Link>
             </>
@@ -197,11 +206,7 @@ export default function Page() {
                   ["Search vocabulary", "/dictionary"],
                   ["Practice exercises", "/practice"],
                 ].map(([label, href]) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
-                  >
+                  <Link key={href} href={href} className={secondaryButton}>
                     {label}
                   </Link>
                 ))}
@@ -227,21 +232,18 @@ export default function Page() {
           ),
         },
       ].map((section) => (
-        <section
-          key={section.title}
-          className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur"
-        >
-          <h2 className="text-2xl font-bold text-white">{section.title}</h2>
-          <div className="space-y-4 text-white/70">{section.body}</div>
+        <section key={section.title} className={`${card} space-y-4 p-6`}>
+          <h2 className="text-2xl font-bold theme-text">{section.title}</h2>
+          <div className="space-y-4 theme-text-muted">{section.body}</div>
         </section>
       ))}
 
-      <section className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           What makes Polish challenging for beginners?
         </h2>
 
-        <p className="text-white/70">
+        <p className="theme-text-muted">
           Polish is a Slavic language with rich grammar and pronunciation that
           can feel unusual at first. Learners often notice special sounds,
           changing word endings, verb forms and cases.
@@ -249,32 +251,32 @@ export default function Page() {
 
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            ["Pronunciation", "Polish has sounds and letter combinations such as sz, cz, rz, ż, ś, ć and ł."],
-            ["Cases", "Nouns and adjectives change depending on their role in a sentence."],
+            [
+              "Pronunciation",
+              "Polish has sounds and letter combinations such as sz, cz, rz, ż, ś, ć and ł.",
+            ],
+            [
+              "Cases",
+              "Nouns and adjectives change depending on their role in a sentence.",
+            ],
             ["Verb forms", "Polish verbs change by person, tense and meaning."],
           ].map(([title, text]) => (
-            <div
-              key={title}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4"
-            >
-              <h3 className="font-semibold text-cyan-100">{title}</h3>
-              <p className="mt-2 text-sm text-white/65">{text}</p>
+            <div key={title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-accent-text">{title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur">
-        <h2 className="text-2xl font-bold">FAQ</h2>
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
-            <div
-              key={item.q}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4"
-            >
-              <div className="font-semibold text-cyan-100">{item.q}</div>
-              <div className="mt-2 text-white/70">{item.a}</div>
+            <div key={item.q} className={`${softCard} p-4`}>
+              <div className="font-semibold theme-accent-text">{item.q}</div>
+              <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
         </div>

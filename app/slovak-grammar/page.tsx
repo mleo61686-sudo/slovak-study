@@ -44,6 +44,15 @@ const FAQ = [
   },
 ];
 
+const card = "flunio-card rounded-3xl";
+const softCard = "theme-home-soft-card rounded-2xl";
+const primaryButton =
+  "theme-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const secondaryButton =
+  "theme-secondary-button inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const textLink =
+  "font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80";
+
 export default function Page() {
   const faqSchema = {
     "@context": "https://schema.org",
@@ -56,7 +65,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 text-white">
+    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
         id="faq-schema-slovak-grammar-en"
         type="application/ld+json"
@@ -64,12 +73,12 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="flunio-card space-y-4 rounded-3xl p-8">
-        <h1 className="text-3xl font-extrabold sm:text-4xl">
+      <section className={`${card} space-y-4 p-8`}>
+        <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
           Slovak grammar online — cases, verbs, alphabet and examples
         </h1>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Slovak grammar becomes much easier when you learn it in a clear order.
           Instead of memorizing rules without context, Flunio helps you connect
           grammar with real words, examples and practice. You can start with the
@@ -77,7 +86,7 @@ export default function Page() {
           sentence patterns.
         </p>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           This page is a starting point for learning Slovak grammar online. It
           is useful for beginners who want to understand how Slovak works, and
           for learners who already know some vocabulary but feel confused by
@@ -85,122 +94,102 @@ export default function Page() {
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
-            href="/grammar"
-          >
+          <Link className={primaryButton} href="/grammar">
             Open grammar topics
           </Link>
 
-          <Link
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-            href="/learning/a0-1"
-          >
+          <Link className={secondaryButton} href="/learning/a0-1">
             Start A0 lessons →
           </Link>
 
-          <Link
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-            href="/dictionary"
-          >
+          <Link className={secondaryButton} href="/dictionary">
             Open dictionary
           </Link>
 
-          <Link
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-            href="/practice"
-          >
+          <Link className={secondaryButton} href="/practice">
             Practice exercises
           </Link>
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">1) Alphabet and pronunciation</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">
+            1) Alphabet and pronunciation
+          </h2>
+          <p className="mt-2 theme-text-muted">
             Start with Slovak letters, long and short vowels, soft sounds and
             pronunciation rules. This helps you read words correctly from the
             beginning.
           </p>
 
           <div className="mt-3">
-            <Link
-              className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
-              href="/grammar/alphabet"
-            >
+            <Link className={textLink} href="/grammar/alphabet">
               Start with the Slovak alphabet →
             </Link>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">2) Slovak verbs</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">2) Slovak verbs</h2>
+          <p className="mt-2 theme-text-muted">
             Learn how Slovak verbs change by person and tense. Begin with common
             verbs and present tense patterns before moving to more complex
             forms.
           </p>
 
           <div className="mt-3">
-            <Link
-              className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
-              href="/grammar/verbs-present"
-            >
+            <Link className={textLink} href="/grammar/verbs-present">
               Learn present tense verbs →
             </Link>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">3) Slovak cases</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">3) Slovak cases</h2>
+          <p className="mt-2 theme-text-muted">
             Cases explain why nouns, adjectives and pronouns change their
             endings. Learn them through examples instead of memorizing tables
             alone.
           </p>
 
           <div className="mt-3">
-            <Link
-              className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
-              href="/grammar/cases"
-            >
+            <Link className={textLink} href="/grammar/cases">
               Learn Slovak cases →
             </Link>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">4) Practice and vocabulary</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">
+            4) Practice and vocabulary
+          </h2>
+          <p className="mt-2 theme-text-muted">
             Grammar is easier when you see it in vocabulary and sentences. Use
             lessons, dictionary search and exercises to reinforce what you learn.
           </p>
 
           <div className="mt-3">
-            <Link
-              className="font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
-              href="/practice"
-            >
+            <Link className={textLink} href="/practice">
               Go to exercises →
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           How to learn Slovak grammar step by step
         </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           The best way to learn Slovak grammar is to combine rules with real
           examples. If you only read grammar tables, it is easy to forget them.
           But when you see a rule inside words and sentences that you already
           know, it becomes more natural.
         </p>
 
-        <ol className="list-decimal space-y-2 pl-5 text-white/65">
+        <ol className="list-decimal space-y-2 pl-5 theme-text-muted">
           <li>Learn the Slovak alphabet and pronunciation first.</li>
           <li>Build basic vocabulary with short daily lessons.</li>
           <li>Study simple sentence structure and word order.</li>
@@ -211,17 +200,19 @@ export default function Page() {
         </ol>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">Why Slovak cases are important</h2>
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Why Slovak cases are important
+        </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Cases are one of the most important parts of Slovak grammar. They show
           the role of a word in a sentence: who is doing something, who receives
           the action, where something is, where it goes, or who owns something.
           This is why Slovak words often change their endings.
         </p>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           At first, cases can look complicated. But you do not need to master
           all forms immediately. Start with common examples and everyday
           phrases, then slowly notice patterns. This is much more effective than
@@ -229,47 +220,43 @@ export default function Page() {
         </p>
 
         <div className="pt-2">
-          <Link
-            href="/grammar/cases"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/grammar/cases" className={secondaryButton}>
             Open Slovak cases →
           </Link>
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">Slovak verbs and present tense</h2>
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Slovak verbs and present tense
+        </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Slovak verbs change depending on the person: I, you, he, she, we, you
           plural and they. This is why a verb can have several forms. For
           beginners, the present tense is the best place to start because it is
           used in everyday communication all the time.
         </p>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Learn common verbs first, such as to be, to have, to go, to do, to
           want and to know. When you understand how these verbs work, it becomes
           easier to recognize similar patterns in new words.
         </p>
 
         <div className="pt-2">
-          <Link
-            href="/grammar/verbs-present"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/grammar/verbs-present" className={secondaryButton}>
             Open present tense →
           </Link>
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Learn grammar together with vocabulary
         </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Grammar should not block your progress. A practical approach is to
           learn useful vocabulary first, then use grammar to explain what you
           already see in examples. This works especially well for Slovak because
@@ -277,7 +264,7 @@ export default function Page() {
           phrases.
         </p>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Flunio connects grammar with lessons, dictionary search and practice.
           You can learn a word, hear its pronunciation, review it in exercises
           and then open a grammar topic when you want to understand the rule
@@ -285,40 +272,28 @@ export default function Page() {
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/learning"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/learning" className={secondaryButton}>
             Open lessons
           </Link>
 
-          <Link
-            href="/dictionary"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/dictionary" className={secondaryButton}>
             Search vocabulary
           </Link>
 
-          <Link
-            href="/practice"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/practice" className={secondaryButton}>
             Practice Slovak
           </Link>
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">FAQ</h2>
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
-            <div
-              key={item.q}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur"
-            >
-              <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-white/65">{item.a}</div>
+            <div key={item.q} className={`${softCard} p-4`}>
+              <div className="font-semibold theme-text">{item.q}</div>
+              <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
         </div>

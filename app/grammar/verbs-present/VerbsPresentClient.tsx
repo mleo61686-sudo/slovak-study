@@ -41,17 +41,26 @@ const FALLBACK_BY_COURSE: Record<GrammarCourseId, string> = {
   cs: "Já pracuji.",
   pl: "Ja pracuję.",
 };
-const card =
-  "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
 
-const softCard =
-  "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+const card = "flunio-card rounded-3xl";
+
+const softCard = "theme-home-soft-card rounded-2xl";
 
 const ghostButton =
-  "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+  "theme-secondary-button rounded-xl px-3 py-2 text-sm font-semibold";
 
 const activeButton =
-  "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]";
+  "theme-primary-button rounded-xl px-3 py-2 text-sm font-semibold";
+
+const rowClass =
+  "flex justify-between gap-4 border-b theme-divider px-5 py-4 last:border-b-0";
+
+const sectionRowClass =
+  "space-y-3 border-b theme-divider px-5 py-5 last:border-b-0";
+
+const cheatItem =
+  "theme-home-soft-card rounded-2xl px-4 py-3 theme-text-muted";
+
 export default function VerbsPresentClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
@@ -90,7 +99,10 @@ export default function VerbsPresentClient() {
       [activeVerbId, verbs]
     ) ?? verbs[0];
 
-  const pronounKeys = useMemo(() => Object.keys(pronouns) as PersonKey[], [pronouns]);
+  const pronounKeys = useMemo(
+    () => Object.keys(pronouns) as PersonKey[],
+    [pronouns]
+  );
 
   const examplesForSection4 = useMemo(
     () => (active ? genExamplesFromRows(active, grammarCourseId) : []),
@@ -174,41 +186,37 @@ export default function VerbsPresentClient() {
         ? ui.subtitlePl
         : ui.subtitleSk;
 
-
   return (
-    <div className="space-y-10 text-white">
+    <div className="space-y-10 theme-text">
       <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative">
-          <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+          <div className="theme-pill mb-4 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
             Grammar · Present tense
           </div>
 
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight theme-text sm:text-4xl">
             {title}
           </h1>
 
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed theme-text-muted">
             {subtitle}
           </p>
         </div>
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">{ui.s1}</h2>
+        <h2 className="text-xl font-semibold theme-text">{ui.s1}</h2>
 
         <div className={card}>
           {pronounKeys.map((k) => (
-            <div
-              key={k}
-              className="flex justify-between gap-4 border-b border-white/10 px-5 py-4 last:border-b-0"
-            >
-              <span className="font-semibold text-cyan-100">
+            <div key={k} className={rowClass}>
+              <span className="font-semibold theme-accent-text">
                 {pronouns[k].sk}
               </span>
-              <span className="text-white/65">
+              <span className="theme-text-muted">
                 {trWord(pronouns[k], uiLang)}
               </span>
             </div>
@@ -217,7 +225,7 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">{ui.s2}</h2>
+        <h2 className="text-xl font-semibold theme-text">{ui.s2}</h2>
 
         <div className={`${card} p-3`}>
           <div className="flex flex-wrap gap-2">
@@ -238,17 +246,18 @@ export default function VerbsPresentClient() {
 
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             <div className={`${softCard} p-4`}>
-              <div className="text-sm text-white/50">{ui.infinitive}</div>
-              <div className="text-lg font-semibold text-cyan-100">
+              <div className="text-sm theme-text-muted">{ui.infinitive}</div>
+              <div className="text-lg font-semibold theme-accent-text">
                 {active?.infinitive}
               </div>
-              <div className="mt-1 text-white/65">
+              <div className="mt-1 theme-text-muted">
                 {active ? trWord(active.meaning, uiLang) : "—"}
               </div>
             </div>
+
             <div className={`${softCard} p-4`}>
-              <div className="text-sm text-white/50">{ui.hint}</div>
-              <div className="text-white/65">
+              <div className="text-sm theme-text-muted">{ui.hint}</div>
+              <div className="theme-text-muted">
                 {active?.note ? trWord(active.note, uiLang) : "—"}
               </div>
             </div>
@@ -257,19 +266,19 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">{ui.s3}</h2>
+        <h2 className="text-xl font-semibold theme-text">{ui.s3}</h2>
 
         <div className={card}>
           {active?.rows.map((row) => (
             <div
               key={row.person}
-              className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 last:border-b-0"
+              className="flex items-center justify-between gap-4 border-b theme-divider px-5 py-4 last:border-b-0"
             >
               <div className="min-w-0">
-                <div className="font-semibold text-cyan-100">
+                <div className="font-semibold theme-accent-text">
                   {capFirst(row.full)}
                 </div>
-                <div className="text-sm text-white/55">
+                <div className="text-sm theme-text-muted">
                   {trWord(row.tr, uiLang)}
                 </div>
               </div>
@@ -281,7 +290,7 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">{ui.s4}</h2>
+        <h2 className="text-xl font-semibold theme-text">{ui.s4}</h2>
 
         <div className={card}>
           {examplesForSection4.map((ex, i) => {
@@ -291,12 +300,12 @@ export default function VerbsPresentClient() {
             return (
               <div
                 key={`${active?.id ?? "verb"}-${i}`}
-                className="space-y-3 border-b border-white/10 px-5 py-5 last:border-b-0"
+                className={sectionRowClass}
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="font-semibold text-white">{ex.sk}</div>
-                    <div className="text-sm text-white/55">
+                    <div className="font-semibold theme-text">{ex.sk}</div>
+                    <div className="text-sm theme-text-muted">
                       {trWord(ex, uiLang)}
                     </div>
                   </div>
@@ -306,23 +315,25 @@ export default function VerbsPresentClient() {
 
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div className={`${softCard} px-4 py-3`}>
-                    <div className="mb-1 text-xs font-semibold text-white/45">
+                    <div className="mb-1 text-xs font-semibold theme-text-subtle">
                       {ui.negation}
                     </div>
 
                     <div className="flex items-center justify-between gap-3">
-                      <div className="font-semibold text-cyan-100">{neg}</div>
+                      <div className="font-semibold theme-accent-text">
+                        {neg}
+                      </div>
                       <SpeakButton text={neg} kind="phrase" />
                     </div>
                   </div>
 
                   <div className={`${softCard} px-4 py-3`}>
-                    <div className="mb-1 text-xs font-semibold text-white/45">
+                    <div className="mb-1 text-xs font-semibold theme-text-subtle">
                       {ui.question}
                     </div>
 
                     <div className="flex items-center justify-between gap-3">
-                      <div className="font-semibold text-cyan-100">{q}</div>
+                      <div className="font-semibold theme-accent-text">{q}</div>
                       <SpeakButton text={q} kind="phrase" />
                     </div>
                   </div>
@@ -334,22 +345,26 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">{ui.s5}</h2>
+        <h2 className="text-xl font-semibold theme-text">{ui.s5}</h2>
 
         <div className={`${card} space-y-4 p-5`}>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="font-semibold text-white">{ui.quizA}</div>
-              <div className="text-sm text-white/50">
+              <div className="font-semibold theme-text">{ui.quizA}</div>
+              <div className="text-sm theme-text-muted">
                 {ui.score}:{" "}
-                <span className="font-semibold text-cyan-100">
+                <span className="font-semibold theme-accent-text">
                   {correctCount}
                 </span>{" "}
                 / {quiz.length}
               </div>
             </div>
 
-            <button type="button" onClick={handleResetQuiz} className={ghostButton}>
+            <button
+              type="button"
+              onClick={handleResetQuiz}
+              className={ghostButton}
+            >
               {ui.reset}
             </button>
           </div>
@@ -357,7 +372,7 @@ export default function VerbsPresentClient() {
           <div className="grid gap-3 sm:grid-cols-2">
             {quiz.map((q) => (
               <div key={q.person} className={`${softCard} space-y-2 p-4`}>
-                <div className="text-sm text-white/50">
+                <div className="text-sm theme-text-muted">
                   {capFirst(pronouns[q.person].sk)} + …
                 </div>
 
@@ -400,7 +415,7 @@ export default function VerbsPresentClient() {
                     ) : (
                       <span className="text-rose-300">
                         {ui.correctNo} {ui.correctForm}:{" "}
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold theme-text">
                           {q.correct}
                         </span>
                       </span>
@@ -415,31 +430,41 @@ export default function VerbsPresentClient() {
         <div className={`${card} space-y-4 p-5`}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="font-semibold text-white">{ui.quizB}</div>
-              <div className="text-sm text-white/50">
+              <div className="font-semibold theme-text">{ui.quizB}</div>
+              <div className="text-sm theme-text-muted">
                 {ui.target}:{" "}
-                <span className="font-semibold text-cyan-100">
+                <span className="font-semibold theme-accent-text">
                   {targetTr}
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setBuild([])} className={ghostButton}>
+              <button
+                type="button"
+                onClick={() => setBuild([])}
+                className={ghostButton}
+              >
                 {ui.clear}
               </button>
 
-              <button type="button" onClick={handleNextSentence} className={ghostButton}>
+              <button
+                type="button"
+                onClick={handleNextSentence}
+                className={ghostButton}
+              >
                 {ui.next}
               </button>
             </div>
           </div>
 
           <div className={`${softCard} p-4`}>
-            <div className="mb-2 text-sm text-white/50">{ui.yourSentence}</div>
+            <div className="mb-2 text-sm theme-text-muted">
+              {ui.yourSentence}
+            </div>
 
             <div className="flex items-center justify-between gap-3">
-              <div className="font-semibold text-white">
+              <div className="font-semibold theme-text">
                 {builtSentence || "—"}
               </div>
 
@@ -454,9 +479,9 @@ export default function VerbsPresentClient() {
                   {ui.correct}
                 </span>
               ) : builtSentence.length > 0 ? (
-                <span className="text-white/50">{ui.wrongHint}</span>
+                <span className="theme-text-muted">{ui.wrongHint}</span>
               ) : (
-                <span className="text-white/50">{ui.clickWords}</span>
+                <span className="theme-text-muted">{ui.clickWords}</span>
               )}
             </div>
           </div>
@@ -477,15 +502,12 @@ export default function VerbsPresentClient() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-white">{ui.s6}</h2>
+        <h2 className="text-xl font-semibold theme-text">{ui.s6}</h2>
 
         <div className={`${card} p-5`}>
           <ul className="space-y-2">
             {cheatItems.map((item, i) => (
-              <li
-                key={i}
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
-              >
+              <li key={i} className={cheatItem}>
                 {item}
               </li>
             ))}

@@ -126,43 +126,45 @@ export default function ResetPasswordClient() {
 
   if (!token) {
     return (
-      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 py-10 text-white">
+      <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 py-10 theme-text">
         <div className="w-full max-w-md">
           <div className="flunio-card rounded-3xl p-6">
-            <div className="text-xl font-semibold text-white">{t.bad}</div>
+            <div className="text-xl font-semibold theme-text">{t.bad}</div>
 
             <div className="mt-4">
               <Link
                 href="/login"
-                className="text-sm font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+                className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
               >
                 {t.back}
               </Link>
             </div>
           </div>
 
-          <p className="mt-6 text-center text-xs text-white/45">{t.footer}</p>
+          <p className="mt-6 text-center text-xs theme-text-subtle">
+            {t.footer}
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 py-10 text-white">
+    <main className="flex min-h-[calc(100vh-64px)] items-center justify-center px-4 py-10 theme-text">
       <div className="w-full max-w-md">
         <div className="flunio-card rounded-3xl p-6">
-          <h1 className="text-2xl font-semibold text-white">{t.title}</h1>
-          <p className="mt-2 text-sm text-white/65">{t.subtitle}</p>
+          <h1 className="text-2xl font-semibold theme-text">{t.title}</h1>
+          <p className="mt-2 text-sm theme-text-muted">{t.subtitle}</p>
 
           {status === "ok" ? (
             <div className="mt-6 space-y-4">
-              <div className="rounded-2xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100">
+              <div className="rounded-2xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
                 {t.ok}
               </div>
 
               <button
                 onClick={() => router.push("/login")}
-                className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+                className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
               >
                 {t.back}
               </button>
@@ -170,14 +172,14 @@ export default function ResetPasswordClient() {
           ) : (
             <div className="mt-6 space-y-4">
               <div className="grid gap-1.5">
-                <label className="block text-sm font-medium text-white/70">
+                <label className="block text-sm font-medium theme-text-muted">
                   {t.pass}
                 </label>
 
                 <div className="relative">
                   <input
                     type={showPw ? "text" : "password"}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 pr-24 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                    className="theme-input w-full rounded-2xl px-3 py-2 pr-24 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="new-password"
@@ -185,7 +187,7 @@ export default function ResetPasswordClient() {
                   <button
                     type="button"
                     onClick={() => setShowPw((v) => !v)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+                    className="theme-secondary-button absolute right-2 top-1/2 -translate-y-1/2 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition"
                   >
                     {showPw ? t.hide : t.show}
                   </button>
@@ -197,13 +199,13 @@ export default function ResetPasswordClient() {
               </div>
 
               <div className="grid gap-1.5">
-                <label className="block text-sm font-medium text-white/70">
+                <label className="block text-sm font-medium theme-text-muted">
                   {t.pass2}
                 </label>
 
                 <input
                   type={showPw ? "text" : "password"}
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                  className="theme-input w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                   value={password2}
                   onChange={(e) => setPassword2(e.target.value)}
                   autoComplete="new-password"
@@ -215,7 +217,7 @@ export default function ResetPasswordClient() {
               </div>
 
               {status === "bad" && (
-                <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                <div className="rounded-2xl border border-red-400/25 bg-red-500/10 px-4 py-3 text-sm text-red-300">
                   {errorCode === "PASSWORD_MISMATCH"
                     ? t.mismatch
                     : errorCode === "WEAK_PASSWORD"
@@ -228,14 +230,14 @@ export default function ResetPasswordClient() {
                 <button
                   onClick={submit}
                   disabled={!canSubmit}
-                  className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
+                  className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
                 >
                   {t.btn}
                 </button>
 
                 <Link
                   href="/login"
-                  className="text-sm font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+                  className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
                 >
                   {t.back}
                 </Link>
@@ -244,7 +246,9 @@ export default function ResetPasswordClient() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-white/45">{t.footer}</p>
+        <p className="mt-6 text-center text-xs theme-text-subtle">
+          {t.footer}
+        </p>
       </div>
     </main>
   );

@@ -52,6 +52,13 @@ const FAQ = [
   },
 ];
 
+const card = "flunio-card rounded-3xl";
+const softCard = "theme-home-soft-card rounded-2xl";
+const primaryButton =
+  "theme-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const secondaryButton =
+  "theme-secondary-button inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+
 export default function Page() {
   const faqSchema = {
     "@context": "https://schema.org",
@@ -67,7 +74,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 text-white">
+    <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
         id="faq-schema-czech-ua"
         type="application/ld+json"
@@ -75,19 +82,19 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <section className="flunio-card space-y-4 rounded-3xl p-8">
-        <h1 className="text-3xl font-extrabold sm:text-4xl">
+      <section className={`${card} space-y-4 p-8`}>
+        <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
           Вивчення чеської мови онлайн — курс з нуля до B2
         </h1>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Flunio допомагає вивчати чеську мову онлайн системно і без хаосу.
           Замість випадкових списків слів, відео та складних граматичних
           пояснень ти можеш проходити короткі уроки, слухати вимову, виконувати
           вправи та поступово будувати словниковий запас.
         </p>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Курс підходить для тих, хто починає з нуля, хоче покращити щоденне
           спілкування або вивчає чеську для життя, роботи, навчання чи
           документів у Чехії. Почни з A0 і рухайся далі до A1, A2, B1 та B2 у
@@ -95,73 +102,66 @@ export default function Page() {
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/learning"
-            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
-          >
+          <Link href="/learning" className={primaryButton}>
             Почати навчання
           </Link>
 
-          <Link
-            href="/learning/a0-1"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/learning/a0-1" className={secondaryButton}>
             Почати з A0 →
           </Link>
 
-          <Link
-            href="/dictionary"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/dictionary" className={secondaryButton}>
             Словник
           </Link>
 
-          <Link
-            href="/grammar"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/grammar" className={secondaryButton}>
             Граматика
           </Link>
 
-          <Link
-            href="/ru/vyvchennia-cheskoi-movy-online"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/ru/vyvchennia-cheskoi-movy-online" className={secondaryButton}>
             Русская версия →
           </Link>
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">1) Уроки чеської по рівнях</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">
+            1) Уроки чеської по рівнях
+          </h2>
+          <p className="mt-2 theme-text-muted">
             Матеріал організований від A0 до B2, щоб ти завжди розумів, що
             вчити далі. Це допомагає рухатися послідовно, а не стрибати між
             випадковими темами.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">2) Коротка щоденна практика</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">
+            2) Коротка щоденна практика
+          </h2>
+          <p className="mt-2 theme-text-muted">
             Уроки короткі, тому їх легко проходити щодня. 10–20 хвилин на день
             достатньо, щоб поступово накопичувати словниковий запас і не
             вигорати.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">3) Озвучка слів і фраз</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">
+            3) Озвучка слів і фраз
+          </h2>
+          <p className="mt-2 theme-text-muted">
             Чеську важливо не тільки читати, а й чути. Озвучка допомагає звикати
             до вимови, повторювати слова вголос і краще сприймати мову на слух.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-          <h2 className="text-lg font-bold">4) Словник і граматика разом</h2>
-          <p className="mt-2 text-white/65">
+        <div className={`${card} p-5`}>
+          <h2 className="text-lg font-bold theme-text">
+            4) Словник і граматика разом
+          </h2>
+          <p className="mt-2 theme-text-muted">
             У Flunio є уроки, словник, граматичні теми та вправи. Це дозволяє
             не просто запам’ятовувати слова, а й розуміти, як використовувати їх
             у реченнях.
@@ -169,19 +169,19 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Як почати вивчати чеську мову онлайн
         </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Якщо ти починаєш з нуля, не варто одразу намагатися вивчити всю
           граматику. Спочатку краще створити базу: найчастіші слова, прості
           фрази, вимова та базові конструкції. Коли в пам’яті вже є приклади,
           граматика сприймається значно легше.
         </p>
 
-        <ol className="list-decimal space-y-2 pl-5 text-white/65">
+        <ol className="list-decimal space-y-2 pl-5 theme-text-muted">
           <li>Почни з A0, якщо вивчаєш чеську з нуля.</li>
           <li>Проходь невеликі уроки з корисними словами.</li>
           <li>Слухай озвучку і повторюй слова вголос.</li>
@@ -192,21 +192,18 @@ export default function Page() {
         </ol>
 
         <div className="pt-2">
-          <Link
-            href="/learning/a0-1"
-            className="inline-flex rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
-          >
+          <Link href="/learning/a0-1" className={primaryButton}>
             Перейти до A0 →
           </Link>
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Що найскладніше у чеській для початківців?
         </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Чеська мова має багато спільного з іншими слов’янськими мовами, але
           все одно потребує системного підходу. Найчастіше складність викликають
           відмінки, закінчення слів, форми дієслів і вимова окремих звуків. Це
@@ -215,25 +212,25 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <h3 className="font-semibold">Вимова</h3>
-            <p className="mt-2 text-sm text-white/65">
+          <div className={`${softCard} p-4`}>
+            <h3 className="font-semibold theme-text">Вимова</h3>
+            <p className="mt-2 text-sm theme-text-muted">
               У чеській є характерні звуки та літери ř, č, š, ž, ě. Озвучка
               допомагає швидше звикнути до вимови.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <h3 className="font-semibold">Відмінки</h3>
-            <p className="mt-2 text-sm text-white/65">
+          <div className={`${softCard} p-4`}>
+            <h3 className="font-semibold theme-text">Відмінки</h3>
+            <p className="mt-2 text-sm theme-text-muted">
               Іменники та прикметники змінюються залежно від ролі у реченні. Це
               легше зрозуміти через готові приклади.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <h3 className="font-semibold">Дієслова</h3>
-            <p className="mt-2 text-sm text-white/65">
+          <div className={`${softCard} p-4`}>
+            <h3 className="font-semibold theme-text">Дієслова</h3>
+            <p className="mt-2 text-sm theme-text-muted">
               Дієслова змінюються за особами, часом і значенням. Починати краще
               з найчастіших дієслів у теперішньому часі.
             </p>
@@ -241,29 +238,31 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Чеська лексика для реальних ситуацій
         </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Хороше навчання чеської має давати не тільки окремі слова, а й лексику
           для реального життя: знайомство, покупки, транспорт, житло, робота,
           навчання, документи та щоденне спілкування.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <h3 className="font-semibold">Щоденна чеська</h3>
-            <p className="mt-2 text-white/65">
+          <div className={`${softCard} p-4`}>
+            <h3 className="font-semibold theme-text">Щоденна чеська</h3>
+            <p className="mt-2 theme-text-muted">
               Вчи слова і фрази для привітань, їжі, сім’ї, покупок, житла,
               транспорту та повсякденних розмов.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <h3 className="font-semibold">Чеська для роботи й навчання</h3>
-            <p className="mt-2 text-white/65">
+          <div className={`${softCard} p-4`}>
+            <h3 className="font-semibold theme-text">
+              Чеська для роботи й навчання
+            </h3>
+            <p className="mt-2 theme-text-muted">
               Поступово додавай слова для інструкцій, графіків, документів,
               комунікації, навчання і робочих ситуацій.
             </p>
@@ -271,54 +270,45 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Граматика має допомагати, а не блокувати навчання
         </h2>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Граматика важлива, але її краще вивчати тоді, коли вона пояснює вже
           знайомі приклади. Спочатку можна накопичувати слова і фрази, а потім
           відкривати граматичні теми, щоб зрозуміти, чому речення побудоване
           саме так.
         </p>
 
-        <p className="text-white/65">
+        <p className="theme-text-muted">
           Такий підхід особливо корисний для чеської, бо відмінки, дієслова і
           закінчення легше засвоюються не як суха теорія, а через контекст і
           повторення.
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/grammar"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/grammar" className={secondaryButton}>
             Відкрити граматику
           </Link>
 
-          <Link
-            href="/dictionary"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/dictionary" className={secondaryButton}>
             Відкрити словник
           </Link>
 
-          <Link
-            href="/practice"
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
-          >
+          <Link href="/practice" className={secondaryButton}>
             Перейти до вправ
           </Link>
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Кому підійде навчання чеської у Flunio
         </h2>
 
-        <div className="space-y-3 text-white/65">
+        <div className="space-y-3 theme-text-muted">
           <p>
             Flunio підійде тим, хто хоче вивчати чеську онлайн у простому,
             структурованому і практичному форматі. Це хороший варіант, якщо ти
@@ -335,17 +325,14 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="flunio-card space-y-4 rounded-3xl p-6">
-        <h2 className="text-2xl font-bold">FAQ</h2>
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="space-y-4">
           {FAQ.map((item) => (
-            <div
-              key={item.q}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur"
-            >
-              <div className="font-semibold">{item.q}</div>
-              <div className="mt-2 text-white/65">{item.a}</div>
+            <div key={item.q} className={`${softCard} p-4`}>
+              <div className="font-semibold theme-text">{item.q}</div>
+              <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
         </div>

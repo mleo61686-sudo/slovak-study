@@ -19,12 +19,12 @@ export default function ImageWithCredit({
       <img
         src={src}
         alt={alt}
-        className="w-full rounded-2xl border border-white/10 bg-white/5 object-cover shadow-[0_0_18px_rgba(34,211,238,0.08)] backdrop-blur"
+        className="w-full rounded-2xl border border-white/10 bg-white/5 object-cover shadow-[0_0_18px_rgba(34,211,238,0.08)] backdrop-blur theme-simple:border-slate-200 theme-simple:bg-white theme-simple:shadow-sm"
         loading="lazy"
       />
 
       {credit ? (
-        <figcaption className="mt-2 text-xs text-white/45">
+        <figcaption className="mt-2 text-xs theme-text-subtle">
           {credit}
         </figcaption>
       ) : null}

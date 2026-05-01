@@ -207,17 +207,20 @@ const UI: Record<string, LocalizedText> = {
   },
 };
 
-const card =
-  "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
+const card = "flunio-card rounded-3xl";
 
-const softCard =
-  "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+const softCard = "theme-home-soft-card rounded-2xl";
 
 const ghostButton =
-  "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+  "theme-secondary-button rounded-xl px-3 py-2 text-sm font-semibold";
 
 const activeButton =
-  "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]";
+  "theme-primary-button rounded-xl px-3 py-2 text-sm font-semibold";
+
+const rowDivider = "border-b border-white/10 last:border-b-0";
+
+const tipItem =
+  "theme-home-soft-card rounded-2xl px-4 py-3 theme-text-muted";
 
 function tr(text: LocalizedText, lang: Lang) {
   return text[lang] ?? text.ua ?? "";
@@ -291,21 +294,21 @@ export default function CasesClient() {
   };
 
   if (!mounted) {
-    return <div className="space-y-10 text-white">Loading…</div>;
+    return <div className="space-y-10 theme-text">Loading…</div>;
   }
 
   return (
-    <div className="space-y-10 text-white">
+    <div className="space-y-10 theme-text">
       <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative">
-          <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+          <div className="theme-pill mb-4 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
             Grammar · Cases
           </div>
 
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight theme-text sm:text-4xl">
             {isCzech
               ? tr(UI.titleCs, lang)
               : isPolish
@@ -313,7 +316,7 @@ export default function CasesClient() {
                 : tr(UI.titleSk, lang)}
           </h1>
 
-          <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70">
+          <p className="mt-3 max-w-3xl text-base leading-relaxed theme-text-muted">
             {isCzech
               ? tr(UI.introCs, lang)
               : isPolish
@@ -324,32 +327,36 @@ export default function CasesClient() {
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section1, lang)}
         </h2>
 
         <div className={card}>
           {cases.map((c) => (
-            <div
-              key={c.id}
-              className="space-y-3 border-b border-white/10 px-5 py-5 last:border-b-0"
-            >
+            <div key={c.id} className={`space-y-3 px-5 py-5 ${rowDivider}`}>
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="font-semibold text-cyan-100">
+                  <div className="font-semibold theme-accent-text">
                     {c.name.sk}{" "}
-                    <span className="text-white/45">—</span>{" "}
-                    <span className="text-white">
+                    <span className="theme-text-muted">—</span>{" "}
+                    <span className="theme-text">
                       {trPair(c.name.ua, c.name.ru, c.name.en, lang)}
                     </span>
                   </div>
 
-                  <div className="mt-1 text-sm text-white/60">
-                    <span className="font-semibold text-white/80">
+                  <div className="mt-1 text-sm theme-text-muted">
+                    <span className="font-semibold theme-text">
                       {c.questions.sk}
                     </span>{" "}
-                    <span className="text-white/45">
-                      ({trPair(c.questions.ua, c.questions.ru, c.questions.en, lang)})
+                    <span className="theme-text-muted">
+                      (
+                      {trPair(
+                        c.questions.ua,
+                        c.questions.ru,
+                        c.questions.en,
+                        lang
+                      )}
+                      )
                     </span>
                   </div>
                 </div>
@@ -357,11 +364,11 @@ export default function CasesClient() {
                 <SpeakButton text={c.questions.sk} kind="phrase" />
               </div>
 
-              <div className="text-sm leading-relaxed text-white/70">
+              <div className="text-sm leading-relaxed theme-text-muted">
                 {trPair(c.use.ua, c.use.ru, c.use.en, lang)}
               </div>
 
-              <div className="text-sm leading-relaxed text-white/50">
+              <div className="text-sm leading-relaxed theme-text-muted">
                 {trPair(c.rule.ua, c.rule.ru, c.rule.en, lang)}
               </div>
             </div>
@@ -370,20 +377,17 @@ export default function CasesClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section2, lang)}
         </h2>
 
         <div className={card}>
           {cases.map((c) => (
-            <div
-              key={c.id}
-              className="space-y-3 border-b border-white/10 px-5 py-5 last:border-b-0"
-            >
-              <div className="font-semibold text-cyan-100">
+            <div key={c.id} className={`space-y-3 px-5 py-5 ${rowDivider}`}>
+              <div className="font-semibold theme-accent-text">
                 {c.name.sk}{" "}
-                <span className="text-white/45">—</span>{" "}
-                <span className="text-white">
+                <span className="theme-text-muted">—</span>{" "}
+                <span className="theme-text">
                   {trPair(c.name.ua, c.name.ru, c.name.en, lang)}
                 </span>
               </div>
@@ -395,8 +399,8 @@ export default function CasesClient() {
                     className={`${softCard} flex items-center justify-between gap-3 px-4 py-3`}
                   >
                     <div className="min-w-0">
-                      <div className="font-semibold text-white">{ex.sk}</div>
-                      <div className="text-sm text-white/55">
+                      <div className="font-semibold theme-text">{ex.sk}</div>
+                      <div className="text-sm theme-text-muted">
                         {trWord(ex, lang)}
                       </div>
                     </div>
@@ -411,19 +415,19 @@ export default function CasesClient() {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section3, lang)}
         </h2>
 
         <div className={`${card} space-y-4 p-5`}>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="font-semibold text-white">
+              <div className="font-semibold theme-text">
                 {tr(UI.quizTitle, lang)}
               </div>
-              <div className="text-sm text-white/50">
+              <div className="text-sm theme-text-muted">
                 {tr(UI.score, lang)}{" "}
-                <span className="font-semibold text-cyan-100">
+                <span className="font-semibold theme-accent-text">
                   {correctCount}
                 </span>{" "}
                 / {quiz.length}
@@ -446,7 +450,7 @@ export default function CasesClient() {
           <div className="grid gap-3 sm:grid-cols-2">
             {quiz.map((q) => (
               <div key={q.caseId} className={`${softCard} space-y-2 p-4`}>
-                <div className="text-sm text-white/50">
+                <div className="text-sm theme-text-muted">
                   {lang === "ru"
                     ? q.prompt.ru
                     : lang === "en"
@@ -492,7 +496,7 @@ export default function CasesClient() {
                     ) : (
                       <span className="text-rose-300">
                         {tr(UI.wrongPrefix, lang)}{" "}
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold theme-text">
                           {q.correct}
                         </span>
                       </span>
@@ -507,12 +511,14 @@ export default function CasesClient() {
         <div className={`${card} space-y-4 p-5`}>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="font-semibold text-white">
+              <div className="font-semibold theme-text">
                 {tr(UI.builderTitle, lang)}
               </div>
-              <div className="text-sm text-white/50">
+              <div className="text-sm theme-text-muted">
                 {tr(UI.target, lang)}{" "}
-                <span className="font-semibold text-cyan-100">{targetTr}</span>
+                <span className="font-semibold theme-accent-text">
+                  {targetTr}
+                </span>
               </div>
             </div>
 
@@ -540,12 +546,12 @@ export default function CasesClient() {
           </div>
 
           <div className={`${softCard} p-4`}>
-            <div className="mb-2 text-sm text-white/50">
+            <div className="mb-2 text-sm theme-text-muted">
               {tr(UI.yourSentence, lang)}
             </div>
 
             <div className="flex items-center justify-between gap-3">
-              <div className="font-semibold text-white">
+              <div className="font-semibold theme-text">
                 {builtSentence || "—"}
               </div>
 
@@ -560,9 +566,9 @@ export default function CasesClient() {
                   {tr(UI.correct, lang)}
                 </span>
               ) : builtSentence.length > 0 ? (
-                <span className="text-white/50">{tr(UI.compare, lang)}</span>
+                <span className="theme-text-muted">{tr(UI.compare, lang)}</span>
               ) : (
-                <span className="text-white/50">
+                <span className="theme-text-muted">
                   {tr(UI.clickWords, lang)}
                 </span>
               )}
@@ -607,7 +613,7 @@ export default function CasesClient() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-semibold theme-text">
           {tr(UI.section4, lang)}
         </h2>
 
@@ -615,45 +621,23 @@ export default function CasesClient() {
           <ul className="space-y-2">
             {!isCzech && !isPolish ? (
               <>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip1Sk, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip2Sk, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip3Sk, lang)}
-                </li>
+                <li className={tipItem}>{tr(UI.tip1Sk, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip2Sk, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip3Sk, lang)}</li>
               </>
             ) : isCzech ? (
               <>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip1Cs, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip2Cs, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip3Cs, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip4Cs, lang)}
-                </li>
+                <li className={tipItem}>{tr(UI.tip1Cs, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip2Cs, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip3Cs, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip4Cs, lang)}</li>
               </>
             ) : (
               <>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip1Pl, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip2Pl, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip3Pl, lang)}
-                </li>
-                <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70">
-                  {tr(UI.tip4Pl, lang)}
-                </li>
+                <li className={tipItem}>{tr(UI.tip1Pl, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip2Pl, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip3Pl, lang)}</li>
+                <li className={tipItem}>{tr(UI.tip4Pl, lang)}</li>
               </>
             )}
           </ul>

@@ -83,7 +83,7 @@ async function buildLocalUrlsCached(
 export default function SpeakButton({
   text,
   kind = "word",
-  className = "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white shadow-[0_0_14px_rgba(34,211,238,0.08)] backdrop-blur transition hover:border-cyan-400/40 hover:bg-white/10 active:scale-[0.98]",
+  className = "theme-secondary-button rounded-xl px-3 py-2 text-sm font-medium shadow-[0_0_14px_rgba(34,211,238,0.08)] transition active:scale-[0.98]",
   title,
   label,
   asChild,
@@ -107,7 +107,7 @@ export default function SpeakButton({
     if (a) {
       try {
         a.pause();
-      } catch { }
+      } catch {}
       a.currentTime = 0;
       audioRef.current = null;
     }
@@ -190,7 +190,7 @@ export default function SpeakButton({
     if (lastAutoKeyRef.current === nextKey) return;
     lastAutoKeyRef.current = nextKey;
 
-    play(true).catch(() => { });
+    play(true).catch(() => {});
   }, [autoPlayKey, cleanText, kind, play]);
 
   if (asChild) {

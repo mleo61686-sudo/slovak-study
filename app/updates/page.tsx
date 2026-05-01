@@ -163,19 +163,19 @@ export default function UpdatesPage() {
 
   if (!sorted.length) {
     return (
-      <div className="w-full px-6 py-8 text-white">
+      <div className="w-full px-6 py-8 theme-text">
         <div className="mx-auto max-w-5xl">
           <div className="flunio-card rounded-3xl p-6">
             <div className="flex items-center justify-between gap-3">
-              <h1 className="text-2xl font-bold">{tr.title}</h1>
+              <h1 className="text-2xl font-bold theme-text">{tr.title}</h1>
               <Link
                 href="/"
-                className="text-sm font-semibold text-cyan-200 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-cyan-100"
+                className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
               >
                 ← {tr.back}
               </Link>
             </div>
-            <p className="mt-4 text-white/65">{tr.empty}</p>
+            <p className="mt-4 theme-text-muted">{tr.empty}</p>
           </div>
         </div>
       </div>
@@ -183,22 +183,22 @@ export default function UpdatesPage() {
   }
 
   return (
-    <div className="w-full py-8 text-white">
+    <div className="w-full py-8 theme-text">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-start gap-8 lg:grid-cols-[340px_minmax(0,1fr)]">
           <aside className="space-y-5 lg:sticky lg:top-24">
             <div className="flunio-card rounded-3xl p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h1 className="text-3xl font-bold tracking-tight">
+                  <h1 className="text-3xl font-bold tracking-tight theme-text">
                     {tr.title}
                   </h1>
-                  <p className="mt-2 text-white/65">{tr.subtitle}</p>
+                  <p className="mt-2 theme-text-muted">{tr.subtitle}</p>
                 </div>
 
                 <Link
                   href="/"
-                  className="inline-flex h-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-4 text-sm font-semibold text-white/80 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+                  className="theme-secondary-button inline-flex h-10 shrink-0 items-center justify-center rounded-2xl px-4 text-sm font-semibold transition"
                 >
                   ← {tr.back}
                 </Link>
@@ -207,10 +207,10 @@ export default function UpdatesPage() {
 
             <div className="flunio-card rounded-3xl p-4">
               <div className="flex items-center justify-between">
-                <div className="text-sm font-semibold text-white">
+                <div className="text-sm font-semibold theme-text">
                   {tr.months}
                 </div>
-                <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/55">
+                <span className="theme-pill rounded-full px-2 py-0.5 text-xs">
                   {sorted.length}
                 </span>
               </div>
@@ -218,7 +218,7 @@ export default function UpdatesPage() {
               <div className="mt-3 space-y-4">
                 {groups.map((g) => (
                   <div key={g.key}>
-                    <div className="px-2 text-xs font-semibold uppercase tracking-wide text-white/45">
+                    <div className="px-2 text-xs font-semibold uppercase tracking-wide theme-text-subtle">
                       {monthLabel(g.m, L)} {g.y}
                     </div>
 
@@ -235,8 +235,8 @@ export default function UpdatesPage() {
                             className={[
                               "w-full rounded-2xl border px-3 py-2 text-left transition",
                               isActive
-                                ? "border-cyan-400/45 bg-cyan-400/10 text-white shadow-[0_0_18px_rgba(34,211,238,0.16)]"
-                                : "border-white/10 bg-white/5 text-white/80 hover:border-cyan-400/35 hover:bg-white/10 hover:text-white",
+                                ? "border-cyan-400/45 bg-cyan-400/10 shadow-[0_0_18px_rgba(34,211,238,0.16)] ring-1 ring-cyan-400/15"
+                                : "theme-home-soft-card hover:border-cyan-400/35",
                             ].join(" ")}
                           >
                             <div className="flex items-start justify-between gap-3">
@@ -244,7 +244,9 @@ export default function UpdatesPage() {
                                 <div
                                   className={[
                                     "text-xs",
-                                    isActive ? "text-cyan-100/80" : "text-white/45",
+                                    isActive
+                                      ? "theme-accent-text"
+                                      : "theme-text-subtle",
                                   ].join(" ")}
                                 >
                                   {d.full}
@@ -252,7 +254,7 @@ export default function UpdatesPage() {
                                 <div
                                   className={[
                                     "mt-0.5 whitespace-normal break-words text-sm font-semibold leading-snug",
-                                    isActive ? "text-white" : "text-white/85",
+                                    isActive ? "theme-text" : "theme-text-muted",
                                   ].join(" ")}
                                 >
                                   {u.title[L] ?? u.title.ua}
@@ -263,8 +265,8 @@ export default function UpdatesPage() {
                                 className={[
                                   "mt-1 rounded-full px-2 py-0.5 text-[11px] font-bold",
                                   isActive
-                                    ? "bg-cyan-400/20 text-cyan-100"
-                                    : "border border-white/10 bg-white/5 text-white/55",
+                                    ? "bg-cyan-400/20 text-cyan-200 theme-simple:text-cyan-700"
+                                    : "theme-pill",
                                 ].join(" ")}
                               >
                                 {d.short}
@@ -285,15 +287,15 @@ export default function UpdatesPage() {
               <article className="flunio-card rounded-3xl p-4 sm:p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="text-sm text-white/45">
+                    <div className="text-sm theme-text-subtle">
                       {fmtDate(active.date).full}
                     </div>
-                    <h2 className="mt-1 text-2xl font-bold tracking-tight text-white">
+                    <h2 className="mt-1 text-2xl font-bold tracking-tight theme-text">
                       {active.title[L] ?? active.title.ua}
                     </h2>
                   </div>
 
-                  <div className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-sm font-bold text-cyan-100">
+                  <div className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-sm font-bold text-cyan-200 theme-simple:text-cyan-700">
                     {fmtDate(active.date).short}
                   </div>
                 </div>
@@ -302,7 +304,7 @@ export default function UpdatesPage() {
                   {(active.items[L] ?? active.items.ua ?? []).map((it) => (
                     <li key={it} className="flex gap-3">
                       <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.45)]" />
-                      <span className="text-white/70">{it}</span>
+                      <span className="theme-text-muted">{it}</span>
                     </li>
                   ))}
                 </ul>

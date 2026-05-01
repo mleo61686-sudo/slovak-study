@@ -31,45 +31,41 @@ export default async function SlangWordPage({ params }: PageProps) {
 
   const slang = getAllSlang();
 
-  const item = slang.find(
-    (s) => normalizeWord(s.sk) === normalizedWord
-  );
+  const item = slang.find((s) => normalizeWord(s.sk) === normalizedWord);
 
   if (!item) {
     notFound();
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 px-4 py-10">
+    <main className="mx-auto max-w-3xl space-y-6 px-4 py-10 theme-text">
       {/* HEADER */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-        <h1 className="text-3xl font-bold text-white">{item.sk}</h1>
+      <div className="theme-home-soft-card rounded-2xl p-6">
+        <h1 className="text-3xl font-bold theme-text">{item.sk}</h1>
 
-        <div className="mt-2 text-lg text-white/70">
+        <div className="mt-2 text-lg theme-text-muted">
           {item.ua} / {item.ru} / {item.en}
         </div>
       </div>
 
       {/* EXAMPLE */}
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-        <div className="text-sm text-white/50 mb-2">Приклад</div>
+      <div className="theme-home-soft-card rounded-2xl p-5">
+        <div className="mb-2 text-sm theme-text-muted">Приклад</div>
 
-        <div className="text-lg font-medium text-white">
-          {item.exampleSk}
-        </div>
+        <div className="text-lg font-medium theme-text">{item.exampleSk}</div>
 
-        <div className="text-white/70">
+        <div className="theme-text-muted">
           {item.exampleUa} / {item.exampleRu} / {item.exampleEn}
         </div>
       </div>
 
       {/* TAGS */}
       <div className="flex gap-2 text-sm">
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/70">
+        <span className="theme-pill rounded-full px-3 py-1">
           {item.level}
         </span>
 
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/70">
+        <span className="theme-pill rounded-full px-3 py-1">
           {item.category}
         </span>
       </div>

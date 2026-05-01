@@ -408,20 +408,20 @@ export default function PracticeClient({
   if (!ready) {
     return (
       <main className="mx-auto max-w-3xl p-4">
-        <div className="flunio-card rounded-3xl p-6 text-white">{t.loading}</div>
+        <div className="flunio-card rounded-3xl p-6 theme-text">{t.loading}</div>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-6 p-4 text-white">
+    <main className="mx-auto max-w-3xl space-y-6 p-4 theme-text">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">{t.title}</h1>
+        <h1 className="text-2xl font-semibold theme-text">{t.title}</h1>
 
         <div className="flex gap-2">
           <Link
             href="/practice/words"
-            className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80 backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+            className="theme-secondary-button rounded-2xl px-3 py-2 text-sm transition"
           >
             {t.wordsSrs}
           </Link>
@@ -430,22 +430,22 @@ export default function PracticeClient({
 
       {notEnough ? (
         <div className="flunio-card space-y-3 rounded-3xl p-6">
-          <p className="font-medium text-white">{t.notEnoughTitle}</p>
-          <p className="text-sm text-white/65">{t.notEnoughHint}</p>
+          <p className="font-medium theme-text">{t.notEnoughTitle}</p>
+          <p className="text-sm theme-text-muted">{t.notEnoughHint}</p>
         </div>
       ) : null}
 
       {phase === "setup" ? (
         <section className="flunio-card space-y-4 rounded-3xl p-6">
-          <h2 className="text-lg font-semibold">{t.setupTitle}</h2>
+          <h2 className="text-lg font-semibold theme-text">{t.setupTitle}</h2>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <div className="text-sm font-medium text-white/70">{t.setupCount}</div>
+              <div className="text-sm font-medium theme-text-muted">{t.setupCount}</div>
               <select
                 value={questionCount}
                 onChange={(e) => setQuestionCount(Number(e.target.value))}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none backdrop-blur transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                className="theme-select w-full rounded-2xl px-3 py-2 outline-none transition"
                 disabled={isBlitz}
               >
                 <option value={8}>8</option>
@@ -455,7 +455,7 @@ export default function PracticeClient({
               </select>
 
               {isBlitz ? (
-                <div className="text-xs text-white/50">
+                <div className="text-xs theme-text-subtle">
                   {uiLang === "en"
                     ? "Blitz uses a 60-second timer instead of a fixed question count."
                     : uiLang === "ru"
@@ -466,11 +466,11 @@ export default function PracticeClient({
             </div>
 
             <div className="space-y-2">
-              <div className="text-sm font-medium text-white/70">{t.setupMode}</div>
+              <div className="text-sm font-medium theme-text-muted">{t.setupMode}</div>
               <select
                 value={sessionMode}
                 onChange={(e) => setSessionMode(e.target.value as SessionMode)}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none backdrop-blur transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                className="theme-select w-full rounded-2xl px-3 py-2 outline-none transition"
               >
                 <option value="mixed">{t.modeMixed}</option>
                 <option value="mcq">{t.modeMcq}</option>
@@ -480,17 +480,17 @@ export default function PracticeClient({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/75 backdrop-blur">
-            <div className="mb-2 font-semibold">{t.record}</div>
+          <div className="theme-home-soft-card rounded-2xl p-4 text-sm theme-text-muted">
+            <div className="mb-2 font-semibold theme-text">{t.record}</div>
             <div className="flex flex-wrap gap-2">
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-                {t.accuracy}: <b>{stats.bestAccuracyPct}%</b>
+              <div className="theme-pill rounded-xl px-3 py-2">
+                {t.accuracy}: <b className="theme-text">{stats.bestAccuracyPct}%</b>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-                {t.bestStreak}: <b>{stats.bestStreak}</b>
+              <div className="theme-pill rounded-xl px-3 py-2">
+                {t.bestStreak}: <b className="theme-text">{stats.bestStreak}</b>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-                {t.bestScore}: <b>{stats.bestScore}</b>
+              <div className="theme-pill rounded-xl px-3 py-2">
+                {t.bestScore}: <b className="theme-text">{stats.bestScore}</b>
               </div>
             </div>
           </div>
@@ -498,7 +498,7 @@ export default function PracticeClient({
           <button
             onClick={() => startNew(slangTermList ?? undefined)}
             disabled={notEnough}
-            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 active:translate-y-0"
+            className="theme-primary-button rounded-2xl px-5 py-3 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 active:translate-y-0"
           >
             {t.start}
           </button>
@@ -507,43 +507,43 @@ export default function PracticeClient({
 
       {phase === "result" ? (
         <section className="flunio-card space-y-4 rounded-3xl p-6">
-          <h2 className="text-xl font-semibold text-white">{t.resultTitle}</h2>
+          <h2 className="text-xl font-semibold theme-text">{t.resultTitle}</h2>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-[0_0_22px_rgba(34,211,238,0.08)] backdrop-blur">
+          <div className="theme-home-soft-card rounded-3xl p-4">
             <div className="flex items-start gap-3">
               <div className="text-4xl">{resultMood.emoji}</div>
               <div>
-                <div className="text-lg font-semibold text-white">
+                <div className="text-lg font-semibold theme-text">
                   {resultMood.title}
                 </div>
-                <p className="mt-1 text-sm text-white/65">{resultMood.text}</p>
+                <p className="mt-1 text-sm theme-text-muted">{resultMood.text}</p>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3 text-sm text-white/75">
-            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-              {t.yourResult}: <b className="text-white">{score}</b> / {session.length}
+          <div className="flex flex-wrap gap-3 text-sm theme-text-muted">
+            <div className="theme-pill rounded-xl px-3 py-2">
+              {t.yourResult}: <b className="theme-text">{score}</b> / {session.length}
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-              {t.accuracy}: <b className="text-white">{accuracyPct}%</b>
+            <div className="theme-pill rounded-xl px-3 py-2">
+              {t.accuracy}: <b className="theme-text">{accuracyPct}%</b>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-              {t.bestStreak}: <b className="text-white">{bestStreakSession}</b>
+            <div className="theme-pill rounded-xl px-3 py-2">
+              {t.bestStreak}: <b className="theme-text">{bestStreakSession}</b>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/75 backdrop-blur">
-            <div className="mb-2 font-semibold text-white">{t.record}</div>
+          <div className="theme-home-soft-card rounded-2xl p-4 text-sm theme-text-muted">
+            <div className="mb-2 font-semibold theme-text">{t.record}</div>
             <div className="flex flex-wrap gap-2">
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-                {t.accuracy}: <b className="text-white">{stats.bestAccuracyPct}%</b>
+              <div className="theme-pill rounded-xl px-3 py-2">
+                {t.accuracy}: <b className="theme-text">{stats.bestAccuracyPct}%</b>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-                {t.bestStreak}: <b className="text-white">{stats.bestStreak}</b>
+              <div className="theme-pill rounded-xl px-3 py-2">
+                {t.bestStreak}: <b className="theme-text">{stats.bestStreak}</b>
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
-                {t.bestScore}: <b className="text-white">{stats.bestScore}</b>
+              <div className="theme-pill rounded-xl px-3 py-2">
+                {t.bestScore}: <b className="theme-text">{stats.bestScore}</b>
               </div>
             </div>
           </div>
@@ -551,7 +551,7 @@ export default function PracticeClient({
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => startNew(slangTermList ?? undefined)}
-              className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+              className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
             >
               {uiLang === "en"
                 ? "Play again 🔁"
@@ -566,7 +566,7 @@ export default function PracticeClient({
                 setSession([]);
                 setTimeLeft(null);
               }}
-              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/80 backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+              className="theme-secondary-button rounded-2xl px-5 py-3 text-sm font-semibold transition"
             >
               {uiLang === "en"
                 ? "Change settings ⚙️"
@@ -578,36 +578,33 @@ export default function PracticeClient({
             <button
               onClick={() => startNew(mistakes.map((m) => m.sk))}
               disabled={mistakes.length === 0}
-              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white/80 backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="theme-secondary-button rounded-2xl px-5 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t.retryMistakes}
             </button>
           </div>
 
           <div className="space-y-2 pt-2">
-            <div className="text-sm font-semibold text-white">{t.mistakesTitle}</div>
+            <div className="text-sm font-semibold theme-text">{t.mistakesTitle}</div>
 
             {mistakes.length === 0 ? (
-              <div className="text-sm text-white/65">{t.noMistakes}</div>
+              <div className="text-sm theme-text-muted">{t.noMistakes}</div>
             ) : (
               <div className="space-y-2">
                 {mistakes.slice(0, 20).map((m, idx) => {
                   const tr = uiLang === "en" ? m.en : uiLang === "ru" ? m.ru : m.ua;
                   return (
-                    <div
-                      key={`${m.sk}-${idx}`}
-                      className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur"
-                    >
+                    <div key={`${m.sk}-${idx}`} className="theme-home-soft-card rounded-2xl p-3">
                       <div className="flex items-center justify-between gap-3">
-                        <div className="font-medium text-white">
-                          {m.sk} — <span className="text-white/65">{tr}</span>
+                        <div className="font-medium theme-text">
+                          {m.sk} — <span className="theme-text-muted">{tr}</span>
                         </div>
                         <SpeakButton text={m.sk} />
                       </div>
                       {m.your ? (
-                        <div className="mt-1 text-sm text-white/55">
+                        <div className="mt-1 text-sm theme-text-subtle">
                           {t.yourAnswer}{" "}
-                          <span className="font-medium text-white/75">{m.your}</span>
+                          <span className="font-medium theme-text-muted">{m.your}</span>
                         </div>
                       ) : null}
                     </div>
@@ -622,13 +619,13 @@ export default function PracticeClient({
       {phase === "quiz" && qBase ? (
         <section className="flunio-card space-y-4 rounded-3xl p-6">
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm text-white/55">
+            <div className="flex items-center justify-between text-sm theme-text-subtle">
               <div>
                 {t.questionLabel} {current + 1} / {session.length}
               </div>
 
               <div className="flex items-center gap-2">
-                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/75">
+                <div className="theme-pill rounded-full px-3 py-1">
                   {isBlitz
                     ? t.blitzBadge
                     : qBase.mode === "mcq"
@@ -638,7 +635,7 @@ export default function PracticeClient({
 
                 <button
                   onClick={skip}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/75 transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white"
+                  className="theme-secondary-button rounded-full px-3 py-1 transition"
                 >
                   {t.skip}
                 </button>
@@ -646,7 +643,7 @@ export default function PracticeClient({
             </div>
 
             {isBlitz && timeLeft !== null ? (
-              <div className="rounded-2xl border border-cyan-400/25 bg-slate-950/70 px-4 py-3 text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur">
+              <div className="theme-home-soft-card rounded-2xl px-4 py-3 theme-text">
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-medium">⚡ {t.blitzBadge}</span>
                   <span className="font-semibold">
@@ -654,7 +651,7 @@ export default function PracticeClient({
                   </span>
                 </div>
 
-                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
+                <div className="theme-progress-track mt-2 h-2 w-full overflow-hidden rounded-full">
                   <div
                     className="h-2 bg-gradient-to-r from-cyan-400 via-blue-400 to-fuchsia-400 transition-all"
                     style={{
@@ -665,7 +662,7 @@ export default function PracticeClient({
               </div>
             ) : null}
 
-            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+            <div className="theme-progress-track h-2 w-full overflow-hidden rounded-full">
               <div
                 className="h-2 bg-gradient-to-r from-cyan-400 via-blue-400 to-fuchsia-400"
                 style={{ width: `${progressPct}%` }}
@@ -673,16 +670,16 @@ export default function PracticeClient({
             </div>
 
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-white/55">
+              <span className="theme-text-subtle">
                 {t.progress}: {progressPct}% • {t.accuracy}: {accuracyPct}%
               </span>
 
               <span
                 className={`rounded-full border px-2 py-1 text-xs font-medium
-            ${streakLevel === "legend" ? "border-purple-400/30 bg-purple-500/15 text-purple-200" : ""}
-            ${streakLevel === "fire" ? "border-orange-400/30 bg-orange-500/15 text-orange-200" : ""}
-            ${streakLevel === "warm" ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-200" : ""}
-            ${streakLevel === "none" ? "border-white/10 bg-white/5 text-white/60" : ""}
+            ${streakLevel === "legend" ? "border-purple-400/30 bg-purple-500/15 text-purple-300" : ""}
+            ${streakLevel === "fire" ? "border-orange-400/30 bg-orange-500/15 text-orange-300" : ""}
+            ${streakLevel === "warm" ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-300" : ""}
+            ${streakLevel === "none" ? "theme-pill" : ""}
           `}
               >
                 🔥 {streak}
@@ -696,9 +693,9 @@ export default function PracticeClient({
             return (
               <>
                 <div className="space-y-2">
-                  <p className="text-lg font-medium text-white">{prompt}</p>
+                  <p className="text-lg font-medium theme-text">{prompt}</p>
 
-                  <div className="flex items-center gap-2 text-sm text-white/60">
+                  <div className="flex items-center gap-2 text-sm theme-text-muted">
                     <span>{t.listen}</span>
 
                     {canRevealAnswer ? (
@@ -712,7 +709,7 @@ export default function PracticeClient({
                       <button
                         type="button"
                         disabled
-                        className="cursor-not-allowed rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/50 opacity-60"
+                        className="cursor-not-allowed rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs theme-text-subtle opacity-60 theme-simple:border-slate-200 theme-simple:bg-slate-100"
                         title={t.revealLock}
                       >
                         🔒
@@ -746,10 +743,10 @@ export default function PracticeClient({
                               }
                             }}
                             className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition
-                        ${isCorrect ? "border-emerald-400/45 bg-emerald-500/15 text-emerald-100" : ""}
-                        ${isWrong ? "border-red-400/45 bg-red-500/15 text-red-100" : ""}
+                        ${isCorrect ? "border-emerald-400/45 bg-emerald-500/15 text-emerald-300" : ""}
+                        ${isWrong ? "border-red-400/45 bg-red-500/15 text-red-300" : ""}
                         ${!selected
-                                ? "cursor-pointer border-white/10 bg-white/5 text-white hover:border-cyan-400/35 hover:bg-white/10"
+                                ? "theme-secondary-button cursor-pointer hover:-translate-y-0.5"
                                 : "cursor-default opacity-95"
                               }
                       `}
@@ -770,7 +767,7 @@ export default function PracticeClient({
                                 text={option}
                                 asChild
                                 label="🔊"
-                                className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs text-white hover:bg-white/10"
+                                className="theme-secondary-button rounded-lg px-2 py-1 text-xs"
                               />
                             </span>
                           </div>
@@ -799,12 +796,12 @@ export default function PracticeClient({
 
                     {selected && !isBlitz && (
                       <div className="space-y-3">
-                        <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
+                        <div className="theme-home-soft-card rounded-2xl px-4 py-3 text-sm theme-text-muted">
                           {helper}
                         </div>
                         <button
                           onClick={goNext}
-                          className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+                          className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
                         >
                           {t.next}
                         </button>
@@ -812,7 +809,7 @@ export default function PracticeClient({
                     )}
 
                     {selected && isBlitz && (
-                      <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
+                      <div className="theme-home-soft-card rounded-2xl px-4 py-3 text-sm theme-text-muted">
                         {helper}
                       </div>
                     )}
@@ -824,17 +821,17 @@ export default function PracticeClient({
                         value={typed}
                         onChange={(e) => setTyped(e.target.value)}
                         placeholder={t.placeholder}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-white outline-none placeholder:text-white/35 transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+                        className="theme-input w-full rounded-2xl px-4 py-3 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                         disabled={!!typedChecked}
                       />
 
-                      <div className="text-sm text-white/50">{t.hintNoDiacritics}</div>
+                      <div className="text-sm theme-text-subtle">{t.hintNoDiacritics}</div>
 
                       {!typedChecked ? (
                         <button
                           onClick={checkTyping}
                           disabled={!typed.trim()}
-                          className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 active:translate-y-0"
+                          className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 active:translate-y-0"
                         >
                           {t.check}
                         </button>
@@ -842,8 +839,8 @@ export default function PracticeClient({
                         <div className="space-y-3">
                           <div
                             className={`rounded-2xl border px-4 py-3 text-sm ${typedChecked.ok
-                                ? "border-emerald-400/45 bg-emerald-500/15 text-emerald-100"
-                                : "border-red-400/45 bg-red-500/15 text-red-100"
+                              ? "border-emerald-400/45 bg-emerald-500/15 text-emerald-300"
+                              : "border-red-400/45 bg-red-500/15 text-red-300"
                               }`}
                           >
                             <div className="text-sm font-medium">
@@ -862,14 +859,14 @@ export default function PracticeClient({
                             {typedChecked.ok ? t.correct : `${t.wrongPrefix} ${qBase.sk}`}
                           </div>
 
-                          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
+                          <div className="theme-home-soft-card rounded-2xl px-4 py-3 text-sm theme-text-muted">
                             {helper}
                           </div>
 
                           {!isBlitz ? (
                             <button
                               onClick={goNext}
-                              className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+                              className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
                             >
                               {t.next}
                             </button>

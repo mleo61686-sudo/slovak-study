@@ -310,19 +310,19 @@ export default function OnboardingOverlay() {
       />
 
       <div
-        className="fixed z-[10000] max-w-xs rounded-2xl border border-white/10 bg-[#0b1020]/95 p-4 text-white shadow-[0_0_28px_rgba(34,211,238,0.22)] backdrop-blur-xl"
+        className="theme-menu-panel fixed z-[10000] max-w-xs rounded-2xl p-4 shadow-[0_0_28px_rgba(34,211,238,0.22)] backdrop-blur-xl"
         style={{
           top: tooltipTop,
           left: tooltipLeft,
           width: tooltipWidth,
         }}
       >
-        <div className="text-sm font-medium text-white/85">{step.text}</div>
+        <div className="text-sm font-medium theme-text">{step.text}</div>
 
         <div className="mt-3 flex justify-between gap-2">
           <button
             onClick={finish}
-            className="text-xs font-medium text-white/45 transition hover:text-white/75"
+            className="text-xs font-medium theme-text-subtle transition hover:opacity-80"
             type="button"
           >
             {SKIP_TEXT[safeLang]}
@@ -330,7 +330,7 @@ export default function OnboardingOverlay() {
 
           <button
             onClick={next}
-            className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-1.5 text-xs font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0"
+            className="theme-primary-button rounded-xl px-3 py-1.5 text-xs font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
             type="button"
           >
             {step.button}

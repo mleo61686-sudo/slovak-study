@@ -279,7 +279,7 @@ const FEATURES: readonly FeatureRow[] = [
 
 function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-amber-300/30 bg-amber-400/15 px-2 py-0.5 text-xs font-bold text-amber-100">
+    <span className="inline-flex items-center rounded-full border border-amber-300/30 bg-amber-400/15 px-2 py-0.5 text-xs font-bold text-amber-300">
       {children}
     </span>
   );
@@ -358,39 +358,39 @@ export default function PremiumClient() {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 theme-text">
       <header className="space-y-2 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="text-3xl font-semibold tracking-tight theme-text sm:text-4xl">
           {t.topTitle}
         </h1>
-        <p className="text-white/65">{t.topSubtitle}</p>
+        <p className="theme-text-muted">{t.topSubtitle}</p>
       </header>
 
-      <section className="flunio-card relative overflow-hidden rounded-3xl p-8 text-white shadow-[0_0_30px_rgba(34,211,238,0.10)]">
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-8 theme-text shadow-[0_0_30px_rgba(34,211,238,0.10)]">
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-4">
-            <div className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
+            <div className="theme-pill inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
               {t.badge}
             </div>
 
-            <h2 className="text-2xl font-semibold">{t.title}</h2>
-            <p className="max-w-2xl text-white/80">{t.subtitle}</p>
+            <h2 className="text-2xl font-semibold theme-text">{t.title}</h2>
+            <p className="max-w-2xl theme-text-muted">{t.subtitle}</p>
 
             {!isPremium ? (
               <div className="space-y-2">
-                <div className="text-sm font-semibold text-white/90">
+                <div className="text-sm font-semibold theme-text">
                   {t.planTitle}
                 </div>
 
-                <div className="inline-flex rounded-2xl border border-white/15 bg-white/5 p-1">
+                <div className="theme-home-soft-card inline-flex rounded-2xl p-1">
                   <button
                     type="button"
                     onClick={() => setInterval("month")}
                     className={[
                       "h-9 rounded-xl px-4 text-sm font-semibold transition",
                       interval === "month"
-                        ? "bg-white text-slate-900"
-                        : "text-white/85 hover:bg-white/10",
+                        ? "bg-white text-slate-900 shadow-sm theme-simple:bg-slate-900 theme-simple:text-white"
+                        : "theme-text-muted hover:bg-white/10 theme-simple:hover:bg-slate-100",
                     ].join(" ")}
                   >
                     {t.planMonth}
@@ -402,8 +402,8 @@ export default function PremiumClient() {
                     className={[
                       "relative h-9 rounded-xl px-4 text-sm font-semibold transition",
                       interval === "year"
-                        ? "bg-white text-slate-900"
-                        : "text-white/85 hover:bg-white/10",
+                        ? "bg-white text-slate-900 shadow-sm theme-simple:bg-slate-900 theme-simple:text-white"
+                        : "theme-text-muted hover:bg-white/10 theme-simple:hover:bg-slate-100",
                     ].join(" ")}
                   >
                     <span className="inline-flex items-center gap-2">
@@ -415,7 +415,7 @@ export default function PremiumClient() {
                   </button>
                 </div>
 
-                <div className="text-xs text-white/65">{t.planHint}</div>
+                <div className="text-xs theme-text-muted">{t.planHint}</div>
               </div>
             ) : null}
 
@@ -423,19 +423,19 @@ export default function PremiumClient() {
               {t.bullets.map((item) => (
                 <li
                   key={item}
-                  className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/90"
+                  className="theme-home-soft-card rounded-2xl px-4 py-3 text-sm theme-text"
                 >
                   {item}
                 </li>
               ))}
             </ul>
 
-            <div className="text-sm text-white/70">{t.priceNote}</div>
+            <div className="text-sm theme-text-muted">{t.priceNote}</div>
           </div>
 
           <div className="flex flex-col gap-3 sm:pt-2">
             {isLoadingSession ? (
-              <div className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white/80">
+              <div className="theme-secondary-button inline-flex h-11 items-center justify-center rounded-2xl px-6 text-sm font-semibold">
                 {t.loading}
               </div>
             ) : !isPremium ? (
@@ -450,7 +450,7 @@ export default function PremiumClient() {
                       key={currency}
                       onClick={() => handleCheckout(currency)}
                       disabled={!!loading}
-                      className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-6 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
+                      className="theme-primary-button inline-flex h-11 items-center justify-center rounded-2xl px-6 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
                     >
                       {loading === currency
                         ? t.opening
@@ -471,13 +471,13 @@ export default function PremiumClient() {
 
             <a
               href={isPremium ? "/practice" : "/premium"}
-              className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white hover:bg-white/15"
+              className="theme-secondary-button inline-flex h-11 items-center justify-center rounded-2xl px-6 text-sm font-semibold transition"
             >
               {isPremium ? t.secondary : t.lockedTrainer}
             </a>
 
             {!isPremium ? (
-              <div className="pt-1 text-center text-xs text-white/55">
+              <div className="pt-1 text-center text-xs theme-text-subtle">
                 {interval === "year" ? t.yearlyHint : t.monthlyHint}
               </div>
             ) : null}
@@ -486,19 +486,21 @@ export default function PremiumClient() {
       </section>
 
       {!isPremium ? (
-        <section className="flunio-card space-y-4 rounded-3xl p-6 text-white">
+        <section className="flunio-card space-y-4 rounded-3xl p-6 theme-text">
           <div className="space-y-1 text-center">
-            <h2 className="text-2xl font-semibold">{t.compareTitle}</h2>
-            <p className="text-sm text-white/65">{t.compareSubtitle}</p>
+            <h2 className="text-2xl font-semibold theme-text">
+              {t.compareTitle}
+            </h2>
+            <p className="text-sm theme-text-muted">{t.compareSubtitle}</p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] border-collapse overflow-hidden rounded-2xl">
               <thead>
-                <tr className="border-b border-white/10 bg-white/5 text-sm text-white/75">
+                <tr className="border-b border-white/10 bg-white/5 text-sm theme-text-muted theme-simple:border-slate-200 theme-simple:bg-slate-50">
                   <th className="p-4 text-left">{t.colFeature}</th>
                   <th className="p-4 text-center">{t.colFree}</th>
-                  <th className="bg-amber-400/10 p-4 text-center text-white">
+                  <th className="bg-amber-400/10 p-4 text-center theme-text">
                     <div className="inline-flex items-center justify-center gap-2">
                       {t.colPremium} <Badge>{t.premiumBetter}</Badge>
                     </div>
@@ -508,16 +510,19 @@ export default function PremiumClient() {
 
               <tbody>
                 {FEATURES.map((f) => (
-                  <tr key={f.key} className="border-t border-white/10">
-                    <td className="p-4 text-sm text-white">
+                  <tr
+                    key={f.key}
+                    className="border-t border-white/10 theme-simple:border-slate-200"
+                  >
+                    <td className="p-4 text-sm theme-text">
                       {L === "ru" ? f.ru : L === "en" ? f.en : f.ua}
                     </td>
 
-                    <td className="p-4 text-center text-sm text-white/65">
+                    <td className="p-4 text-center text-sm theme-text-muted">
                       {f.free}
                     </td>
 
-                    <td className="bg-amber-400/10 p-4 text-center text-sm font-semibold text-amber-100">
+                    <td className="bg-amber-400/10 p-4 text-center text-sm font-semibold text-amber-300 theme-simple:text-amber-700">
                       {f.premium}
                     </td>
                   </tr>
@@ -530,12 +535,12 @@ export default function PremiumClient() {
             <button
               onClick={() => handleCheckout(interval === "year" ? "eur" : "eur")}
               disabled={!!loading}
-              className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-8 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
+              className="theme-primary-button inline-flex h-11 items-center justify-center rounded-2xl px-8 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
             >
               {loading ? t.opening : t.ctaAfterCompare}
             </button>
 
-            <div className="text-center text-xs text-white/50">
+            <div className="text-center text-xs theme-text-subtle">
               {t.currencyHint}
             </div>
           </div>

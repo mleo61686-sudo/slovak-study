@@ -172,7 +172,7 @@ export default function ReportErrorButton({
         type="button"
         onClick={() => setOpen(true)}
         className={
-          "rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/65 backdrop-blur transition hover:border-cyan-400/40 hover:bg-white/10 hover:text-white " +
+          "theme-secondary-button rounded-xl px-3 py-1.5 text-xs font-semibold transition " +
           className
         }
       >
@@ -186,23 +186,23 @@ export default function ReportErrorButton({
             onClick={() => setOpen(false)}
           />
 
-          <div className="flunio-card relative w-full max-w-lg overflow-hidden rounded-3xl p-4 text-white shadow-[0_0_32px_rgba(34,211,238,0.18)] md:p-5">
+          <div className="flunio-card relative w-full max-w-lg overflow-hidden rounded-3xl p-4 theme-text shadow-[0_0_32px_rgba(34,211,238,0.18)] md:p-5">
             <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-14 -left-10 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
             <div className="relative">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-lg font-semibold text-white">
+                  <div className="text-lg font-semibold theme-text">
                     {ui.title}
                   </div>
-                  <div className="text-sm text-white/60">{ui.subtitle}</div>
+                  <div className="text-sm theme-text-muted">{ui.subtitle}</div>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="rounded-xl border border-white/10 bg-white/5 px-2 py-1 text-white/60 transition hover:bg-white/10 hover:text-white"
+                  className="theme-secondary-button rounded-xl px-2 py-1 transition"
                   aria-label="Close"
                 >
                   ✕
@@ -210,13 +210,13 @@ export default function ReportErrorButton({
               </div>
 
               {preview && (
-                <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/65 backdrop-blur">
+                <div className="theme-home-soft-card mt-3 rounded-2xl p-3 text-xs theme-text-muted">
                   {preview}
                 </div>
               )}
 
               <div className="mt-4">
-                <div className="mb-2 text-sm font-medium text-white/80">
+                <div className="mb-2 text-sm font-medium theme-text">
                   {ui.category}
                 </div>
 
@@ -227,10 +227,10 @@ export default function ReportErrorButton({
                       type="button"
                       onClick={() => setCategory(id)}
                       className={[
-                        "rounded-full border px-3 py-1.5 text-xs font-semibold transition",
+                        "rounded-full px-3 py-1.5 text-xs font-semibold transition",
                         category === id
-                          ? "border-cyan-400/50 bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 text-white shadow-[0_0_18px_rgba(59,130,246,0.25)]"
-                          : "border-white/10 bg-white/5 text-white/65 hover:border-cyan-400/40 hover:bg-white/10 hover:text-white",
+                          ? "theme-primary-button"
+                          : "theme-secondary-button",
                       ].join(" ")}
                     >
                       {ui.categories[id]}
@@ -240,7 +240,7 @@ export default function ReportErrorButton({
               </div>
 
               <div className="mt-4">
-                <div className="mb-2 text-sm font-medium text-white/80">
+                <div className="mb-2 text-sm font-medium theme-text">
                   {ui.description}
                 </div>
 
@@ -249,12 +249,12 @@ export default function ReportErrorButton({
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
                   placeholder={ui.placeholder}
-                  className="w-full rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white placeholder:text-white/35 outline-none backdrop-blur transition focus:border-cyan-400/50 focus:bg-white/10 focus:shadow-[0_0_18px_rgba(34,211,238,0.18)]"
+                  className="theme-input w-full rounded-2xl p-3 text-sm outline-none transition focus:border-cyan-400/50 focus:shadow-[0_0_18px_rgba(34,211,238,0.18)]"
                 />
               </div>
 
               <div className="mt-4 flex items-center justify-between gap-3">
-                <div className="text-xs text-white/55">
+                <div className="text-xs theme-text-muted">
                   {status === "ok" && (
                     <span className="font-semibold text-emerald-300">
                       {ui.sent}
@@ -271,7 +271,7 @@ export default function ReportErrorButton({
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/70 transition hover:bg-white/10 hover:text-white"
+                    className="theme-secondary-button rounded-2xl px-3 py-2 text-sm font-semibold transition"
                   >
                     {ui.cancel}
                   </button>
@@ -280,7 +280,7 @@ export default function ReportErrorButton({
                     type="button"
                     disabled={status === "sending" || message.trim().length < 3}
                     onClick={submit}
-                    className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                    className="theme-primary-button rounded-2xl px-3 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                   >
                     {status === "sending" ? ui.sending : ui.send}
                   </button>

@@ -316,19 +316,19 @@ export default function WordsSrsPage({
   if (needLogin) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-4 sm:p-4">
-        <div className="flunio-card rounded-3xl p-5 text-white sm:p-6">
-          <div className="text-lg font-semibold text-white">
+        <div className="flunio-card rounded-3xl p-5 theme-text sm:p-6">
+          <div className="text-lg font-semibold theme-text">
             {t.needLoginTitle}
           </div>
 
-          <div className="mt-2 text-sm leading-6 text-white/65">
+          <div className="mt-2 text-sm leading-6 theme-text-muted">
             {t.needLoginText}
           </div>
 
           <div className="mt-4">
             <Link
               href="/login"
-              className="inline-flex rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98]"
+              className="theme-primary-button inline-flex rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98]"
             >
               {t.login}
             </Link>
@@ -339,31 +339,31 @@ export default function WordsSrsPage({
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-4 px-4 py-4 sm:space-y-6 sm:p-4">
-      <section className="flunio-card rounded-3xl p-4 text-white sm:p-5">
+    <main className="mx-auto max-w-3xl space-y-4 px-4 py-4 theme-text sm:space-y-6 sm:p-4">
+      <section className="flunio-card rounded-3xl p-4 theme-text sm:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-1">
-            <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
+            <h1 className="text-xl font-bold tracking-tight theme-text sm:text-2xl">
               🧠 {t.title}
             </h1>
 
-            <p className="max-w-xl text-sm leading-6 text-white/65">
+            <p className="max-w-xl text-sm leading-6 theme-text-muted">
               {t.subtitle}
             </p>
 
-            <div className="text-sm text-white/60">
+            <div className="text-sm theme-text-muted">
               {t.today}:{" "}
-              <b className="text-white">
+              <b className="theme-text">
                 {Math.min(stats.due, DAILY_REVIEW_LIMIT)}
               </b>{" "}
-              · {t.left}: <b className="text-white">{left}</b>
+              · {t.left}: <b className="theme-text">{left}</b>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-end">
             <button
               onClick={() => addNewWordsRandom(30)}
-              className="min-h-11 w-full rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold leading-5 text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
+              className="theme-primary-button min-h-11 w-full rounded-2xl px-3 py-2 text-sm font-semibold leading-5 transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
               type="button"
             >
               ＋ {t.add30}
@@ -371,7 +371,7 @@ export default function WordsSrsPage({
 
             <Link
               href={backHref}
-              className="inline-flex min-h-11 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white/70 backdrop-blur transition hover:border-cyan-400/35 hover:bg-white/10 hover:text-white active:scale-[0.98] sm:w-auto"
+              className="theme-secondary-button inline-flex min-h-11 w-full items-center justify-center rounded-2xl px-3 py-2 text-sm font-semibold transition active:scale-[0.98] sm:w-auto"
             >
               ← {t.back}
             </Link>
@@ -379,14 +379,14 @@ export default function WordsSrsPage({
         </div>
 
         <div className="mt-5 space-y-2">
-          <div className="flex items-center justify-between text-xs font-medium text-white/50">
+          <div className="flex items-center justify-between text-xs font-medium theme-text-subtle">
             <span>{t.progress}</span>
             <span>
               {reviewed}/{sessionSize || 0}
             </span>
           </div>
 
-          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="theme-progress-track h-2 overflow-hidden rounded-full">
             <div
               className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
@@ -394,7 +394,7 @@ export default function WordsSrsPage({
           </div>
 
           {current && left <= 5 && left > 0 ? (
-            <div className="rounded-2xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs font-medium text-amber-100">
+            <div className="rounded-2xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs font-medium text-amber-300">
               {t.almostDone(left)}
             </div>
           ) : null}
@@ -415,19 +415,19 @@ export default function WordsSrsPage({
 
       {!current ? (
         Math.min(stats.due, DAILY_REVIEW_LIMIT) === 0 ? (
-          <section className="flunio-card rounded-3xl p-5 text-center text-white sm:p-6">
-            <div className="text-xl font-semibold text-white">
+          <section className="flunio-card rounded-3xl p-5 text-center theme-text sm:p-6">
+            <div className="text-xl font-semibold theme-text">
               {t.noDueTitle}
             </div>
 
-            <div className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/65">
+            <div className="mx-auto mt-2 max-w-md text-sm leading-6 theme-text-muted">
               {t.noDueText}
             </div>
 
             <div className="mt-5">
               <button
                 onClick={() => addNewWordsRandom(30)}
-                className="min-h-11 w-full rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
+                className="theme-primary-button min-h-11 w-full rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
                 type="button"
               >
                 ＋ {t.add30}
@@ -435,19 +435,19 @@ export default function WordsSrsPage({
             </div>
           </section>
         ) : (
-          <section className="flunio-card rounded-3xl p-5 text-center text-white sm:p-6">
-            <div className="text-2xl font-bold text-white">
+          <section className="flunio-card rounded-3xl p-5 text-center theme-text sm:p-6">
+            <div className="text-2xl font-bold theme-text">
               {t.sessionDone}
             </div>
 
-            <p className="mt-2 text-sm leading-6 text-white/65">
+            <p className="mt-2 text-sm leading-6 theme-text-muted">
               {t.sessionDoneText}
             </p>
 
             <div className="mt-5">
               <button
                 onClick={() => startNewSession()}
-                className="min-h-11 w-full rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
+                className="theme-primary-button min-h-11 w-full rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
                 type="button"
               >
                 {t.nextSession}

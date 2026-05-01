@@ -116,9 +116,9 @@ export default function SupportPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-10 text-white">
+    <div className="mx-auto max-w-2xl px-4 py-10 theme-text">
       <div className="flunio-card rounded-3xl p-6">
-        <h1 className="mb-4 text-2xl font-bold">{t.title}</h1>
+        <h1 className="mb-4 text-2xl font-bold theme-text">{t.title}</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -127,13 +127,13 @@ export default function SupportPage() {
             placeholder={t.emailPlaceholder}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+            className="theme-input w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
           />
 
           <select
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+            className="theme-select w-full rounded-2xl px-3 py-2 outline-none transition"
           >
             <option value="problem">{t.topicProblem}</option>
             <option value="question">{t.topicQuestion}</option>
@@ -147,19 +147,19 @@ export default function SupportPage() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={6}
-            className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2 text-white outline-none placeholder:text-white/35 focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+            className="theme-input w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
+            className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
           >
             {loading ? t.sending : t.send}
           </button>
 
           {status && (
-            <p className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75">
+            <p className="theme-home-soft-card rounded-2xl px-3 py-2 text-sm theme-text-muted">
               {status}
             </p>
           )}

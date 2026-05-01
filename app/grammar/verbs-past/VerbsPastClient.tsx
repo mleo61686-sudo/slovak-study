@@ -790,17 +790,18 @@ const DATA: Record<CourseId, VerbPastBlock[]> = {
     ],
 };
 
-const card =
-    "rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_0_24px_rgba(34,211,238,0.08)] backdrop-blur";
+const card = "flunio-card rounded-3xl";
 
-const softCard =
-    "rounded-2xl border border-white/10 bg-white/5 text-white backdrop-blur";
+const softCard = "theme-home-soft-card rounded-2xl";
 
 const ghostButton =
-    "rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10";
+    "theme-secondary-button rounded-xl px-3 py-2 text-sm font-semibold";
 
 const activeButton =
-    "rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]";
+    "theme-primary-button rounded-xl px-3 py-2 text-sm font-semibold";
+
+const infoItem =
+    "theme-home-soft-card rounded-2xl px-4 py-3 theme-text-muted";
 
 function normalizeCourse(courseId: string): CourseId {
     if (courseId === "cs" || courseId === "pl") return courseId;
@@ -839,39 +840,36 @@ export default function VerbsPastClient() {
     }
 
     return (
-        <div className="space-y-10 text-white">
+        <div className="space-y-10 theme-text">
             <div className="flunio-card relative overflow-hidden rounded-3xl p-6 sm:p-8">
                 <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
                 <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
                 <div className="relative">
-                    <div className="mb-4 inline-flex rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                    <div className="theme-pill mb-4 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
                         Grammar · Past tense
                     </div>
 
-                    <h1 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+                    <h1 className="text-3xl font-semibold leading-tight tracking-tight theme-text sm:text-4xl">
                         {ui.title}
                     </h1>
 
-                    <p className="mt-3 max-w-3xl text-base leading-relaxed text-white/70">
+                    <p className="mt-3 max-w-3xl text-base leading-relaxed theme-text-muted">
                         {ui.subtitle}
                     </p>
                 </div>
             </div>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold text-white">{ui.s1}</h2>
+                <h2 className="text-xl font-semibold theme-text">{ui.s1}</h2>
 
                 <div className="grid gap-4 lg:grid-cols-2">
                     <div className={`${card} p-5`}>
-                        <div className="font-semibold text-white">{ui.pattern}</div>
+                        <div className="font-semibold theme-text">{ui.pattern}</div>
 
                         <div className="mt-4 grid gap-3">
                             {ui.formulaItems.map((item) => (
-                                <div
-                                    key={item}
-                                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
-                                >
+                                <div key={item} className={infoItem}>
                                     {item}
                                 </div>
                             ))}
@@ -879,14 +877,11 @@ export default function VerbsPastClient() {
                     </div>
 
                     <div className={`${card} p-5`}>
-                        <div className="font-semibold text-white">{ui.noteTitle}</div>
+                        <div className="font-semibold theme-text">{ui.noteTitle}</div>
 
                         <ul className="mt-4 space-y-2">
                             {ui.noteItems.slice(0, 3).map((item) => (
-                                <li
-                                    key={item}
-                                    className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
-                                >
+                                <li key={item} className={infoItem}>
                                     {item}
                                 </li>
                             ))}
@@ -896,10 +891,12 @@ export default function VerbsPastClient() {
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold text-white">{ui.s2}</h2>
+                <h2 className="text-xl font-semibold theme-text">{ui.s2}</h2>
 
                 <div className={`${card} p-5`}>
-                    <div className="text-sm font-semibold text-white/50">{ui.chooseVerb}</div>
+                    <div className="text-sm font-semibold theme-text-muted">
+                        {ui.chooseVerb}
+                    </div>
 
                     <div className="mt-3 flex flex-wrap gap-2">
                         {verbs.map((v) => (
@@ -919,40 +916,60 @@ export default function VerbsPastClient() {
 
                     <div className="mt-5 grid gap-3 sm:grid-cols-3">
                         <div className={`${softCard} p-4`}>
-                            <div className="text-sm text-white/50">{ui.infinitive}</div>
-                            <div className="text-lg font-semibold text-cyan-100">{active.infinitive}</div>
-                            <div className="mt-1 text-white/65">{tr(active.meaning, uiLang)}</div>
+                            <div className="text-sm theme-text-muted">{ui.infinitive}</div>
+                            <div className="text-lg font-semibold theme-accent-text">
+                                {active.infinitive}
+                            </div>
+                            <div className="mt-1 theme-text-muted">
+                                {tr(active.meaning, uiLang)}
+                            </div>
                         </div>
 
                         <div className={`${softCard} p-4`}>
-                            <div className="text-sm text-white/50">{ui.rule}</div>
-                            <div className="text-lg font-semibold text-cyan-100">{active.rule.sk}</div>
-                            <div className="mt-1 text-white/65">{tr(active.rule, uiLang)}</div>
+                            <div className="text-sm theme-text-muted">{ui.rule}</div>
+                            <div className="text-lg font-semibold theme-accent-text">
+                                {active.rule.sk}
+                            </div>
+                            <div className="mt-1 theme-text-muted">
+                                {tr(active.rule, uiLang)}
+                            </div>
                         </div>
 
                         <div className={`${softCard} p-4`}>
-                            <div className="text-sm text-white/50">{ui.pattern}</div>
-                            <div className="font-semibold text-cyan-100">{active.pattern.sk}</div>
-                            <div className="mt-1 text-white/65">{tr(active.pattern, uiLang)}</div>
+                            <div className="text-sm theme-text-muted">{ui.pattern}</div>
+                            <div className="font-semibold theme-accent-text">
+                                {active.pattern.sk}
+                            </div>
+                            <div className="mt-1 theme-text-muted">
+                                {tr(active.pattern, uiLang)}
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold text-white">{ui.s3}</h2>
-                <p className="text-white/60">{ui.examplesHint}</p>
+                <h2 className="text-xl font-semibold theme-text">{ui.s3}</h2>
+                <p className="theme-text-muted">{ui.examplesHint}</p>
 
                 <div className="grid gap-4 md:grid-cols-3">
                     {active.rows.map((row) => (
                         <div key={row.form} className={`${card} p-5`}>
                             <div className="text-2xl">{row.emoji}</div>
-                            <div className="mt-2 text-sm text-white/50">{tr(row.label, uiLang)}</div>
-                            <div className="mt-1 text-lg font-semibold text-cyan-100">{row.form}</div>
+                            <div className="mt-2 text-sm theme-text-muted">
+                                {tr(row.label, uiLang)}
+                            </div>
+                            <div className="mt-1 text-lg font-semibold theme-accent-text">
+                                {row.form}
+                            </div>
 
                             <div className={`${softCard} mt-4 p-4`}>
-                                <div className="font-semibold text-white">{row.example.sk}</div>
-                                <div className="mt-1 text-sm text-white/55">{tr(row.example, uiLang)}</div>
+                                <div className="font-semibold theme-text">
+                                    {row.example.sk}
+                                </div>
+                                <div className="mt-1 text-sm theme-text-muted">
+                                    {tr(row.example, uiLang)}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -960,11 +977,11 @@ export default function VerbsPastClient() {
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-xl font-semibold text-white">{ui.s4}</h2>
+                <h2 className="text-xl font-semibold theme-text">{ui.s4}</h2>
 
                 <div className={`${card} p-5`}>
-                    <div className="text-sm text-white/50">{ui.practice}</div>
-                    <div className="mt-2 text-lg font-semibold text-white">
+                    <div className="text-sm theme-text-muted">{ui.practice}</div>
+                    <div className="mt-2 text-lg font-semibold theme-text">
                         {tr(currentPractice.example, uiLang)}
                     </div>
 
@@ -988,9 +1005,11 @@ export default function VerbsPastClient() {
 
                     {showAnswer && (
                         <div className={`${softCard} mt-4 p-4`}>
-                            <div className="text-sm text-white/50">{ui.answer}</div>
-                            <div className="font-semibold text-cyan-100">{currentPractice.example.sk}</div>
-                            <div className="mt-1 text-sm text-white/55">
+                            <div className="text-sm theme-text-muted">{ui.answer}</div>
+                            <div className="font-semibold theme-accent-text">
+                                {currentPractice.example.sk}
+                            </div>
+                            <div className="mt-1 text-sm theme-text-muted">
                                 {currentPractice.form}
                             </div>
                         </div>
@@ -999,15 +1018,12 @@ export default function VerbsPastClient() {
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">{ui.noteTitle}</h2>
+                <h2 className="text-xl font-semibold theme-text">{ui.noteTitle}</h2>
 
                 <div className={`${card} p-5`}>
                     <ul className="space-y-2">
                         {ui.noteItems.map((item) => (
-                            <li
-                                key={item}
-                                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white/70"
-                            >
+                            <li key={item} className={infoItem}>
                                 {item}
                             </li>
                         ))}

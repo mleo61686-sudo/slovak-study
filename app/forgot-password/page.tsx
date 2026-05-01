@@ -70,31 +70,31 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-64px-64px)] items-center justify-center overflow-hidden px-4 py-8 text-white">
+    <div className="flex min-h-[calc(100dvh-64px-64px)] items-center justify-center overflow-hidden px-4 py-8 theme-text">
       <div className="w-full max-w-md">
         <div className="flunio-card relative overflow-hidden rounded-3xl p-6">
           <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-14 -left-10 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
           <div className="relative">
-            <h1 className="text-2xl font-semibold tracking-tight text-white">
+            <h1 className="text-2xl font-semibold tracking-tight theme-text">
               {t.title}
             </h1>
 
-            <p className="mt-2 text-sm text-white/65">{t.hint}</p>
+            <p className="mt-2 text-sm theme-text-muted">{t.hint}</p>
 
             {done ? (
-              <div className="mt-6 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 px-4 py-3 text-sm font-medium text-emerald-100">
+              <div className="mt-6 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 px-4 py-3 text-sm font-medium text-emerald-300">
                 {t.ok}
               </div>
             ) : (
               <div className="mt-6 space-y-3">
-                <label className="block text-sm font-medium text-white/75">
+                <label className="block text-sm font-medium theme-text-muted">
                   {t.email}
                 </label>
 
                 <input
-                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35 outline-none backdrop-blur transition focus:border-cyan-400/50 focus:bg-white/10 focus:shadow-[0_0_18px_rgba(34,211,238,0.18)]"
+                  className="theme-input w-full rounded-2xl px-4 py-3 outline-none transition focus:border-cyan-400/50 focus:shadow-[0_0_18px_rgba(34,211,238,0.18)]"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
@@ -105,14 +105,14 @@ export default function ForgotPasswordPage() {
                   <button
                     onClick={submit}
                     disabled={!email.trim() || loading}
-                    className="inline-flex min-h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_22px_rgba(59,130,246,0.35)] transition hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                    className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                   >
                     {loading ? "..." : t.btn}
                   </button>
 
                   <Link
                     href="/login"
-                    className="text-sm font-semibold text-cyan-200 underline-offset-4 transition hover:text-cyan-100 hover:underline"
+                    className="theme-action-link text-sm font-semibold underline-offset-4 transition hover:underline"
                   >
                     {t.back}
                   </Link>
@@ -122,7 +122,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-white/45">{t.footer}</p>
+        <p className="mt-6 text-center text-xs theme-text-subtle">{t.footer}</p>
       </div>
     </div>
   );

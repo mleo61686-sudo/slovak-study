@@ -74,7 +74,7 @@ export default function LanguageMenu({ mobile = false }: Props) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={[
-          "inline-flex items-center justify-center border border-white/10 bg-white/5 shadow-sm backdrop-blur transition hover:border-cyan-400/40 hover:bg-white/10",
+          "theme-secondary-button inline-flex items-center justify-center shadow-sm transition",
           mobile ? "h-10 w-10 rounded-xl" : "h-9 w-9 rounded-full",
         ].join(" ")}
         aria-haspopup="menu"
@@ -95,13 +95,13 @@ export default function LanguageMenu({ mobile = false }: Props) {
       {open && (
         <div
           className={[
-            "absolute top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/95 p-2 text-white shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl",
+            "theme-menu-panel absolute top-full z-50 mt-2 overflow-hidden rounded-2xl p-2 shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl",
             mobile ? "right-0 w-52" : "right-0 w-56",
           ].join(" ")}
           style={{ maxWidth: "calc(100vw - 16px)" }}
           role="menu"
         >
-          <div className="px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-white/45">
+          <div className="px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide theme-text-subtle">
             Interface language
           </div>
 
@@ -123,8 +123,8 @@ export default function LanguageMenu({ mobile = false }: Props) {
                   className={[
                     "flex min-h-11 w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm font-medium transition",
                     isActive
-                      ? "bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 text-white shadow-[0_0_18px_rgba(59,130,246,0.25)]"
-                      : "text-white/75 hover:bg-white/10 hover:text-white",
+                      ? "theme-primary-button"
+                      : "theme-menu-item",
                   ].join(" ")}
                 >
                   <span className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export default function LanguageMenu({ mobile = false }: Props) {
                     <span>{item.label}</span>
                   </span>
 
-                  <span className={isActive ? "text-white" : "text-white/35"}>
+                  <span className={isActive ? "text-white" : "theme-text-subtle"}>
                     {isActive ? "✓" : ""}
                   </span>
                 </button>

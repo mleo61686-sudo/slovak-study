@@ -122,9 +122,9 @@ export default function DictionaryClient({
   const canLoadMore = visible.length < filtered.length;
 
   return (
-    <div className="mx-auto w-[min(100vw-2rem,56rem)] space-y-6 text-white">
+    <div className="mx-auto w-[min(100vw-2rem,56rem)] space-y-6 theme-text">
       <section className="flunio-card rounded-3xl p-6">
-        <h1 className="text-2xl font-semibold">{t.title}</h1>
+        <h1 className="text-2xl font-semibold theme-text">{t.title}</h1>
 
         <div className="mt-5 w-full self-stretch space-y-2">
           <input
@@ -134,21 +134,24 @@ export default function DictionaryClient({
               setLimit(STEP);
             }}
             placeholder={t.placeholder(searchSourceLabel)}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-white/35 backdrop-blur transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20"
+            className="theme-input w-full rounded-2xl px-4 py-3 outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20"
           />
 
-          <div className="text-sm text-white/55">
-            {t.found} <span className="font-semibold text-cyan-200">{filtered.length}</span>
+          <div className="text-sm theme-text-muted">
+            {t.found}{" "}
+            <span className="font-semibold theme-accent-text">
+              {filtered.length}
+            </span>
           </div>
         </div>
       </section>
 
       {visible.length === 1 ? (
-        <div className="flunio-card rounded-2xl p-4 text-white">
+        <div className="flunio-card rounded-2xl p-4 theme-text">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-white">
+                <span className="text-lg font-semibold theme-text">
                   {visible[0].term ?? visible[0].sk}
                 </span>
 
@@ -159,10 +162,12 @@ export default function DictionaryClient({
               </div>
 
               {visible[0].ipa && (
-                <span className="text-xs text-white/45">{visible[0].ipa}</span>
+                <span className="text-xs theme-text-subtle">
+                  {visible[0].ipa}
+                </span>
               )}
 
-              <span className="text-white/70">
+              <span className="theme-text-muted">
                 {getWordTranslation(visible[0], lang)}
               </span>
             </div>
@@ -173,12 +178,12 @@ export default function DictionaryClient({
           {visible.map((word) => (
             <div
               key={word.key ?? word.term ?? word.sk}
-              className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_0_18px_rgba(34,211,238,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
+              className="flunio-card rounded-2xl p-4 theme-text transition hover:-translate-y-0.5"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="truncate text-lg font-semibold text-white">
+                    <span className="truncate text-lg font-semibold theme-text">
                       {word.term ?? word.sk}
                     </span>
 
@@ -186,10 +191,12 @@ export default function DictionaryClient({
                   </div>
 
                   {word.ipa && (
-                    <span className="text-xs text-white/45">{word.ipa}</span>
+                    <span className="text-xs theme-text-subtle">
+                      {word.ipa}
+                    </span>
                   )}
 
-                  <span className="text-white/70">
+                  <span className="theme-text-muted">
                     {getWordTranslation(word, lang)}
                   </span>
                 </div>
@@ -204,7 +211,7 @@ export default function DictionaryClient({
           <button
             type="button"
             onClick={() => setLimit((v) => v + STEP)}
-            className="rounded-2xl border border-cyan-400/35 bg-white/5 px-5 py-3 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:scale-95"
+            className="theme-secondary-button rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-95"
           >
             {t.showMore(filtered.length - visible.length)}
           </button>
