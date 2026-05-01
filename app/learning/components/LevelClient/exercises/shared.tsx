@@ -52,18 +52,18 @@ export function ResultBox({
   const T = RESULT_I18N[lang];
 
   return (
-    <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-white backdrop-blur">
+    <div className="theme-inner-card space-y-3 rounded-2xl p-4 theme-text">
       {correct ? (
-        <div className="font-semibold text-emerald-300">{T.correct}</div>
+        <div className="font-semibold text-emerald-500">{T.correct}</div>
       ) : (
-        <div className="font-semibold text-rose-300">{T.wrong}</div>
+        <div className="font-semibold text-rose-500">{T.wrong}</div>
       )}
 
-      {extra ? <div className="text-white/75">{extra}</div> : null}
+      {extra ? <div className="theme-text-muted">{extra}</div> : null}
 
       <button
         onClick={onNext}
-        className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5"
+        className="theme-primary-button rounded-xl px-4 py-2 font-semibold transition hover:-translate-y-0.5"
       >
         {T.next}
       </button>
@@ -112,7 +112,7 @@ export function WordImage({
             width={1200}
             height={900}
             className={[
-              "h-auto w-full rounded-2xl bg-white/5 transition-opacity duration-200",
+              "h-auto w-full rounded-2xl transition-opacity duration-200",
               ready ? "opacity-100" : "opacity-0",
             ].join(" ")}
             onLoadingComplete={() => setReady(true)}
@@ -122,7 +122,7 @@ export function WordImage({
       </div>
 
       {word.imgCredit && (
-        <div className="text-xs text-white/45">{word.imgCredit}</div>
+        <div className="text-xs theme-text-subtle">{word.imgCredit}</div>
       )}
     </div>
   );

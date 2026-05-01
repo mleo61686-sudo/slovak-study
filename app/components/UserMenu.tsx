@@ -82,7 +82,7 @@ function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="theme-menu-item w-full px-4 py-2 text-left text-sm transition"
+      className="user-menu-theme-toggle mx-3 my-2 w-[calc(100%-1.5rem)] rounded-2xl px-4 py-3 text-left text-sm font-medium transition"
     >
       {theme === "flunio" ? "☀️ Simple theme" : "🌌 Flunio theme"}
     </button>
@@ -305,8 +305,8 @@ export default function UserMenu({
 
   if (mobile) {
     return (
-      <div className="theme-menu-panel overflow-hidden rounded-2xl backdrop-blur">
-        <div className="flex items-center gap-3 px-4 py-3">
+      <div className="theme-menu-panel overflow-hidden rounded-3xl">
+        <div className="user-menu-header flex items-center gap-3 px-4 py-4">
           <AvatarCircle
             avatarUrl={avatarUrl}
             initial={initial}
@@ -391,10 +391,10 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="theme-menu-panel absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl shadow-[0_0_24px_rgba(34,211,238,0.16)] backdrop-blur-xl"
+          className="theme-menu-panel absolute right-0 top-full z-50 mt-3 w-80 overflow-hidden rounded-3xl"
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
-          <div className="flex items-center gap-3 px-4 py-3 text-sm">
+          <div className="user-menu-header flex items-center gap-3 px-4 py-4 text-sm">
             <AvatarCircle
               avatarUrl={avatarUrl}
               initial={initial}
@@ -414,7 +414,7 @@ export default function UserMenu({
 
           <Link
             href="/account"
-            className="theme-menu-item block px-4 py-2 text-sm transition"
+            className="theme-menu-item mx-2 block px-3 py-2.5 text-sm font-medium transition"
             onClick={() => setOpen(false)}
           >
             {t.profile}
@@ -422,7 +422,7 @@ export default function UserMenu({
 
           <Link
             href="/learn"
-            className="theme-menu-item block px-4 py-2 text-sm transition"
+            className="theme-menu-item mx-2 block px-3 py-2.5 text-sm font-medium transition"
             onClick={() => setOpen(false)}
             data-onboarding="choose-course"
           >
@@ -432,7 +432,7 @@ export default function UserMenu({
           <button
             onClick={openPortal}
             disabled={loadingPortal}
-            className="theme-menu-item w-full px-4 py-2 text-left text-sm transition disabled:opacity-50"
+            className="theme-menu-item mx-2 w-[calc(100%-1rem)] px-3 py-2.5 text-left text-sm transition disabled:opacity-50"
             type="button"
           >
             <div className="font-medium">{t.manageSub}</div>
@@ -447,7 +447,7 @@ export default function UserMenu({
 
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="w-full px-4 py-2 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+            className="user-menu-logout mx-2 mb-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm font-semibold transition"
             type="button"
           >
             {t.logout}

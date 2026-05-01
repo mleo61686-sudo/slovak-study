@@ -217,7 +217,8 @@ const ghostButton =
 const activeButton =
   "theme-primary-button rounded-xl px-3 py-2 text-sm font-semibold";
 
-const rowDivider = "border-b border-white/10 last:border-b-0";
+const rowDivider =
+  "border-b border-slate-300/70 last:border-b-0 theme-flunio:border-white/10";
 
 const tipItem =
   "theme-home-soft-card rounded-2xl px-4 py-3 theme-text-muted";

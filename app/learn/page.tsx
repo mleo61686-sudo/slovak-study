@@ -116,7 +116,7 @@ export default function LearnPage() {
             <button
               key={course.id}
               onClick={() => chooseCourse(course.id, isLive)}
-              className="flunio-card rounded-3xl p-5 text-left theme-text transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+              className="learn-course-card rounded-3xl p-5 text-left theme-text transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!isLive}
               type="button"
               data-onboarding={

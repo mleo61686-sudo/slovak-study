@@ -66,7 +66,7 @@ export default function WriteWord({
       ? "border-emerald-400/60 ring-2 ring-emerald-400/20"
       : status === "wrong"
         ? "border-rose-400/60 ring-2 ring-rose-400/20"
-        : "border-white/10 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20";
+        : "focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20";
 
   const courseLang = courseLangName[courseId] ?? courseLangName.sk;
 
@@ -109,8 +109,11 @@ export default function WriteWord({
   return (
     <>
       <div className="space-y-2.5 sm:space-y-3">
-        <div className="text-lg font-semibold leading-snug text-white">
-          {t.title} <span className="font-bold text-cyan-100">{trWord(word, lang)}</span>
+        <div className="text-lg font-semibold leading-snug theme-text">
+          {t.title}{" "}
+          <span className="font-bold theme-accent-text">
+            {trWord(word, lang)}
+          </span>
         </div>
 
         <div className="flex justify-start">
@@ -127,16 +130,16 @@ export default function WriteWord({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={status !== "idle"}
-          className={`w-full rounded-2xl border bg-white/5 px-4 py-2.5 text-[17px] text-white outline-none transition placeholder:text-white/35 disabled:opacity-60 sm:py-3 ${inputClass}`}
+          className={`theme-input w-full rounded-2xl px-4 py-2.5 text-[17px] outline-none transition disabled:opacity-60 sm:py-3 ${inputClass}`}
           placeholder={t.placeholder}
         />
 
-        <div className="text-sm leading-snug text-white/50">{t.hint}</div>
+        <div className="text-sm leading-snug theme-text-subtle">{t.hint}</div>
 
         {status === "idle" ? (
           <button
             onClick={check}
-            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 disabled:opacity-50 sm:px-5 sm:py-2.5"
+            className="theme-primary-button rounded-2xl px-5 py-2.5 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5"
             disabled={!value.trim()}
           >
             {t.check}
@@ -144,11 +147,11 @@ export default function WriteWord({
         ) : (
           <div className="mt-2 space-y-3">
             {status === "correct" ? (
-              <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-3 py-2 font-semibold text-emerald-200">
+              <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-3 py-2 font-semibold text-emerald-500">
                 {t.correctPrefix} <b>{correctAnswer}</b>
               </div>
             ) : (
-              <div className="rounded-xl border border-rose-300/25 bg-rose-400/10 px-3 py-2 font-semibold text-rose-200">
+              <div className="rounded-xl border border-rose-300/25 bg-rose-400/10 px-3 py-2 font-semibold text-rose-500">
                 {t.wrongPrefix} <b>{correctAnswer}</b>
               </div>
             )}
@@ -156,7 +159,7 @@ export default function WriteWord({
             <div className="flex items-center gap-2">
               <button
                 onClick={next}
-                className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5"
+                className="theme-primary-button rounded-2xl px-5 py-2.5 font-semibold transition hover:-translate-y-0.5"
               >
                 {t.next}
               </button>

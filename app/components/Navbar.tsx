@@ -4,7 +4,7 @@ import CourseBadge from "@/app/components/CourseBadge";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 theme-navbar backdrop-blur-xl">
+    <header className="sticky top-0 z-50 theme-navbar">
       <div className="mx-auto max-w-7xl px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between">
           <Link href="/" className="group flex items-center gap-4">

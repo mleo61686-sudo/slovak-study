@@ -64,7 +64,7 @@ export default function ChooseTranslation({
     <>
       <div
         className={[
-          "text-lg font-semibold text-white transition-all duration-300",
+          "text-lg font-semibold theme-text transition-all duration-300",
           word.img
             ? imageLoaded
               ? "translate-y-0 opacity-100"
@@ -72,13 +72,14 @@ export default function ChooseTranslation({
             : "translate-y-0 opacity-100",
         ].join(" ")}
       >
-        {chooseLabel} <span className="font-bold text-cyan-100">{word.sk}</span>
+        {chooseLabel}{" "}
+        <span className="font-bold theme-accent-text">{word.sk}</span>
       </div>
 
       {word.img ? (
         <div className="mt-2 flex flex-col items-center gap-2">
           <div className="mx-auto w-full max-w-[320px]">
-            <div className="relative min-h-[180px] overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+            <div className="theme-inner-card relative min-h-[180px] overflow-hidden rounded-2xl">
               {!imageLoaded && (
                 <div className="absolute inset-0 animate-pulse bg-white/10" />
               )}
@@ -90,7 +91,7 @@ export default function ChooseTranslation({
                 height={900}
                 onLoad={() => setImageLoaded(true)}
                 className={[
-                  "h-auto w-full rounded-2xl bg-white/5 transition-all duration-500",
+                  "h-auto w-full rounded-2xl transition-all duration-500",
                   imageLoaded
                     ? "scale-100 opacity-100 blur-0"
                     : "scale-[1.02] opacity-0 blur-sm",
@@ -100,7 +101,7 @@ export default function ChooseTranslation({
           </div>
 
           {word.imgCredit && (
-            <div className="text-xs text-white/45">{word.imgCredit}</div>
+            <div className="text-xs theme-text-subtle">{word.imgCredit}</div>
           )}
         </div>
       ) : null}
@@ -139,13 +140,13 @@ export default function ChooseTranslation({
               }
             }}
             className={[
-              "rounded-2xl border px-4 py-3 text-left font-semibold text-white transition",
+              "rounded-2xl px-4 py-3 text-left font-semibold transition",
               answered
                 ? "cursor-not-allowed opacity-60"
-                : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+                : "hover:-translate-y-0.5 hover:border-cyan-400/35",
               picked === opt
-                ? "border-cyan-400/50 bg-cyan-400/10 ring-2 ring-cyan-400/20"
-                : "",
+                ? "border border-cyan-400/70 bg-cyan-400/20 text-cyan-600 shadow-[0_0_22px_rgba(34,211,238,0.24)] ring-2 ring-cyan-400/35"
+                : "theme-inner-card theme-text",
             ].join(" ")}
           >
             {opt}
@@ -154,18 +155,20 @@ export default function ChooseTranslation({
       </div>
 
       {answered && (
-        <ResultBox
-          correct={status === "correct"}
-          onNext={() => onNext(status === "correct")}
-          lang={lang}
-          extra={
-            status === "wrong" ? (
-              <div className="text-sm text-white/70">
-                {correctLabel} <b className="text-white">{correctText}</b>
-              </div>
-            ) : null
-          }
-        />
+        <div className="mt-4">
+          <ResultBox
+            correct={status === "correct"}
+            onNext={() => onNext(status === "correct")}
+            lang={lang}
+            extra={
+              status === "wrong" ? (
+                <div className="text-sm theme-text-muted">
+                  {correctLabel} <b className="theme-text">{correctText}</b>
+                </div>
+              ) : null
+            }
+          />
+        </div>
       )}
     </>
   );

@@ -48,7 +48,11 @@ export default function SupportPage() {
     send: lang === "ru" ? "Отправить" : lang === "en" ? "Send" : "Надіслати",
 
     sending:
-      lang === "ru" ? "Отправляю..." : lang === "en" ? "Sending..." : "Відправляю...",
+      lang === "ru"
+        ? "Отправляю..."
+        : lang === "en"
+          ? "Sending..."
+          : "Відправляю...",
 
     emailRequired:
       lang === "ru" ? "Укажите email" : lang === "en" ? "Enter your email" : "Вкажіть email",
@@ -67,7 +71,11 @@ export default function SupportPage() {
       lang === "ru" ? "Серверная ошибка" : lang === "en" ? "Server error" : "Серверна помилка",
 
     sent:
-      lang === "ru" ? "Сообщение отправлено ✅" : lang === "en" ? "Message sent ✅" : "Повідомлення відправлено ✅",
+      lang === "ru"
+        ? "Сообщение отправлено ✅"
+        : lang === "en"
+          ? "Message sent ✅"
+          : "Повідомлення відправлено ✅",
   };
 
   async function handleSubmit(e: React.FormEvent) {
@@ -127,7 +135,7 @@ export default function SupportPage() {
             placeholder={t.emailPlaceholder}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="theme-input w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+            className="theme-input support-field w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
           />
 
           <select
@@ -147,7 +155,7 @@ export default function SupportPage() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={6}
-            className="theme-input w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
+            className="theme-input support-field w-full rounded-2xl px-3 py-2 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
           />
 
           <button

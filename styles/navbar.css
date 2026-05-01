@@ -1,9 +1,9 @@
 .theme-flunio .theme-nav-link {
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.82);
 }
 
 .theme-flunio .theme-nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(34, 211, 238, 0.1);
     color: white;
 }
 
@@ -17,12 +17,14 @@
 }
 
 .theme-flunio .theme-nav-button {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(34, 211, 238, 0.22);
     color: white;
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .theme-flunio .theme-nav-button:hover {
-    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(34, 211, 238, 0.35);
+    background: rgba(255, 255, 255, 0.09);
 }
 
 .theme-simple .theme-nav-button {
@@ -36,10 +38,10 @@
 }
 
 .theme-flunio .theme-icon-button {
-    border-color: rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(34, 211, 238, 0.22);
+    background: rgba(255, 255, 255, 0.07);
     color: white;
-    box-shadow: 0 0 18px rgba(34, 211, 238, 0.12);
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.14);
 }
 
 .theme-flunio .theme-icon-button:hover {
@@ -59,9 +61,14 @@
 
 /* 🌌 Flunio navbar */
 .theme-flunio .theme-navbar {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(5, 8, 22, 0.85);
+    border-bottom: 1px solid rgba(34, 211, 238, 0.18);
+    background:
+        radial-gradient(circle at 12% 0%, rgba(34, 211, 238, 0.10), transparent 28%),
+        radial-gradient(circle at 88% 0%, rgba(217, 70, 239, 0.10), transparent 30%),
+        rgba(8, 13, 36, 0.96);
     color: white;
+    backdrop-filter: none;
+    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.18);
 }
 
 /* ☀️ Simple navbar */

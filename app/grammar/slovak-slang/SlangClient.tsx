@@ -111,7 +111,7 @@ const activeButton =
   "theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 
 const inputClass =
-  "theme-input h-11 w-full rounded-xl px-3 text-sm outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20";
+  "theme-input slang-filter-field h-11 w-full rounded-xl px-3 text-sm outline-none transition focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/20";
 
 const iconButton =
   "theme-secondary-button rounded-xl px-3 py-2 text-xs transition";
@@ -224,7 +224,7 @@ export default function SlangClient() {
         </div>
       </div>
 
-      <div className={`${card} p-4`}>
+      <div className="slang-filter-panel rounded-3xl p-4">
         <div className="grid gap-3 md:grid-cols-3">
           <input
             value={q}
@@ -365,7 +365,7 @@ function SlangCard({ item }: { item: SlangItem }) {
       </div>
 
       {caution && (
-        <div className="rounded-2xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm text-amber-300">
+        <div className="theme-warning-box rounded-2xl px-4 py-3 text-sm font-medium">
           ⚠ {caution}
         </div>
       )}

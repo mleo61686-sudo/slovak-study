@@ -60,10 +60,12 @@ export default function ChooseSlovak({
 
   return (
     <>
-      <div className="space-y-3 text-white">
-        <div className="text-lg font-semibold leading-snug text-white">
+      <div className="space-y-3 theme-text">
+        <div className="text-lg font-semibold leading-snug theme-text">
           {title}{" "}
-          <span className="font-bold text-cyan-100">{trWord(word, lang)}</span>
+          <span className="font-bold theme-accent-text">
+            {trWord(word, lang)}
+          </span>
         </div>
 
         <div className="flex justify-center">
@@ -92,13 +94,13 @@ export default function ChooseSlovak({
               }
             }}
             className={[
-              "rounded-2xl border px-4 py-3 text-left text-[17px] font-semibold text-white transition sm:px-5 sm:py-3.5",
+              "rounded-2xl px-4 py-3 text-left text-[17px] font-semibold transition sm:px-5 sm:py-3.5",
               answered
                 ? "cursor-not-allowed opacity-60"
-                : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+                : "hover:-translate-y-0.5 hover:border-cyan-400/35",
               picked === opt
-                ? "border-cyan-400/50 bg-cyan-400/10 ring-2 ring-cyan-400/20"
-                : "",
+                ? "border border-cyan-400/70 bg-cyan-400/20 text-cyan-600 shadow-[0_0_22px_rgba(34,211,238,0.24)] ring-2 ring-cyan-400/35"
+                : "theme-inner-card theme-text",
             ].join(" ")}
           >
             {opt}
@@ -114,8 +116,8 @@ export default function ChooseSlovak({
             lang={lang}
             extra={
               status === "wrong" ? (
-                <div className="text-sm text-white/70">
-                  {correctLabel} <b className="text-white">{word.sk}</b>
+                <div className="text-sm theme-text-muted">
+                  {correctLabel} <b className="theme-text">{word.sk}</b>
                 </div>
               ) : null
             }

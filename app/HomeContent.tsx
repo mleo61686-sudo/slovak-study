@@ -88,7 +88,6 @@ const t: Record<Lang, HomeTranslations> = {
       "🏋️ Повний доступ до тренажера",
       "🔁 Повторення тільки помилок",
       "📊 Статистика, серії та рекорди",
-      "🔊 Озвучка слів (Premium)",
     ],
     premiumPriceNote:
       "EUR / USD / UAH / PLN / CZK • місячний і річний план • можна скасувати будь-коли",
@@ -199,7 +198,6 @@ const t: Record<Lang, HomeTranslations> = {
       "🏋️ Полный доступ к тренажёру",
       "🔁 Повторять только ошибки",
       "📊 Статистика, серии и рекорды",
-      "🔊 Озвучка слов (Premium)",
     ],
     premiumPriceNote:
       "EUR / USD / UAH / PLN / CZK • месячный и годовой план • можно отменить в любой момент",
@@ -311,7 +309,6 @@ const t: Record<Lang, HomeTranslations> = {
       "🏋️ Full access to the trainer",
       "🔁 Review only mistakes",
       "📊 Statistics, streaks, and records",
-      "🔊 Word audio (Premium)",
     ],
     premiumPriceNote:
       "EUR / USD / UAH / PLN / CZK • monthly and yearly plans • cancel anytime",

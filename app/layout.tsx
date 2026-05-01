@@ -140,19 +140,21 @@ export default function RootLayout({
 
       <body
         suppressHydrationWarning
-        className="theme-flunio min-h-screen flex flex-col"
+        className="theme-flunio min-h-screen"
       >
         <SessionProviderClient>
-          <CourseBootstrap />
-          <Navbar />
-          <ProgressSync />
-          <SrsSync />
-          <OnboardingOverlay />
+          <div className="flex min-h-screen flex-col">
+            <CourseBootstrap />
+            <Navbar />
+            <ProgressSync />
+            <SrsSync />
+            <OnboardingOverlay />
 
-          <MainShell>{children}</MainShell>
+            <MainShell>{children}</MainShell>
+
+            <FooterClient />
+          </div>
         </SessionProviderClient>
-
-        <FooterClient />
 
         <SpeedInsights />
       </body>

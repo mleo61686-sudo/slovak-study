@@ -37,13 +37,12 @@ export default function MatchColumns({
         : lang === "ru"
           ? "Все пары собраны — можно перейти дальше."
           : "Усі пари зібрано — можна перейти далі.",
-    clear:
-      lang === "en" ? "Clear" : lang === "ru" ? "Очистить" : "Очистити",
-    next:
-      lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Наступне →",
+    clear: lang === "en" ? "Clear" : lang === "ru" ? "Очистить" : "Очистити",
+    next: lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Наступне →",
   };
 
   const left = useMemo(() => shuffle(words.map((w) => w.sk)), [words]);
+
   const right = useMemo(
     () => shuffle(words.map((w) => trWord(w, lang))),
     [words, lang]
@@ -69,9 +68,15 @@ export default function MatchColumns({
     null
   );
 
+  const [justMatchedPair, setJustMatchedPair] = useState<{
+    l: string;
+    r: string;
+  } | null>(null);
+
   const [isResolving, setIsResolving] = useState(false);
 
   const timeoutRef = useRef<number | null>(null);
+  const correctFlashTimeoutRef = useRef<number | null>(null);
 
   const MAX_WRONG = 3;
 
@@ -84,11 +89,17 @@ export default function MatchColumns({
     setWrongCount(0);
     setShakeWrong(false);
     setWrongPair(null);
+    setJustMatchedPair(null);
     setIsResolving(false);
 
     if (timeoutRef.current !== null) {
       window.clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
+    }
+
+    if (correctFlashTimeoutRef.current !== null) {
+      window.clearTimeout(correctFlashTimeoutRef.current);
+      correctFlashTimeoutRef.current = null;
     }
   }, [words, lang]);
 
@@ -97,6 +108,11 @@ export default function MatchColumns({
       if (timeoutRef.current !== null) {
         window.clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
+      }
+
+      if (correctFlashTimeoutRef.current !== null) {
+        window.clearTimeout(correctFlashTimeoutRef.current);
+        correctFlashTimeoutRef.current = null;
       }
     };
   }, []);
@@ -111,6 +127,7 @@ export default function MatchColumns({
     setSelectedLeft(null);
     setSelectedRight(null);
     setWrongPair(null);
+    setJustMatchedPair(null);
     setShakeWrong(false);
   }
 
@@ -127,11 +144,22 @@ export default function MatchColumns({
       setCorrectCount((c) => c + 1);
       setMatchedLeft((prev) => new Set(prev).add(selectedLeft));
       setMatchedRight((prev) => new Set(prev).add(selectedRight));
+      setJustMatchedPair({ l: selectedLeft, r: selectedRight });
       setSelectedLeft(null);
       setSelectedRight(null);
       setWrongPair(null);
       setShakeWrong(false);
       setIsResolving(false);
+
+      if (correctFlashTimeoutRef.current !== null) {
+        window.clearTimeout(correctFlashTimeoutRef.current);
+      }
+
+      correctFlashTimeoutRef.current = window.setTimeout(() => {
+        setJustMatchedPair(null);
+        correctFlashTimeoutRef.current = null;
+      }, 650);
+
       return;
     }
 
@@ -153,16 +181,24 @@ export default function MatchColumns({
     const isMatched = matchedLeft.has(sk);
     const isSelected = selectedLeft === sk;
     const isWrong = wrongPair?.l === sk;
+    const isJustMatched = justMatchedPair?.l === sk;
 
     return [
-      "w-full rounded-2xl border px-4 py-3 text-left font-semibold text-white transition",
-      locked || isMatched || isResolving
-        ? "cursor-not-allowed border-white/10 bg-white/5 opacity-45"
-        : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+      "w-full rounded-2xl px-4 py-3 text-left font-semibold transition",
+      isMatched
+        ? "cursor-not-allowed border border-emerald-500/60 bg-emerald-400/20 text-emerald-700 opacity-95"
+        : locked || isResolving
+          ? "cursor-not-allowed opacity-45 theme-inner-card theme-text"
+          : "theme-inner-card theme-text hover:-translate-y-0.5 hover:border-cyan-400/35",
       isSelected
-        ? "border-emerald-400/50 bg-emerald-400/10 ring-2 ring-emerald-400/20"
+        ? "scale-[1.015] border-2 border-emerald-500 bg-emerald-500/35 text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.35)] ring-4 ring-emerald-400/45"
         : "",
-      isWrong ? "border-rose-400/60 bg-rose-400/10" : "",
+      isJustMatched
+        ? "border-2 border-emerald-500 bg-emerald-500/40 text-emerald-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-4 ring-emerald-400/55"
+        : "",
+      isWrong
+        ? "border-2 border-rose-500 bg-rose-400/25 text-rose-800 ring-4 ring-rose-400/35"
+        : "",
     ].join(" ");
   }
 
@@ -170,41 +206,52 @@ export default function MatchColumns({
     const isMatched = matchedRight.has(tr);
     const isSelected = selectedRight === tr;
     const isWrong = wrongPair?.r === tr;
+    const isJustMatched = justMatchedPair?.r === tr;
 
     return [
-      "w-full rounded-2xl border px-4 py-3 text-left font-semibold text-white transition",
-      locked || isMatched || isResolving
-        ? "cursor-not-allowed border-white/10 bg-white/5 opacity-45"
-        : "border-white/10 bg-white/5 hover:border-cyan-400/35 hover:bg-white/10",
+      "w-full rounded-2xl px-4 py-3 text-left font-semibold transition",
+      isMatched
+        ? "cursor-not-allowed border border-emerald-500/60 bg-emerald-400/20 text-emerald-700 opacity-95"
+        : locked || isResolving
+          ? "cursor-not-allowed opacity-45 theme-inner-card theme-text"
+          : "theme-inner-card theme-text hover:-translate-y-0.5 hover:border-cyan-400/35",
       isSelected
-        ? "border-cyan-400/50 bg-cyan-400/10 ring-2 ring-cyan-400/20"
+        ? "scale-[1.015] border-2 border-cyan-500 bg-cyan-500/35 text-cyan-950 shadow-[0_0_28px_rgba(34,211,238,0.35)] ring-4 ring-cyan-400/45"
         : "",
-      isWrong ? "border-rose-400/60 bg-rose-400/10" : "",
+      isJustMatched
+        ? "border-2 border-emerald-500 bg-emerald-500/40 text-emerald-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-4 ring-emerald-400/55"
+        : "",
+      isWrong
+        ? "border-2 border-rose-500 bg-rose-400/25 text-rose-800 ring-4 ring-rose-400/35"
+        : "",
     ].join(" ");
   }
-
   const canNext = locked;
 
   return (
-    <div className="space-y-4 text-white">
+    <div className="space-y-4 theme-text">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-lg font-semibold">{t.title}</div>
+          <div className="text-lg font-semibold theme-text">{t.title}</div>
 
-          <div className="text-sm text-white/55">
-            {t.correct}: {correctCount} / {words.length}
-            <span className="mx-2">•</span>
-            {t.wrongs}: {wrongCount} / {MAX_WRONG}
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm font-semibold">
+            <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-emerald-400">
+              {t.correct}: {correctCount} / {words.length}
+            </span>
+
+            <span className="rounded-full border border-rose-400/30 bg-rose-400/10 px-3 py-1 text-rose-400">
+              {t.wrongs}: {wrongCount} / {MAX_WRONG}
+            </span>
           </div>
 
           {doneByWrong && (
-            <div className="mt-1 text-sm font-semibold text-rose-300">
+            <div className="mt-1 text-sm font-semibold text-rose-500">
               {t.limitReached}
             </div>
           )}
 
           {doneAll && (
-            <div className="mt-1 text-sm font-semibold text-emerald-300">
+            <div className="mt-1 text-sm font-semibold text-emerald-500">
               {t.allDone}
             </div>
           )}
@@ -214,7 +261,7 @@ export default function MatchColumns({
           <button
             onClick={clearSelection}
             disabled={locked || isResolving}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/85 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+            className="theme-secondary-button rounded-xl px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t.clear}
           </button>
@@ -222,7 +269,7 @@ export default function MatchColumns({
           <button
             disabled={!canNext}
             onClick={() => onDone(correctCount)}
-            className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+            className="theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t.next}
           </button>

@@ -122,7 +122,7 @@ export default function WordsSrsPage({
     const now = Date.now();
 
     const dueAll = getDueSorted(allWords, updated);
-    const dueIds = dueAll.map((w) => getTerm(w));
+    const dueIds = dueAll.map((w) => getTerm(w)).filter(Boolean);
 
     const today = getTodayKey();
     const saved = getDailySession(userId, courseId);
@@ -132,14 +132,18 @@ export default function WordsSrsPage({
     let ids: string[] = [];
 
     if (saved?.date === today) {
+      /*
+       * ВАЖЛИВО:
+       * Якщо сьогоднішня сесія вже була створена, НЕ добираємо нові слова.
+       * Інакше після завершення 30 слів сторінка знову набирала наступні 30.
+       */
       ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
-
-      if (ids.length === 0) {
-        ids = dueIds.slice(0, target);
-      }
 
       setDailySession(userId, courseId, ids);
     } else {
+      /*
+       * Нова денна сесія створюється тільки один раз на день.
+       */
       ids = dueIds.slice(0, target);
       setDailySession(userId, courseId, ids);
     }
@@ -273,7 +277,7 @@ export default function WordsSrsPage({
 
       removeFromDailySession(userId, courseId, curId);
       goNext();
-    }, 900);
+    }, 1400);
   }
 
   function skip() {
@@ -407,7 +411,7 @@ export default function WordsSrsPage({
         streak={streak.count}
         streakLabel={streakLabel}
         dailyGoalLabel={dailyGoalLabel}
-        dailyGoalReviewed={dailyGoal.reviewed}
+        dailyGoalReviewed={Math.min(dailyGoal.reviewed, DAILY_GOAL_TARGET)}
         dailyGoalTarget={DAILY_GOAL_TARGET}
         xpLabel={xpLabel}
         xp={xp.totalXp}

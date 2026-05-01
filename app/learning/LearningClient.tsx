@@ -376,34 +376,37 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 text-white relative">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10 blur-3xl" />
-      <div className="flunio-card rounded-3xl p-6">
-        <h1 className="text-3xl font-bold">{t.title}</h1>
-        <p className="mt-2 text-white/65">{t.subtitle}</p>
+    <div className="relative mx-auto max-w-3xl px-4 py-10 theme-text">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10 blur-3xl" />
 
-        <p className="mt-3 text-sm text-white/55">
-          {t.done} <span className="font-semibold text-white">{completedCount}</span>
+      <div className="flunio-card rounded-3xl p-6">
+        <h1 className="text-3xl font-bold theme-text">{t.title}</h1>
+        <p className="mt-2 theme-text-muted">{t.subtitle}</p>
+
+        <p className="mt-3 text-sm theme-text-muted">
+          {t.done}{" "}
+          <span className="font-semibold theme-text">{completedCount}</span>
         </p>
 
         <div className="mt-3 flex flex-wrap gap-2">
           {isPremium && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300/25 bg-yellow-300/10 px-3 py-1 text-xs font-semibold text-yellow-100">
+            <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300/25 bg-yellow-300/10 px-3 py-1 text-xs font-semibold text-yellow-500">
               {t.premiumActive}
             </div>
           )}
 
           {hasReachedDailyLimit && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/75">
+            <div className="theme-pill inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
               {t.dailyLimit}
             </div>
           )}
         </div>
 
-        <div className="mt-3 text-xs text-white/50">
-          {t.availableNow} <span className="font-semibold text-cyan-200">{allowed}</span>
+        <div className="mt-3 text-xs theme-text-subtle">
+          {t.availableNow}{" "}
+          <span className="font-semibold theme-accent-text">{allowed}</span>
           {lastDone ? (
-            <span className="ml-2 text-white/40">
+            <span className="ml-2 theme-text-subtle">
               · {t.lastDone} {lastDone}
             </span>
           ) : null}
@@ -419,20 +422,17 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
           const isBandDisabled = DISABLED_BANDS.has(band.id);
 
           return (
-            <section
-              key={band.id}
-              className="flunio-card rounded-3xl p-6 text-white"
-            >
+            <section key={band.id} className="flunio-card rounded-3xl p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold theme-text">
                     {getLocalized(band.title, lang)}
                   </h2>
-                  <p className="mt-1 text-sm text-white/65">
+                  <p className="mt-1 text-sm theme-text-muted">
                     {getLocalized(band.subtitle, lang)}
                   </p>
 
-                  <p className="mt-2 text-xs text-white/50">
+                  <p className="mt-2 text-xs theme-text-subtle">
                     {t.lessons} {lessonsTotal} · {t.words} {wordsTotal}
                   </p>
                 </div>
@@ -443,7 +443,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       type="button"
                       onClick={() => goTo("/premium")}
                       disabled={isPending}
-                      className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-1 text-xs font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="theme-primary-button rounded-xl px-3 py-1 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {t.buyPremium}
                     </button>
@@ -452,25 +452,25 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       type="button"
                       onClick={() => goTo(`/learning/levels/${band.id}`)}
                       disabled={isPending}
-                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/85 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="theme-secondary-button rounded-xl px-3 py-1 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {t.allLessons}
                     </button>
                   )}
 
-                  <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-100">
+                  <span className="theme-pill rounded-full px-3 py-1 text-xs font-semibold">
                     {band.id.toUpperCase()}
                   </span>
                 </div>
               </div>
 
               {band.lessons.length === 0 ? (
-                <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/65">
+                <div className="theme-inner-card mt-5 rounded-2xl p-4 text-sm theme-text-muted">
                   {t.soon}
                 </div>
               ) : isBandDisabled ? (
-                <div className="mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-sm font-medium text-white/85">
+                <div className="theme-inner-card mt-5 flex items-center justify-between rounded-2xl p-4">
+                  <div className="text-sm font-medium theme-text">
                     🔒 {t.premiumOnly}
                   </div>
 
@@ -478,7 +478,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                     type="button"
                     onClick={() => goTo("/premium")}
                     disabled={isPending}
-                    className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {t.buyPremium}
                   </button>
@@ -506,23 +506,24 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                       <div
                         key={lesson.id}
                         className={[
-                          "rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur transition",
+                          "theme-inner-card rounded-2xl p-4 transition",
                           unlocked
-                            ? "hover:-translate-y-0.5 hover:border-cyan-400/35 hover:bg-white/10"
+                            ? "hover:-translate-y-0.5 hover:border-cyan-400/35"
                             : "opacity-50",
                         ].join(" ")}
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <div className="font-medium text-white">
-                            {getLocalized(lesson.title, lang)} {done ? "✅" : ""}
+                          <div className="font-medium theme-text">
+                            {getLocalized(lesson.title, lang)}{" "}
+                            {done ? "✅" : ""}
                           </div>
-                          <div className="text-sm text-white/50">
+                          <div className="text-sm theme-text-subtle">
                             {t.wordsCount(lesson.wordsCount)}
                           </div>
                         </div>
 
                         {stats && (
-                          <div className="mt-1 text-xs text-white/50">
+                          <div className="mt-1 text-xs theme-text-subtle">
                             ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
                             {stats.lastTotal}
                           </div>
@@ -534,7 +535,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                               type="button"
                               onClick={() => goTo(lessonPath)}
                               disabled={isPending}
-                              className="rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                              className="theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                               {isStart ? t.start : t.repeat}
                             </button>
@@ -542,7 +543,7 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
                             <button
                               type="button"
                               disabled
-                              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/55"
+                              className="theme-secondary-button rounded-xl px-4 py-2 text-sm opacity-70"
                             >
                               {lockedText}
                             </button>

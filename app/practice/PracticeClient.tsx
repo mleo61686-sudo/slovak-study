@@ -742,14 +742,14 @@ export default function PracticeClient({
                                 checkMcq(option);
                               }
                             }}
-                            className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left transition
-                        ${isCorrect ? "border-emerald-400/45 bg-emerald-500/15 text-emerald-300" : ""}
-                        ${isWrong ? "border-red-400/45 bg-red-500/15 text-red-300" : ""}
-                        ${!selected
+                            className={`flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left font-semibold transition
+    ${isCorrect ? "border-emerald-500 bg-emerald-500 text-white shadow-[0_0_22px_rgba(16,185,129,0.28)] ring-2 ring-emerald-400/35" : ""}
+    ${isWrong ? "border-red-500 bg-red-500 text-white shadow-[0_0_22px_rgba(239,68,68,0.24)] ring-2 ring-red-400/35" : ""}
+    ${!selected
                                 ? "theme-secondary-button cursor-pointer hover:-translate-y-0.5"
-                                : "cursor-default opacity-95"
+                                : "cursor-default opacity-100"
                               }
-                      `}
+  `}
                           >
                             <span className="font-medium">{option}</span>
 
@@ -774,10 +774,11 @@ export default function PracticeClient({
                         );
                       })}
                     </div>
-
                     {selected && (
                       <div
-                        className={`text-sm font-medium ${selected === qBase.sk ? "text-emerald-300" : "text-red-300"
+                        className={`inline-flex w-fit rounded-full border px-3 py-1.5 text-sm font-bold ${selected === qBase.sk
+                          ? "border-emerald-400/40 bg-emerald-400/15 text-emerald-600"
+                          : "border-red-400/40 bg-red-400/15 text-red-600"
                           }`}
                       >
                         {selected === qBase.sk
@@ -838,12 +839,12 @@ export default function PracticeClient({
                       ) : (
                         <div className="space-y-3">
                           <div
-                            className={`rounded-2xl border px-4 py-3 text-sm ${typedChecked.ok
-                              ? "border-emerald-400/45 bg-emerald-500/15 text-emerald-300"
-                              : "border-red-400/45 bg-red-500/15 text-red-300"
+                            className={`rounded-2xl border px-4 py-3 text-sm font-semibold shadow-sm ${typedChecked.ok
+                                ? "border-emerald-500 bg-emerald-500 text-white shadow-[0_0_18px_rgba(16,185,129,0.22)]"
+                                : "border-red-500 bg-red-500 text-white shadow-[0_0_18px_rgba(239,68,68,0.2)]"
                               }`}
                           >
-                            <div className="text-sm font-medium">
+                            <div className="text-sm font-bold">
                               {typedChecked.ok
                                 ? uiLang === "en"
                                   ? "Perfect! ⚡"
@@ -856,9 +857,11 @@ export default function PracticeClient({
                                     ? "Не совсем 😅"
                                     : "Майже 😅"}
                             </div>
-                            {typedChecked.ok ? t.correct : `${t.wrongPrefix} ${qBase.sk}`}
-                          </div>
 
+                            <div className="mt-1">
+                              {typedChecked.ok ? t.correct : `${t.wrongPrefix} ${qBase.sk}`}
+                            </div>
+                          </div>
                           <div className="theme-home-soft-card rounded-2xl px-4 py-3 text-sm theme-text-muted">
                             {helper}
                           </div>

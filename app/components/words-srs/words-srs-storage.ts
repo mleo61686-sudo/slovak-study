@@ -30,6 +30,8 @@ const STREAK_KEY_BASE = "slovakStudy.srsStreak";
 const DAILY_GOAL_KEY_BASE = "slovakStudy.srsDailyGoal";
 const XP_KEY_BASE = "slovakStudy.srsXp";
 
+const DAILY_GOAL_MAX = 30;
+
 export const XP_SYNC_EVENT = "slovakStudy:xpChanged";
 
 export type DailySession = { date: string; ids: string[] };
@@ -245,7 +247,10 @@ export function getDailyGoalState(
 
     return {
       date: today,
-      reviewed: typeof parsed?.reviewed === "number" ? parsed.reviewed : 0,
+      reviewed:
+        typeof parsed?.reviewed === "number"
+          ? Math.min(parsed.reviewed, DAILY_GOAL_MAX)
+          : 0,
     };
   } catch {
     return { date: today, reviewed: 0 };
@@ -260,7 +265,7 @@ export function markDailyGoalReview(
 
   const next: DailyGoalState = {
     date: getTodayKey(),
-    reviewed: current.reviewed + 1,
+    reviewed: Math.min(current.reviewed + 1, DAILY_GOAL_MAX),
   };
 
   localStorage.setItem(dailyGoalKey(userId, courseId), JSON.stringify(next));

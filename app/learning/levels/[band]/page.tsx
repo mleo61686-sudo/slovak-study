@@ -165,9 +165,9 @@ export default function BandPage() {
 
   if (!band) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-10 text-white">
+      <div className="mx-auto max-w-3xl px-4 py-10 theme-text">
         <div className="flunio-card rounded-3xl p-6">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-2xl font-semibold theme-text">
             {lang === "ua"
               ? "Рівень не знайдено"
               : lang === "ru"
@@ -175,7 +175,7 @@ export default function BandPage() {
                 : "Level not found"}
           </h1>
 
-          <p className="mt-2 text-white/65">
+          <p className="mt-2 theme-text-muted">
             {lang === "ua"
               ? "Спробуй повернутися назад."
               : lang === "ru"
@@ -183,13 +183,13 @@ export default function BandPage() {
                 : "Try going back."}
           </p>
 
-          <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70 backdrop-blur">
+          <div className="theme-inner-card mt-4 rounded-2xl p-4 text-sm theme-text-muted">
             <div>
-              <span className="font-medium text-white">bandId:</span>{" "}
+              <span className="font-medium theme-text">bandId:</span>{" "}
               {bandId || "(порожньо)"}
             </div>
             <div className="mt-2">
-              <span className="font-medium text-white">
+              <span className="font-medium theme-text">
                 {lang === "ua"
                   ? "Доступні рівні:"
                   : lang === "ru"
@@ -201,7 +201,7 @@ export default function BandPage() {
           </div>
 
           <Link
-            className="mt-4 inline-flex min-h-10 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
+            className="theme-secondary-button mt-4 inline-flex min-h-10 items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
             href="/learning"
           >
             ← {lang === "ua" ? "Назад" : lang === "ru" ? "Назад" : "Back"}
@@ -214,22 +214,22 @@ export default function BandPage() {
   const doneCount = band.lessons.filter((l) => isDone(l.id)).length;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 text-white">
+    <div className="mx-auto max-w-4xl px-4 py-10 theme-text">
       <div className="flunio-card relative overflow-hidden rounded-3xl p-6">
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-fuchsia-500/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-14 -left-10 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-white">
+            <h1 className="text-3xl font-semibold tracking-tight theme-text">
               {band.title[lang] ?? band.title.ua}
             </h1>
 
-            <p className="mt-2 text-white/70">
+            <p className="mt-2 theme-text-muted">
               {band.subtitle[lang] ?? band.subtitle.ua}
             </p>
 
-            <p className="mt-2 text-sm text-white/55">
+            <p className="mt-2 text-sm theme-text-subtle">
               {lang === "ua"
                 ? "Прогрес"
                 : lang === "ru"
@@ -241,7 +241,7 @@ export default function BandPage() {
             </p>
 
             {isPremium && (
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-yellow-300/25 bg-yellow-300/10 px-3 py-1 text-xs font-semibold text-yellow-100 backdrop-blur">
+              <div className="theme-premium-badge mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
                 ⭐{" "}
                 {lang === "ua"
                   ? "Premium активний — всі уроки відкриті"
@@ -252,7 +252,7 @@ export default function BandPage() {
             )}
 
             {hasReachedDailyLimit && (
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-white/75 backdrop-blur">
+              <div className="theme-pill mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
                 {lang === "ua"
                   ? "Ліміт на сьогодні вичерпано 🔒"
                   : lang === "ru"
@@ -264,13 +264,13 @@ export default function BandPage() {
 
           <Link
             href="/learning"
-            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-2xl border border-cyan-400/45 bg-white/5 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/10 active:translate-y-0"
+            className="theme-secondary-button inline-flex min-h-10 shrink-0 items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
           >
             ← {lang === "ua" ? "Назад" : lang === "ru" ? "Назад" : "Back"}
           </Link>
         </div>
 
-        <div className="relative mt-6 h-2 w-full overflow-hidden rounded-full bg-white/10">
+        <div className="theme-progress-track relative mt-6 h-2 w-full overflow-hidden rounded-full">
           <div
             className="h-2 rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 shadow-[0_0_18px_rgba(59,130,246,0.35)]"
             style={{
@@ -309,7 +309,8 @@ export default function BandPage() {
             lockedByProgress || lockedByPremium || lockedByDailyLimit;
 
           const cardClass =
-            "rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_0_18px_rgba(34,211,238,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-cyan-400/40 hover:bg-white/10";
+            "theme-inner-card rounded-2xl p-4 shadow-[0_0_18px_rgba(34,211,238,0.06)] transition hover:-translate-y-0.5 hover:border-cyan-400/40";
+
           const lessonTitle = lesson.title[lang] ?? lesson.title.ua;
 
           const lockedText = lockedByDailyLimit
@@ -330,33 +331,33 @@ export default function BandPage() {
             return (
               <div
                 key={lesson.id}
-                className={`${cardClass} cursor-not-allowed opacity-60 hover:translate-y-0 hover:border-white/10 hover:bg-white/5`}
+                className={`${cardClass} cursor-not-allowed opacity-60 hover:translate-y-0`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <div className="font-medium text-white">{lessonTitle}</div>
-                  <div className="text-xs text-white/45">
+                  <div className="font-medium theme-text">{lessonTitle}</div>
+                  <div className="text-xs theme-text-subtle">
                     {lesson.wordsCount}{" "}
                     {lang === "ua" ? "слів" : lang === "ru" ? "слов" : "words"}
                   </div>
                 </div>
 
-                <div className="mt-2 text-xs text-white/45">{lesson.id}</div>
+                <div className="mt-2 text-xs theme-text-subtle">{lesson.id}</div>
 
                 {stats && (
-                  <div className="mt-1 text-xs text-white/45">
+                  <div className="mt-1 text-xs theme-text-subtle">
                     ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
                     {stats.lastTotal}
                   </div>
                 )}
 
-                <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/75">
+                <div className="theme-pill mt-3 inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm">
                   {lockedText} 🔒
                 </div>
 
                 {lockedByPremium && (
                   <Link
                     href="/premium"
-                    className="mt-3 inline-flex rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-3 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.25)] transition hover:-translate-y-0.5 active:translate-y-0"
+                    className="theme-primary-button mt-3 inline-flex rounded-xl px-3 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
                   >
                     {lang === "ua"
                       ? "Купити Premium"
@@ -376,19 +377,19 @@ export default function BandPage() {
               className={cardClass}
             >
               <div className="flex items-start justify-between gap-2">
-                <div className="font-medium text-white">
+                <div className="font-medium theme-text">
                   {lessonTitle} {done ? "✅" : ""}
                 </div>
-                <div className="text-xs text-white/45">
+                <div className="text-xs theme-text-subtle">
                   {lesson.wordsCount}{" "}
                   {lang === "ua" ? "слів" : lang === "ru" ? "слов" : "words"}
                 </div>
               </div>
 
-              <div className="mt-2 text-xs text-white/45">{lesson.id}</div>
+              <div className="mt-2 text-xs theme-text-subtle">{lesson.id}</div>
 
               {stats && (
-                <div className="mt-1 text-xs text-white/45">
+                <div className="mt-1 text-xs theme-text-subtle">
                   ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
                   {stats.lastTotal}
                 </div>

@@ -240,17 +240,17 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const lesson = getLessonFromLessonsByBand(lessonsByBand, levelId);
   if (!lesson) {
     return (
-      <div className="mx-auto max-w-2xl px-4 py-10 text-white">
+      <div className="mx-auto max-w-2xl px-4 py-10 theme-text">
         <div className="flunio-card rounded-3xl p-6">
-          <h1 className="text-2xl font-semibold text-white">
+          <h1 className="text-2xl font-semibold theme-text">
             Урок не знайдено 😢
           </h1>
 
-          <p className="mt-2 text-white/60">id = {levelId}</p>
+          <p className="mt-2 theme-text-muted">id = {levelId}</p>
 
           <Link
             href="/learning"
-            className="mt-4 inline-flex rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-cyan-400/35 hover:bg-white/10"
+            className="theme-secondary-button mt-4 inline-flex rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5"
           >
             ← Назад
           </Link>
