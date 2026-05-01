@@ -120,27 +120,27 @@ const USER_LEVELS: Array<{
   xp: number;
   title: UserLevel["title"];
 }> = [
-  { level: 1, xp: 0, title: { ua: "Початківець", ru: "Новичок", en: "Beginner" } },
-  { level: 2, xp: 100, title: { ua: "Новачок", ru: "Начинающий", en: "Rookie" } },
-  { level: 3, xp: 250, title: { ua: "Учень", ru: "Ученик", en: "Learner" } },
-  { level: 4, xp: 500, title: { ua: "Старанний учень", ru: "Старательный ученик", en: "Dedicated Learner" } },
-  { level: 5, xp: 900, title: { ua: "Практик", ru: "Практик", en: "Practitioner" } },
-  { level: 6, xp: 1400, title: { ua: "Словознавець", ru: "Знаток слов", en: "Word Explorer" } },
-  { level: 7, xp: 2100, title: { ua: "Активний учень", ru: "Активный ученик", en: "Active Learner" } },
-  { level: 8, xp: 3000, title: { ua: "Мовний дослідник", ru: "Языковой исследователь", en: "Language Explorer" } },
-  { level: 9, xp: 4200, title: { ua: "Сильний учень", ru: "Сильный ученик", en: "Strong Learner" } },
-  { level: 10, xp: 6000, title: { ua: "Поліглот-початківець", ru: "Полиглот-новичок", en: "Junior Polyglot" } },
-  { level: 11, xp: 8500, title: { ua: "Мовний боєць", ru: "Языковой боец", en: "Language Fighter" } },
-  { level: 12, xp: 11500, title: { ua: "Впевнений учень", ru: "Уверенный ученик", en: "Confident Learner" } },
-  { level: 13, xp: 15000, title: { ua: "Просунутий", ru: "Продвинутый", en: "Advanced" } },
-  { level: 14, xp: 19000, title: { ua: "Мовний майстер", ru: "Языковой мастер", en: "Language Master" } },
-  { level: 15, xp: 24000, title: { ua: "Експерт", ru: "Эксперт", en: "Expert" } },
-  { level: 16, xp: 30000, title: { ua: "Поліглот", ru: "Полиглот", en: "Polyglot" } },
-  { level: 17, xp: 37000, title: { ua: "Супер поліглот", ru: "Супер полиглот", en: "Super Polyglot" } },
-  { level: 18, xp: 45000, title: { ua: "Легенда Flunio", ru: "Легенда Flunio", en: "Flunio Legend" } },
-  { level: 19, xp: 55000, title: { ua: "Майстер мов", ru: "Мастер языков", en: "Language Champion" } },
-  { level: 20, xp: 70000, title: { ua: "Грандмайстер", ru: "Грандмастер", en: "Grandmaster" } },
-];
+    { level: 1, xp: 0, title: { ua: "Початківець", ru: "Новичок", en: "Beginner" } },
+    { level: 2, xp: 100, title: { ua: "Новачок", ru: "Начинающий", en: "Rookie" } },
+    { level: 3, xp: 250, title: { ua: "Учень", ru: "Ученик", en: "Learner" } },
+    { level: 4, xp: 500, title: { ua: "Старанний учень", ru: "Старательный ученик", en: "Dedicated Learner" } },
+    { level: 5, xp: 900, title: { ua: "Практик", ru: "Практик", en: "Practitioner" } },
+    { level: 6, xp: 1400, title: { ua: "Словознавець", ru: "Знаток слов", en: "Word Explorer" } },
+    { level: 7, xp: 2100, title: { ua: "Активний учень", ru: "Активный ученик", en: "Active Learner" } },
+    { level: 8, xp: 3000, title: { ua: "Мовний дослідник", ru: "Языковой исследователь", en: "Language Explorer" } },
+    { level: 9, xp: 4200, title: { ua: "Сильний учень", ru: "Сильный ученик", en: "Strong Learner" } },
+    { level: 10, xp: 6000, title: { ua: "Поліглот-початківець", ru: "Полиглот-новичок", en: "Junior Polyglot" } },
+    { level: 11, xp: 8500, title: { ua: "Мовний боєць", ru: "Языковой боец", en: "Language Fighter" } },
+    { level: 12, xp: 11500, title: { ua: "Впевнений учень", ru: "Уверенный ученик", en: "Confident Learner" } },
+    { level: 13, xp: 15000, title: { ua: "Просунутий", ru: "Продвинутый", en: "Advanced" } },
+    { level: 14, xp: 19000, title: { ua: "Мовний майстер", ru: "Языковой мастер", en: "Language Master" } },
+    { level: 15, xp: 24000, title: { ua: "Експерт", ru: "Эксперт", en: "Expert" } },
+    { level: 16, xp: 30000, title: { ua: "Поліглот", ru: "Полиглот", en: "Polyglot" } },
+    { level: 17, xp: 37000, title: { ua: "Супер поліглот", ru: "Супер полиглот", en: "Super Polyglot" } },
+    { level: 18, xp: 45000, title: { ua: "Легенда Flunio", ru: "Легенда Flunio", en: "Flunio Legend" } },
+    { level: 19, xp: 55000, title: { ua: "Майстер мов", ru: "Мастер языков", en: "Language Champion" } },
+    { level: 20, xp: 70000, title: { ua: "Грандмайстер", ru: "Грандмастер", en: "Grandmaster" } },
+  ];
 
 export function getUserLevel(totalXp: number): UserLevel {
   const safeXp = Math.max(0, totalXp);
@@ -166,14 +166,14 @@ export function getUserLevel(totalXp: number): UserLevel {
     current.level === next.level
       ? 100
       : Math.min(
-          100,
-          Math.max(
-            0,
-            Math.round(
-              ((safeXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100
-            )
+        100,
+        Math.max(
+          0,
+          Math.round(
+            ((safeXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100
           )
-        );
+        )
+      );
 
   return {
     level: current.level,
@@ -348,19 +348,24 @@ export function getDailyState(
   userId: string,
   courseId: CourseId
 ): { date: string; count: number } {
+  const today = getTodayKey();
   const raw = localStorage.getItem(dailyKey(userId, courseId));
 
-  if (!raw) return { date: getTodayKey(), count: 0 };
+  if (!raw) return { date: today, count: 0 };
 
   try {
     const parsed = JSON.parse(raw);
 
+    if (parsed?.date !== today) {
+      return { date: today, count: 0 };
+    }
+
     return {
-      date: typeof parsed?.date === "string" ? parsed.date : getTodayKey(),
+      date: today,
       count: typeof parsed?.count === "number" ? parsed.count : 0,
     };
   } catch {
-    return { date: getTodayKey(), count: 0 };
+    return { date: today, count: 0 };
   }
 }
 
@@ -379,6 +384,7 @@ export function getDailySession(
   userId: string,
   courseId: CourseId
 ): DailySession | null {
+  const today = getTodayKey();
   const raw = localStorage.getItem(dailySessionKey(userId, courseId));
 
   if (!raw) return null;
@@ -386,7 +392,13 @@ export function getDailySession(
   try {
     const s = JSON.parse(raw);
 
-    if (typeof s?.date === "string" && Array.isArray(s?.ids)) return s;
+    if (s?.date !== today) {
+      return null;
+    }
+
+    if (typeof s?.date === "string" && Array.isArray(s?.ids)) {
+      return s;
+    }
 
     return null;
   } catch {
