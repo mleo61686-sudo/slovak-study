@@ -9,6 +9,7 @@ import NavLabel, { type NavKey } from "@/app/components/NavLabel";
 import LanguageMenu from "@/app/components/LanguageMenu";
 import ThemeToggleButton from "@/app/components/ThemeToggleButton";
 
+
 type NavItem = { href: string; key: NavKey };
 
 export default function NavbarClient() {

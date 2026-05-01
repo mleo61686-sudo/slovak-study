@@ -418,7 +418,7 @@ export const A0_BUILD_UA_SENTENCES_3: BuildUaSentenceDict = {
   },
 
   [phraseKey("hlava", "a0-14")]: {
-    sk: "Bolie ma hlava.",
+    sk: "Bolí ma hlava.",
     ua: "У мене болить голова.",
     ru: "У меня болит голова.",
     en: "I have a headache.",

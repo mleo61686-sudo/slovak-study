@@ -237,11 +237,11 @@ export const A0_PHRASES_2: Record<string, Phrase> = {
     tokens: ["Telo", "potrebuje", "oddych", "."],
   },
   [phraseKey("hlava", "a0-14")]: {
-    sk: "Bolie ma hlava.",
+    sk: "Bolí ma hlava.",
     ua: "У мене болить голова.",
     ru: "У меня болит голова.",
     en: "My head hurts.",
-    tokens: ["Bolie", "ma", "hlava", "."],
+    tokens: ["Bolí", "ma", "hlava", "."],
   },
   [phraseKey("oko", "a0-14")]: {
     sk: "Mám unavené oko.",

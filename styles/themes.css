@@ -4,13 +4,14 @@
 }
 
 body.theme-flunio {
-  --background: #050816;
+  --background: #071126;
   --foreground: #f8fafc;
 
-  background:
-    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.16), transparent 32%),
-    radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.16), transparent 30%),
-    linear-gradient(135deg, #050816 0%, #080d24 45%, #12051f 100%);
+  background-color: #071126;
+  background-image:
+    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.14), transparent 30%),
+    radial-gradient(circle at 10% 0%, rgba(34, 211, 238, 0.14), transparent 30%),
+    linear-gradient(180deg, #0b1730 0%, #0a1833 45%, #0b1730 100%);
   color: var(--foreground);
 }
 
