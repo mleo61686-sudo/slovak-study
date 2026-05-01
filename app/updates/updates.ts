@@ -8,6 +8,37 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-05-01",
+    title: {
+      ua: "Оновлення: нова тема Flunio, покращення дизайну та медіа",
+      ru: "Обновление: новая тема Flunio, улучшение дизайна и медиа",
+      en: "Update: new Flunio theme, design improvements, and media",
+    },
+    items: {
+      ua: [
+        "Додано нову візуальну тему Flunio — сучасний темний стиль із м’якими картками, градієнтами та світловими акцентами",
+        "Щоб змінити тему, натисни на аватар у верхньому меню та обери Flunio theme або Simple theme",
+        "Частково оновлено попередню світлу тему — покращено читабельність, контраст і вигляд окремих сторінок",
+        "Замінено деякі зображення в уроках, щоб приклади виглядали точніше та приємніше",
+        "Оновлено аудіо для частини словацького курсу — зокрема для уроків 8–20",
+      ],
+      ru: [
+        "Добавлена новая визуальная тема Flunio — современный тёмный стиль с мягкими карточками, градиентами и световыми акцентами",
+        "Чтобы изменить тему, нажми на аватар в верхнем меню и выбери Flunio theme или Simple theme",
+        "Частично обновлена предыдущая светлая тема — улучшены читаемость, контраст и внешний вид отдельных страниц",
+        "Заменены некоторые изображения в уроках, чтобы примеры выглядели точнее и приятнее",
+        "Обновлено аудио для части словацкого курса — в частности для уроков 8–20",
+      ],
+      en: [
+        "A new Flunio visual theme has been added — a modern dark style with soft cards, gradients, and glowing accents",
+        "To change the theme, click your avatar in the top menu and choose Flunio theme or Simple theme",
+        "The previous light theme has been partially updated — readability, contrast, and the look of several pages have been improved",
+        "Some lesson images have been replaced so the examples look clearer and more polished",
+        "Audio has been updated for part of the Slovak course, especially lessons 8–20",
+      ],
+    },
+  },
+  {
     date: "2026-04-28",
     title: {
       ua: "Оновлення: допомога новим користувачам, аудіо та покращення зручності",

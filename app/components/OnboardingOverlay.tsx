@@ -297,10 +297,10 @@ export default function OnboardingOverlay() {
 
   return (
     <div data-onboarding-overlay="true">
-      <div className="fixed inset-0 z-[9998] bg-black/65 backdrop-blur-[2px]" />
+      <div className="fixed inset-0 z-[9998] bg-black/35 backdrop-blur-[1px]" />
 
       <div
-        className="pointer-events-none fixed z-[9999] rounded-2xl border-2 border-cyan-400 shadow-[0_0_24px_rgba(34,211,238,0.55),0_0_0_9999px_rgba(0,0,0,0.55)] transition-all duration-200"
+        className="pointer-events-none fixed z-[9999] rounded-2xl border-2 border-cyan-400 shadow-[0_0_24px_rgba(34,211,238,0.55),0_0_0_9999px_rgba(0,0,0,0.28)] transition-all duration-200"
         style={{
           top: rect.top - 6,
           left: rect.left - 6,

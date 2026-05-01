@@ -233,7 +233,7 @@ export default function UpdatesPage() {
                             type="button"
                             onClick={() => selectUpdate(u.date)}
                             className={[
-                              "w-full rounded-2xl border px-3 py-2 text-left transition",
+                              "w-full rounded-2xl border px-3 py-2 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/35",
                               isActive
                                 ? "border-cyan-400/45 bg-cyan-400/10 shadow-[0_0_18px_rgba(34,211,238,0.16)] ring-1 ring-cyan-400/15"
                                 : "theme-home-soft-card hover:border-cyan-400/35",
@@ -263,9 +263,9 @@ export default function UpdatesPage() {
 
                               <div
                                 className={[
-                                  "mt-1 rounded-full px-2 py-0.5 text-[11px] font-bold",
+                                  "mt-1 rounded-full border px-2 py-0.5 text-[11px] font-bold",
                                   isActive
-                                    ? "bg-cyan-400/20 text-cyan-200 theme-simple:text-cyan-700"
+                                    ? "border-cyan-300 bg-cyan-100 text-cyan-800 dark:border-cyan-400/30 dark:bg-cyan-400/20 dark:text-cyan-100"
                                     : "theme-pill",
                                 ].join(" ")}
                               >
@@ -295,7 +295,7 @@ export default function UpdatesPage() {
                     </h2>
                   </div>
 
-                  <div className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-sm font-bold text-cyan-200 theme-simple:text-cyan-700">
+                  <div className="rounded-full border border-cyan-300 bg-cyan-100 px-3 py-1 text-sm font-bold text-cyan-800 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-100">
                     {fmtDate(active.date).short}
                   </div>
                 </div>
