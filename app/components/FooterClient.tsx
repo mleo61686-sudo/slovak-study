@@ -11,6 +11,8 @@ type FooterDict = {
   dictionary: string;
   practice: string;
   support: string;
+  privacy: string;
+  terms: string;
 };
 
 const t: Record<Lang, FooterDict> = {
@@ -21,6 +23,8 @@ const t: Record<Lang, FooterDict> = {
     dictionary: "Словник",
     practice: "Тренажер",
     support: "Підтримка",
+    privacy: "Політика конфіденційності",
+    terms: "Умови користування",
   },
   ru: {
     slogan: "учите языки каждый день.",
@@ -29,6 +33,8 @@ const t: Record<Lang, FooterDict> = {
     dictionary: "Словарь",
     practice: "Тренажёр",
     support: "Поддержка",
+    privacy: "Политика конфиденциальности",
+    terms: "Условия использования",
   },
   en: {
     slogan: "learn languages every day.",
@@ -37,6 +43,8 @@ const t: Record<Lang, FooterDict> = {
     dictionary: "Dictionary",
     practice: "Practice",
     support: "Support",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
   },
 };
 
@@ -72,6 +80,24 @@ export default function FooterClient() {
             </a>
             <a className="theme-footer-link transition hover:underline" href="/support">
               {dict.support}
+            </a>
+          </nav>
+        </div>
+
+        <div className="mt-5 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs theme-text-muted sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            Flunio © {new Date().getFullYear()}
+          </div>
+
+          <nav
+            aria-label="Legal"
+            className="flex flex-wrap gap-x-4 gap-y-2"
+          >
+            <a className="theme-footer-link transition hover:underline" href="/privacy">
+              {dict.privacy}
+            </a>
+            <a className="theme-footer-link transition hover:underline" href="/terms">
+              {dict.terms}
             </a>
           </nav>
         </div>
