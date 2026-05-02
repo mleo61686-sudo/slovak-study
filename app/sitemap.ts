@@ -44,10 +44,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `${baseUrl}/vyvchennia-polskoi-movy-online`,
     `${baseUrl}/ru/vyvchennia-polskoi-movy-online`,
 
-    // RU основні
-    `${baseUrl}/ru/learning`,
-    `${baseUrl}/ru/grammar`,
-    `${baseUrl}/ru/dictionary`,
   ];
 
   return urls.map((url) => ({
