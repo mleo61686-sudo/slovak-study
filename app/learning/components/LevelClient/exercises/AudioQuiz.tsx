@@ -53,8 +53,8 @@ export default function AudioQuiz({
 
   return (
     <>
-      <div className="space-y-3 theme-text sm:space-y-4">
-        <div className="text-lg font-semibold leading-snug theme-text">
+      <div className="space-y-4 text-center theme-text">
+        <div className="text-[15px] font-semibold leading-snug theme-text sm:text-lg">
           {title}
         </div>
 
@@ -67,8 +67,8 @@ export default function AudioQuiz({
         </div>
       </div>
 
-      <div className="mt-4 w-full space-y-3">
-        <div className="grid gap-3">
+      <div className="mt-6 w-full space-y-3">
+        <div className="grid gap-4">
           {options.map((opt) => (
             <button
               key={opt}
@@ -85,7 +85,7 @@ export default function AudioQuiz({
                 }
               }}
               className={[
-                "rounded-2xl px-4 py-3 text-left text-[17px] font-semibold transition sm:px-5 sm:py-3.5",
+                "rounded-2xl px-4 py-3.5 text-left text-[17px] font-semibold transition sm:px-5 sm:py-4",
                 answered
                   ? "cursor-not-allowed opacity-60"
                   : "hover:-translate-y-0.5 hover:border-cyan-400/35",

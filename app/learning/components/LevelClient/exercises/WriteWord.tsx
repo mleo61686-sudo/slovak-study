@@ -108,15 +108,18 @@ export default function WriteWord({
 
   return (
     <>
-      <div className="space-y-2.5 sm:space-y-3">
-        <div className="text-lg font-semibold leading-snug theme-text">
-          {t.title}{" "}
-          <span className="font-bold theme-accent-text">
+      <div className="space-y-4 text-center sm:space-y-5">
+        <div className="space-y-2">
+          <div className="text-[15px] font-semibold leading-snug theme-text sm:text-lg">
+            {t.title}
+          </div>
+
+          <div className="break-words text-2xl font-bold leading-tight theme-accent-text sm:text-[30px]">
             {trWord(word, lang)}
-          </span>
+          </div>
         </div>
 
-        <div className="flex justify-start">
+        <div className="flex justify-center">
           <SpeakButton
             text={word.sk}
             kind="word"
@@ -125,41 +128,45 @@ export default function WriteWord({
         </div>
       </div>
 
-      <div className="mt-3 max-w-[720px] space-y-2.5 sm:mt-4 sm:space-y-3">
+      <div className="mx-auto mt-6 w-full max-w-[720px] space-y-4 sm:mt-7">
         <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={status !== "idle"}
-          className={`theme-input w-full rounded-2xl px-4 py-2.5 text-[17px] outline-none transition disabled:opacity-60 sm:py-3 ${inputClass}`}
+          className={`theme-input w-full rounded-2xl px-4 py-3.5 text-[17px] font-semibold outline-none transition disabled:opacity-60 sm:px-5 sm:py-4 ${inputClass}`}
           placeholder={t.placeholder}
         />
 
-        <div className="text-sm leading-snug theme-text-subtle">{t.hint}</div>
+        <div className="text-center text-sm leading-snug theme-text-subtle">
+          {t.hint}
+        </div>
 
         {status === "idle" ? (
-          <button
-            onClick={check}
-            className="theme-primary-button rounded-2xl px-5 py-2.5 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5"
-            disabled={!value.trim()}
-          >
-            {t.check}
-          </button>
+          <div className="flex justify-center pt-1">
+            <button
+              onClick={check}
+              className="theme-primary-button min-h-[46px] rounded-2xl px-7 py-3 font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={!value.trim()}
+            >
+              {t.check}
+            </button>
+          </div>
         ) : (
           <div className="mt-2 space-y-3">
             {status === "correct" ? (
-              <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-3 py-2 font-semibold text-emerald-500">
+              <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-3 py-2 text-center font-semibold text-emerald-500">
                 {t.correctPrefix} <b>{correctAnswer}</b>
               </div>
             ) : (
-              <div className="rounded-xl border border-rose-300/25 bg-rose-400/10 px-3 py-2 font-semibold text-rose-500">
+              <div className="rounded-xl border border-rose-300/25 bg-rose-400/10 px-3 py-2 text-center font-semibold text-rose-500">
                 {t.wrongPrefix} <b>{correctAnswer}</b>
               </div>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex justify-center">
               <button
                 onClick={next}
-                className="theme-primary-button rounded-2xl px-5 py-2.5 font-semibold transition hover:-translate-y-0.5"
+                className="theme-primary-button min-h-[46px] rounded-2xl px-7 py-3 font-semibold transition hover:-translate-y-0.5"
               >
                 {t.next}
               </button>

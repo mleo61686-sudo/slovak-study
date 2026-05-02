@@ -169,23 +169,23 @@ export default function BuildUaSentence({
 
   return (
     <div className="space-y-5 theme-text">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div className="flex flex-col gap-4 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left">
         <div className="space-y-2">
           <div className="text-lg font-semibold leading-snug theme-text">
             {ui.title}
           </div>
 
-          <div className="text-sm theme-text-muted">
+          <div className="text-sm leading-snug theme-text-muted">
             {ui.targetLabel}:{" "}
-            <span className="font-medium theme-accent-text">{item.sk}</span>
+            <span className="font-semibold theme-accent-text">{item.sk}</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+        <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-wrap lg:items-center lg:justify-end">
           <button
             onClick={clear}
             disabled={status !== "idle"}
-            className="theme-secondary-button rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+            className="theme-secondary-button w-full rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 lg:w-auto"
           >
             {ui.clear}
           </button>
@@ -194,14 +194,14 @@ export default function BuildUaSentence({
             <button
               onClick={check}
               disabled={picked.length === 0}
-              className="theme-primary-button rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+              className="theme-primary-button w-full rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 lg:w-auto"
             >
               {ui.check}
             </button>
           ) : (
             <button
               onClick={next}
-              className="theme-primary-button rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5"
+              className="theme-primary-button w-full rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 lg:w-auto"
             >
               {ui.next}
             </button>
@@ -209,13 +209,13 @@ export default function BuildUaSentence({
         </div>
       </div>
 
-      <div className="theme-inner-card rounded-2xl p-4 shadow-[0_0_18px_rgba(34,211,238,0.08)] sm:p-5">
+      <div className="theme-inner-card rounded-3xl p-5 shadow-[0_0_18px_rgba(34,211,238,0.08)] sm:p-6">
         <div className="space-y-3">
           <div className="text-sm font-medium theme-text-muted">
             {ui.yourSentence}
           </div>
 
-          <div className="min-h-[32px] text-lg font-semibold theme-text sm:text-[28px]">
+          <div className="min-h-[44px] text-xl font-bold leading-snug theme-text sm:text-[28px]">
             {picked.length ? builtPretty : ui.dash}
           </div>
 
@@ -223,24 +223,24 @@ export default function BuildUaSentence({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2.5">
+      <div className="flex flex-wrap justify-center gap-3">
         {available.map((t, idx) => (
           <button
             key={`${t}-${idx}`}
             onClick={() => pickToken(t, idx)}
             disabled={status !== "idle"}
-            className="theme-secondary-button rounded-xl px-3 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+            className="theme-secondary-button min-h-[42px] rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t}
           </button>
         ))}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex justify-center gap-2">
         <button
           onClick={unpickLast}
           disabled={picked.length === 0 || status !== "idle"}
-          className="theme-secondary-button rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+          className="theme-secondary-button min-h-[42px] rounded-2xl px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {ui.back}
         </button>
@@ -268,7 +268,7 @@ export default function BuildUaSentence({
             <b className="text-rose-600">{tokensToSentence(correctTokens)}</b>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex justify-center gap-2 sm:justify-start">
             <button
               onClick={replay}
               className="rounded-2xl border border-rose-400/30 bg-rose-400/10 px-4 py-2.5 text-sm font-semibold text-rose-500 transition hover:-translate-y-0.5 hover:bg-rose-400/15"

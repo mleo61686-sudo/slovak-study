@@ -144,7 +144,7 @@ export default function BuildSentence({
 
   return (
     <div className="space-y-5 theme-text">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div className="flex flex-col gap-4 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left">
         <div className="space-y-2">
           <div className="text-lg font-semibold leading-snug theme-text">
             {ui.title}
@@ -158,10 +158,10 @@ export default function BuildSentence({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+        <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-wrap lg:items-center lg:justify-end">
           <button
             onClick={clear}
-            className="theme-secondary-button rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5"
+            className="theme-secondary-button w-full rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 lg:w-auto"
           >
             {ui.clear}
           </button>
@@ -185,13 +185,13 @@ export default function BuildSentence({
         </div>
       </div>
 
-      <div className="theme-inner-card rounded-2xl p-4 shadow-[0_0_18px_rgba(34,211,238,0.08)] sm:p-5">
+      <div className="theme-inner-card rounded-3xl p-5 shadow-[0_0_18px_rgba(34,211,238,0.08)] sm:p-6">
         <div className="space-y-3">
           <div className="text-sm font-medium theme-text-muted">
             {ui.yourSentence}
           </div>
 
-          <div className="min-h-[32px] text-lg font-semibold theme-text sm:text-[28px]">
+          <div className="min-h-[44px] text-xl font-bold leading-snug theme-text sm:text-[28px]">
             {picked.length ? builtPretty : ui.dash}
           </div>
 
@@ -199,23 +199,23 @@ export default function BuildSentence({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2.5">
+      <div className="flex flex-wrap justify-center gap-3">
         {available.map((t, idx) => (
           <button
             key={`${t}-${idx}`}
             onClick={() => pickToken(t, idx)}
-            className="theme-secondary-button rounded-xl px-3 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.97]"
+            className="theme-secondary-button min-h-[42px] rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.97]"
           >
             {t}
           </button>
         ))}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex justify-center gap-2">
         <button
           onClick={unpickLast}
           disabled={picked.length === 0 || status !== "idle"}
-          className="theme-secondary-button rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
+          className="theme-secondary-button min-h-[42px] rounded-2xl px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {ui.back}
         </button>

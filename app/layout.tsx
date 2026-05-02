@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 import Navbar from "./components/Navbar";
-import FooterClient from "./components/FooterClient"; // 👈 ДОДАНО
+import FooterVisibility from "./components/FooterVisibility";
 import SessionProviderClient from "./components/SessionProviderClient";
 import ProgressSync from "./components/ProgressSync";
 import SrsSync from "./components/SrsSync";
@@ -152,7 +152,7 @@ export default function RootLayout({
 
             <MainShell>{children}</MainShell>
 
-            <FooterClient />
+            <FooterVisibility />
           </div>
         </SessionProviderClient>
 

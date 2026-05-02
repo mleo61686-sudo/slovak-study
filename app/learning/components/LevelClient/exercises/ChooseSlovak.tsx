@@ -61,11 +61,14 @@ export default function ChooseSlovak({
   return (
     <>
       <div className="space-y-3 theme-text">
-        <div className="text-lg font-semibold leading-snug theme-text">
-          {title}{" "}
-          <span className="font-bold theme-accent-text">
+        <div className="space-y-2 text-center">
+          <div className="text-[15px] font-medium leading-snug theme-text">
+            {title}
+          </div>
+
+          <div className="text-2xl font-bold leading-tight theme-accent-text sm:text-[30px]">
             {trWord(word, lang)}
-          </span>
+          </div>
         </div>
 
         <div className="flex justify-center">
@@ -77,7 +80,7 @@ export default function ChooseSlovak({
         </div>
       </div>
 
-      <div className="mt-4 grid gap-3">
+      <div className="mt-6 grid gap-4">
         {options.map((opt) => (
           <button
             key={opt}
@@ -94,7 +97,7 @@ export default function ChooseSlovak({
               }
             }}
             className={[
-              "rounded-2xl px-4 py-3 text-left text-[17px] font-semibold transition sm:px-5 sm:py-3.5",
+              "rounded-2xl px-4 py-3.5 text-left text-[17px] font-semibold transition sm:px-5 sm:py-4",
               answered
                 ? "cursor-not-allowed opacity-60"
                 : "hover:-translate-y-0.5 hover:border-cyan-400/35",

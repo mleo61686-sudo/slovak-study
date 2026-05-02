@@ -48,6 +48,13 @@ export default function MatchColumns({
     [words, lang]
   );
 
+  const rows = useMemo(() => {
+    return left.map((sk, index) => ({
+      sk,
+      tr: right[index],
+    }));
+  }, [left, right]);
+
   const mapSkToTr = useMemo(() => {
     const m = new Map<string, string>();
     words.forEach((w) => m.set(w.sk, trWord(w, lang)));
@@ -184,20 +191,20 @@ export default function MatchColumns({
     const isJustMatched = justMatchedPair?.l === sk;
 
     return [
-      "w-full rounded-2xl px-4 py-3 text-left font-semibold transition",
+      "min-h-[44px] w-full rounded-2xl px-3 py-2 text-left text-[14px] font-semibold leading-snug transition sm:min-h-[50px] sm:px-4 sm:py-3 sm:text-base",
       isMatched
-        ? "cursor-not-allowed border border-emerald-500/60 bg-emerald-400/20 text-emerald-700 opacity-95"
+        ? "cursor-not-allowed border border-emerald-400/50 bg-emerald-400/15 text-emerald-300 opacity-95"
         : locked || isResolving
           ? "cursor-not-allowed opacity-45 theme-inner-card theme-text"
           : "theme-inner-card theme-text hover:-translate-y-0.5 hover:border-cyan-400/35",
       isSelected
-        ? "scale-[1.015] border-2 border-emerald-500 bg-emerald-500/35 text-emerald-950 shadow-[0_0_28px_rgba(16,185,129,0.35)] ring-4 ring-emerald-400/45"
+        ? "scale-[1.015] border-2 border-emerald-400 bg-emerald-400/25 text-emerald-100 shadow-[0_0_22px_rgba(16,185,129,0.28)] ring-2 ring-emerald-400/35"
         : "",
       isJustMatched
-        ? "border-2 border-emerald-500 bg-emerald-500/40 text-emerald-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-4 ring-emerald-400/55"
+        ? "border-2 border-emerald-400 bg-emerald-400/25 text-emerald-100 shadow-[0_0_22px_rgba(16,185,129,0.28)] ring-2 ring-emerald-400/35"
         : "",
       isWrong
-        ? "border-2 border-rose-500 bg-rose-400/25 text-rose-800 ring-4 ring-rose-400/35"
+        ? "border-2 border-rose-400 bg-rose-400/20 text-rose-100 ring-2 ring-rose-400/30"
         : "",
     ].join(" ");
   }
@@ -209,110 +216,109 @@ export default function MatchColumns({
     const isJustMatched = justMatchedPair?.r === tr;
 
     return [
-      "w-full rounded-2xl px-4 py-3 text-left font-semibold transition",
+      "min-h-[44px] w-full rounded-2xl px-3 py-2 text-left text-[14px] font-semibold leading-snug transition sm:min-h-[50px] sm:px-4 sm:py-3 sm:text-base",
       isMatched
-        ? "cursor-not-allowed border border-emerald-500/60 bg-emerald-400/20 text-emerald-700 opacity-95"
+        ? "cursor-not-allowed border border-emerald-400/50 bg-emerald-400/15 text-emerald-300 opacity-95"
         : locked || isResolving
           ? "cursor-not-allowed opacity-45 theme-inner-card theme-text"
           : "theme-inner-card theme-text hover:-translate-y-0.5 hover:border-cyan-400/35",
       isSelected
-        ? "scale-[1.015] border-2 border-cyan-500 bg-cyan-500/35 text-cyan-950 shadow-[0_0_28px_rgba(34,211,238,0.35)] ring-4 ring-cyan-400/45"
+        ? "scale-[1.015] border-2 border-cyan-400 bg-cyan-400/25 text-cyan-100 shadow-[0_0_22px_rgba(34,211,238,0.28)] ring-2 ring-cyan-400/35"
         : "",
       isJustMatched
-        ? "border-2 border-emerald-500 bg-emerald-500/40 text-emerald-950 shadow-[0_0_30px_rgba(16,185,129,0.4)] ring-4 ring-emerald-400/55"
+        ? "border-2 border-emerald-400 bg-emerald-400/25 text-emerald-100 shadow-[0_0_22px_rgba(16,185,129,0.28)] ring-2 ring-emerald-400/35"
         : "",
       isWrong
-        ? "border-2 border-rose-500 bg-rose-400/25 text-rose-800 ring-4 ring-rose-400/35"
+        ? "border-2 border-rose-400 bg-rose-400/20 text-rose-100 ring-2 ring-rose-400/30"
         : "",
     ].join(" ");
   }
+
   const canNext = locked;
 
   return (
     <div className="space-y-4 theme-text">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="text-lg font-semibold theme-text">{t.title}</div>
+      <div className="space-y-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <div className="text-xl font-bold leading-tight theme-text sm:text-lg">
+              {t.title}
+            </div>
 
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm font-semibold">
-            <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-emerald-400">
-              {t.correct}: {correctCount} / {words.length}
-            </span>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold sm:text-sm">
+              <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-emerald-400">
+                {t.correct}: {correctCount}/{words.length}
+              </span>
 
-            <span className="rounded-full border border-rose-400/30 bg-rose-400/10 px-3 py-1 text-rose-400">
-              {t.wrongs}: {wrongCount} / {MAX_WRONG}
-            </span>
+              <span className="rounded-full border border-rose-400/30 bg-rose-400/10 px-3 py-1 text-rose-400">
+                {t.wrongs}: {wrongCount}/{MAX_WRONG}
+              </span>
+            </div>
+
+            {doneByWrong && (
+              <div className="mt-1 text-sm font-semibold text-rose-500">
+                {t.limitReached}
+              </div>
+            )}
+
+            {doneAll && (
+              <div className="mt-1 text-sm font-semibold text-emerald-500">
+                {t.allDone}
+              </div>
+            )}
           </div>
 
-          {doneByWrong && (
-            <div className="mt-1 text-sm font-semibold text-rose-500">
-              {t.limitReached}
-            </div>
-          )}
+          <div className="grid grid-cols-2 gap-2 sm:flex">
+            <button
+              onClick={clearSelection}
+              disabled={locked || isResolving}
+              className="theme-secondary-button min-h-[44px] rounded-xl px-3 py-2 text-sm font-medium transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4"
+            >
+              {t.clear}
+            </button>
 
-          {doneAll && (
-            <div className="mt-1 text-sm font-semibold text-emerald-500">
-              {t.allDone}
-            </div>
-          )}
-        </div>
-
-        <div className="flex gap-2">
-          <button
-            onClick={clearSelection}
-            disabled={locked || isResolving}
-            className="theme-secondary-button rounded-xl px-4 py-2 text-sm font-medium transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {t.clear}
-          </button>
-
-          <button
-            disabled={!canNext}
-            onClick={() => onDone(correctCount)}
-            className="theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {t.next}
-          </button>
+            <button
+              disabled={!canNext}
+              onClick={() => onDone(correctCount)}
+              className="theme-primary-button min-h-[44px] rounded-xl px-3 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4"
+            >
+              {t.next}
+            </button>
+          </div>
         </div>
       </div>
 
       <div
         className={[
-          "grid grid-cols-2 gap-4",
+          "space-y-2.5 sm:space-y-3",
           shakeWrong ? "animate-[shake_0.2s_linear_0s_2]" : "",
         ].join(" ")}
       >
-        <div className="space-y-2">
-          {left.map((sk) => (
+        {rows.map((row, index) => (
+          <div key={`${row.sk}-${row.tr}-${index}`} className="grid grid-cols-2 gap-2.5 sm:gap-3">
             <button
-              key={sk}
-              disabled={locked || matchedLeft.has(sk) || isResolving}
+              disabled={locked || matchedLeft.has(row.sk) || isResolving}
               onClick={() => {
                 if (locked || isResolving) return;
-                setSelectedLeft(sk);
+                setSelectedLeft(row.sk);
               }}
-              className={leftBtnClass(sk)}
+              className={leftBtnClass(row.sk)}
             >
-              {sk}
+              {row.sk}
             </button>
-          ))}
-        </div>
 
-        <div className="space-y-2">
-          {right.map((r) => (
             <button
-              key={r}
-              disabled={locked || matchedRight.has(r) || isResolving}
+              disabled={locked || matchedRight.has(row.tr) || isResolving}
               onClick={() => {
                 if (locked || isResolving) return;
-                setSelectedRight(r);
+                setSelectedRight(row.tr);
               }}
-              className={rightBtnClass(r)}
+              className={rightBtnClass(row.tr)}
             >
-              {r}
+              {row.tr}
             </button>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
 
       <style jsx>{`

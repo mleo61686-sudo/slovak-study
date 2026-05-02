@@ -560,7 +560,7 @@ export default function LevelClient({
 
     return (
       <div
-        className="space-y-3 theme-text sm:space-y-6"
+        className="space-y-4 pt-4 theme-text sm:space-y-6 sm:pt-0"
         onPointerDownCapture={unlockInsideLesson}
         onKeyDownCapture={unlockInsideLesson}
       >
@@ -587,7 +587,7 @@ export default function LevelClient({
               <div className="relative">
                 {word?.img ? (
                   <div className="flex flex-col items-center gap-2">
-                    <div className="theme-inner-card relative flex min-h-[360px] w-full items-center justify-center overflow-hidden rounded-2xl px-1 py-1 sm:min-h-[420px]">
+                    <div className="theme-inner-card relative flex min-h-[450px] w-full items-center justify-center overflow-hidden rounded-2xl px-1 py-1 sm:min-h-[420px]">
                       {!learnImageLoaded && (
                         <div className="absolute inset-0 animate-pulse bg-white/10" />
                       )}
@@ -599,7 +599,7 @@ export default function LevelClient({
                         height={900}
                         onLoad={() => setLearnImageLoaded(true)}
                         className={[
-                          "max-h-[340px] w-full max-w-[92%] rounded-2xl object-contain transition-all duration-500 sm:w-auto sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
+                          "max-h-[400px] max-w-[94%] rounded-2xl object-contain transition-all duration-500 sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
                           learnImageLoaded
                             ? "opacity-100 blur-0 scale-100"
                             : "opacity-0 blur-sm scale-[1.02]",
@@ -679,7 +679,7 @@ export default function LevelClient({
             </div>
           </div>
 
-          <div className="mt-2 flex items-center justify-between gap-3 lg:hidden">
+          <div className="mb-8 mt-6 flex items-center justify-between gap-3 lg:hidden">
             <button
               disabled={isFirst}
               onClick={goPrevWord}
@@ -778,15 +778,24 @@ export default function LevelClient({
       onPointerDownCapture={unlockInsideLesson}
       onKeyDownCapture={unlockInsideLesson}
     >
-      <div className="text-sm theme-text-subtle">
-        {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} • {exerciseTitle} •{" "}
-        {exercise.mode === "perWord" ? (
-          <>
-            {t.word} {wordIndex + 1} / {words.length}
-          </>
-        ) : (
-          <>{t.lesson}</>
-        )}
+      <div className="text-xs font-medium leading-snug theme-text-subtle sm:text-sm">
+        <span className="sm:hidden">
+          {t.exercise} {exerciseIndex + 1}/{EXERCISES.length} ·{" "}
+          {exercise.mode === "perWord"
+            ? `${t.word} ${wordIndex + 1}/${words.length}`
+            : t.lesson}
+        </span>
+
+        <span className="hidden sm:inline">
+          {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} • {exerciseTitle} •{" "}
+          {exercise.mode === "perWord" ? (
+            <>
+              {t.word} {wordIndex + 1} / {words.length}
+            </>
+          ) : (
+            <>{t.lesson}</>
+          )}
+        </span>
       </div>
 
       <style>{exerciseEnterStyle}</style>
@@ -809,7 +818,7 @@ export default function LevelClient({
 
       <div
         key={exerciseScreenKey}
-        className="theme-inner-card rounded-2xl p-4 transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
+        className="theme-inner-card rounded-3xl px-4 py-10 transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
       >
         {exercise.kind === "chooseTranslation" && (
           <ChooseTranslation
