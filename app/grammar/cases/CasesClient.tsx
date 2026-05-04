@@ -21,191 +21,7 @@ import {
   type QuizQ,
   type SentencePart,
 } from "./cases-helpers";
-
-type LocalizedText = Partial<Record<Lang, string>>;
-
-const UI: Record<string, LocalizedText> = {
-  titleSk: {
-    ua: "Відмінки (6 падежів)",
-    ru: "Падежи (6 падежей)",
-    en: "Cases (6 cases)",
-  },
-  titleCs: {
-    ua: "Відмінки (7 падежів у чеській)",
-    ru: "Падежи (7 падежей в чешском)",
-    en: "Cases (7 cases in Czech)",
-  },
-  titlePl: {
-    ua: "Відмінки (7 падежів у польській)",
-    ru: "Падежи (7 падежей в польском)",
-    en: "Cases (7 cases in Polish)",
-  },
-
-  introSk: {
-    ua: "У словацькій 6 відмінків. Вони відповідають на питання (Kto? Čo? / Koho? Čoho? …) і змінюють закінчення слів.",
-    ru: "В словацком 6 падежей. Они отвечают на вопросы (Kto? Čo? / Koho? Čoho? …) и меняют окончания слов.",
-    en: "Slovak has 6 cases. They answer questions like (Kto? Čo? / Koho? Čoho? …) and change word endings.",
-  },
-  introCs: {
-    ua: "У чеській 7 відмінків. Вони відповідають на питання (Kdo? Co? / Koho? Čeho? …) і змінюють закінчення слів.",
-    ru: "В чешском 7 падежей. Они отвечают на вопросы (Kdo? Co? / Koho? Čeho? …) и меняют окончания слов.",
-    en: "Czech has 7 cases. They answer questions like (Kdo? Co? / Koho? Čeho? …) and change word endings.",
-  },
-  introPl: {
-    ua: "У польській 7 відмінків. Вони відповідають на питання (Kto? Co? / Kogo? Czego? …) і змінюють закінчення слів.",
-    ru: "В польском 7 падежей. Они отвечают на вопросы (Kto? Co? / Kogo? Czego? …) и меняют окончания слов.",
-    en: "Polish has 7 cases. They answer questions like (Kto? Co? / Kogo? Czego? …) and change word endings.",
-  },
-
-  section1: {
-    ua: "1) Швидка таблиця",
-    ru: "1) Быстрая таблица",
-    en: "1) Quick table",
-  },
-  section2: {
-    ua: "2) Приклади (звучання)",
-    ru: "2) Примеры (озвучка)",
-    en: "2) Examples (audio)",
-  },
-  section3: {
-    ua: "3) Практика 🧠",
-    ru: "3) Практика 🧠",
-    en: "3) Practice 🧠",
-  },
-  section4: {
-    ua: "4) Шпаргалка",
-    ru: "4) Шпаргалка",
-    en: "4) Cheat sheet",
-  },
-  score: {
-    ua: "Рахунок:",
-    ru: "Счет:",
-    en: "Score:",
-  },
-  reset: {
-    ua: "Скинути",
-    ru: "Сбросить",
-    en: "Reset",
-  },
-  quizTitle: {
-    ua: "A) Вибери правильний приклад",
-    ru: "A) Выбери правильный пример",
-    en: "A) Choose the correct example",
-  },
-  builderTitle: {
-    ua: "B) Збери речення",
-    ru: "B) Собери предложение",
-    en: "B) Build the sentence",
-  },
-  target: {
-    ua: "Ціль:",
-    ru: "Цель:",
-    en: "Target:",
-  },
-  clear: {
-    ua: "Очистити",
-    ru: "Очистить",
-    en: "Clear",
-  },
-  next: {
-    ua: "Наступне",
-    ru: "Следующее",
-    en: "Next",
-  },
-  yourSentence: {
-    ua: "Твоє речення:",
-    ru: "Твое предложение:",
-    en: "Your sentence:",
-  },
-  correct: {
-    ua: "✅ Правильно!",
-    ru: "✅ Правильно!",
-    en: "✅ Correct!",
-  },
-  compare: {
-    ua: "Порівняй із ціллю 👆",
-    ru: "Сравни с целью 👆",
-    en: "Compare it with the target 👆",
-  },
-  clickWords: {
-    ua: "Натискай слова нижче.",
-    ru: "Нажимай слова ниже.",
-    en: "Click the words below.",
-  },
-  removeLast: {
-    ua: "← Забрати останнє слово",
-    ru: "← Убрать последнее слово",
-    en: "← Remove last word",
-  },
-  correctShort: {
-    ua: "✅ Правильно",
-    ru: "✅ Правильно",
-    en: "✅ Correct",
-  },
-  wrongPrefix: {
-    ua: "❌ Неправильно. Правильно:",
-    ru: "❌ Неправильно. Правильно:",
-    en: "❌ Incorrect. Correct answer:",
-  },
-
-  tip1Sk: {
-    ua: "Lokál завжди з прийменником: v/vo, na, o, po.",
-    ru: "Lokál всегда с предлогом: v/vo, na, o, po.",
-    en: "Lokál is always used with a preposition: v/vo, na, o, po.",
-  },
-  tip2Sk: {
-    ua: "Genitív часто після bez, do, z/zo: bez vody, do práce, z domu.",
-    ru: "Genitív часто после bez, do, z/zo: bez vody, do práce, z domu.",
-    en: "Genitív often follows bez, do, z/zo: bez vody, do práce, z domu.",
-  },
-  tip3Sk: {
-    ua: "Inštrumentál часто з s/so: s kamarátom, so sestrou.",
-    ru: "Inštrumentál часто с s/so: s kamarátom, so sestrou.",
-    en: "Inštrumentál is often used with s/so: s kamarátom, so sestrou.",
-  },
-
-  tip1Cs: {
-    ua: "Lokál у чеській завжди з прийменником: v/ve, na, o, po.",
-    ru: "Lokál в чешском всегда с предлогом: v/ve, na, o, po.",
-    en: "Lokál in Czech is always used with a preposition: v/ve, na, o, po.",
-  },
-  tip2Cs: {
-    ua: "Genitiv часто після bez, do, z/ze: bez vody, do práce, z domu.",
-    ru: "Genitiv часто после bez, do, z/ze: bez vody, do práce, z domu.",
-    en: "Genitiv often follows bez, do, z/ze: bez vody, do práce, z domu.",
-  },
-  tip3Cs: {
-    ua: "Instrumentál часто з s/se: s kamarádem, se sestrou.",
-    ru: "Instrumentál часто с s/se: s kamarádem, se sestrou.",
-    en: "Instrumentál is often used with s/se: s kamarádem, se sestrou.",
-  },
-  tip4Cs: {
-    ua: "Vokativ використовується для звертання: Petře!, pane!, Jano!",
-    ru: "Vokativ используется для обращения: Petře!, pane!, Jano!",
-    en: "Vokativ is used for addressing someone: Petře!, pane!, Jano!",
-  },
-
-  tip1Pl: {
-    ua: "Miejscownik у польській завжди з прийменником: w/we, na, o, po.",
-    ru: "Miejscownik в польском всегда с предлогом: w/we, na, o, po.",
-    en: "Miejscownik in Polish is always used with a preposition: w/we, na, o, po.",
-  },
-  tip2Pl: {
-    ua: "Dopełniacz часто після bez, do, z/ze: bez wody, do pracy, z domu.",
-    ru: "Dopełniacz часто после bez, do, z/ze: bez wody, do pracy, z domu.",
-    en: "Dopełniacz often follows bez, do, z/ze: bez wody, do pracy, z domu.",
-  },
-  tip3Pl: {
-    ua: "Narzędnik часто з z/ze: z kolegą, ze siostrą.",
-    ru: "Narzędnik часто с z/ze: z kolegą, ze siostrą.",
-    en: "Narzędnik is often used with z/ze: z kolegą, ze siostrą.",
-  },
-  tip4Pl: {
-    ua: "Wołacz використовується для звертання: Piotrze!, Anno!, panie!",
-    ru: "Wołacz используется для обращения: Piotrze!, Anno!, panie!",
-    en: "Wołacz is used for addressing someone: Piotrze!, Anno!, panie!",
-  },
-};
+import { UI, type LocalizedText } from "./cases-ui";
 
 const card = "flunio-card rounded-3xl";
 
@@ -238,6 +54,12 @@ function trPair(
   return ua;
 }
 
+function getBadgeLabel(lang: Lang) {
+  if (lang === "ru") return "Грамматика · Падежи";
+  if (lang === "en") return "Grammar · Cases";
+  return "Граматика · Відмінки";
+}
+
 export default function CasesClient() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
@@ -253,6 +75,7 @@ export default function CasesClient() {
       : BUILD_SAMPLES_SK;
 
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => setMounted(true), []);
 
   const [quiz, setQuiz] = useState<QuizQ[]>([]);
@@ -279,9 +102,13 @@ export default function CasesClient() {
 
   const correctCount = useMemo(() => {
     let count = 0;
+
     for (const q of quiz) {
-      if (answers[q.caseId] && answers[q.caseId] === q.correct) count++;
+      if (answers[q.caseId] && answers[q.caseId] === q.correct) {
+        count++;
+      }
     }
+
     return count;
   }, [answers, quiz]);
 
@@ -306,7 +133,7 @@ export default function CasesClient() {
 
         <div className="relative">
           <div className="theme-pill mb-4 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
-            Grammar · Cases
+            {getBadgeLabel(lang)}
           </div>
 
           <h1 className="text-3xl font-semibold leading-tight tracking-tight theme-text sm:text-4xl">
@@ -426,6 +253,7 @@ export default function CasesClient() {
               <div className="font-semibold theme-text">
                 {tr(UI.quizTitle, lang)}
               </div>
+
               <div className="text-sm theme-text-muted">
                 {tr(UI.score, lang)}{" "}
                 <span className="font-semibold theme-accent-text">
@@ -468,6 +296,7 @@ export default function CasesClient() {
                     return (
                       <button
                         key={opt}
+                        type="button"
                         onClick={() => {
                           setAnswers((a) => ({ ...a, [q.caseId]: opt }));
                           setChecked((c) => ({ ...c, [q.caseId]: true }));
@@ -515,6 +344,7 @@ export default function CasesClient() {
               <div className="font-semibold theme-text">
                 {tr(UI.builderTitle, lang)}
               </div>
+
               <div className="text-sm theme-text-muted">
                 {tr(UI.target, lang)}{" "}
                 <span className="font-semibold theme-accent-text">
@@ -580,6 +410,7 @@ export default function CasesClient() {
             {sentenceParts.map((part) => (
               <button
                 key={part.id}
+                type="button"
                 onClick={() => {
                   setBuild((prev) => [...prev, part]);
                   setSentenceParts((prev) =>

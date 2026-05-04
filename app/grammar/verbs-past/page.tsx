@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import VerbsPastClient from "./VerbsPastClient";
+import VerbsPastSeo from "./VerbsPastSeo";
 
 export const metadata: Metadata = {
   title: "Минулий час | Flunio",
   description:
-    "Минулий час у словацькій, чеській та польській мовах: як сказати я робив, ти був, ми пішли.",
+    "Минулий час у словацькій, чеській та польській мовах: robil som, robila som, dělal jsem, dělala jsem, zrobiłem, zrobiłam, byliśmy.",
   alternates: {
     canonical: "https://flunio.com/grammar/verbs-past",
   },
   openGraph: {
     title: "Минулий час | Flunio",
     description:
-      "Минулий час у словацькій, чеській та польській мовах з прикладами та міні-вправою.",
+      "Практичний гід по минулому часу у словацькій, чеській та польській мовах з прикладами, типовими помилками та міні-вправою.",
     url: "https://flunio.com/grammar/verbs-past",
     siteName: "Flunio",
     type: "article",
@@ -23,5 +24,10 @@ export const metadata: Metadata = {
 };
 
 export default function VerbsPastPage() {
-  return <VerbsPastClient />;
+  return (
+    <div className="space-y-10">
+      <VerbsPastSeo />
+      <VerbsPastClient />
+    </div>
+  );
 }

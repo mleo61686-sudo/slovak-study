@@ -53,10 +53,8 @@ const activeButton =
   "theme-primary-button rounded-xl px-3 py-2 text-sm font-semibold";
 
 const rowClass =
-  "flex justify-between gap-4 border-b theme-divider px-5 py-4 last:border-b-0";
+  "flex min-h-[72px] items-center justify-between gap-4 border-b theme-divider px-5 py-4 last:border-b-0";
 
-const sectionRowClass =
-  "space-y-3 border-b theme-divider px-5 py-5 last:border-b-0";
 
 const cheatItem =
   "theme-home-soft-card rounded-2xl px-4 py-3 theme-text-muted";
@@ -268,22 +266,22 @@ export default function VerbsPresentClient() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold theme-text">{ui.s3}</h2>
 
-        <div className={card}>
+        <div className={`${card} overflow-hidden`}>
           {active?.rows.map((row) => (
-            <div
-              key={row.person}
-              className="flex items-center justify-between gap-4 border-b theme-divider px-5 py-4 last:border-b-0"
-            >
-              <div className="min-w-0">
-                <div className="font-semibold theme-accent-text">
+            <div key={row.person} className={rowClass}>
+              <div className="min-w-0 flex-1">
+                <div className="text-base font-semibold leading-snug theme-accent-text">
                   {capFirst(row.full)}
                 </div>
-                <div className="text-sm theme-text-muted">
+
+                <div className="mt-1 text-sm leading-relaxed theme-text-muted">
                   {trWord(row.tr, uiLang)}
                 </div>
               </div>
 
-              <SpeakButton text={row.full} kind="phrase" />
+              <div className="shrink-0">
+                <SpeakButton text={row.full} kind="phrase" />
+              </div>
             </div>
           ))}
         </div>
@@ -292,7 +290,7 @@ export default function VerbsPresentClient() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold theme-text">{ui.s4}</h2>
 
-        <div className={card}>
+        <div className="grid gap-4 md:grid-cols-2">
           {examplesForSection4.map((ex, i) => {
             const neg = negateSentence(ex.sk, grammarCourseId);
             const q = makeQuestion(ex.sk);
@@ -300,41 +298,58 @@ export default function VerbsPresentClient() {
             return (
               <div
                 key={`${active?.id ?? "verb"}-${i}`}
-                className={sectionRowClass}
+                className={`${card} space-y-4 p-5`}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="font-semibold theme-text">{ex.sk}</div>
-                    <div className="text-sm theme-text-muted">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-semibold uppercase tracking-wide theme-text-subtle">
+                      Приклад
+                    </div>
+
+                    <div className="mt-1 text-base font-semibold leading-snug theme-text">
+                      {ex.sk}
+                    </div>
+
+                    <div className="mt-1 text-sm leading-relaxed theme-text-muted">
                       {trWord(ex, uiLang)}
                     </div>
                   </div>
 
-                  <SpeakButton text={ex.sk} kind="phrase" />
+                  <div className="shrink-0">
+                    <SpeakButton text={ex.sk} kind="phrase" />
+                  </div>
                 </div>
 
-                <div className="grid gap-2 sm:grid-cols-2">
-                  <div className={`${softCard} px-4 py-3`}>
-                    <div className="mb-1 text-xs font-semibold theme-text-subtle">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className={`${softCard} p-4`}>
+                    <div className="text-xs font-semibold uppercase tracking-wide theme-text-subtle">
                       {ui.negation}
                     </div>
 
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="font-semibold theme-accent-text">
+                    <div className="mt-2 flex items-center justify-between gap-3">
+                      <div className="min-w-0 text-sm font-semibold leading-snug theme-accent-text sm:text-base">
                         {neg}
                       </div>
-                      <SpeakButton text={neg} kind="phrase" />
+
+                      <div className="shrink-0">
+                        <SpeakButton text={neg} kind="phrase" />
+                      </div>
                     </div>
                   </div>
 
-                  <div className={`${softCard} px-4 py-3`}>
-                    <div className="mb-1 text-xs font-semibold theme-text-subtle">
+                  <div className={`${softCard} p-4`}>
+                    <div className="text-xs font-semibold uppercase tracking-wide theme-text-subtle">
                       {ui.question}
                     </div>
 
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="font-semibold theme-accent-text">{q}</div>
-                      <SpeakButton text={q} kind="phrase" />
+                    <div className="mt-2 flex items-center justify-between gap-3">
+                      <div className="min-w-0 text-sm font-semibold leading-snug theme-accent-text sm:text-base">
+                        {q}
+                      </div>
+
+                      <div className="shrink-0">
+                        <SpeakButton text={q} kind="phrase" />
+                      </div>
                     </div>
                   </div>
                 </div>

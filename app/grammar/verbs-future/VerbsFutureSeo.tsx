@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 import type { Lang } from "@/lib/src/language";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
-import { CONTENT, type Section } from "./alphabet-seo-data";
+import {
+  FUTURE_SEO_CONTENT,
+  type FutureSeoSection,
+} from "./verbs-future-seo-data";
 
-function SectionBlock({ section }: { section: Section }) {
+function SectionBlock({ section }: { section: FutureSeoSection }) {
   return (
     <div className="theme-home-soft-card rounded-3xl p-5 shadow-[0_0_24px_rgba(34,211,238,0.06)]">
       <h3 className="theme-text text-xl font-semibold">{section.heading}</h3>
@@ -46,7 +48,13 @@ function SectionBlock({ section }: { section: Section }) {
   );
 }
 
-export default function AlphabetSeo() {
+function getBadgeLabel(lang: Lang) {
+  if (lang === "ru") return "Грамматика · Будущее время";
+  if (lang === "en") return "Grammar · Future tense";
+  return "Граматика · Майбутній час";
+}
+
+export default function VerbsFutureSeo() {
   const { lang } = useLanguage();
   const { courseId } = useActiveCourse();
 
@@ -55,7 +63,7 @@ export default function AlphabetSeo() {
   const course: "sk" | "cs" | "pl" =
     courseId === "cs" ? "cs" : courseId === "pl" ? "pl" : "sk";
 
-  const content = CONTENT[safeLang][course];
+  const content = FUTURE_SEO_CONTENT[safeLang][course];
 
   return (
     <section className="space-y-6">
@@ -65,7 +73,7 @@ export default function AlphabetSeo() {
 
         <div className="relative space-y-4">
           <div className="theme-pill inline-flex rounded-full px-3 py-1 text-xs font-semibold">
-            SEO guide · Alphabet
+            {getBadgeLabel(safeLang)}
           </div>
 
           <h2 className="theme-text text-3xl font-semibold leading-tight tracking-tight">
@@ -83,29 +91,6 @@ export default function AlphabetSeo() {
       {content.sections.map((section) => (
         <SectionBlock key={section.heading} section={section} />
       ))}
-
-      <div className="theme-home-soft-card rounded-3xl p-5 shadow-[0_0_24px_rgba(34,211,238,0.06)]">
-        <h3 className="theme-text text-xl font-semibold">
-          {content.nextLabel}
-        </h3>
-
-        <ul className="mt-4 space-y-2">
-          {content.nextLinks.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="theme-secondary-button inline-flex rounded-2xl px-4 py-2 text-sm font-semibold transition"
-              >
-                {link.label} →
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <p className="theme-text-muted mt-4 text-sm leading-relaxed sm:text-base">
-          {content.outro}
-        </p>
-      </div>
     </section>
   );
 }
