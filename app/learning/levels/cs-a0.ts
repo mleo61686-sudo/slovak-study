@@ -23,8 +23,8 @@ export const CS_A0_SOURCE: Lesson[] = [
     words: [
       { sk: "člověk", ua: "людина", ru: "человек", en: "person", img: "/words_a0_cz/člověk.jpg" },
       { sk: "muž", ua: "чоловік", ru: "мужчина", en: "man", img: "/words_a0_cz/muž.jpg" },
-      { sk: "žena", ua: "жінка", ru: "женщина", en: "woman", img: "/words/woman.jpg", imgCredit: "Wikimedia Commons" },
-      { sk: "dítě", ua: "дитина", ru: "ребёнок", en: "child", img: "/words/child.jpg", imgCredit: "Photo: Arkady Zarubin, CC BY-SA 3.0 (Wikimedia Commons)" },
+      { sk: "žena", ua: "жінка", ru: "женщина", en: "woman", img: "/words/woman.jpg" },
+      { sk: "dítě", ua: "дитина", ru: "ребёнок", en: "child", img: "/words/child.jpg" },
       { sk: "kamarád", ua: "друг", ru: "друг", en: "male friend", img: "/words/male-friend.jpg", imgCredit: "Photo: Random Institute (Unsplash License)" },
       { sk: "kamarádka", ua: "подруга", ru: "подруга", en: "female friend", img: "/words/female-friend.jpg", imgCredit: "Photo: John Doe, Unsplash" },
       { sk: "otec", ua: "батько", ru: "отец", en: "father", img: "/words/father.jpg", imgCredit: "Photo: Derek Thomson (Unsplash License)" },
