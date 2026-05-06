@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
+import FocusMusic from "@/app/components/FocusMusic";
 
 type Props = {
   name?: string | null;
@@ -28,36 +29,53 @@ const T: Record<
     manageSubHint: string;
     logout: string;
     userFallback: string;
+    premium: string;
+    free: string;
+    themeSimple: string;
+    themeFlunio: string;
   }
 > = {
   ua: {
     profile: "Профіль",
     chooseLanguage: "Обрати курс",
     manageSub: "Керувати підпискою",
-    manageSubHint: "Змінити тариф • скасувати • оновити картку • рахунки",
+    manageSubHint: "Тариф • картка • рахунки • скасування",
     logout: "Вийти",
     userFallback: "Користувач",
+    premium: "Premium",
+    free: "Free",
+    themeSimple: "☀️ Simple theme",
+    themeFlunio: "🌌 Flunio theme",
   },
   ru: {
     profile: "Профиль",
     chooseLanguage: "Выбрать курс",
     manageSub: "Управлять подпиской",
-    manageSubHint: "Сменить тариф • отменить • обновить карту • счета",
+    manageSubHint: "Тариф • карта • счета • отмена",
     logout: "Выйти",
     userFallback: "Пользователь",
+    premium: "Premium",
+    free: "Free",
+    themeSimple: "☀️ Simple theme",
+    themeFlunio: "🌌 Flunio theme",
   },
   en: {
     profile: "Profile",
     chooseLanguage: "Choose course",
     manageSub: "Manage subscription",
-    manageSubHint: "Change plan • cancel • update card • invoices",
+    manageSubHint: "Plan • card • invoices • cancel",
     logout: "Log out",
     userFallback: "User",
+    premium: "Premium",
+    free: "Free",
+    themeSimple: "☀️ Simple theme",
+    themeFlunio: "🌌 Flunio theme",
   },
 };
 
-function ThemeToggle() {
+function ThemeToggle({ lang }: { lang: Lang }) {
   const [theme, setTheme] = useState<AppTheme>("flunio");
+  const t = T[lang];
 
   useEffect(() => {
     const saved = localStorage.getItem(THEME_KEY) as AppTheme | null;
@@ -82,9 +100,9 @@ function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="user-menu-theme-toggle mx-3 my-2 w-[calc(100%-1.5rem)] rounded-2xl px-4 py-3 text-left text-sm font-medium transition"
+      className="mx-2 flex w-[calc(100%-1rem)] items-center justify-between rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2.5 text-left text-sm font-semibold text-cyan-50 transition hover:border-cyan-300/40 hover:bg-cyan-400/15 active:scale-[0.99]"
     >
-      {theme === "flunio" ? "☀️ Simple theme" : "🌌 Flunio theme"}
+      <span>{theme === "flunio" ? t.themeSimple : t.themeFlunio}</span>
     </button>
   );
 }
@@ -97,14 +115,15 @@ function AvatarCircle({
 }: {
   avatarUrl: string;
   initial: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
   loaded?: boolean;
 }) {
-  const sizeClass = size === "md" ? "h-10 w-10" : "h-9 w-9";
+  const sizeClass =
+    size === "lg" ? "h-12 w-12" : size === "md" ? "h-10 w-10" : "h-9 w-9";
 
   return (
     <div
-      className={`flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-500 via-blue-500 to-fuchsia-500 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)]`}
+      className={`flex ${sizeClass} shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-cyan-500 via-blue-500 to-fuchsia-500 text-sm font-semibold text-white shadow-[0_0_18px_rgba(59,130,246,0.35)] ring-1 ring-white/15`}
     >
       {!loaded ? (
         <div className="h-full w-full animate-pulse bg-white/20" />
@@ -114,6 +133,33 @@ function AvatarCircle({
         initial
       )}
     </div>
+  );
+}
+
+function Divider() {
+  return <div className="my-2 h-px bg-white/10" />;
+}
+
+function MenuItem({
+  href,
+  children,
+  onClick,
+  onboarding,
+}: {
+  href: string;
+  children: React.ReactNode;
+  onClick?: () => void;
+  onboarding?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      data-onboarding={onboarding}
+      className="mx-2 flex items-center rounded-2xl px-3 py-2.5 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+    >
+      {children}
+    </Link>
   );
 }
 
@@ -303,72 +349,118 @@ export default function UserMenu({
     }
   }
 
-  if (mobile) {
-    return (
-      <div className="theme-menu-panel overflow-hidden rounded-3xl">
-        <div className="user-menu-header flex items-center gap-3 px-4 py-4">
-          <AvatarCircle
-            avatarUrl={avatarUrl}
-            initial={initial}
-            size="md"
-            loaded={avatarLoaded}
-          />
+  const userName = name || t.userFallback;
 
-          <div className="min-w-0">
-            <div className="theme-text truncate font-medium">
-              {name || t.userFallback}
+  const userHeader = (
+    <div className="relative overflow-hidden rounded-t-3xl border-b border-white/10 bg-gradient-to-br from-cyan-500/18 via-white/5 to-fuchsia-500/16 px-4 py-4">
+      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/20 blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-12 left-8 h-24 w-24 rounded-full bg-fuchsia-400/15 blur-2xl" />
+
+      <div className="relative flex items-center gap-3">
+        <AvatarCircle
+          avatarUrl={avatarUrl}
+          initial={initial}
+          size="lg"
+          loaded={avatarLoaded}
+        />
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <div className="truncate text-sm font-bold text-white">
+              {userName}
             </div>
-            <div className="theme-text-muted break-all text-sm">{email}</div>
+
+            <span
+              className={[
+                "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                isPremium
+                  ? "bg-amber-400/95 text-slate-950"
+                  : "bg-white/10 text-white/70",
+              ].join(" ")}
+            >
+              {isPremium ? t.premium : t.free}
+            </span>
           </div>
+
+          <div className="truncate text-xs text-white/60">{email}</div>
         </div>
+      </div>
+    </div>
+  );
 
-        <div className="theme-divider" />
+  const menuContent = (
+    <>
+      {userHeader}
 
-        <Link
+      <div className="py-2">
+        <MenuItem
           href="/account"
-          className="theme-menu-item block px-4 py-3 text-sm transition"
-          onClick={() => onNavigate?.()}
+          onClick={() => {
+            onNavigate?.();
+            setOpen(false);
+          }}
         >
           {t.profile}
-        </Link>
+        </MenuItem>
 
-        <Link
+        <MenuItem
           href="/learn"
-          className="theme-menu-item block px-4 py-3 text-sm transition"
-          onClick={() => onNavigate?.()}
-          data-onboarding="choose-course"
+          onboarding="choose-course"
+          onClick={() => {
+            onNavigate?.();
+            setOpen(false);
+          }}
         >
           {t.chooseLanguage}
-        </Link>
+        </MenuItem>
 
         <button
           onClick={openPortal}
           disabled={loadingPortal}
-          className="theme-menu-item w-full px-4 py-3 text-left text-sm transition disabled:opacity-50"
+          className="mx-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm transition hover:bg-white/10 disabled:opacity-50"
           type="button"
         >
-          <div className="font-medium">{t.manageSub}</div>
-          <div className="theme-text-subtle mt-0.5 text-xs">
+          <div className="font-semibold text-white/85">{t.manageSub}</div>
+          <div className="mt-0.5 text-xs leading-snug text-white/45">
             {t.manageSubHint}
           </div>
         </button>
+      </div>
 
-        <div className="theme-divider" />
+      <Divider />
 
-        <ThemeToggle />
+      <div className="py-1">
+        <ThemeToggle lang={L} />
+      </div>
 
-        <div className="theme-divider" />
+      <Divider />
 
+      <div className="py-1">
+        <FocusMusic />
+      </div>
+
+      <Divider />
+
+      <div className="pb-2">
         <button
           onClick={() => {
             onNavigate?.();
+            setOpen(false);
             signOut({ callbackUrl: "/login" });
           }}
-          className="w-full px-4 py-3 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+          className="mx-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm font-semibold text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
           type="button"
         >
           {t.logout}
         </button>
+      </div>
+    </>
+  );
+
+  if (mobile) {
+    return (
+      <div className="rounded-3xl border border-white/10 bg-slate-950/82 text-white shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+        {menuContent}
       </div>
     );
   }
@@ -377,9 +469,14 @@ export default function UserMenu({
     <div className="relative ml-auto" ref={menuRef}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="rounded-full transition hover:scale-[1.03]"
+        className={[
+          "rounded-full transition",
+          "hover:scale-[1.03] active:scale-95",
+          open ? "ring-2 ring-cyan-400/60 ring-offset-2 ring-offset-slate-950" : "",
+        ].join(" ")}
         type="button"
         aria-label="User menu"
+        aria-expanded={open}
         data-onboarding="avatar"
       >
         <AvatarCircle
@@ -391,67 +488,15 @@ export default function UserMenu({
 
       {open && (
         <div
-          className="theme-menu-panel absolute right-0 top-full z-50 mt-3 w-80 overflow-hidden rounded-3xl"
+          className={[
+            "absolute right-0 top-full z-[100] mt-3 w-[340px]",
+            "max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain",
+            "rounded-3xl border border-white/10 bg-slate-950/88 text-white",
+            "shadow-[0_24px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl",
+          ].join(" ")}
           style={{ maxWidth: "calc(100vw - 16px)" }}
         >
-          <div className="user-menu-header flex items-center gap-3 px-4 py-4 text-sm">
-            <AvatarCircle
-              avatarUrl={avatarUrl}
-              initial={initial}
-              size="md"
-              loaded={avatarLoaded}
-            />
-
-            <div className="min-w-0">
-              <div className="theme-text truncate font-medium">
-                {name || t.userFallback}
-              </div>
-              <div className="theme-text-muted truncate">{email}</div>
-            </div>
-          </div>
-
-          <div className="theme-divider" />
-
-          <Link
-            href="/account"
-            className="theme-menu-item mx-2 block px-3 py-2.5 text-sm font-medium transition"
-            onClick={() => setOpen(false)}
-          >
-            {t.profile}
-          </Link>
-
-          <Link
-            href="/learn"
-            className="theme-menu-item mx-2 block px-3 py-2.5 text-sm font-medium transition"
-            onClick={() => setOpen(false)}
-            data-onboarding="choose-course"
-          >
-            {t.chooseLanguage}
-          </Link>
-
-          <button
-            onClick={openPortal}
-            disabled={loadingPortal}
-            className="theme-menu-item mx-2 w-[calc(100%-1rem)] px-3 py-2.5 text-left text-sm transition disabled:opacity-50"
-            type="button"
-          >
-            <div className="font-medium">{t.manageSub}</div>
-            <div className="theme-text-subtle text-xs">{t.manageSubHint}</div>
-          </button>
-
-          <div className="theme-divider" />
-
-          <ThemeToggle />
-
-          <div className="theme-divider" />
-
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="user-menu-logout mx-2 mb-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm font-semibold transition"
-            type="button"
-          >
-            {t.logout}
-          </button>
+          {menuContent}
         </div>
       )}
     </div>

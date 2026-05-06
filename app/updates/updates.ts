@@ -8,6 +8,40 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-05-06",
+    title: {
+      ua: "Оновлення: граматика, мобільне меню, фонова музика та польська транскрипція",
+      ru: "Обновление: грамматика, мобильное меню, фоновая музыка и польская транскрипция",
+      en: "Update: grammar, mobile menu, background music, and Polish transcription",
+    },
+    items: {
+      ua: [
+        "Оновлено матеріали в розділі граматики — покращено сторінки «Алфавіт і вимова», «Минулий час», «Майбутній час» та «Відмінки»",
+        "Оновлено частину матеріалів у рівні A0 словацького курсу — покращено деякі слова, фрази та зображення",
+        "Покращено меню профілю на мобільних пристроях — тепер воно виглядає акуратніше, зручніше відкривається та краще підходить для маленьких екранів",
+        "Додано фонову музику для навчання — її можна увімкнути в меню профілю під час проходження уроків",
+        "Додано окремий регулятор гучності для фонової музики. Він змінює тільки гучність музики, а озвучка слів,фраз залишається без змін",
+        "Додано транскрипцію для рівня A1 у польському курсі — тепер новачкам легше читати та повторювати польські слова",
+      ],
+      ru: [
+        "Обновлены материалы в разделе грамматики — улучшены страницы «Алфавит и произношение», «Прошедшее время», «Будущее время» и «Падежи»",
+        "Обновлена часть материалов в уровне A0 словацкого курса — улучшены некоторые слова, фразы и изображения",
+        "Улучшено меню профиля на мобильных устройствах — теперь оно выглядит аккуратнее, удобнее открывается и лучше подходит для маленьких экранов",
+        "Добавлена фоновая музыка для обучения — её можно включить в меню профиля во время прохождения уроков",
+        "Добавлен отдельный регулятор громкости для фоновой музыки. Он меняет только громкость музыки, а озвучка слов,фраз остаётся без изменений",
+        "Добавлена транскрипция для уровня A1 в польском курсе — теперь новичкам легче читать и повторять польские слова",
+      ],
+      en: [
+        "Grammar materials have been updated — the “Alphabet and pronunciation”, “Past tense”, “Future tense”, and “Cases” pages have been improved",
+        "Part of the A0 Slovak course materials has been updated — some words, phrases, and images have been improved",
+        "The profile menu has been improved on mobile devices — it now looks cleaner, opens more comfortably, and works better on small screens",
+        "Background music for learning has been added — it can be turned on from the profile menu while studying",
+        "A separate volume control has been added for background music. It affects only the music volume, while word audio stays unchanged",
+        "Transcription has been added for A1 in the Polish course — beginners can now read and repeat Polish words more easily",
+      ],
+    },
+  },
+  {
     date: "2026-05-01",
     title: {
       ua: "Оновлення: нова тема Flunio, покращення дизайну та медіа",

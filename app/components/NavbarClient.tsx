@@ -9,7 +9,6 @@ import NavLabel, { type NavKey } from "@/app/components/NavLabel";
 import LanguageMenu from "@/app/components/LanguageMenu";
 import ThemeToggleButton from "@/app/components/ThemeToggleButton";
 
-
 type NavItem = { href: string; key: NavKey };
 
 export default function NavbarClient() {
@@ -57,6 +56,17 @@ export default function NavbarClient() {
     return () => {
       document.removeEventListener("mousedown", handleOutside);
       document.removeEventListener("keydown", handleEsc);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
     };
   }, [open]);
 
@@ -154,44 +164,65 @@ export default function NavbarClient() {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="theme-icon-button inline-flex h-10 w-10 items-center justify-center rounded-xl border text-lg backdrop-blur transition"
+          className={[
+            "theme-icon-button inline-flex h-10 w-10 items-center justify-center rounded-xl border text-lg backdrop-blur transition",
+            "active:scale-95",
+            open ? "ring-2 ring-cyan-400/60 ring-offset-2 ring-offset-slate-950" : "",
+          ].join(" ")}
           aria-label="Menu"
+          aria-expanded={open}
           type="button"
           data-onboarding="mobile-menu"
         >
-          ☰
+          {open ? "✕" : "☰"}
         </button>
 
         {open && (
-          <div className="theme-menu-panel absolute right-0 top-full z-50 mt-2 w-[min(92vw,360px)] rounded-2xl p-2 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl">
-            <nav className="flex flex-col">
-              {nav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="theme-menu-item rounded-xl px-3 py-2 text-sm font-medium transition"
-                  onClick={() => setOpen(false)}
-                >
-                  <span className="inline-block min-w-[88px] whitespace-nowrap">
-                    <NavLabel k={item.key} />
-                  </span>
-                </Link>
-              ))}
+          <div className="fixed inset-0 z-[90] sm:hidden">
+            <button
+              type="button"
+              aria-label="Close menu"
+              className="absolute inset-0 bg-slate-950/55 backdrop-blur-sm"
+              onClick={() => setOpen(false)}
+            />
 
-              {isAdmin && (
-                <Link
-                  href="/admin/reports"
-                  className="theme-nav-button mt-1 rounded-xl border px-3 py-2 text-sm font-semibold transition"
-                  onClick={() => setOpen(false)}
-                >
-                  🛠️ <NavLabel k="reports" />
-                </Link>
-              )}
-            </nav>
+            <div
+              className={[
+                "absolute right-3 top-[64px] w-[min(92vw,380px)]",
+                "max-h-[calc(100dvh-88px)] overflow-y-auto overscroll-contain",
+                "rounded-3xl border border-white/10 bg-slate-950/92 p-2 text-white",
+                "shadow-[0_24px_90px_rgba(0,0,0,0.60)] backdrop-blur-2xl",
+              ].join(" ")}
+            >
+              <nav className="flex flex-col gap-1">
+                {nav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="rounded-2xl px-3 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white active:scale-[0.99]"
+                    onClick={() => setOpen(false)}
+                  >
+                    <span className="inline-block min-w-[88px] whitespace-nowrap">
+                      <NavLabel k={item.key} />
+                    </span>
+                  </Link>
+                ))}
 
-            <div className="mt-3 space-y-2">
+                {isAdmin && (
+                  <Link
+                    href="/admin/reports"
+                    className="mt-1 rounded-2xl border border-cyan-400/25 bg-white/5 px-3 py-3 text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.99]"
+                    onClick={() => setOpen(false)}
+                  >
+                    🛠️ <NavLabel k="reports" />
+                  </Link>
+                )}
+              </nav>
+
+              <div className="my-2 h-px bg-white/10" />
+
               {isLoggedIn && (
-                <div onClick={() => setOpen(false)}>
+                <div className="px-1 pb-2">
                   <PremiumButton />
                 </div>
               )}
@@ -207,7 +238,7 @@ export default function NavbarClient() {
               ) : (
                 <Link
                   href="/login"
-                  className="theme-menu-item block rounded-xl px-3 py-2 text-sm font-medium transition"
+                  className="block rounded-2xl px-3 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white active:scale-[0.99]"
                   onClick={() => setOpen(false)}
                 >
                   <span className="inline-block min-w-[60px] whitespace-nowrap">
