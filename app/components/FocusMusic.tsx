@@ -88,8 +88,16 @@ type SavedState = {
   volume: number;
 };
 
+type WebKitAudioWindow = Window & {
+  webkitAudioContext?: typeof AudioContext;
+};
+
 let globalAudio: HTMLAudioElement | null = null;
 let globalVolume = 10;
+
+let globalAudioContext: AudioContext | null = null;
+let globalGainNode: GainNode | null = null;
+let globalSourceNode: MediaElementAudioSourceNode | null = null;
 
 function shuffleTracks() {
   const indexes = TRACKS.map((_, index) => index);
@@ -134,24 +142,6 @@ function getRealVolume(uiVolume: number) {
   return Math.pow(safeVolume / 100, 2) * MAX_REAL_VOLUME;
 }
 
-function playNextRandomTrackGlobal() {
-  const audio = getAudio();
-  if (!audio) return;
-
-  const nextIndex = getNextTrackIndex();
-  const nextTrack = TRACKS[nextIndex];
-
-  if (!nextTrack) return;
-
-  audio.src = nextTrack.src;
-  audio.loop = false;
-  audio.volume = getRealVolume(globalVolume);
-
-  void audio.play().catch(() => {
-    // Не крашимо UI, якщо браузер або файл зупинив відтворення.
-  });
-}
-
 function getAudio() {
   if (typeof window === "undefined") return null;
 
@@ -159,6 +149,7 @@ function getAudio() {
     globalAudio = new Audio();
     globalAudio.preload = "none";
     globalAudio.loop = false;
+    globalAudio.crossOrigin = "anonymous";
 
     // Важливо: цей ended listener живе глобально,
     // а не всередині компонента FocusMusic.
@@ -169,6 +160,85 @@ function getAudio() {
   }
 
   return globalAudio;
+}
+
+function setupAudioGraph() {
+  if (typeof window === "undefined") return null;
+
+  const audio = getAudio();
+  if (!audio) return null;
+
+  if (!globalAudioContext) {
+    const AudioContextCtor =
+      window.AudioContext ?? (window as WebKitAudioWindow).webkitAudioContext;
+
+    if (!AudioContextCtor) {
+      return null;
+    }
+
+    globalAudioContext = new AudioContextCtor();
+  }
+
+  if (!globalGainNode) {
+    globalGainNode = globalAudioContext.createGain();
+    globalGainNode.connect(globalAudioContext.destination);
+  }
+
+  if (!globalSourceNode) {
+    globalSourceNode = globalAudioContext.createMediaElementSource(audio);
+    globalSourceNode.connect(globalGainNode);
+  }
+
+  return {
+    audioContext: globalAudioContext,
+    gainNode: globalGainNode,
+  };
+}
+
+function setPlaybackVolume(uiVolume: number) {
+  const audio = getAudio();
+  if (!audio) return;
+
+  globalVolume = uiVolume;
+
+  const realVolume = getRealVolume(uiVolume);
+  const graph = setupAudioGraph();
+
+  if (graph?.gainNode) {
+    // На мобільних браузерах audio.volume часто ігнорується,
+    // тому реальну гучність контролюємо через GainNode.
+    graph.gainNode.gain.value = realVolume;
+
+    // Коли звук іде через Web Audio, сам елемент лишаємо на 100%.
+    audio.volume = 1;
+    return;
+  }
+
+  // Fallback для браузерів без Web Audio.
+  audio.volume = realVolume;
+}
+
+function playNextRandomTrackGlobal() {
+  const audio = getAudio();
+  if (!audio) return;
+
+  const nextIndex = getNextTrackIndex();
+  const nextTrack = TRACKS[nextIndex];
+
+  if (!nextTrack) return;
+
+  setPlaybackVolume(globalVolume);
+
+  audio.src = nextTrack.src;
+  audio.loop = false;
+
+  if (globalAudioContext?.state === "suspended") {
+    void globalAudioContext.resume().catch(() => {});
+  }
+
+  void audio.play().catch(() => {
+    // Не крашимо UI, якщо браузер або файл зупинив відтворення.
+  });
 }
 
 function loadSavedState(): SavedState {
@@ -215,7 +285,7 @@ export default function FocusMusic() {
     globalVolume = saved.volume;
 
     if (audio) {
-      audio.volume = getRealVolume(saved.volume);
+      setPlaybackVolume(saved.volume);
       setIsPlaying(!audio.paused);
     }
 
@@ -264,11 +334,7 @@ export default function FocusMusic() {
   }, [volume, isReady]);
 
   useEffect(() => {
-    const audio = getAudio();
-    if (!audio) return;
-
-    globalVolume = volume;
-    audio.volume = getRealVolume(volume);
+    setPlaybackVolume(volume);
   }, [volume]);
 
   async function startRandomMusic() {
@@ -280,6 +346,12 @@ export default function FocusMusic() {
     try {
       setIsLoading(true);
 
+      const graph = setupAudioGraph();
+
+      if (graph?.audioContext.state === "suspended") {
+        await graph.audioContext.resume();
+      }
+
       const nextIndex = getNextTrackIndex();
       const nextTrack = TRACKS[nextIndex];
 
@@ -288,10 +360,10 @@ export default function FocusMusic() {
         return;
       }
 
-      globalVolume = volume;
+      setPlaybackVolume(volume);
+
       audio.src = nextTrack.src;
       audio.loop = false;
-      audio.volume = getRealVolume(volume);
 
       await audio.play();
 
