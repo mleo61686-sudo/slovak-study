@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { shuffle, trWord, playLocal } from "../helpers";
@@ -39,14 +40,17 @@ export default function ChooseSlovak({
 
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
+    setImageLoaded(false);
   }, [word.sk]);
 
   const answered = status !== "idle";
   const courseLang = courseLangName[courseId] ?? courseLangName.sk;
+  const translation = trWord(word, lang);
 
   const title =
     lang === "en"
@@ -61,17 +65,65 @@ export default function ChooseSlovak({
   return (
     <>
       <div className="space-y-3 theme-text">
-        <div className="space-y-2 text-center">
-          <div className="text-[15px] font-medium leading-snug theme-text">
-            {title}
-          </div>
+        <div className="text-center text-[15px] font-medium leading-snug theme-text">
+          {title}
+        </div>
 
-          <div className="text-2xl font-bold leading-tight theme-accent-text sm:text-[30px]">
-            {trWord(word, lang)}
+        {word.img ? (
+          <div className="mt-2 flex flex-col items-center gap-2">
+            <div className="mx-auto w-full max-w-[320px]">
+              <div className="theme-inner-card relative min-h-[180px] overflow-hidden rounded-2xl">
+                {!imageLoaded && (
+                  <div className="absolute inset-0 animate-pulse bg-white/10" />
+                )}
+
+                <Image
+                  src={word.img}
+                  alt={word.sk}
+                  width={1200}
+                  height={900}
+                  onLoad={() => setImageLoaded(true)}
+                  className={[
+                    "h-auto w-full rounded-2xl transition-all duration-500",
+                    imageLoaded
+                      ? "scale-100 opacity-100 blur-0"
+                      : "scale-[1.02] opacity-0 blur-sm",
+                  ].join(" ")}
+                />
+              </div>
+            </div>
+
+            {word.imgCredit && (
+              <div className="text-xs theme-text-subtle">{word.imgCredit}</div>
+            )}
+          </div>
+        ) : null}
+
+        <div
+          className={[
+            "text-center transition-all duration-300",
+            word.img
+              ? imageLoaded
+                ? "translate-y-0 opacity-100"
+                : "translate-y-1 opacity-90"
+              : "translate-y-0 opacity-100",
+          ].join(" ")}
+        >
+          <div className="mx-auto inline-flex max-w-full items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-2xl font-black leading-tight theme-accent-text sm:text-[30px]">
+            <span className="break-words">{translation}</span>
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div
+          className={[
+            "flex justify-center transition-all duration-300",
+            word.img
+              ? imageLoaded
+                ? "translate-y-0 opacity-100"
+                : "translate-y-1 opacity-90"
+              : "translate-y-0 opacity-100",
+          ].join(" ")}
+        >
           <SpeakCentered
             text={word.sk}
             kind="word"
@@ -80,7 +132,7 @@ export default function ChooseSlovak({
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4">
+      <div className="mt-3 grid gap-3">
         {options.map((opt) => (
           <button
             key={opt}
@@ -97,7 +149,8 @@ export default function ChooseSlovak({
               }
             }}
             className={[
-              "rounded-2xl px-4 py-3.5 text-left text-[17px] font-semibold transition sm:px-5 sm:py-4",
+              "rounded-2xl px-4 py-3 text-left font-semibold transition",
+              "break-words leading-snug",
               answered
                 ? "cursor-not-allowed opacity-60"
                 : "hover:-translate-y-0.5 hover:border-cyan-400/35",

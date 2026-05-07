@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { finishLessonQuiz } from "@/lib/src/progress";
@@ -153,6 +152,20 @@ const UI = {
     notAvailableFree: "Недоступно у free",
     saving: "Зберігаю прогрес…",
 
+    introEyebrow: "Старт уроку",
+    introTitle: "Що сьогодні вчимо?",
+    introSubtitle:
+      "Ось 10 слів, які зараз потренуємо. Можеш послухати вимову — і погнали.",
+    introCount: "слів у цьому уроці",
+    introHint:
+      "Не треба зубрити їх одразу. Просто ознайомся — далі вправи допоможуть усе закріпити.",
+    introReadyTitle: "Починаємо?",
+    introReadyText:
+      "Спочатку легкі вибори, потім аудіо, письмо, пари й речення.",
+    courseSk: "Словацька",
+    courseCs: "Чеська",
+    coursePl: "Польська",
+
     exerciseChooseTranslation: "Вибір перекладу",
     exerciseChooseSlovak: "Вибір словацького слова",
     exerciseWriteWord: "Введення слова",
@@ -180,6 +193,20 @@ const UI = {
     notAvailableFree: "Недоступно в free",
     saving: "Сохраняю прогресс…",
 
+    introEyebrow: "Старт урока",
+    introTitle: "Что сегодня учим?",
+    introSubtitle:
+      "Вот 10 слов, которые сейчас потренируем. Можешь послушать произношение — и погнали.",
+    introCount: "слов в этом уроке",
+    introHint:
+      "Не нужно сразу всё зубрить. Просто познакомься со словами — дальше упражнения помогут закрепить.",
+    introReadyTitle: "Начинаем?",
+    introReadyText:
+      "Сначала лёгкий выбор, потом аудио, письмо, пары и предложения.",
+    courseSk: "Словацкий",
+    courseCs: "Чешский",
+    coursePl: "Польский",
+
     exerciseChooseTranslation: "Выбор перевода",
     exerciseChooseSlovak: "Выбор словацкого слова",
     exerciseWriteWord: "Ввод слова",
@@ -206,6 +233,20 @@ const UI = {
     toLessonsList: "Back to lessons list",
     notAvailableFree: "Not available in free",
     saving: "Saving progress…",
+
+    introEyebrow: "Lesson start",
+    introTitle: "What are we learning today?",
+    introSubtitle:
+      "Here are 10 words we are going to practise. Listen to them if you want — then let’s go.",
+    introCount: "words in this lesson",
+    introHint:
+      "No need to memorise everything right now. Get familiar with the words — the exercises will help you lock them in.",
+    introReadyTitle: "Ready?",
+    introReadyText:
+      "First simple choices, then audio, typing, matching and sentences.",
+    courseSk: "Slovak",
+    courseCs: "Czech",
+    coursePl: "Polish",
 
     exerciseChooseTranslation: "Choose the translation",
     exerciseChooseSlovak: "Choose the Slovak word",
@@ -279,6 +320,12 @@ function getExerciseTitle(
   }
 }
 
+function getCourseLabel(courseId: CourseId, t: (typeof UI)[UiLang]) {
+  if (courseId === "cs") return t.courseCs;
+  if (courseId === "pl") return t.coursePl;
+  return t.courseSk;
+}
+
 export default function LevelClient({
   levelId,
   words,
@@ -312,7 +359,6 @@ export default function LevelClient({
     lockedReason
   );
   const [isNavigating, startNavigation] = useTransition();
-  const [learnImageLoaded, setLearnImageLoaded] = useState(false);
 
   const audioUnlockedRef = useRef(false);
   const finishingRef = useRef(false);
@@ -335,6 +381,7 @@ export default function LevelClient({
   }
 
   function startQuiz() {
+    unlockInsideLesson();
     advancingRef.current = false;
     setQuizAutoKey((k) => k + 1);
     setMode("quiz");
@@ -352,32 +399,11 @@ export default function LevelClient({
   useEffect(() => {
     advancingRef.current = false;
   }, [mode, exerciseIndex, wordIndex, finished]);
+
   useEffect(() => {
     router.prefetch(nextLevelId);
     router.prefetch(onLockedNextRedirect);
   }, [router, nextLevelId, onLockedNextRedirect]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (mode !== "learn") return;
-
-    const lookahead = 2;
-
-    for (let k = 1; k <= lookahead; k++) {
-      const src = words[wordIndex + k]?.img;
-      if (!src) continue;
-
-      const img = new window.Image();
-      img.decoding = "async";
-      img.loading = "eager";
-      img.src = src;
-    }
-  }, [mode, words, wordIndex]);
-
-  useEffect(() => {
-    if (mode !== "learn") return;
-    setLearnImageLoaded(false);
-  }, [mode, wordIndex]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -423,31 +449,16 @@ export default function LevelClient({
       if (event.repeat) return;
       if (isTypingTarget(event.target)) return;
 
-      if (event.key === "ArrowLeft") {
-        if (wordIndex > 0) {
-          unlockInsideLesson();
-          event.preventDefault();
-          setWordIndex((i) => Math.max(0, i - 1));
-        }
-        return;
-      }
-
-      if (event.key === "ArrowRight") {
+      if (event.key === "Enter" || event.key === "ArrowRight") {
         unlockInsideLesson();
         event.preventDefault();
-
-        if (wordIndex < words.length - 1) {
-          setWordIndex((i) => Math.min(words.length - 1, i + 1));
-          return;
-        }
-
         startQuiz();
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [mode, wordIndex, words.length]);
+  }, [mode]);
 
   const totalQuestions = useMemo(() => {
     return EXERCISES.reduce((sum, ex) => {
@@ -482,8 +493,10 @@ export default function LevelClient({
           const dailyCount =
             typeof data?.dailyCount === "number" ? data.dailyCount : 0;
 
-          const nextIsStarterUnlimited = isFreeStarterUnlimitedLesson(nextLevelId);
+          const nextIsStarterUnlimited =
+            isFreeStarterUnlimitedLesson(nextLevelId);
           const freeCanGoNext = nextIsStarterUnlimited || dailyCount < 2;
+
           if (freeCanGoNext) {
             setCanGoNextNow(true);
             setLockedReasonNow(undefined);
@@ -545,164 +558,145 @@ export default function LevelClient({
       router.push(path);
     });
   }
-  function goPrevWord() {
-    setWordIndex((i) => Math.max(0, i - 1));
-  }
-
-  function goNextWord() {
-    setWordIndex((i) => Math.min(words.length - 1, i + 1));
-  }
 
   if (mode === "learn") {
-    const word = words[wordIndex];
-    const isFirst = wordIndex === 0;
-    const isLast = wordIndex === words.length - 1;
+    const courseLabel = getCourseLabel(courseId, t);
 
     return (
       <div
-        className="space-y-4 pt-4 theme-text sm:space-y-6 sm:pt-0"
+        className="space-y-5 pt-4 theme-text sm:space-y-6 sm:pt-0"
         onPointerDownCapture={unlockInsideLesson}
         onKeyDownCapture={unlockInsideLesson}
       >
-        <div className="sticky top-2 z-10 flunio-card-soft rounded-2xl px-4 py-2 text-sm font-semibold theme-text shadow-[0_0_18px_rgba(34,211,238,0.12)]">
-          {t.viewed}: {wordIndex + 1}/{words.length}
-        </div>
+        <div className="mx-auto w-full max-w-[1120px]">
+          <div className="lesson-intro-shell flunio-card relative overflow-hidden rounded-[2rem] p-4 sm:p-6 lg:p-8">
+            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl" />
+            <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent" />
 
-        <div className="mx-auto w-full max-w-[1100px]">
-          <div className="grid grid-cols-1 items-center gap-3 sm:gap-4 lg:grid-cols-[110px_minmax(0,1fr)_110px]">
-            <div className="hidden justify-center lg:flex">
-              <button
-                disabled={isFirst}
-                onClick={goPrevWord}
-                className="theme-secondary-button inline-flex min-h-[52px] items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {t.back}
-              </button>
-            </div>
+            <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-start">
+              <div className="space-y-5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="theme-pill inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.22em]">
+                    {t.introEyebrow}
+                  </span>
 
-            <div className="flunio-card relative mx-auto w-full max-w-[760px] overflow-hidden rounded-3xl px-3 py-3 text-center sm:px-6 sm:py-6">
-              <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-fuchsia-500/20 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-cyan-400/20 blur-3xl" />
+                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold theme-text-muted backdrop-blur">
+                    {courseLabel}
+                  </span>
 
-              <div className="relative">
-                {word?.img ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="theme-inner-card relative flex min-h-[450px] w-full items-center justify-center overflow-hidden rounded-2xl px-1 py-1 sm:min-h-[420px]">
-                      {!learnImageLoaded && (
-                        <div className="absolute inset-0 animate-pulse bg-white/10" />
-                      )}
+                  <span className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-500">
+                    {t.lesson} {levelId.toUpperCase()}
+                  </span>
+                </div>
 
-                      <Image
-                        src={word.img}
-                        alt={word.sk}
-                        width={1200}
-                        height={900}
-                        onLoad={() => setLearnImageLoaded(true)}
-                        className={[
-                          "max-h-[400px] max-w-[94%] rounded-2xl object-contain transition-all duration-500 sm:max-w-full sm:max-h-[380px] lg:max-h-[460px]",
-                          learnImageLoaded
-                            ? "opacity-100 blur-0 scale-100"
-                            : "opacity-0 blur-sm scale-[1.02]",
-                        ].join(" ")}
-                        priority={wordIndex === 0}
-                        fetchPriority={wordIndex === 0 ? "high" : "auto"}
-                        sizes="(max-width: 640px) 96vw, (max-width: 1024px) 70vw, 700px"
-                      />
-                    </div>
+                <div>
+                  <h1 className="max-w-3xl text-3xl font-black tracking-tight theme-text sm:text-4xl lg:text-5xl">
+                    {t.introTitle}
+                  </h1>
 
-                    {word.imgCredit && (
-                      <div className="text-xs theme-text-subtle">
-                        {word.imgCredit}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="theme-inner-card flex min-h-[360px] w-full items-center justify-center rounded-2xl theme-text-subtle sm:min-h-[420px]">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="text-5xl">📷</div>
-                    </div>
-                  </div>
-                )}
+                  <p className="mt-3 max-w-2xl text-sm leading-6 theme-text-muted sm:text-base">
+                    {t.introSubtitle}
+                  </p>
+                </div>
 
-                <div
-                  className={[
-                    "mt-4 flex flex-col items-center transition-all duration-300",
-                    learnImageLoaded
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-1 opacity-85",
-                  ].join(" ")}
-                >
-                  <div className="flex flex-col items-center">
-                    <div className="flex items-center justify-center">
-                      <div className="break-words text-3xl font-bold leading-none theme-text sm:text-4xl">
-                        {word.sk}
-                      </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {words.map((word, index) => (
+                    <div
+                      key={`${word.sk}-${index}`}
+                      className="lesson-intro-word-card group relative overflow-hidden rounded-2xl p-4 backdrop-blur transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-white/[0.075] hover:shadow-[0_0_22px_rgba(34,211,238,0.12)]"
+                    >
+                      <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-cyan-400/0 blur-2xl transition group-hover:bg-cyan-400/12" />
 
-                      <div className="ml-5 shrink-0 sm:ml-6">
-                        <SpeakButton
-                          text={word.sk}
-                          autoPlayKey={audioUnlocked ? word.sk : undefined}
-                        />
+                      <div className="relative flex items-start gap-3">
+                        <div className="lesson-intro-number mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl text-sm font-black theme-text">
+                          {index + 1}
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-start gap-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="break-words text-lg font-extrabold leading-tight theme-text sm:text-xl">
+                                {word.sk}
+                              </div>
+
+                              {courseId === "pl" && word.hintUa ? (
+                                <div className="mt-1 break-words text-xs italic theme-text-subtle">
+                                  [{word.hintUa}]
+                                </div>
+                              ) : null}
+
+                              <div className="mt-1 break-words text-sm font-semibold theme-accent-text">
+                                {trWord(word, lang)}
+                              </div>
+                            </div>
+
+                            <div className="lesson-intro-audio shrink-0 scale-[0.82]">
+                              <SpeakButton text={word.sk} />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  ))}
+                </div>
 
-                    {courseId === "pl" && word.hintUa && (
-                      <div className="mt-2 text-center text-sm italic theme-text-subtle sm:text-base">
-                        [{word.hintUa}]
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-3 text-center text-xl font-semibold leading-tight theme-accent-text sm:text-2xl">
-                    {trWord(word, lang)}
-                  </div>
+                <div className="lesson-intro-hint rounded-2xl p-4 text-sm leading-6">
+                  {t.introHint}
                 </div>
               </div>
+
+              <aside className="lesson-intro-side relative overflow-hidden rounded-3xl p-5 backdrop-blur-xl lg:sticky lg:top-24">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-cyan-400/15 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-16 -left-16 h-36 w-36 rounded-full bg-fuchsia-500/12 blur-3xl" />
+
+                <div className="relative space-y-5">
+                  <div className="lesson-intro-stat rounded-3xl p-5 text-center">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-cyan-400/20 via-blue-500/15 to-fuchsia-500/20 text-3xl shadow-[0_0_24px_rgba(34,211,238,0.14)]">
+                      ✨
+                    </div>
+
+                    <div className="mt-4 text-4xl font-black theme-text">
+                      {words.length}
+                    </div>
+
+                    <div className="mt-1 text-sm font-semibold theme-text-muted">
+                      {t.introCount}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xl font-black theme-text">
+                      {t.introReadyTitle}
+                    </div>
+
+                    <p className="mt-2 text-sm leading-6 theme-text-muted">
+                      {t.introReadyText}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={startQuiz}
+                    className="theme-primary-button flex min-h-[54px] w-full items-center justify-center rounded-2xl px-5 py-3 text-base font-black transition hover:-translate-y-0.5"
+                  >
+                    {t.startExercises}
+                  </button>
+
+                  <div className="grid grid-cols-7 gap-1.5">
+                    {EXERCISES.map((exercise, index) => (
+                      <div
+                        key={exercise.kind}
+                        className="h-1.5 rounded-full bg-gradient-to-r from-cyan-400/70 via-blue-400/70 to-fuchsia-400/70"
+                        title={`${index + 1}. ${getExerciseTitle(
+                          exercise.kind,
+                          t
+                        )}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </aside>
             </div>
-
-            <div className="hidden justify-center lg:flex">
-              {isLast ? (
-                <button
-                  onClick={startQuiz}
-                  className="theme-primary-button inline-flex min-h-[52px] items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5"
-                >
-                  {t.startExercises}
-                </button>
-              ) : (
-                <button
-                  onClick={goNextWord}
-                  className="theme-secondary-button inline-flex min-h-[52px] items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5"
-                >
-                  {t.next}
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="mb-8 mt-6 flex items-center justify-between gap-3 lg:hidden">
-            <button
-              disabled={isFirst}
-              onClick={goPrevWord}
-              className="theme-secondary-button min-h-[44px] rounded-2xl px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {t.back}
-            </button>
-
-            {isLast ? (
-              <button
-                onClick={startQuiz}
-                className="theme-primary-button min-h-[44px] rounded-2xl px-4 py-2 text-sm font-semibold"
-              >
-                {t.startExercises}
-              </button>
-            ) : (
-              <button
-                onClick={goNextWord}
-                className="theme-secondary-button min-h-[44px] rounded-2xl px-4 py-2 text-sm font-semibold transition"
-              >
-                {t.next}
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -787,7 +781,8 @@ export default function LevelClient({
         </span>
 
         <span className="hidden sm:inline">
-          {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} • {exerciseTitle} •{" "}
+          {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} •{" "}
+          {exerciseTitle} •{" "}
           {exercise.mode === "perWord" ? (
             <>
               {t.word} {wordIndex + 1} / {words.length}
