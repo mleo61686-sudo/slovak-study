@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
 import { shuffle, trWord, playLocal } from "../helpers";
-import { ResultBox, SpeakCentered } from "./shared";
+import { SpeakCentered } from "./shared";
 
 type CourseId = "sk" | "cs" | "pl";
 
@@ -46,13 +46,6 @@ export default function ChooseTranslation({
 
   const answered = status !== "idle";
 
-  const correctLabel =
-    lang === "en"
-      ? "Correct answer:"
-      : lang === "ru"
-        ? "Правильный ответ:"
-        : "Правильна відповідь:";
-
   const chooseLabel =
     lang === "en"
       ? "Choose the translation:"
@@ -60,8 +53,60 @@ export default function ChooseTranslation({
         ? "Выбери перевод:"
         : "Обери переклад:";
 
+  const resultTitle =
+    status === "correct"
+      ? lang === "en"
+        ? "Correct!"
+        : lang === "ru"
+          ? "Правильно!"
+          : "Правильно!"
+      : lang === "en"
+        ? "Not quite"
+        : lang === "ru"
+          ? "Неправильно"
+          : "Неправильно";
+
+  const correctLabel =
+    lang === "en"
+      ? "Correct answer"
+      : lang === "ru"
+        ? "Правильный ответ"
+        : "Правильна відповідь";
+
+  const nextLabel =
+    lang === "en" ? "Next" : lang === "ru" ? "Дальше" : "Далі";
+
   return (
     <>
+      <style jsx global>{`
+        @keyframes chooseTranslationSheetIn {
+          from {
+            opacity: 0;
+            transform: translateY(26px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes chooseTranslationGlow {
+          0% {
+            box-shadow: 0 0 0 rgba(163, 230, 53, 0);
+          }
+          100% {
+            box-shadow: 0 -18px 50px rgba(163, 230, 53, 0.24);
+          }
+        }
+
+        .choose-translation-bottom-sheet {
+          animation:
+            chooseTranslationSheetIn 260ms cubic-bezier(0.22, 1, 0.36, 1)
+              both,
+            chooseTranslationGlow 420ms ease-out both;
+        }
+      `}</style>
+
       <div
         className={[
           "text-lg font-semibold theme-text transition-all duration-300",
@@ -125,55 +170,93 @@ export default function ChooseTranslation({
 
       <div className="relative mt-3">
         <div className="grid gap-3">
-          {options.map((opt) => (
-            <button
-              key={opt}
-              disabled={answered}
-              onClick={async () => {
-                if (answered) return;
+          {options.map((opt) => {
+            const isPicked = picked === opt;
+            const isCorrectOption = opt === correctText;
 
-                const ok = opt === correctText;
-                setPicked(opt);
-                setStatus(ok ? "correct" : "wrong");
+            return (
+              <button
+                key={opt}
+                disabled={answered}
+                onClick={async () => {
+                  if (answered) return;
 
-                if (!audioUnlocked) {
-                  await playLocal(word.sk, "word", courseId);
-                }
-              }}
-              className={[
-                "rounded-2xl px-4 py-3 text-left font-semibold transition",
-                answered
-                  ? "cursor-not-allowed opacity-60"
-                  : "hover:-translate-y-0.5 hover:border-cyan-400/35",
-                picked === opt
-                  ? "border border-cyan-400/70 bg-cyan-400/20 text-cyan-600 shadow-[0_0_22px_rgba(34,211,238,0.24)] ring-2 ring-cyan-400/35"
-                  : "theme-inner-card theme-text",
-              ].join(" ")}
-            >
-              {opt}
-            </button>
-          ))}
+                  const ok = opt === correctText;
+                  setPicked(opt);
+                  setStatus(ok ? "correct" : "wrong");
+
+                  if (!audioUnlocked) {
+                    await playLocal(word.sk, "word", courseId);
+                  }
+                }}
+                className={[
+                  "rounded-2xl px-4 py-3 text-left font-semibold transition",
+                  answered
+                    ? "cursor-not-allowed"
+                    : "hover:-translate-y-0.5 hover:border-cyan-400/35",
+
+                  answered && isCorrectOption
+                    ? "border border-lime-300/80 bg-lime-400/20 text-lime-600 shadow-[0_0_22px_rgba(163,230,53,0.24)] ring-2 ring-lime-300/35"
+                    : "",
+
+                  answered && isPicked && !isCorrectOption
+                    ? "border border-rose-300/80 bg-rose-400/20 text-rose-500 shadow-[0_0_22px_rgba(251,113,133,0.22)] ring-2 ring-rose-300/30"
+                    : "",
+
+                  !answered || (!isPicked && !isCorrectOption)
+                    ? "theme-inner-card theme-text"
+                    : "",
+                ].join(" ")}
+              >
+                {opt}
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {answered && (
-          <div className="absolute inset-x-0 bottom-4 z-30 flex justify-center px-3 sm:bottom-5 sm:px-6">
-            <div className="choose-translation-result-overlay w-full max-w-[520px]">
-              <ResultBox
-                correct={status === "correct"}
-                onNext={() => onNext(status === "correct")}
-                lang={lang}
-                extra={
-                  status === "wrong" ? (
-                    <div className="text-sm theme-text-muted">
-                      {correctLabel} <b className="theme-text">{correctText}</b>
-                    </div>
-                  ) : null
-                }
-              />
+      {answered && (
+        <div
+          className="fixed inset-x-0 bottom-14 z-50 px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] sm:bottom-10 sm:px-5 sm:pb-6"
+          aria-live="polite"
+        >
+          <div
+            className={[
+              "choose-translation-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
+              status === "correct"
+                ? "border-lime-200/50 bg-lime-500"
+                : "border-red-200/50 bg-red-500"
+            ].join(" ")}
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
+                  {resultTitle}
+                </div>
+
+                <div className="mt-1 text-sm font-semibold text-white/90 sm:text-base">
+                  {status === "wrong" ? `${correctLabel}: ` : ""}
+                  <span className="font-black text-white">{word.sk}</span>
+                  <span className="px-1 text-white/80">—</span>
+                  <span className="font-black text-white">{correctText}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => onNext(status === "correct")}
+                className={[
+                  "shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition active:scale-95 sm:px-6 sm:text-base",
+                  status === "correct"
+                    ? "bg-white text-lime-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90"
+                    : "bg-white text-rose-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90",
+                ].join(" ")}
+              >
+                {nextLabel}
+              </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

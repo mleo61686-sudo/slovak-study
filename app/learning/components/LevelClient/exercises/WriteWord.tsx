@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import SpeakButton from "@/app/components/SpeakButton";
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "../types";
@@ -29,9 +30,14 @@ export default function WriteWord({
   audioUnlocked: boolean;
   courseId?: CourseId;
 }) {
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setValue("");
@@ -69,6 +75,7 @@ export default function WriteWord({
         : "focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20";
 
   const courseLang = courseLangName[courseId] ?? courseLangName.sk;
+  const translation = trWord(word, lang);
 
   const t = {
     title:
@@ -85,19 +92,31 @@ export default function WriteWord({
           : "Введи слово...",
     check:
       lang === "en" ? "Check" : lang === "ru" ? "Проверить" : "Перевірити",
-    correctPrefix:
+    resultTitleCorrect:
       lang === "en"
-        ? "✅ Correct:"
+        ? "Correct!"
         : lang === "ru"
-          ? "✅ Правильно:"
-          : "✅ Правильно:",
-    wrongPrefix:
+          ? "Правильно!"
+          : "Правильно!",
+    resultTitleWrong:
       lang === "en"
-        ? "❌ Wrong. Correct:"
+        ? "Not quite"
         : lang === "ru"
-          ? "❌ Неправильно. Правильно:"
-          : "❌ Неправильно. Правильно:",
-    next: lang === "en" ? "Next →" : lang === "ru" ? "Далее →" : "Далі →",
+          ? "Неправильно"
+          : "Неправильно",
+    correctLabel:
+      lang === "en"
+        ? "Correct answer"
+        : lang === "ru"
+          ? "Правильный ответ"
+          : "Правильна відповідь",
+    yourAnswer:
+      lang === "en"
+        ? "Your answer"
+        : lang === "ru"
+          ? "Твой ответ"
+          : "Твоя відповідь",
+    next: lang === "en" ? "Next" : lang === "ru" ? "Дальше" : "Далі",
     hint:
       lang === "en"
         ? "You can type without diacritics"
@@ -106,8 +125,103 @@ export default function WriteWord({
           : "Можна без діакритики",
   };
 
+  const resultSheet =
+    status !== "idle" && mounted
+      ? createPortal(
+        <div
+          className="fixed inset-x-0 bottom-8 z-[9999] px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] sm:bottom-10 sm:px-5 sm:pb-6"
+          aria-live="polite"
+        >
+          <div
+            className={[
+              "write-word-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
+              status === "correct"
+                ? "border-lime-200/50 bg-lime-500"
+                : "border-rose-200/50 bg-rose-500",
+            ].join(" ")}
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
+                  {status === "correct"
+                    ? t.resultTitleCorrect
+                    : t.resultTitleWrong}
+                </div>
+
+                <div className="mt-1 text-sm font-semibold text-white/90 sm:text-base">
+                  {status === "wrong" && (
+                    <>
+                      <span className="text-white/85">
+                        {t.yourAnswer}:{" "}
+                        <span className="font-black text-white">
+                          {value.trim()}
+                        </span>
+                      </span>
+                      <span className="mx-2 text-white/70">•</span>
+                    </>
+                  )}
+
+                  <span>
+                    {status === "wrong" ? `${t.correctLabel}: ` : ""}
+                    <span className="font-black text-white">
+                      {correctAnswer}
+                    </span>
+                    <span className="px-1 text-white/80">—</span>
+                    <span className="font-black text-white">
+                      {translation}
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={next}
+                className={[
+                  "shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition active:scale-95 sm:px-6 sm:text-base",
+                  status === "correct"
+                    ? "bg-white text-lime-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90"
+                    : "bg-white text-rose-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90",
+                ].join(" ")}
+              >
+                {t.next}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body,
+      )
+      : null;
+
   return (
     <>
+      <style jsx global>{`
+        @keyframes writeWordSheetIn {
+          from {
+            opacity: 0;
+            transform: translateY(26px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes writeWordGlow {
+          0% {
+            box-shadow: 0 0 0 rgba(163, 230, 53, 0);
+          }
+          100% {
+            box-shadow: 0 -18px 50px rgba(163, 230, 53, 0.24);
+          }
+        }
+
+        .write-word-bottom-sheet {
+          animation:
+            writeWordSheetIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both,
+            writeWordGlow 420ms ease-out both;
+        }
+      `}</style>
+
       <div className="space-y-4 text-center sm:space-y-5">
         <div className="space-y-2">
           <div className="text-[15px] font-semibold leading-snug theme-text sm:text-lg">
@@ -115,7 +229,7 @@ export default function WriteWord({
           </div>
 
           <div className="break-words text-2xl font-bold leading-tight theme-accent-text sm:text-[30px]">
-            {trWord(word, lang)}
+            {translation}
           </div>
         </div>
 
@@ -141,7 +255,7 @@ export default function WriteWord({
           {t.hint}
         </div>
 
-        {status === "idle" ? (
+        {status === "idle" && (
           <div className="flex justify-center pt-1">
             <button
               onClick={check}
@@ -151,29 +265,10 @@ export default function WriteWord({
               {t.check}
             </button>
           </div>
-        ) : (
-          <div className="mt-2 space-y-3">
-            {status === "correct" ? (
-              <div className="rounded-xl border border-emerald-300/25 bg-emerald-400/10 px-3 py-2 text-center font-semibold text-emerald-500">
-                {t.correctPrefix} <b>{correctAnswer}</b>
-              </div>
-            ) : (
-              <div className="rounded-xl border border-rose-300/25 bg-rose-400/10 px-3 py-2 text-center font-semibold text-rose-500">
-                {t.wrongPrefix} <b>{correctAnswer}</b>
-              </div>
-            )}
-
-            <div className="flex justify-center">
-              <button
-                onClick={next}
-                className="theme-primary-button min-h-[46px] rounded-2xl px-7 py-3 font-semibold transition hover:-translate-y-0.5"
-              >
-                {t.next}
-              </button>
-            </div>
-          </div>
         )}
       </div>
+
+      {resultSheet}
     </>
   );
 }
