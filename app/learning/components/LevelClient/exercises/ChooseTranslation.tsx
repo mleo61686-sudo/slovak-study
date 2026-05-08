@@ -123,53 +123,57 @@ export default function ChooseTranslation({
         />
       </div>
 
-      <div className="mt-3 grid gap-3">
-        {options.map((opt) => (
-          <button
-            key={opt}
-            disabled={answered}
-            onClick={async () => {
-              if (answered) return;
+      <div className="relative mt-3">
+        <div className="grid gap-3">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              disabled={answered}
+              onClick={async () => {
+                if (answered) return;
 
-              const ok = opt === correctText;
-              setPicked(opt);
-              setStatus(ok ? "correct" : "wrong");
+                const ok = opt === correctText;
+                setPicked(opt);
+                setStatus(ok ? "correct" : "wrong");
 
-              if (!audioUnlocked) {
-                await playLocal(word.sk, "word", courseId);
-              }
-            }}
-            className={[
-              "rounded-2xl px-4 py-3 text-left font-semibold transition",
-              answered
-                ? "cursor-not-allowed opacity-60"
-                : "hover:-translate-y-0.5 hover:border-cyan-400/35",
-              picked === opt
-                ? "border border-cyan-400/70 bg-cyan-400/20 text-cyan-600 shadow-[0_0_22px_rgba(34,211,238,0.24)] ring-2 ring-cyan-400/35"
-                : "theme-inner-card theme-text",
-            ].join(" ")}
-          >
-            {opt}
-          </button>
-        ))}
-      </div>
-
-      {answered && (
-        <div className="mt-4">
-          <ResultBox
-            correct={status === "correct"}
-            onNext={() => onNext(status === "correct")}
-            lang={lang}
-            extra={
-              status === "wrong" ? (
-                <div className="text-sm theme-text-muted">
-                  {correctLabel} <b className="theme-text">{correctText}</b>
-                </div>
-              ) : null
-            }
-          />
+                if (!audioUnlocked) {
+                  await playLocal(word.sk, "word", courseId);
+                }
+              }}
+              className={[
+                "rounded-2xl px-4 py-3 text-left font-semibold transition",
+                answered
+                  ? "cursor-not-allowed opacity-60"
+                  : "hover:-translate-y-0.5 hover:border-cyan-400/35",
+                picked === opt
+                  ? "border border-cyan-400/70 bg-cyan-400/20 text-cyan-600 shadow-[0_0_22px_rgba(34,211,238,0.24)] ring-2 ring-cyan-400/35"
+                  : "theme-inner-card theme-text",
+              ].join(" ")}
+            >
+              {opt}
+            </button>
+          ))}
         </div>
-      )}
+
+        {answered && (
+          <div className="absolute inset-x-0 bottom-4 z-30 flex justify-center px-3 sm:bottom-5 sm:px-6">
+            <div className="choose-translation-result-overlay w-full max-w-[520px]">
+              <ResultBox
+                correct={status === "correct"}
+                onNext={() => onNext(status === "correct")}
+                lang={lang}
+                extra={
+                  status === "wrong" ? (
+                    <div className="text-sm theme-text-muted">
+                      {correctLabel} <b className="theme-text">{correctText}</b>
+                    </div>
+                  ) : null
+                }
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }
