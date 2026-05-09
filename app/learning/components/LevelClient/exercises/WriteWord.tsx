@@ -53,10 +53,25 @@ export default function WriteWord({
     return stripDiacritics(s).trim().toLowerCase().replace(/\s+/g, " ");
   }
 
+  const playAnswerSfx = (ok: boolean) => {
+    try {
+      const enabled = window.localStorage.getItem("flunio.answerSfx.enabled");
+
+      if (enabled === "false") return;
+
+      const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
+      audio.volume = 0.15;
+      audio.play().catch(() => { });
+    } catch { }
+  };
+
   async function check() {
     const ok = normalize(value) === normalize(word.sk);
+
     setStatus(ok ? "correct" : "wrong");
     setCorrectAnswer(word.sk);
+
+    playAnswerSfx(ok);
 
     if (!audioUnlocked) {
       await playLocal(word.sk, "word", courseId);

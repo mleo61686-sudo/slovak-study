@@ -47,6 +47,18 @@ export default function AudioQuiz({
 
   const answered = status !== "idle";
 
+  const playAnswerSfx = (ok: boolean) => {
+    try {
+      const enabled = window.localStorage.getItem("flunio.answerSfx.enabled");
+
+      if (enabled === "false") return;
+
+      const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
+      audio.volume = 0.15;
+      audio.play().catch(() => { });
+    } catch { }
+  };
+
   const title =
     lang === "en"
       ? "Listen to the word and choose the correct one:"
@@ -180,8 +192,11 @@ export default function AudioQuiz({
                   if (answered) return;
 
                   const ok = opt === word.sk;
+
                   setPicked(opt);
                   setStatus(ok ? "correct" : "wrong");
+
+                  playAnswerSfx(ok);
 
                   if (!audioUnlocked) {
                     await playLocal(word.sk, "word", courseId);

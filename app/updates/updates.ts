@@ -8,6 +8,37 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-05-09",
+    title: {
+      ua: "Оновлення: звуки відповідей, покращення вправ та нові зображення",
+      ru: "Обновление: звуки ответов, улучшение упражнений и новые изображения",
+      en: "Update: answer sounds, exercise improvements, and new images",
+    },
+    items: {
+      ua: [
+        "Додано звуки правильної та неправильної відповіді в уроках — тепер вправи відчуваються живішими та зрозумілішими",
+        "Звуки відповідей можна вимкнути або увімкнути в профілі в розділі «Звуки»",
+        "Трохи оновлено візуальне оформлення вправ — покращено вигляд варіантів відповідей, результатів та нижніх повідомлень після відповіді",
+        "Покращено взаємодію після вибору відповіді — правильні та неправильні варіанти тепер помітніші в інтерфейсі",
+        "Замінено деякі зображення для слів, щоб приклади виглядали точніше, красивіше та краще підходили до навчання",
+      ],
+      ru: [
+        "Добавлены звуки правильного и неправильного ответа в уроках — теперь упражнения ощущаются более живыми и понятными",
+        "Звуки ответов можно выключить или включить в профиле в разделе «Звуки»",
+        "Немного обновлено визуальное оформление упражнений — улучшен вид вариантов ответов, результатов и нижних сообщений после ответа",
+        "Улучшено взаимодействие после выбора ответа — правильные и неправильные варианты теперь заметнее в интерфейсе",
+        "Заменены некоторые изображения для слов, чтобы примеры выглядели точнее, красивее и лучше подходили для обучения",
+      ],
+      en: [
+        "Correct and wrong answer sounds have been added to lessons — exercises now feel more lively and easier to follow",
+        "Answer sounds can be turned on or off in the profile under the “Sounds” section",
+        "The visual design of exercises has been slightly updated — answer options, results, and bottom feedback messages now look better",
+        "Feedback after choosing an answer has been improved — correct and wrong options are now more visible in the interface",
+        "Some word images have been replaced so examples look clearer, more polished, and better suited for learning",
+      ],
+    },
+  },
+  {
     date: "2026-05-06",
     title: {
       ua: "Оновлення: граматика, мобільне меню, фонова музика та польська транскрипція",

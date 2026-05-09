@@ -52,6 +52,18 @@ export default function ChooseSlovak({
   const courseLang = courseLangName[courseId] ?? courseLangName.sk;
   const translation = trWord(word, lang);
 
+  const playAnswerSfx = (ok: boolean) => {
+    try {
+      const enabled = window.localStorage.getItem("flunio.answerSfx.enabled");
+
+      if (enabled === "false") return;
+
+      const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
+      audio.volume = 0.15;
+      audio.play().catch(() => { });
+    } catch { }
+  };
+
   const title =
     lang === "en"
       ? `Choose the word ${courseLang.en}:`
@@ -193,8 +205,11 @@ export default function ChooseSlovak({
                 if (answered) return;
 
                 const ok = opt === word.sk;
+
                 setPicked(opt);
                 setStatus(ok ? "correct" : "wrong");
+
+                playAnswerSfx(ok);
 
                 if (!audioUnlocked) {
                   await playLocal(word.sk, "word", courseId);

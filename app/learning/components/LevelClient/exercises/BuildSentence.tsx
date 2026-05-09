@@ -106,6 +106,18 @@ export default function BuildSentence({
     setStatus("idle");
   }, [word.sk, baseTokens.join("|")]);
 
+  const playAnswerSfx = (ok: boolean) => {
+    try {
+      const enabled = window.localStorage.getItem("flunio.answerSfx.enabled");
+
+      if (enabled === "false") return;
+
+      const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
+      audio.volume = 0.14;
+      audio.play().catch(() => { });
+    } catch { }
+  };
+
   function pickToken(t: string, idx: number) {
     if (status !== "idle") return;
 
@@ -140,6 +152,9 @@ export default function BuildSentence({
     const ok = normalizeSentence(built) === normalizeSentence(target);
 
     setStatus(ok ? "correct" : "wrong");
+
+    playAnswerSfx(ok);
+
     await playLocal(phrase.sk, "phrase", courseId);
   }
 
@@ -153,59 +168,59 @@ export default function BuildSentence({
   const resultSheet =
     status !== "idle" && mounted
       ? createPortal(
+        <div
+          className="fixed inset-x-0 bottom-14 z-[9999] px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] sm:bottom-10 sm:px-5 sm:pb-6"
+          aria-live="polite"
+        >
           <div
-            className="fixed inset-x-0 bottom-14 z-[9999] px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] sm:bottom-10 sm:px-5 sm:pb-6"
-            aria-live="polite"
+            className={[
+              "build-sentence-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
+              status === "correct"
+                ? "border-lime-200/50 bg-lime-500"
+                : "border-rose-200/50 bg-rose-500",
+            ].join(" ")}
           >
-            <div
-              className={[
-                "build-sentence-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
-                status === "correct"
-                  ? "border-lime-200/50 bg-lime-500"
-                  : "border-rose-200/50 bg-rose-500",
-              ].join(" ")}
-            >
-              <div className="flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <div className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
-                    {status === "correct" ? ui.correct : ui.wrong}
-                  </div>
-
-                  <div className="mt-1 text-sm font-semibold leading-snug text-white/90 sm:text-base">
-                    {status === "wrong" ? `${ui.correctAnswer}: ` : ""}
-                    <span className="font-black text-white">
-                      {correctSentence}
-                    </span>
-                  </div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
+                  {status === "correct" ? ui.correct : ui.wrong}
                 </div>
 
-                <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
-                  <button
-                    onClick={replay}
-                    className="rounded-2xl bg-white/20 px-4 py-3 text-sm font-black text-white ring-1 ring-white/35 transition hover:bg-white/25 active:scale-95 sm:px-5"
-                    aria-label={ui.listenAgain}
-                    title={ui.listenAgain}
-                  >
-                    🔊
-                  </button>
-
-                  <button
-                    onClick={next}
-                    className={[
-                      "rounded-2xl px-5 py-3 text-sm font-black transition active:scale-95 sm:px-6 sm:text-base",
-                      status === "correct"
-                        ? "bg-white text-lime-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90"
-                        : "bg-white text-rose-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90",
-                    ].join(" ")}
-                  >
-                    {ui.next}
-                  </button>
+                <div className="mt-1 text-sm font-semibold leading-snug text-white/90 sm:text-base">
+                  {status === "wrong" ? `${ui.correctAnswer}: ` : ""}
+                  <span className="font-black text-white">
+                    {correctSentence}
+                  </span>
                 </div>
               </div>
+
+              <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+                <button
+                  onClick={replay}
+                  className="rounded-2xl bg-white/20 px-4 py-3 text-sm font-black text-white ring-1 ring-white/35 transition hover:bg-white/25 active:scale-95 sm:px-5"
+                  aria-label={ui.listenAgain}
+                  title={ui.listenAgain}
+                >
+                  🔊
+                </button>
+
+                <button
+                  onClick={next}
+                  className={[
+                    "rounded-2xl px-5 py-3 text-sm font-black transition active:scale-95 sm:px-6 sm:text-base",
+                    status === "correct"
+                      ? "bg-white text-lime-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90"
+                      : "bg-white text-rose-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90",
+                  ].join(" ")}
+                >
+                  {ui.next}
+                </button>
+              </div>
             </div>
-          </div>,
-          document.body,
-        )
+          </div>
+        </div>,
+        document.body,
+      )
       : null;
 
   return (

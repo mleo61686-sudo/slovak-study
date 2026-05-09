@@ -12,6 +12,8 @@ import {
   type XpState,
 } from "@/app/components/words-srs/words-srs-storage";
 
+const ANSWER_SFX_KEY = "flunio.answerSfx.enabled";
+
 type SessionUserLike = {
   id?: string | null;
   name?: string | null;
@@ -40,6 +42,7 @@ export default function AccountClient() {
   const [nameError, setNameError] = useState("");
   const [nameSuccess, setNameSuccess] = useState("");
   const [xp, setXp] = useState<XpState>({ totalXp: 0 });
+  const [answerSfxEnabled, setAnswerSfxEnabled] = useState(true);
 
   const normalizedInitialName = initialName.trim();
   const normalizedNameValue = nameValue.trim();
@@ -86,6 +89,24 @@ export default function AccountClient() {
         ? "Go to word review"
         : "Перейти до повторення";
 
+  const soundsTitle = L === "ru" ? "Звуки" : L === "en" ? "Sounds" : "Звуки";
+  const answerSoundsTitle =
+    L === "ru"
+      ? "Звуки правильного / неправильного ответа"
+      : L === "en"
+        ? "Correct / wrong answer sounds"
+        : "Звуки правильної / неправильної відповіді";
+  const answerSoundsHint =
+    L === "ru"
+      ? "Можно выключить короткие звуки после выбора ответа в уроках."
+      : L === "en"
+        ? "Turn off short sounds after choosing an answer in lessons."
+        : "Можна вимкнути короткі звуки після вибору відповіді в уроках.";
+  const soundEnabledLabel =
+    L === "ru" ? "Включено" : L === "en" ? "Enabled" : "Увімкнено";
+  const soundDisabledLabel =
+    L === "ru" ? "Выключено" : L === "en" ? "Disabled" : "Вимкнено";
+
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -101,6 +122,15 @@ export default function AccountClient() {
 
   const canSubmitPassword =
     !savingPassword && !!currentPassword && !!newPassword && !!confirmPassword;
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(ANSWER_SFX_KEY);
+      setAnswerSfxEnabled(saved !== "false");
+    } catch {
+      setAnswerSfxEnabled(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -190,6 +220,16 @@ export default function AccountClient() {
     return () => window.clearTimeout(timer);
   }, [avatarSuccess]);
 
+  function handleToggleAnswerSfx() {
+    const next = !answerSfxEnabled;
+
+    setAnswerSfxEnabled(next);
+
+    try {
+      window.localStorage.setItem(ANSWER_SFX_KEY, String(next));
+    } catch { }
+  }
+
   async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -267,7 +307,7 @@ export default function AccountClient() {
       window.dispatchEvent(
         new CustomEvent("flunio:avatarUpdated", {
           detail: { avatarUrl: data.avatarUrl },
-        })
+        }),
       );
 
       setAvatarSuccess(t.avatarSuccess);
@@ -767,6 +807,52 @@ export default function AccountClient() {
                 {savingPassword ? t.saving : t.changePassword}
               </button>
             </form>
+          </div>
+        </div>
+
+        <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
+          <h2 className="text-xl font-semibold theme-text">{soundsTitle}</h2>
+
+          <div className="mt-4 grid gap-3">
+            <div className="theme-inner-card rounded-2xl p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-sm font-semibold theme-text">
+                    {answerSoundsTitle}
+                  </div>
+
+                  <div className="mt-1 text-sm theme-text-muted">
+                    {answerSoundsHint}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleToggleAnswerSfx}
+                  className={[
+                    "relative inline-flex h-8 w-14 shrink-0 items-center rounded-full border transition shadow-sm",
+                    answerSfxEnabled
+                      ? "border-cyan-400/60 bg-cyan-500/40 shadow-cyan-500/20"
+                      : "border-slate-400/70 bg-slate-200 shadow-slate-300/40",
+                  ].join(" ")}
+                  aria-pressed={answerSfxEnabled}
+                  aria-label={answerSoundsTitle}
+                >
+                  <span
+                    className={[
+                      "inline-block h-6 w-6 rounded-full shadow-md ring-1 transition",
+                      answerSfxEnabled
+                        ? "translate-x-7 bg-cyan-50 ring-cyan-200"
+                        : "translate-x-1 bg-slate-700 ring-slate-500",
+                    ].join(" ")}
+                  />
+                </button>
+              </div>
+
+              <div className="mt-3 text-xs font-semibold theme-text-subtle">
+                {answerSfxEnabled ? soundEnabledLabel : soundDisabledLabel}
+              </div>
+            </div>
           </div>
         </div>
 

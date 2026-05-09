@@ -46,6 +46,17 @@ export default function ChooseTranslation({
 
   const answered = status !== "idle";
 
+  const playAnswerSfx = (ok: boolean) => {
+    try {
+      const enabled = window.localStorage.getItem("flunio.answerSfx.enabled");
+
+      if (enabled === "false") return;
+
+      const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
+      audio.volume = 0.15;
+      audio.play().catch(() => { });
+    } catch { }
+  };
   const chooseLabel =
     lang === "en"
       ? "Choose the translation:"
@@ -182,8 +193,11 @@ export default function ChooseTranslation({
                   if (answered) return;
 
                   const ok = opt === correctText;
+
                   setPicked(opt);
                   setStatus(ok ? "correct" : "wrong");
+
+                  playAnswerSfx(ok);
 
                   if (!audioUnlocked) {
                     await playLocal(word.sk, "word", courseId);
@@ -225,7 +239,7 @@ export default function ChooseTranslation({
               "choose-translation-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
               status === "correct"
                 ? "border-lime-200/50 bg-lime-500"
-                : "border-red-200/50 bg-red-500"
+                : "border-red-200/50 bg-red-500",
             ].join(" ")}
           >
             <div className="flex items-center justify-between gap-4">
