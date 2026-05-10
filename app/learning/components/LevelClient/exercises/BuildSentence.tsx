@@ -113,7 +113,7 @@ export default function BuildSentence({
       if (enabled === "false") return;
 
       const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
-      audio.volume = 0.14;
+      audio.volume = 0.12;
       audio.play().catch(() => { });
     } catch { }
   };
