@@ -53,7 +53,7 @@ export default function ChooseTranslation({
       if (enabled === "false") return;
 
       const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
-      audio.volume = 0.15;
+      audio.volume = 0.13;
       audio.play().catch(() => { });
     } catch { }
   };
