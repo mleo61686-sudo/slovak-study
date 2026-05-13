@@ -103,7 +103,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "blok", ua: "чек", ru: "чек", en: "receipt", img: "/words/blok.jpg" },
             { sk: "hotovosť", ua: "готівка", ru: "наличные", en: "cash", img: "/words/hotovosť.jpg" },
             { sk: "karta", ua: "картка", ru: "карта", en: "card", img: "/words/karta.jpg" },
-            { sk: "kúpiť", ua: "купити", ru: "купить", en: "to buy", img: "/words/kupiť.jpg" },
+            { sk: "kúpiť", ua: "купити", ru: "купить", en: "to buy", img: "/words/kúpiť.jpg" },
             { sk: "platiť", ua: "платити", ru: "платить", en: "to pay", img: "/words/platiť.jpg" },
         ],
     },

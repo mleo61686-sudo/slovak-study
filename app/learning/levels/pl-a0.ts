@@ -61,7 +61,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "paragon", ua: "чек", ru: "чек", en: "receipt", hintUa: "парагон", img: "/words/blok.jpg" },
       { sk: "gotówka", ua: "готівка", ru: "наличные", en: "cash", hintUa: "гутувка", img: "/words/hotovosť.jpg" },
       { sk: "karta", ua: "картка", ru: "карта", en: "card", hintUa: "карта", img: "/words/karta.jpg" },
-      { sk: "kupić", ua: "купити", ru: "купить", en: "to buy", hintUa: "купіч", img: "/words/kupiť.jpg" },
+      { sk: "kupić", ua: "купити", ru: "купить", en: "to buy", hintUa: "купіч", img: "/words/kúpiť.jpg"},
       { sk: "płacić", ua: "платити", ru: "платить", en: "to pay", hintUa: "пуаціч", img: "/words/platiť.jpg" },
     ],
   },
