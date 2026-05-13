@@ -122,7 +122,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "polievka", ua: "суп", ru: "суп", en: "soup", img: "/words/polievka.jpg" },
             { sk: "ovocie", ua: "фрукти", ru: "фрукты", en: "fruit", img: "/words/ovocie.jpg" },
             { sk: "zelenina", ua: "овочі", ru: "овощи", en: "vegetables", img: "/words/zelenina.jpg" },
-            { sk: "voda", ua: "вода", ru: "вода", en: "water", img: "/words/water.jpg" },
+            { sk: "voda", ua: "вода", ru: "вода", en: "water", img: "/words/voda.jpg" },
             { sk: "káva", ua: "кава", ru: "кофе", en: "coffee", img: "/words/káva.jpg" },
             { sk: "čaj", ua: "чай", ru: "чай", en: "tea", img: "/words/čaj.jpg" },
         ],
