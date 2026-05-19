@@ -40,17 +40,37 @@ export default function ChooseSlovak({
 
   const [status, setStatus] = useState<"idle" | "correct" | "wrong">("idle");
   const [picked, setPicked] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(!word.img);
+
+  const answered = status !== "idle";
+  const visualReady = !word.img || imageLoaded;
+
+  const courseLang = courseLangName[courseId] ?? courseLangName.sk;
+  const translation = trWord(word, lang);
 
   useEffect(() => {
     setStatus("idle");
     setPicked(null);
-    setImageLoaded(false);
-  }, [word.sk]);
+    setImageLoaded(!word.img);
+  }, [word.sk, word.img]);
 
-  const answered = status !== "idle";
-  const courseLang = courseLangName[courseId] ?? courseLangName.sk;
-  const translation = trWord(word, lang);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const currentIndex = words.findIndex((w) => w === word);
+
+    const imgsToPreload = [
+      word.img,
+      words[currentIndex + 1]?.img,
+      words[currentIndex + 2]?.img,
+      words[currentIndex + 3]?.img,
+    ].filter(Boolean) as string[];
+
+    imgsToPreload.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [word, words]);
 
   const playAnswerSfx = (ok: boolean) => {
     try {
@@ -60,8 +80,8 @@ export default function ChooseSlovak({
 
       const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
       audio.volume = 0.13;
-      audio.play().catch(() => { });
-    } catch { }
+      audio.play().catch(() => {});
+    } catch {}
   };
 
   const title =
@@ -138,11 +158,14 @@ export default function ChooseSlovak({
                 )}
 
                 <Image
+                  key={word.img}
                   src={word.img}
                   alt={word.sk}
                   width={1200}
                   height={900}
-                  onLoad={() => setImageLoaded(true)}
+                  priority
+                  sizes="(max-width: 640px) 320px, 320px"
+                  onLoadingComplete={() => setImageLoaded(true)}
                   className={[
                     "h-auto w-full rounded-2xl transition-all duration-500",
                     imageLoaded
@@ -187,7 +210,11 @@ export default function ChooseSlovak({
           <SpeakCentered
             text={word.sk}
             kind="word"
-            autoPlayKey={audioUnlocked ? `${quizAutoKey}:${word.sk}` : undefined}
+            autoPlayKey={
+              audioUnlocked && visualReady
+                ? `${quizAutoKey}:${word.sk}`
+                : undefined
+            }
           />
         </div>
       </div>
