@@ -1,29 +1,16 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { finishLessonQuiz } from "@/lib/src/progress";
-import ReportErrorButton from "@/app/components/ReportErrorButton";
 
 import type { Word, ExerciseDef } from "./types";
-import { trWord } from "./helpers";
-import { phraseKey } from "@/app/learning/phrases/phraseKey";
-
-const exerciseEnterStyle = `
-@keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-`;
+import LessonIntro from "./LessonIntro";
+import LessonFinished from "./LessonFinished";
+import LessonExerciseScreen, {
+  preloadExerciseModules,
+} from "./LessonExerciseScreen";
 
 type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
@@ -35,96 +22,6 @@ type IdleWindow = Window & {
   ) => number;
   cancelIdleCallback?: (id: number) => void;
 };
-
-function ExerciseLoading() {
-  return (
-    <div className="theme-inner-card rounded-2xl p-4">
-      <div className="animate-pulse space-y-4">
-        <div className="h-6 w-56 rounded bg-white/10" />
-        <div className="mx-auto h-[220px] w-full max-w-[320px] rounded-2xl bg-white/10" />
-        <div className="mx-auto h-10 w-10 rounded-full bg-white/10" />
-        <div className="space-y-3">
-          <div className="h-12 w-full rounded-xl bg-white/10" />
-          <div className="h-12 w-full rounded-xl bg-white/10" />
-          <div className="h-12 w-full rounded-xl bg-white/10" />
-          <div className="h-12 w-full rounded-xl bg-white/10" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const ChooseTranslation = dynamic(
-  () =>
-    import(
-      "@/app/learning/components/LevelClient/exercises/ChooseTranslation"
-    ),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-const ChooseSlovak = dynamic(
-  () => import("@/app/learning/components/LevelClient/exercises/ChooseSlovak"),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-const WriteWord = dynamic(
-  () => import("@/app/learning/components/LevelClient/exercises/WriteWord"),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-const AudioQuiz = dynamic(
-  () => import("@/app/learning/components/LevelClient/exercises/AudioQuiz"),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-const MatchColumns = dynamic(
-  () => import("@/app/learning/components/LevelClient/exercises/MatchColumns"),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-const BuildSentence = dynamic(
-  () => import("@/app/learning/components/LevelClient/exercises/BuildSentence"),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-const BuildUaSentence = dynamic(
-  () =>
-    import("@/app/learning/components/LevelClient/exercises/BuildUaSentence"),
-  {
-    ssr: false,
-    loading: () => <ExerciseLoading />,
-  }
-);
-
-function preloadExerciseModules() {
-  return Promise.all([
-    import("@/app/learning/components/LevelClient/exercises/ChooseTranslation"),
-    import("@/app/learning/components/LevelClient/exercises/ChooseSlovak"),
-    import("@/app/learning/components/LevelClient/exercises/WriteWord"),
-    import("@/app/learning/components/LevelClient/exercises/AudioQuiz"),
-    import("@/app/learning/components/LevelClient/exercises/MatchColumns"),
-    import("@/app/learning/components/LevelClient/exercises/BuildSentence"),
-    import("@/app/learning/components/LevelClient/exercises/BuildUaSentence"),
-  ]);
-}
 
 function uiLangFrom(lang: string): UiLang {
   if (lang === "ru") return "ru";
@@ -260,6 +157,7 @@ const UI = {
 
 function getNextLevelId(levelId: string) {
   const m = /^([a-z]\d)-(\d+)$/.exec(levelId.toLowerCase());
+
   if (m) {
     const band = m[1];
     const n = Number(m[2]);
@@ -275,6 +173,7 @@ function getNextLevelId(levelId: string) {
 
   const n = Number(levelId);
   if (Number.isFinite(n)) return String(n + 1);
+
   return levelId;
 }
 
@@ -437,6 +336,7 @@ export default function LevelClient({
       if (!el) return false;
 
       const tag = el.tagName;
+
       return (
         tag === "INPUT" ||
         tag === "TEXTAREA" ||
@@ -480,6 +380,7 @@ export default function LevelClient({
 
     (async () => {
       setSavingNext(true);
+
       try {
         const res = await fetch("/api/progress/lesson-done", {
           method: "POST",
@@ -544,6 +445,7 @@ export default function LevelClient({
     setScore((s) => s + correctCount);
 
     const lastExercise = exerciseIndex >= EXERCISES.length - 1;
+
     if (!lastExercise) {
       setExerciseIndex((e) => e + 1);
       setWordIndex(0);
@@ -563,327 +465,61 @@ export default function LevelClient({
     const courseLabel = getCourseLabel(courseId, t);
 
     return (
-      <div
-        className="space-y-5 pt-4 theme-text sm:space-y-6 sm:pt-0"
-        onPointerDownCapture={unlockInsideLesson}
-        onKeyDownCapture={unlockInsideLesson}
-      >
-        <div className="mx-auto w-full max-w-[1120px]">
-          <div className="lesson-intro-shell flunio-card relative overflow-hidden rounded-[2rem] p-4 sm:p-6 lg:p-8">
-            <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-400/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl" />
-            <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-cyan-300/50 to-transparent" />
-
-            <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-start">
-              <div className="space-y-5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="theme-pill inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.22em]">
-                    {t.introEyebrow}
-                  </span>
-
-                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold theme-text-muted backdrop-blur">
-                    {courseLabel}
-                  </span>
-
-                  <span className="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-500">
-                    {t.lesson} {levelId.toUpperCase()}
-                  </span>
-                </div>
-
-                <div>
-                  <h1 className="max-w-3xl text-3xl font-black tracking-tight theme-text sm:text-4xl lg:text-5xl">
-                    {t.introTitle}
-                  </h1>
-
-                  <p className="mt-3 max-w-2xl text-sm leading-6 theme-text-muted sm:text-base">
-                    {t.introSubtitle}
-                  </p>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {words.map((word, index) => (
-                    <div
-                      key={`${word.sk}-${index}`}
-                      className="lesson-intro-word-card group relative overflow-hidden rounded-2xl p-4 backdrop-blur transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/35 hover:bg-white/[0.075] hover:shadow-[0_0_22px_rgba(34,211,238,0.12)]"
-                    >
-                      <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-cyan-400/0 blur-2xl transition group-hover:bg-cyan-400/12" />
-
-                      <div className="relative flex items-start gap-3">
-                        <div className="lesson-intro-number mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl text-sm font-black theme-text">
-                          {index + 1}
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-start gap-2">
-                            <div className="min-w-0 flex-1">
-                              <div className="break-words text-lg font-extrabold leading-tight theme-text sm:text-xl">
-                                {word.sk}
-                              </div>
-
-                              {courseId === "pl" && word.hintUa ? (
-                                <div className="mt-1 break-words text-xs italic theme-text-subtle">
-                                  [{word.hintUa}]
-                                </div>
-                              ) : null}
-
-                              <div className="mt-1 break-words text-sm font-semibold theme-accent-text">
-                                {trWord(word, lang)}
-                              </div>
-                            </div>
-
-                            <div className="lesson-intro-audio shrink-0 scale-[0.82]">
-                              <SpeakButton text={word.sk} />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="lesson-intro-hint rounded-2xl p-4 text-sm leading-6">
-                  {t.introHint}
-                </div>
-              </div>
-
-              <aside className="lesson-intro-side relative overflow-hidden rounded-3xl p-5 backdrop-blur-xl lg:sticky lg:top-24">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-cyan-400/15 blur-3xl" />
-                <div className="pointer-events-none absolute -bottom-16 -left-16 h-36 w-36 rounded-full bg-fuchsia-500/12 blur-3xl" />
-
-                <div className="relative space-y-5">
-                  <div className="lesson-intro-stat rounded-3xl p-5 text-center">
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-cyan-400/20 via-blue-500/15 to-fuchsia-500/20 text-3xl shadow-[0_0_24px_rgba(34,211,238,0.14)]">
-                      ✨
-                    </div>
-
-                    <div className="mt-4 text-4xl font-black theme-text">
-                      {words.length}
-                    </div>
-
-                    <div className="mt-1 text-sm font-semibold theme-text-muted">
-                      {t.introCount}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="text-xl font-black theme-text">
-                      {t.introReadyTitle}
-                    </div>
-
-                    <p className="mt-2 text-sm leading-6 theme-text-muted">
-                      {t.introReadyText}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={startQuiz}
-                    className="theme-primary-button flex min-h-[54px] w-full items-center justify-center rounded-2xl px-5 py-3 text-base font-black transition hover:-translate-y-0.5"
-                  >
-                    {t.startExercises}
-                  </button>
-
-                  <div className="grid grid-cols-7 gap-1.5">
-                    {EXERCISES.map((exercise, index) => (
-                      <div
-                        key={exercise.kind}
-                        className="h-1.5 rounded-full bg-gradient-to-r from-cyan-400/70 via-blue-400/70 to-fuchsia-400/70"
-                        title={`${index + 1}. ${getExerciseTitle(
-                          exercise.kind,
-                          t
-                        )}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </aside>
-            </div>
-          </div>
-        </div>
-      </div>
+      <LessonIntro
+        levelId={levelId}
+        words={words}
+        lang={lang}
+        courseId={courseId}
+        courseLabel={courseLabel}
+        t={t}
+        exercises={EXERCISES}
+        getExerciseTitle={(kind) => getExerciseTitle(kind, t)}
+        onStartQuiz={startQuiz}
+        onUnlockAudio={unlockInsideLesson}
+      />
     );
   }
 
   const exercise = EXERCISES[exerciseIndex];
-  const currentWord = words[wordIndex];
   const exerciseTitle = getExerciseTitle(exercise.kind, t);
   const exerciseScreenKey = `${exercise.kind}-${wordIndex}-${quizAutoKey}`;
 
   if (finished) {
     return (
-      <div className="flunio-card space-y-4 rounded-3xl p-6 theme-text">
-        <div className="text-xl font-semibold theme-text">{t.levelDone}</div>
-
-        <div className="theme-text-muted">
-          {t.result}: <b className="theme-text">{score}</b> /{" "}
-          <b className="theme-text">{totalQuestions}</b>
-        </div>
-
-        {savingNext ? (
-          <div className="text-sm theme-text-subtle">{t.saving}</div>
-        ) : null}
-
-        {!canGoNextNow && (
-          <div className="theme-inner-card rounded-2xl p-4 text-sm theme-text-muted">
-            <div className="font-semibold theme-text">{t.nextLockedTitle}</div>
-            <div className="mt-1">{lockedReasonNow ?? t.nextLockedDefault}</div>
-          </div>
-        )}
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={resetToLearn}
-            disabled={isNavigating}
-            className="theme-secondary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {t.reviewAgain}
-          </button>
-
-          <button
-            onClick={() => goTo(nextLevelId)}
-            className={[
-              "rounded-xl px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed",
-              canGoNextNow && !savingNext && !isNavigating
-                ? "theme-primary-button hover:-translate-y-0.5"
-                : "theme-secondary-button opacity-60",
-            ].join(" ")}
-            disabled={!canGoNextNow || savingNext || isNavigating}
-            title={!canGoNextNow ? t.notAvailableFree : undefined}
-          >
-            {t.goNextLevel}
-          </button>
-
-          {!canGoNextNow && (
-            <button
-              onClick={() => goTo(onLockedNextRedirect)}
-              disabled={isNavigating}
-              className="theme-secondary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {t.toLessonsList}
-            </button>
-          )}
-        </div>
-      </div>
+      <LessonFinished
+        t={t}
+        score={score}
+        totalQuestions={totalQuestions}
+        savingNext={savingNext}
+        canGoNextNow={canGoNextNow}
+        lockedReasonNow={lockedReasonNow}
+        isNavigating={isNavigating}
+        nextLevelId={nextLevelId}
+        onReviewAgain={resetToLearn}
+        onGoNext={goTo}
+        onGoToLessonsList={() => goTo(onLockedNextRedirect)}
+      />
     );
   }
 
   return (
-    <div
-      className="flunio-card space-y-4 rounded-3xl p-6 theme-text"
-      onPointerDownCapture={unlockInsideLesson}
-      onKeyDownCapture={unlockInsideLesson}
-    >
-      <div className="text-xs font-medium leading-snug theme-text-subtle sm:text-sm">
-        <span className="sm:hidden">
-          {t.exercise} {exerciseIndex + 1}/{EXERCISES.length} ·{" "}
-          {exercise.mode === "perWord"
-            ? `${t.word} ${wordIndex + 1}/${words.length}`
-            : t.lesson}
-        </span>
-
-        <span className="hidden sm:inline">
-          {t.exercise} {exerciseIndex + 1} / {EXERCISES.length} •{" "}
-          {exerciseTitle} •{" "}
-          {exercise.mode === "perWord" ? (
-            <>
-              {t.word} {wordIndex + 1} / {words.length}
-            </>
-          ) : (
-            <>{t.lesson}</>
-          )}
-        </span>
-      </div>
-
-      <style>{exerciseEnterStyle}</style>
-
-      <ReportErrorButton
-        lang={lang}
-        context={{
-          lessonId: levelId,
-          exercise: `${mode}:${exercise.kind}`,
-          actionIdx: exercise.mode === "perWord" ? wordIndex + 1 : undefined,
-          sk: exercise.mode === "perWord" ? currentWord?.sk : undefined,
-          ua: exercise.mode === "perWord" ? currentWord?.ua : undefined,
-          ru: exercise.mode === "perWord" ? currentWord?.ru : undefined,
-          key:
-            exercise.mode === "perWord" && currentWord?.sk && currentWord?.ua
-              ? phraseKey(currentWord.sk, currentWord.ua, levelId)
-              : undefined,
-        }}
-      />
-
-      <div
-        key={exerciseScreenKey}
-        className="theme-inner-card rounded-3xl px-4 py-10 transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
-      >
-        {exercise.kind === "chooseTranslation" && (
-          <ChooseTranslation
-            word={currentWord}
-            words={words}
-            lang={lang}
-            onNext={nextPerWord}
-            quizAutoKey={quizAutoKey}
-            audioUnlocked={audioUnlocked}
-          />
-        )}
-
-        {exercise.kind === "chooseSlovak" && (
-          <ChooseSlovak
-            word={currentWord}
-            words={words}
-            lang={lang}
-            onNext={nextPerWord}
-            quizAutoKey={quizAutoKey}
-            audioUnlocked={audioUnlocked}
-            courseId={courseId}
-          />
-        )}
-
-        {exercise.kind === "writeWord" && (
-          <WriteWord
-            word={currentWord}
-            lang={lang}
-            onNext={nextPerWord}
-            quizAutoKey={quizAutoKey}
-            audioUnlocked={audioUnlocked}
-            courseId={courseId}
-          />
-        )}
-
-        {exercise.kind === "audioQuiz" && (
-          <AudioQuiz
-            word={currentWord}
-            words={words}
-            onNext={nextPerWord}
-            quizAutoKey={quizAutoKey}
-            audioUnlocked={audioUnlocked}
-            lang={lang}
-          />
-        )}
-
-        {exercise.kind === "matchColumns" && (
-          <MatchColumns words={words} lang={lang} onDone={(c) => doneWhole(c)} />
-        )}
-
-        {exercise.kind === "buildSentence" && (
-          <BuildSentence
-            word={currentWord}
-            lang={lang}
-            levelId={levelId}
-            courseId={courseId}
-            onNext={nextPerWord}
-          />
-        )}
-
-        {exercise.kind === "buildUaSentence" && (
-          <BuildUaSentence
-            word={currentWord}
-            lang={lang}
-            levelId={levelId}
-            courseId={courseId}
-            onNext={nextPerWord}
-          />
-        )}
-      </div>
-    </div>
+    <LessonExerciseScreen
+      levelId={levelId}
+      words={words}
+      lang={lang}
+      courseId={courseId}
+      exercise={exercise}
+      exerciseIndex={exerciseIndex}
+      wordIndex={wordIndex}
+      exerciseTitle={exerciseTitle}
+      exerciseScreenKey={exerciseScreenKey}
+      quizAutoKey={quizAutoKey}
+      audioUnlocked={audioUnlocked}
+      exercisesCount={EXERCISES.length}
+      onUnlockAudio={unlockInsideLesson}
+      onNextPerWord={nextPerWord}
+      onDoneWhole={doneWhole}
+      t={t}
+    />
   );
 }
