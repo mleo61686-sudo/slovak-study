@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { Word } from "@/app/learning/data";
 import type { CourseId } from "@/app/learning/courses/registry";
 import { useLanguage } from "@/lib/src/useLanguage";
+import WordsSrsWeakWords from "./words-srs/WordsSrsWeakWords";
 
 import WordsSrsReviewCard from "./words-srs/WordsSrsReviewCard";
 import WordsSrsStats from "./words-srs/WordsSrsStats";
@@ -15,11 +16,12 @@ import {
   computeStats,
   DAILY_NEW_LIMIT,
   DAILY_REVIEW_LIMIT,
-  getDueSorted,
+  getSmartReviewSession,
   getTerm,
   getTodayKey,
   getTranslation,
   initState,
+  isWeakState,
   SESSION_SIZE,
   shuffle,
   type SrsState,
@@ -79,6 +81,9 @@ export default function WordsSrsPage({
   const [isGrading, setIsGrading] = useState(false);
   const [sessionSize, setSessionSize] = useState(0);
 
+  const [sessionReviewsDone, setSessionReviewsDone] = useState(0);
+  const [sessionXpEarned, setSessionXpEarned] = useState(0);
+
   const [stats, setStats] = useState<Stats>({
     total: allWords.length,
     learned: 0,
@@ -121,30 +126,39 @@ export default function WordsSrsPage({
     const updated = nextDb ?? loadDb(userId, courseId);
     const now = Date.now();
 
-    const dueAll = getDueSorted(allWords, updated);
-    const dueIds = dueAll.map((w) => getTerm(w)).filter(Boolean);
+    const smartWords = getSmartReviewSession(
+      allWords,
+      updated,
+      Math.min(DAILY_REVIEW_LIMIT, SESSION_SIZE)
+    );
+
+    const smartIds = smartWords.map((w) => getTerm(w)).filter(Boolean);
 
     const today = getTodayKey();
     const saved = getDailySession(userId, courseId);
-
-    const target = Math.min(DAILY_REVIEW_LIMIT, dueIds.length);
 
     let ids: string[] = [];
 
     if (saved?.date === today) {
       /*
-       * ВАЖЛИВО:
        * Якщо сьогоднішня сесія вже була створена, НЕ добираємо нові слова.
-       * Інакше після завершення 30 слів сторінка знову набирала наступні 30.
+       * Але залишаємо due + weak words.
        */
-      ids = saved.ids.filter((id) => updated[id] && updated[id].dueAt <= now);
+      ids = saved.ids.filter((id) => {
+        const state = updated[id];
+
+        if (!state) return false;
+
+        return state.dueAt <= now || isWeakState(state);
+      });
 
       setDailySession(userId, courseId, ids);
     } else {
       /*
-       * Нова денна сесія створюється тільки один раз на день.
+       * Нова денна smart-сесія:
+       * due words + weak words, без дублікатів.
        */
-      ids = dueIds.slice(0, target);
+      ids = smartIds.slice(0, Math.min(DAILY_REVIEW_LIMIT, SESSION_SIZE));
       setDailySession(userId, courseId, ids);
     }
 
@@ -160,6 +174,8 @@ export default function WordsSrsPage({
     setLastInfo("");
     setIsGrading(false);
     setSessionSize(limited.length);
+    setSessionReviewsDone(0);
+    setSessionXpEarned(0);
 
     setStats(computeStats(updated, allWords.length));
   }
@@ -256,6 +272,8 @@ export default function WordsSrsPage({
     setStreak(markStreakReview(userId, courseId));
     setDailyGoal(markDailyGoalReview(userId, courseId));
     setXp(addXp(userId, XP_PER_REVIEW, courseId));
+    setSessionReviewsDone((value) => value + 1);
+    setSessionXpEarned((value) => value + XP_PER_REVIEW);
 
     setTimeout(() => {
       if (g === 0) {
@@ -316,6 +334,32 @@ export default function WordsSrsPage({
     lang === "ru" ? "Сегодня" : lang === "en" ? "Today" : "Сьогодні";
 
   const xpLabel = lang === "ru" ? "Опыт" : lang === "en" ? "XP" : "Досвід";
+
+  const resultReviewedLabel =
+    lang === "ru"
+      ? "Повторено слов"
+      : lang === "en"
+        ? "Words reviewed"
+        : "Повторено слів";
+
+  const resultXpLabel =
+    lang === "ru" ? "XP за сессию" : lang === "en" ? "Session XP" : "XP за сесію";
+
+  const resultStreakLabel =
+    lang === "ru"
+      ? "Серия"
+      : lang === "en"
+        ? "Streak"
+        : "Серія";
+
+  const resultGoalLabel =
+    lang === "ru"
+      ? "Цель дня"
+      : lang === "en"
+        ? "Daily goal"
+        : "Ціль дня";
+
+  const sessionCompleted = !current && sessionSize > 0 && reviewed >= sessionSize;
 
   if (needLogin) {
     return (
@@ -416,9 +460,77 @@ export default function WordsSrsPage({
         xpLabel={xpLabel}
         xp={xp.totalXp}
       />
-
+      <WordsSrsWeakWords words={allWords} db={db} lang={lang} />
       {!current ? (
-        Math.min(stats.due, DAILY_REVIEW_LIMIT) === 0 ? (
+        sessionCompleted ? (
+          <section className="flunio-card rounded-3xl p-5 theme-text sm:p-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold theme-text">
+                {t.sessionDone}
+              </div>
+
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 theme-text-muted">
+                {t.sessionDoneText}
+              </p>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <div className="flunio-card-soft rounded-2xl p-3 text-center">
+                <div className="text-xs theme-text-subtle">
+                  {resultReviewedLabel}
+                </div>
+                <div className="mt-1 text-xl font-bold theme-text">
+                  ✅ {sessionReviewsDone}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-cyan-400/30 bg-cyan-400/15 p-3 text-center shadow-[0_0_16px_rgba(34,211,238,0.12)] backdrop-blur">
+                <div className="text-xs font-medium theme-accent-text">
+                  {resultXpLabel}
+                </div>
+                <div className="mt-1 text-xl font-bold theme-accent-text">
+                  ⭐ +{sessionXpEarned}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-amber-300/30 bg-amber-300/15 p-3 text-center shadow-[0_0_16px_rgba(251,191,36,0.12)] backdrop-blur">
+                <div className="text-xs font-medium text-amber-500">
+                  {resultStreakLabel}
+                </div>
+                <div className="mt-1 text-xl font-bold text-amber-500">
+                  🔥 {streak.count}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/15 p-3 text-center shadow-[0_0_16px_rgba(16,185,129,0.12)] backdrop-blur">
+                <div className="text-xs font-medium text-emerald-500">
+                  {resultGoalLabel}
+                </div>
+                <div className="mt-1 text-xl font-bold text-emerald-500">
+                  🎯 {Math.min(dailyGoal.reviewed, DAILY_GOAL_TARGET)}/
+                  {DAILY_GOAL_TARGET}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <button
+                onClick={() => startNewSession()}
+                className="theme-primary-button min-h-11 rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98]"
+                type="button"
+              >
+                {t.nextSession}
+              </button>
+
+              <Link
+                href={backHref}
+                className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition active:scale-[0.98]"
+              >
+                ← {t.back}
+              </Link>
+            </div>
+          </section>
+        ) : (
           <section className="flunio-card rounded-3xl p-5 text-center theme-text sm:p-6">
             <div className="text-xl font-semibold theme-text">
               {t.noDueTitle}
@@ -435,26 +547,6 @@ export default function WordsSrsPage({
                 type="button"
               >
                 ＋ {t.add30}
-              </button>
-            </div>
-          </section>
-        ) : (
-          <section className="flunio-card rounded-3xl p-5 text-center theme-text sm:p-6">
-            <div className="text-2xl font-bold theme-text">
-              {t.sessionDone}
-            </div>
-
-            <p className="mt-2 text-sm leading-6 theme-text-muted">
-              {t.sessionDoneText}
-            </p>
-
-            <div className="mt-5">
-              <button
-                onClick={() => startNewSession()}
-                className="theme-primary-button min-h-11 w-full rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto"
-                type="button"
-              >
-                {t.nextSession}
               </button>
             </div>
           </section>
