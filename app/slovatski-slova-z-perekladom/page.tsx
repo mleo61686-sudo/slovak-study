@@ -327,8 +327,8 @@ export default function Page() {
             Вивчення словацької онлайн →
           </Link>
 
-          <Link href="/slovak-for-ukrainians" className={secondaryBlock}>
-            Словацька для українців →
+          <Link href="/learning/a0-1" className={secondaryBlock}>
+            Почати з першого уроку →
           </Link>
 
           <Link href="/practice" className={secondaryBlock}>

@@ -1,53 +1,36 @@
 import type { MetadataRoute } from "next";
+import { SEO_MAP } from "./seo-pages/seoMap";
+
+const SITE_URL = "https://flunio.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://flunio.com";
   const now = new Date();
 
-  const urls: string[] = [
-    // основа
-    `${baseUrl}/`,
-    `${baseUrl}/learning`,
-    `${baseUrl}/dictionary`,
-    `${baseUrl}/grammar`,
-
+  const staticUrls: string[] = [
     // рівні
-    `${baseUrl}/learning/a0`,
-    `${baseUrl}/learning/a1`,
-    `${baseUrl}/learning/a2`,
-    `${baseUrl}/learning/b1`,
-    `${baseUrl}/learning/b2`,
+    "/learning/a0",
+    "/learning/a1",
+    "/learning/a2",
+    "/learning/b1",
+    "/learning/b2",
 
     // граматика
-    `${baseUrl}/grammar/alphabet`,
-    `${baseUrl}/grammar/verbs-present`,
-    `${baseUrl}/grammar/cases`,
-    `${baseUrl}/grammar/slovak-slang`,
-    `${baseUrl}/grammar/verbs-past`,
-    `${baseUrl}/grammar/verbs-future`,
-
-    // словацька SEO
-    `${baseUrl}/learn-slovak`,
-    `${baseUrl}/vyvchennia-slovatskoi-movy-online`,
-    `${baseUrl}/ru/vyvchennia-slovatskoi-movy-online`,
-    `${baseUrl}/yak-vyvchyty-slovatsku-movu`,
-    `${baseUrl}/slovatski-slova-z-perekladom`,
-    `${baseUrl}/pomylky-v-slovatskii-movi`,
-
-    // чеська SEO
-    `${baseUrl}/learn-czech`,
-    `${baseUrl}/vyvchennia-cheskoi-movy-online`,
-    `${baseUrl}/ru/vyvchennia-cheskoi-movy-online`,
-
-    // польська SEO
-    `${baseUrl}/learn-polish`,
-    `${baseUrl}/vyvchennia-polskoi-movy-online`,
-    `${baseUrl}/ru/vyvchennia-polskoi-movy-online`,
-
+    "/grammar/alphabet",
+    "/grammar/verbs-present",
+    "/grammar/cases",
+    "/grammar/slovak-slang",
+    "/grammar/verbs-past",
+    "/grammar/verbs-future",
   ];
 
+  const seoUrls = SEO_MAP.filter(
+    (page) => page.status === "keep" && page.inSitemap
+  ).map((page) => page.url);
+
+  const urls = Array.from(new Set([...seoUrls, ...staticUrls]));
+
   return urls.map((url) => ({
-    url,
+    url: `${SITE_URL}${url === "/" ? "" : url}`,
     lastModified: now,
   }));
 }

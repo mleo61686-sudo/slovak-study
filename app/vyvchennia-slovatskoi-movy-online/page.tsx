@@ -302,8 +302,8 @@ export default function Page() {
             Перейти до вправ
           </Link>
 
-          <Link href="/slovak-for-ukrainians" className={secondaryButton}>
-            Словацька для життя у Словаччині →
+          <Link href="/slovatski-slova-z-perekladom" className={secondaryButton}>
+            Словацькі слова з перекладом →
           </Link>
         </div>
       </section>
