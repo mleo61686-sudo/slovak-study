@@ -192,8 +192,8 @@ export const SEO_MAP: SeoMapItem[] = [
         intentType: "course",
         mainKeyword: "учить чешский язык онлайн",
         intent: "Clean Russian landing page for learning Czech online",
-        status: "future",
-        inSitemap: false,
+        status: "keep",
+        inSitemap: true,
         note: "Create as the main Russian Czech course landing page. After publishing, switch to keep + inSitemap true.",
     },
     {
@@ -203,8 +203,8 @@ export const SEO_MAP: SeoMapItem[] = [
         intentType: "course",
         mainKeyword: "учить польский язык онлайн",
         intent: "Clean Russian landing page for learning Polish online",
-        status: "future",
-        inSitemap: false,
+        status: "keep",
+        inSitemap: true,
         note: "Create as the main Russian Polish course landing page. After publishing, switch to keep + inSitemap true.",
     },
 
