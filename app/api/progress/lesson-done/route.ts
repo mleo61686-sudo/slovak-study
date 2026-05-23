@@ -1,29 +1,106 @@
 /**
  * API route для фіксації завершення уроку користувачем.
  *
- * Що робить:
- * Позначає урок (levelId) як done у userProgress, оновлює lessonsProgress,
- * рахує dailyCount і застосовує ліміт 2 нових уроки/день для FREE користувачів.
+ * Course-aware version:
+ * lessonsProgress зберігається у форматі:
+ * {
+ *   byCourse: {
+ *     sk: { "a0-1": {...} },
+ *     cs: { "a0-1": {...} },
+ *     pl: { "a0-1": {...} }
+ *   }
+ * }
  *
- * Як працює:
- * 1. Отримує сесію через auth() і знаходить user у Prisma
- * 2. Перевіряє чи користувач має Premium (isPremium / premiumUntil)
- * 3. Через upsert отримує або створює userProgress
- * 4. Якщо урок уже done → нічого не змінює
- * 5. Якщо ні → додає done=true, doneAt, updatedAt і збільшує dailyCount
- *
- * Пов’язані файли:
- * - Prisma models: user, userProgress
- * - клієнтські компоненти learning/LevelClient
- * - /api/progress (синхронізація прогресу)
- *
- * Роль у Flunio:
- * Серверна логіка прогресу уроків і денного ліміту для free-користувачів.
+ * Старий flat формат автоматично мігрується як sk.
  */
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+
+type CourseId = "sk" | "cs" | "pl";
+type LessonsProgress = Record<string, any>;
+type LessonsProgressByCourse = Partial<Record<CourseId, LessonsProgress>>;
+
+type CourseAwareProgress = {
+  byCourse: LessonsProgressByCourse;
+};
+
+const COURSE_IDS: CourseId[] = ["sk", "cs", "pl"];
+
+function isCourseId(value: unknown): value is CourseId {
+  return value === "sk" || value === "cs" || value === "pl";
+}
+
+function getCourseIdFromBody(body: any): CourseId {
+  const raw = body?.courseId;
+  return isCourseId(raw) ? raw : "sk";
+}
+
+function isPlainObject(value: unknown): value is Record<string, any> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isCourseAwareProgress(value: unknown): value is CourseAwareProgress {
+  return isPlainObject(value) && isPlainObject((value as any).byCourse);
+}
+
+function normalizeProgressStore(raw: unknown): CourseAwareProgress {
+  if (isCourseAwareProgress(raw)) {
+    const byCourse: LessonsProgressByCourse = {};
+
+    for (const courseId of COURSE_IDS) {
+      const lessons = (raw as any).byCourse?.[courseId];
+      byCourse[courseId] = isPlainObject(lessons) ? lessons : {};
+    }
+
+    return { byCourse };
+  }
+
+  // Старий flat формат: { "a0-1": {...}, "a0-2": {...} }
+  // Мігруємо його як Slovak, бо історично перший курс був sk.
+  if (isPlainObject(raw)) {
+    return {
+      byCourse: {
+        sk: raw as LessonsProgress,
+        cs: {},
+        pl: {},
+      },
+    };
+  }
+
+  return {
+    byCourse: {
+      sk: {},
+      cs: {},
+      pl: {},
+    },
+  };
+}
+
+function getLessonsForCourse(raw: unknown, courseId: CourseId): LessonsProgress {
+  const store = normalizeProgressStore(raw);
+  const lessons = store.byCourse[courseId];
+
+  return isPlainObject(lessons) ? lessons : {};
+}
+
+function updateLessonsForCourse(
+  raw: unknown,
+  courseId: CourseId,
+  lessons: LessonsProgress
+): CourseAwareProgress {
+  const store = normalizeProgressStore(raw);
+
+  return {
+    byCourse: {
+      sk: store.byCourse.sk ?? {},
+      cs: store.byCourse.cs ?? {},
+      pl: store.byCourse.pl ?? {},
+      [courseId]: lessons,
+    },
+  };
+}
 
 function isSameDay(a: Date, b: Date) {
   return (
@@ -34,8 +111,9 @@ function isSameDay(a: Date, b: Date) {
 }
 
 function toDayKey(d: Date) {
-  return d.toISOString().slice(0, 10); // YYYY-MM-DD
+  return d.toISOString().slice(0, 10);
 }
+
 function isFreeStarterUnlimitedLesson(id: string) {
   const m = /^a0-(\d+)$/i.exec(String(id).toLowerCase());
   if (!m) return false;
@@ -44,20 +122,38 @@ function isFreeStarterUnlimitedLesson(id: string) {
   return n >= 1 && n <= 10;
 }
 
+function isLessonDone(value: any) {
+  if (value === true) return true;
+  return !!(value && typeof value === "object" && value.done === true);
+}
+
 export async function POST(req: Request) {
   const session = await auth();
   const email = session?.user?.email;
-  if (!email) return NextResponse.json({ ok: false }, { status: 401 });
 
-  const { levelId } = await req.json().catch(() => ({}));
+  if (!email) {
+    return NextResponse.json({ ok: false }, { status: 401 });
+  }
+
+  const body = await req.json().catch(() => ({}));
+
+  const { levelId } = body;
+  const courseId = getCourseIdFromBody(body);
+
   const id = String(levelId || "").toLowerCase();
-  if (!id) return NextResponse.json({ ok: false }, { status: 400 });
+
+  if (!id) {
+    return NextResponse.json({ ok: false }, { status: 400 });
+  }
 
   const user = await prisma.user.findUnique({
     where: { email },
     select: { id: true, isPremium: true, premiumUntil: true },
   });
-  if (!user) return NextResponse.json({ ok: false }, { status: 401 });
+
+  if (!user) {
+    return NextResponse.json({ ok: false }, { status: 401 });
+  }
 
   const hasPremium =
     !!user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
@@ -71,7 +167,13 @@ export async function POST(req: Request) {
     update: {},
     create: {
       userId: user.id,
-      lessonsProgress: {},
+      lessonsProgress: {
+        byCourse: {
+          sk: {},
+          cs: {},
+          pl: {},
+        },
+      },
       dailyCount: 0,
       dailyDate: null,
       lastUnlockedLevel: null,
@@ -84,62 +186,73 @@ export async function POST(req: Request) {
     },
   });
 
-  const lp = (row.lessonsProgress ?? {}) as Record<string, any>;
+  const courseLessons = getLessonsForCourse(row.lessonsProgress ?? null, courseId);
 
-  const wasDone =
-    lp?.[id] === true ||
-    (lp?.[id] && typeof lp[id] === "object" && lp[id].done === true);
+  const wasDone = isLessonDone(courseLessons[id]);
 
-  // ✅ якщо вже було done — нічого не рахуємо, просто повертаємо стан
   if (wasDone) {
     return NextResponse.json({
       ok: true,
+      courseId,
       dailyCount:
         row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0,
       alreadyDone: true,
     });
   }
 
-  // ✅ по даті рахуємо current dailyCount
   const currentCount =
     row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
+
   const shouldCountDaily = !hasPremium && !isFreeStarterUnlimitedLesson(id);
 
-  // ✅ Серверний ліміт для FREE (преміум байпас)
   if (shouldCountDaily && currentCount >= 2) {
-    return NextResponse.json({ ok: false, code: "DAILY_LIMIT", limit: 2 }, { status: 429 });
+    return NextResponse.json(
+      { ok: false, code: "DAILY_LIMIT", limit: 2 },
+      { status: 429 }
+    );
   }
 
-  // ✅ FREE: збільшуємо ліміт тільки для нових уроків
-  // ✅ PREMIUM: ліміт не важливий
   const nextCount = currentCount + (shouldCountDaily ? 1 : 0);
 
-  // ✅ позначаємо урок як done + фіксуємо дату (для streak/records)
   const prevObj =
-    typeof lp[id] === "object" && lp[id] ? lp[id] : (lp[id] === true ? { done: true } : {});
+    typeof courseLessons[id] === "object" && courseLessons[id]
+      ? courseLessons[id]
+      : courseLessons[id] === true
+        ? { done: true }
+        : {};
 
-  const nextLp = {
-    ...lp,
+  const nextCourseLessons = {
+    ...courseLessons,
     [id]: {
       ...prevObj,
       done: true,
-      doneAt: todayKey,   // ✅ ключ для streak
-      updatedAt: nowIso,  // ✅ на всякий
+      doneAt: todayKey,
+      updatedAt: nowIso,
     },
   };
+
+  const nextLessonsProgress = updateLessonsForCourse(
+    row.lessonsProgress ?? null,
+    courseId,
+    nextCourseLessons
+  );
 
   await prisma.userProgress.update({
     where: { userId: user.id },
     data: {
-      lessonsProgress: nextLp,
+      lessonsProgress: nextLessonsProgress,
       dailyDate: today,
       dailyCount: nextCount,
+
+      // Поки залишаємо старе поле як є.
+      // Воно global, але не ламаємо Prisma-схему зараз.
       lastUnlockedLevel: id,
     },
   });
 
   return NextResponse.json({
     ok: true,
+    courseId,
     dailyCount: nextCount,
     alreadyDone: false,
   });

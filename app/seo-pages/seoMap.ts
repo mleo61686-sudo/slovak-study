@@ -1,5 +1,7 @@
 export type SeoPageLang = "uk" | "ru" | "en";
+
 export type SeoCourse = "sk" | "cs" | "pl" | "general";
+
 export type SeoPageStatus =
     | "keep"
     | "review"
@@ -134,16 +136,18 @@ export const SEO_MAP: SeoMapItem[] = [
         inSitemap: true,
     },
 
-    // Russian course landing pages
+    // Old Russian course landing pages with Ukrainian-style slugs.
+    // Keep them alive if they already exist / are indexed, but do not use them as the main RU SEO direction.
     {
         url: "/ru/vyvchennia-slovatskoi-movy-online",
         lang: "ru",
         course: "sk",
         intentType: "course",
         mainKeyword: "словацкий язык онлайн",
-        intent: "Russian landing page for learning Slovak online",
-        status: "keep",
-        inSitemap: true,
+        intent: "Old Russian landing page for learning Slovak online with Ukrainian-style slug",
+        status: "review",
+        inSitemap: false,
+        note: "Old URL with Ukrainian transliteration. Keep page alive if indexed, but do not use as the main Russian SEO direction.",
     },
     {
         url: "/ru/vyvchennia-cheskoi-movy-online",
@@ -151,9 +155,10 @@ export const SEO_MAP: SeoMapItem[] = [
         course: "cs",
         intentType: "course",
         mainKeyword: "чешский язык онлайн",
-        intent: "Russian landing page for learning Czech online",
-        status: "keep",
-        inSitemap: true,
+        intent: "Old Russian landing page for learning Czech online with Ukrainian-style slug",
+        status: "review",
+        inSitemap: false,
+        note: "Old URL with Ukrainian transliteration. Keep page alive if indexed, but do not use as the main Russian SEO direction.",
     },
     {
         url: "/ru/vyvchennia-polskoi-movy-online",
@@ -161,9 +166,46 @@ export const SEO_MAP: SeoMapItem[] = [
         course: "pl",
         intentType: "course",
         mainKeyword: "польский язык онлайн",
-        intent: "Russian landing page for learning Polish online",
+        intent: "Old Russian landing page for learning Polish online with Ukrainian-style slug",
+        status: "review",
+        inSitemap: false,
+        note: "Old URL with Ukrainian transliteration. Keep page alive if indexed, but do not use as the main Russian SEO direction.",
+    },
+
+    // Russian clean course landing pages — first SEO attack.
+    // These should become the main Russian SEO pages after they are created.
+    {
+        url: "/ru/learn-slovak",
+        lang: "ru",
+        course: "sk",
+        intentType: "course",
+        mainKeyword: "учить словацкий язык онлайн",
+        intent: "Clean Russian landing page for learning Slovak online",
         status: "keep",
         inSitemap: true,
+        note: "Create as the main Russian Slovak course landing page. After publishing, switch to keep + inSitemap true.",
+    },
+    {
+        url: "/ru/learn-czech",
+        lang: "ru",
+        course: "cs",
+        intentType: "course",
+        mainKeyword: "учить чешский язык онлайн",
+        intent: "Clean Russian landing page for learning Czech online",
+        status: "future",
+        inSitemap: false,
+        note: "Create as the main Russian Czech course landing page. After publishing, switch to keep + inSitemap true.",
+    },
+    {
+        url: "/ru/learn-polish",
+        lang: "ru",
+        course: "pl",
+        intentType: "course",
+        mainKeyword: "учить польский язык онлайн",
+        intent: "Clean Russian landing page for learning Polish online",
+        status: "future",
+        inSitemap: false,
+        note: "Create as the main Russian Polish course landing page. After publishing, switch to keep + inSitemap true.",
     },
 
     // Slovak SEO support pages
@@ -208,7 +250,7 @@ export const SEO_MAP: SeoMapItem[] = [
         inSitemap: true,
     },
 
-    // Existing page that should not drive the main SEO strategy
+    // Existing narrow pages that should not drive the main SEO strategy
     {
         url: "/slovak-for-ukrainians",
         lang: "uk",
@@ -232,14 +274,14 @@ export const SEO_MAP: SeoMapItem[] = [
         note: "Do not add to sitemap unless this page is rewritten for a clearly different intent.",
     },
 
-    // Future pages — not created yet
+    // English Czech / Polish SEO support pages
     {
         url: "/czech-vocabulary",
         lang: "en",
         course: "cs",
         intentType: "vocabulary",
         mainKeyword: "Czech vocabulary",
-        intent: "Future English SEO page for Czech vocabulary",
+        intent: "English SEO page for Czech vocabulary by topic",
         status: "keep",
         inSitemap: true,
     },
