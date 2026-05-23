@@ -120,6 +120,10 @@ export default function Page() {
             Start Polish lessons →
           </Link>
 
+          <Link href="/polish-for-beginners" className={secondaryButton}>
+            Polish for beginners
+          </Link>
+
           <Link href="/polish-vocabulary" className={secondaryButton}>
             Polish vocabulary
           </Link>
@@ -171,6 +175,45 @@ export default function Page() {
           <li>You connect vocabulary with listening practice.</li>
           <li>You build better pronunciation habits from A0.</li>
         </ul>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/polish-vocabulary" className={secondaryButton}>
+            Learn basic Polish vocabulary →
+          </Link>
+
+          <Link href="/polish-grammar" className={secondaryButton}>
+            Polish grammar guide →
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          How audio fits into a Polish beginner roadmap
+        </h2>
+
+        <p className="theme-text-muted">
+          Beginners should not learn Polish only from written word lists. Audio
+          should come early, together with pronunciation, first words and short
+          phrases. This helps you avoid building bad pronunciation habits and
+          makes vocabulary easier to remember.
+        </p>
+
+        <p className="theme-text-muted">
+          If you are starting from zero, the beginner roadmap explains what to
+          learn in the first 7 days, how to plan the first 30 days and how to
+          choose the first 100 useful Polish words.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/polish-for-beginners" className={primaryButton}>
+            Open Polish beginner roadmap →
+          </Link>
+
+          <Link href="/learn-polish" className={secondaryButton}>
+            Full Polish course →
+          </Link>
+        </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -225,9 +268,13 @@ export default function Page() {
           <li>Return to older words later for review.</li>
         </ol>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/learning/a0-1" className={primaryButton}>
             Start with the first lesson →
+          </Link>
+
+          <Link href="/polish-vocabulary" className={secondaryButton}>
+            Polish word list →
           </Link>
         </div>
       </section>
@@ -245,6 +292,10 @@ export default function Page() {
         </p>
 
         <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/polish-for-beginners" className={secondaryBlock}>
+            Polish for beginners →
+          </Link>
+
           <Link href="/polish-vocabulary" className={secondaryBlock}>
             Polish vocabulary →
           </Link>
@@ -259,6 +310,10 @@ export default function Page() {
 
           <Link href="/practice" className={secondaryBlock}>
             Practice Polish →
+          </Link>
+
+          <Link href="/learning/a0-1" className={secondaryBlock}>
+            Start A0 lesson →
           </Link>
         </div>
       </section>

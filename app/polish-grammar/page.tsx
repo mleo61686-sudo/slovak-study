@@ -102,12 +102,16 @@ export default function Page() {
             Learn Polish online
           </Link>
 
+          <Link className={secondaryButton} href="/polish-for-beginners">
+            Polish for beginners
+          </Link>
+
           <Link className={secondaryButton} href="/polish-vocabulary">
             Polish vocabulary
           </Link>
 
-          <Link className={secondaryButton} href="/practice">
-            Practice exercises
+          <Link className={secondaryButton} href="/polish-words-with-audio">
+            Polish audio practice
           </Link>
         </div>
       </section>
@@ -124,8 +128,8 @@ export default function Page() {
           </p>
 
           <div className="mt-3">
-            <Link className={textLink} href="/learn-polish">
-              Start with Polish basics →
+            <Link className={textLink} href="/polish-words-with-audio">
+              Practice Polish pronunciation with audio →
             </Link>
           </div>
         </div>
@@ -171,8 +175,8 @@ export default function Page() {
           </p>
 
           <div className="mt-3">
-            <Link className={textLink} href="/practice">
-              Go to exercises →
+            <Link className={textLink} href="/polish-for-beginners">
+              Follow the beginner roadmap →
             </Link>
           </div>
         </div>
@@ -199,6 +203,16 @@ export default function Page() {
           <li>Practice grammar through exercises, not only reading.</li>
           <li>Return to difficult topics regularly instead of rushing.</li>
         </ol>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/polish-for-beginners" className={primaryButton}>
+            Open Polish beginner roadmap →
+          </Link>
+
+          <Link href="/polish-vocabulary" className={secondaryButton}>
+            Learn first Polish words →
+          </Link>
+        </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -220,9 +234,13 @@ export default function Page() {
           every table at once.
         </p>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/polish-vocabulary" className={secondaryButton}>
             Learn useful Polish words →
+          </Link>
+
+          <Link href="/learn-polish" className={secondaryButton}>
+            Learn Polish online →
           </Link>
         </div>
       </section>
@@ -244,9 +262,13 @@ export default function Page() {
           to recognize similar patterns in new Polish words.
         </p>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/learning/a0-1" className={secondaryButton}>
             Start the first Polish lesson →
+          </Link>
+
+          <Link href="/polish-for-beginners" className={secondaryButton}>
+            Beginner learning order →
           </Link>
         </div>
       </section>
@@ -275,12 +297,43 @@ export default function Page() {
             Learn Polish online
           </Link>
 
+          <Link href="/polish-for-beginners" className={secondaryButton}>
+            Polish for beginners
+          </Link>
+
           <Link href="/polish-vocabulary" className={secondaryButton}>
             Polish vocabulary
           </Link>
 
+          <Link href="/polish-words-with-audio" className={secondaryButton}>
+            Polish words with audio
+          </Link>
+
           <Link href="/practice" className={secondaryButton}>
             Practice Polish
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Not sure where to start?
+        </h2>
+
+        <p className="theme-text-muted">
+          If you are new to Polish, start with pronunciation, basic words and
+          short phrases before diving deep into grammar. The beginner roadmap
+          shows the first 7 days, first 30 days and first 100 Polish words to
+          learn.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/polish-for-beginners" className={primaryButton}>
+            Open Polish for beginners →
+          </Link>
+
+          <Link href="/polish-words-with-audio" className={secondaryButton}>
+            Practice pronunciation →
           </Link>
         </div>
       </section>

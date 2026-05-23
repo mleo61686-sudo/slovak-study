@@ -206,6 +206,10 @@ export default function Page() {
                         Learn Czech online
                     </Link>
 
+                    <Link href="/czech-for-beginners" className={secondaryButton}>
+                        Czech for beginners
+                    </Link>
+
                     <Link href="/dictionary" className={secondaryButton}>
                         Open dictionary
                     </Link>
@@ -262,9 +266,42 @@ export default function Page() {
                     <li>Combine vocabulary with listening and exercises.</li>
                 </ul>
 
-                <div className="pt-2">
+                <div className="flex flex-wrap gap-3 pt-2">
                     <Link href="/learning" className={primaryButton}>
                         Learn words in Flunio →
+                    </Link>
+
+                    <Link href="/czech-words-with-audio" className={secondaryButton}>
+                        Practice Czech words with audio →
+                    </Link>
+                </div>
+            </section>
+
+            <section className={`${card} space-y-4 p-6`}>
+                <h2 className="text-2xl font-bold theme-text">
+                    How this vocabulary fits into a beginner Czech roadmap
+                </h2>
+
+                <p className="theme-text-muted">
+                    Vocabulary works best when it has a clear order. If you are starting
+                    from zero, first learn pronunciation, greetings, daily words and simple
+                    sentence patterns. Then connect these words with basic verbs and Czech
+                    grammar.
+                </p>
+
+                <p className="theme-text-muted">
+                    The beginner roadmap explains what to learn in your first 7 days, how
+                    to organize the first 30 days and which first 100 Czech words are most
+                    useful.
+                </p>
+
+                <div className="flex flex-wrap gap-3 pt-2">
+                    <Link href="/czech-for-beginners" className={primaryButton}>
+                        Open Czech beginner roadmap →
+                    </Link>
+
+                    <Link href="/czech-grammar" className={secondaryButton}>
+                        Czech grammar guide →
                     </Link>
                 </div>
             </section>
@@ -321,6 +358,18 @@ export default function Page() {
                 <div className="grid gap-3 sm:grid-cols-2">
                     <Link href="/learn-czech" className={secondaryBlock}>
                         Learn Czech online →
+                    </Link>
+
+                    <Link href="/czech-for-beginners" className={secondaryBlock}>
+                        Czech for beginners →
+                    </Link>
+
+                    <Link href="/czech-grammar" className={secondaryBlock}>
+                        Czech grammar guide →
+                    </Link>
+
+                    <Link href="/czech-words-with-audio" className={secondaryBlock}>
+                        Czech words with audio →
                     </Link>
 
                     <Link href="/dictionary" className={secondaryBlock}>

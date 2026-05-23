@@ -271,6 +271,32 @@ export default function Page() {
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          New to Czech? Start with the beginner roadmap
+        </h2>
+
+        <p className="theme-text-muted">
+          If you are learning Czech from zero, it helps to know what to study
+          first: pronunciation, first words, useful phrases, grammar order and a
+          simple 30-day plan.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/czech-for-beginners" className={primaryButton}>
+            Open Czech for beginners →
+          </Link>
+
+          <Link href="/czech-vocabulary" className={secondaryButton}>
+            Czech vocabulary →
+          </Link>
+
+          <Link href="/czech-words-with-audio" className={secondaryButton}>
+            Czech audio practice →
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="space-y-4">

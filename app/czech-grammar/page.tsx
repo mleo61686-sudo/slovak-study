@@ -102,12 +102,16 @@ export default function Page() {
             Learn Czech online
           </Link>
 
+          <Link className={secondaryButton} href="/czech-for-beginners">
+            Czech for beginners
+          </Link>
+
           <Link className={secondaryButton} href="/czech-vocabulary">
             Czech vocabulary
           </Link>
 
-          <Link className={secondaryButton} href="/practice">
-            Practice exercises
+          <Link className={secondaryButton} href="/czech-words-with-audio">
+            Czech audio practice
           </Link>
         </div>
       </section>
@@ -124,8 +128,8 @@ export default function Page() {
           </p>
 
           <div className="mt-3">
-            <Link className={textLink} href="/learn-czech">
-              Start with Czech basics →
+            <Link className={textLink} href="/czech-words-with-audio">
+              Practice Czech pronunciation with audio →
             </Link>
           </div>
         </div>
@@ -171,8 +175,8 @@ export default function Page() {
           </p>
 
           <div className="mt-3">
-            <Link className={textLink} href="/practice">
-              Go to exercises →
+            <Link className={textLink} href="/czech-for-beginners">
+              Follow the beginner roadmap →
             </Link>
           </div>
         </div>
@@ -199,6 +203,16 @@ export default function Page() {
           <li>Practice grammar through exercises, not only reading.</li>
           <li>Return to difficult topics regularly instead of rushing.</li>
         </ol>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/czech-for-beginners" className={primaryButton}>
+            Open Czech beginner roadmap →
+          </Link>
+
+          <Link href="/czech-vocabulary" className={secondaryButton}>
+            Learn first Czech words →
+          </Link>
+        </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -220,9 +234,13 @@ export default function Page() {
           every table at once.
         </p>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/czech-vocabulary" className={secondaryButton}>
             Learn useful Czech words →
+          </Link>
+
+          <Link href="/learn-czech" className={secondaryButton}>
+            Learn Czech online →
           </Link>
         </div>
       </section>
@@ -244,9 +262,13 @@ export default function Page() {
           to recognize similar patterns in new Czech words.
         </p>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/learning/a0-1" className={secondaryButton}>
             Start the first Czech lesson →
+          </Link>
+
+          <Link href="/czech-for-beginners" className={secondaryButton}>
+            Beginner learning order →
           </Link>
         </div>
       </section>
@@ -275,12 +297,43 @@ export default function Page() {
             Learn Czech online
           </Link>
 
+          <Link href="/czech-for-beginners" className={secondaryButton}>
+            Czech for beginners
+          </Link>
+
           <Link href="/czech-vocabulary" className={secondaryButton}>
             Czech vocabulary
           </Link>
 
+          <Link href="/czech-words-with-audio" className={secondaryButton}>
+            Czech words with audio
+          </Link>
+
           <Link href="/practice" className={secondaryButton}>
             Practice Czech
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Not sure where to start?
+        </h2>
+
+        <p className="theme-text-muted">
+          If you are new to Czech, start with pronunciation, basic words and
+          short phrases before diving deep into grammar. The beginner roadmap
+          shows the first 7 days, first 30 days and first 100 Czech words to
+          learn.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/czech-for-beginners" className={primaryButton}>
+            Open Czech for beginners →
+          </Link>
+
+          <Link href="/czech-words-with-audio" className={secondaryButton}>
+            Practice pronunciation →
           </Link>
         </div>
       </section>

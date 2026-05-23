@@ -270,6 +270,32 @@ export default function Page() {
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          New to Polish? Start with the beginner roadmap
+        </h2>
+
+        <p className="theme-text-muted">
+          If you are learning Polish from zero, it helps to know what to study
+          first: pronunciation, first words, useful phrases, grammar order and a
+          simple 30-day plan.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/polish-for-beginners" className={primaryButton}>
+            Open Polish for beginners →
+          </Link>
+
+          <Link href="/polish-vocabulary" className={secondaryButton}>
+            Polish vocabulary →
+          </Link>
+
+          <Link href="/polish-words-with-audio" className={secondaryButton}>
+            Polish audio practice →
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="space-y-4">
