@@ -238,8 +238,8 @@ export default function ProgressSync() {
         const localLessons = extractLessonsProgress(localRaw);
 
         const mergedLessons = {
-          ...serverLessons,
           ...localLessons,
+          ...serverLessons,
         };
 
         localStorage.setItem(
