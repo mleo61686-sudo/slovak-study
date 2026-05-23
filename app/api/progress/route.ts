@@ -7,7 +7,17 @@
  * - daily limit (2 уроки для free)
  * - XP користувача (xp)
  *
- * 👉 Це core-логіка всього навчання.
+ * ВАЖЛИВО:
+ * - lessonsProgress тепер зберігається course-aware:
+ *   {
+ *     byCourse: {
+ *       sk: { "a0-1": {...} },
+ *       cs: { "a0-1": {...} },
+ *       pl: { "a0-1": {...} }
+ *     }
+ *   }
+ *
+ * - Старий flat формат автоматично мігрується як sk.
  */
 
 import { NextResponse } from "next/server";
@@ -18,7 +28,103 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+type CourseId = "sk" | "cs" | "pl";
 type LessonsProgress = Record<string, any>;
+type LessonsProgressByCourse = Partial<Record<CourseId, LessonsProgress>>;
+
+type CourseAwareProgress = {
+  byCourse: LessonsProgressByCourse;
+};
+
+const COURSE_IDS: CourseId[] = ["sk", "cs", "pl"];
+
+function isCourseId(value: unknown): value is CourseId {
+  return value === "sk" || value === "cs" || value === "pl";
+}
+
+function getCourseIdFromUrl(req: Request): CourseId {
+  try {
+    const url = new URL(req.url);
+    const raw = url.searchParams.get("courseId");
+
+    return isCourseId(raw) ? raw : "sk";
+  } catch {
+    return "sk";
+  }
+}
+
+function getCourseIdFromBody(body: any): CourseId {
+  const raw = body?.courseId;
+
+  return isCourseId(raw) ? raw : "sk";
+}
+
+function isPlainObject(value: unknown): value is Record<string, any> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isCourseAwareProgress(value: unknown): value is CourseAwareProgress {
+  return (
+    isPlainObject(value) &&
+    isPlainObject((value as any).byCourse)
+  );
+}
+
+function normalizeProgressStore(raw: unknown): CourseAwareProgress {
+  if (isCourseAwareProgress(raw)) {
+    const byCourse: LessonsProgressByCourse = {};
+
+    for (const courseId of COURSE_IDS) {
+      const lessons = (raw as any).byCourse?.[courseId];
+      byCourse[courseId] = isPlainObject(lessons) ? lessons : {};
+    }
+
+    return { byCourse };
+  }
+
+  // Старий flat формат: { "a0-1": {...}, "a0-2": {...} }
+  if (isPlainObject(raw)) {
+    return {
+      byCourse: {
+        sk: raw as LessonsProgress,
+        cs: {},
+        pl: {},
+      },
+    };
+  }
+
+  return {
+    byCourse: {
+      sk: {},
+      cs: {},
+      pl: {},
+    },
+  };
+}
+
+function getLessonsForCourse(raw: unknown, courseId: CourseId): LessonsProgress {
+  const store = normalizeProgressStore(raw);
+  const lessons = store.byCourse[courseId];
+
+  return isPlainObject(lessons) ? lessons : {};
+}
+
+function updateLessonsForCourse(
+  raw: unknown,
+  courseId: CourseId,
+  lessons: LessonsProgress
+): CourseAwareProgress {
+  const store = normalizeProgressStore(raw);
+
+  return {
+    byCourse: {
+      sk: store.byCourse.sk ?? {},
+      cs: store.byCourse.cs ?? {},
+      pl: store.byCourse.pl ?? {},
+      [courseId]: lessons,
+    },
+  };
+}
 
 function normId(id: string) {
   return String(id ?? "").trim().toLowerCase();
@@ -82,7 +188,9 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 5) {
   throw lastErr;
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const courseId = getCourseIdFromUrl(req);
+
   const session = await auth();
   const email = session?.user?.email;
 
@@ -104,7 +212,8 @@ export async function GET() {
   return NextResponse.json({
     ok: true,
     userId: user.id,
-    lessonsProgress: row?.lessonsProgress ?? null,
+    courseId,
+    lessonsProgress: getLessonsForCourse(row?.lessonsProgress ?? null, courseId),
     xpTotal: row?.xp ?? 0,
     updatedAt: row?.updatedAt ?? null,
     lastUnlockedLevel: row?.lastUnlockedLevel ?? null,
@@ -142,6 +251,8 @@ export async function PUT(req: Request) {
     return NextResponse.json({ ok: false, code: "INVALID_JSON" }, { status: 400 });
   }
 
+  const courseId = getCourseIdFromBody(body);
+
   const bodyUserId = typeof body?.userId === "string" ? body.userId : null;
   if (!bodyUserId || bodyUserId !== user.id) {
     return NextResponse.json({ ok: false, code: "USER_ID_MISMATCH" }, { status: 409 });
@@ -175,23 +286,37 @@ export async function PUT(req: Request) {
               },
             });
 
-            const prevLessons = (prevRow?.lessonsProgress ?? {}) as LessonsProgress;
-            const lessonsProgress: LessonsProgress = {
-              ...prevLessons,
+            const prevCourseLessons = getLessonsForCourse(
+              prevRow?.lessonsProgress ?? null,
+              courseId
+            );
+
+            const lessonsForCourse: LessonsProgress = {
+              ...prevCourseLessons,
               ...clientLessonsProgress,
             };
+
+            const fullLessonsProgress = updateLessonsForCourse(
+              prevRow?.lessonsProgress ?? null,
+              courseId,
+              lessonsForCourse
+            );
+
             const prevXp = prevRow?.xp ?? 0;
             const nextXp = xpTotal === null ? prevXp : Math.max(prevXp, xpTotal);
 
-            const sameDay = prevRow?.dailyDate ? isSameDay(prevRow.dailyDate, today) : false;
+            const sameDay = prevRow?.dailyDate
+              ? isSameDay(prevRow.dailyDate, today)
+              : false;
+
             const currentDailyCount = sameDay ? (prevRow?.dailyCount ?? 0) : 0;
 
             const allowed = prevRow?.lastUnlockedLevel
               ? nextLevelId(prevRow.lastUnlockedLevel)
               : "a0-1";
 
-            const doneNow = isDone(lessonsProgress[allowed]);
-            const donePrev = isDone(prevLessons[allowed]);
+            const doneNow = isDone(lessonsForCourse[allowed]);
+            const donePrev = isDone(prevCourseLessons[allowed]);
 
             if (doneNow && !donePrev) {
               if (!parseLevelId(allowed)) {
@@ -216,14 +341,14 @@ export async function PUT(req: Request) {
                 where: { userId: user.id },
                 create: {
                   userId: user.id,
-                  lessonsProgress,
+                  lessonsProgress: fullLessonsProgress,
                   lastUnlockedLevel: allowed,
                   dailyDate: shouldCountDaily ? today : null,
                   dailyCount: shouldCountDaily ? 1 : 0,
                   xp: nextXp,
                 },
                 update: {
-                  lessonsProgress,
+                  lessonsProgress: fullLessonsProgress,
                   lastUnlockedLevel: allowed,
                   dailyDate: shouldCountDaily ? today : prevRow?.dailyDate ?? null,
                   dailyCount: shouldCountDaily
@@ -243,6 +368,7 @@ export async function PUT(req: Request) {
                 status: 200,
                 payload: {
                   ok: true,
+                  courseId,
                   updatedAt: saved.updatedAt,
                   lastUnlockedLevel: saved.lastUnlockedLevel,
                   dailyCount: saved.dailyCount,
@@ -253,14 +379,26 @@ export async function PUT(req: Request) {
 
             const saved = await tx.userProgress.upsert({
               where: { userId: user.id },
-              create: { userId: user.id, lessonsProgress, xp: nextXp },
-              update: { lessonsProgress, xp: nextXp },
+              create: {
+                userId: user.id,
+                lessonsProgress: fullLessonsProgress,
+                xp: nextXp,
+              },
+              update: {
+                lessonsProgress: fullLessonsProgress,
+                xp: nextXp,
+              },
               select: { updatedAt: true, xp: true },
             });
 
             return {
               status: 200,
-              payload: { ok: true, updatedAt: saved.updatedAt, xpTotal: saved.xp },
+              payload: {
+                ok: true,
+                courseId,
+                updatedAt: saved.updatedAt,
+                xpTotal: saved.xp,
+              },
             };
           },
           { isolationLevel: "Serializable" }

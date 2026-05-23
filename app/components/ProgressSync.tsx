@@ -5,79 +5,13 @@
  * - localStorage (джерело змін на фронті)
  * - сервером (/api/progress)
  *
- * 👉 Відповідає за:
- * - синхронізацію lesson progress
- * - синхронізацію XP
- * - pending retry (якщо не відправилось)
- * - debounce запитів (щоб не спамити API)
+ * ВАЖЛИВО:
+ * - Progress тепер course-aware:
+ *   slovakStudy.{userId}.progress.sk
+ *   slovakStudy.{userId}.progress.cs
+ *   slovakStudy.{userId}.progress.pl
  *
- * --------------------------------
- * ЯК ПРАЦЮЄ:
- *
- * 1. Після логіну → GET /api/progress
- *    → записує lessonsProgress в localStorage
- *    → записує XP
- *
- * 2. При будь-якій зміні:
- *    - slovakStudy:progressChanged
- *    - XP_SYNC_EVENT
- *    - storage event
- *
- *    → викликається pushToServer()
- *
- * 3. pushToServer():
- *    → бере дані з localStorage
- *    → відправляє PUT /api/progress
- *    → якщо fail → кладеться в pending
- *
- * 4. retryPending:
- *    → при наступному load повторює sync
- *
- * --------------------------------
- * ⚠️ ДУЖЕ ВАЖЛИВО:
- *
- * ❌ НЕ міняти ключі localStorage:
- *    slovakStudy.{userId}.progress
- *
- * ❌ НЕ прибирати:
- *    PROGRESS_EVENT
- *    XP_SYNC_EVENT
- *    storage listener
- *
- * ❌ НЕ змінювати debounce (600ms) без причини
- *
- * ❌ НЕ прибирати pending логіку
- *
- * ❌ НЕ міняти payload:
- *    { userId, lessonsProgress, xpTotal }
- *
- * --------------------------------
- * ⚠️ МОЖЛИВІ ПРОБЛЕМИ ПРИ ПОМИЛКАХ:
- *
- * - прогрес не синхрониться між ПК і мобілкою ❌
- * - XP не зберігається ❌
- * - подвійні або втрачені уроки ❌
- * - infinite запити ❌
- *
- * --------------------------------
- * ✅ ПІСЛЯ БУДЬ-ЯКИХ ЗМІН:
- *
- * 1. npm run build
- *
- * 2. тест:
- *    - ПК → пройти урок
- *    - мобілка → оновити → перевірити
- *
- * 3. перевір:
- *    - XP синхрониться
- *    - урок відкрився
- *    - немає подвійних PUT запитів
- *
- * --------------------------------
- * Пов’язані критичні файли:
- * - app/api/progress/route.ts
- * - words-srs-storage.ts
- * - LevelClient / saveProgress
+ * - XP залишається user-level, без courseId.
  */
 
 "use client";
@@ -90,10 +24,11 @@ import {
   setXpState,
   XP_SYNC_EVENT,
 } from "@/app/components/words-srs/words-srs-storage";
-
-const GUEST_KEY = "slovakStudy.guest.progress";
-const keyFor = (userId?: string | null) =>
-  userId ? `slovakStudy.${userId}.progress` : GUEST_KEY;
+import {
+  COURSE_STORAGE_KEY,
+  getDefaultCourse,
+  type CourseId,
+} from "@/lib/course";
 
 const PROGRESS_EVENT = "slovakStudy:progressChanged";
 
@@ -104,27 +39,57 @@ function emitSyncState(state: SyncState) {
   window.dispatchEvent(new CustomEvent(SYNC_EVENT, { detail: { state } }));
 }
 
-const PENDING_KEY = "slovakStudy.pendingSync";
+function getActiveCourseId(): CourseId {
+  if (typeof window === "undefined") return getDefaultCourse();
 
-function savePending(data: any) {
   try {
-    localStorage.setItem(PENDING_KEY, JSON.stringify(data));
-  } catch { }
+    const raw = localStorage.getItem(COURSE_STORAGE_KEY);
+
+    if (raw === "sk" || raw === "cs" || raw === "pl") {
+      return raw;
+    }
+
+    return getDefaultCourse();
+  } catch {
+    return getDefaultCourse();
+  }
 }
 
-function getPending() {
+const GUEST_ID = "guest";
+
+function keyFor(userId?: string | null, courseId?: CourseId) {
+  const uid = userId && userId.trim() ? userId.trim() : GUEST_ID;
+  const course = courseId ?? getActiveCourseId();
+
+  return `slovakStudy.${uid}.progress.${course}`;
+}
+
+function pendingKeyFor(userId?: string | null, courseId?: CourseId) {
+  const uid = userId && userId.trim() ? userId.trim() : GUEST_ID;
+  const course = courseId ?? getActiveCourseId();
+
+  return `slovakStudy.pendingSync.${uid}.${course}`;
+}
+
+function savePending(userId: string, courseId: CourseId, data: any) {
   try {
-    const raw = localStorage.getItem(PENDING_KEY);
+    localStorage.setItem(pendingKeyFor(userId, courseId), JSON.stringify(data));
+  } catch {}
+}
+
+function getPending(userId: string, courseId: CourseId) {
+  try {
+    const raw = localStorage.getItem(pendingKeyFor(userId, courseId));
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
   }
 }
 
-function clearPending() {
+function clearPending(userId: string, courseId: CourseId) {
   try {
-    localStorage.removeItem(PENDING_KEY);
-  } catch { }
+    localStorage.removeItem(pendingKeyFor(userId, courseId));
+  } catch {}
 }
 
 function extractLessonsProgress(raw: string | null) {
@@ -143,13 +108,83 @@ function extractLessonsProgress(raw: string | null) {
   }
 }
 
+function lessonTime(value: any): number {
+  if (!value || typeof value !== "object") return 0;
+
+  const raw = value.updatedAt ?? value.doneAt;
+
+  if (typeof raw !== "string") return 0;
+
+  const t = Date.parse(raw);
+  return Number.isFinite(t) ? t : 0;
+}
+
+function isDone(value: any): boolean {
+  if (value === true) return true;
+  return !!(value && typeof value === "object" && value.done === true);
+}
+
+/**
+ * Merge без втрати прогресу:
+ * - якщо один із записів done:true — не губимо done
+ * - якщо обидва мають updatedAt — бере новіший
+ * - якщо є тільки один — бере його
+ */
+function mergeLessons(localLessons: Record<string, any>, serverLessons: Record<string, any>) {
+  const result: Record<string, any> = {
+    ...localLessons,
+    ...serverLessons,
+  };
+
+  const keys = new Set([
+    ...Object.keys(localLessons ?? {}),
+    ...Object.keys(serverLessons ?? {}),
+  ]);
+
+  for (const key of keys) {
+    const local = localLessons?.[key];
+    const server = serverLessons?.[key];
+
+    if (local == null) {
+      result[key] = server;
+      continue;
+    }
+
+    if (server == null) {
+      result[key] = local;
+      continue;
+    }
+
+    const localDone = isDone(local);
+    const serverDone = isDone(server);
+
+    if (localDone && !serverDone) {
+      result[key] = local;
+      continue;
+    }
+
+    if (serverDone && !localDone) {
+      result[key] = server;
+      continue;
+    }
+
+    const lt = lessonTime(local);
+    const st = lessonTime(server);
+
+    result[key] = lt > st ? local : server;
+  }
+
+  return result;
+}
+
 export default function ProgressSync() {
   const { status, data: session } = useSession();
 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const activeKey = useRef<string>(GUEST_KEY);
+  const activeKey = useRef<string>(keyFor(null, getDefaultCourse()));
   const activeUid = useRef<string | null>(null);
-  const lastSyncEmail = useRef<string | null>(null);
+  const activeCourse = useRef<CourseId>(getDefaultCourse());
+  const lastSyncIdentity = useRef<string | null>(null);
   const loadInFlight = useRef(false);
 
   useEffect(() => {
@@ -164,16 +199,23 @@ export default function ProgressSync() {
 
     function resetToGuest() {
       cancelTimer();
-      lastSyncEmail.current = null;
+
+      const courseId = getActiveCourseId();
+
+      lastSyncIdentity.current = null;
       activeUid.current = null;
-      activeKey.current = GUEST_KEY;
+      activeCourse.current = courseId;
+      activeKey.current = keyFor(null, courseId);
+
       setActiveUserId(null);
       emitSyncState("idle");
     }
 
-    async function retryPendingIfAny(userId: string) {
-      const pending = getPending();
+    async function retryPendingIfAny(userId: string, courseId: CourseId) {
+      const pending = getPending(userId, courseId);
+
       if (!pending?.userId || pending.userId !== userId) return;
+      if (pending?.courseId && pending.courseId !== courseId) return;
 
       try {
         const res = await fetch("/api/progress", {
@@ -183,25 +225,26 @@ export default function ProgressSync() {
           body: JSON.stringify(pending),
         });
 
-        if (res.ok) clearPending();
-      } catch { }
+        if (res.ok) clearPending(userId, courseId);
+      } catch {}
     }
 
     async function load() {
       if (loadInFlight.current) return;
       if (status !== "authenticated") return;
 
+      const courseId = getActiveCourseId();
+
       loadInFlight.current = true;
       emitSyncState("syncing");
 
       try {
-        const res = await fetch("/api/progress", {
+        const res = await fetch(`/api/progress?courseId=${courseId}`, {
           method: "GET",
           credentials: "include",
           cache: "no-store",
         });
 
-        // ❗ КЛЮЧОВИЙ ФІКС
         if (res.status === 401) {
           resetToGuest();
           loadInFlight.current = false;
@@ -223,11 +266,14 @@ export default function ProgressSync() {
           return;
         }
 
-        if (activeUid.current !== userId) cancelTimer();
+        if (activeUid.current !== userId || activeCourse.current !== courseId) {
+          cancelTimer();
+        }
 
         activeUid.current = userId;
+        activeCourse.current = courseId;
         setActiveUserId(userId);
-        activeKey.current = keyFor(userId);
+        activeKey.current = keyFor(userId, courseId);
 
         const serverLessons =
           data?.lessonsProgress && typeof data.lessonsProgress === "object"
@@ -237,10 +283,7 @@ export default function ProgressSync() {
         const localRaw = localStorage.getItem(activeKey.current);
         const localLessons = extractLessonsProgress(localRaw);
 
-        const mergedLessons = {
-          ...localLessons,
-          ...serverLessons,
-        };
+        const mergedLessons = mergeLessons(localLessons, serverLessons);
 
         localStorage.setItem(
           activeKey.current,
@@ -256,7 +299,7 @@ export default function ProgressSync() {
           setXpState(userId, { totalXp: data.xpTotal }, { emit: false });
         }
 
-        await retryPendingIfAny(userId);
+        await retryPendingIfAny(userId, courseId);
 
         emitSyncState("idle");
       } catch {
@@ -268,16 +311,23 @@ export default function ProgressSync() {
 
     function pushToServer() {
       if (status !== "authenticated") return;
-      const uidSnapshot = activeUid.current;
-      const keySnapshot = activeKey.current;
 
+      const uidSnapshot = activeUid.current;
       if (!uidSnapshot) return;
+
+      const courseSnapshot = getActiveCourseId();
+
+      activeCourse.current = courseSnapshot;
+      activeKey.current = keyFor(uidSnapshot, courseSnapshot);
+
+      const keySnapshot = activeKey.current;
 
       if (timer.current) clearTimeout(timer.current);
 
       timer.current = setTimeout(async () => {
         if (activeUid.current !== uidSnapshot) return;
         if (activeKey.current !== keySnapshot) return;
+        if (activeCourse.current !== courseSnapshot) return;
 
         emitSyncState("syncing");
 
@@ -286,6 +336,7 @@ export default function ProgressSync() {
 
         const payload = {
           userId: uidSnapshot,
+          courseId: courseSnapshot,
           lessonsProgress,
           xpTotal: getXpState(uidSnapshot).totalXp,
         };
@@ -298,22 +349,21 @@ export default function ProgressSync() {
             body: JSON.stringify(payload),
           });
 
-          // ❗ не ретраїмо 401
           if (res.status === 401) {
             resetToGuest();
             return;
           }
 
           if (!res.ok) {
-            savePending(payload);
+            savePending(uidSnapshot, courseSnapshot, payload);
             emitSyncState("error");
             return;
           }
 
-          clearPending();
+          clearPending(uidSnapshot, courseSnapshot);
           emitSyncState("idle");
         } catch {
-          savePending(payload);
+          savePending(uidSnapshot, courseSnapshot, payload);
           emitSyncState("error");
         }
       }, 600);
@@ -327,9 +377,11 @@ export default function ProgressSync() {
     }
 
     const email = session?.user?.email ?? null;
+    const courseId = getActiveCourseId();
+    const identity = email ? `${email}:${courseId}` : null;
 
-    if (email && lastSyncEmail.current !== email) {
-      lastSyncEmail.current = email;
+    if (identity && lastSyncIdentity.current !== identity) {
+      lastSyncIdentity.current = identity;
       load();
     }
 
