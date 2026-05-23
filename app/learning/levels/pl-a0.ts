@@ -12,7 +12,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "szkoła", ua: "школа", ru: "школа", en: "school", hintUa: "школа", img: "/words/škola.jpg" },
       { sk: "miasto", ua: "місто", ru: "город", en: "city", hintUa: "място", img: "/words/mesto.jpg" },
       { sk: "czas", ua: "час", ru: "время", en: "time", hintUa: "час", img: "/words_pl/czas.jpg" },
-      { sk: "dzień", ua: "день", ru: "день", en: "day", hintUa: "джень", img: "/words/day.jpg" },
+      { sk: "dzień", ua: "день", ru: "день", en: "day", hintUa: "джень", img: "/words/deň.jpg" },
       { sk: "dobry", ua: "добрий", ru: "хороший", en: "good", hintUa: "добри", img: "/words/dobrý.jpg" },
       { sk: "pieniądze", ua: "гроші", ru: "деньги", en: "money", hintUa: "пєньондзе", img: "/words/peniaze.jpg" },
     ],

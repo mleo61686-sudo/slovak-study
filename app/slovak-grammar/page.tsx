@@ -98,6 +98,14 @@ export default function Page() {
             Open grammar topics
           </Link>
 
+          <Link className={secondaryButton} href="/slovak-for-beginners">
+            Slovak for beginners
+          </Link>
+
+          <Link className={secondaryButton} href="/learn-slovak">
+            Learn Slovak online
+          </Link>
+
           <Link className={secondaryButton} href="/learning/a0-1">
             Start A0 lessons →
           </Link>
@@ -170,8 +178,8 @@ export default function Page() {
           </p>
 
           <div className="mt-3">
-            <Link className={textLink} href="/practice">
-              Go to exercises →
+            <Link className={textLink} href="/slovak-for-beginners">
+              Follow the beginner roadmap →
             </Link>
           </div>
         </div>
@@ -198,6 +206,16 @@ export default function Page() {
           <li>Practice grammar through exercises, not only reading.</li>
           <li>Return to difficult topics regularly instead of rushing.</li>
         </ol>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/slovak-for-beginners" className={primaryButton}>
+            Open Slovak beginner roadmap →
+          </Link>
+
+          <Link href="/learn-slovak" className={secondaryButton}>
+            Full Slovak course →
+          </Link>
+        </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -219,9 +237,13 @@ export default function Page() {
           trying to memorize every table at once.
         </p>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/grammar/cases" className={secondaryButton}>
             Open Slovak cases →
+          </Link>
+
+          <Link href="/dictionary" className={secondaryButton}>
+            Search Slovak words →
           </Link>
         </div>
       </section>
@@ -244,9 +266,13 @@ export default function Page() {
           easier to recognize similar patterns in new words.
         </p>
 
-        <div className="pt-2">
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/grammar/verbs-present" className={secondaryButton}>
             Open present tense →
+          </Link>
+
+          <Link href="/learning/a0-1" className={secondaryButton}>
+            Start first lesson →
           </Link>
         </div>
       </section>
@@ -272,6 +298,14 @@ export default function Page() {
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/learn-slovak" className={secondaryButton}>
+            Learn Slovak online
+          </Link>
+
+          <Link href="/slovak-for-beginners" className={secondaryButton}>
+            Slovak for beginners
+          </Link>
+
           <Link href="/learning" className={secondaryButton}>
             Open lessons
           </Link>
@@ -282,6 +316,29 @@ export default function Page() {
 
           <Link href="/practice" className={secondaryButton}>
             Practice Slovak
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Not sure where to start?
+        </h2>
+
+        <p className="theme-text-muted">
+          If you are new to Slovak, start with pronunciation, basic words and
+          short phrases before diving deep into grammar. The beginner roadmap
+          shows the first 7 days, first 30 days and first 100 Slovak words to
+          learn.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/slovak-for-beginners" className={primaryButton}>
+            Open Slovak for beginners →
+          </Link>
+
+          <Link href="/learn-slovak" className={secondaryButton}>
+            Full Slovak course →
           </Link>
         </div>
       </section>
