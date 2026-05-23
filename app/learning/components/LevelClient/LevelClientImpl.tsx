@@ -385,7 +385,7 @@ export default function LevelClient({
         const res = await fetch("/api/progress/lesson-done", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ levelId }),
+          body: JSON.stringify({ levelId, courseId }),
         });
 
         const data = await res.json().catch(() => ({}));
