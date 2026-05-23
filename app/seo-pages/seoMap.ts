@@ -297,6 +297,17 @@ export const SEO_MAP: SeoMapItem[] = [
         inSitemap: true,
     },
     {
+        url: "/slovak-for-beginners",
+        lang: "en",
+        course: "sk",
+        intentType: "how_to_learn",
+        mainKeyword: "Slovak for beginners",
+        intent:
+            "English beginner roadmap page for learning Slovak from zero, including first words, pronunciation, grammar order and 30-day plan",
+        status: "keep",
+        inSitemap: true,
+    },
+    {
         url: "/polish-for-beginners",
         lang: "en",
         course: "pl",

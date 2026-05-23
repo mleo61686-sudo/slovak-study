@@ -114,8 +114,9 @@ export default function Page() {
 
             {[
               ["Start with A0 →", "/learning/a0-1"],
+              ["Slovak for beginners", "/slovak-for-beginners"],
               ["Slovak dictionary", "/dictionary"],
-              ["Slovak grammar", "/grammar"],
+              ["Slovak grammar", "/slovak-grammar"],
             ].map(([label, href]) => (
               <Link key={href} href={href} className={secondaryButton}>
                 {label}
@@ -172,9 +173,15 @@ export default function Page() {
                 <li>Move to A1, A2, B1 and B2 gradually.</li>
               </ol>
 
-              <Link href="/learning/a0-1" className={primaryButton}>
-                Go to A0 lessons →
-              </Link>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link href="/learning/a0-1" className={primaryButton}>
+                  Go to A0 lessons →
+                </Link>
+
+                <Link href="/slovak-for-beginners" className={secondaryButton}>
+                  See the beginner roadmap →
+                </Link>
+              </div>
             </>
           ),
         },
@@ -200,7 +207,7 @@ export default function Page() {
 
               <div className="flex flex-wrap gap-3 pt-2">
                 {[
-                  ["Open grammar topics", "/grammar"],
+                  ["Open Slovak grammar", "/slovak-grammar"],
                   ["Search vocabulary", "/dictionary"],
                   ["Practice exercises", "/practice"],
                 ].map(([label, href]) => (
@@ -255,6 +262,32 @@ export default function Page() {
               <p className="mt-2 text-sm theme-text-muted">{text}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          New to Slovak? Start with the beginner roadmap
+        </h2>
+
+        <p className="theme-text-muted">
+          If you are learning Slovak from zero, it helps to know what to study
+          first: pronunciation, first useful words, simple phrases, grammar order
+          and a practical 30-day plan.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/slovak-for-beginners" className={primaryButton}>
+            Open Slovak for beginners →
+          </Link>
+
+          <Link href="/slovak-grammar" className={secondaryButton}>
+            Slovak grammar →
+          </Link>
+
+          <Link href="/learning/a0-1" className={secondaryButton}>
+            Start A0 lesson →
+          </Link>
         </div>
       </section>
 
