@@ -286,6 +286,28 @@ export const SEO_MAP: SeoMapItem[] = [
         inSitemap: true,
     },
     {
+        url: "/czech-for-beginners",
+        lang: "en",
+        course: "cs",
+        intentType: "how_to_learn",
+        mainKeyword: "Czech for beginners",
+        intent:
+            "English beginner roadmap page for learning Czech from zero, including first words, pronunciation, grammar order and 30-day plan",
+        status: "keep",
+        inSitemap: true,
+    },
+    {
+        url: "/polish-for-beginners",
+        lang: "en",
+        course: "pl",
+        intentType: "how_to_learn",
+        mainKeyword: "Polish for beginners",
+        intent:
+            "English beginner roadmap page for learning Polish from zero, including first words, pronunciation, grammar order and 30-day plan",
+        status: "keep",
+        inSitemap: true,
+    },
+    {
         url: "/polish-vocabulary",
         lang: "en",
         course: "pl",
