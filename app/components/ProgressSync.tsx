@@ -109,7 +109,7 @@ const PENDING_KEY = "slovakStudy.pendingSync";
 function savePending(data: any) {
   try {
     localStorage.setItem(PENDING_KEY, JSON.stringify(data));
-  } catch {}
+  } catch { }
 }
 
 function getPending() {
@@ -124,7 +124,7 @@ function getPending() {
 function clearPending() {
   try {
     localStorage.removeItem(PENDING_KEY);
-  } catch {}
+  } catch { }
 }
 
 function extractLessonsProgress(raw: string | null) {
@@ -184,7 +184,7 @@ export default function ProgressSync() {
         });
 
         if (res.ok) clearPending();
-      } catch {}
+      } catch { }
     }
 
     async function load() {
@@ -350,17 +350,12 @@ export default function ProgressSync() {
     window.addEventListener("storage", onStorage);
     window.addEventListener("focus", onFocus);
 
-    const interval = setInterval(() => {
-      load();
-    }, 15000);
-
     return () => {
       cancelled = true;
       window.removeEventListener(PROGRESS_EVENT, onProgressChanged);
       window.removeEventListener(XP_SYNC_EVENT, onProgressChanged);
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("focus", onFocus);
-      clearInterval(interval);
       cancelTimer();
     };
   }, [status, session?.user?.email]);
