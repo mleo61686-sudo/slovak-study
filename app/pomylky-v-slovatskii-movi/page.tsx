@@ -121,6 +121,7 @@ const primaryButton =
   "theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 const secondaryButton =
   "theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const textLink = "font-semibold theme-accent-text underline-offset-4 hover:underline";
 
 export default function Page() {
   const faqSchema = {
@@ -151,7 +152,7 @@ export default function Page() {
 
         <div className="relative space-y-4">
           <div className="theme-pill inline-flex rounded-full px-3 py-1 text-xs font-semibold">
-            Flunio Grammar
+            Slovak mistakes · grammar · beginner repair
           </div>
 
           <h1 className="text-3xl font-extrabold tracking-tight theme-text sm:text-4xl">
@@ -205,8 +206,66 @@ export default function Page() {
           <p>
             Найкращий спосіб уникати помилок — вчити не тільки окремі слова, а й
             готові приклади речень. Так ти бачиш, як слово реально працює у
-            фразі.
+            фразі. Якщо ти ще тільки стартуєш, спочатку відкрий{" "}
+            <Link className={textLink} href="/slovak-for-beginners">
+              словацьку для початківців
+            </Link>
+            , а потім повернися до цієї сторінки як до чекліста помилок.
           </p>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Як працювати з цією сторінкою
+        </h2>
+
+        <p className="theme-text-muted">
+          Не треба просто один раз прочитати список помилок. Краще взяти одну
+          помилку, подивитися правильний варіант, повторити фразу вголос і потім
+          закріпити її через урок або вправу.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Link href="/slovak-for-beginners" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Почни з правильної бази →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Beginner-roadmap допоможе не починати з хаосу: перші слова,
+              вимова, перші 7 і 30 днів.
+            </p>
+          </Link>
+
+          <Link href="/yak-vyvchyty-slovatsku-movu" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Побудуй план навчання →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Покроковий план показує, коли вчити слова, коли граматику, а коли
+              просто повторювати.
+            </p>
+          </Link>
+
+          <Link href="/slovatski-slova-z-perekladom" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Перевір базову лексику →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Багато помилок виникає через слабку базу слів або дослівний
+              переклад знайомих фраз.
+            </p>
+          </Link>
+
+          <Link href="/practice" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Закріпи через вправи →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Помилки виправляються швидше, коли ти не тільки читаєш правило, а
+              регулярно бачиш правильну форму у вправах.
+            </p>
+          </Link>
         </div>
       </section>
 
@@ -264,7 +323,11 @@ export default function Page() {
           <li>
             <strong className="theme-text">Вчи слова у реченнях.</strong> Окреме
             слово — це тільки половина знання. Важливо бачити його форму у
-            фразі.
+            фразі. Для старту відкрий{" "}
+            <Link className={textLink} href="/slovatski-slova-z-perekladom">
+              словацькі слова з перекладом
+            </Link>
+            .
           </li>
           <li>
             <strong className="theme-text">Слухай вимову.</strong> Деякі слова
@@ -277,13 +340,21 @@ export default function Page() {
           <li>
             <strong className="theme-text">Повторюй правильні приклади.</strong>{" "}
             Краще запам’ятати одну правильну фразу, ніж десять окремих слів без
-            контексту.
+            контексту. Закріплюй це у{" "}
+            <Link className={textLink} href="/practice">
+              практиці
+            </Link>
+            .
           </li>
         </ol>
 
-        <div className="pt-5">
+        <div className="flex flex-wrap gap-3 pt-5">
           <Link href="/learning" className={primaryButton}>
             Практикуватися у Flunio →
+          </Link>
+
+          <Link href="/learning/a0-1" className={secondaryButton}>
+            Почати перший урок →
           </Link>
         </div>
       </section>
@@ -298,22 +369,59 @@ export default function Page() {
             {
               title: "Відмінки",
               text: "Форми слів змінюються залежно від ролі у реченні: do práce, v autobuse, mám kávu.",
+              href: "/slovak-grammar",
+              link: "Дивитися граматику →",
             },
             {
               title: "Дієслова",
               text: "Не всі дієслова працюють так само, як в українській. Наприклад: učiť sa slovenčinu.",
+              href: "/slovak-grammar",
+              link: "Розібрати правила →",
             },
             {
               title: "Схожі слова",
               text: "Деякі слова схожі на українські, але мають інше значення або інше вживання.",
+              href: "/dictionary",
+              link: "Перевірити у словнику →",
             },
           ].map((item) => (
             <div key={item.title} className={`${softCard} p-4 transition`}>
               <h3 className="font-semibold theme-text">{item.title}</h3>
               <p className="mt-2 text-sm theme-text-muted">{item.text}</p>
+              <Link href={item.href} className={`mt-3 inline-flex text-sm ${textLink}`}>
+                {item.link}
+              </Link>
             </div>
           ))}
         </div>
+      </section>
+
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Коли читати цю сторінку під час навчання?
+        </h2>
+
+        <p className="mt-3 theme-text-muted">
+          Найкраще повернутися до цієї сторінки після перших уроків A0. Тоді
+          приклади вже не будуть виглядати абстрактно: ти побачиш знайомі слова,
+          форми й ситуації. Якщо ти ще не проходив уроки, почни з{" "}
+          <Link className={textLink} href="/learning/a0-1">
+            A0-1
+          </Link>
+          .
+        </p>
+
+        <p className="mt-3 theme-text-muted">
+          Якщо хочеш спочатку зрозуміти загальну систему навчання, відкрий{" "}
+          <Link className={textLink} href="/vyvchennia-slovatskoi-movy-online">
+            вивчення словацької онлайн
+          </Link>{" "}
+          або сторінку{" "}
+          <Link className={textLink} href="/learn-slovak">
+            Learn Slovak online
+          </Link>
+          .
+        </p>
       </section>
 
       <section className={`${card} p-6`}>
@@ -327,6 +435,10 @@ export default function Page() {
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {[
+            {
+              href: "/slovak-for-beginners",
+              label: "Словацька для початківців →",
+            },
             {
               href: "/slovatski-slova-z-perekladom",
               label: "Словацькі слова з перекладом →",
@@ -343,8 +455,16 @@ export default function Page() {
               href: "/dictionary",
               label: "Словацький словник →",
             },
+            {
+              href: "/practice",
+              label: "Вправи для повторення →",
+            },
           ].map((item) => (
-            <Link key={item.href} href={item.href} className={`${softCard} p-4 transition hover:-translate-y-0.5`}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`${softCard} p-4 transition hover:-translate-y-0.5`}
+            >
               {item.label}
             </Link>
           ))}
@@ -361,6 +481,32 @@ export default function Page() {
               <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className={`${card} p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Виправляй помилки через практику
+        </h2>
+
+        <p className="mt-3 theme-text-muted">
+          Помилки зникають не від одного прочитання правила, а від повторення
+          правильних прикладів. Почни з короткого уроку, потім відкрий словник і
+          закріпи матеріал у вправах.
+        </p>
+
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link href="/learning/a0-1" className={primaryButton}>
+            Почати A0-1 →
+          </Link>
+
+          <Link href="/dictionary" className={secondaryButton}>
+            Відкрити словник
+          </Link>
+
+          <Link href="/practice" className={secondaryButton}>
+            Перейти до практики
+          </Link>
         </div>
       </section>
     </main>

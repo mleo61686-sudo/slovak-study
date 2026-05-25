@@ -155,6 +155,7 @@ const secondaryButton =
   "theme-secondary-button inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 const secondaryBlock =
   "theme-secondary-button rounded-2xl p-4 font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const textLink = "font-semibold theme-accent-text underline-offset-4 hover:underline";
 
 export default function Page() {
   const faqSchema = {
@@ -180,6 +181,10 @@ export default function Page() {
       />
 
       <section className={`${card} space-y-4 p-8`}>
+        <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold theme-text-muted">
+          Словацька лексика · переклад українською · A0–A1
+        </div>
+
         <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
           Словацькі слова з перекладом українською
         </h1>
@@ -205,8 +210,69 @@ export default function Page() {
             Відкрити словник
           </Link>
 
-          <Link href="/yak-vyvchyty-slovatsku-movu" className={secondaryButton}>
-            Як вивчити словацьку
+          <Link href="/slovak-for-beginners" className={secondaryButton}>
+            Словацька для початківців
+          </Link>
+
+          <Link
+            href="/vyvchennia-slovatskoi-movy-online"
+            className={secondaryButton}
+          >
+            Вивчення словацької онлайн
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Як використовувати цей список слів
+        </h2>
+
+        <p className="theme-text-muted">
+          Ця сторінка — не просто таблиця. Її краще використовувати як стартову
+          карту лексики: спочатку переглянь базові теми, потім відкрий перший
+          урок, а після цього повторюй слова у словнику й практиці.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Link href="/slovak-for-beginners" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Якщо ти починаєш з нуля →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Перейди до beginner-roadmap: перші 7 днів, 30 днів, перші слова,
+              вимова й базова граматика.
+            </p>
+          </Link>
+
+          <Link href="/learn-slovak" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Якщо хочеш сторінку курсу →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Відкрий загальну сторінку Slovak course з рівнями A0–B2, уроками,
+              вимовою та вправами.
+            </p>
+          </Link>
+
+          <Link href="/slovak-grammar" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Якщо потрібні правила →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Подивись огляд словацької граматики: алфавіт, дієслова, відмінки
+              й порядок слів.
+            </p>
+          </Link>
+
+          <Link href="/practice" className={`${softCard} block p-4`}>
+            <h3 className="font-semibold theme-text">
+              Якщо хочеш повторення →
+            </h3>
+            <p className="mt-2 text-sm theme-text-muted">
+              Переходь до практики, щоб не просто читати слова, а закріплювати
+              їх у вправах.
+            </p>
           </Link>
         </div>
       </section>
@@ -260,9 +326,34 @@ export default function Page() {
           <li>Поєднуй слова з темами: дім, робота, магазин, транспорт.</li>
         </ul>
 
-        <div className="pt-2">
+        <p className="theme-text-muted">
+          У Flunio слова краще вчити не ізольовано, а через{" "}
+          <Link className={textLink} href="/learning/a0-1">
+            короткі уроки A0
+          </Link>
+          ,{" "}
+          <Link className={textLink} href="/dictionary">
+            словник
+          </Link>{" "}
+          і{" "}
+          <Link className={textLink} href="/practice">
+            вправи для повторення
+          </Link>
+          . Так лексика швидше переходить із пасивної пам’яті в реальне
+          використання.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/learning" className={primaryButton}>
             Вчити слова у Flunio →
+          </Link>
+
+          <Link href="/dictionary" className={secondaryButton}>
+            Відкрити словник →
+          </Link>
+
+          <Link href="/practice" className={secondaryButton}>
+            Повторювати у вправах →
           </Link>
         </div>
       </section>
@@ -296,6 +387,20 @@ export default function Page() {
             прості слова забуваються, якщо не повертатися до них регулярно.
           </p>
         </div>
+
+        <p className="theme-text-muted">
+          Якщо хочеш окремо розібрати часті проблеми, відкрий сторінку{" "}
+          <Link className={textLink} href="/pomylky-v-slovatskii-movi">
+            типові помилки в словацькій мові
+          </Link>
+          . Вона добре доповнює цю добірку слів.
+        </p>
+
+        <div className="pt-2">
+          <Link href="/pomylky-v-slovatskii-movi" className={secondaryButton}>
+            Типові помилки →
+          </Link>
+        </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -316,6 +421,10 @@ export default function Page() {
         </p>
 
         <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/slovak-for-beginners" className={secondaryBlock}>
+            Словацька для початківців →
+          </Link>
+
           <Link href="/slovak-grammar" className={secondaryBlock}>
             Словацька граматика →
           </Link>
@@ -325,6 +434,10 @@ export default function Page() {
             className={secondaryBlock}
           >
             Вивчення словацької онлайн →
+          </Link>
+
+          <Link href="/learn-slovak" className={secondaryBlock}>
+            Learn Slovak online →
           </Link>
 
           <Link href="/learning/a0-1" className={secondaryBlock}>
@@ -338,6 +451,32 @@ export default function Page() {
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Слова, граматика й практика мають працювати разом
+        </h2>
+
+        <p className="theme-text-muted">
+          Список слів — це тільки перший шар. Щоб реально розуміти словацьку,
+          потрібно бачити, як слова змінюються у реченнях, як працюють дієслова,
+          які закінчення з’являються після прийменників і як будувати прості
+          питання.
+        </p>
+
+        <p className="theme-text-muted">
+          Тому після базової лексики варто перейти до{" "}
+          <Link className={textLink} href="/slovak-grammar">
+            словацької граматики
+          </Link>
+          , а потім регулярно повертатися до{" "}
+          <Link className={textLink} href="/practice">
+            практики
+          </Link>
+          . Так навчання не розвалюється на окремі списки, а складається в
+          систему.
+        </p>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">FAQ</h2>
 
         <div className="space-y-4">
@@ -347,6 +486,32 @@ export default function Page() {
               <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Почни вчити словацькі слова у коротких уроках
+        </h2>
+
+        <p className="theme-text-muted">
+          Якщо список уже зрозумілий, наступний крок — пройти перший урок. Там
+          слова одразу закріплюються через озвучку, переклад і вправи, а не
+          залишаються просто таблицею.
+        </p>
+
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Link href="/learning/a0-1" className={primaryButton}>
+            Почати з A0-1 →
+          </Link>
+
+          <Link href="/dictionary" className={secondaryButton}>
+            Відкрити словник
+          </Link>
+
+          <Link href="/practice" className={secondaryButton}>
+            Перейти до практики
+          </Link>
         </div>
       </section>
     </main>
