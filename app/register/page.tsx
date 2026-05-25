@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 import {
   getStoredCourseId,
@@ -159,18 +159,8 @@ export default function RegisterPage() {
   const t = T[L];
 
   const router = useRouter();
-  const sp = useSearchParams();
 
-  const rawCallbackUrl = sp.get("callbackUrl");
-  const callbackUrl =
-    rawCallbackUrl && rawCallbackUrl.startsWith("/")
-      ? rawCallbackUrl
-      : "/";
-
-  const loginHref = rawCallbackUrl
-    ? `/login?callbackUrl=${encodeURIComponent(rawCallbackUrl)}`
-    : "/login";
-
+  const [rawCallbackUrl, setRawCallbackUrl] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<CourseId>("sk");
 
   const [name, setName] = useState("");
@@ -185,6 +175,17 @@ export default function RegisterPage() {
   const [showPw2, setShowPw2] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const nextCallbackUrl = params.get("callbackUrl");
+
+    if (nextCallbackUrl && nextCallbackUrl.startsWith("/")) {
+      setRawCallbackUrl(nextCallbackUrl);
+    } else {
+      setRawCallbackUrl(null);
+    }
+  }, []);
+
+  useEffect(() => {
     const stored = getStoredCourseId();
     const storedCourse = COURSE_REGISTRY[stored];
 
@@ -196,6 +197,12 @@ export default function RegisterPage() {
     setSelectedCourse("sk");
     setStoredCourseId("sk");
   }, []);
+
+  const callbackUrl = rawCallbackUrl ?? "/";
+
+  const loginHref = rawCallbackUrl
+    ? `/login?callbackUrl=${encodeURIComponent(rawCallbackUrl)}`
+    : "/login";
 
   const emailOk = useMemo(() => {
     const v = email.trim().toLowerCase();
