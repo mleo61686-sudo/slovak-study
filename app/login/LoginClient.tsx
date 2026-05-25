@@ -26,6 +26,11 @@ const T: Record<
     invalidEmail: string;
     invalidEmailShort: string;
     passwordMin: string;
+
+    lessonHintTitle: string;
+    lessonHintText: string;
+    practiceHintTitle: string;
+    practiceHintText: string;
   }
 > = {
   ua: {
@@ -44,6 +49,13 @@ const T: Record<
     invalidEmail: "Email некоректний",
     invalidEmailShort: "Некоректний email",
     passwordMin: "Пароль має бути мінімум 8 символів",
+
+    lessonHintTitle: "Увійди, щоб почати урок",
+    lessonHintText:
+      "Для проходження уроків потрібен акаунт. Так Flunio зберігає твій прогрес, відкриті уроки та результати вправ.",
+    practiceHintTitle: "Увійди, щоб відкрити тренажер",
+    practiceHintText:
+      "Тренажер працює з твоїм особистим прогресом, тому спочатку потрібно увійти або створити акаунт.",
   },
   ru: {
     title: "Вход",
@@ -61,6 +73,13 @@ const T: Record<
     invalidEmail: "Некорректный email",
     invalidEmailShort: "Некорректный email",
     passwordMin: "Пароль должен быть минимум 8 символов",
+
+    lessonHintTitle: "Войдите, чтобы начать урок",
+    lessonHintText:
+      "Для прохождения уроков нужен аккаунт. Так Flunio сохранит ваш прогресс, открытые уроки и результаты упражнений.",
+    practiceHintTitle: "Войдите, чтобы открыть тренажёр",
+    practiceHintText:
+      "Тренажёр работает с вашим личным прогрессом, поэтому сначала нужно войти или создать аккаунт.",
   },
   en: {
     title: "Log in",
@@ -78,6 +97,13 @@ const T: Record<
     invalidEmail: "Invalid email",
     invalidEmailShort: "Invalid email",
     passwordMin: "Password must be at least 8 characters",
+
+    lessonHintTitle: "Log in to start the lesson",
+    lessonHintText:
+      "You need an account to complete lessons. This lets Flunio save your progress, unlocked lessons and exercise results.",
+    practiceHintTitle: "Log in to open practice",
+    practiceHintText:
+      "Practice uses your personal progress, so please log in or create an account first.",
   },
 };
 
@@ -88,7 +114,27 @@ export default function LoginClient() {
 
   const sp = useSearchParams();
   const router = useRouter();
-  const callbackUrl = sp.get("callbackUrl") ?? "/profile";
+
+  const rawCallbackUrl = sp.get("callbackUrl");
+  const callbackUrl = rawCallbackUrl ?? "/profile";
+  const reason = sp.get("reason");
+
+  const authHint =
+    reason === "lesson"
+      ? {
+          title: t.lessonHintTitle,
+          text: t.lessonHintText,
+        }
+      : reason === "practice"
+        ? {
+            title: t.practiceHintTitle,
+            text: t.practiceHintText,
+          }
+        : null;
+
+  const registerHref = rawCallbackUrl
+    ? `/register?callbackUrl=${encodeURIComponent(rawCallbackUrl)}`
+    : "/register";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -143,6 +189,25 @@ export default function LoginClient() {
         <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-cyan-400/20 blur-3xl" />
 
         <div className="relative">
+          {authHint && (
+            <div className="mb-5 overflow-hidden rounded-2xl border border-cyan-400/30 bg-cyan-400/10 p-4 shadow-[0_0_24px_rgba(34,211,238,0.18)] backdrop-blur">
+              <div className="flex gap-3">
+                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-cyan-300/30 bg-cyan-300/15 text-lg shadow-[0_0_18px_rgba(34,211,238,0.18)]">
+                  🔐
+                </div>
+
+                <div>
+                  <div className="text-sm font-extrabold tracking-tight theme-text">
+                    {authHint.title}
+                  </div>
+                  <p className="mt-1 text-sm leading-relaxed theme-text-muted">
+                    {authHint.text}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="mb-6">
             <div className="theme-pill mb-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
               Flunio
@@ -223,7 +288,7 @@ export default function LoginClient() {
               {t.noAccount}{" "}
               <Link
                 className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
-                href="/register"
+                href={registerHref}
               >
                 {t.register}
               </Link>

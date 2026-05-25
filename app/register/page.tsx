@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 import {
   getStoredCourseId,
@@ -157,7 +157,19 @@ export default function RegisterPage() {
   const { lang } = useLanguage();
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
+
   const router = useRouter();
+  const sp = useSearchParams();
+
+  const rawCallbackUrl = sp.get("callbackUrl");
+  const callbackUrl =
+    rawCallbackUrl && rawCallbackUrl.startsWith("/")
+      ? rawCallbackUrl
+      : "/";
+
+  const loginHref = rawCallbackUrl
+    ? `/login?callbackUrl=${encodeURIComponent(rawCallbackUrl)}`
+    : "/login";
 
   const [selectedCourse, setSelectedCourse] = useState<CourseId>("sk");
 
@@ -263,17 +275,17 @@ export default function RegisterPage() {
       email: e2,
       password: pw,
       redirect: false,
-      callbackUrl: "/",
+      callbackUrl,
     });
 
     setLoading(false);
 
     if (!login || login.error) {
-      router.push("/login");
+      router.push(loginHref);
       return;
     }
 
-    router.push("/");
+    router.push(callbackUrl);
     router.refresh();
   }
 
@@ -486,7 +498,7 @@ export default function RegisterPage() {
             {t.have}{" "}
             <Link
               className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
-              href="/login"
+              href={loginHref}
             >
               {t.login}
             </Link>

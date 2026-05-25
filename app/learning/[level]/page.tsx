@@ -11,7 +11,10 @@ type LessonsProgress = Record<string, any>;
 
 const FREE_A2_LESSONS = 10;
 
-function getLessonFromLessonsByBand(lessonsByBand: Record<string, any[]>, id: string) {
+function getLessonFromLessonsByBand(
+  lessonsByBand: Record<string, any[]>,
+  id: string
+) {
   const raw = String(id).toLowerCase();
   const m = /^(a0|a1|a2|b1|b2)-(\d+)$/.exec(raw);
   if (!m) return null;
@@ -46,6 +49,7 @@ function isPremiumLevel(id: string) {
 
   return false;
 }
+
 function isFreeStarterUnlimitedLesson(id: string) {
   const parsed = parseLevelId(id);
   return parsed?.band === "a0" && parsed.n >= 1 && parsed.n <= 10;
@@ -82,10 +86,21 @@ function nextLevelId(id: string) {
 
   const limit = BAND_LIMITS[p.band];
 
-  if (p.band === "a0" && Number.isFinite(p.n) && p.n >= (limit ?? 30)) return "a1-1";
-  if (p.band === "a1" && Number.isFinite(p.n) && p.n >= (limit ?? 40)) return "a2-1";
-  if (p.band === "a2" && Number.isFinite(p.n) && p.n >= (limit ?? 50)) return "b1-1";
-  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) return "b2-1";
+  if (p.band === "a0" && Number.isFinite(p.n) && p.n >= (limit ?? 30)) {
+    return "a1-1";
+  }
+
+  if (p.band === "a1" && Number.isFinite(p.n) && p.n >= (limit ?? 40)) {
+    return "a2-1";
+  }
+
+  if (p.band === "a2" && Number.isFinite(p.n) && p.n >= (limit ?? 50)) {
+    return "b1-1";
+  }
+
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= (limit ?? 35)) {
+    return "b2-1";
+  }
 
   return `${p.band}-${p.n + 1}`;
 }
@@ -100,7 +115,9 @@ function isSameDay(a: Date, b: Date) {
 
 function isDone(lp: LessonsProgress | null | undefined, id: string) {
   if (!lp || typeof lp !== "object") return false;
+
   const v = (lp as any)[id] ?? (lp as any)[id.toLowerCase()];
+
   return v === true || (v && typeof v === "object" && (v as any).done === true);
 }
 
@@ -147,7 +164,8 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
     if (!p) continue;
 
     const done =
-      val === true || (val && typeof val === "object" && (val as any).done === true);
+      val === true ||
+      (val && typeof val === "object" && (val as any).done === true);
 
     if (!done) continue;
 
@@ -162,12 +180,26 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
   return best;
 }
 
-export default async function Page({ params }: { params: Promise<{ level: string }> }) {
+function redirectToLessonLogin(levelId: string): never {
+  const callbackUrl = `/learning/${encodeURIComponent(levelId)}`;
+
+  redirect(
+    `/login?reason=lesson&callbackUrl=${encodeURIComponent(callbackUrl)}`
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ level: string }>;
+}) {
   const { level: levelIdRaw } = await params;
   const levelId = String(levelIdRaw).toLowerCase();
 
   const cookieStore = await cookies();
-  const cookieCourse = cookieStore.get("slovakStudyActiveCourse")?.value as CourseId | undefined;
+  const cookieCourse = cookieStore.get("slovakStudyActiveCourse")?.value as
+    | CourseId
+    | undefined;
 
   const activeCourseId: CourseId =
     cookieCourse === "cs" || cookieCourse === "sk" || cookieCourse === "pl"
@@ -177,8 +209,11 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const lessonsByBand = getLessonsByBand(activeCourseId);
 
   const session = await auth();
-  const email = session?.user?.email;
-  if (!email) redirect("/login");
+  const email = session?.user?.email ?? null;
+
+  if (!email) {
+    return redirectToLessonLogin(levelId);
+  }
 
   const user = await prisma.user.findUnique({
     where: { email },
@@ -189,7 +224,10 @@ export default async function Page({ params }: { params: Promise<{ level: string
       premiumUntil: true,
     },
   });
-  if (!user) redirect("/login");
+
+  if (!user) {
+    return redirectToLessonLogin(levelId);
+  }
 
   const hasPremium =
     user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
@@ -238,6 +276,7 @@ export default async function Page({ params }: { params: Promise<{ level: string
   const allowed = lastUnlockedLevel ? nextLevelId(lastUnlockedLevel) : "a0-1";
 
   const lesson = getLessonFromLessonsByBand(lessonsByBand, levelId);
+
   if (!lesson) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-10 theme-text">
@@ -275,6 +314,7 @@ export default async function Page({ params }: { params: Promise<{ level: string
   ) {
     redirect("/learning/limit");
   }
+
   const nextId = nextLevelId(levelId);
 
   let canGoNext = true;
