@@ -157,7 +157,7 @@ export const PL_A0_SOURCE: Lesson[] = [
       { sk: "godzina", ua: "година", ru: "час", en: "lesson", hintUa: "годзіна", img: "/words/hodina.jpg" },
       { sk: "zadanie", ua: "завдання", ru: "задание", en: "task / homework", hintUa: "заданє", img: "/words/úloha.jpg" },
       { sk: "test", ua: "тест", ru: "тест", en: "test", hintUa: "тест", img: "/words/test.jpg" },
-      { sk: "zeszyt", ua: "зошит", ru: "тетрадь", en: "notebook", hintUa: "зешит", img: "/words/zošitt.jpg" },
+      { sk: "zeszyt", ua: "зошит", ru: "тетрадь", en: "notebook", hintUa: "зешит", img: "/words/zošit.jpg" },
       { sk: "podręcznik", ua: "підручник", ru: "учебник", en: "textbook", hintUa: "подренчнік", img: "/words/učebnica.jpg" },
     ],
   },

@@ -223,7 +223,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "hodina", ua: "урок", ru: "урок", en: "lesson", img: "/words/hodina.jpg" },
             { sk: "úloha", ua: "завдання / домашня робота", ru: "задание / домашняя работа", en: "task / homework", img: "/words/úloha.jpg" },
             { sk: "test", ua: "тест", ru: "тест", en: "test", img: "/words/test.jpg" },
-            { sk: "zošit", ua: "зошит", ru: "тетрадь", en: "notebook", img: "/words/zošitt.jpg" },
+            { sk: "zošit", ua: "зошит", ru: "тетрадь", en: "notebook", img: "/words/zošit.jpg" },
             { sk: "učebnica", ua: "підручник", ru: "учебник", en: "textbook", img: "/words/učebnica.jpg" },
         ],
     },
