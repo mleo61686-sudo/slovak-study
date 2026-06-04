@@ -12,6 +12,59 @@ import {
 } from "@/app/learning/access/lessonAccess";
 
 type LessonsProgress = Record<string, any>;
+type LessonsProgressByCourse = Partial<Record<CourseId, LessonsProgress>>;
+
+type CourseAwareProgress = {
+  byCourse: LessonsProgressByCourse;
+};
+
+const COURSE_IDS: CourseId[] = ["sk", "cs", "pl"];
+
+function isPlainObject(value: unknown): value is Record<string, any> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isCourseAwareProgress(value: unknown): value is CourseAwareProgress {
+  return isPlainObject(value) && isPlainObject((value as any).byCourse);
+}
+
+function normalizeProgressStore(raw: unknown): CourseAwareProgress {
+  if (isCourseAwareProgress(raw)) {
+    const byCourse: LessonsProgressByCourse = {};
+
+    for (const courseId of COURSE_IDS) {
+      const lessons = (raw as any).byCourse?.[courseId];
+      byCourse[courseId] = isPlainObject(lessons) ? lessons : {};
+    }
+
+    return { byCourse };
+  }
+
+  if (isPlainObject(raw)) {
+    return {
+      byCourse: {
+        sk: raw as LessonsProgress,
+        cs: {},
+        pl: {},
+      },
+    };
+  }
+
+  return {
+    byCourse: {
+      sk: {},
+      cs: {},
+      pl: {},
+    },
+  };
+}
+
+function getLessonsForCourse(raw: unknown, courseId: CourseId): LessonsProgress {
+  const store = normalizeProgressStore(raw);
+  const lessons = store.byCourse[courseId];
+
+  return isPlainObject(lessons) ? lessons : {};
+}
 
 function getLessonFromLessonsByBand(
   lessonsByBand: Record<string, any[]>,
@@ -95,15 +148,12 @@ function nextLevelId(id: string) {
 function isDone(lp: LessonsProgress | null | undefined, id: string) {
   if (!lp || typeof lp !== "object") return false;
 
-  const v = (lp as any)[id] ?? (lp as any)[id.toLowerCase()];
+  const key = id.toLowerCase();
+  const v = (lp as any)[key] ?? (lp as any)[id];
 
   return v === true || (v && typeof v === "object" && (v as any).done === true);
 }
 
-/**
- * For free users we recover progress only sequentially.
- * This prevents jumping ahead by manually editing local/server progress.
- */
 function getLastDoneSequential(
   lp: LessonsProgress | null | undefined,
   lessonsByBand: Record<string, any[]>
@@ -128,9 +178,6 @@ function getLastDoneSequential(
   return lastDone;
 }
 
-/**
- * For premium users we can recover the highest completed lesson.
- */
 function getLastDoneMax(lp: LessonsProgress | null | undefined) {
   if (!lp || typeof lp !== "object") return null;
 
@@ -156,6 +203,16 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
   }
 
   return best;
+}
+
+function chooseBetterLastUnlocked(
+  current: string | null,
+  recovered: string | null
+) {
+  if (!current) return recovered;
+  if (!recovered) return current;
+
+  return compareLevel(recovered, current) === 1 ? recovered : current;
 }
 
 function redirectToLessonLogin(levelId: string): never {
@@ -242,7 +299,13 @@ export default async function Page({
     update: {},
     create: {
       userId: user.id,
-      lessonsProgress: {},
+      lessonsProgress: {
+        byCourse: {
+          sk: {},
+          cs: {},
+          pl: {},
+        },
+      },
       dailyCount: 0,
       dailyDate: null,
       lastUnlockedLevel: null,
@@ -253,23 +316,25 @@ export default async function Page({
     },
   });
 
-  const lp = (row.lessonsProgress ?? {}) as any;
+  const courseLessons = getLessonsForCourse(
+    row.lessonsProgress ?? null,
+    activeCourseId
+  );
 
-  let lastUnlockedLevel = row.lastUnlockedLevel;
+  const recovered = hasPremium
+    ? getLastDoneMax(courseLessons)
+    : getLastDoneSequential(courseLessons, lessonsByBand);
 
-  if (!lastUnlockedLevel) {
-    const recovered = hasPremium
-      ? getLastDoneMax(lp)
-      : getLastDoneSequential(lp, lessonsByBand);
+  let lastUnlockedLevel = chooseBetterLastUnlocked(
+    row.lastUnlockedLevel,
+    recovered
+  );
 
-    if (recovered) {
-      lastUnlockedLevel = recovered;
-
-      await prisma.userProgress.update({
-        where: { userId: user.id },
-        data: { lastUnlockedLevel: recovered },
-      });
-    }
+  if (lastUnlockedLevel && lastUnlockedLevel !== row.lastUnlockedLevel) {
+    await prisma.userProgress.update({
+      where: { userId: user.id },
+      data: { lastUnlockedLevel },
+    });
   }
 
   const allowed = lastUnlockedLevel ? nextLevelId(lastUnlockedLevel) : "a0-1";
