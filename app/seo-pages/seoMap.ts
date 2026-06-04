@@ -204,6 +204,32 @@ export const SEO_MAP: SeoMapItem[] = [
       "Main Russian Slovak course landing page. Use this URL for RU hreflang and internal linking.",
   },
   {
+    url: "/ru/czech-for-beginners",
+    lang: "ru",
+    course: "cs",
+    intentType: "how_to_learn",
+    mainKeyword: "чешский язык для начинающих",
+    intent:
+      "Russian beginner roadmap page for learning Czech from zero: first words, pronunciation, ř, false friends, first 7 days, 30-day plan and path into Flunio lessons",
+    status: "keep",
+    inSitemap: true,
+    note:
+      "Unique RU Czech beginner roadmap page. Different from /ru/learn-czech: focuses on first steps, beginner traps and practical continuation inside Flunio.",
+  },
+  {
+    url: "/ru/czech-vocabulary",
+    lang: "ru",
+    course: "cs",
+    intentType: "vocabulary",
+    mainKeyword: "чешские слова с переводом",
+    intent:
+      "Russian SEO vocabulary page for Czech words by real-life topics: first words, shop, work, transport, doctor, documents, verbs, false friends and practice path into Flunio",
+    status: "keep",
+    inSitemap: true,
+    note:
+      "Unique RU Czech vocabulary page. Different from /ru/learn-czech and /ru/czech-for-beginners: focuses on practical word groups, Czech traps and continuing inside Flunio.",
+  },
+  {
     url: "/ru/learn-czech",
     lang: "ru",
     course: "cs",
