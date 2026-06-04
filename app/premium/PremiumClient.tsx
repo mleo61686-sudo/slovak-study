@@ -46,10 +46,6 @@ type PremiumTranslations = {
   yearlyHint: string;
   monthlyHint: string;
   currencyHint: string;
-
-  lifetimeTitle: string;
-  lifetimeText: string;
-  lifetimeBadge: string;
 };
 
 type FeatureRow = {
@@ -79,18 +75,18 @@ const T: Record<Lang, PremiumTranslations> = {
   ua: {
     topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "Для тих, хто хоче не просто спробувати, а реально пройти курс і рухатися швидше.",
+      "Почни безкоштовно з A0. Premium відкриває повний шлях далі: A1, A2, B1, B2 і тренажер.",
     badge: "Premium",
-    title: "Вчися без стопів 🚀",
+    title: "Продовжуй навчання після A0 🚀",
     subtitle:
-      "Без денного ліміту, з повним доступом до рівнів, тренажера, статистики та Premium-теми Flunio.",
+      "A0 доступний безкоштовно. Якщо хочеш рухатися далі, Premium відкриває наступні рівні, тренажер і розширену статистику.",
     bullets: [
-      "🔓 Усі рівні курсу без блокування",
-      "🚫 Без денного ліміту на нові уроки",
+      "🔓 Доступ до A1, A2, B1 та B2",
       "🏋️ Повний доступ до тренажера",
       "📊 Статистика, серії та рекорди",
-      "🌌 Premium Flunio тема",
       "🧠 Більше контролю над прогресом",
+      "🌍 Доступ до всіх активних курсів",
+      "⚡ Навчання без штучних daily lesson лімітів",
     ],
 
     planTitle: "Обери план:",
@@ -113,9 +109,9 @@ const T: Record<Lang, PremiumTranslations> = {
     loading: "Завантажую…",
     opening: "Відкриваю Stripe…",
 
-    compareTitle: "Що змінюється з Premium",
+    compareTitle: "Free vs Premium",
     compareSubtitle:
-      "Безкоштовний план дає старт. Premium прибирає обмеження і відкриває повний темп навчання.",
+      "Free дає сильний старт. Premium відкриває продовження курсу та інструменти для серйозної практики.",
     colFeature: "Можливість",
     colFree: "Free",
     colPremium: "Premium",
@@ -126,28 +122,23 @@ const T: Record<Lang, PremiumTranslations> = {
       "Місячний план зручний, якщо хочеш спробувати Premium без довгого зобов’язання.",
     currencyHint:
       "Для PLN і CZK зараз доступний лише місячний план. Річний план доступний у EUR/USD/UAH.",
-
-    lifetimeTitle: "Lifetime Early Access скоро",
-    lifetimeText:
-      "Окремий одноразовий доступ можна додати пізніше як early supporter offer. Спочатку треба підключити окремий Stripe price.",
-    lifetimeBadge: "планується",
   },
 
   ru: {
     topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "Для тех, кто хочет не просто попробовать, а реально пройти курс и двигаться быстрее.",
+      "Начни бесплатно с A0. Premium открывает полный путь дальше: A1, A2, B1, B2 и тренажёр.",
     badge: "Premium",
-    title: "Учись без стопов 🚀",
+    title: "Продолжай обучение после A0 🚀",
     subtitle:
-      "Без дневного лимита, с полным доступом к уровням, тренажёру, статистике и Premium-теме Flunio.",
+      "A0 доступен бесплатно. Если хочешь двигаться дальше, Premium открывает следующие уровни, тренажёр и расширенную статистику.",
     bullets: [
-      "🔓 Все уровни курса без блокировки",
-      "🚫 Без дневного лимита на новые уроки",
+      "🔓 Доступ к A1, A2, B1 и B2",
       "🏋️ Полный доступ к тренажёру",
       "📊 Статистика, серии и рекорды",
-      "🌌 Premium Flunio тема",
       "🧠 Больше контроля над прогрессом",
+      "🌍 Доступ ко всем активным курсам",
+      "⚡ Обучение без искусственных daily lesson лимитов",
     ],
 
     planTitle: "Выбери план:",
@@ -170,9 +161,9 @@ const T: Record<Lang, PremiumTranslations> = {
     loading: "Загрузка…",
     opening: "Открываю Stripe…",
 
-    compareTitle: "Что меняется с Premium",
+    compareTitle: "Free vs Premium",
     compareSubtitle:
-      "Бесплатный план даёт старт. Premium убирает ограничения и открывает полный темп обучения.",
+      "Free даёт сильный старт. Premium открывает продолжение курса и инструменты для серьёзной практики.",
     colFeature: "Возможность",
     colFree: "Free",
     colPremium: "Premium",
@@ -183,28 +174,23 @@ const T: Record<Lang, PremiumTranslations> = {
       "Месячный план удобен, если хочешь попробовать Premium без долгого обязательства.",
     currencyHint:
       "Для PLN и CZK сейчас доступен только месячный план. Годовой план доступен в EUR/USD/UAH.",
-
-    lifetimeTitle: "Lifetime Early Access скоро",
-    lifetimeText:
-      "Отдельный единоразовый доступ можно добавить позже как early supporter offer. Сначала нужно подключить отдельный Stripe price.",
-    lifetimeBadge: "планируется",
   },
 
   en: {
     topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "For learners who want more than a trial: unlock the full learning pace and keep moving.",
+      "Start with A0 for free. Premium unlocks the full path forward: A1, A2, B1, B2, and the trainer.",
     badge: "Premium",
-    title: "Learn without stops 🚀",
+    title: "Continue learning after A0 🚀",
     subtitle:
-      "No daily limit, full level access, the full trainer, progress statistics, and the Premium Flunio theme.",
+      "A0 is free. If you want to keep moving, Premium unlocks the next levels, the trainer, and advanced progress stats.",
     bullets: [
-      "🔓 All course levels unlocked",
-      "🚫 No daily limit on new lessons",
+      "🔓 Access to A1, A2, B1 and B2",
       "🏋️ Full trainer access",
       "📊 Statistics, streaks, and records",
-      "🌌 Premium Flunio theme",
       "🧠 More control over your progress",
+      "🌍 Access to all active courses",
+      "⚡ Learning without artificial daily lesson limits",
     ],
 
     planTitle: "Choose a plan:",
@@ -227,9 +213,9 @@ const T: Record<Lang, PremiumTranslations> = {
     loading: "Loading…",
     opening: "Opening Stripe…",
 
-    compareTitle: "What Premium changes",
+    compareTitle: "Free vs Premium",
     compareSubtitle:
-      "Free gives you the start. Premium removes the limits and unlocks the full learning pace.",
+      "Free gives you a strong start. Premium unlocks the rest of the course and serious practice tools.",
     colFeature: "Feature",
     colFree: "Free",
     colPremium: "Premium",
@@ -239,11 +225,6 @@ const T: Record<Lang, PremiumTranslations> = {
     monthlyHint: "The monthly plan is useful if you want to try Premium first.",
     currencyHint:
       "PLN and CZK currently support monthly plans only. Yearly is available in EUR/USD/UAH.",
-
-    lifetimeTitle: "Lifetime Early Access soon",
-    lifetimeText:
-      "A one-time lifetime option can be added later as an early supporter offer. First, we need a separate Stripe price.",
-    lifetimeBadge: "planned",
   },
 };
 
@@ -261,16 +242,24 @@ const FEATURES: readonly FeatureRow[] = [
     ua: "Рівні курсу",
     ru: "Уровни курса",
     en: "Course levels",
-    free: "Стартові рівні",
-    premium: "Усі рівні",
+    free: "A0",
+    premium: "A0–B2",
   },
   {
-    key: "limit",
-    ua: "Нові уроки на день",
-    ru: "Новые уроки в день",
-    en: "New lessons per day",
-    free: "2",
-    premium: "∞",
+    key: "a0Limit",
+    ua: "A0 уроки",
+    ru: "A0 уроки",
+    en: "A0 lessons",
+    free: "✅ без ліміту",
+    premium: "✅",
+  },
+  {
+    key: "advancedLevels",
+    ua: "A1, A2, B1, B2",
+    ru: "A1, A2, B1, B2",
+    en: "A1, A2, B1, B2",
+    free: "🔒",
+    premium: "✅",
   },
   {
     key: "trainer",
@@ -281,36 +270,52 @@ const FEATURES: readonly FeatureRow[] = [
     premium: "✅",
   },
   {
-    key: "theme",
-    ua: "Premium Flunio тема",
-    ru: "Premium Flunio тема",
-    en: "Premium Flunio theme",
-    free: "🔒",
+    key: "wordReview",
+    ua: "Базове повторення слів",
+    ru: "Базовое повторение слов",
+    en: "Basic word review",
+    free: "✅",
+    premium: "✅",
+  },
+  {
+    key: "xp",
+    ua: "XP / досвід",
+    ru: "XP / опыт",
+    en: "XP",
+    free: "✅",
     premium: "✅",
   },
   {
     key: "stats",
-    ua: "Статистика, серії та рекорди",
-    ru: "Статистика, серии и рекорды",
-    en: "Statistics, streaks, and records",
-    free: "Базово",
-    premium: "Повністю",
+    ua: "Серії, рекорди та статистика",
+    ru: "Серии, рекорды и статистика",
+    en: "Streaks, records and stats",
+    free: "🔒 частково",
+    premium: "✅",
   },
   {
-    key: "pace",
-    ua: "Темп навчання",
-    ru: "Темп обучения",
-    en: "Learning pace",
-    free: "Повільний",
-    premium: "Без обмежень",
+    key: "grammar",
+    ua: "Граматика",
+    ru: "Грамматика",
+    en: "Grammar",
+    free: "✅",
+    premium: "✅",
   },
   {
-    key: "courses",
-    ua: "Курси",
-    ru: "Курсы",
-    en: "Courses",
-    free: "Обмежено",
-    premium: "Усі доступні",
+    key: "dictionary",
+    ua: "Словник",
+    ru: "Словарь",
+    en: "Dictionary",
+    free: "✅",
+    premium: "✅",
+  },
+  {
+    key: "theme",
+    ua: "Flunio theme",
+    ru: "Flunio theme",
+    en: "Flunio theme",
+    free: "✅",
+    premium: "✅",
   },
 ] as const;
 
@@ -540,30 +545,6 @@ export default function PremiumClient() {
           </div>
         </div>
       </section>
-
-      {!isPremium ? (
-        <section className="flunio-card-soft rounded-3xl p-5 theme-text">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="space-y-1">
-              <div className="inline-flex items-center rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300 theme-simple:text-cyan-700">
-                {t.lifetimeBadge}
-              </div>
-
-              <h2 className="text-lg font-semibold theme-text">
-                {t.lifetimeTitle}
-              </h2>
-
-              <p className="max-w-3xl text-sm theme-text-muted">
-                {t.lifetimeText}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold theme-text theme-simple:border-slate-200 theme-simple:bg-slate-50">
-              €49–69 one-time
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       {!isPremium ? (
         <section className="flunio-card space-y-4 rounded-3xl p-6 theme-text">
