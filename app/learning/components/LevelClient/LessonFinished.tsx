@@ -26,6 +26,16 @@ type LessonFinishedProps = {
   onGoToLessonsList: () => void;
 };
 
+function getNextLessonPath(nextLevelId: string) {
+  if (!nextLevelId) return "/learning";
+
+  if (nextLevelId.startsWith("/")) {
+    return nextLevelId;
+  }
+
+  return `/learning/${nextLevelId}`;
+}
+
 export default function LessonFinished({
   t,
   score,
@@ -39,6 +49,8 @@ export default function LessonFinished({
   onGoNext,
   onGoToLessonsList,
 }: LessonFinishedProps) {
+  const nextPath = getNextLessonPath(nextLevelId);
+
   return (
     <div className="flunio-card space-y-4 rounded-3xl p-6 theme-text">
       <div className="text-xl font-semibold theme-text">{t.levelDone}</div>
@@ -71,7 +83,7 @@ export default function LessonFinished({
 
         <button
           type="button"
-          onClick={() => onGoNext(nextLevelId)}
+          onClick={() => onGoNext(nextPath)}
           className={[
             "rounded-xl px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed",
             canGoNextNow && !savingNext && !isNavigating
