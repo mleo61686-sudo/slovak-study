@@ -347,7 +347,11 @@ export default function LevelClient({
   }, [mode, exerciseIndex, wordIndex, finished]);
 
   useEffect(() => {
-    router.prefetch(nextLevelId);
+    const nextPath = nextLevelId.startsWith("/")
+      ? nextLevelId
+      : `/learning/${nextLevelId}`;
+
+    router.prefetch(nextPath);
     router.prefetch(onLockedNextRedirect);
   }, [router, nextLevelId, onLockedNextRedirect]);
 
@@ -417,6 +421,15 @@ export default function LevelClient({
     if (finishingRef.current) return;
     finishingRef.current = true;
 
+    /**
+     * ВАЖЛИВО:
+     * Спочатку блокуємо Next і показуємо saving state.
+     * Інакше користувач може натиснути "Перейти далі"
+     * раніше, ніж сервер оновив lastUnlockedLevel.
+     */
+    setSavingNext(true);
+    setCanGoNextNow(false);
+    setLockedReasonNow(undefined);
     setFinished(true);
 
     try {
@@ -426,8 +439,6 @@ export default function LevelClient({
     }
 
     (async () => {
-      setSavingNext(true);
-
       try {
         const res = await fetch("/api/progress/lesson-done", {
           method: "POST",
@@ -437,23 +448,41 @@ export default function LevelClient({
 
         const data = await res.json().catch(() => ({}));
 
-        if (res.ok && data?.ok) {
-          const nextIsFree = isFreeLesson(nextLevelId);
+        if (!res.ok || !data?.ok) {
+          console.error("Save server progress failed:", {
+            status: res.status,
+            data,
+          });
 
-          if (nextIsFree) {
-            setCanGoNextNow(true);
-            setLockedReasonNow(undefined);
-          } else {
-            setCanGoNextNow(canGoNext);
-            setLockedReasonNow(
-              canGoNext
-                ? undefined
-                : lockedReason ?? getLockedLessonReason(nextLevelId)
-            );
-          }
+          setCanGoNextNow(false);
+          setLockedReasonNow("unknown_lesson");
+          return;
         }
+
+        const nextIsFree = isFreeLesson(nextLevelId);
+
+        if (nextIsFree) {
+          setCanGoNextNow(true);
+          setLockedReasonNow(undefined);
+        } else {
+          setCanGoNextNow(canGoNext);
+          setLockedReasonNow(
+            canGoNext
+              ? undefined
+              : lockedReason ?? getLockedLessonReason(nextLevelId)
+          );
+        }
+
+        /**
+         * Оновлює server components / router cache,
+         * щоб наступний перехід бачив вже новий lastUnlockedLevel.
+         */
+        router.refresh();
       } catch (e) {
         console.error("Save server progress error", e);
+
+        setCanGoNextNow(false);
+        setLockedReasonNow("unknown_lesson");
       } finally {
         setSavingNext(false);
       }
