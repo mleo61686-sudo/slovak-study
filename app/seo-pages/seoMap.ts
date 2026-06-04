@@ -240,6 +240,45 @@ export const SEO_MAP: SeoMapItem[] = [
     inSitemap: true,
   },
   {
+    url: "/ru/slovak-for-beginners",
+    lang: "ru",
+    course: "sk",
+    intentType: "how_to_learn",
+    mainKeyword: "словацкий язык для начинающих",
+    intent:
+      "Russian beginner roadmap page for learning Slovak from zero: first words, first 7 days, 30-day plan, mistakes and practical path into Flunio lessons",
+    status: "keep",
+    inSitemap: true,
+    note:
+      "Unique RU beginner roadmap page. Different from /ru/learn-slovak: focuses on what to learn first, why beginners get stuck, and how to continue inside Flunio.",
+  },
+  {
+    url: "/ru/slovak-vocabulary",
+    lang: "ru",
+    course: "sk",
+    intentType: "vocabulary",
+    mainKeyword: "словацкие слова с переводом",
+    intent:
+      "Russian SEO vocabulary page for Slovak words by real-life topics: first words, shop, work, transport, doctor, documents, verbs and practice path into Flunio",
+    status: "keep",
+    inSitemap: true,
+    note:
+      "Unique RU Slovak vocabulary page. Different from /ru/learn-slovak and /ru/slovak-for-beginners: focuses on word groups, practical vocabulary and continuing inside Flunio.",
+  },
+  {
+    url: "/ru/slovak-grammar",
+    lang: "ru",
+    course: "sk",
+    intentType: "grammar",
+    mainKeyword: "словацкая грамматика для начинающих",
+    intent:
+      "Russian SEO grammar page for Slovak grammar without panic: alphabet, pronunciation, gender, verbs, cases, word order and how to practice grammar inside Flunio",
+    status: "keep",
+    inSitemap: true,
+    note:
+      "Unique RU Slovak grammar page. Different from /ru/learn-slovak and /ru/slovak-vocabulary: focuses on grammar order, beginner mistakes and practical grammar practice.",
+  },
+  {
     url: "/slovak-for-beginners",
     lang: "en",
     course: "sk",
