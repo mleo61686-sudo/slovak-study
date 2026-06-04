@@ -61,21 +61,23 @@ export default function LessonFinished({
       </div>
 
       {savingNext ? (
-        <div className="text-sm theme-text-subtle">{t.saving}</div>
+        <div className="theme-inner-card rounded-2xl p-4 text-sm theme-text-muted">
+          {t.saving}
+        </div>
       ) : null}
 
-      {!canGoNextNow && (
+      {!savingNext && !canGoNextNow ? (
         <div className="theme-inner-card rounded-2xl p-4 text-sm theme-text-muted">
           <div className="font-semibold theme-text">{t.nextLockedTitle}</div>
           <div className="mt-1">{lockedReasonNow ?? t.nextLockedDefault}</div>
         </div>
-      )}
+      ) : null}
 
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={onReviewAgain}
-          disabled={isNavigating}
+          disabled={savingNext || isNavigating}
           className="theme-secondary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {t.reviewAgain}
@@ -91,12 +93,12 @@ export default function LessonFinished({
               : "theme-secondary-button opacity-60",
           ].join(" ")}
           disabled={!canGoNextNow || savingNext || isNavigating}
-          title={!canGoNextNow ? t.notAvailableFree : undefined}
+          title={!canGoNextNow && !savingNext ? t.notAvailableFree : undefined}
         >
           {t.goNextLevel}
         </button>
 
-        {!canGoNextNow && (
+        {!savingNext && !canGoNextNow ? (
           <button
             type="button"
             onClick={onGoToLessonsList}
@@ -105,7 +107,7 @@ export default function LessonFinished({
           >
             {t.toLessonsList}
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   );
