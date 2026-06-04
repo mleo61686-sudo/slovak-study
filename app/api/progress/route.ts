@@ -1,23 +1,27 @@
 /**
- * ⚠️ CRITICAL FILE — LESSON PROGRESS + XP SYNC (НЕ ЛАМАТИ БЕЗ РОЗУМІННЯ)
+ * ⚠️ CRITICAL FILE — LESSON PROGRESS + XP SYNC
  *
- * Це головний файл, який відповідає за:
- * - прогрес уроків (lessonsProgress)
- * - розблокування наступного уроку (lastUnlockedLevel)
- * - daily limit (2 уроки для free)
- * - XP користувача (xp)
+ * Відповідає за:
+ * - прогрес уроків lessonsProgress
+ * - course-aware sync
+ * - lastUnlockedLevel
+ * - XP користувача
  *
- * ВАЖЛИВО:
- * - lessonsProgress тепер зберігається course-aware:
- *   {
- *     byCourse: {
- *       sk: { "a0-1": {...} },
- *       cs: { "a0-1": {...} },
- *       pl: { "a0-1": {...} }
- *     }
+ * Monetization model:
+ * - A0 is free without daily limit.
+ * - A1/A2/B1/B2 are Premium.
+ * - Daily lesson limit is no longer used for access.
+ *
+ * lessonsProgress зберігається course-aware:
+ * {
+ *   byCourse: {
+ *     sk: { "a0-1": {...} },
+ *     cs: { "a0-1": {...} },
+ *     pl: { "a0-1": {...} }
  *   }
+ * }
  *
- * - Старий flat формат автоматично мігрується як sk.
+ * Старий flat формат автоматично мігрується як sk.
  */
 
 import { NextResponse } from "next/server";
@@ -64,10 +68,7 @@ function isPlainObject(value: unknown): value is Record<string, any> {
 }
 
 function isCourseAwareProgress(value: unknown): value is CourseAwareProgress {
-  return (
-    isPlainObject(value) &&
-    isPlainObject((value as any).byCourse)
-  );
+  return isPlainObject(value) && isPlainObject((value as any).byCourse);
 }
 
 function normalizeProgressStore(raw: unknown): CourseAwareProgress {
@@ -82,7 +83,6 @@ function normalizeProgressStore(raw: unknown): CourseAwareProgress {
     return { byCourse };
   }
 
-  // Старий flat формат: { "a0-1": {...}, "a0-2": {...} }
   if (isPlainObject(raw)) {
     return {
       byCourse: {
@@ -141,15 +141,12 @@ function nextLevelId(id: string) {
   if (!p) return id;
 
   if (p.band === "a0" && Number.isFinite(p.n) && p.n >= 30) return "a1-1";
-  return `${p.band}-${p.n + 1}`;
-}
+  if (p.band === "a1" && Number.isFinite(p.n) && p.n >= 40) return "a2-1";
+  if (p.band === "a2" && Number.isFinite(p.n) && p.n >= 50) return "b1-1";
+  if (p.band === "b1" && Number.isFinite(p.n) && p.n >= 35) return "b2-1";
+  if (p.band === "b2" && Number.isFinite(p.n) && p.n >= 50) return "b2-50";
 
-function isSameDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
+  return `${p.band}-${p.n + 1}`;
 }
 
 function isDone(v: any) {
@@ -158,17 +155,6 @@ function isDone(v: any) {
   return false;
 }
 
-function hasPremium(user: { isPremium: boolean; premiumUntil: Date | null }) {
-  return user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
-}
-
-// ✅ Перші 10 уроків A0 не рахуються в daily limit для free користувачів
-function isFreeStarterUnlimitedLesson(levelId: string) {
-  const p = parseLevelId(levelId);
-  return p?.band === "a0" && p.n >= 1 && p.n <= 10;
-}
-
-// ✅ Retry helper for Prisma deadlocks / write conflicts (P2034)
 async function withRetry<T>(fn: () => Promise<T>, retries = 5) {
   let lastErr: any;
 
@@ -195,7 +181,10 @@ export async function GET(req: Request) {
   const email = session?.user?.email;
 
   if (!email) {
-    return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+    return NextResponse.json(
+      { ok: false, code: "UNAUTHORIZED" },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
@@ -204,10 +193,15 @@ export async function GET(req: Request) {
   });
 
   if (!user) {
-    return NextResponse.json({ ok: false, code: "USER_NOT_FOUND" }, { status: 404 });
+    return NextResponse.json(
+      { ok: false, code: "USER_NOT_FOUND" },
+      { status: 404 }
+    );
   }
 
-  const row = await prisma.userProgress.findUnique({ where: { userId: user.id } });
+  const row = await prisma.userProgress.findUnique({
+    where: { userId: user.id },
+  });
 
   return NextResponse.json({
     ok: true,
@@ -217,8 +211,14 @@ export async function GET(req: Request) {
     xpTotal: row?.xp ?? 0,
     updatedAt: row?.updatedAt ?? null,
     lastUnlockedLevel: row?.lastUnlockedLevel ?? null,
-    dailyDate: row?.dailyDate ?? null,
-    dailyCount: row?.dailyCount ?? 0,
+
+    /**
+     * Legacy response fields.
+     * Daily limits are no longer used for lesson access,
+     * but returning these keeps old client code safe.
+     */
+    dailyDate: null,
+    dailyCount: 0,
   });
 }
 
@@ -227,35 +227,44 @@ export async function PUT(req: Request) {
   const email = session?.user?.email;
 
   if (!email) {
-    return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+    return NextResponse.json(
+      { ok: false, code: "UNAUTHORIZED" },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
     where: { email },
-    select: { id: true, isPremium: true, premiumUntil: true },
+    select: { id: true },
   });
 
   if (!user) {
-    return NextResponse.json({ ok: false, code: "USER_NOT_FOUND" }, { status: 404 });
+    return NextResponse.json(
+      { ok: false, code: "USER_NOT_FOUND" },
+      { status: 404 }
+    );
   }
 
-  const userHasPremium = hasPremium({
-    isPremium: user.isPremium,
-    premiumUntil: user.premiumUntil ?? null,
-  });
-
   let body: any = null;
+
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ ok: false, code: "INVALID_JSON" }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, code: "INVALID_JSON" },
+      { status: 400 }
+    );
   }
 
   const courseId = getCourseIdFromBody(body);
 
   const bodyUserId = typeof body?.userId === "string" ? body.userId : null;
+
   if (!bodyUserId || bodyUserId !== user.id) {
-    return NextResponse.json({ ok: false, code: "USER_ID_MISMATCH" }, { status: 409 });
+    return NextResponse.json(
+      { ok: false, code: "USER_ID_MISMATCH" },
+      { status: 409 }
+    );
   }
 
   const clientLessonsProgress: LessonsProgress =
@@ -268,8 +277,6 @@ export async function PUT(req: Request) {
       ? Math.max(0, Math.floor(body.xpTotal))
       : null;
 
-  const today = new Date();
-
   try {
     const result = await withRetry(
       () =>
@@ -280,8 +287,6 @@ export async function PUT(req: Request) {
               select: {
                 lessonsProgress: true,
                 lastUnlockedLevel: true,
-                dailyDate: true,
-                dailyCount: true,
                 xp: true,
               },
             });
@@ -305,12 +310,6 @@ export async function PUT(req: Request) {
             const prevXp = prevRow?.xp ?? 0;
             const nextXp = xpTotal === null ? prevXp : Math.max(prevXp, xpTotal);
 
-            const sameDay = prevRow?.dailyDate
-              ? isSameDay(prevRow.dailyDate, today)
-              : false;
-
-            const currentDailyCount = sameDay ? (prevRow?.dailyCount ?? 0) : 0;
-
             const allowed = prevRow?.lastUnlockedLevel
               ? nextLevelId(prevRow.lastUnlockedLevel)
               : "a0-1";
@@ -326,34 +325,33 @@ export async function PUT(req: Request) {
                 };
               }
 
-              const isStarterUnlimited = isFreeStarterUnlimitedLesson(allowed);
-              const shouldCountDaily = !userHasPremium && !isStarterUnlimited;
-
-              // free ліміт після перших 10 уроків A0
-              if (shouldCountDaily && currentDailyCount >= 2) {
-                return {
-                  status: 429,
-                  payload: { ok: false, code: "DAILY_LIMIT", limit: 2 },
-                };
-              }
-
               const saved = await tx.userProgress.upsert({
                 where: { userId: user.id },
                 create: {
                   userId: user.id,
                   lessonsProgress: fullLessonsProgress,
                   lastUnlockedLevel: allowed,
-                  dailyDate: shouldCountDaily ? today : null,
-                  dailyCount: shouldCountDaily ? 1 : 0,
+
+                  /**
+                   * Legacy fields.
+                   * Daily lesson limit is disabled.
+                   */
+                  dailyDate: null,
+                  dailyCount: 0,
+
                   xp: nextXp,
                 },
                 update: {
                   lessonsProgress: fullLessonsProgress,
                   lastUnlockedLevel: allowed,
-                  dailyDate: shouldCountDaily ? today : prevRow?.dailyDate ?? null,
-                  dailyCount: shouldCountDaily
-                    ? currentDailyCount + 1
-                    : prevRow?.dailyCount ?? 0,
+
+                  /**
+                   * Legacy fields.
+                   * Daily lesson limit is disabled.
+                   */
+                  dailyDate: null,
+                  dailyCount: 0,
+
                   xp: nextXp,
                 },
                 select: {
@@ -371,7 +369,7 @@ export async function PUT(req: Request) {
                   courseId,
                   updatedAt: saved.updatedAt,
                   lastUnlockedLevel: saved.lastUnlockedLevel,
-                  dailyCount: saved.dailyCount,
+                  dailyCount: 0,
                   xpTotal: saved.xp,
                 },
               };
@@ -382,10 +380,14 @@ export async function PUT(req: Request) {
               create: {
                 userId: user.id,
                 lessonsProgress: fullLessonsProgress,
+                dailyDate: null,
+                dailyCount: 0,
                 xp: nextXp,
               },
               update: {
                 lessonsProgress: fullLessonsProgress,
+                dailyDate: null,
+                dailyCount: 0,
                 xp: nextXp,
               },
               select: { updatedAt: true, xp: true },
@@ -397,6 +399,7 @@ export async function PUT(req: Request) {
                 ok: true,
                 courseId,
                 updatedAt: saved.updatedAt,
+                dailyCount: 0,
                 xpTotal: saved.xp,
               },
             };
@@ -409,6 +412,9 @@ export async function PUT(req: Request) {
     return NextResponse.json(result.payload, { status: result.status });
   } catch (e) {
     console.error("PUT /api/progress error:", e);
-    return NextResponse.json({ ok: false, code: "SERVER_ERROR" }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, code: "SERVER_ERROR" },
+      { status: 500 }
+    );
   }
 }

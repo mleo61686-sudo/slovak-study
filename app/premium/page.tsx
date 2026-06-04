@@ -3,18 +3,18 @@ import PremiumClient from "./PremiumClient";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Premium | Flunio",
+  title: "Flunio Premium | Learn without daily limits",
   description:
-    "Flunio Premium: unlimited lessons, full trainer access, audio, statistics, streaks, and records.",
+    "Unlock all Flunio levels, unlimited lessons, the full trainer, progress statistics, streaks, records, and the Premium Flunio theme.",
 
   alternates: {
     canonical: `${SITE_URL}/premium`,
   },
 
   openGraph: {
-    title: "Premium | Flunio",
+    title: "Flunio Premium | Learn without daily limits",
     description:
-      "Unlock unlimited lessons, full trainer access, audio, statistics, streaks, and records with Flunio Premium.",
+      "Get unlimited lessons, all levels, the full trainer, progress statistics, streaks, records, and the Premium Flunio theme.",
     url: `${SITE_URL}/premium`,
     siteName: "Flunio",
     type: "website",

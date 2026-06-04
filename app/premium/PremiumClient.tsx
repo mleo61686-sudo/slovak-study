@@ -46,6 +46,10 @@ type PremiumTranslations = {
   yearlyHint: string;
   monthlyHint: string;
   currencyHint: string;
+
+  lifetimeTitle: string;
+  lifetimeText: string;
+  lifetimeBadge: string;
 };
 
 type FeatureRow = {
@@ -73,19 +77,20 @@ const MONTHLY_DISPLAY_PRICE: Record<Currency, string> = {
 
 const T: Record<Lang, PremiumTranslations> = {
   ua: {
-    topTitle: "Premium ⭐",
+    topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "Повний доступ без обмежень: уроки, тренажер, озвучка та статистика.",
+      "Для тих, хто хоче не просто спробувати, а реально пройти курс і рухатися швидше.",
     badge: "Premium",
-    title: "Навчання без обмежень 🚀",
+    title: "Вчися без стопів 🚀",
     subtitle:
-      "Відкрий повний A2, B1–B2 та проходь уроки без денного ліміту.",
+      "Без денного ліміту, з повним доступом до рівнів, тренажера, статистики та Premium-теми Flunio.",
     bullets: [
-      "🔓 Повний доступ до A2, B1 та B2",
+      "🔓 Усі рівні курсу без блокування",
       "🚫 Без денного ліміту на нові уроки",
       "🏋️ Повний доступ до тренажера",
-      "🔁 Повторення тільки помилок",
       "📊 Статистика, серії та рекорди",
+      "🌌 Premium Flunio тема",
+      "🧠 Більше контролю над прогресом",
     ],
 
     planTitle: "Обери план:",
@@ -95,7 +100,7 @@ const T: Record<Lang, PremiumTranslations> = {
     planHint: "Можна скасувати будь-коли.",
 
     priceNote:
-      "Обери валюту: EUR / USD / UAH / PLN / CZK • Оплата через Stripe • можна скасувати будь-коли",
+      "Оплата через Stripe • доступ активується автоматично • можна скасувати будь-коли",
 
     buy: (currencyLabel: string, price: string, interval: Interval) =>
       interval === "year"
@@ -103,37 +108,46 @@ const T: Record<Lang, PremiumTranslations> = {
         : `Оформити Premium — ${price} / місяць (${currencyLabel}) →`,
 
     manage: "Керувати підпискою →",
-    secondary: "Подивитись тренажер →",
+    secondary: "Відкрити тренажер →",
     lockedTrainer: "Тренажер 🔒",
     loading: "Завантажую…",
     opening: "Відкриваю Stripe…",
 
-    compareTitle: "Free vs Premium",
-    compareSubtitle: "Різниця, яку відчуєш одразу.",
-    colFeature: "Функція",
+    compareTitle: "Що змінюється з Premium",
+    compareSubtitle:
+      "Безкоштовний план дає старт. Premium прибирає обмеження і відкриває повний темп навчання.",
+    colFeature: "Можливість",
     colFree: "Free",
     colPremium: "Premium",
     ctaAfterCompare: "Оформити Premium →",
-    premiumBetter: "краще",
-    yearlyHint: "Річний план — найкращий вибір, якщо вчишся серйозно.",
-    monthlyHint: "Можна перейти на річний план у будь-який момент.",
+    premiumBetter: "повний доступ",
+    yearlyHint: "Річний план вигідніший, якщо ти вчишся серйозно.",
+    monthlyHint:
+      "Місячний план зручний, якщо хочеш спробувати Premium без довгого зобов’язання.",
     currencyHint:
-      "Вгорі можна обрати EUR/USD/UAH/PLN/CZK. Для PLN і CZK доступний лише місячний план.",
+      "Для PLN і CZK зараз доступний лише місячний план. Річний план доступний у EUR/USD/UAH.",
+
+    lifetimeTitle: "Lifetime Early Access скоро",
+    lifetimeText:
+      "Окремий одноразовий доступ можна додати пізніше як early supporter offer. Спочатку треба підключити окремий Stripe price.",
+    lifetimeBadge: "планується",
   },
+
   ru: {
-    topTitle: "Premium ⭐",
+    topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "Полный доступ без ограничений: уроки, тренажёр, озвучка и статистика.",
+      "Для тех, кто хочет не просто попробовать, а реально пройти курс и двигаться быстрее.",
     badge: "Premium",
-    title: "Обучение без ограничений 🚀",
+    title: "Учись без стопов 🚀",
     subtitle:
-      "Открой полный A2, B1–B2 и проходи уроки без дневного лимита.",
+      "Без дневного лимита, с полным доступом к уровням, тренажёру, статистике и Premium-теме Flunio.",
     bullets: [
-      "🔓 Полный доступ к A2, B1 и B2",
+      "🔓 Все уровни курса без блокировки",
       "🚫 Без дневного лимита на новые уроки",
       "🏋️ Полный доступ к тренажёру",
-      "🔁 Повторять только ошибки",
       "📊 Статистика, серии и рекорды",
+      "🌌 Premium Flunio тема",
+      "🧠 Больше контроля над прогрессом",
     ],
 
     planTitle: "Выбери план:",
@@ -143,7 +157,7 @@ const T: Record<Lang, PremiumTranslations> = {
     planHint: "Можно отменить в любой момент.",
 
     priceNote:
-      "Выбери валюту: EUR / USD / UAH / PLN / CZK • Оплата через Stripe • можно отменить в любой момент",
+      "Оплата через Stripe • доступ активируется автоматически • можно отменить в любой момент",
 
     buy: (currencyLabel: string, price: string, interval: Interval) =>
       interval === "year"
@@ -151,37 +165,46 @@ const T: Record<Lang, PremiumTranslations> = {
         : `Оформить Premium — ${price} / месяц (${currencyLabel}) →`,
 
     manage: "Управлять подпиской →",
-    secondary: "Посмотреть тренажёр →",
+    secondary: "Открыть тренажёр →",
     lockedTrainer: "Тренажёр 🔒",
     loading: "Загрузка…",
     opening: "Открываю Stripe…",
 
-    compareTitle: "Free vs Premium",
-    compareSubtitle: "Разница, которую почувствуешь сразу.",
-    colFeature: "Функция",
+    compareTitle: "Что меняется с Premium",
+    compareSubtitle:
+      "Бесплатный план даёт старт. Premium убирает ограничения и открывает полный темп обучения.",
+    colFeature: "Возможность",
     colFree: "Free",
     colPremium: "Premium",
     ctaAfterCompare: "Оформить Premium →",
-    premiumBetter: "лучше",
-    yearlyHint: "Годовой план — лучший выбор, если учишься всерьёз.",
-    monthlyHint: "Можно перейти на годовой план в любое время.",
+    premiumBetter: "полный доступ",
+    yearlyHint: "Годовой план выгоднее, если ты учишься серьёзно.",
+    monthlyHint:
+      "Месячный план удобен, если хочешь попробовать Premium без долгого обязательства.",
     currencyHint:
-      "Вверху можно выбрать EUR/USD/UAH/PLN/CZK. Для PLN и CZK доступен только месячный план.",
+      "Для PLN и CZK сейчас доступен только месячный план. Годовой план доступен в EUR/USD/UAH.",
+
+    lifetimeTitle: "Lifetime Early Access скоро",
+    lifetimeText:
+      "Отдельный единоразовый доступ можно добавить позже как early supporter offer. Сначала нужно подключить отдельный Stripe price.",
+    lifetimeBadge: "планируется",
   },
+
   en: {
-    topTitle: "Premium ⭐",
+    topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "Full access without limits: lessons, trainer, audio, and statistics.",
+      "For learners who want more than a trial: unlock the full learning pace and keep moving.",
     badge: "Premium",
-    title: "Learning without limits 🚀",
+    title: "Learn without stops 🚀",
     subtitle:
-      "Unlock full A2, B1–B2, and go through lessons without a daily limit.",
+      "No daily limit, full level access, the full trainer, progress statistics, and the Premium Flunio theme.",
     bullets: [
-      "🔓 Full access to A2, B1, and B2",
+      "🔓 All course levels unlocked",
       "🚫 No daily limit on new lessons",
-      "🏋️ Full access to the trainer",
-      "🔁 Review only mistakes",
+      "🏋️ Full trainer access",
       "📊 Statistics, streaks, and records",
+      "🌌 Premium Flunio theme",
+      "🧠 More control over your progress",
     ],
 
     planTitle: "Choose a plan:",
@@ -191,7 +214,7 @@ const T: Record<Lang, PremiumTranslations> = {
     planHint: "You can cancel anytime.",
 
     priceNote:
-      "Choose currency: EUR / USD / UAH / PLN / CZK • Payment via Stripe • cancel anytime",
+      "Payment via Stripe • access activates automatically • cancel anytime",
 
     buy: (currencyLabel: string, price: string, interval: Interval) =>
       interval === "year"
@@ -204,17 +227,23 @@ const T: Record<Lang, PremiumTranslations> = {
     loading: "Loading…",
     opening: "Opening Stripe…",
 
-    compareTitle: "Free vs Premium",
-    compareSubtitle: "A difference you’ll feel right away.",
+    compareTitle: "What Premium changes",
+    compareSubtitle:
+      "Free gives you the start. Premium removes the limits and unlocks the full learning pace.",
     colFeature: "Feature",
     colFree: "Free",
     colPremium: "Premium",
     ctaAfterCompare: "Get Premium →",
-    premiumBetter: "better",
-    yearlyHint: "The yearly plan is the best choice if you’re learning seriously.",
-    monthlyHint: "You can switch to the yearly plan at any time.",
+    premiumBetter: "full access",
+    yearlyHint: "The yearly plan is better value if you are learning seriously.",
+    monthlyHint: "The monthly plan is useful if you want to try Premium first.",
     currencyHint:
-      "You can choose EUR/USD/UAH/PLN/CZK above. PLN and CZK are available only for the monthly plan.",
+      "PLN and CZK currently support monthly plans only. Yearly is available in EUR/USD/UAH.",
+
+    lifetimeTitle: "Lifetime Early Access soon",
+    lifetimeText:
+      "A one-time lifetime option can be added later as an early supporter offer. First, we need a separate Stripe price.",
+    lifetimeBadge: "planned",
   },
 };
 
@@ -229,11 +258,11 @@ const CURRENCY_LABEL: Record<Currency, string> = {
 const FEATURES: readonly FeatureRow[] = [
   {
     key: "levels",
-    ua: "Доступ до рівнів",
-    ru: "Доступ к уровням",
-    en: "Access to levels",
-    free: "A0–A2(1-10 Lessons)",
-    premium: "A0–B2",
+    ua: "Рівні курсу",
+    ru: "Уровни курса",
+    en: "Course levels",
+    free: "Стартові рівні",
+    premium: "Усі рівні",
   },
   {
     key: "limit",
@@ -252,37 +281,51 @@ const FEATURES: readonly FeatureRow[] = [
     premium: "✅",
   },
   {
-    key: "voice",
-    ua: "Озвучка",
-    ru: "Озвучка",
-    en: "Audio",
-    free: "✅",
-    premium: "✅",
-  },
-  {
-    key: "mistakes",
-    ua: "Повторення помилок",
-    ru: "Повторение ошибок",
-    en: "Mistake review",
-    free: "✅",
+    key: "theme",
+    ua: "Premium Flunio тема",
+    ru: "Premium Flunio тема",
+    en: "Premium Flunio theme",
+    free: "🔒",
     premium: "✅",
   },
   {
     key: "stats",
-    ua: "Серії та рекорди",
-    ru: "Серии и рекорды",
-    en: "Streaks and records",
-    free: "🔒",
-    premium: "✅",
+    ua: "Статистика, серії та рекорди",
+    ru: "Статистика, серии и рекорды",
+    en: "Statistics, streaks, and records",
+    free: "Базово",
+    premium: "Повністю",
+  },
+  {
+    key: "pace",
+    ua: "Темп навчання",
+    ru: "Темп обучения",
+    en: "Learning pace",
+    free: "Повільний",
+    premium: "Без обмежень",
+  },
+  {
+    key: "courses",
+    ua: "Курси",
+    ru: "Курсы",
+    en: "Courses",
+    free: "Обмежено",
+    premium: "Усі доступні",
   },
 ] as const;
 
 function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-amber-300/30 bg-amber-400/15 px-2 py-0.5 text-xs font-bold text-amber-300">
+    <span className="inline-flex items-center rounded-full border border-amber-300/30 bg-amber-400/15 px-2 py-0.5 text-xs font-bold text-amber-300 theme-simple:text-amber-700">
       {children}
     </span>
   );
+}
+
+function getFeatureText(feature: FeatureRow, lang: Lang) {
+  if (lang === "ru") return feature.ru;
+  if (lang === "en") return feature.en;
+  return feature.ua;
 }
 
 export default function PremiumClient() {
@@ -307,11 +350,13 @@ export default function PremiumClient() {
     if (interval === "year") {
       return ["eur", "usd", "uah"];
     }
+
     return ["eur", "usd", "uah", "pln", "czk"];
   }, [interval]);
 
   async function handleCheckout(currency: Currency) {
     setLoading(currency);
+
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -338,8 +383,10 @@ export default function PremiumClient() {
 
   async function handleManage() {
     setLoading("portal");
+
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
+
       const data = (await res.json().catch(() => ({}))) as {
         url?: string;
         error?: string;
@@ -363,18 +410,27 @@ export default function PremiumClient() {
         <h1 className="text-3xl font-semibold tracking-tight theme-text sm:text-4xl">
           {t.topTitle}
         </h1>
-        <p className="theme-text-muted">{t.topSubtitle}</p>
+
+        <p className="mx-auto max-w-2xl theme-text-muted">{t.topSubtitle}</p>
       </header>
 
-      <section className="flunio-card relative overflow-hidden rounded-3xl p-8 theme-text shadow-[0_0_30px_rgba(34,211,238,0.10)]">
-        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-4">
+      <section className="flunio-card relative overflow-hidden rounded-3xl p-6 theme-text shadow-[0_0_30px_rgba(34,211,238,0.10)] sm:p-8">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-cyan-400/15 blur-3xl" />
+
+        <div className="relative flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+          <div className="space-y-5">
             <div className="theme-pill inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
               {t.badge}
             </div>
 
-            <h2 className="text-2xl font-semibold theme-text">{t.title}</h2>
-            <p className="max-w-2xl theme-text-muted">{t.subtitle}</p>
+            <div className="space-y-3">
+              <h2 className="text-2xl font-semibold theme-text sm:text-3xl">
+                {t.title}
+              </h2>
+
+              <p className="max-w-2xl theme-text-muted">{t.subtitle}</p>
+            </div>
 
             {!isPremium ? (
               <div className="space-y-2">
@@ -433,7 +489,7 @@ export default function PremiumClient() {
             <div className="text-sm theme-text-muted">{t.priceNote}</div>
           </div>
 
-          <div className="flex flex-col gap-3 sm:pt-2">
+          <div className="flex w-full flex-col gap-3 lg:w-[360px] lg:pt-2">
             {isLoadingSession ? (
               <div className="theme-secondary-button inline-flex h-11 items-center justify-center rounded-2xl px-6 text-sm font-semibold">
                 {t.loading}
@@ -450,7 +506,7 @@ export default function PremiumClient() {
                       key={currency}
                       onClick={() => handleCheckout(currency)}
                       disabled={!!loading}
-                      className="theme-primary-button inline-flex h-11 items-center justify-center rounded-2xl px-6 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
+                      className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
                     >
                       {loading === currency
                         ? t.opening
@@ -486,11 +542,36 @@ export default function PremiumClient() {
       </section>
 
       {!isPremium ? (
+        <section className="flunio-card-soft rounded-3xl p-5 theme-text">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <div className="inline-flex items-center rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-300 theme-simple:text-cyan-700">
+                {t.lifetimeBadge}
+              </div>
+
+              <h2 className="text-lg font-semibold theme-text">
+                {t.lifetimeTitle}
+              </h2>
+
+              <p className="max-w-3xl text-sm theme-text-muted">
+                {t.lifetimeText}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold theme-text theme-simple:border-slate-200 theme-simple:bg-slate-50">
+              €49–69 one-time
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {!isPremium ? (
         <section className="flunio-card space-y-4 rounded-3xl p-6 theme-text">
           <div className="space-y-1 text-center">
             <h2 className="text-2xl font-semibold theme-text">
               {t.compareTitle}
             </h2>
+
             <p className="text-sm theme-text-muted">{t.compareSubtitle}</p>
           </div>
 
@@ -509,21 +590,21 @@ export default function PremiumClient() {
               </thead>
 
               <tbody>
-                {FEATURES.map((f) => (
+                {FEATURES.map((feature) => (
                   <tr
-                    key={f.key}
+                    key={feature.key}
                     className="border-t border-white/10 theme-simple:border-slate-200"
                   >
                     <td className="p-4 text-sm theme-text">
-                      {L === "ru" ? f.ru : L === "en" ? f.en : f.ua}
+                      {getFeatureText(feature, L)}
                     </td>
 
                     <td className="p-4 text-center text-sm theme-text-muted">
-                      {f.free}
+                      {feature.free}
                     </td>
 
                     <td className="bg-amber-400/10 p-4 text-center text-sm font-semibold text-amber-300 theme-simple:text-amber-700">
-                      {f.premium}
+                      {feature.premium}
                     </td>
                   </tr>
                 ))}
@@ -533,7 +614,7 @@ export default function PremiumClient() {
 
           <div className="flex flex-col items-center gap-3 pt-2">
             <button
-              onClick={() => handleCheckout(interval === "year" ? "eur" : "eur")}
+              onClick={() => handleCheckout("eur")}
               disabled={!!loading}
               className="theme-primary-button inline-flex h-11 items-center justify-center rounded-2xl px-8 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-0"
             >

@@ -6,10 +6,12 @@ import { getLessonsByBand, type CourseId } from "../courses/registry";
 
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import {
+  getLockedLessonReason,
+  isPremiumLesson,
+} from "@/app/learning/access/lessonAccess";
 
 type LessonsProgress = Record<string, any>;
-
-const FREE_A2_LESSONS = 10;
 
 function getLessonFromLessonsByBand(
   lessonsByBand: Record<string, any[]>,
@@ -38,21 +40,6 @@ function parseLevelId(id: string) {
   const m = /^([a-z]\d)-(\d+)$/.exec(id.toLowerCase());
   if (!m) return null;
   return { band: m[1], n: Number(m[2]) };
-}
-
-function isPremiumLevel(id: string) {
-  const parsed = parseLevelId(id);
-  if (!parsed) return false;
-
-  if (parsed.band === "b1" || parsed.band === "b2") return true;
-  if (parsed.band === "a2" && parsed.n > FREE_A2_LESSONS) return true;
-
-  return false;
-}
-
-function isFreeStarterUnlimitedLesson(id: string) {
-  const parsed = parseLevelId(id);
-  return parsed?.band === "a0" && parsed.n >= 1 && parsed.n <= 10;
 }
 
 function bandOrder(band: string) {
@@ -105,14 +92,6 @@ function nextLevelId(id: string) {
   return `${p.band}-${p.n + 1}`;
 }
 
-function isSameDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
 function isDone(lp: LessonsProgress | null | undefined, id: string) {
   if (!lp || typeof lp !== "object") return false;
 
@@ -122,9 +101,8 @@ function isDone(lp: LessonsProgress | null | undefined, id: string) {
 }
 
 /**
- * SAFE для FREE:
- * рахуємо прогрес тільки послідовно: a0-1, a0-2, ... поки done.
- * перший не-done = стоп. повертаємо останній done.
+ * For free users we recover progress only sequentially.
+ * This prevents jumping ahead by manually editing local/server progress.
  */
 function getLastDoneSequential(
   lp: LessonsProgress | null | undefined,
@@ -151,7 +129,7 @@ function getLastDoneSequential(
 }
 
 /**
- * MAX done (можна лишити для premium / діагностики)
+ * For premium users we can recover the highest completed lesson.
  */
 function getLastDoneMax(lp: LessonsProgress | null | undefined) {
   if (!lp || typeof lp !== "object") return null;
@@ -232,7 +210,30 @@ export default async function Page({
   const hasPremium =
     user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
-  if (!hasPremium && isPremiumLevel(levelId)) {
+  const lesson = getLessonFromLessonsByBand(lessonsByBand, levelId);
+
+  if (!lesson) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-10 theme-text">
+        <div className="flunio-card rounded-3xl p-6">
+          <h1 className="text-2xl font-semibold theme-text">
+            Урок не знайдено 😢
+          </h1>
+
+          <p className="mt-2 theme-text-muted">id = {levelId}</p>
+
+          <Link
+            href="/learning"
+            className="theme-secondary-button mt-4 inline-flex rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5"
+          >
+            ← Назад
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasPremium && isPremiumLesson(levelId)) {
     redirect("/premium");
   }
 
@@ -248,8 +249,6 @@ export default async function Page({
     },
     select: {
       lastUnlockedLevel: true,
-      dailyDate: true,
-      dailyCount: true,
       lessonsProgress: true,
     },
   });
@@ -275,44 +274,8 @@ export default async function Page({
 
   const allowed = lastUnlockedLevel ? nextLevelId(lastUnlockedLevel) : "a0-1";
 
-  const lesson = getLessonFromLessonsByBand(lessonsByBand, levelId);
-
-  if (!lesson) {
-    return (
-      <div className="mx-auto max-w-2xl px-4 py-10 theme-text">
-        <div className="flunio-card rounded-3xl p-6">
-          <h1 className="text-2xl font-semibold theme-text">
-            Урок не знайдено 😢
-          </h1>
-
-          <p className="mt-2 theme-text-muted">id = {levelId}</p>
-
-          <Link
-            href="/learning"
-            className="theme-secondary-button mt-4 inline-flex rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5"
-          >
-            ← Назад
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   if (!hasPremium && compareLevel(levelId, allowed) === 1) {
     redirect(`/learning/${allowed}`);
-  }
-
-  const today = new Date();
-  const dailyCount =
-    row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
-
-  if (
-    !hasPremium &&
-    compareLevel(levelId, allowed) === 0 &&
-    !isFreeStarterUnlimitedLesson(levelId) &&
-    dailyCount >= 2
-  ) {
-    redirect("/learning/limit");
   }
 
   const nextId = nextLevelId(levelId);
@@ -323,23 +286,13 @@ export default async function Page({
   if (!hasPremium) {
     if (nextId === levelId) {
       canGoNext = false;
-      lockedReason = "Скоро додамо наступний рівень/уроки.";
-    } else if (isPremiumLevel(nextId)) {
+      lockedReason = "unknown_lesson";
+    } else if (isPremiumLesson(nextId)) {
       canGoNext = false;
-      lockedReason = "Наступні уроки доступні лише з Premium.";
+      lockedReason = getLockedLessonReason(nextId);
     } else if (compareLevel(nextId, allowed) === 1) {
       canGoNext = false;
-      lockedReason = "Спочатку пройди попередні уроки/рівні (послідовно).";
-    }
-
-    if (
-      canGoNext &&
-      nextId === allowed &&
-      !isFreeStarterUnlimitedLesson(nextId) &&
-      dailyCount >= 2
-    ) {
-      canGoNext = false;
-      lockedReason = "Ліміт 2 нових уроки на день для безкоштовної версії.";
+      lockedReason = "sequence_locked";
     }
   }
 

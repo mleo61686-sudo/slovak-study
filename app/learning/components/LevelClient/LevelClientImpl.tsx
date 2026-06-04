@@ -11,6 +11,10 @@ import LessonFinished from "./LessonFinished";
 import LessonExerciseScreen, {
   preloadExerciseModules,
 } from "./LessonExerciseScreen";
+import {
+  getLockedLessonReason,
+  isFreeLesson,
+} from "@/app/learning/access/lessonAccess";
 
 type UiLang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
@@ -40,14 +44,22 @@ const UI = {
     lesson: "Урок",
     levelDone: "Рівень пройдено 🎉",
     result: "Результат",
-    nextLockedTitle: "Наступний урок зараз закритий 🔒",
+    nextLockedTitle: "Наступний урок входить у Premium 🔒",
     nextLockedDefault:
-      "У безкоштовній версії є ліміт/послідовність рівнів. Повернись до списку уроків.",
+      "A0 доступний безкоштовно. Щоб перейти до A1, A2, B1 або B2, відкрий Premium.",
     reviewAgain: "Переглянути слова знову",
     goNextLevel: "Перейти до наступного рівня →",
     toLessonsList: "До списку уроків",
     notAvailableFree: "Недоступно у free",
     saving: "Зберігаю прогрес…",
+
+    premiumA1Locked:
+      "A1 відкривається з Premium. A0 можна пройти безкоштовно без денного ліміту.",
+    premiumAdvancedLocked:
+      "Цей рівень входить у Premium. Відкрий Premium, щоб продовжити курс.",
+    premiumLessonLocked: "Цей урок входить у Premium.",
+    unknownLessonLocked: "Цей урок зараз недоступний.",
+    sequenceLocked: "Спочатку пройди попередні уроки послідовно.",
 
     introEyebrow: "Старт уроку",
     introTitle: "Що сьогодні вчимо?",
@@ -81,14 +93,22 @@ const UI = {
     lesson: "Урок",
     levelDone: "Уровень пройден 🎉",
     result: "Результат",
-    nextLockedTitle: "Следующий урок сейчас закрыт 🔒",
+    nextLockedTitle: "Следующий урок входит в Premium 🔒",
     nextLockedDefault:
-      "В бесплатной версии есть лимит/последовательность уроков. Вернись к списку уроков.",
+      "A0 доступен бесплатно. Чтобы перейти к A1, A2, B1 или B2, открой Premium.",
     reviewAgain: "Посмотреть слова снова",
     goNextLevel: "Перейти к следующему уровню →",
     toLessonsList: "К списку уроков",
     notAvailableFree: "Недоступно в free",
     saving: "Сохраняю прогресс…",
+
+    premiumA1Locked:
+      "A1 открывается с Premium. A0 можно пройти бесплатно без дневного лимита.",
+    premiumAdvancedLocked:
+      "Этот уровень входит в Premium. Открой Premium, чтобы продолжить курс.",
+    premiumLessonLocked: "Этот урок входит в Premium.",
+    unknownLessonLocked: "Этот урок сейчас недоступен.",
+    sequenceLocked: "Сначала пройди предыдущие уроки последовательно.",
 
     introEyebrow: "Старт урока",
     introTitle: "Что сегодня учим?",
@@ -122,14 +142,22 @@ const UI = {
     lesson: "Lesson",
     levelDone: "Level completed 🎉",
     result: "Result",
-    nextLockedTitle: "The next lesson is locked right now 🔒",
+    nextLockedTitle: "The next lesson is Premium 🔒",
     nextLockedDefault:
-      "In the free version there is a lesson limit/sequence. Return to the lessons list.",
+      "A0 is free. To continue with A1, A2, B1 or B2, unlock Premium.",
     reviewAgain: "Review words again",
     goNextLevel: "Go to the next level →",
     toLessonsList: "Back to lessons list",
     notAvailableFree: "Not available in free",
     saving: "Saving progress…",
+
+    premiumA1Locked:
+      "A1 unlocks with Premium. You can complete A0 for free without a daily limit.",
+    premiumAdvancedLocked:
+      "This level is included in Premium. Unlock Premium to continue the course.",
+    premiumLessonLocked: "This lesson is included in Premium.",
+    unknownLessonLocked: "This lesson is currently unavailable.",
+    sequenceLocked: "Complete the previous lessons in order first.",
 
     introEyebrow: "Lesson start",
     introTitle: "What are we learning today?",
@@ -177,14 +205,6 @@ function getNextLevelId(levelId: string) {
   return levelId;
 }
 
-function isFreeStarterUnlimitedLesson(levelId: string) {
-  const m = /^a0-(\d+)$/i.exec(String(levelId).toLowerCase());
-  if (!m) return false;
-
-  const n = Number(m[1]);
-  return n >= 1 && n <= 10;
-}
-
 const EXERCISES: ExerciseDef[] = [
   { kind: "chooseTranslation", title: "chooseTranslation", mode: "perWord" },
   { kind: "chooseSlovak", title: "chooseSlovak", mode: "perWord" },
@@ -223,6 +243,33 @@ function getCourseLabel(courseId: CourseId, t: (typeof UI)[UiLang]) {
   if (courseId === "cs") return t.courseCs;
   if (courseId === "pl") return t.coursePl;
   return t.courseSk;
+}
+
+function getLockedReasonText(
+  reason: string | undefined,
+  t: (typeof UI)[UiLang]
+): string | undefined {
+  if (!reason) return undefined;
+
+  switch (reason) {
+    case "premium_a1":
+      return t.premiumA1Locked;
+
+    case "premium_advanced":
+      return t.premiumAdvancedLocked;
+
+    case "premium_lesson":
+      return t.premiumLessonLocked;
+
+    case "unknown_lesson":
+      return t.unknownLessonLocked;
+
+    case "sequence_locked":
+      return t.sequenceLocked;
+
+    default:
+      return reason;
+  }
 }
 
 export default function LevelClient({
@@ -391,18 +438,18 @@ export default function LevelClient({
         const data = await res.json().catch(() => ({}));
 
         if (res.ok && data?.ok) {
-          const dailyCount =
-            typeof data?.dailyCount === "number" ? data.dailyCount : 0;
+          const nextIsFree = isFreeLesson(nextLevelId);
 
-          const nextIsStarterUnlimited =
-            isFreeStarterUnlimitedLesson(nextLevelId);
-          const freeCanGoNext = nextIsStarterUnlimited || dailyCount < 2;
-
-          if (freeCanGoNext) {
+          if (nextIsFree) {
             setCanGoNextNow(true);
             setLockedReasonNow(undefined);
           } else {
             setCanGoNextNow(canGoNext);
+            setLockedReasonNow(
+              canGoNext
+                ? undefined
+                : lockedReason ?? getLockedLessonReason(nextLevelId)
+            );
           }
         }
       } catch (e) {
@@ -492,7 +539,7 @@ export default function LevelClient({
         totalQuestions={totalQuestions}
         savingNext={savingNext}
         canGoNextNow={canGoNextNow}
-        lockedReasonNow={lockedReasonNow}
+        lockedReasonNow={getLockedReasonText(lockedReasonNow, t)}
         isNavigating={isNavigating}
         nextLevelId={nextLevelId}
         onReviewAgain={resetToLearn}

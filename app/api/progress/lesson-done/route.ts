@@ -12,6 +12,11 @@
  * }
  *
  * Старий flat формат автоматично мігрується як sk.
+ *
+ * Monetization model:
+ * - A0 is free without daily limit.
+ * - A1/A2/B1/B2 are Premium, checked before opening lesson pages.
+ * - This endpoint only saves completed lessons.
  */
 
 import { NextResponse } from "next/server";
@@ -57,8 +62,6 @@ function normalizeProgressStore(raw: unknown): CourseAwareProgress {
     return { byCourse };
   }
 
-  // Старий flat формат: { "a0-1": {...}, "a0-2": {...} }
-  // Мігруємо його як Slovak, бо історично перший курс був sk.
   if (isPlainObject(raw)) {
     return {
       byCourse: {
@@ -102,24 +105,8 @@ function updateLessonsForCourse(
   };
 }
 
-function isSameDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
 function toDayKey(d: Date) {
   return d.toISOString().slice(0, 10);
-}
-
-function isFreeStarterUnlimitedLesson(id: string) {
-  const m = /^a0-(\d+)$/i.exec(String(id).toLowerCase());
-  if (!m) return false;
-
-  const n = Number(m[1]);
-  return n >= 1 && n <= 10;
 }
 
 function isLessonDone(value: any) {
@@ -140,7 +127,7 @@ export async function POST(req: Request) {
   const { levelId } = body;
   const courseId = getCourseIdFromBody(body);
 
-  const id = String(levelId || "").toLowerCase();
+  const id = String(levelId || "").trim().toLowerCase();
 
   if (!id) {
     return NextResponse.json({ ok: false }, { status: 400 });
@@ -148,15 +135,12 @@ export async function POST(req: Request) {
 
   const user = await prisma.user.findUnique({
     where: { email },
-    select: { id: true, isPremium: true, premiumUntil: true },
+    select: { id: true },
   });
 
   if (!user) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
-
-  const hasPremium =
-    !!user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
 
   const today = new Date();
   const todayKey = toDayKey(today);
@@ -174,19 +158,26 @@ export async function POST(req: Request) {
           pl: {},
         },
       },
+
+      /**
+       * Legacy fields.
+       * We keep them because Prisma schema still has them,
+       * but lesson monetization no longer uses daily limits.
+       */
       dailyCount: 0,
       dailyDate: null,
       lastUnlockedLevel: null,
     },
     select: {
       lessonsProgress: true,
-      dailyCount: true,
-      dailyDate: true,
       lastUnlockedLevel: true,
     },
   });
 
-  const courseLessons = getLessonsForCourse(row.lessonsProgress ?? null, courseId);
+  const courseLessons = getLessonsForCourse(
+    row.lessonsProgress ?? null,
+    courseId
+  );
 
   const wasDone = isLessonDone(courseLessons[id]);
 
@@ -194,25 +185,10 @@ export async function POST(req: Request) {
     return NextResponse.json({
       ok: true,
       courseId,
-      dailyCount:
-        row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0,
+      dailyCount: 0,
       alreadyDone: true,
     });
   }
-
-  const currentCount =
-    row.dailyDate && isSameDay(row.dailyDate, today) ? row.dailyCount : 0;
-
-  const shouldCountDaily = !hasPremium && !isFreeStarterUnlimitedLesson(id);
-
-  if (shouldCountDaily && currentCount >= 2) {
-    return NextResponse.json(
-      { ok: false, code: "DAILY_LIMIT", limit: 2 },
-      { status: 429 }
-    );
-  }
-
-  const nextCount = currentCount + (shouldCountDaily ? 1 : 0);
 
   const prevObj =
     typeof courseLessons[id] === "object" && courseLessons[id]
@@ -241,11 +217,18 @@ export async function POST(req: Request) {
     where: { userId: user.id },
     data: {
       lessonsProgress: nextLessonsProgress,
-      dailyDate: today,
-      dailyCount: nextCount,
 
-      // Поки залишаємо старе поле як є.
-      // Воно global, але не ламаємо Prisma-схему зараз.
+      /**
+       * Keep legacy fields stable.
+       * dailyCount/dailyDate no longer control lesson access.
+       */
+      dailyCount: 0,
+      dailyDate: null,
+
+      /**
+       * Still used by some lesson navigation logic.
+       * It is global for now, so we do not change Prisma schema in this step.
+       */
       lastUnlockedLevel: id,
     },
   });
@@ -253,7 +236,7 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ok: true,
     courseId,
-    dailyCount: nextCount,
+    dailyCount: 0,
     alreadyDone: false,
   });
 }

@@ -9,9 +9,7 @@ import { CEFR_LEVELS } from "../../data";
 import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
-
-const FREE_A2_LESSONS = 10;
-const DAILY_FREE_LIMIT = 2;
+import { isPremiumLesson } from "@/app/learning/access/lessonAccess";
 
 const PROGRESS_EVENT = "slovakStudy:progressChanged";
 const SYNC_EVENT = "slovakStudy:syncState";
@@ -29,37 +27,56 @@ function parseLevelId(lessonId: string) {
   };
 }
 
-function isFreeStarterUnlimitedLesson(lessonId: string) {
-  const parsed = parseLevelId(lessonId);
-  return parsed?.band === "a0" && parsed.n >= 1 && parsed.n <= 10;
+function bandOrder(band: string) {
+  const b = String(band).toLowerCase();
+
+  if (b === "a0") return 0;
+  if (b === "a1") return 1;
+  if (b === "a2") return 2;
+  if (b === "b1") return 3;
+  if (b === "b2") return 4;
+
+  return 0;
 }
 
-function isPremiumLesson(lessonId: string) {
-  const parsed = parseLevelId(lessonId);
-  if (!parsed) return false;
+function compareLevel(a: string, b: string) {
+  const pa = parseLevelId(a);
+  const pb = parseLevelId(b);
 
-  if (parsed.band === "b1" || parsed.band === "b2") return true;
-  if (parsed.band === "a2" && parsed.n > FREE_A2_LESSONS) return true;
+  if (!pa || !pb) return 0;
 
-  return false;
+  const ba = bandOrder(pa.band);
+  const bb = bandOrder(pb.band);
+
+  if (ba !== bb) return ba < bb ? -1 : 1;
+
+  if (pa.n === pb.n) return 0;
+  return pa.n < pb.n ? -1 : 1;
 }
 
-async function getServerDailyCount() {
-  try {
-    const res = await fetch("/api/progress", {
-      method: "GET",
-      credentials: "include",
-      cache: "no-store",
-    });
+function isDoneId(progress: LessonsProgress, id: string) {
+  const key = id.toLowerCase();
+  const v: LessonProgressValue | undefined =
+    (progress as any)[key] ?? (progress as any)[id];
 
-    if (!res.ok) return 0;
+  return v === true || (typeof v === "object" && (v as any)?.done === true);
+}
 
-    const data = await res.json();
+function getAllowedSequential(progress: LessonsProgress, lessonIds: string[]) {
+  const sortedIds = [...lessonIds].sort((a, b) => compareLevel(a, b));
 
-    return typeof data?.dailyCount === "number" ? data.dailyCount : 0;
-  } catch {
-    return 0;
+  for (const id of sortedIds) {
+    if (isPremiumLesson(id)) {
+      return id.toLowerCase();
+    }
+
+    if (!isDoneId(progress, id)) {
+      return id.toLowerCase();
+    }
   }
+
+  const last = sortedIds[sortedIds.length - 1];
+  return last ? last.toLowerCase() : "a0-1";
 }
 
 export default function BandPage() {
@@ -91,16 +108,10 @@ export default function BandPage() {
   }, []);
 
   const [progress, setProgress] = useState<LessonsProgress>({});
-  const [dailyCount, setDailyCount] = useState<number | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
-
-    const refresh = async () => {
+    const refresh = () => {
       setProgress(getLessonsProgress());
-
-      const count = await getServerDailyCount();
-      if (!cancelled) setDailyCount(count);
     };
 
     refresh();
@@ -119,35 +130,23 @@ export default function BandPage() {
     window.addEventListener(SYNC_EVENT, onSyncState);
     document.addEventListener("visibilitychange", refresh);
 
-    const interval = window.setInterval(refresh, 3000);
-
     return () => {
-      cancelled = true;
       window.removeEventListener("focus", refresh);
       window.removeEventListener("storage", refresh);
       window.removeEventListener(PROGRESS_EVENT, refresh);
       window.removeEventListener(SYNC_EVENT, onSyncState);
       document.removeEventListener("visibilitychange", refresh);
-      window.clearInterval(interval);
     };
   }, []);
 
-  const hasReachedDailyLimit =
-    !isPremium &&
-    !isAdmin &&
-    dailyCount !== null &&
-    dailyCount >= DAILY_FREE_LIMIT;
-
   const isDone = (id: string) => {
-    const key = id.toLowerCase();
-    const v: LessonProgressValue | undefined =
-      (progress as any)[key] ?? (progress as any)[id];
-    return v === true || (typeof v === "object" && (v as any)?.done === true);
+    return isDoneId(progress, id);
   };
 
   const getStats = (id: string) => {
     const key = id.toLowerCase();
     const v = (progress as any)[key] ?? (progress as any)[id];
+
     if (!v || v === true || typeof v !== "object") return null;
 
     if (typeof v.lastTotal === "number" && v.lastTotal > 0) {
@@ -188,6 +187,7 @@ export default function BandPage() {
               <span className="font-medium theme-text">bandId:</span>{" "}
               {bandId || "(порожньо)"}
             </div>
+
             <div className="mt-2">
               <span className="font-medium theme-text">
                 {lang === "ua"
@@ -212,6 +212,13 @@ export default function BandPage() {
   }
 
   const doneCount = band.lessons.filter((l) => isDone(l.id)).length;
+  const allowed = getAllowedSequential(
+    progress,
+    band.lessons.map((lesson) => lesson.id)
+  );
+
+  const bandIsPremiumOnly = band.id !== "a0";
+  const bandLockedByPremium = bandIsPremiumOnly && !isPremium && !isAdmin;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 theme-text">
@@ -240,7 +247,17 @@ export default function BandPage() {
               {band.lessons.length * 10}
             </p>
 
-            {isPremium && (
+            {band.id === "a0" && !isPremium && !isAdmin && (
+              <div className="theme-pill mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
+                {lang === "ua"
+                  ? "A0 безкоштовно — без денного ліміту"
+                  : lang === "ru"
+                    ? "A0 бесплатно — без дневного лимита"
+                    : "A0 is free — no daily limit"}
+              </div>
+            )}
+
+            {(isPremium || isAdmin) && (
               <div className="theme-premium-badge mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
                 ⭐{" "}
                 {lang === "ua"
@@ -251,13 +268,13 @@ export default function BandPage() {
               </div>
             )}
 
-            {hasReachedDailyLimit && (
+            {bandLockedByPremium && (
               <div className="theme-pill mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
                 {lang === "ua"
-                  ? "Ліміт на сьогодні вичерпано 🔒"
+                  ? "Цей рівень входить у Premium 🔒"
                   : lang === "ru"
-                    ? "Лимит на сегодня исчерпан 🔒"
-                    : "Daily limit reached 🔒"}
+                    ? "Этот уровень входит в Premium 🔒"
+                    : "This level is included in Premium 🔒"}
               </div>
             )}
           </div>
@@ -283,49 +300,68 @@ export default function BandPage() {
         </div>
       </div>
 
+      {bandLockedByPremium ? (
+        <div className="flunio-card mt-8 rounded-3xl p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold theme-text">
+                {lang === "ua"
+                  ? "Продовження курсу доступне в Premium"
+                  : lang === "ru"
+                    ? "Продолжение курса доступно в Premium"
+                    : "Continue this course with Premium"}
+              </h2>
+
+              <p className="mt-2 text-sm theme-text-muted">
+                {lang === "ua"
+                  ? "A0 можна пройти безкоштовно. A1, A2, B1 і B2 відкриваються з Premium."
+                  : lang === "ru"
+                    ? "A0 можно пройти бесплатно. A1, A2, B1 и B2 открываются с Premium."
+                    : "A0 is free. A1, A2, B1 and B2 unlock with Premium."}
+              </p>
+            </div>
+
+            <Link
+              href="/premium"
+              className="theme-primary-button inline-flex min-h-10 items-center justify-center rounded-2xl px-5 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
+            >
+              {lang === "ua"
+                ? "Відкрити Premium"
+                : lang === "ru"
+                  ? "Открыть Premium"
+                  : "Unlock Premium"}
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {band.lessons.map((lesson, idx) => {
           const done = isDone(lesson.id);
           const stats = getStats(lesson.id);
 
           const prev = band.lessons[idx - 1];
+
           const lockedByProgress =
             !isPremium && !isAdmin && idx > 0 && prev && !isDone(prev.id);
 
           const lockedByPremium =
             !isPremium && !isAdmin && isPremiumLesson(lesson.id);
 
-          const lessonUsesDailyLimit =
-            !isFreeStarterUnlimitedLesson(lesson.id);
-
-          const lockedByDailyLimit =
-            !isPremium &&
-            !isAdmin &&
-            !done &&
-            lessonUsesDailyLimit &&
-            (dailyCount === null || dailyCount >= DAILY_FREE_LIMIT);
-
-          const locked =
-            lockedByProgress || lockedByPremium || lockedByDailyLimit;
+          const locked = lockedByProgress || lockedByPremium;
 
           const cardClass =
             "theme-inner-card rounded-2xl p-4 shadow-[0_0_18px_rgba(34,211,238,0.06)] transition hover:-translate-y-0.5 hover:border-cyan-400/40";
 
           const lessonTitle = lesson.title[lang] ?? lesson.title.ua;
 
-          const lockedText = lockedByDailyLimit
-            ? lang === "ua"
-              ? "Ліміт на сьогодні"
+          const lockedText = lockedByPremium
+            ? "Premium"
+            : lang === "ua"
+              ? "Закрито"
               : lang === "ru"
-                ? "Лимит на сегодня"
-                : "Daily limit"
-            : lockedByPremium
-              ? "Premium"
-              : lang === "ua"
-                ? "Закрито"
-                : lang === "ru"
-                  ? "Закрыто"
-                  : "Locked";
+                ? "Закрыто"
+                : "Locked";
 
           if (locked) {
             return (
@@ -335,6 +371,7 @@ export default function BandPage() {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="font-medium theme-text">{lessonTitle}</div>
+
                   <div className="text-xs theme-text-subtle">
                     {lesson.wordsCount}{" "}
                     {lang === "ua" ? "слів" : lang === "ru" ? "слов" : "words"}
@@ -360,10 +397,10 @@ export default function BandPage() {
                     className="theme-primary-button mt-3 inline-flex rounded-xl px-3 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
                   >
                     {lang === "ua"
-                      ? "Купити Premium"
+                      ? "Відкрити Premium"
                       : lang === "ru"
-                        ? "Купить Premium"
-                        : "Buy Premium"}
+                        ? "Открыть Premium"
+                        : "Unlock Premium"}
                   </Link>
                 )}
               </div>
@@ -380,6 +417,7 @@ export default function BandPage() {
                 <div className="font-medium theme-text">
                   {lessonTitle} {done ? "✅" : ""}
                 </div>
+
                 <div className="text-xs theme-text-subtle">
                   {lesson.wordsCount}{" "}
                   {lang === "ua" ? "слів" : lang === "ru" ? "слов" : "words"}
@@ -392,6 +430,16 @@ export default function BandPage() {
                 <div className="mt-1 text-xs theme-text-subtle">
                   ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
                   {stats.lastTotal}
+                </div>
+              )}
+
+              {!done && lesson.id === allowed && (
+                <div className="theme-pill mt-3 inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm">
+                  {lang === "ua"
+                    ? "Наступний урок"
+                    : lang === "ru"
+                      ? "Следующий урок"
+                      : "Next lesson"}
                 </div>
               )}
             </Link>
