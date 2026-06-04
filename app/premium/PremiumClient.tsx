@@ -48,13 +48,13 @@ type PremiumTranslations = {
   currencyHint: string;
 };
 
+type LocalizedText = Record<Lang, string>;
+
 type FeatureRow = {
   key: string;
-  ua: string;
-  ru: string;
-  en: string;
-  free: string;
-  premium: string;
+  label: LocalizedText;
+  free: LocalizedText;
+  premium: LocalizedText;
 };
 
 const YEARLY_DISPLAY_PRICE: Partial<Record<Currency, string>> = {
@@ -81,11 +81,11 @@ const T: Record<Lang, PremiumTranslations> = {
     subtitle:
       "Безкоштовно можна пройти A0. Якщо хочеш рухатися далі, Premium відкриває A1, A2, B1, B2, тренажер і більше можливостей для повторення.",
     bullets: [
-      "🔓 A1, A2, B1 та B2 після безкоштовного A0",
+      "🔓 Доступ до A1, A2, B1 та B2",
       "🏋️ Тренажер для активної практики",
       "🔁 Більше повторення слів",
       "📊 Серії, рекорди та статистика навчання",
-      "🌍 Доступ до всіх активних курсів",
+      "🌍 Всі активні курси без обмеження по рівнях",
       "⚡ Без daily lesson лімітів",
     ],
 
@@ -111,7 +111,7 @@ const T: Record<Lang, PremiumTranslations> = {
 
     compareTitle: "Що відкриває Premium",
     compareSubtitle:
-      "Free дає нормальний старт з A0. Premium потрібен тоді, коли ти хочеш продовжити курс і практикуватися серйозніше.",
+      "Free дає стартовий рівень. Premium потрібен, якщо ти хочеш продовжити курс і практикуватися серйозніше.",
     colFeature: "Можливість",
     colFree: "Free",
     colPremium: "Premium",
@@ -133,11 +133,11 @@ const T: Record<Lang, PremiumTranslations> = {
     subtitle:
       "Бесплатно можно пройти A0. Если хочешь двигаться дальше, Premium открывает A1, A2, B1, B2, тренажёр и больше возможностей для повторения.",
     bullets: [
-      "🔓 A1, A2, B1 и B2 после бесплатного A0",
+      "🔓 Доступ к A1, A2, B1 и B2",
       "🏋️ Тренажёр для активной практики",
       "🔁 Больше повторения слов",
       "📊 Серии, рекорды и статистика обучения",
-      "🌍 Доступ ко всем активным курсам",
+      "🌍 Все активные курсы без ограничения по уровням",
       "⚡ Без daily lesson лимитов",
     ],
 
@@ -163,7 +163,7 @@ const T: Record<Lang, PremiumTranslations> = {
 
     compareTitle: "Что открывает Premium",
     compareSubtitle:
-      "Free даёт нормальный старт с A0. Premium нужен тогда, когда ты хочешь продолжить курс и практиковаться серьёзнее.",
+      "Free даёт стартовый уровень. Premium нужен, если ты хочешь продолжить курс и практиковаться серьёзнее.",
     colFeature: "Возможность",
     colFree: "Free",
     colPremium: "Premium",
@@ -185,11 +185,11 @@ const T: Record<Lang, PremiumTranslations> = {
     subtitle:
       "You can complete A0 for free. Premium unlocks A1, A2, B1, B2, the trainer, and more ways to review what you learn.",
     bullets: [
-      "🔓 A1, A2, B1 and B2 after free A0",
+      "🔓 Access to A1, A2, B1 and B2",
       "🏋️ Trainer for active practice",
       "🔁 More word review",
       "📊 Streaks, records and learning stats",
-      "🌍 Access to all active courses",
+      "🌍 All active courses without level restrictions",
       "⚡ No daily lesson limits",
     ],
 
@@ -215,7 +215,7 @@ const T: Record<Lang, PremiumTranslations> = {
 
     compareTitle: "What Premium unlocks",
     compareSubtitle:
-      "Free gives you a solid start with A0. Premium is for continuing the course and practicing more seriously.",
+      "Free gives you the starter level. Premium is for continuing the course and practicing more seriously.",
     colFeature: "Feature",
     colFree: "Free",
     colPremium: "Premium",
@@ -238,60 +238,94 @@ const CURRENCY_LABEL: Record<Currency, string> = {
 
 const FEATURES: readonly FeatureRow[] = [
   {
-    key: "levels",
-    ua: "Рівні навчання",
-    ru: "Уровни обучения",
-    en: "Learning levels",
-    free: "A0",
-    premium: "A0–B2",
-  },
-  {
-    key: "freeStart",
-    ua: "Безкоштовний старт",
-    ru: "Бесплатный старт",
-    en: "Free start",
-    free: "✅ A0",
-    premium: "✅ A0",
-  },
-  {
-    key: "advancedLevels",
-    ua: "Продовження після A0",
-    ru: "Продолжение после A0",
-    en: "After A0",
-    free: "🔒",
-    premium: "✅ A1, A2, B1, B2",
+    key: "courseAccess",
+    label: {
+      ua: "Доступ до курсу",
+      ru: "Доступ к курсу",
+      en: "Course access",
+    },
+    free: {
+      ua: "Стартовий рівень",
+      ru: "Стартовый уровень",
+      en: "Starter level",
+    },
+    premium: {
+      ua: "Весь шлях A0–B2",
+      ru: "Весь путь A0–B2",
+      en: "Full path A0–B2",
+    },
   },
   {
     key: "trainer",
-    ua: "Тренажер для практики",
-    ru: "Тренажёр для практики",
-    en: "Practice trainer",
-    free: "🔒",
-    premium: "✅",
+    label: {
+      ua: "Тренажер",
+      ru: "Тренажёр",
+      en: "Trainer",
+    },
+    free: {
+      ua: "🔒",
+      ru: "🔒",
+      en: "🔒",
+    },
+    premium: {
+      ua: "✅ повний доступ",
+      ru: "✅ полный доступ",
+      en: "✅ full access",
+    },
   },
   {
     key: "wordReview",
-    ua: "Повторення слів",
-    ru: "Повторение слов",
-    en: "Word review",
-    free: "✅ базове",
-    premium: "✅ більше можливостей",
+    label: {
+      ua: "Повторення слів",
+      ru: "Повторение слов",
+      en: "Word review",
+    },
+    free: {
+      ua: "Базове",
+      ru: "Базовое",
+      en: "Basic",
+    },
+    premium: {
+      ua: "Розширене",
+      ru: "Расширенное",
+      en: "Advanced",
+    },
   },
   {
-    key: "stats",
-    ua: "Серії, рекорди та статистика",
-    ru: "Серии, рекорды и статистика",
-    en: "Streaks, records and stats",
-    free: "🔒 частково",
-    premium: "✅",
+    key: "progress",
+    label: {
+      ua: "Прогрес навчання",
+      ru: "Прогресс обучения",
+      en: "Learning progress",
+    },
+    free: {
+      ua: "Обмежено",
+      ru: "Ограниченно",
+      en: "Limited",
+    },
+    premium: {
+      ua: "Серії, рекорди, статистика",
+      ru: "Серии, рекорды, статистика",
+      en: "Streaks, records, stats",
+    },
   },
   {
     key: "courses",
-    ua: "Активні курси",
-    ru: "Активные курсы",
-    en: "Active courses",
-    free: "A0",
-    premium: "✅ всі рівні",
+    label: {
+      ua: "Активні курси",
+      ru: "Активные курсы",
+      en: "Active courses",
+    },
+    free: {
+      ua: "Тільки старт",
+      ru: "Только старт",
+      en: "Starter only",
+    },
+    premium: {
+      ua: "Всі рівні",
+      ru: "Все уровни",
+      en: "All levels",
+    },
   },
 ] as const;
 
@@ -303,10 +337,8 @@ function Badge({ children }: { children: React.ReactNode }) {
   );
 }
 
-function getFeatureText(feature: FeatureRow, lang: Lang) {
-  if (lang === "ru") return feature.ru;
-  if (lang === "en") return feature.en;
-  return feature.ua;
+function getText(text: LocalizedText, lang: Lang) {
+  return text[lang] ?? text.ua;
 }
 
 export default function PremiumClient() {
@@ -553,15 +585,15 @@ export default function PremiumClient() {
                     className="border-t border-white/10 theme-simple:border-slate-200"
                   >
                     <td className="p-4 text-sm theme-text">
-                      {getFeatureText(feature, L)}
+                      {getText(feature.label, L)}
                     </td>
 
                     <td className="p-4 text-center text-sm theme-text-muted">
-                      {feature.free}
+                      {getText(feature.free, L)}
                     </td>
 
                     <td className="bg-amber-400/10 p-4 text-center text-sm font-semibold text-amber-300 theme-simple:text-amber-700">
-                      {feature.premium}
+                      {getText(feature.premium, L)}
                     </td>
                   </tr>
                 ))}
