@@ -145,8 +145,18 @@ export default function ChooseSlovak({
       `}</style>
 
       <div className="space-y-3 theme-text">
-        <div className="text-center text-[15px] font-medium leading-snug theme-text">
-          {title}
+        <div
+          className={[
+            "text-lg font-semibold theme-text transition-all duration-300",
+            word.img
+              ? imageLoaded
+                ? "translate-y-0 opacity-100"
+                : "translate-y-1 opacity-90"
+              : "translate-y-0 opacity-100",
+          ].join(" ")}
+        >
+          {title}{" "}
+          <span className="font-bold theme-accent-text">{translation}</span>
         </div>
 
         {word.img ? (
@@ -184,22 +194,7 @@ export default function ChooseSlovak({
 
         <div
           className={[
-            "text-center transition-all duration-300",
-            word.img
-              ? imageLoaded
-                ? "translate-y-0 opacity-100"
-                : "translate-y-1 opacity-90"
-              : "translate-y-0 opacity-100",
-          ].join(" ")}
-        >
-          <div className="mx-auto inline-flex max-w-full items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-400/10 px-4 py-2 text-2xl font-black leading-tight theme-accent-text sm:text-[30px]">
-            <span className="break-words">{translation}</span>
-          </div>
-        </div>
-
-        <div
-          className={[
-            "flex justify-center transition-all duration-300",
+            "mt-2 transition-all duration-300",
             word.img
               ? imageLoaded
                 ? "translate-y-0 opacity-100"

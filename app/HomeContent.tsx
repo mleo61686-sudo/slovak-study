@@ -63,11 +63,11 @@ const t: Record<Lang, HomeTranslations> = {
     ctaLearning: "Перейти до навчання 🚀",
     ctaDict: "Відкрити словник",
     ctaGrammar: "Перейти до граматики",
-    starterBadge: "🚀 Перші 10 уроків у кожному курсі — без ліміту",
+    starterBadge: "🚀 A0 безкоштовний — почни навчання без оплати",
     free: [
-      "Короткі уроки по 10 слів без перевантаження",
+      "A0 відкритий безкоштовно для старту з нуля",
       "Словник, граматика та приклади речень в одному місці",
-      "Практика з озвучкою, прогресом і повторенням помилок",
+      "Короткі уроки, озвучка та вправи для щоденної практики",
     ],
 
     seoH2: "Онлайн курс словацької, чеської та польської мов",
@@ -76,17 +76,17 @@ const t: Record<Lang, HomeTranslations> = {
     seoP2:
       "Сайт підходить для людей, які планують працювати, навчатися або жити в Європі. Вивчайте словацьку, чеську та польську онлайн у зручному форматі, з короткими уроками, поступовим ускладненням матеріалу та практикою для реального життя.",
 
-    premiumTitle: "Premium — навчання без обмежень 🚀",
+    premiumTitle: "Premium — повний шлях після A0 🚀",
     premiumSubtitle:
-      "Відкрий усі рівні A0–B2 та отримай повний доступ до всіх доступних курсів без денного ліміту.",
+      "A0 доступний безкоштовно. Premium відкриває A1–B2, тренажер, повторення слів і всі активні курси Flunio в одній підписці.",
     premiumBullets: [
-      "🔓 Усі рівні та уроки відкриті одразу (A0–B2)",
-      "🇸🇰 Повний доступ до словацького курсу",
-      "🇨🇿 Повний доступ до чеського курсу",
-      "🇵🇱 Повний доступ до польського курсу",
-      "🚫 Без денного ліміту на нові уроки",
+      "🔓 Доступ до преміум-рівнів A1–B2",
+      "🌍 Усі активні курси в одній підписці",
+      "🇸🇰 Словацький курс",
+      "🇨🇿 Чеський курс",
+      "🇵🇱 Польський курс",
       "🏋️ Повний доступ до тренажера",
-      "🔁 Повторення тільки помилок",
+      "🔁 Розширене повторення слів",
       "📊 Статистика, серії та рекорди",
     ],
     premiumPriceNote:
@@ -173,11 +173,11 @@ const t: Record<Lang, HomeTranslations> = {
     ctaLearning: "Перейти к обучению 🚀",
     ctaDict: "Открыть словарь",
     ctaGrammar: "Перейти к грамматике",
-    starterBadge: "🚀 Первые 10 уроков в каждом курсе — без лимита",
+    starterBadge: "🚀 A0 бесплатный — начни обучение без оплаты",
     free: [
-      "Короткие уроки по 10 слов без перегруза",
+      "A0 открыт бесплатно для старта с нуля",
       "Словарь, грамматика и примеры предложений в одном месте",
-      "Практика с озвучкой, прогрессом и повторением ошибок",
+      "Короткие уроки, озвучка и упражнения для ежедневной практики",
     ],
 
     seoH2: "Онлайн курс словацкого, чешского и польского языков",
@@ -186,17 +186,17 @@ const t: Record<Lang, HomeTranslations> = {
     seoP2:
       "Сайт подходит для людей, которые планируют работать, учиться или жить в Европе. Изучайте словацкий, чешский и польский онлайн в удобном формате: короткие уроки, постепенное усложнение материала и практика для реальной жизни.",
 
-    premiumTitle: "Premium — обучение без ограничений 🚀",
+    premiumTitle: "Premium — полный путь после A0 🚀",
     premiumSubtitle:
-      "Открой все уровни A0–B2 и получи полный доступ ко всем доступным курсам без дневного лимита.",
+      "A0 доступен бесплатно. Premium открывает A1–B2, тренажёр, повторение слов и все активные курсы Flunio в одной подписке.",
     premiumBullets: [
-      "🔓 Все уровни и уроки открыты сразу (A0–B2)",
-      "🇸🇰 Полный доступ к словацкому курсу",
-      "🇨🇿 Полный доступ к чешскому курсу",
-      "🇵🇱 Полный доступ к польскому курсу",
-      "🚫 Без дневного лимита на новые уроки",
+      "🔓 Доступ к премиум-уровням A1–B2",
+      "🌍 Все активные курсы в одной подписке",
+      "🇸🇰 Словацкий курс",
+      "🇨🇿 Чешский курс",
+      "🇵🇱 Польский курс",
       "🏋️ Полный доступ к тренажёру",
-      "🔁 Повторять только ошибки",
+      "🔁 Расширенное повторение слов",
       "📊 Статистика, серии и рекорды",
     ],
     premiumPriceNote:
@@ -284,11 +284,11 @@ const t: Record<Lang, HomeTranslations> = {
     ctaLearning: "Go to learning 🚀",
     ctaDict: "Open dictionary",
     ctaGrammar: "Go to grammar",
-    starterBadge: "🚀 First 10 lessons in each course — unlimited",
+    starterBadge: "🚀 A0 is free — start learning without payment",
     free: [
-      "Short 10-word lessons without overload",
+      "A0 is open for free, so you can start from zero",
       "Dictionary, grammar, and example sentences in one place",
-      "Practice with audio, progress tracking, and mistake review",
+      "Short lessons, audio, and exercises for daily practice",
     ],
 
     seoH2: "Online Slovak, Czech, and Polish course",
@@ -297,17 +297,17 @@ const t: Record<Lang, HomeTranslations> = {
     seoP2:
       "The website is suitable for people who plan to work, study, or live in Europe. Learn Slovak, Czech, and Polish online in a convenient format with short lessons, gradual progression, and practice for real life.",
 
-    premiumTitle: "Premium — learning without limits 🚀",
+    premiumTitle: "Premium — continue after A0 🚀",
     premiumSubtitle:
-      "Unlock all A0–B2 levels and get full access to all available courses with no daily limit.",
+      "A0 is free. Premium unlocks A1–B2, the trainer, word review, and all active Flunio courses in one subscription.",
     premiumBullets: [
-      "🔓 All levels and lessons unlocked instantly (A0–B2)",
-      "🇸🇰 Full access to the Slovak course",
-      "🇨🇿 Full access to the Czech course",
-      "🇵🇱 Full access to the Polish course",
-      "🚫 No daily limit on new lessons",
+      "🔓 Access to premium levels A1–B2",
+      "🌍 All active courses in one subscription",
+      "🇸🇰 Slovak course",
+      "🇨🇿 Czech course",
+      "🇵🇱 Polish course",
       "🏋️ Full access to the trainer",
-      "🔁 Review only mistakes",
+      "🔁 Advanced word review",
       "📊 Statistics, streaks, and records",
     ],
     premiumPriceNote:
