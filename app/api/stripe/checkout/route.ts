@@ -25,13 +25,13 @@ const PRICE_MAP: Record<CurrencyCode, { month?: string; year?: string }> = {
     month: process.env.STRIPE_PRICE_UAH,
     year: process.env.STRIPE_PRICE_UAH_YEAR,
   },
-
-  // PLN / CZK only monthly for now
   pln: {
     month: process.env.STRIPE_PRICE_PLN,
+    year: process.env.STRIPE_PRICE_PLN_YEAR,
   },
   czk: {
     month: process.env.STRIPE_PRICE_CZK,
+    year: process.env.STRIPE_PRICE_CZK_YEAR,
   },
 };
 
