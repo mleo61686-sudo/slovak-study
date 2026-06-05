@@ -57,36 +57,37 @@ type FeatureRow = {
   premium: LocalizedText;
 };
 
-const YEARLY_DISPLAY_PRICE: Partial<Record<Currency, string>> = {
-  eur: "€79",
-  usd: "$89",
-  uah: "₴3490",
+const YEARLY_DISPLAY_PRICE: Record<Currency, string> = {
+  eur: "€59.99",
+  usd: "$59.99",
+  uah: "₴2399",
+  pln: "239.99 zł",
+  czk: "1499 Kč",
 };
 
 const MONTHLY_DISPLAY_PRICE: Record<Currency, string> = {
-  eur: "€7.99",
-  usd: "$8.99",
-  uah: "₴349",
-  pln: "34 zł",
-  czk: "199 Kč",
+  eur: "€9.99",
+  usd: "$9.99",
+  uah: "₴399",
+  pln: "39.99 zł",
+  czk: "249 Kč",
 };
 
 const T: Record<Lang, PremiumTranslations> = {
   ua: {
     topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "A0 доступний безкоштовно. Premium відкриває наступні рівні, тренажер і більше практики.",
+      "A0 доступний безкоштовно. Premium відкриває A1–B2, тренажер і всі активні курси Flunio.",
     badge: "Premium",
     title: "Продовжуй навчання після A0 🚀",
     subtitle:
-      "Безкоштовно можна пройти A0. Якщо хочеш рухатися далі, Premium відкриває A1, A2, B1, B2, тренажер і більше можливостей для повторення.",
+      "Безкоштовно можна пройти A0. Premium відкриває A1, A2, B1, B2, тренажер, повторення слів і всі активні курси в одній підписці.",
     bullets: [
       "🔓 Доступ до A1, A2, B1 та B2",
+      "🌍 Усі активні курси в одній підписці",
       "🏋️ Тренажер для активної практики",
-      "🔁 Більше повторення слів",
+      "🔁 Розширене повторення слів",
       "📊 Серії, рекорди та статистика навчання",
-      "🌍 Всі активні курси без обмеження по рівнях",
-      "⚡ Без daily lesson лімітів",
     ],
 
     planTitle: "Обери план:",
@@ -121,24 +122,23 @@ const T: Record<Lang, PremiumTranslations> = {
     monthlyHint:
       "Місячний план зручний, якщо хочеш спробувати Premium без довгого зобов’язання.",
     currencyHint:
-      "Для PLN і CZK зараз доступний лише місячний план. Річний план доступний у EUR/USD/UAH.",
+      "Одна підписка відкриває всі активні курси Flunio. Можна вибрати місячний або річний план.",
   },
 
   ru: {
     topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "A0 доступен бесплатно. Premium открывает следующие уровни, тренажёр и больше практики.",
+      "A0 доступен бесплатно. Premium открывает A1–B2, тренажёр и все активные курсы Flunio.",
     badge: "Premium",
     title: "Продолжай обучение после A0 🚀",
     subtitle:
-      "Бесплатно можно пройти A0. Если хочешь двигаться дальше, Premium открывает A1, A2, B1, B2, тренажёр и больше возможностей для повторения.",
+      "Бесплатно можно пройти A0. Premium открывает A1, A2, B1, B2, тренажёр, повторение слов и все активные курсы в одной подписке.",
     bullets: [
       "🔓 Доступ к A1, A2, B1 и B2",
+      "🌍 Все активные курсы в одной подписке",
       "🏋️ Тренажёр для активной практики",
-      "🔁 Больше повторения слов",
+      "🔁 Расширенное повторение слов",
       "📊 Серии, рекорды и статистика обучения",
-      "🌍 Все активные курсы без ограничения по уровням",
-      "⚡ Без daily lesson лимитов",
     ],
 
     planTitle: "Выбери план:",
@@ -173,24 +173,23 @@ const T: Record<Lang, PremiumTranslations> = {
     monthlyHint:
       "Месячный план удобен, если хочешь попробовать Premium без долгого обязательства.",
     currencyHint:
-      "Для PLN и CZK сейчас доступен только месячный план. Годовой план доступен в EUR/USD/UAH.",
+      "Одна подписка открывает все активные курсы Flunio. Можно выбрать месячный или годовой план.",
   },
 
   en: {
     topTitle: "Flunio Premium ⭐",
     topSubtitle:
-      "A0 is free. Premium unlocks the next levels, the trainer, and more practice.",
+      "A0 is free. Premium unlocks A1–B2, the trainer, and all active Flunio courses.",
     badge: "Premium",
     title: "Continue learning after A0 🚀",
     subtitle:
-      "You can complete A0 for free. Premium unlocks A1, A2, B1, B2, the trainer, and more ways to review what you learn.",
+      "You can complete A0 for free. Premium unlocks A1, A2, B1, B2, the trainer, word review, and all active courses in one subscription.",
     bullets: [
       "🔓 Access to A1, A2, B1 and B2",
+      "🌍 All active courses in one subscription",
       "🏋️ Trainer for active practice",
-      "🔁 More word review",
+      "🔁 Advanced word review",
       "📊 Streaks, records and learning stats",
-      "🌍 All active courses without level restrictions",
-      "⚡ No daily lesson limits",
     ],
 
     planTitle: "Choose a plan:",
@@ -224,7 +223,7 @@ const T: Record<Lang, PremiumTranslations> = {
     yearlyHint: "The yearly plan is better value if you are learning seriously.",
     monthlyHint: "The monthly plan is useful if you want to try Premium first.",
     currencyHint:
-      "PLN and CZK currently support monthly plans only. Yearly is available in EUR/USD/UAH.",
+      "One subscription unlocks all active Flunio courses. You can choose monthly or yearly billing.",
   },
 };
 
@@ -245,14 +244,14 @@ const FEATURES: readonly FeatureRow[] = [
       en: "Course access",
     },
     free: {
-      ua: "Стартовий рівень",
-      ru: "Стартовый уровень",
-      en: "Starter level",
+      ua: "A0 безкоштовно",
+      ru: "A0 бесплатно",
+      en: "A0 for free",
     },
     premium: {
-      ua: "Весь шлях A0–B2",
-      ru: "Весь путь A0–B2",
-      en: "Full path A0–B2",
+      ua: "A1–B2 у всіх курсах",
+      ru: "A1–B2 во всех курсах",
+      en: "A1–B2 in all courses",
     },
   },
   {
@@ -299,9 +298,9 @@ const FEATURES: readonly FeatureRow[] = [
       en: "Learning progress",
     },
     free: {
-      ua: "Обмежено",
-      ru: "Ограниченно",
-      en: "Limited",
+      ua: "Старт",
+      ru: "Старт",
+      en: "Starter",
     },
     premium: {
       ua: "Серії, рекорди, статистика",
@@ -317,12 +316,12 @@ const FEATURES: readonly FeatureRow[] = [
       en: "Active courses",
     },
     free: {
-      ua: "Тільки старт",
-      ru: "Только старт",
-      en: "Starter only",
+      ua: "A0",
+      ru: "A0",
+      en: "A0",
     },
     premium: {
-      ua: "Всі рівні",
+      ua: "Усі рівні",
       ru: "Все уровни",
       en: "All levels",
     },
@@ -360,12 +359,8 @@ export default function PremiumClient() {
   }, [interval]);
 
   const visibleCurrencies = useMemo<Currency[]>(() => {
-    if (interval === "year") {
-      return ["eur", "usd", "uah"];
-    }
-
     return ["eur", "usd", "uah", "pln", "czk"];
-  }, [interval]);
+  }, []);
 
   async function handleCheckout(currency: Currency) {
     setLoading(currency);
@@ -511,8 +506,6 @@ export default function PremiumClient() {
               <>
                 {visibleCurrencies.map((currency) => {
                   const price = displayPrice[currency];
-
-                  if (!price) return null;
 
                   return (
                     <button
