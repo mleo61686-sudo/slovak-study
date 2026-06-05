@@ -8,6 +8,35 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-06-05",
+    title: {
+      ua: "Оновлення: нова модель доступу до уроків та покращення курсів",
+      ru: "Обновление: новая модель доступа к урокам и улучшения курсов",
+      en: "Update: new lesson access model and course improvements",
+    },
+    items: {
+      ua: [
+        "Рівень A0 тепер повністю безкоштовний без обмеження на кількість нових уроків за день",
+        "Рівні A1, A2, B1 та B2 тепер доступні у Flunio Premium",
+        "Замінено деякі зображення в уроках для кращої якості та більш єдиного стилю курсів",
+        "Покращено перевірку польських слів у вправі «Напиши слово» — тепер слова можна вводити без діакритики (наприклад: żółty → zolty)",
+      ],
+      ru: [
+        "Уровень A0 теперь полностью бесплатный без ограничения на количество новых уроков в день",
+        "Уровни A1, A2, B1 и B2 теперь доступны в Flunio Premium",
+        "Заменены некоторые изображения в уроках для лучшего качества и более единого стиля курсов",
+        "Улучшена проверка польских слов в упражнении «Напиши слово» — теперь слова можно вводить без диакритики (например: żółty → zolty)",
+      ],
+      en: [
+        "A0 is now completely free with no limit on the number of new lessons per day",
+        "A1, A2, B1 and B2 levels are now available with Flunio Premium",
+        "Some lesson images have been updated for better quality and a more consistent course style",
+        "Improved Polish word checking in the Write the Word exercise — words can now be entered without diacritics (for example: żółty → zolty)",
+      ],
+    },
+  },
+
+  {
     date: "2026-05-19",
     title: {
       ua: "Оновлення: нові зображення та плавніше завантаження вправ",

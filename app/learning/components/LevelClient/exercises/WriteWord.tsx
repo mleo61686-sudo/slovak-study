@@ -46,7 +46,11 @@ export default function WriteWord({
   }, [word.sk]);
 
   function stripDiacritics(s: string) {
-    return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return s
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/ł/g, "l")
+      .replace(/Ł/g, "L");
   }
 
   function normalize(s: string) {
@@ -61,8 +65,8 @@ export default function WriteWord({
 
       const audio = new Audio(ok ? "/sfx/correct.mp3" : "/sfx/wrong.mp3");
       audio.volume = 0.13;
-      audio.play().catch(() => { });
-    } catch { }
+      audio.play().catch(() => {});
+    } catch {}
   };
 
   async function check() {
@@ -143,68 +147,68 @@ export default function WriteWord({
   const resultSheet =
     status !== "idle" && mounted
       ? createPortal(
-        <div
-          className="fixed inset-x-0 bottom-8 z-[9999] px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] sm:bottom-10 sm:px-5 sm:pb-6"
-          aria-live="polite"
-        >
           <div
-            className={[
-              "write-word-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
-              status === "correct"
-                ? "border-lime-200/50 bg-lime-500"
-                : "border-rose-200/50 bg-rose-500",
-            ].join(" ")}
+            className="fixed inset-x-0 bottom-8 z-[9999] px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] sm:bottom-10 sm:px-5 sm:pb-6"
+            aria-live="polite"
           >
-            <div className="flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <div className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
-                  {status === "correct"
-                    ? t.resultTitleCorrect
-                    : t.resultTitleWrong}
-                </div>
+            <div
+              className={[
+                "write-word-bottom-sheet mx-auto w-full max-w-[720px] overflow-hidden rounded-[28px] border px-5 py-4 text-white shadow-2xl backdrop-blur-xl sm:px-6 sm:py-5",
+                status === "correct"
+                  ? "border-lime-200/50 bg-lime-500"
+                  : "border-rose-200/50 bg-rose-500",
+              ].join(" ")}
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="text-xl font-black leading-tight tracking-tight text-white sm:text-2xl">
+                    {status === "correct"
+                      ? t.resultTitleCorrect
+                      : t.resultTitleWrong}
+                  </div>
 
-                <div className="mt-1 text-sm font-semibold text-white/90 sm:text-base">
-                  {status === "wrong" && (
-                    <>
-                      <span className="text-white/85">
-                        {t.yourAnswer}:{" "}
-                        <span className="font-black text-white">
-                          {value.trim()}
+                  <div className="mt-1 text-sm font-semibold text-white/90 sm:text-base">
+                    {status === "wrong" && (
+                      <>
+                        <span className="text-white/85">
+                          {t.yourAnswer}:{" "}
+                          <span className="font-black text-white">
+                            {value.trim()}
+                          </span>
                         </span>
+                        <span className="mx-2 text-white/70">•</span>
+                      </>
+                    )}
+
+                    <span>
+                      {status === "wrong" ? `${t.correctLabel}: ` : ""}
+                      <span className="font-black text-white">
+                        {correctAnswer}
                       </span>
-                      <span className="mx-2 text-white/70">•</span>
-                    </>
-                  )}
-
-                  <span>
-                    {status === "wrong" ? `${t.correctLabel}: ` : ""}
-                    <span className="font-black text-white">
-                      {correctAnswer}
+                      <span className="px-1 text-white/80">—</span>
+                      <span className="font-black text-white">
+                        {translation}
+                      </span>
                     </span>
-                    <span className="px-1 text-white/80">—</span>
-                    <span className="font-black text-white">
-                      {translation}
-                    </span>
-                  </span>
+                  </div>
                 </div>
-              </div>
 
-              <button
-                onClick={next}
-                className={[
-                  "shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition active:scale-95 sm:px-6 sm:text-base",
-                  status === "correct"
-                    ? "bg-white text-lime-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90"
-                    : "bg-white text-rose-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90",
-                ].join(" ")}
-              >
-                {t.next}
-              </button>
+                <button
+                  onClick={next}
+                  className={[
+                    "shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition active:scale-95 sm:px-6 sm:text-base",
+                    status === "correct"
+                      ? "bg-white text-lime-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90"
+                      : "bg-white text-rose-600 shadow-[0_10px_26px_rgba(255,255,255,0.22)] hover:bg-white/90",
+                  ].join(" ")}
+                >
+                  {t.next}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>,
-        document.body,
-      )
+          </div>,
+          document.body,
+        )
       : null;
 
   return (
