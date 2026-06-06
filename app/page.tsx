@@ -11,10 +11,10 @@ import {
 } from "@/lib/src/language";
 
 export const metadata: Metadata = {
-  title: "Flunio — вивчення мов онлайн (A0–B2)",
+  title: "Flunio — словацька, чеська та польська онлайн (A0–B2)",
 
   description:
-    "Flunio — онлайн платформа для вивчення мов: словацька та чеська, уроки A0–B2, словник, граматика з прикладами, вправи та озвучка.",
+    "Вивчайте словацьку, чеську та польську онлайн у Flunio: короткі уроки A0–B2, озвучка, словник, граматика та інтерактивні вправи. Рівень A0 безкоштовний.",
 
   alternates: {
     canonical: `${SITE_URL}/`,
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Flunio — вивчення мов онлайн",
+    title: "Flunio — словацька, чеська та польська онлайн",
     description:
-      "Вивчай словацьку та чеську онлайн: уроки A0–B2, словник, граматика з прикладами, вправи та озвучка.",
+      "Короткі інтерактивні уроки, озвучка, граматика та словник. Почніть безкоштовний рівень A0.",
     url: `${SITE_URL}/`,
     siteName: "Flunio",
     type: "website",
@@ -40,11 +40,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Flunio — вивчення мов онлайн",
     description:
-      "Словацька та Чеська мови онлайн: уроки A0–B2, граматика, словник, вправи та озвучка.",
+      "Вивчайте словацьку, чеську та польську від A0 до B2. Рівень A0 доступний безкоштовно.",
     images: ["/opengraph-image"],
   },
 
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const COURSE_COOKIE_KEY = "slovakStudyActiveCourse";

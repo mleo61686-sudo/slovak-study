@@ -1,50 +1,37 @@
 "use client";
 
+import Link from "next/link";
 import { useLanguage } from "@/lib/src/useLanguage";
 
 type Lang = "ua" | "ru" | "en";
 
 type FooterDict = {
-  slogan: string;
-  courses: string;
-  grammar: string;
-  dictionary: string;
-  practice: string;
-  support: string;
+  copyright: string;
   privacy: string;
   terms: string;
+  support: string;
 };
 
 const t: Record<Lang, FooterDict> = {
   ua: {
-    slogan: "вивчай мови щодня.",
-    courses: "Курси",
-    grammar: "Граматика",
-    dictionary: "Словник",
-    practice: "Тренажер",
+    copyright: "Flunio — вивчай мови щодня",
+    privacy: "Конфіденційність",
+    terms: "Умови",
     support: "Підтримка",
-    privacy: "Політика конфіденційності",
-    terms: "Умови користування",
   },
+
   ru: {
-    slogan: "учите языки каждый день.",
-    courses: "Курсы",
-    grammar: "Грамматика",
-    dictionary: "Словарь",
-    practice: "Тренажёр",
+    copyright: "Flunio — учите языки каждый день",
+    privacy: "Конфиденциальность",
+    terms: "Условия",
     support: "Поддержка",
-    privacy: "Политика конфиденциальности",
-    terms: "Условия использования",
   },
+
   en: {
-    slogan: "learn languages every day.",
-    courses: "Courses",
-    grammar: "Grammar",
-    dictionary: "Dictionary",
-    practice: "Practice",
+    copyright: "Flunio — learn languages every day",
+    privacy: "Privacy",
+    terms: "Terms",
     support: "Support",
-    privacy: "Privacy Policy",
-    terms: "Terms of Service",
   },
 };
 
@@ -53,54 +40,40 @@ export default function FooterClient() {
 
   const safeLang: Lang = lang === "ru" || lang === "en" ? lang : "ua";
   const dict = t[safeLang];
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="theme-footer">
-      <div className="mx-auto max-w-5xl px-4 py-6 text-sm">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="theme-text-muted text-left">
-            © {new Date().getFullYear()} Flunio — {dict.slogan}
-          </div>
-
-          <nav
-            aria-label="Footer"
-            className="grid grid-cols-2 gap-x-6 gap-y-2 text-left sm:flex sm:flex-wrap sm:items-center sm:justify-end"
-          >
-            <a className="theme-footer-link transition hover:underline" href="/learn">
-              {dict.courses}
-            </a>
-            <a className="theme-footer-link transition hover:underline" href="/grammar">
-              {dict.grammar}
-            </a>
-            <a className="theme-footer-link transition hover:underline" href="/dictionary">
-              {dict.dictionary}
-            </a>
-            <a className="theme-footer-link transition hover:underline" href="/practice">
-              {dict.practice}
-            </a>
-            <a className="theme-footer-link transition hover:underline" href="/support">
-              {dict.support}
-            </a>
-          </nav>
+    <footer className="theme-footer border-t border-white/10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="theme-text-muted">
+          © {year} {dict.copyright}
         </div>
 
-        <div className="mt-5 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs theme-text-muted sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            Flunio © {new Date().getFullYear()}
-          </div>
-
-          <nav
-            aria-label="Legal"
-            className="flex flex-wrap gap-x-4 gap-y-2"
+        <nav
+          aria-label="Footer"
+          className="flex flex-wrap items-center gap-x-5 gap-y-2"
+        >
+          <Link
+            href="/support"
+            className="theme-footer-link transition hover:underline"
           >
-            <a className="theme-footer-link transition hover:underline" href="/privacy">
-              {dict.privacy}
-            </a>
-            <a className="theme-footer-link transition hover:underline" href="/terms">
-              {dict.terms}
-            </a>
-          </nav>
-        </div>
+            {dict.support}
+          </Link>
+
+          <Link
+            href="/privacy"
+            className="theme-footer-link transition hover:underline"
+          >
+            {dict.privacy}
+          </Link>
+
+          <Link
+            href="/terms"
+            className="theme-footer-link transition hover:underline"
+          >
+            {dict.terms}
+          </Link>
+        </nav>
       </div>
     </footer>
   );
