@@ -11,6 +11,18 @@ export type Word = {
     ipa?: string;
     img?: string;
     imgCredit?: string;
+
+    note?: {
+        ua: string;
+        ru?: string;
+        en?: string;
+
+        exampleSk?: string;
+        exampleUa?: string;
+        exampleRu?: string;
+        exampleEn?: string;
+    };
+
     phrase?: {
         sk: string;
         ua: string;
@@ -55,12 +67,57 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             en: "Lesson 2 — People",
         },
         words: [
-            { sk: "človek", ua: "людина", ru: "человек", en: "person", img: "/words/human.jpg" },
+            {
+                sk: "človek",
+                ua: "людина",
+                ru: "человек",
+                en: "person",
+                img: "/words/human.jpg",
+                note: {
+                    ua: "`človek` означає людину загалом. Якщо треба сказати саме чоловік, частіше буде `muž`.",
+                    ru: "`človek` означает человека в целом. Если нужно сказать именно мужчина, чаще будет `muž`.",
+                    en: "`človek` means a person in general. For a man specifically, Slovak usually uses `muž`.",
+                    exampleSk: "Je to dobrý človek.",
+                    exampleUa: "Це добра людина.",
+                    exampleRu: "Это хороший человек.",
+                    exampleEn: "This is a good person.",
+                },
+            },
             { sk: "muž", ua: "чоловік", ru: "мужчина", en: "man", img: "/words/man.jpg" },
             { sk: "žena", ua: "жінка", ru: "женщина", en: "woman", img: "/words/woman.jpg" },
             { sk: "dieťa", ua: "дитина", ru: "ребёнок", en: "child", img: "/words/child.jpg" },
-            { sk: "priateľ", ua: "друг", ru: "друг", en: "friend", img: "/words/priateľ.jpg" },
-            { sk: "priateľka", ua: "подруга", ru: "подруга", en: "female friend", img: "/words/priateľka.jpg" },
+            {
+                sk: "priateľ",
+                ua: "друг",
+                ru: "друг",
+                en: "friend",
+                img: "/words/priateľ.jpg",
+                note: {
+                    ua: "`priateľ` може означати “друг”, але також “хлопець” у стосунках. Якщо хочеш сказати просто друг без романтичного значення, часто краще `kamarát`.",
+                    ru: "`priateľ` может означать “друг”, но также “парень” в отношениях. Если нужно сказать просто друг без романтического смысла, часто лучше `kamarát`.",
+                    en: "`priateľ` can mean “friend”, but also “boyfriend”. For a regular friend without a romantic meaning, `kamarát` is often clearer.",
+                    exampleSk: "On je môj priateľ.",
+                    exampleUa: "Він мій друг / мій хлопець.",
+                    exampleRu: "Он мой друг / мой парень.",
+                    exampleEn: "He is my friend / my boyfriend.",
+                },
+            },
+            {
+                sk: "priateľka",
+                ua: "подруга",
+                ru: "подруга",
+                en: "female friend",
+                img: "/words/priateľka.jpg",
+                note: {
+                    ua: "`priateľka` може означати “подруга”, але також “дівчина” у стосунках. Якщо треба сказати просто подруга, часто безпечніше `kamarátka`.",
+                    ru: "`priateľka` может означать “подруга”, но также “девушка” в отношениях. Если нужно сказать просто подруга, часто безопаснее `kamarátka`.",
+                    en: "`priateľka` can mean “female friend”, but also “girlfriend”. For a regular female friend, `kamarátka` is often clearer.",
+                    exampleSk: "Ona je moja priateľka.",
+                    exampleUa: "Вона моя подруга / моя дівчина.",
+                    exampleRu: "Она моя подруга / моя девушка.",
+                    exampleEn: "She is my female friend / my girlfriend.",
+                },
+            },
             { sk: "otec", ua: "батько", ru: "отец", en: "father", img: "/words/otec.jpg" },
             { sk: "matka", ua: "мати", ru: "мать", en: "mother", img: "/words/matka.jpg" },
             { sk: "brat", ua: "брат", ru: "брат", en: "brother", img: "/words/brat.jpg" },
@@ -140,7 +197,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "námestie", ua: "площа", ru: "площадь", en: "square", img: "/words/námestie.jpg" },
             { sk: "dom", ua: "будинок", ru: "дом", en: "house", img: "/words/dom.jpg" },
             { sk: "byt", ua: "квартира", ru: "квартира", en: "apartment", img: "/words/byt.jpg" },
-            { sk: "škola", ua: "школа", ru: "школа", en: "school", img: "/words/škola.jpg"},
+            { sk: "škola", ua: "школа", ru: "школа", en: "school", img: "/words/škola.jpg" },
             { sk: "nemocnica", ua: "лікарня", ru: "больница", en: "hospital", img: "/words/nemocnica.jpg" },
             { sk: "zastávka", ua: "зупинка", ru: "остановка", en: "stop", img: "/words/zastávka.jpg" },
             { sk: "park", ua: "парк", ru: "парк", en: "park", img: "/words/park.jpg" },
@@ -184,7 +241,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "dnes", ua: "сьогодні", ru: "сегодня", en: "today", img: "/words/dnes.jpg" },
             { sk: "zajtra", ua: "завтра", ru: "завтра", en: "tomorrow", img: "/words/zajtra.jpg" },
             { sk: "včera", ua: "вчора", ru: "вчера", en: "yesterday", img: "/words/včera.jpg" },
-            { sk: "hodina", ua: "година", ru: "час / час (ед.)", en: "hour", img: "/words/hodina.jpg" },
+            {
+                sk: "hodina",
+                ua: "година",
+                ru: "час / час (ед.)",
+                en: "hour",
+                img: "/words/hodina.jpg",
+                note: {
+                    ua: "`hodina` може означати “година” як час, але в школі також “урок”.",
+                    ru: "`hodina` может означать “час” как время, но в школе также “урок”.",
+                    en: "`hodina` can mean “hour”, but at school it can also mean “lesson/class”.",
+                    exampleSk: "Slovenčina je moja prvá hodina.",
+                    exampleUa: "Словацька — мій перший урок.",
+                    exampleRu: "Словацкий — мой первый урок.",
+                    exampleEn: "Slovak is my first lesson.",
+                },
+            },
         ],
     },
     {
@@ -220,7 +292,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "učiteľ", ua: "вчитель", ru: "учитель", en: "teacher", img: "/words/učiteľ.jpg" },
             { sk: "trieda", ua: "клас", ru: "класс", en: "classroom", img: "/words/trieda.jpg" },
             { sk: "predmet", ua: "предмет", ru: "предмет", en: "subject", img: "/words/predmet.jpg" },
-            { sk: "hodina", ua: "урок", ru: "урок", en: "lesson", img: "/words/hodina.jpg" },
+            {
+                sk: "hodina",
+                ua: "урок",
+                ru: "урок",
+                en: "lesson",
+                img: "/words/hodina.jpg",
+                note: {
+                    ua: "`hodina` в школі означає “урок”. Але поза школою це слово також означає “година”.",
+                    ru: "`hodina` в школе означает “урок”. Но вне школы это слово также означает “час”.",
+                    en: "`hodina` means “lesson/class” at school. Outside school, it also means “hour”.",
+                    exampleSk: "Máme hodinu slovenčiny.",
+                    exampleUa: "У нас урок словацької.",
+                    exampleRu: "У нас урок словацкого.",
+                    exampleEn: "We have a Slovak lesson.",
+                },
+            },
             { sk: "úloha", ua: "завдання / домашня робота", ru: "задание / домашняя работа", en: "task / homework", img: "/words/úloha.jpg" },
             { sk: "test", ua: "тест", ru: "тест", en: "test", img: "/words/test.jpg" },
             { sk: "zošit", ua: "зошит", ru: "тетрадь", en: "notebook", img: "/words/zošit.jpg" },
@@ -515,7 +602,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             en: "Lesson 25 — Travel",
         },
         words: [
-            { sk: "cesta", ua: "подорож", ru: "путешествие / дорога", en: "trip / journey", img: "/words_pl/droga.jpg" },
+            {
+                sk: "cesta",
+                ua: "подорож",
+                ru: "путешествие / дорога",
+                en: "trip / journey",
+                img: "/words_pl/droga.jpg",
+                note: {
+                    ua: "`cesta` може означати і “дорога”, і “подорож”. Значення залежить від контексту.",
+                    ru: "`cesta` может означать и “дорога”, и “путешествие”. Значение зависит от контекста.",
+                    en: "`cesta` can mean both “road” and “trip/journey”. The meaning depends on context.",
+                    exampleSk: "Cesta do Bratislavy je dlhá.",
+                    exampleUa: "Дорога до Братислави довга.",
+                    exampleRu: "Дорога до Братиславы длинная.",
+                    exampleEn: "The road to Bratislava is long.",
+                },
+            },
             { sk: "cestovať", ua: "подорожувати", ru: "путешествовать", en: "to travel", img: "/words_a0_cz/cestovat.jpg" },
             { sk: "kufor", ua: "валіза", ru: "чемодан", en: "suitcase", img: "/words_a0_cz/kufr.jpg" },
             { sk: "pas", ua: "паспорт", ru: "паспорт", en: "passport", img: "/words_pl/paszport.jpg" },
@@ -536,7 +638,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
         },
         words: [
             { sk: "hotel", ua: "готель", ru: "отель", en: "hotel", img: "/words/hotel.jpg" },
-            { sk: "izba", ua: "кімната", ru: "комната / номер", en: "room", img: "/words/izba.jpg" },
+            {
+                sk: "izba",
+                ua: "кімната",
+                ru: "комната / номер",
+                en: "room",
+                img: "/words/izba.jpg",
+                note: {
+                    ua: "`izba` — це кімната. У готелі це слово також часто означає “номер”.",
+                    ru: "`izba` — это комната. В отеле это слово также часто означает “номер”.",
+                    en: "`izba` means “room”. In a hotel, it can also mean a hotel room.",
+                    exampleSk: "Mám izbu v hoteli.",
+                    exampleUa: "У мене є номер у готелі.",
+                    exampleRu: "У меня есть номер в отеле.",
+                    exampleEn: "I have a room in the hotel.",
+                },
+            },
             { sk: "recepcia", ua: "ресепшн", ru: "ресепшн", en: "reception", img: "/words_a0_cz/recepce.jpg" },
             { sk: "reštaurácia", ua: "ресторан", ru: "ресторан", en: "restaurant", img: "/words_a0_cz/restaurace.jpg" },
             { sk: "menu", ua: "меню", ru: "меню", en: "menu", img: "/words/menu.jpg" },
@@ -544,7 +661,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "raňajky", ua: "сніданок", ru: "завтрак", en: "breakfast", img: "/words_a0_cz/snídaně.jpg" },
             { sk: "obed", ua: "обід", ru: "обед", en: "lunch", img: "/words_a0_cz/oběd.jpg" },
             { sk: "večera", ua: "вечеря", ru: "ужин", en: "dinner", img: "/words_a0_cz/večeře.jpg" },
-            { sk: "účet", ua: "рахунок", ru: "счёт", en: "bill", img: "/words_pl/rachunek.jpg" },
+            {
+                sk: "účet",
+                ua: "рахунок",
+                ru: "счёт",
+                en: "account / bill",
+                img: "/words_pl/rachunek.jpg",
+                note: {
+                    ua: "`účet` може означати банківський рахунок, але також рахунок у ресторані.",
+                    ru: "`účet` может означать банковский счёт, но также счёт в ресторане.",
+                    en: "`účet` can mean a bank account, but also a restaurant bill.",
+                    exampleSk: "Mám účet v banke.",
+                    exampleUa: "У мене є рахунок у банку.",
+                    exampleRu: "У меня есть счёт в банке.",
+                    exampleEn: "I have a bank account.",
+                },
+            },
         ],
     },
     {
@@ -561,7 +693,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "platba", ua: "платіж", ru: "платёж", en: "payment", img: "/words_pl/płatność.jpg" },
             { sk: "hotovosť", ua: "готівка", ru: "наличные", en: "cash", img: "/words/hotovosť.jpg" },
             { sk: "karta", ua: "картка", ru: "карта", en: "card", img: "/words/karta.jpg" },
-            { sk: "účet", ua: "рахунок", ru: "счёт", en: "account / bill", img: "/words_pl/rachunek.jpg" },
+            {
+                sk: "účet",
+                ua: "рахунок",
+                ru: "счёт",
+                en: "bill",
+                img: "/words_pl/rachunek.jpg",
+                note: {
+                    ua: "`účet` може бути рахунок у ресторані або банківський рахунок. У ресторані можна сказати: `Prosím si účet.`",
+                    ru: "`účet` может быть счёт в ресторане или банковский счёт. В ресторане можно сказать: `Prosím si účet.`",
+                    en: "`účet` can mean a restaurant bill or a bank account. In a restaurant, you can say: `Prosím si účet.`",
+                    exampleSk: "Prosím si účet.",
+                    exampleUa: "Рахунок, будь ласка.",
+                    exampleRu: "Счёт, пожалуйста.",
+                    exampleEn: "The bill, please.",
+                },
+            },
             { sk: "banka", ua: "банк", ru: "банк", en: "bank", img: "/words_pl/bank.jpg" },
             { sk: "zľava", ua: "знижка", ru: "скидка", en: "discount", img: "/words/zľava.jpg" },
             { sk: "výdavky", ua: "витрати", ru: "расходы", en: "expenses", img: "/words_a0_cz/výdaje.jpg" },
@@ -598,8 +745,38 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "dobrý deň", ua: "добрий день", ru: "добрый день", en: "good afternoon", img: "/words_a0_cz/dobrý den.jpg" },
             { sk: "ahoj", ua: "привіт", ru: "привет", en: "hi", img: "/words_pl/cześć.jpg" },
             { sk: "ďakujem", ua: "дякую", ru: "спасибо", en: "thank you", img: "/words_a0_cz/děkuji.jpg" },
-            { sk: "prosím", ua: "будь ласка", ru: "пожалуйста", en: "please", img: "/words_pl/proszę.jpg" },
-            { sk: "prepáč", ua: "вибач", ru: "извини", en: "sorry", img: "/words_a0_cz/omlouvám se.jpg" },
+            {
+                sk: "prosím",
+                ua: "будь ласка",
+                ru: "пожалуйста",
+                en: "please",
+                img: "/words_pl/proszę.jpg",
+                note: {
+                    ua: "`prosím` означає “будь ласка”, але також може бути відповіддю на `ďakujem`, як “будь ласка / прошу”.",
+                    ru: "`prosím` означает “пожалуйста”, но также может быть ответом на `ďakujem`, как “пожалуйста / не за что”.",
+                    en: "`prosím` means “please”, but it can also be used as a reply to `ďakujem`, like “you’re welcome”.",
+                    exampleSk: "Ďakujem. — Prosím.",
+                    exampleUa: "Дякую. — Будь ласка.",
+                    exampleRu: "Спасибо. — Пожалуйста.",
+                    exampleEn: "Thank you. — You’re welcome.",
+                },
+            },
+            {
+                sk: "prepáč",
+                ua: "вибач",
+                ru: "извини",
+                en: "sorry",
+                img: "/words_a0_cz/omlouvám se.jpg",
+                note: {
+                    ua: "`prepáč` — неформальне “вибач”. До незнайомих людей або ввічливо краще сказати `prepáčte`.",
+                    ru: "`prepáč` — неформальное “извини”. К незнакомым людям или вежливо лучше сказать `prepáčte`.",
+                    en: "`prepáč` is informal “sorry”. For strangers or polite speech, use `prepáčte`.",
+                    exampleSk: "Prepáčte, kde je stanica?",
+                    exampleUa: "Вибачте, де вокзал?",
+                    exampleRu: "Извините, где вокзал?",
+                    exampleEn: "Excuse me, where is the station?",
+                },
+            },
             { sk: "rozumiem", ua: "розумію", ru: "понимаю", en: "I understand", img: "/words_a0_cz/rozumím.jpg" },
             { sk: "nerozumiem", ua: "не розумію", ru: "не понимаю", en: "I don't understand", img: "/words_a0_cz/nerozumím.jpg" },
             { sk: "pomôžte", ua: "допоможіть", ru: "помогите", en: "help", img: "/words_a0_cz/pomozte.jpg" },
@@ -623,7 +800,22 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "vy", ua: "ви", ru: "вы", en: "you (plural/formal)", img: "/words_pl/wy.jpg" },
             { sk: "oni", ua: "вони", ru: "они", en: "they", img: "/words/oni.jpg" },
             { sk: "byť", ua: "бути", ru: "быть", en: "to be", img: "/words_pl/być.jpg" },
-            { sk: "mať", ua: "мати", ru: "иметь", en: "to have", img: "/words_pl/mieć.jpg" },
+            {
+                sk: "mať",
+                ua: "мати",
+                ru: "иметь",
+                en: "to have",
+                img: "/words_pl/mieć.jpg",
+                note: {
+                    ua: "`mať` означає “мати / володіти”. Це не “мати” як мама — мама словацькою `mama` або `matka`.",
+                    ru: "`mať` означает “иметь”. Это не “мать” как мама — мама по-словацки `mama` или `matka`.",
+                    en: "`mať` means “to have”. It does not mean “mother” — mother is `mama` or `matka` in Slovak.",
+                    exampleSk: "Mám auto.",
+                    exampleUa: "У мене є авто.",
+                    exampleRu: "У меня есть авто.",
+                    exampleEn: "I have a car.",
+                },
+            },
             { sk: "ísť", ua: "йти", ru: "идти", en: "to go", img: "/words_a0_cz/jít.jpg" },
         ],
     },]

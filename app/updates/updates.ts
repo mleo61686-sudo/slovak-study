@@ -8,6 +8,40 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-06-13",
+    title: {
+      ua: "Оновлення: навчальні підказки та диктант для чеського A0",
+      ru: "Обновление: учебные подсказки и диктант для чешского A0",
+      en: "Update: learning hints and Czech A0 dictation",
+    },
+    items: {
+      ua: [
+        "Додано короткі навчальні підказки для деяких слів у рівні A0 у словацькому, чеському та польському курсах",
+        "Підказки зʼявляються тільки там, де слово може мати важливий нюанс або кілька значень, щоб не перевантажувати уроки зайвою інформацією",
+        "Підказки доступні в перших вправах уроку через компактну кнопку з лампочкою",
+        "Додано новий диктант для чеського рівня A0 — він знаходиться внизу сторінки A0 під списком уроків",
+        "У диктанті можна слухати короткий чеський текст, змінювати швидкість аудіо, писати відповідь вручну та перевіряти її по словах",
+        "Під час перевірки розділові знаки, великі літери та діакритика не заважають результату: наприклад, dobry den приймається як dobrý den",
+      ],
+      ru: [
+        "Добавлены короткие учебные подсказки для некоторых слов уровня A0 в словацком, чешском и польском курсах",
+        "Подсказки появляются только там, где у слова есть важный нюанс или несколько значений, чтобы не перегружать уроки лишней информацией",
+        "Подсказки доступны в первых упражнениях урока через компактную кнопку с лампочкой",
+        "Добавлен новый диктант для чешского уровня A0 — он находится внизу страницы A0 под списком уроков",
+        "В диктанте можно слушать короткий чешский текст, менять скорость аудио, писать ответ вручную и проверять его по словам",
+        "При проверке знаки препинания, заглавные буквы и диакритика не мешают результату: например, dobry den принимается как dobrý den",
+      ],
+      en: [
+        "Short learning hints have been added for selected A0 words in the Slovak, Czech, and Polish courses",
+        "Hints appear only when a word has an important nuance or multiple meanings, so lessons stay clean and are not overloaded with extra information",
+        "Hints are available in the first exercises of a lesson through a compact lightbulb button",
+        "A new dictation activity has been added for Czech A0 — it is located at the bottom of the A0 page under the lesson list",
+        "In the dictation activity, learners can listen to a short Czech text, change the audio speed, type the answer manually, and check it word by word",
+        "Punctuation, capital letters, and diacritics do not affect checking: for example, dobry den is accepted as dobrý den",
+      ],
+    },
+  },
+  {
     date: "2026-06-05",
     title: {
       ua: "Оновлення: нова модель доступу до уроків та покращення курсів",

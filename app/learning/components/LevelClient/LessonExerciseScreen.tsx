@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import ReportErrorButton from "@/app/components/ReportErrorButton";
 import type { Lang } from "@/lib/src/language";
@@ -61,6 +62,141 @@ function ExerciseLoading() {
         </div>
       </div>
     </div>
+  );
+}
+
+function getNoteText(word: Word | undefined, lang: Lang) {
+  if (!word?.note) return undefined;
+
+  if (lang === "en") return word.note.en ?? word.note.ua;
+  if (lang === "ru") return word.note.ru ?? word.note.ua;
+
+  return word.note.ua;
+}
+
+function getNoteExample(word: Word | undefined, lang: Lang) {
+  if (!word?.note?.exampleSk) return undefined;
+
+  const target =
+    lang === "en"
+      ? word.note.exampleEn ?? word.note.exampleUa
+      : lang === "ru"
+        ? word.note.exampleRu ?? word.note.exampleUa
+        : word.note.exampleUa;
+
+  if (!target) return undefined;
+
+  return {
+    sk: word.note.exampleSk,
+    target,
+  };
+}
+
+function getNoteLabels(lang: Lang) {
+  if (lang === "en") {
+    return {
+      title: "Hint",
+      example: "Example",
+      close: "Close",
+    };
+  }
+
+  if (lang === "ru") {
+    return {
+      title: "Подсказка",
+      example: "Пример",
+      close: "Закрыть",
+    };
+  }
+
+  return {
+    title: "Підказка",
+    example: "Приклад",
+    close: "Закрити",
+  };
+}
+
+function WordNote({
+  word,
+  lang,
+  exerciseKey,
+}: {
+  word: Word | undefined;
+  lang: Lang;
+  exerciseKey: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  const noteText = getNoteText(word, lang);
+  const example = getNoteExample(word, lang);
+  const labels = useMemo(() => getNoteLabels(lang), [lang]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [exerciseKey]);
+
+  if (!noteText) return null;
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-300/25 bg-slate-900/80 text-lg shadow-[0_0_18px_rgba(34,211,238,0.12)] backdrop-blur transition hover:scale-[1.03] hover:border-cyan-300/45 hover:bg-slate-800/90"
+        aria-label={labels.title}
+        title={labels.title}
+      >
+        💡
+      </button>
+
+      {open ? (
+        <>
+          <div
+            className="fixed inset-0 z-30 bg-black/35"
+            onClick={() => setOpen(false)}
+          />
+
+          <div className="fixed inset-x-4 bottom-4 z-40 mx-auto max-h-[52vh] max-w-[340px] overflow-y-auto rounded-2xl border border-cyan-300/20 bg-slate-950/95 shadow-2xl backdrop-blur-xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-16 sm:max-h-none sm:w-[320px] sm:overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+              <div className="flex items-center gap-2 text-sm font-black theme-text">
+                <span>💡</span>
+                <span>{labels.title}</span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-sm theme-text-muted transition hover:bg-white/10"
+                aria-label={labels.close}
+                title={labels.close}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3 px-4 py-4">
+              <p className="text-sm leading-6 theme-text-muted">{noteText}</p>
+
+              {example ? (
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
+                  <div className="text-[11px] font-bold uppercase tracking-[0.18em] theme-text-subtle">
+                    {labels.example}
+                  </div>
+
+                  <div className="mt-2 text-sm font-bold theme-text">
+                    {example.sk}
+                  </div>
+
+                  <div className="mt-1 text-sm theme-text-muted">
+                    {example.target}
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </>
+      ) : null}
+    </>
   );
 }
 
@@ -155,6 +291,10 @@ export default function LessonExerciseScreen({
   t,
 }: LessonExerciseScreenProps) {
   const currentWord = words[wordIndex];
+  const showWordNote =
+    exercise.kind === "chooseTranslation" || exercise.kind === "chooseSlovak"
+      ? currentWord
+      : undefined;
 
   return (
     <div
@@ -203,8 +343,14 @@ export default function LessonExerciseScreen({
 
       <div
         key={exerciseScreenKey}
-        className="theme-inner-card rounded-3xl px-4 py-10 transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
+        className="relative theme-inner-card rounded-3xl px-4 py-10 transition-all duration-300 ease-out motion-reduce:transition-none animate-[fadeSlideIn_220ms_ease-out]"
       >
+        <WordNote
+          word={showWordNote}
+          lang={lang}
+          exerciseKey={exerciseScreenKey}
+        />
+
         {exercise.kind === "chooseTranslation" && (
           <ChooseTranslation
             word={currentWord}
@@ -213,6 +359,7 @@ export default function LessonExerciseScreen({
             onNext={onNextPerWord}
             quizAutoKey={quizAutoKey}
             audioUnlocked={audioUnlocked}
+            courseId={courseId}
           />
         )}
 
