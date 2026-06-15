@@ -8,6 +8,37 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-06-15",
+    title: {
+      ua: "Оновлення: нова аудіопрактика",
+      ru: "Обновление: новая аудиопрактика",
+      en: "Update: new audio practice",
+    },
+    items: {
+      ua: [
+        "Додано новий розділ Аудіопрактика для тренування розуміння мови на слух",
+        "Додано перші аудіотексти для словацької, чеської та польської мов",
+        "Кожен аудіотекст можна проходити у двох режимах: Слухання з питаннями та Диктант",
+        "У диктанті можна писати почутий текст вручну й перевіряти відповідь по словах",
+        "Аудіопрактика знаходиться внизу сторінки рівня під списком уроків",
+      ],
+      ru: [
+        "Добавлен новый раздел Аудиопрактика для тренировки понимания речи на слух",
+        "Добавлены первые аудиотексты для словацкого, чешского и польского языков",
+        "Каждый аудиотекст можно проходить в двух режимах: Слушание с вопросами и Диктант",
+        "В диктанте можно писать услышанный текст вручную и проверять ответ по словам",
+        "Аудиопрактика находится внизу страницы уровня под списком уроков",
+      ],
+      en: [
+        "A new Audio Practice section has been added for training listening comprehension",
+        "The first audio texts have been added for Slovak, Czech, and Polish",
+        "Each audio text can be practised in two modes: Listening with questions and Dictation",
+        "In Dictation mode, learners can type what they hear and check the answer word by word",
+        "Audio Practice is located at the bottom of the level page under the lesson list",
+      ],
+    },
+  },
+  {
     date: "2026-06-13",
     title: {
       ua: "Оновлення: навчальні підказки та диктант для чеського A0",

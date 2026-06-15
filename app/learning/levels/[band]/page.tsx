@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 
+import AudioPracticeTeaser from "@/app/learning/audio-practice/AudioPracticeTeaser";
 import { CEFR_LEVELS } from "../../data";
 import type { LessonsProgress, LessonProgressValue } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
@@ -220,7 +221,6 @@ export default function BandPage() {
 
   const bandIsPremiumOnly = band.id !== "a0";
   const bandLockedByPremium = bandIsPremiumOnly && !isPremium && !isAdmin;
-  const showCsA0Dictation = courseId === "cs" && band.id === "a0";
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 theme-text">
@@ -449,75 +449,7 @@ export default function BandPage() {
         })}
       </div>
 
-      {showCsA0Dictation ? (
-        <section className="mt-12">
-          <div className="mb-5 flex items-center gap-4">
-            <div>
-              <h2 className="text-xl font-black tracking-tight theme-text">
-                🎧{" "}
-                {lang === "ua"
-                  ? "Диктанти"
-                  : lang === "ru"
-                    ? "Диктанты"
-                    : "Dictations"}
-              </h2>
-
-              <p className="mt-1 text-sm theme-text-muted">
-                {lang === "ua"
-                  ? "Тренуй слух і письмо на коротких чеських текстах."
-                  : lang === "ru"
-                    ? "Тренируй слух и письмо на коротких чешских текстах."
-                    : "Practice listening and writing with short Czech texts."}
-              </p>
-            </div>
-
-            <div className="theme-divider hidden flex-1 sm:block" />
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <Link
-              href="/learning/dictation/cs/a0"
-              className="theme-inner-card relative overflow-hidden rounded-2xl p-4 shadow-[0_0_18px_rgba(34,211,238,0.06)] transition hover:-translate-y-0.5 hover:border-cyan-400/40"
-            >
-              <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-cyan-400/20 blur-2xl" />
-
-              <div className="relative flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-lg font-black theme-text">
-                    🎧{" "}
-                    {lang === "ua"
-                      ? "Диктант A0"
-                      : lang === "ru"
-                        ? "Диктант A0"
-                        : "A0 Dictation"}
-                  </div>
-
-                  <p className="mt-2 text-sm leading-5 theme-text-muted">
-                    {lang === "ua"
-                      ? "Прослухай короткий чеський текст і напиши його вручну."
-                      : lang === "ru"
-                        ? "Прослушай короткий чешский текст и напиши его вручную."
-                        : "Listen to a short Czech text and write it manually."}
-                  </p>
-                </div>
-
-                <div className="theme-pill rounded-2xl px-3 py-2 text-xs font-bold">
-                  CZ
-                </div>
-              </div>
-
-              <div className="theme-pill relative mt-4 inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm">
-                {lang === "ua"
-                  ? "Відкрити диктант"
-                  : lang === "ru"
-                    ? "Открыть диктант"
-                    : "Open dictation"}{" "}
-                →
-              </div>
-            </Link>
-          </div>
-        </section>
-      ) : null}
+      <AudioPracticeTeaser band={band.id} />
     </div>
   );
 }
