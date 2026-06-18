@@ -54,6 +54,7 @@ type Props = {
 
 const DAILY_GOAL_TARGET = 30;
 const XP_PER_REVIEW = 10;
+const LEADERBOARD_POINTS_PER_REVIEW = 1;
 
 export default function WordsSrsPage({
   backHref,
@@ -225,6 +226,31 @@ export default function WordsSrsPage({
     startNewSession(updated);
   }
 
+  async function recordReviewLeaderboardPoint() {
+    if (needLogin) return;
+    if (!userId) return;
+
+    try {
+      const res = await fetch("/api/leaderboard/review", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseId,
+          points: LEADERBOARD_POINTS_PER_REVIEW,
+        }),
+      });
+
+      if (!res.ok) return;
+
+      window.dispatchEvent(new CustomEvent("slovakStudy:leaderboardChanged"));
+    } catch {
+      // Leaderboard must never break word review UX.
+    }
+  }
+
   function goNext() {
     const curId = current ? getTerm(current) : "";
     const rest = queue.filter((w) => getTerm(w) !== curId);
@@ -274,6 +300,7 @@ export default function WordsSrsPage({
     setXp(addXp(userId, XP_PER_REVIEW, courseId));
     setSessionReviewsDone((value) => value + 1);
     setSessionXpEarned((value) => value + XP_PER_REVIEW);
+    void recordReviewLeaderboardPoint();
 
     setTimeout(() => {
       if (g === 0) {
@@ -460,7 +487,9 @@ export default function WordsSrsPage({
         xpLabel={xpLabel}
         xp={xp.totalXp}
       />
+
       <WordsSrsWeakWords words={allWords} db={db} lang={lang} />
+
       {!current ? (
         sessionCompleted ? (
           <section className="flunio-card rounded-3xl p-5 theme-text sm:p-6">

@@ -24,6 +24,9 @@ model User {
   progress     UserProgress?
   srsProgress  SrsProgress[]
   errorReports ErrorReport[]
+
+  // ✅ активності для leaderboard / рейтингу
+  leaderboardActivities LeaderboardActivity[]
 }
 
 model UserProgress {
@@ -78,7 +81,7 @@ model ErrorReport {
 
   // повідомлення користувача
   category String?
-  status   String  @default("new")
+  status   String @default("new")
   message  String // головний текст
 
   // тех інфа (корисно при дебагу)
@@ -109,4 +112,37 @@ model SrsProgress {
 
   @@id([userId, courseId])
   @@index([userId])
+}
+
+enum LeaderboardActivityType {
+  LESSON
+  REVIEW
+  DICTATION
+  AUDIO_QUIZ
+}
+
+model LeaderboardActivity {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type        LeaderboardActivityType
+  courseId    String
+  activityKey String
+  score       Int
+
+  // Початок тижня. Для MVP використовуємо понеділок 00:00 UTC.
+  weekStart DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Один урок / диктант / аудіоквіз за тиждень не фармиться нескінченно.
+  // Якщо користувач проходить ще раз — зберігаємо тільки кращий score.
+  @@unique([userId, type, courseId, activityKey, weekStart])
+  @@index([weekStart])
+  @@index([userId])
+  @@index([type, weekStart])
+  @@index([courseId, weekStart])
 }

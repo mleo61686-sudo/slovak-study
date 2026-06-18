@@ -1,5 +1,6 @@
 import Link from "next/link";
 import WordsStatsClient from "./components/home/WordsStatsClient";
+import LeaderboardBlock from "./components/LeaderboardBlock";
 
 type Lang = "ua" | "ru" | "en";
 
@@ -473,6 +474,30 @@ export default function HomeContent({
         </div>
       </section>
 
+      <section className="grid items-start gap-4 lg:grid-cols-[1.25fr_0.75fr]">
+        <div className="min-w-0">
+          <WordsStatsClient />
+        </div>
+
+        <div className="grid gap-4">
+          <FeatureCard
+            href="/grammar"
+            icon="📘"
+            title={tr.grammarTitle}
+            desc={tr.grammarDesc}
+            action={tr.open}
+          />
+
+          <FeatureCard
+            href="/dictionary"
+            icon="📚"
+            title={tr.dictTitle}
+            desc={tr.dictDesc}
+            action={tr.open}
+          />
+        </div>
+      </section>
+
       <section className="space-y-5">
         <div className="space-y-2 text-center">
           <h2 className="theme-text text-2xl font-bold sm:text-3xl">
@@ -598,6 +623,10 @@ export default function HomeContent({
       </section>
 
       <section>
+        <LeaderboardBlock lang={lang} limit={5} period="all" compact />
+      </section>
+
+      <section>
         <div className="flunio-card relative overflow-hidden rounded-3xl p-8">
           <div className="pointer-events-none absolute -top-20 left-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
 
@@ -649,30 +678,6 @@ export default function HomeContent({
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="grid items-start gap-4 lg:grid-cols-[1.25fr_0.75fr]">
-        <div className="min-w-0">
-          <WordsStatsClient />
-        </div>
-
-        <div className="grid gap-4">
-          <FeatureCard
-            href="/grammar"
-            icon="📘"
-            title={tr.grammarTitle}
-            desc={tr.grammarDesc}
-            action={tr.open}
-          />
-
-          <FeatureCard
-            href="/dictionary"
-            icon="📚"
-            title={tr.dictTitle}
-            desc={tr.dictDesc}
-            action={tr.open}
-          />
         </div>
       </section>
 

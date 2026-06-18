@@ -320,6 +320,51 @@ function savePracticeResult(key: string, correct: number, total: number) {
   });
 }
 
+type AudioLeaderboardType = "LISTENING" | "DICTATION";
+
+const LISTENING_LEADERBOARD_MAX_SCORE = 5;
+const DICTATION_LEADERBOARD_MAX_SCORE = 20;
+
+function getAudioLeaderboardScore(
+  correct: number,
+  total: number,
+  maxScore: number
+) {
+  if (!Number.isFinite(correct) || !Number.isFinite(total) || total <= 0) {
+    return 0;
+  }
+
+  const percent = Math.max(0, Math.min(1, correct / total));
+
+  return Math.max(0, Math.min(maxScore, Math.round(percent * maxScore)));
+}
+
+async function recordAudioPracticeLeaderboardScore(args: {
+  type: AudioLeaderboardType;
+  courseId: string;
+  activityKey: string;
+  score: number;
+}) {
+  if (args.score <= 0) return;
+
+  try {
+    const res = await fetch("/api/leaderboard/audio-practice", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(args),
+    });
+
+    if (!res.ok) return;
+
+    window.dispatchEvent(new CustomEvent("slovakStudy:leaderboardChanged"));
+  } catch {
+    // Leaderboard must never break audio practice UX.
+  }
+}
+
 function ProgressSummary({
   progress,
   lang,
@@ -510,8 +555,24 @@ export default function AudioPracticeClient({ item }: { item: AudioPracticeItem 
   const checkListeningAnswers = () => {
     setAnswersChecked(true);
     setShowTranscript(false);
-    savePracticeResult(listeningKey, listeningScore, item.questions.length);
+
+    const total = item.questions.length;
+
+    savePracticeResult(listeningKey, listeningScore, total);
     refreshProgress();
+
+    const leaderboardScore = getAudioLeaderboardScore(
+      listeningScore,
+      total,
+      LISTENING_LEADERBOARD_MAX_SCORE
+    );
+
+    void recordAudioPracticeLeaderboardScore({
+      type: "LISTENING",
+      courseId: item.courseId,
+      activityKey: item.id,
+      score: leaderboardScore,
+    });
   };
 
   const checkDictationAnswer = () => {
@@ -522,6 +583,19 @@ export default function AudioPracticeClient({ item }: { item: AudioPracticeItem 
 
     savePracticeResult(dictationKey, result.correctCount, result.expectedCount);
     refreshProgress();
+
+    const leaderboardScore = getAudioLeaderboardScore(
+      result.correctCount,
+      result.expectedCount,
+      DICTATION_LEADERBOARD_MAX_SCORE
+    );
+
+    void recordAudioPracticeLeaderboardScore({
+      type: "DICTATION",
+      courseId: item.courseId,
+      activityKey: item.id,
+      score: leaderboardScore,
+    });
   };
 
   return (
@@ -560,9 +634,8 @@ export default function AudioPracticeClient({ item }: { item: AudioPracticeItem 
           <button
             type="button"
             onClick={() => switchMode("listening")}
-            className={`rounded-2xl px-4 py-3 text-sm font-black transition ${
-              mode === "listening" ? "theme-primary-button" : "theme-secondary-button"
-            }`}
+            className={`rounded-2xl px-4 py-3 text-sm font-black transition ${mode === "listening" ? "theme-primary-button" : "theme-secondary-button"
+              }`}
           >
             🎧 {t.listening}
           </button>
@@ -570,9 +643,8 @@ export default function AudioPracticeClient({ item }: { item: AudioPracticeItem 
           <button
             type="button"
             onClick={() => switchMode("dictation")}
-            className={`rounded-2xl px-4 py-3 text-sm font-black transition ${
-              mode === "dictation" ? "theme-primary-button" : "theme-secondary-button"
-            }`}
+            className={`rounded-2xl px-4 py-3 text-sm font-black transition ${mode === "dictation" ? "theme-primary-button" : "theme-secondary-button"
+              }`}
           >
             ✍️ {t.dictation}
           </button>
@@ -675,11 +747,10 @@ export default function AudioPracticeClient({ item }: { item: AudioPracticeItem 
                   key={rate}
                   type="button"
                   onClick={() => setPlaybackRate(rate)}
-                  className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition ${
-                    playbackRate === rate
-                      ? "border-cyan-300/50 bg-cyan-300/15 theme-text"
-                      : "border-white/10 bg-white/[0.04] theme-text-muted hover:bg-white/[0.08]"
-                  }`}
+                  className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition ${playbackRate === rate
+                    ? "border-cyan-300/50 bg-cyan-300/15 theme-text"
+                    : "border-white/10 bg-white/[0.04] theme-text-muted hover:bg-white/[0.08]"
+                    }`}
                 >
                   {rate}×
                 </button>
@@ -725,15 +796,14 @@ export default function AudioPracticeClient({ item }: { item: AudioPracticeItem 
                               }));
                               setAnswersChecked(false);
                             }}
-                            className={`rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
-                              shouldShowCorrect
-                                ? "border-emerald-300/60 bg-emerald-300/15 theme-text"
-                                : shouldShowWrong
-                                  ? "border-rose-300/60 bg-rose-300/15 theme-text"
-                                  : isSelected
-                                    ? "border-cyan-300/50 bg-cyan-300/15 theme-text"
-                                    : "border-white/10 bg-white/[0.04] theme-text-muted hover:bg-white/[0.08]"
-                            }`}
+                            className={`rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${shouldShowCorrect
+                              ? "border-emerald-300/60 bg-emerald-300/15 theme-text"
+                              : shouldShowWrong
+                                ? "border-rose-300/60 bg-rose-300/15 theme-text"
+                                : isSelected
+                                  ? "border-cyan-300/50 bg-cyan-300/15 theme-text"
+                                  : "border-white/10 bg-white/[0.04] theme-text-muted hover:bg-white/[0.08]"
+                              }`}
                           >
                             {answerText}
                           </button>

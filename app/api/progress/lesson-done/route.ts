@@ -22,6 +22,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { safelyRecordLessonLeaderboardScore } from "@/lib/leaderboard/recordLessonLeaderboardScore";
 
 type CourseId = "sk" | "cs" | "pl";
 type LessonsProgress = Record<string, any>;
@@ -182,6 +183,13 @@ export async function POST(req: Request) {
   const wasDone = isLessonDone(courseLessons[id]);
 
   if (wasDone) {
+    await safelyRecordLessonLeaderboardScore({
+      userId: user.id,
+      courseId,
+      activityKey: id,
+      score: 70,
+    });
+
     return NextResponse.json({
       ok: true,
       courseId,
@@ -231,6 +239,13 @@ export async function POST(req: Request) {
        */
       lastUnlockedLevel: id,
     },
+  });
+
+  await safelyRecordLessonLeaderboardScore({
+    userId: user.id,
+    courseId,
+    activityKey: id,
+    score: 70,
   });
 
   return NextResponse.json({
