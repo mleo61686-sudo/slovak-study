@@ -5,18 +5,18 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Learn Slovak Online from A0 to B2 | Flunio",
+  title: "Learn Slovak Online: Slovak for Beginners A0–B2 | Flunio",
   description:
-    "Learn Slovak through short interactive lessons, pronunciation, vocabulary and practical exercises. Start the complete A0 level for free.",
+    "Learn Slovak online from zero with Flunio: Slovak for beginners, A0 lessons, pronunciation, vocabulary, grammar, phrases and practical exercises.",
 
   alternates: {
     canonical: `${SITE_URL}/learn-slovak`,
   },
 
   openGraph: {
-    title: "Learn Slovak Online from A0 to B2 | Flunio",
+    title: "Learn Slovak Online: Slovak for Beginners | Flunio",
     description:
-      "Start Slovak from zero with short interactive lessons. Complete A0 for free and continue through A1–B2 with Flunio Premium.",
+      "Start Slovak from zero with short interactive lessons, pronunciation, vocabulary, grammar and practical exercises. Complete A0 for free.",
     url: `${SITE_URL}/learn-slovak`,
     siteName: "Flunio",
     type: "website",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Learn Slovak Online from A0 to B2 | Flunio",
+    title: "Learn Slovak Online: Slovak for Beginners | Flunio",
     description:
       "Interactive Slovak lessons with vocabulary, pronunciation and exercises. Start A0 for free.",
   },
@@ -35,26 +35,45 @@ export const metadata: Metadata = {
   },
 };
 
+type RoadmapStep = {
+  title: string;
+  text: string;
+};
+
+type ExamplePhrase = {
+  sk: string;
+  en: string;
+  note: string;
+};
+
 const FAQ = [
+  {
+    q: "Can I learn Slovak online as a complete beginner?",
+    a: "Yes. Flunio starts with Slovak A0, so you can begin from zero. You learn basic words, pronunciation, short phrases and simple exercises step by step.",
+  },
+  {
+    q: "Is Slovak hard to learn?",
+    a: "Slovak can feel difficult because of cases, endings and pronunciation, but it becomes much easier when you learn useful words first and study grammar through examples.",
+  },
+  {
+    q: "How should I learn Slovak as a beginner?",
+    a: "Start with pronunciation, greetings, everyday vocabulary and simple sentence patterns. Then add grammar gradually through examples and regular practice.",
+  },
   {
     q: "Can I start learning Slovak for free?",
     a: "Yes. The complete A0 level is available for free. You can start from the first lesson, learn essential words and complete interactive exercises without buying Premium.",
   },
   {
     q: "What does Flunio Premium unlock?",
-    a: "Premium unlocks the Slovak levels A1, A2, B1 and B2, together with premium practice and review features. One Premium subscription also covers all active Flunio language courses.",
-  },
-  {
-    q: "Is Flunio suitable for complete beginners?",
-    a: "Yes. The Slovak course begins at A0, so you do not need previous knowledge. Lessons introduce vocabulary and exercises gradually.",
+    a: "Premium unlocks Slovak levels A1, A2, B1 and B2, together with premium practice and review features. One Premium subscription also covers all active Flunio language courses.",
   },
   {
     q: "Is the course useful for living and working in Slovakia?",
     a: "Yes. Lessons include practical vocabulary for everyday communication, work, shopping, transport, health, housing and other situations you may encounter in Slovakia.",
   },
   {
-    q: "How long does one lesson take?",
-    a: "Most lessons are designed to be completed in a short study session. You can learn a small group of words and immediately practise them through several exercise types.",
+    q: "How long does one Slovak lesson take?",
+    a: "Most lessons are designed for a short study session. You learn a small group of words and immediately practise them through several exercise types.",
   },
 ];
 
@@ -77,7 +96,7 @@ const PREMIUM_FEATURES = [
 const LESSON_STEPS = [
   {
     number: "01",
-    title: "Learn useful words",
+    title: "Learn useful Slovak words",
     text: "Each lesson introduces a focused group of Slovak words instead of overwhelming you with a large random list.",
   },
   {
@@ -94,6 +113,25 @@ const LESSON_STEPS = [
     number: "04",
     title: "Unlock the next lesson",
     text: "A0 lessons open sequentially, so you always have a clear next step and never need to choose from a confusing list.",
+  },
+];
+
+const BEGINNER_ROADMAP: RoadmapStep[] = [
+  {
+    title: "Start with Slovak pronunciation",
+    text: "Learn how Slovak letters sound before you memorize many words. Pay attention to č, š, ž, ľ, ä, ô and long vowels.",
+  },
+  {
+    title: "Learn basic Slovak words",
+    text: "Begin with greetings, family, food, home, shopping, transport and work vocabulary. These words are useful immediately.",
+  },
+  {
+    title: "Use short Slovak phrases",
+    text: "Do not learn only isolated words. Connect them with simple phrases like I have, I want, I need, where is and how much is it.",
+  },
+  {
+    title: "Add grammar gradually",
+    text: "Slovak grammar is easier after you already know examples. Learn cases, verbs and endings step by step, not all at once.",
   },
 ];
 
@@ -124,6 +162,39 @@ const EXAMPLE_WORDS = [
   },
 ];
 
+const EXAMPLE_PHRASES: ExamplePhrase[] = [
+  {
+    sk: "Dobrý deň",
+    en: "Good day / Hello",
+    note: "polite greeting",
+  },
+  {
+    sk: "Ako sa máš?",
+    en: "How are you?",
+    note: "basic conversation",
+  },
+  {
+    sk: "Nerozumiem",
+    en: "I do not understand",
+    note: "useful beginner phrase",
+  },
+  {
+    sk: "Prosím vás",
+    en: "Please / Excuse me",
+    note: "polite expression",
+  },
+  {
+    sk: "Kde je obchod?",
+    en: "Where is the shop?",
+    note: "city and shopping",
+  },
+  {
+    sk: "Chcem vodu",
+    en: "I want water",
+    note: "simple sentence",
+  },
+];
+
 const TOPICS = [
   "Introductions",
   "Family",
@@ -148,6 +219,9 @@ const primaryButton =
 
 const secondaryButton =
   "theme-secondary-button inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold";
+
+const secondaryBlock =
+  "theme-secondary-button rounded-2xl p-4 font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 
 export default function Page() {
   const faqSchema = {
@@ -207,18 +281,18 @@ export default function Page() {
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
           <div className="space-y-6">
             <div className="theme-pill inline-flex rounded-full px-4 py-2 text-sm font-semibold">
-              🇸🇰 Slovak course · A0 is free
+              🇸🇰 Slovak for beginners · A0 is free
             </div>
 
             <div className="space-y-4">
               <h1 className="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight theme-text sm:text-5xl">
-                Learn Slovak for everyday life, work and communication
+                Learn Slovak online from zero with short daily lessons
               </h1>
 
               <p className="max-w-2xl text-lg leading-8 theme-text-muted">
-                Start from zero with short interactive lessons. Learn useful
-                Slovak words, listen to pronunciation and practise them through
-                seven exercise types.
+                Start Slovak as a beginner with practical vocabulary,
+                pronunciation, simple phrases and interactive exercises. Flunio
+                gives you a clear path from A0 to more advanced Slovak.
               </p>
             </div>
 
@@ -294,6 +368,77 @@ export default function Page() {
         </div>
       </section>
 
+      <section className={`${card} space-y-5 p-6 sm:p-8`}>
+        <div className="text-sm font-bold uppercase tracking-widest theme-accent-text">
+          Slovak for beginners
+        </div>
+
+        <h2 className="text-3xl font-extrabold theme-text">
+          How to learn Slovak step by step
+        </h2>
+
+        <p className="max-w-3xl leading-7 theme-text-muted">
+          If you want to learn Slovak language from zero, do not begin with long
+          grammar tables. Start with sounds, useful words and short phrases.
+          Then add grammar gradually when the examples already feel familiar.
+        </p>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {BEGINNER_ROADMAP.map((step) => (
+            <article key={step.title} className={`${softCard} p-5`}>
+              <h3 className="text-lg font-bold theme-text">{step.title}</h3>
+              <p className="mt-2 leading-7 theme-text-muted">{step.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-5 p-6 sm:p-8`}>
+        <div className="text-sm font-bold uppercase tracking-widest theme-accent-text">
+          Is Slovak hard to learn?
+        </div>
+
+        <h2 className="text-3xl font-extrabold theme-text">
+          Slovak feels easier when you learn it through examples
+        </h2>
+
+        <p className="leading-7 theme-text-muted">
+          Slovak can be challenging for beginners because it has cases, word
+          endings, verb forms and sounds that may be new to you. But it is not
+          impossible. The biggest mistake is trying to learn everything at once.
+        </p>
+
+        <p className="leading-7 theme-text-muted">
+          A better approach is to learn practical words first, listen to
+          pronunciation, use short sentences and then understand grammar step by
+          step. This is exactly how Flunio structures the Slovak A0 course.
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            {
+              title: "Pronunciation",
+              text: "č, š, ž, ľ, ô and long vowels need listening practice.",
+            },
+            {
+              title: "Cases",
+              text: "Endings are easier when you meet them in real phrases.",
+            },
+            {
+              title: "Verbs",
+              text: "Start with common verbs before studying complex patterns.",
+            },
+          ].map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-bold theme-text">{item.title}</h3>
+              <p className="mt-2 text-sm leading-6 theme-text-muted">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="space-y-6">
         <div className="mx-auto max-w-3xl space-y-3 text-center">
           <div className="text-sm font-bold uppercase tracking-widest theme-accent-text">
@@ -306,7 +451,8 @@ export default function Page() {
 
           <p className="theme-text-muted">
             You do not need to combine random videos, word lists and unrelated
-            grammar pages. Flunio gives you a structured lesson sequence.
+            grammar pages. Flunio gives you a structured Slovak language
+            learning sequence.
           </p>
         </div>
 
@@ -342,8 +488,9 @@ export default function Page() {
             </h2>
 
             <p className="leading-7 theme-text-muted">
-              Flunio turns vocabulary into active practice. You repeatedly see,
-              hear, recognise and use every word before completing the lesson.
+              Flunio turns Slovak vocabulary into active practice. You
+              repeatedly see, hear, recognise and use every word before
+              completing the lesson.
             </p>
 
             <Link href="/learning/a0-1" className={primaryButton}>
@@ -383,7 +530,7 @@ export default function Page() {
           </div>
 
           <h2 className="mt-4 text-3xl font-extrabold theme-text">
-            Start with the complete A0 level
+            Start with the complete Slovak A0 level
           </h2>
 
           <p className="mt-3 leading-7 theme-text-muted">
@@ -405,7 +552,9 @@ export default function Page() {
           </Link>
         </article>
 
-        <article className={`${card} relative flex flex-col overflow-hidden p-6 sm:p-8`}>
+        <article
+          className={`${card} relative flex flex-col overflow-hidden p-6 sm:p-8`}
+        >
           <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-fuchsia-500/15 blur-3xl" />
 
           <div className="relative flex h-full flex-col">
@@ -441,7 +590,7 @@ export default function Page() {
       <section className={`${card} space-y-6 p-6 sm:p-8`}>
         <div className="max-w-3xl space-y-3">
           <div className="text-sm font-bold uppercase tracking-widest theme-accent-text">
-            Practical vocabulary
+            Practical Slovak vocabulary
           </div>
 
           <h2 className="text-3xl font-extrabold theme-text">
@@ -474,6 +623,34 @@ export default function Page() {
 
               <div className="mt-1 theme-text-muted">{word.en}</div>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-5 p-6 sm:p-8`}>
+        <div className="text-sm font-bold uppercase tracking-widest theme-accent-text">
+          Basic Slovak phrases
+        </div>
+
+        <h2 className="text-3xl font-extrabold theme-text">
+          Useful Slovak phrases for beginners
+        </h2>
+
+        <p className="max-w-3xl leading-7 theme-text-muted">
+          Beginner Slovak becomes easier when you connect words with short
+          phrases. These examples help you understand how simple Slovak
+          sentences work.
+        </p>
+
+        <div className="grid gap-3 md:grid-cols-2">
+          {EXAMPLE_PHRASES.map((phrase) => (
+            <article key={phrase.sk} className={`${softCard} p-4`}>
+              <h3 className="text-lg font-bold theme-text">{phrase.sk}</h3>
+              <p className="mt-1 theme-text-muted">{phrase.en}</p>
+              <p className="mt-2 text-sm font-semibold theme-accent-text">
+                {phrase.note}
+              </p>
+            </article>
           ))}
         </div>
       </section>

@@ -5,9 +5,9 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Вивчення словацької мови онлайн з нуля A0–B2 | Flunio",
+  title: "Курси словацької мови онлайн з нуля A0–B2 | Flunio",
   description:
-    "Вивчай словацьку мову онлайн у Flunio: короткі уроки A0–B2, словник, граматика, вправи, озвучка та прогрес для щоденного навчання.",
+    "Онлайн курс словацької мови у Flunio: вивчення словацької з нуля, A0 безкоштовно, уроки, слова, граматика, вимова, вправи та прогрес.",
 
   alternates: {
     canonical: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Вивчення словацької мови онлайн з нуля A0–B2 | Flunio",
+    title: "Курси словацької мови онлайн з нуля A0–B2 | Flunio",
     description:
-      "Словацька мова онлайн: уроки, словник, граматика, вправи, озвучка та прогрес в одному місці.",
+      "Словацька мова онлайн: короткі уроки, словник, граматика, вимова, вправи та прогрес в одному місці.",
     url: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
     siteName: "Flunio",
     type: "website",
@@ -30,17 +30,43 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+type RouteCard = {
+  title: string;
+  text: string;
+  href: string;
+};
+
+type FeatureCard = {
+  title: string;
+  text: string;
+};
+
+type WordGroup = {
+  title: string;
+  words: string;
+};
+
+type PhraseItem = {
+  sk: string;
+  ua: string;
+  note: string;
+};
+
 const FAQ = [
   {
-    q: "Чи можна вивчати словацьку онлайн з нуля?",
+    q: "Чи можна вивчати словацьку мову онлайн з нуля?",
     a: "Так. У Flunio можна почати з рівня A0: базові слова, короткі уроки, озвучка, вправи та поступовий перехід до A1, A2, B1 і B2.",
+  },
+  {
+    q: "Чи є безкоштовний онлайн курс словацької?",
+    a: "Так. У Flunio рівень A0 доступний безкоштовно. Можна пройти перші уроки, вивчити базові слова, слухати вимову та виконувати вправи без Premium.",
   },
   {
     q: "Скільки часу потрібно займатися щодня?",
     a: "Оптимально 10–20 хвилин на день. Регулярні короткі заняття зазвичай працюють краще, ніж довгі, але рідкісні сесії.",
   },
   {
-    q: "Що входить у навчання?",
+    q: "Що входить в онлайн навчання словацької?",
     a: "На платформі є уроки по рівнях, словник, граматика з прикладами, озвучка слів і фраз, а також вправи для повторення.",
   },
   {
@@ -48,8 +74,144 @@ const FAQ = [
     a: "Так. Курс допомагає вивчати практичну лексику для побуту, роботи, навчання, документів, транспорту та щоденного спілкування.",
   },
   {
+    q: "Чи треба починати з граматики?",
+    a: "Не обов’язково. Якщо ти починаєш з нуля, краще спочатку вивчити базові слова, вимову та прості фрази, а граматику додавати поступово.",
+  },
+  {
     q: "Чи зберігається прогрес?",
     a: "Так, прогрес уроків зберігається, щоб ти бачив пройдені теми та міг повертатися до повторення.",
+  },
+];
+
+const routeCards: RouteCard[] = [
+  {
+    title: "Словацька для початківців →",
+    text: "Що вчити першим, як пройти перші 7 і 30 днів, які слова та граматику брати на старті.",
+    href: "/slovak-for-beginners",
+  },
+  {
+    title: "Перший урок A0 →",
+    text: "Почни з короткого уроку, вивчи перші слова, послухай вимову й одразу виконай вправи.",
+    href: "/learning/a0-1",
+  },
+  {
+    title: "Словацькі слова з перекладом →",
+    text: "Базова лексика за темами: привітання, сім’я, дім, їжа, транспорт, робота й навчання.",
+    href: "/slovatski-slova-z-perekladom",
+  },
+  {
+    title: "Словацька граматика →",
+    text: "Алфавіт, дієслова, відмінки, порядок слів і базові правила з простими поясненнями.",
+    href: "/slovak-grammar",
+  },
+];
+
+const features: FeatureCard[] = [
+  {
+    title: "1) Уроки словацької по рівнях",
+    text: "Матеріал організований від A0 до B2, щоб ти завжди розумів, що вчити далі. Це допомагає рухатися послідовно, а не стрибати між випадковими темами.",
+  },
+  {
+    title: "2) Коротка щоденна практика",
+    text: "Уроки короткі, тому їх легко проходити щодня. 10–20 хвилин на день достатньо, щоб поступово накопичувати словниковий запас і не вигорати.",
+  },
+  {
+    title: "3) Озвучка слів і фраз",
+    text: "Словацьку важливо не тільки читати, а й чути. Озвучка допомагає звикати до вимови, повторювати слова вголос і краще сприймати мову на слух.",
+  },
+  {
+    title: "4) Словник і граматика разом",
+    text: "У Flunio є уроки, словник, граматичні теми та вправи. Це дозволяє не просто запам’ятовувати слова, а й розуміти, як використовувати їх у реченнях.",
+  },
+];
+
+const studySteps: FeatureCard[] = [
+  {
+    title: "Крок 1: Почни з A0",
+    text: "Якщо ти вивчаєш словацьку з нуля, не починай з B1-граматики або складних таблиць. Спочатку відкрий перші A0-уроки.",
+  },
+  {
+    title: "Крок 2: Вчи слова за темами",
+    text: "Привітання, сім’я, дім, їжа, транспорт, робота, здоров’я, документи — це база для реального життя у Словаччині.",
+  },
+  {
+    title: "Крок 3: Слухай вимову",
+    text: "Словацькі звуки č, š, ž, ľ, ô і довгі голосні легше засвоюються через регулярне слухання та повторення.",
+  },
+  {
+    title: "Крок 4: Додавай граматику поступово",
+    text: "Відмінки, дієслова й закінчення краще розуміти через уже знайомі слова та приклади, а не через сухі таблиці.",
+  },
+];
+
+const levelCards: FeatureCard[] = [
+  {
+    title: "A0 — старт з нуля",
+    text: "Перші слова, базові фрази, вимова, прості вправи й поступове звикання до словацької мови.",
+  },
+  {
+    title: "A1 — базове спілкування",
+    text: "Більше тем для щоденного життя, прості речення, найчастіші дієслова та перші граматичні конструкції.",
+  },
+  {
+    title: "A2 — впевненіша база",
+    text: "Більше лексики для роботи, навчання, транспорту, документів, побуту й реальних ситуацій.",
+  },
+  {
+    title: "B1–B2 — розвиток мови",
+    text: "Розширення словника, складніші речення, повторення, граматика й підготовка до впевненішого користування мовою.",
+  },
+];
+
+const wordGroups: WordGroup[] = [
+  {
+    title: "Перші слова",
+    words: "dom, práca, obchod, rodina, voda, jedlo, mesto, škola, zdravie.",
+  },
+  {
+    title: "Щоденні ситуації",
+    words: "dobrý deň, ďakujem, prosím, prepáčte, nerozumiem, kde je...",
+  },
+  {
+    title: "Робота й навчання",
+    words: "pracovať, rozumieť, hovoriť, dokument, kolega, škola, čas.",
+  },
+  {
+    title: "Транспорт і місто",
+    words: "autobus, vlak, zastávka, ulica, cesta, ísť, prísť, odísť.",
+  },
+];
+
+const phrases: PhraseItem[] = [
+  {
+    sk: "Dobrý deň",
+    ua: "Добрий день",
+    note: "ввічливе привітання",
+  },
+  {
+    sk: "Ako sa máš?",
+    ua: "Як справи?",
+    note: "просте спілкування",
+  },
+  {
+    sk: "Nerozumiem",
+    ua: "Я не розумію",
+    note: "коли словацька звучить занадто швидко",
+  },
+  {
+    sk: "Prosím vás",
+    ua: "Будь ласка / перепрошую",
+    note: "ввічливе звертання",
+  },
+  {
+    sk: "Kde je obchod?",
+    ua: "Де магазин?",
+    note: "місто й покупки",
+  },
+  {
+    sk: "Chcem vodu",
+    ua: "Я хочу воду",
+    note: "просте речення",
   },
 ];
 
@@ -59,7 +221,10 @@ const primaryButton =
   "theme-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 const secondaryButton =
   "theme-secondary-button inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
-const textLink = "font-semibold theme-accent-text underline-offset-4 hover:underline";
+const secondaryBlock =
+  "theme-secondary-button rounded-2xl p-4 font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const textLink =
+  "font-semibold theme-accent-text underline-offset-4 hover:underline";
 
 export default function Page() {
   const faqSchema = {
@@ -75,6 +240,23 @@ export default function Page() {
     })),
   };
 
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: "Курси словацької мови онлайн з нуля A0–B2",
+    description:
+      "Онлайн курс словацької мови у Flunio з уроками, словником, граматикою, вимовою, вправами та прогресом.",
+    provider: {
+      "@type": "Organization",
+      name: "Flunio",
+      url: SITE_URL,
+    },
+    url: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
+    inLanguage: "uk",
+    educationalLevel: "A0–B2",
+    isAccessibleForFree: true,
+  };
+
   return (
     <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
@@ -84,36 +266,42 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      <Script
+        id="course-schema-uk-slovak-online"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+      />
+
       <section className={`${card} space-y-4 p-8`}>
         <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold theme-text-muted">
-          Словацька онлайн · A0–B2 · уроки, граматика, словник і практика
+          Онлайн курс словацької · A0 безкоштовно · A1–B2 Premium
         </div>
 
         <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
-          Вивчення словацької мови онлайн — курс з нуля до B2
+          Курси словацької мови онлайн — вивчення з нуля до B2
         </h1>
 
         <p className="theme-text-muted">
-          Flunio допомагає вивчати словацьку мову онлайн системно і без хаосу.
-          Замість випадкових списків слів, відео та складних граматичних
-          пояснень ти можеш проходити короткі уроки, слухати вимову, виконувати
-          вправи та поступово будувати словниковий запас.
+          Flunio — це онлайн курс словацької мови для тих, хто хоче почати з
+          нуля і рухатися без хаосу. Замість випадкових списків слів, відео та
+          складних пояснень ти проходиш короткі уроки, слухаєш вимову, виконуєш
+          вправи й поступово будуєш словниковий запас.
         </p>
 
         <p className="theme-text-muted">
-          Курс підходить для тих, хто починає з нуля, хоче покращити щоденне
-          спілкування або вивчає словацьку для життя, роботи, навчання чи
-          документів у Словаччині. Почни з A0 і рухайся далі до A1, A2, B1 та B2
-          у своєму темпі.
+          Курс підходить для життя, роботи, навчання, документів і щоденного
+          спілкування у Словаччині. Рівень A0 доступний безкоштовно, а A1, A2,
+          B1 і B2 відкриваються у Premium.
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link className={primaryButton} href="/learning">
-            Почати навчання
+          <Link className={primaryButton} href="/learning/a0-1">
+            Почати A0 безкоштовно →
           </Link>
 
-          <Link className={secondaryButton} href="/learning/a0-1">
-            Почати з A0 →
+          <Link className={secondaryButton} href="/learning">
+            Усі рівні курсу
           </Link>
 
           <Link className={secondaryButton} href="/slovak-for-beginners">
@@ -137,100 +325,27 @@ export default function Page() {
 
         <p className="theme-text-muted">
           Якщо ти тільки починаєш, краще не відкривати одразу всі теми. Йди
-          маршрутом: спочатку перший урок, потім базові слова, після цього
-          граматика, типові помилки й регулярна практика.
+          маршрутом: перший урок, базові слова, вимова, прості фрази, а вже
+          потім граматика та регулярне повторення.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Link href="/slovak-for-beginners" className={`${softCard} block p-4`}>
-            <h3 className="font-semibold theme-text">
-              Словацька для початківців →
-            </h3>
-            <p className="mt-2 text-sm theme-text-muted">
-              Що вчити першим, як пройти перші 7 і 30 днів, які слова та
-              граматику брати на старті.
-            </p>
-          </Link>
-
-          <Link href="/learn-slovak" className={`${softCard} block p-4`}>
-            <h3 className="font-semibold theme-text">
-              Learn Slovak online →
-            </h3>
-            <p className="mt-2 text-sm theme-text-muted">
-              Англомовна сторінка курсу словацької з рівнями, уроками,
-              вимовою, словником і вправами.
-            </p>
-          </Link>
-
-          <Link href="/slovak-grammar" className={`${softCard} block p-4`}>
-            <h3 className="font-semibold theme-text">
-              Словацька граматика →
-            </h3>
-            <p className="mt-2 text-sm theme-text-muted">
-              Огляд граматики: алфавіт, дієслова, відмінки, порядок слів і
-              базові правила.
-            </p>
-          </Link>
-
-          <Link
-            href="/slovatski-slova-z-perekladom"
-            className={`${softCard} block p-4`}
-          >
-            <h3 className="font-semibold theme-text">
-              Словацькі слова з перекладом →
-            </h3>
-            <p className="mt-2 text-sm theme-text-muted">
-              Базова лексика за темами: привітання, сім’я, дім, їжа, транспорт,
-              робота й навчання.
-            </p>
-          </Link>
+          {routeCards.map((item) => (
+            <Link key={item.href} href={item.href} className={`${softCard} block p-4`}>
+              <h3 className="font-semibold theme-text">{item.title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{item.text}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">
-            1) Уроки словацької по рівнях
-          </h2>
-          <p className="mt-2 theme-text-muted">
-            Матеріал організований від A0 до B2, щоб ти завжди розумів, що
-            вчити далі. Це допомагає рухатися послідовно, а не стрибати між
-            випадковими темами.
-          </p>
-        </div>
-
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">
-            2) Коротка щоденна практика
-          </h2>
-          <p className="mt-2 theme-text-muted">
-            Уроки короткі, тому їх легко проходити щодня. 10–20 хвилин на день
-            достатньо, щоб поступово накопичувати словниковий запас і не
-            вигорати.
-          </p>
-        </div>
-
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">
-            3) Озвучка слів і фраз
-          </h2>
-          <p className="mt-2 theme-text-muted">
-            Словацьку важливо не тільки читати, а й чути. Озвучка допомагає
-            звикати до вимови, повторювати слова вголос і краще сприймати мову
-            на слух.
-          </p>
-        </div>
-
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">
-            4) Словник і граматика разом
-          </h2>
-          <p className="mt-2 theme-text-muted">
-            У Flunio є уроки, словник, граматичні теми та вправи. Це дозволяє
-            не просто запам’ятовувати слова, а й розуміти, як використовувати їх
-            у реченнях.
-          </p>
-        </div>
+        {features.map((item) => (
+          <div key={item.title} className={`${card} p-5`}>
+            <h2 className="text-lg font-bold theme-text">{item.title}</h2>
+            <p className="mt-2 theme-text-muted">{item.text}</p>
+          </div>
+        ))}
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -245,51 +360,14 @@ export default function Page() {
           граматика сприймається значно легше.
         </p>
 
-        <ol className="list-decimal space-y-2 pl-5 theme-text-muted">
-          <li>
-            Прочитай короткий маршрут{" "}
-            <Link className={textLink} href="/slovak-for-beginners">
-              словацької для початківців
-            </Link>
-            .
-          </li>
-          <li>
-            Почни з{" "}
-            <Link className={textLink} href="/learning/a0-1">
-              першого уроку A0
-            </Link>
-            , якщо вивчаєш словацьку з нуля.
-          </li>
-          <li>
-            Проходь невеликі{" "}
-            <Link className={textLink} href="/learning">
-              уроки словацької
-            </Link>{" "}
-            з корисними словами.
-          </li>
-          <li>Слухай озвучку і повторюй слова вголос.</li>
-          <li>
-            Роби вправи у розділі{" "}
-            <Link className={textLink} href="/practice">
-              practice
-            </Link>{" "}
-            одразу після уроку.
-          </li>
-          <li>
-            Користуйся{" "}
-            <Link className={textLink} href="/dictionary">
-              словником
-            </Link>{" "}
-            для пошуку і повторення.
-          </li>
-          <li>
-            Відкривай{" "}
-            <Link className={textLink} href="/slovak-grammar">
-              словацьку граматику
-            </Link>
-            , коли потрібно зрозуміти правило.
-          </li>
-        </ol>
+        <div className="grid gap-4">
+          {studySteps.map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-text">{item.title}</h3>
+              <p className="mt-2 theme-text-muted">{item.text}</p>
+            </div>
+          ))}
+        </div>
 
         <div className="flex flex-wrap gap-3 pt-2">
           <Link className={primaryButton} href="/learning/a0-1">
@@ -300,6 +378,31 @@ export default function Page() {
             Як вивчити словацьку →
           </Link>
         </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Рівні онлайн курсу словацької
+        </h2>
+
+        <p className="theme-text-muted">
+          Flunio побудований як послідовний курс. A0 допомагає стартувати з
+          нуля, A1–A2 розширюють базу, а B1–B2 дають більше практики, лексики й
+          граматики для впевненішого користування мовою.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {levelCards.map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-text">{item.title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{item.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <Link href="/learning" className={secondaryButton}>
+          Подивитися всі рівні →
+        </Link>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -362,23 +465,12 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className={`${softCard} p-4`}>
-            <h3 className="font-semibold theme-text">Щоденна словацька</h3>
-            <p className="mt-2 theme-text-muted">
-              Вчи слова і фрази для привітань, їжі, сім’ї, покупок, житла,
-              транспорту та повсякденних розмов.
-            </p>
-          </div>
-
-          <div className={`${softCard} p-4`}>
-            <h3 className="font-semibold theme-text">
-              Словацька для роботи й навчання
-            </h3>
-            <p className="mt-2 theme-text-muted">
-              Поступово додавай слова для інструкцій, графіків, документів,
-              комунікації, навчання і робочих ситуацій.
-            </p>
-          </div>
+          {wordGroups.map((group) => (
+            <div key={group.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-text">{group.title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{group.words}</p>
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-wrap gap-3 pt-2">
@@ -389,6 +481,30 @@ export default function Page() {
           <Link href="/dictionary" className={secondaryButton}>
             Відкрити словник →
           </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Корисні словацькі фрази для старту
+        </h2>
+
+        <p className="theme-text-muted">
+          Щоб словацька не залишалася лише списком слів, одразу з’єднуй лексику
+          з короткими фразами. Так легше зрозуміти порядок слів і базову логіку
+          речення.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {phrases.map((phrase) => (
+            <div key={phrase.sk} className={`${softCard} p-4`}>
+              <h3 className="text-lg font-bold theme-text">{phrase.sk}</h3>
+              <p className="mt-1 theme-text-muted">{phrase.ua}</p>
+              <p className="mt-2 text-sm font-semibold theme-accent-text">
+                {phrase.note}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -414,21 +530,21 @@ export default function Page() {
           .
         </p>
 
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/slovak-grammar" className={secondaryButton}>
-            Словацька граматика
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/slovak-grammar" className={secondaryBlock}>
+            Словацька граматика →
           </Link>
 
-          <Link href="/grammar" className={secondaryButton}>
-            Усі граматичні теми
+          <Link href="/grammar" className={secondaryBlock}>
+            Усі граматичні теми →
           </Link>
 
-          <Link href="/dictionary" className={secondaryButton}>
-            Відкрити словник
+          <Link href="/dictionary" className={secondaryBlock}>
+            Відкрити словник →
           </Link>
 
-          <Link href="/practice" className={secondaryButton}>
-            Перейти до вправ
+          <Link href="/learning" className={secondaryBlock}>
+            Перейти до навчання →
           </Link>
         </div>
       </section>
@@ -456,7 +572,10 @@ export default function Page() {
             </div>
           </Link>
 
-          <Link href="/yak-vyvchyty-slovatsku-movu" className={`${softCard} block p-4`}>
+          <Link
+            href="/yak-vyvchyty-slovatsku-movu"
+            className={`${softCard} block p-4`}
+          >
             <div className="font-semibold theme-text">
               Якщо хочеш план навчання →
             </div>
@@ -469,15 +588,16 @@ export default function Page() {
             href="/slovatski-slova-z-perekladom"
             className={`${softCard} block p-4`}
           >
-            <div className="font-semibold theme-text">
-              Якщо потрібні слова →
-            </div>
+            <div className="font-semibold theme-text">Якщо потрібні слова →</div>
             <div className="mt-1 text-sm theme-text-muted">
               Почни з базової лексики за темами й перекладом українською.
             </div>
           </Link>
 
-          <Link href="/pomylky-v-slovatskii-movi" className={`${softCard} block p-4`}>
+          <Link
+            href="/pomylky-v-slovatskii-movi"
+            className={`${softCard} block p-4`}
+          >
             <div className="font-semibold theme-text">
               Якщо боїшся помилок →
             </div>
@@ -514,8 +634,8 @@ export default function Page() {
             Почати перший урок →
           </Link>
 
-          <Link className={secondaryButton} href="/practice">
-            Відкрити практику
+          <Link className={secondaryButton} href="/premium">
+            Що відкриває Premium
           </Link>
 
           <Link className={secondaryButton} href="/dictionary">

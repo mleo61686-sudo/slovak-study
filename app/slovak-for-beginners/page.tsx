@@ -5,9 +5,9 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Slovak for Beginners: Learn Slovak from Zero | Flunio",
+  title: "Slovak for Beginners: Learn Slovak from Zero Step by Step | Flunio",
   description:
-    "Slovak for beginners: learn what to study first, how to start from zero, first Slovak words, pronunciation basics, grammar order and a simple 30-day learning plan.",
+    "Slovak for beginners: learn how to start from zero, first Slovak words, pronunciation, basic phrases, grammar order and a simple 7-day and 30-day study plan.",
 
   alternates: {
     canonical: `${SITE_URL}/slovak-for-beginners`,
@@ -16,13 +16,35 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Slovak for Beginners: Learn Slovak from Zero | Flunio",
     description:
-      "A beginner roadmap for learning Slovak: first words, pronunciation, grammar order, common mistakes and daily practice.",
+      "A practical beginner roadmap for learning Slovak: first words, pronunciation, phrases, grammar order, common mistakes and daily practice.",
     url: `${SITE_URL}/slovak-for-beginners`,
     siteName: "Flunio",
     type: "website",
   },
 
   robots: { index: true, follow: true },
+};
+
+type RoadmapItem = {
+  title: string;
+  text: string;
+};
+
+type WordGroup = {
+  title: string;
+  words: string;
+};
+
+type PhraseItem = {
+  sk: string;
+  en: string;
+  use: string;
+};
+
+type SoundItem = {
+  sound: string;
+  example: string;
+  note: string;
 };
 
 const FAQ = [
@@ -36,7 +58,7 @@ const FAQ = [
   },
   {
     q: "Is Slovak hard for beginners?",
-    a: "Slovak can be difficult at first because of cases, word endings, verb forms and pronunciation. But it becomes easier when you learn in small steps instead of trying to memorize everything at once.",
+    a: "Slovak can feel hard at first because of cases, word endings, verb forms and pronunciation. But it becomes easier when you learn in small steps instead of trying to memorize everything at once.",
   },
   {
     q: "How many Slovak words should a beginner learn first?",
@@ -45,6 +67,214 @@ const FAQ = [
   {
     q: "How long should I study Slovak every day?",
     a: "For beginners, 10–20 minutes a day is enough to build a habit. Short daily practice is usually better than long irregular study sessions.",
+  },
+  {
+    q: "Should I learn Slovak grammar first?",
+    a: "Not first. Learn useful words, pronunciation and short phrases before deep grammar. Slovak grammar becomes easier when it explains examples you already know.",
+  },
+];
+
+const START_ORDER: RoadmapItem[] = [
+  {
+    title: "1) Start with Slovak pronunciation",
+    text: "Before learning many words, get used to Slovak sounds. Listen to words with č, š, ž, ľ, ť, ď, ô and long vowels so Slovak starts to sound less strange.",
+  },
+  {
+    title: "2) Learn useful Slovak words first",
+    text: "Begin with words you can use in daily life: people, home, food, transport, work, time, questions and basic verbs.",
+  },
+  {
+    title: "3) Build simple Slovak phrases",
+    text: "Do not wait until you know all grammar. Start making short phrases: I am, I have, I need, where is, how much, I want.",
+  },
+  {
+    title: "4) Add Slovak grammar gradually",
+    text: "Slovak grammar is important, but beginners should learn it in order: sentence structure, verbs, gender, cases and common endings.",
+  },
+];
+
+const LEARNING_ORDER: RoadmapItem[] = [
+  {
+    title: "Step 1: Pronunciation and alphabet",
+    text: "Learn how Slovak letters sound, especially č, š, ž, ľ, ť, ď, ň, ô and long vowels. You do not need perfect pronunciation at the start, but you should hear the difference between sounds.",
+  },
+  {
+    title: "Step 2: First everyday words",
+    text: "Learn words for greetings, people, home, city, food, work, study, numbers, time and transport. These words appear constantly in beginner conversations.",
+  },
+  {
+    title: "Step 3: Simple sentence patterns",
+    text: "Practice short structures like “I am…”, “I have…”, “I want…”, “I need…”, “Where is…?” and “How much is…?”. These phrases make vocabulary useful.",
+  },
+  {
+    title: "Step 4: Basic Slovak verbs",
+    text: "Focus on common verbs such as byť, mať, robiť, ísť, chcieť, potrebovať, hovoriť and rozumieť. Verbs help you create real sentences.",
+  },
+  {
+    title: "Step 5: Grammar in small pieces",
+    text: "After you know some words and phrases, start learning gender, present tense, cases and word endings gradually. Grammar is easier when it explains sentences you already use.",
+  },
+];
+
+const FIRST_WEEK: RoadmapItem[] = [
+  {
+    title: "Day 1",
+    text: "Listen to Slovak pronunciation and learn basic greetings: ahoj, dobrý deň, prosím, ďakujem.",
+  },
+  {
+    title: "Day 2",
+    text: "Learn people and basic identity words: ja, ty, človek, žena, muž, dieťa, rodina.",
+  },
+  {
+    title: "Day 3",
+    text: "Learn home and daily objects: dom, byt, izba, stôl, voda, jedlo.",
+  },
+  {
+    title: "Day 4",
+    text: "Learn city and transport words: mesto, ulica, zastávka, autobus, vlak.",
+  },
+  {
+    title: "Day 5",
+    text: "Learn first verbs: byť, mať, robiť, ísť, chcieť, potrebovať.",
+  },
+  {
+    title: "Day 6",
+    text: "Build simple phrases with “I am”, “I have”, “I want” and “I need”.",
+  },
+  {
+    title: "Day 7",
+    text: "Review all words, listen again and repeat difficult words aloud.",
+  },
+];
+
+const THIRTY_DAY_PLAN: RoadmapItem[] = [
+  {
+    title: "Week 1: Sounds and first words",
+    text: "Focus on pronunciation, greetings, basic nouns and very simple phrases.",
+  },
+  {
+    title: "Week 2: Daily life vocabulary",
+    text: "Learn words for home, food, transport, work, time and everyday actions.",
+  },
+  {
+    title: "Week 3: Verbs and short sentences",
+    text: "Practice common verbs and build short sentences with words you already know.",
+  },
+  {
+    title: "Week 4: Grammar foundations",
+    text: "Start learning gender, present tense and the idea of Slovak cases without trying to memorize everything.",
+  },
+];
+
+const FIRST_WORDS: WordGroup[] = [
+  {
+    title: "People and family",
+    words: "ja, ty, on, ona, človek, žena, muž, dieťa, rodina, kamarát.",
+  },
+  {
+    title: "Home and city",
+    words: "dom, byt, izba, stôl, dvere, mesto, ulica, obchod, škola.",
+  },
+  {
+    title: "Food and daily life",
+    words: "voda, jedlo, chlieb, káva, čaj, ráno, deň, večer, práca.",
+  },
+  {
+    title: "Transport and movement",
+    words: "autobus, vlak, auto, zastávka, cesta, ísť, prísť, odísť.",
+  },
+  {
+    title: "Basic verbs",
+    words: "byť, mať, robiť, chcieť, potrebovať, hovoriť, rozumieť, vedieť.",
+  },
+  {
+    title: "Useful phrases",
+    words: "dobrý deň, ahoj, ďakujem, prosím, prepáčte, nerozumiem.",
+  },
+];
+
+const BEGINNER_PHRASES: PhraseItem[] = [
+  {
+    sk: "Dobrý deň",
+    en: "Good day / Hello",
+    use: "polite greeting",
+  },
+  {
+    sk: "Ako sa máš?",
+    en: "How are you?",
+    use: "basic conversation",
+  },
+  {
+    sk: "Nerozumiem",
+    en: "I do not understand",
+    use: "when Slovak is too fast",
+  },
+  {
+    sk: "Prosím vás",
+    en: "Please / Excuse me",
+    use: "polite request",
+  },
+  {
+    sk: "Kde je obchod?",
+    en: "Where is the shop?",
+    use: "city and shopping",
+  },
+  {
+    sk: "Chcem vodu",
+    en: "I want water",
+    use: "simple sentence",
+  },
+];
+
+const PRONUNCIATION: SoundItem[] = [
+  {
+    sound: "č",
+    example: "človek",
+    note: "similar to “ch” in English",
+  },
+  {
+    sound: "š",
+    example: "škola",
+    note: "similar to “sh” in English",
+  },
+  {
+    sound: "ž",
+    example: "žena",
+    note: "voiced sound, common in Slovak words",
+  },
+  {
+    sound: "ľ",
+    example: "ľudia",
+    note: "soft L; listen and repeat slowly",
+  },
+  {
+    sound: "ô",
+    example: "stôl",
+    note: "a special Slovak vowel sound",
+  },
+  {
+    sound: "á / é / í / ú",
+    example: "práca",
+    note: "long vowels are important in Slovak pronunciation",
+  },
+];
+
+const COMMON_MISTAKES: RoadmapItem[] = [
+  {
+    title: "Trying to learn all cases immediately",
+    text: "Slovak cases are important, but beginners should first understand the idea and learn common examples. Full tables can come later.",
+  },
+  {
+    title: "Memorizing words without audio",
+    text: "If you only read Slovak words, pronunciation may become harder later. Listen and repeat from the first lessons.",
+  },
+  {
+    title: "Learning random vocabulary",
+    text: "A beginner needs useful words, not rare words. Focus on daily topics and common verbs first.",
+  },
+  {
+    title: "Waiting too long to make sentences",
+    text: "Even with limited vocabulary, you can build simple sentences. This helps words become active, not just passive.",
   },
 ];
 
@@ -57,6 +287,9 @@ const primaryButton =
 
 const secondaryButton =
   "theme-secondary-button inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+
+const secondaryBlock =
+  "theme-secondary-button rounded-2xl p-4 font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 
 export default function Page() {
   const faqSchema = {
@@ -91,7 +324,7 @@ export default function Page() {
           </div>
 
           <h1 className="text-3xl font-extrabold leading-tight tracking-tight theme-text sm:text-4xl">
-            Slovak for beginners — what to learn first if you start from zero
+            Slovak for beginners — learn Slovak from zero step by step
           </h1>
 
           <p className="theme-text-muted">
@@ -102,21 +335,22 @@ export default function Page() {
           </p>
 
           <p className="theme-text-muted">
-            This page explains what to learn first, how to organize your first 7
-            and 30 days, which Slovak words matter most at the beginning and
-            when grammar should enter your study routine.
+            This guide explains how to learn Slovak from zero, what to study
+            first, how to organize your first 7 and 30 days, which Slovak words
+            matter most at the beginning and when grammar should enter your
+            study routine.
           </p>
 
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link href="/learning" className={primaryButton}>
-              Start Slovak lessons
+            <Link href="/learning/a0-1" className={primaryButton}>
+              Start Slovak A0 for free
             </Link>
 
             {[
               ["Full Slovak course", "/learn-slovak"],
               ["Slovak grammar", "/slovak-grammar"],
-              ["Start with A0", "/learning/a0-1"],
-              ["Practice", "/practice"],
+              ["Dictionary", "/dictionary"],
+              ["All course levels", "/learning"],
             ].map(([label, href]) => (
               <Link key={href} href={href} className={secondaryButton}>
                 {label}
@@ -127,27 +361,12 @@ export default function Page() {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        {[
-          [
-            "1) Start with pronunciation",
-            "Before learning many words, get used to Slovak sounds. Listen to words with č, š, ž, ľ, ť, ď, ô and long vowels so Slovak starts to sound less strange.",
-          ],
-          [
-            "2) Learn useful words first",
-            "Begin with words you can use in daily life: people, home, food, transport, work, time, questions and basic verbs.",
-          ],
-          [
-            "3) Build simple phrases",
-            "Do not wait until you know all grammar. Start making short phrases: I am, I have, I need, where is, how much, I want.",
-          ],
-          [
-            "4) Add grammar gradually",
-            "Slovak grammar is important, but beginners should learn it in order: sentence structure, verbs, gender, cases and common endings.",
-          ],
-        ].map(([title, text]) => (
-          <div key={title} className={`${card} p-5`}>
-            <h2 className="text-lg font-bold theme-accent-text">{title}</h2>
-            <p className="mt-2 theme-text-muted">{text}</p>
+        {START_ORDER.map((item) => (
+          <div key={item.title} className={`${card} p-5`}>
+            <h2 className="text-lg font-bold theme-accent-text">
+              {item.title}
+            </h2>
+            <p className="mt-2 theme-text-muted">{item.text}</p>
           </div>
         ))}
       </section>
@@ -164,31 +383,52 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4">
+          {LEARNING_ORDER.map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-accent-text">{item.title}</h3>
+              <p className="mt-2 theme-text-muted">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Is Slovak hard to learn?
+        </h2>
+
+        <p className="theme-text-muted">
+          Slovak can be hard for beginners if you start with too much grammar at
+          once. The language has cases, endings, gender, verb forms and sounds
+          that may be new to you. But it becomes much easier when you learn
+          through examples.
+        </p>
+
+        <p className="theme-text-muted">
+          The practical path is simple: listen first, learn useful words, build
+          short phrases, and then use grammar to understand why the sentence
+          works. This is better than memorizing long tables before you can say
+          anything.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-3">
           {[
             [
-              "Step 1: Pronunciation and alphabet",
-              "Learn how Slovak letters sound, especially č, š, ž, ľ, ť, ď, ň, ô and long vowels. You do not need perfect pronunciation at the start, but you should hear the difference between sounds.",
+              "Pronunciation",
+              "č, š, ž, ľ, ô and long vowels need listening practice.",
             ],
             [
-              "Step 2: First everyday words",
-              "Learn words for greetings, people, home, city, food, work, study, numbers, time and transport. These words appear constantly in beginner conversations.",
+              "Cases",
+              "Endings are easier when you meet them in real phrases.",
             ],
             [
-              "Step 3: Simple sentence patterns",
-              "Practice short structures like “I am…”, “I have…”, “I want…”, “I need…”, “Where is…?” and “How much is…?”. These phrases make vocabulary useful.",
-            ],
-            [
-              "Step 4: Basic verbs",
-              "Focus on common verbs such as byť, mať, robiť, ísť, chcieť, potrebovať, hovoriť and rozumieť. Verbs help you create real sentences.",
-            ],
-            [
-              "Step 5: Grammar in small pieces",
-              "After you know some words and phrases, start learning gender, present tense, cases and word endings gradually. Grammar is easier when it explains sentences you already use.",
+              "Verbs",
+              "Start with common verbs before studying complex patterns.",
             ],
           ].map(([title, text]) => (
             <div key={title} className={`${softCard} p-4`}>
               <h3 className="font-semibold theme-accent-text">{title}</h3>
-              <p className="mt-2 theme-text-muted">{text}</p>
+              <p className="mt-2 text-sm theme-text-muted">{text}</p>
             </div>
           ))}
         </div>
@@ -206,39 +446,10 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {[
-            [
-              "Day 1",
-              "Listen to Slovak pronunciation and learn basic greetings: ahoj, dobrý deň, prosím, ďakujem.",
-            ],
-            [
-              "Day 2",
-              "Learn people and basic identity words: ja, ty, človek, žena, muž, dieťa, rodina.",
-            ],
-            [
-              "Day 3",
-              "Learn home and daily objects: dom, byt, izba, stôl, voda, jedlo.",
-            ],
-            [
-              "Day 4",
-              "Learn city and transport words: mesto, ulica, zastávka, autobus, vlak.",
-            ],
-            [
-              "Day 5",
-              "Learn first verbs: byť, mať, robiť, ísť, chcieť, potrebovať.",
-            ],
-            [
-              "Day 6",
-              "Build simple phrases with “I am”, “I have”, “I want” and “I need”.",
-            ],
-            [
-              "Day 7",
-              "Review all words, listen again and repeat difficult words aloud.",
-            ],
-          ].map(([title, text]) => (
-            <div key={title} className={`${softCard} p-4`}>
-              <h3 className="font-semibold theme-accent-text">{title}</h3>
-              <p className="mt-2 text-sm theme-text-muted">{text}</p>
+          {FIRST_WEEK.map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-accent-text">{item.title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{item.text}</p>
             </div>
           ))}
         </div>
@@ -260,27 +471,10 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {[
-            [
-              "Week 1: Sounds and first words",
-              "Focus on pronunciation, greetings, basic nouns and very simple phrases.",
-            ],
-            [
-              "Week 2: Daily life vocabulary",
-              "Learn words for home, food, transport, work, time and everyday actions.",
-            ],
-            [
-              "Week 3: Verbs and short sentences",
-              "Practice common verbs and build short sentences with words you already know.",
-            ],
-            [
-              "Week 4: Grammar foundations",
-              "Start learning gender, present tense and the idea of Slovak cases without trying to memorize everything.",
-            ],
-          ].map(([title, text]) => (
-            <div key={title} className={`${softCard} p-4`}>
-              <h3 className="font-semibold theme-accent-text">{title}</h3>
-              <p className="mt-2 text-sm theme-text-muted">{text}</p>
+          {THIRTY_DAY_PLAN.map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-accent-text">{item.title}</h3>
+              <p className="mt-2 text-sm theme-text-muted">{item.text}</p>
             </div>
           ))}
         </div>
@@ -297,35 +491,12 @@ export default function Page() {
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {[
-            [
-              "People and family",
-              "ja, ty, on, ona, človek, žena, muž, dieťa, rodina, kamarát.",
-            ],
-            [
-              "Home and city",
-              "dom, byt, izba, stôl, dvere, mesto, ulica, obchod, škola.",
-            ],
-            [
-              "Food and daily life",
-              "voda, jedlo, chlieb, káva, čaj, ráno, deň, večer, práca.",
-            ],
-            [
-              "Transport and movement",
-              "autobus, vlak, auto, zastávka, cesta, ísť, prísť, odísť.",
-            ],
-            [
-              "Basic verbs",
-              "byť, mať, robiť, chcieť, potrebovať, hovoriť, rozumieť, vedieť.",
-            ],
-            [
-              "Useful phrases",
-              "dobrý deň, ahoj, ďakujem, prosím, prepáčte, nerozumiem.",
-            ],
-          ].map(([title, text]) => (
-            <div key={title} className={`${softCard} p-4`}>
-              <h3 className="font-semibold theme-accent-text">{title}</h3>
-              <p className="mt-2 text-sm theme-text-muted">{text}</p>
+          {FIRST_WORDS.map((group) => (
+            <div key={group.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-accent-text">
+                {group.title}
+              </h3>
+              <p className="mt-2 text-sm theme-text-muted">{group.words}</p>
             </div>
           ))}
         </div>
@@ -342,6 +513,30 @@ export default function Page() {
 
       <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">
+          Useful Slovak phrases for beginners
+        </h2>
+
+        <p className="theme-text-muted">
+          Beginner Slovak becomes easier when you connect words with short
+          phrases. These examples help you understand how simple Slovak
+          sentences work.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {BEGINNER_PHRASES.map((phrase) => (
+            <div key={phrase.sk} className={`${softCard} p-4`}>
+              <h3 className="text-lg font-bold theme-text">{phrase.sk}</h3>
+              <p className="mt-1 theme-text-muted">{phrase.en}</p>
+              <p className="mt-2 text-sm font-semibold theme-accent-text">
+                {phrase.use}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Slovak pronunciation basics for beginners
         </h2>
 
@@ -351,24 +546,16 @@ export default function Page() {
           and repeat words aloud from the beginning.
         </p>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          {[
-            [
-              "Special letters",
-              "Pay attention to č, š, ž, ľ, ť, ď, ň, ô and long vowels like á, é, í, ú.",
-            ],
-            [
-              "Long vowels",
-              "Long and short vowels can change how natural a word sounds.",
-            ],
-            [
-              "Listen before memorizing",
-              "Audio helps you avoid learning words only as written text.",
-            ],
-          ].map(([title, text]) => (
-            <div key={title} className={`${softCard} p-4`}>
-              <h3 className="font-semibold theme-accent-text">{title}</h3>
-              <p className="mt-2 text-sm theme-text-muted">{text}</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {PRONUNCIATION.map((item) => (
+            <div key={item.sound} className={`${softCard} p-4`}>
+              <h3 className="text-lg font-bold theme-accent-text">
+                {item.sound}
+              </h3>
+              <p className="mt-1 text-sm font-semibold theme-text">
+                Example: {item.example}
+              </p>
+              <p className="mt-2 text-sm theme-text-muted">{item.note}</p>
             </div>
           ))}
         </div>
@@ -380,31 +567,43 @@ export default function Page() {
 
       <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">
+          Slovak grammar for beginners: when to start
+        </h2>
+
+        <p className="theme-text-muted">
+          Slovak grammar matters, but it should not block your first progress.
+          At the beginning, learn grammar only when it helps you understand a
+          real phrase. For example, if you know dom, later you can understand why
+          people say v dome. If you know práca, you can learn why people say do
+          práce.
+        </p>
+
+        <p className="theme-text-muted">
+          This approach makes cases and endings less scary because grammar is
+          connected to words and situations you already recognize.
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/slovak-grammar" className={secondaryBlock}>
+            Slovak grammar guide →
+          </Link>
+
+          <Link href="/learn-slovak" className={secondaryBlock}>
+            Learn Slovak online →
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
           Common Slovak beginner mistakes
         </h2>
 
         <div className="grid gap-4">
-          {[
-            [
-              "Trying to learn all cases immediately",
-              "Slovak cases are important, but beginners should first understand the idea and learn common examples. Full tables can come later.",
-            ],
-            [
-              "Memorizing words without audio",
-              "If you only read Slovak words, pronunciation may become harder later. Listen and repeat from the first lessons.",
-            ],
-            [
-              "Learning random vocabulary",
-              "A beginner needs useful words, not rare words. Focus on daily topics and common verbs first.",
-            ],
-            [
-              "Waiting too long to make sentences",
-              "Even with limited vocabulary, you can build simple sentences. This helps words become active, not just passive.",
-            ],
-          ].map(([title, text]) => (
-            <div key={title} className={`${softCard} p-4`}>
-              <h3 className="font-semibold theme-accent-text">{title}</h3>
-              <p className="mt-2 theme-text-muted">{text}</p>
+          {COMMON_MISTAKES.map((item) => (
+            <div key={item.title} className={`${softCard} p-4`}>
+              <h3 className="font-semibold theme-accent-text">{item.title}</h3>
+              <p className="mt-2 theme-text-muted">{item.text}</p>
             </div>
           ))}
         </div>
@@ -427,7 +626,7 @@ export default function Page() {
             ["Go to A0 lessons", "/learning/a0-1"],
             ["Slovak grammar guide", "/slovak-grammar"],
             ["Dictionary", "/dictionary"],
-            ["Practice", "/practice"],
+            ["All learning levels", "/learning"],
           ].map(([label, href]) => (
             <Link key={href} href={href} className={secondaryButton}>
               {label}

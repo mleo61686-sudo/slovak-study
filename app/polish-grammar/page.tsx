@@ -5,18 +5,18 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Polish Grammar Online: Cases, Verbs, Alphabet | Flunio",
+  title: "Polish Grammar for Beginners: Cases, Verbs, Word Order | Flunio",
   description:
-    "Learn Polish grammar online with clear explanations, examples and practice: alphabet, pronunciation, verbs, cases, word order and beginner grammar.",
+    "Learn Polish grammar for beginners: Polish cases, verbs, alphabet, pronunciation, word order, sentence patterns and simple examples with Flunio.",
 
   alternates: {
     canonical: `${SITE_URL}/polish-grammar`,
   },
 
   openGraph: {
-    title: "Polish Grammar Online: Cases, Verbs, Alphabet | Flunio",
+    title: "Polish Grammar for Beginners | Flunio",
     description:
-      "Learn Polish grammar step by step: alphabet, pronunciation, verbs, cases, word order and practical examples.",
+      "Learn Polish grammar step by step: alphabet, pronunciation, verbs, cases, word order, sentence patterns and practical examples.",
     url: `${SITE_URL}/polish-grammar`,
     siteName: "Flunio",
     type: "website",
@@ -25,22 +25,189 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+type GrammarTopic = {
+  title: string;
+  description: string;
+  example: string;
+  href: string;
+  linkText: string;
+};
+
+type CaseItem = {
+  name: string;
+  use: string;
+  example: string;
+};
+
+type VerbItem = {
+  polish: string;
+  english: string;
+  example: string;
+};
+
 const FAQ = [
   {
     q: "Is Polish grammar difficult?",
-    a: "Polish grammar can feel difficult at first because of cases, endings, verb forms and pronunciation, but it becomes easier when you learn it step by step with examples.",
+    a: "Polish grammar can feel difficult at first because of cases, endings, verb forms and pronunciation. It becomes easier when you learn it step by step with examples instead of memorizing tables alone.",
   },
   {
     q: "What should I learn first in Polish grammar?",
-    a: "Start with the Polish alphabet and pronunciation, then continue with basic sentence structure, present tense verbs and the most common cases.",
+    a: "Start with the Polish alphabet and pronunciation, then basic sentence structure, present tense verbs and the most common Polish cases.",
   },
   {
     q: "Does Polish have cases?",
-    a: "Yes. Polish uses cases, which means nouns, adjectives and pronouns can change their endings depending on their role in a sentence.",
+    a: "Yes. Polish uses cases, so nouns, adjectives and pronouns can change their endings depending on their role in a sentence.",
+  },
+  {
+    q: "How many cases does Polish have?",
+    a: "Polish has seven main cases: nominative, genitive, dative, accusative, instrumental, locative and vocative.",
   },
   {
     q: "Can I learn Polish grammar together with vocabulary?",
-    a: "Yes. It is usually better to learn basic words and phrases first, then use grammar to understand how those words change in real sentences.",
+    a: "Yes. It is usually better to learn useful words and short phrases first, then use grammar to understand how those words change in real sentences.",
+  },
+  {
+    q: "What is the best way to learn Polish grammar online?",
+    a: "The best way is to combine short explanations, real examples, pronunciation, vocabulary and exercises. This helps you understand grammar in context.",
+  },
+];
+
+const grammarTopics: GrammarTopic[] = [
+  {
+    title: "1) Polish alphabet and pronunciation",
+    description:
+      "Before you study grammar deeply, learn how Polish letters and sounds work. Sounds like sz, cz, rz, ą, ę, ł and ń appear often.",
+    example: "Example: dziękuję, szkoła, człowiek, łóżko",
+    href: "/polish-words-with-audio",
+    linkText: "Practice Polish pronunciation with audio →",
+  },
+  {
+    title: "2) Basic Polish sentence structure",
+    description:
+      "Beginners should start with simple patterns: I am, I have, I want, I go, this is, there is. These patterns make grammar easier to notice.",
+    example: "Example: To jest dom. Mam pytanie. Idę do pracy.",
+    href: "/polish-for-beginners",
+    linkText: "Follow the beginner roadmap →",
+  },
+  {
+    title: "3) Polish verbs",
+    description:
+      "Polish verbs change by person, tense and meaning. Start with common verbs such as być, mieć, iść, robić, chcieć and mówić.",
+    example: "Example: jestem, mam, idę, robię, chcę, mówię",
+    href: "/learning",
+    linkText: "Learn verbs in lessons →",
+  },
+  {
+    title: "4) Polish cases",
+    description:
+      "Cases explain why Polish nouns, adjectives and pronouns change endings. Learn them through examples, not only through tables.",
+    example: "Example: dom → w domu, praca → do pracy",
+    href: "/polish-vocabulary",
+    linkText: "Build vocabulary first →",
+  },
+];
+
+const polishCases: CaseItem[] = [
+  {
+    name: "Nominative",
+    use: "basic form; the subject of a sentence",
+    example: "To jest dom.",
+  },
+  {
+    name: "Genitive",
+    use: "often used for possession, absence and quantity",
+    example: "Nie mam czasu.",
+  },
+  {
+    name: "Dative",
+    use: "often shows the indirect object",
+    example: "Daję książkę mamie.",
+  },
+  {
+    name: "Accusative",
+    use: "often shows the direct object",
+    example: "Widzę dom.",
+  },
+  {
+    name: "Instrumental",
+    use: "often used with “with” or after “to be” in identity phrases",
+    example: "Jestem studentem.",
+  },
+  {
+    name: "Locative",
+    use: "often used after prepositions about place or topic",
+    example: "Mieszkam w Polsce.",
+  },
+  {
+    name: "Vocative",
+    use: "used when addressing someone directly",
+    example: "Mamo, chodź tutaj.",
+  },
+];
+
+const basicVerbs: VerbItem[] = [
+  {
+    polish: "być",
+    english: "to be",
+    example: "Jestem w domu.",
+  },
+  {
+    polish: "mieć",
+    english: "to have",
+    example: "Mam pytanie.",
+  },
+  {
+    polish: "iść",
+    english: "to go",
+    example: "Idę do sklepu.",
+  },
+  {
+    polish: "robić",
+    english: "to do / to make",
+    example: "Co robisz?",
+  },
+  {
+    polish: "chcieć",
+    english: "to want",
+    example: "Chcę kawę.",
+  },
+  {
+    polish: "mówić",
+    english: "to speak",
+    example: "Mówię trochę po polsku.",
+  },
+];
+
+const commonPatterns = [
+  {
+    pattern: "To jest...",
+    meaning: "This is...",
+    example: "To jest mój dom.",
+  },
+  {
+    pattern: "Mam...",
+    meaning: "I have...",
+    example: "Mam małe mieszkanie.",
+  },
+  {
+    pattern: "Chcę...",
+    meaning: "I want...",
+    example: "Chcę wodę.",
+  },
+  {
+    pattern: "Idę do...",
+    meaning: "I am going to...",
+    example: "Idę do pracy.",
+  },
+  {
+    pattern: "Mieszkam w...",
+    meaning: "I live in...",
+    example: "Mieszkam w Polsce.",
+  },
+  {
+    pattern: "Nie wiem",
+    meaning: "I do not know",
+    example: "Przepraszam, nie wiem.",
   },
 ];
 
@@ -50,6 +217,8 @@ const primaryButton =
   "theme-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 const secondaryButton =
   "theme-secondary-button inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
+const secondaryBlock =
+  "theme-secondary-button rounded-2xl p-4 font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 const textLink =
   "font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80";
 
@@ -60,7 +229,10 @@ export default function Page() {
     mainEntity: FAQ.map((item) => ({
       "@type": "Question",
       name: item.q,
-      acceptedAnswer: { "@type": "Answer", text: item.a },
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
     })),
   };
 
@@ -74,32 +246,31 @@ export default function Page() {
       />
 
       <section className={`${card} space-y-4 p-8`}>
+        <p className="text-sm font-semibold uppercase tracking-wide theme-text-muted">
+          Polish grammar guide for A0–A1 learners
+        </p>
+
         <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
-          Polish grammar online — cases, verbs, alphabet and examples
+          Polish grammar for beginners: cases, verbs and word order
         </h1>
 
         <p className="theme-text-muted">
           Polish grammar becomes easier when you learn it in a clear order.
-          Instead of memorizing rules without context, Flunio helps you connect
-          grammar with real words, examples and practice. You can start with the
-          alphabet and pronunciation, then continue with verbs, cases and useful
-          sentence patterns.
+          Start with pronunciation and simple sentences, then move to Polish
+          verbs, cases, endings and word order. You do not need to understand
+          every table at once — examples and short phrases help much more.
         </p>
 
         <p className="theme-text-muted">
-          This page is a starting point for learning Polish grammar online. It is
-          useful for beginners who want to understand how Polish works, and for
-          learners who already know some vocabulary but feel confused by endings,
-          verb forms or word order.
+          This guide explains the most important grammar Polish learners need at
+          the beginning: the alphabet, pronunciation, basic sentence patterns,
+          present tense verbs, Polish cases and how grammar connects with
+          vocabulary.
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link className={primaryButton} href="/learning/a0-1">
-            Start Polish lessons →
-          </Link>
-
-          <Link className={secondaryButton} href="/learn-polish">
-            Learn Polish online
+          <Link className={primaryButton} href="/learn-polish">
+            Learn Polish online →
           </Link>
 
           <Link className={secondaryButton} href="/polish-for-beginners">
@@ -111,75 +282,29 @@ export default function Page() {
           </Link>
 
           <Link className={secondaryButton} href="/polish-words-with-audio">
-            Polish audio practice
+            Polish words with audio
           </Link>
         </div>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2">
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">
-            1) Alphabet and pronunciation
-          </h2>
-          <p className="mt-2 theme-text-muted">
-            Start with Polish letters, pronunciation and sounds such as sz, cz,
-            rz, ą, ę, ł and ń. This makes reading and listening much easier from
-            the beginning.
-          </p>
+        {grammarTopics.map((topic) => (
+          <div key={topic.title} className={`${card} p-5`}>
+            <h2 className="text-lg font-bold theme-text">{topic.title}</h2>
 
-          <div className="mt-3">
-            <Link className={textLink} href="/polish-words-with-audio">
-              Practice Polish pronunciation with audio →
-            </Link>
+            <p className="mt-2 theme-text-muted">{topic.description}</p>
+
+            <p className="mt-3 text-sm font-semibold theme-text">
+              {topic.example}
+            </p>
+
+            <div className="mt-3">
+              <Link className={textLink} href={topic.href}>
+                {topic.linkText}
+              </Link>
+            </div>
           </div>
-        </div>
-
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">2) Polish verbs</h2>
-          <p className="mt-2 theme-text-muted">
-            Polish verbs change by person, tense and meaning. Begin with common
-            verbs like być, mieć, iść, robić, chcieć and mówić before moving to
-            more complex patterns.
-          </p>
-
-          <div className="mt-3">
-            <Link className={textLink} href="/learning/a0-1">
-              Learn verbs in lessons →
-            </Link>
-          </div>
-        </div>
-
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">3) Polish cases</h2>
-          <p className="mt-2 theme-text-muted">
-            Polish cases explain why nouns, adjectives and pronouns change their
-            endings. They are easier to learn through examples and phrases than
-            through tables alone.
-          </p>
-
-          <div className="mt-3">
-            <Link className={textLink} href="/polish-vocabulary">
-              Build vocabulary first →
-            </Link>
-          </div>
-        </div>
-
-        <div className={`${card} p-5`}>
-          <h2 className="text-lg font-bold theme-text">
-            4) Word order and sentences
-          </h2>
-          <p className="mt-2 theme-text-muted">
-            Polish word order can be flexible, but beginners should start with
-            simple sentence patterns. Practice helps you understand what sounds
-            natural.
-          </p>
-
-          <div className="mt-3">
-            <Link className={textLink} href="/polish-for-beginners">
-              Follow the beginner roadmap →
-            </Link>
-          </div>
-        </div>
+        ))}
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
@@ -188,18 +313,18 @@ export default function Page() {
         </h2>
 
         <p className="theme-text-muted">
-          The best way to learn Polish grammar is to combine rules with real
-          examples. If you only read tables, it is easy to forget them. But when
-          you see grammar inside words and sentences that you already know, the
-          language becomes more natural.
+          The best way to learn Polish grammar online is to combine rules with
+          real examples. If you only read tables, it is easy to forget them. But
+          when you see grammar inside words and sentences that you already know,
+          the language becomes more natural.
         </p>
 
         <ol className="list-decimal space-y-2 pl-5 theme-text-muted">
           <li>Learn the Polish alphabet and pronunciation first.</li>
-          <li>Build basic vocabulary with short daily lessons.</li>
-          <li>Study simple sentence structure and word order.</li>
-          <li>Learn present tense verb forms with common verbs.</li>
-          <li>Start Polish cases gradually through examples.</li>
+          <li>Build basic Polish vocabulary with short daily lessons.</li>
+          <li>Study simple sentence patterns and word order.</li>
+          <li>Learn present tense verbs with common examples.</li>
+          <li>Start Polish cases gradually through short phrases.</li>
           <li>Practice grammar through exercises, not only reading.</li>
           <li>Return to difficult topics regularly instead of rushing.</li>
         </ol>
@@ -210,29 +335,57 @@ export default function Page() {
           </Link>
 
           <Link href="/polish-vocabulary" className={secondaryButton}>
-            Learn first Polish words →
+            Learn basic Polish words →
           </Link>
         </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">
-          Why Polish cases are important
+          Polish cases explained simply
         </h2>
 
         <p className="theme-text-muted">
-          Cases are one of the most important parts of Polish grammar. They show
-          the role of a word in a sentence: who is doing something, who receives
-          the action, where something is, where it goes, or who owns something.
-          This is why Polish words often change their endings.
+          Polish cases are one of the most important parts of Polish grammar.
+          They show the role of a word in a sentence: who is doing something,
+          who receives the action, where something is, where it goes, or who owns
+          something. This is why Polish words often change their endings.
         </p>
 
         <p className="theme-text-muted">
-          At first, cases can look complicated. You do not need to master every
-          form immediately. Start with common phrases and everyday examples, then
-          slowly notice patterns. This is more effective than trying to memorize
-          every table at once.
+          Polish has seven main cases. Beginners should not try to memorize every
+          ending at once. First, learn common phrases and notice patterns.
         </p>
+
+        <div className="overflow-hidden rounded-2xl border border-white/10 theme-simple:border-slate-200">
+          <table className="w-full text-sm">
+            <thead className="bg-white/5 text-left theme-text-muted theme-simple:bg-slate-50">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Case</th>
+                <th className="px-3 py-2 font-semibold">Use</th>
+                <th className="hidden px-3 py-2 font-semibold sm:table-cell">
+                  Example
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {polishCases.map((item) => (
+                <tr
+                  key={item.name}
+                  className="border-t border-white/10 theme-simple:border-slate-200"
+                >
+                  <td className="px-3 py-2 font-medium theme-text">
+                    {item.name}
+                  </td>
+                  <td className="px-3 py-2 theme-text-muted">{item.use}</td>
+                  <td className="hidden px-3 py-2 theme-text-muted sm:table-cell">
+                    {item.example}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/polish-vocabulary" className={secondaryButton}>
@@ -247,7 +400,7 @@ export default function Page() {
 
       <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">
-          Polish verbs and everyday sentences
+          Basic Polish verbs for beginners
         </h2>
 
         <p className="theme-text-muted">
@@ -262,56 +415,133 @@ export default function Page() {
           to recognize similar patterns in new Polish words.
         </p>
 
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/learning/a0-1" className={secondaryButton}>
-            Start the first Polish lesson →
-          </Link>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {basicVerbs.map((verb) => (
+            <div key={verb.polish} className={`${softCard} p-4`}>
+              <p className="text-lg font-bold theme-text">{verb.polish}</p>
+              <p className="mt-1 text-sm theme-text-muted">{verb.english}</p>
+              <p className="mt-2 text-sm font-semibold theme-text">
+                {verb.example}
+              </p>
+            </div>
+          ))}
+        </div>
 
+        <div className="flex flex-wrap gap-3 pt-2">
           <Link href="/polish-for-beginners" className={secondaryButton}>
             Beginner learning order →
+          </Link>
+
+          <Link href="/polish-vocabulary" className={secondaryButton}>
+            Learn verb vocabulary →
           </Link>
         </div>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>
         <h2 className="text-2xl font-bold theme-text">
-          Learn grammar together with vocabulary
+          Polish word order and simple sentence patterns
+        </h2>
+
+        <p className="theme-text-muted">
+          Polish word order can be flexible, but beginners should start with
+          simple patterns. These patterns help you use vocabulary immediately and
+          understand grammar in real sentences.
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {commonPatterns.map((item) => (
+            <div key={item.pattern} className={`${softCard} p-4`}>
+              <p className="font-bold theme-text">{item.pattern}</p>
+              <p className="mt-1 text-sm theme-text-muted">{item.meaning}</p>
+              <p className="mt-2 text-sm font-semibold theme-text">
+                {item.example}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Learn Polish grammar together with vocabulary
         </h2>
 
         <p className="theme-text-muted">
           Grammar should not block your progress. A practical approach is to
           learn useful vocabulary first, then use grammar to explain what you
           already see in examples. This works especially well for Polish because
-          endings and verb forms become clearer when they appear in real
-          phrases.
+          endings and verb forms become clearer when they appear in real phrases.
         </p>
 
         <p className="theme-text-muted">
-          Flunio connects grammar with lessons, dictionary search and practice.
-          You can learn a word, review it in exercises and then return to grammar
-          when you want to understand the rule behind a sentence.
+          For example, if you know the Polish word dom, you can later understand
+          w domu. If you know praca, you can learn why people say do pracy. This
+          is grammar in context, not just theory.
         </p>
 
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/learn-polish" className={secondaryButton}>
-            Learn Polish online
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link href="/polish-vocabulary" className={secondaryBlock}>
+            Polish vocabulary →
           </Link>
 
-          <Link href="/polish-for-beginners" className={secondaryButton}>
-            Polish for beginners
+          <Link href="/polish-words-with-audio" className={secondaryBlock}>
+            Polish words with audio →
           </Link>
 
-          <Link href="/polish-vocabulary" className={secondaryButton}>
-            Polish vocabulary
+          <Link href="/polish-for-beginners" className={secondaryBlock}>
+            Polish for beginners →
           </Link>
 
-          <Link href="/polish-words-with-audio" className={secondaryButton}>
-            Polish words with audio
+          <Link href="/learn-polish" className={secondaryBlock}>
+            Learn Polish online →
           </Link>
 
-          <Link href="/practice" className={secondaryButton}>
-            Practice Polish
+          <Link href="/learning" className={secondaryBlock}>
+            Start lessons in Flunio →
           </Link>
+
+          <Link href="/dictionary" className={secondaryBlock}>
+            Open dictionary →
+          </Link>
+        </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Common mistakes when learning Polish grammar
+        </h2>
+
+        <div className="space-y-3 theme-text-muted">
+          <p>
+            <strong className="theme-text">
+              1. Trying to memorize all cases at once.
+            </strong>{" "}
+            It is better to learn common phrases first and return to the case
+            system gradually.
+          </p>
+
+          <p>
+            <strong className="theme-text">
+              2. Studying grammar without vocabulary.
+            </strong>{" "}
+            Grammar is easier when you already know useful words and can see how
+            they change in sentences.
+          </p>
+
+          <p>
+            <strong className="theme-text">3. Ignoring pronunciation.</strong>{" "}
+            Polish spelling and grammar feel much easier when you also listen to
+            words and repeat them aloud.
+          </p>
+
+          <p>
+            <strong className="theme-text">
+              4. Reading rules but not practicing.
+            </strong>{" "}
+            Exercises, examples and review are what turn grammar from theory
+            into active knowledge.
+          </p>
         </div>
       </section>
 
