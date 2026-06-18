@@ -8,6 +8,31 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-06-18",
+    title: {
+      ua: "Оновлення: рейтинг учнів Flunio",
+      ru: "Обновление: рейтинг учеников Flunio",
+      en: "Update: Flunio learner leaderboard",
+    },
+    items: {
+      ua: [
+        "Додано новий рейтинг найактивніших учнів Flunio на головній сторінці",
+        "Рейтинг враховує бали за завершені уроки, повторення слів, аудіопрактику та диктанти",
+        "Оновлено головну сторінку: тренажер повторення слів, граматика та словник стали помітнішими",
+      ],
+      ru: [
+        "Добавлен новый рейтинг самых активных учеников Flunio на главной странице",
+        "Рейтинг учитывает баллы за завершённые уроки, повторение слов, аудиопрактику и диктанты",
+        "Обновлена главная страница: тренажёр повторения слов, грамматика и словарь стали заметнее",
+      ],
+      en: [
+        "A new leaderboard of the most active Flunio learners has been added to the homepage",
+        "The leaderboard includes points for completed lessons, word reviews, audio practice and dictations",
+        "The homepage layout has been improved: word review, grammar and dictionary are now easier to find",
+      ],
+    },
+  },
+  {
     date: "2026-06-15",
     title: {
       ua: "Оновлення: нова аудіопрактика",
