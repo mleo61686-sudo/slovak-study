@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { finishLessonQuiz } from "@/lib/src/progress";
@@ -309,6 +316,22 @@ export default function LevelClient({
   const audioUnlockedRef = useRef(false);
   const finishingRef = useRef(false);
   const advancingRef = useRef(false);
+  const hasWarmedUpRef = useRef(false);
+
+  const warmUpLessonAssets = useCallback(() => {
+    if (hasWarmedUpRef.current) return;
+
+    hasWarmedUpRef.current = true;
+
+    const nextPath = nextLevelId.startsWith("/")
+      ? nextLevelId
+      : `/learning/${nextLevelId}`;
+
+    router.prefetch(nextPath);
+    router.prefetch(onLockedNextRedirect);
+
+    void preloadExerciseModules();
+  }, [nextLevelId, onLockedNextRedirect, router]);
 
   function unlockInsideLesson() {
     if (audioUnlockedRef.current) return;
@@ -328,6 +351,8 @@ export default function LevelClient({
 
   function startQuiz() {
     unlockInsideLesson();
+    warmUpLessonAssets();
+
     advancingRef.current = false;
     setQuizAutoKey((k) => k + 1);
     setMode("quiz");
@@ -347,37 +372,35 @@ export default function LevelClient({
   }, [mode, exerciseIndex, wordIndex, finished]);
 
   useEffect(() => {
-    const nextPath = nextLevelId.startsWith("/")
-      ? nextLevelId
-      : `/learning/${nextLevelId}`;
-
-    router.prefetch(nextPath);
-    router.prefetch(onLockedNextRedirect);
-  }, [router, nextLevelId, onLockedNextRedirect]);
-
-  useEffect(() => {
     if (typeof window === "undefined") return;
     if (mode !== "learn") return;
 
     const win = window as IdleWindow;
+    let idleId: number | undefined;
 
-    const preload = () => {
-      void preloadExerciseModules();
+    const timeoutId = window.setTimeout(() => {
+      if (typeof win.requestIdleCallback === "function") {
+        idleId = win.requestIdleCallback(warmUpLessonAssets, {
+          timeout: 2500,
+        });
+
+        return;
+      }
+
+      warmUpLessonAssets();
+    }, 3200);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+
+      if (
+        typeof idleId === "number" &&
+        typeof win.cancelIdleCallback === "function"
+      ) {
+        win.cancelIdleCallback(idleId);
+      }
     };
-
-    if (typeof win.requestIdleCallback === "function") {
-      const idleId = win.requestIdleCallback(preload, { timeout: 1500 });
-
-      return () => {
-        if (typeof win.cancelIdleCallback === "function") {
-          win.cancelIdleCallback(idleId);
-        }
-      };
-    }
-
-    const timeoutId = window.setTimeout(preload, 900);
-    return () => window.clearTimeout(timeoutId);
-  }, [mode]);
+  }, [mode, warmUpLessonAssets]);
 
   useEffect(() => {
     if (mode !== "learn") return;

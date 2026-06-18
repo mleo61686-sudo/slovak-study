@@ -20,6 +20,14 @@ type CourseAwareProgress = {
 
 const COURSE_IDS: CourseId[] = ["sk", "cs", "pl"];
 
+const BAND_LIMITS: Record<string, number> = {
+  a0: 30,
+  a1: 40,
+  a2: 50,
+  b1: 35,
+  b2: 50,
+};
+
 function isPlainObject(value: unknown): value is Record<string, any> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -81,18 +89,14 @@ function getLessonFromLessonsByBand(
   return list[n - 1] ?? null;
 }
 
-const BAND_LIMITS: Record<string, number> = {
-  a0: 30,
-  a1: 40,
-  a2: 50,
-  b1: 35,
-  b2: 50,
-};
-
 function parseLevelId(id: string) {
   const m = /^([a-z]\d)-(\d+)$/.exec(id.toLowerCase());
   if (!m) return null;
-  return { band: m[1], n: Number(m[2]) };
+
+  return {
+    band: m[1],
+    n: Number(m[2]),
+  };
 }
 
 function bandOrder(band: string) {
@@ -104,19 +108,23 @@ function bandOrder(band: string) {
 
   if (letter === "a") return n;
   if (letter === "b") return 10 + n;
+
   return 0;
 }
 
 function compareLevel(a: string, b: string) {
   const pa = parseLevelId(a);
   const pb = parseLevelId(b);
+
   if (!pa || !pb) return 0;
 
   const ba = bandOrder(pa.band);
   const bb = bandOrder(pb.band);
+
   if (ba !== bb) return ba < bb ? -1 : 1;
 
   if (pa.n === pb.n) return 0;
+
   return pa.n < pb.n ? -1 : 1;
 }
 
@@ -186,6 +194,7 @@ function getLastDoneMax(lp: LessonsProgress | null | undefined) {
   for (const [idRaw, val] of Object.entries(lp)) {
     const id = String(idRaw).toLowerCase();
     const p = parseLevelId(id);
+
     if (!p) continue;
 
     const done =
@@ -242,31 +251,6 @@ export default async function Page({
       : "sk";
 
   const lessonsByBand = getLessonsByBand(activeCourseId);
-
-  const session = await auth();
-  const email = session?.user?.email ?? null;
-
-  if (!email) {
-    return redirectToLessonLogin(levelId);
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email },
-    select: {
-      id: true,
-      email: true,
-      isPremium: true,
-      premiumUntil: true,
-    },
-  });
-
-  if (!user) {
-    return redirectToLessonLogin(levelId);
-  }
-
-  const hasPremium =
-    user.isPremium && (!user.premiumUntil || user.premiumUntil > new Date());
-
   const lesson = getLessonFromLessonsByBand(lessonsByBand, levelId);
 
   if (!lesson) {
@@ -290,26 +274,41 @@ export default async function Page({
     );
   }
 
+  const session = await auth();
+
+  const sessionUserId = session?.user?.id ?? null;
+  const email = session?.user?.email ?? null;
+
+  if (!sessionUserId && !email) {
+    return redirectToLessonLogin(levelId);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: sessionUserId ? { id: sessionUserId } : { email: email as string },
+    select: {
+      id: true,
+      email: true,
+      isPremium: true,
+      premiumUntil: true,
+    },
+  });
+
+  if (!user) {
+    return redirectToLessonLogin(levelId);
+  }
+
+  const hasPremium =
+    user.isPremium === true && (!user.premiumUntil || user.premiumUntil > new Date());
+
   if (!hasPremium && isPremiumLesson(levelId)) {
     redirect("/premium");
   }
 
-  const row = await prisma.userProgress.upsert({
+  // Важливо для швидкості:
+  // на відкритті сторінки уроку тільки читаємо прогрес.
+  // Не робимо upsert/update у GET-рендері, бо це сповільнює /learning/[level].
+  const progressRow = await prisma.userProgress.findUnique({
     where: { userId: user.id },
-    update: {},
-    create: {
-      userId: user.id,
-      lessonsProgress: {
-        byCourse: {
-          sk: {},
-          cs: {},
-          pl: {},
-        },
-      },
-      dailyCount: 0,
-      dailyDate: null,
-      lastUnlockedLevel: null,
-    },
     select: {
       lastUnlockedLevel: true,
       lessonsProgress: true,
@@ -317,7 +316,7 @@ export default async function Page({
   });
 
   const courseLessons = getLessonsForCourse(
-    row.lessonsProgress ?? null,
+    progressRow?.lessonsProgress ?? null,
     activeCourseId
   );
 
@@ -325,17 +324,10 @@ export default async function Page({
     ? getLastDoneMax(courseLessons)
     : getLastDoneSequential(courseLessons, lessonsByBand);
 
-  let lastUnlockedLevel = chooseBetterLastUnlocked(
-    row.lastUnlockedLevel,
+  const lastUnlockedLevel = chooseBetterLastUnlocked(
+    progressRow?.lastUnlockedLevel ?? null,
     recovered
   );
-
-  if (lastUnlockedLevel && lastUnlockedLevel !== row.lastUnlockedLevel) {
-    await prisma.userProgress.update({
-      where: { userId: user.id },
-      data: { lastUnlockedLevel },
-    });
-  }
 
   const allowed = lastUnlockedLevel ? nextLevelId(lastUnlockedLevel) : "a0-1";
 
