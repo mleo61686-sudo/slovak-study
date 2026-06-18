@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export default async function PracticeLayout({
@@ -9,10 +10,23 @@ export default async function PracticeLayout({
   const session = await auth();
 
   // 🔒 must be logged in
-  if (!session) redirect("/login");
+  if (!session?.user?.id) redirect("/login");
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: {
+      isPremium: true,
+      premiumUntil: true,
+    },
+  });
+
+  const hasActivePremium =
+    session.user.isAdmin === true ||
+    (user?.isPremium === true &&
+      (!user.premiumUntil || user.premiumUntil > new Date()));
 
   // 🔒 premium only
-  if (!session.user?.isPremium) redirect("/premium");
+  if (!hasActivePremium) redirect("/premium");
 
   return <>{children}</>;
 }

@@ -77,9 +77,9 @@ export const SEO_MAP: SeoMapItem[] = [
     course: "general",
     intentType: "internal",
     mainKeyword: "language practice",
-    intent: "Practice and trainer area for repeating vocabulary and exercises",
-    status: "keep",
-    inSitemap: true,
+    intent: "Practice and trainer area for logged-in Premium users",
+    status: "do_not_index",
+    inSitemap: false,
   },
 
   // English course landing pages

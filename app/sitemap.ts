@@ -7,12 +7,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   const staticUrls: string[] = [
-    // рівні
-    "/learning/a0",
-    "/learning/a1",
-    "/learning/a2",
-    "/learning/b1",
-    "/learning/b2",
+    "/",
+
+    // основні публічні сторінки
+    "/learning",
+    "/dictionary",
+    "/grammar",
+    "/updates",
+
+    // сторінки рівнів
+    "/learning/levels/a0",
+    "/learning/levels/a1",
+    "/learning/levels/a2",
+    "/learning/levels/b1",
+    "/learning/levels/b2",
 
     // граматика
     "/grammar/alphabet",
@@ -27,10 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     (page) => page.status === "keep" && page.inSitemap
   ).map((page) => page.url);
 
-  const urls = Array.from(new Set([...seoUrls, ...staticUrls]));
+  const urls = Array.from(new Set([...staticUrls, ...seoUrls]));
 
   return urls.map((url) => ({
     url: `${SITE_URL}${url === "/" ? "" : url}`,
     lastModified: now,
+    changeFrequency: "weekly",
+    priority: url === "/" ? 1 : 0.7,
   }));
 }

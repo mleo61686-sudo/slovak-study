@@ -64,6 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!token.id) {
         token.isPremium = false;
         token.premiumUntil = null;
+        token.premiumCheckedAt = 0;
         return token;
       }
 
@@ -71,7 +72,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const last = (token.premiumCheckedAt as number | undefined) ?? 0;
       const REFRESH_EVERY_MS = 15 * 60 * 1000;
 
-      if (last && now - last < REFRESH_EVERY_MS) return token;
+      // Важливо для Stripe checkout:
+      // useSession().update() має обходити 15-хвилинний кеш JWT.
+      // Інакше webhook вже оновив БД, але session ще бачить isPremium=false.
+      const shouldRefreshPremium =
+        trigger === "update" || !last || now - last >= REFRESH_EVERY_MS;
+
+      if (!shouldRefreshPremium) return token;
 
       try {
         const dbUser = await prisma.user.findUnique({
@@ -79,8 +86,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           select: { isPremium: true, premiumUntil: true },
         });
 
-        token.isPremium = dbUser?.isPremium ?? false;
-        token.premiumUntil = dbUser?.premiumUntil ?? null;
+        const premiumUntil = dbUser?.premiumUntil ?? null;
+        const isPremium =
+          dbUser?.isPremium === true &&
+          (!premiumUntil || premiumUntil > new Date());
+
+        token.isPremium = isPremium;
+        token.premiumUntil = premiumUntil;
         token.premiumCheckedAt = now;
       } catch {
         token.isPremium = Boolean(token.isPremium);
