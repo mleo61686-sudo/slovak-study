@@ -164,7 +164,7 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             { sk: "platiť", ua: "платити", ru: "платить", en: "to pay", img: "/words/platiť.jpg" },
         ],
     },
-    {
+    {   
         id: "5",
         title: {
             ua: "Урок 5 — Їжа та напої",
@@ -502,16 +502,16 @@ export const A0_REAL_SOURCE: LessonSource[] = [
             en: "Lesson 20 — Questions and answers",
         },
         words: [
-            { sk: "kto", ua: "хто", ru: "кто", en: "who", img: "/words_a0_cz/kdo.jpg" },
-            { sk: "čo", ua: "що", ru: "что", en: "what", img: "/words_a0_cz/co.jpg" },
-            { sk: "kde", ua: "де", ru: "где", en: "where", img: "/words_pl/gdzie.jpg" },
-            { sk: "kedy", ua: "коли", ru: "когда", en: "when", img: "/words_a0_cz/kdy.jpg" },
-            { sk: "prečo", ua: "чому", ru: "почему", en: "why", img: "/words_a0_cz/proč.jpg" },
-            { sk: "ako", ua: "як", ru: "как", en: "how", img: "/words_a0_cz/jak.jpg" },
+            { sk: "kto", ua: "хто", ru: "кто", en: "who", img: "/words/kto.jpg" },
+            { sk: "čo", ua: "що", ru: "что", en: "what", img: "/words/čo.jpg" },
+            { sk: "kde", ua: "де", ru: "где", en: "where", img: "/words/kde.jpg" },
+            { sk: "kedy", ua: "коли", ru: "когда", en: "when", img: "/words/kedy.jpg" },
+            { sk: "prečo", ua: "чому", ru: "почему", en: "why", img: "/words/prečo.jpg" },
+            { sk: "ako", ua: "як", ru: "как", en: "how", img: "/words/ako.jpg" },
             { sk: "koľko", ua: "скільки", ru: "сколько", en: "how much / how many", img: "/words/koľko.jpg" },
-            { sk: "áno", ua: "так", ru: "да", en: "yes", img: "/words_a0_cz/ano.jpg" },
-            { sk: "nie", ua: "ні", ru: "нет", en: "no", img: "/words_a0_cz/ne.jpg" },
-            { sk: "možno", ua: "можливо", ru: "возможно", en: "maybe", img: "/words_a0_cz/možná.jpg" },
+            { sk: "áno", ua: "так", ru: "да", en: "yes", img: "/words/áno.jpg" },
+            { sk: "nie", ua: "ні", ru: "нет", en: "no", img: "/words/nie.jpg" },
+            { sk: "možno", ua: "можливо", ru: "возможно", en: "maybe", img: "/words/možno.jpg" },
         ],
     },
     {
