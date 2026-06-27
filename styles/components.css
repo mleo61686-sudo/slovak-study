@@ -979,3 +979,106 @@
     text-decoration-color: rgba(220, 38, 38, 0.75);
     text-underline-offset: 4px;
 }
+
+/* Home / leaderboard — Simple theme contrast fixes */
+
+.theme-simple .border-yellow-300\/35,
+.theme-simple .border-yellow-300\/30,
+.theme-simple .border-yellow-300\/40 {
+    border-color: #eab308 !important;
+}
+
+.theme-simple .border-cyan-300\/25,
+.theme-simple .border-cyan-300\/20 {
+    border-color: #06b6d4 !important;
+}
+
+.theme-simple .border-orange-300\/25,
+.theme-simple .border-orange-300\/30 {
+    border-color: #f97316 !important;
+}
+
+.theme-simple .bg-yellow-300\/15,
+.theme-simple .bg-yellow-300\/12,
+.theme-simple .bg-yellow-300\/10 {
+    background-color: #fef3c7 !important;
+}
+
+.theme-simple .bg-cyan-300\/10 {
+    background-color: #cffafe !important;
+}
+
+.theme-simple .bg-orange-300\/10 {
+    background-color: #ffedd5 !important;
+}
+
+.theme-simple .text-yellow-100 {
+    color: #854d0e !important;
+}
+
+.theme-simple .text-cyan-100 {
+    color: #155e75 !important;
+}
+
+.theme-simple .text-orange-100 {
+    color: #9a3412 !important;
+}
+
+/* Podium card gradients in light theme */
+
+.theme-simple [class*="from-yellow-300"] {
+    background:
+        linear-gradient(135deg, #fffdf0 0%, #fef3c7 100%) !important;
+}
+
+.theme-simple [class*="from-cyan-300"] {
+    background:
+        linear-gradient(135deg, #ecfeff 0%, #cffafe 100%) !important;
+}
+
+.theme-simple [class*="from-orange-300"] {
+    background:
+        linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%) !important;
+}
+
+/* Current course and home blocks in light theme */
+
+.theme-simple .bg-black\/15,
+.theme-simple .bg-black\/10 {
+    background-color: rgba(241, 245, 249, 0.88) !important;
+}
+
+.theme-simple .bg-white\/5,
+.theme-simple .bg-white\/10 {
+    background-color: rgba(255, 255, 255, 0.82) !important;
+}
+
+.theme-simple .border-white\/10,
+.theme-simple .border-white\/12,
+.theme-simple .border-white\/15 {
+    border-color: #cbd5e1 !important;
+}
+
+.theme-simple .text-emerald-300 {
+    color: #047857 !important;
+}
+
+.theme-simple .bg-emerald-400\/10 {
+    background-color: #d1fae5 !important;
+}
+
+.theme-simple .border-emerald-400\/20 {
+    border-color: #6ee7b7 !important;
+}
+
+/* Leaderboard text visibility */
+
+.theme-simple .text-yellow-100,
+.theme-simple .text-cyan-100,
+.theme-simple .text-orange-100 {
+    font-weight: 700;
+}
+
+.theme-simple [class*="shadow-[0_0_38px"] {
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08) !important;
+}

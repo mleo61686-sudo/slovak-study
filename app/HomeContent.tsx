@@ -4,362 +4,516 @@ import LeaderboardBlock from "./components/LeaderboardBlock";
 
 type Lang = "ua" | "ru" | "en";
 
-type StatItem = {
-  k: string;
-  v: string;
-};
+type IconName =
+  | "lessons"
+  | "courses"
+  | "practice"
+  | "dictionary"
+  | "grammar"
+  | "progress"
+  | "updates"
+  | "premium";
 
 type HomeTranslations = {
-  h1: string;
-  heroP: string;
-  ctaLearning: string;
-  starterBadge: string;
-  free: string[];
+  heroEyebrow: string;
+  heroTitle: string;
+  heroSubtitle: string;
 
-  telegramTitle: string;
-  telegramDesc: string;
-  telegramCta: string;
+  currentCourse: string;
+  levels: string;
+  freeLevel: string;
+  continueLearning: string;
 
+  quickTitle: string;
+  quickSubtitle: string;
+
+  lessons: string;
+  lessonsDesc: string;
+
+  courses: string;
+  coursesDesc: string;
+
+  practice: string;
+  practiceDesc: string;
+
+  dictionary: string;
+  dictionaryDesc: string;
+
+  grammar: string;
+  grammarDesc: string;
+
+  progress: string;
+  progressDesc: string;
+
+  updates: string;
+  updatesDesc: string;
+
+  premium: string;
+  premiumDesc: string;
+
+  planEyebrow: string;
+  planTitle: string;
+  planSubtitle: string;
+  planLesson: string;
+  planWords: string;
+  planReview: string;
+  planLessonValue: string;
+  planWordsValue: string;
+  planReviewValue: string;
+  planCta: string;
+
+  premiumEyebrow: string;
+  premiumTitle: string;
+  premiumText: string;
+  premiumCta: string;
+
+  aboutTitle: string;
   seoH2: string;
   seoP1: string;
   seoP2: string;
-
-  premiumTitle: string;
-  premiumSubtitle: string;
-  premiumBullets: string[];
-  premiumPriceNote: string;
-  premiumCta: string;
-  trainerLocked: string;
-
-  grammarTitle: string;
-  grammarDesc: string;
-  dictTitle: string;
-  dictDesc: string;
-
-  open: string;
-  whatsNew: string;
-
-  strip: StatItem[];
 };
 
 const t: Record<Lang, HomeTranslations> = {
   ua: {
-    h1: "Вивчай словацьку, чеську та польську з нуля до B2 — для роботи, життя та переїзду",
-    heroP:
-      "Flunio — онлайн платформа для вивчення словацької, чеської та польської мов: короткі уроки, словник, граматика, озвучка та вправи для щоденної практики.",
+    heroEyebrow: "Твій навчальний простір",
+    heroTitle: "Продовжуй навчання",
+    heroSubtitle:
+      "Повернися до свого курсу або обери потрібний інструмент для практики.",
 
-    ctaLearning: "Перейти до навчання 🚀",
+    currentCourse: "Поточний курс",
+    levels: "Рівні A0–B2",
+    freeLevel: "A0 безкоштовний",
+    continueLearning: "Продовжити навчання",
 
-    starterBadge: "🚀 A0 безкоштовний — почни навчання без оплати",
+    quickTitle: "Швидкий доступ",
+    quickSubtitle: "Усі головні розділи Flunio на одному екрані.",
 
-    free: [
-      "A0 відкритий безкоштовно для старту з нуля",
-      "Словник, граматика та приклади речень в одному місці",
-      "Короткі уроки, озвучка та вправи для щоденної практики",
-    ],
+    lessons: "Уроки",
+    lessonsDesc: "Продовжити навчання",
 
-    telegramTitle: "Flunio в Telegram 📢",
-    telegramDesc:
-      "Новини платформи, плани розвитку, апдейти та корисний контент для вивчення мов.",
-    telegramCta: "Підписатися →",
+    courses: "Курси",
+    coursesDesc: "Змінити мову",
+
+    practice: "Тренажер",
+    practiceDesc: "Закріпити знання",
+
+    dictionary: "Словник",
+    dictionaryDesc: "Знайти слово",
+
+    grammar: "Граматика",
+    grammarDesc: "Повторити правила",
+
+    progress: "Прогрес",
+    progressDesc: "Переглянути статистику",
+
+    updates: "Новини",
+    updatesDesc: "Останні зміни",
+
+    premium: "Premium",
+    premiumDesc: "Відкрити всі рівні",
+
+    planEyebrow: "Рекомендований темп",
+    planTitle: "План на сьогодні",
+    planSubtitle:
+      "Короткий щоденний план допомагає не втрачати темп і краще запамʼятовувати матеріал.",
+
+    planLesson: "Новий матеріал",
+    planWords: "Практика слів",
+    planReview: "Повторення",
+
+    planLessonValue: "1 урок",
+    planWordsValue: "10 слів",
+    planReviewValue: "5 хвилин",
+
+    planCta: "Почати тренування",
+
+    premiumEyebrow: "Flunio Premium",
+    premiumTitle: "Повний доступ від A1 до B2",
+    premiumText:
+      "Усі рівні, тренажер, повторення слів, розширена статистика та всі активні курси в одній підписці.",
+    premiumCta: "Переглянути Premium",
+
+    aboutTitle: "Більше про Flunio",
 
     seoH2: "Онлайн курс словацької, чеської та польської мов",
     seoP1:
       "Flunio — це онлайн платформа для вивчення словацької, чеської та польської мов з нуля. Тут ви знайдете граматику з прикладами, тематичний словник, вправи для тренування та системне навчання по рівнях A0–B2.",
     seoP2:
       "Сайт підходить для людей, які планують працювати, навчатися або жити в Європі. Вивчайте словацьку, чеську та польську онлайн у зручному форматі, з короткими уроками, поступовим ускладненням матеріалу та практикою для реального життя.",
-
-    premiumTitle: "Premium — повний шлях після A0 🚀",
-    premiumSubtitle:
-      "A0 доступний безкоштовно. Premium відкриває A1–B2, тренажер, повторення слів і всі активні курси Flunio в одній підписці.",
-
-    premiumBullets: [
-      "🔓 Доступ до преміум-рівнів A1–B2",
-      "🌍 Усі активні курси в одній підписці",
-      "🇸🇰 Словацький курс",
-      "🇨🇿 Чеський курс",
-      "🇵🇱 Польський курс",
-      "🏋️ Повний доступ до тренажера",
-      "🔁 Розширене повторення слів",
-      "📊 Статистика, серії та рекорди",
-    ],
-
-    premiumPriceNote:
-      "EUR / USD / UAH / PLN / CZK • місячний і річний план • можна скасувати будь-коли",
-
-    premiumCta: "Спробувати Premium →",
-    trainerLocked: "Тренажер 🔒",
-
-    grammarTitle: "Граматика",
-    grammarDesc: "Теми коротко й по суті + приклади та міні-вправи.",
-
-    dictTitle: "Словник",
-    dictDesc: "Пошук, теми, приклади речень і «в обране».",
-
-    open: "Відкрити →",
-    whatsNew: "Що нового",
-
-    strip: [
-      {
-        k: "3 мови",
-        v: "Словацька, чеська та польська",
-      },
-      {
-        k: "A0–B2",
-        v: "Навчання по рівнях",
-      },
-      {
-        k: "10 хв/день",
-        v: "Короткі уроки",
-      },
-    ],
   },
 
   ru: {
-    h1: "Изучай словацкий, чешский и польский с нуля до B2 — для работы, жизни и переезда",
-    heroP:
-      "Flunio — онлайн платформа для изучения словацкого, чешского и польского языков: короткие уроки, словарь, грамматика, озвучка и упражнения для ежедневной практики.",
+    heroEyebrow: "Твоё учебное пространство",
+    heroTitle: "Продолжай обучение",
+    heroSubtitle:
+      "Вернись к своему курсу или выбери нужный инструмент для практики.",
 
-    ctaLearning: "Перейти к обучению 🚀",
+    currentCourse: "Текущий курс",
+    levels: "Уровни A0–B2",
+    freeLevel: "A0 бесплатный",
+    continueLearning: "Продолжить обучение",
 
-    starterBadge: "🚀 A0 бесплатный — начни обучение без оплаты",
+    quickTitle: "Быстрый доступ",
+    quickSubtitle: "Все основные разделы Flunio на одном экране.",
 
-    free: [
-      "A0 открыт бесплатно для старта с нуля",
-      "Словарь, грамматика и примеры предложений в одном месте",
-      "Короткие уроки, озвучка и упражнения для ежедневной практики",
-    ],
+    lessons: "Уроки",
+    lessonsDesc: "Продолжить обучение",
 
-    telegramTitle: "Flunio в Telegram 📢",
-    telegramDesc:
-      "Новости платформы, планы развития, апдейты и полезный контент для изучения языков.",
-    telegramCta: "Подписаться →",
+    courses: "Курсы",
+    coursesDesc: "Сменить язык",
+
+    practice: "Тренажёр",
+    practiceDesc: "Закрепить знания",
+
+    dictionary: "Словарь",
+    dictionaryDesc: "Найти слово",
+
+    grammar: "Грамматика",
+    grammarDesc: "Повторить правила",
+
+    progress: "Прогресс",
+    progressDesc: "Посмотреть статистику",
+
+    updates: "Новости",
+    updatesDesc: "Последние изменения",
+
+    premium: "Premium",
+    premiumDesc: "Открыть все уровни",
+
+    planEyebrow: "Рекомендуемый темп",
+    planTitle: "План на сегодня",
+    planSubtitle:
+      "Короткий ежедневный план помогает не терять темп и лучше запоминать материал.",
+
+    planLesson: "Новый материал",
+    planWords: "Практика слов",
+    planReview: "Повторение",
+
+    planLessonValue: "1 урок",
+    planWordsValue: "10 слов",
+    planReviewValue: "5 минут",
+
+    planCta: "Начать тренировку",
+
+    premiumEyebrow: "Flunio Premium",
+    premiumTitle: "Полный доступ от A1 до B2",
+    premiumText:
+      "Все уровни, тренажёр, повторение слов, расширенная статистика и все активные курсы в одной подписке.",
+    premiumCta: "Посмотреть Premium",
+
+    aboutTitle: "Больше о Flunio",
 
     seoH2: "Онлайн курс словацкого, чешского и польского языков",
     seoP1:
       "Flunio — это онлайн платформа для изучения словацкого, чешского и польского языков с нуля. Здесь вы найдёте грамматику с примерами, тематический словарь, упражнения для тренировки и системное обучение по уровням A0–B2.",
     seoP2:
       "Сайт подходит для людей, которые планируют работать, учиться или жить в Европе. Изучайте словацкий, чешский и польский онлайн в удобном формате: короткие уроки, постепенное усложнение материала и практика для реальной жизни.",
-
-    premiumTitle: "Premium — полный путь после A0 🚀",
-    premiumSubtitle:
-      "A0 доступен бесплатно. Premium открывает A1–B2, тренажёр, повторение слов и все активные курсы Flunio в одной подписке.",
-
-    premiumBullets: [
-      "🔓 Доступ к премиум-уровням A1–B2",
-      "🌍 Все активные курсы в одной подписке",
-      "🇸🇰 Словацкий курс",
-      "🇨🇿 Чешский курс",
-      "🇵🇱 Польский курс",
-      "🏋️ Полный доступ к тренажёру",
-      "🔁 Расширенное повторение слов",
-      "📊 Статистика, серии и рекорды",
-    ],
-
-    premiumPriceNote:
-      "EUR / USD / UAH / PLN / CZK • месячный и годовой план • можно отменить в любой момент",
-
-    premiumCta: "Попробовать Premium →",
-    trainerLocked: "Тренажёр 🔒",
-
-    grammarTitle: "Грамматика",
-    grammarDesc: "Темы кратко и по делу + примеры и мини-упражнения.",
-
-    dictTitle: "Словарь",
-    dictDesc: "Поиск, темы, примеры предложений и «в избранное».",
-
-    open: "Открыть →",
-    whatsNew: "Что нового",
-
-    strip: [
-      {
-        k: "3 языка",
-        v: "Словацкий, чешский и польский",
-      },
-      {
-        k: "A0–B2",
-        v: "Обучение по уровням",
-      },
-      {
-        k: "10 мин/день",
-        v: "Короткие уроки",
-      },
-    ],
   },
 
   en: {
-    h1: "Learn Slovak, Czech, and Polish from zero to B2 — for work, life, and relocation",
-    heroP:
-      "Flunio is an online platform for learning Slovak, Czech, and Polish: short lessons, dictionary, grammar, audio, and exercises for daily practice.",
+    heroEyebrow: "Your learning space",
+    heroTitle: "Continue learning",
+    heroSubtitle:
+      "Return to your current course or choose the tool you need for practice.",
 
-    ctaLearning: "Go to learning 🚀",
+    currentCourse: "Current course",
+    levels: "Levels A0–B2",
+    freeLevel: "A0 is free",
+    continueLearning: "Continue learning",
 
-    starterBadge: "🚀 A0 is free — start learning without payment",
+    quickTitle: "Quick access",
+    quickSubtitle: "Every important Flunio section on one screen.",
 
-    free: [
-      "A0 is open for free, so you can start from zero",
-      "Dictionary, grammar, and example sentences in one place",
-      "Short lessons, audio, and exercises for daily practice",
-    ],
+    lessons: "Lessons",
+    lessonsDesc: "Continue learning",
 
-    telegramTitle: "Flunio on Telegram 📢",
-    telegramDesc:
-      "Platform news, development plans, updates, and useful language-learning content.",
-    telegramCta: "Subscribe →",
+    courses: "Courses",
+    coursesDesc: "Change language",
+
+    practice: "Trainer",
+    practiceDesc: "Practise your skills",
+
+    dictionary: "Dictionary",
+    dictionaryDesc: "Find a word",
+
+    grammar: "Grammar",
+    grammarDesc: "Review the rules",
+
+    progress: "Progress",
+    progressDesc: "View your statistics",
+
+    updates: "Updates",
+    updatesDesc: "Latest changes",
+
+    premium: "Premium",
+    premiumDesc: "Unlock all levels",
+
+    planEyebrow: "Recommended pace",
+    planTitle: "Today’s plan",
+    planSubtitle:
+      "A short daily plan helps you stay consistent and remember more.",
+
+    planLesson: "New material",
+    planWords: "Word practice",
+    planReview: "Review",
+
+    planLessonValue: "1 lesson",
+    planWordsValue: "10 words",
+    planReviewValue: "5 minutes",
+
+    planCta: "Start training",
+
+    premiumEyebrow: "Flunio Premium",
+    premiumTitle: "Full access from A1 to B2",
+    premiumText:
+      "Every level, the trainer, word review, advanced statistics, and all active courses in one subscription.",
+    premiumCta: "View Premium",
+
+    aboutTitle: "More about Flunio",
 
     seoH2: "Online Slovak, Czech, and Polish course",
     seoP1:
       "Flunio is an online platform for learning Slovak, Czech, and Polish from scratch. Here you will find grammar with examples, a thematic dictionary, practice exercises, and structured learning across A0–B2 levels.",
     seoP2:
       "The website is suitable for people who plan to work, study, or live in Europe. Learn Slovak, Czech, and Polish online in a convenient format with short lessons, gradual progression, and practice for real life.",
-
-    premiumTitle: "Premium — continue after A0 🚀",
-    premiumSubtitle:
-      "A0 is free. Premium unlocks A1–B2, the trainer, word review, and all active Flunio courses in one subscription.",
-
-    premiumBullets: [
-      "🔓 Access to premium levels A1–B2",
-      "🌍 All active courses in one subscription",
-      "🇸🇰 Slovak course",
-      "🇨🇿 Czech course",
-      "🇵🇱 Polish course",
-      "🏋️ Full access to the trainer",
-      "🔁 Advanced word review",
-      "📊 Statistics, streaks, and records",
-    ],
-
-    premiumPriceNote:
-      "EUR / USD / UAH / PLN / CZK • monthly and yearly plans • cancel anytime",
-
-    premiumCta: "Try Premium →",
-    trainerLocked: "Trainer 🔒",
-
-    grammarTitle: "Grammar",
-    grammarDesc: "Topics kept short and clear + examples and mini exercises.",
-
-    dictTitle: "Dictionary",
-    dictDesc: "Search, topics, example sentences, and favorites.",
-
-    open: "Open →",
-    whatsNew: "What’s new",
-
-    strip: [
-      {
-        k: "3 languages",
-        v: "Slovak, Czech, and Polish",
-      },
-      {
-        k: "A0–B2",
-        v: "Level-based learning",
-      },
-      {
-        k: "10 min/day",
-        v: "Short lessons",
-      },
-    ],
   },
 };
 
-function StatPill({ k, v }: { k: string; v: string }) {
-  return (
-    <div className="theme-home-soft-card rounded-2xl px-4 py-3 shadow-sm transition hover:-translate-y-0.5">
-      <div className="theme-text text-sm font-semibold">{k}</div>
-      <div className="theme-text-muted text-xs">{v}</div>
-    </div>
-  );
+const COURSE_META: Record<
+  string,
+  {
+    flag: string;
+    code: string;
+    name: Record<Lang, string>;
+  }
+> = {
+  sk: {
+    flag: "🇸🇰",
+    code: "SK",
+    name: {
+      ua: "Словацька мова",
+      ru: "Словацкий язык",
+      en: "Slovak",
+    },
+  },
+
+  cs: {
+    flag: "🇨🇿",
+    code: "CZ",
+    name: {
+      ua: "Чеська мова",
+      ru: "Чешский язык",
+      en: "Czech",
+    },
+  },
+
+  pl: {
+    flag: "🇵🇱",
+    code: "PL",
+    name: {
+      ua: "Польська мова",
+      ru: "Польский язык",
+      en: "Polish",
+    },
+  },
+};
+
+function Glyph({ name }: { name: IconName }) {
+  const sharedProps = {
+    width: 31,
+    height: 31,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+
+  switch (name) {
+    case "lessons":
+      return (
+        <svg {...sharedProps}>
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5z" />
+          <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5z" />
+          <path d="M7 7h2" />
+          <path d="M15 7h2" />
+        </svg>
+      );
+
+    case "courses":
+      return (
+        <svg {...sharedProps}>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18" />
+          <path d="M12 3a14 14 0 0 1 0 18" />
+          <path d="M12 3a14 14 0 0 0 0 18" />
+        </svg>
+      );
+
+    case "practice":
+      return (
+        <svg {...sharedProps}>
+          <path d="M5 8v8" />
+          <path d="M8 6v12" />
+          <path d="M16 6v12" />
+          <path d="M19 8v8" />
+          <path d="M8 12h8" />
+          <path d="M3 10v4" />
+          <path d="M21 10v4" />
+        </svg>
+      );
+
+    case "dictionary":
+      return (
+        <svg {...sharedProps}>
+          <rect x="5" y="4" width="14" height="16" rx="2" />
+          <path d="M8 4v16" />
+          <path d="M11 8h5" />
+          <path d="M11 12h5" />
+          <path d="M11 16h3" />
+        </svg>
+      );
+
+    case "grammar":
+      return (
+        <svg {...sharedProps}>
+          <path d="M5 19 10.5 5h3L19 19" />
+          <path d="M7 14h10" />
+          <path d="M5 22h14" />
+        </svg>
+      );
+
+    case "progress":
+      return (
+        <svg {...sharedProps}>
+          <path d="M5 20V11" />
+          <path d="M12 20V4" />
+          <path d="M19 20v-6" />
+          <path d="M3 20h18" />
+        </svg>
+      );
+
+    case "updates":
+      return (
+        <svg {...sharedProps}>
+          <path d="m12 3 1.4 4.1L17.5 8.5l-4.1 1.4L12 14l-1.4-4.1-4.1-1.4 4.1-1.4z" />
+          <path d="m18 14 .8 2.2L21 17l-2.2.8L18 20l-.8-2.2L15 17l2.2-.8z" />
+          <path d="m6 14 .7 1.8 1.8.7-1.8.7L6 19l-.7-1.8-1.8-.7 1.8-.7z" />
+        </svg>
+      );
+
+    case "premium":
+      return (
+        <svg {...sharedProps}>
+          <path d="m3 7 4 4 5-7 5 7 4-4-2 11H5z" />
+          <path d="M5 18h14" />
+          <path d="M6 21h12" />
+        </svg>
+      );
+
+    default:
+      return null;
+  }
 }
 
-function FeatureCard({
+type AppItem = {
+  href: string;
+  icon: IconName;
+  title: string;
+  description: string;
+  iconClass: string;
+  glowClass: string;
+  badge?: string | null;
+};
+
+function AppLauncherItem({
   href,
   icon,
   title,
-  desc,
-  action,
-}: {
-  href: string;
-  icon: string;
-  title: string;
-  desc: string;
-  action: string;
-}) {
+  description,
+  iconClass,
+  glowClass,
+  badge,
+}: AppItem) {
   return (
     <Link
       href={href}
-      className="theme-home-soft-card group relative block overflow-hidden rounded-2xl p-5 transition hover:-translate-y-0.5"
+      aria-label={`${title}. ${description}`}
+      className={[
+        "group relative flex min-w-0 flex-col items-center rounded-3xl px-1 py-1 text-center",
+        "transition duration-200 hover:-translate-y-1",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400",
+      ].join(" ")}
     >
-      <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-cyan-400/10 blur-2xl" />
+      <div
+        className={[
+          "pointer-events-none absolute top-4 h-14 w-14 rounded-full opacity-0 blur-2xl",
+          "transition duration-300 group-hover:opacity-60",
+          glowClass,
+        ].join(" ")}
+      />
 
-      <div className="relative flex items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">
-          {icon}
+      <div
+        className={[
+          "relative flex h-[68px] w-[68px] items-center justify-center overflow-hidden",
+          "rounded-[22px] border border-white/15 text-white",
+          "shadow-[0_12px_26px_rgba(0,0,0,0.2)]",
+          "transition duration-200 group-hover:scale-[1.05]",
+          "sm:h-[74px] sm:w-[74px] sm:rounded-[24px]",
+          iconClass,
+        ].join(" ")}
+      >
+        <div className="pointer-events-none absolute -right-5 -top-5 h-12 w-12 rounded-full bg-white/25 blur-xl" />
+
+        <div className="pointer-events-none absolute inset-x-2 top-1 h-px bg-white/25" />
+
+        <span className="relative">
+          <Glyph name={icon} />
+        </span>
+
+        {badge && (
+          <span className="absolute right-1 top-1 rounded-full border border-white/20 bg-rose-500 px-1.5 py-0.5 text-[9px] font-extrabold leading-none text-white shadow-lg">
+            {badge}
+          </span>
+        )}
+      </div>
+
+      <div className="mt-2 min-w-0 max-w-full">
+        <div className="theme-text truncate text-[11px] font-semibold sm:text-sm">
+          {title}
         </div>
 
-        <div className="min-w-0 flex-1">
-          <h2 className="theme-text text-lg font-bold">{title}</h2>
-
-          <p className="theme-text-muted mt-1 text-sm leading-6">{desc}</p>
-
-          <div className="theme-action-link mt-3 text-sm font-semibold transition group-hover:translate-x-1">
-            {action}
-          </div>
+        <div className="theme-text-subtle mt-0.5 hidden truncate text-[10px] xl:block">
+          {description}
         </div>
       </div>
     </Link>
   );
 }
 
-function CourseCard({
-  href,
-  flag,
-  title,
-  description,
-  badge,
-  action,
-  active,
+function PlanRow({
+  icon,
+  label,
+  value,
 }: {
-  href: string;
-  flag: string;
-  title: string;
-  description: string;
-  badge: string;
-  action: string;
-  active: boolean;
+  icon: string;
+  label: string;
+  value: string;
 }) {
   return (
-    <Link
-      href={href}
-      className={[
-        "theme-home-soft-card group relative block overflow-hidden rounded-3xl p-6",
-        "transition hover:-translate-y-1",
-        active
-          ? "ring-2 ring-cyan-400/40 shadow-[0_0_30px_rgba(34,211,238,0.14)]"
-          : "shadow-[0_0_24px_rgba(34,211,238,0.07)]",
-      ].join(" ")}
-    >
-      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-fuchsia-500/10 blur-3xl" />
-
-      <div className="relative">
-        <div className="flex items-start justify-between gap-3">
-          <div className="text-4xl" aria-hidden="true">
-            {flag}
-          </div>
-
-          <div className="theme-pill rounded-full px-3 py-1 text-xs font-bold">
-            {badge}
-          </div>
+    <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 px-3.5 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg">
+          {icon}
         </div>
 
-        <h2 className="theme-text mt-5 text-xl font-bold">{title}</h2>
-
-        <p className="theme-text-muted mt-2 min-h-[72px] text-sm leading-6">
-          {description}
-        </p>
-
-        <div className="theme-action-link mt-5 text-sm font-bold transition group-hover:translate-x-1">
-          {action}
-        </div>
+        <span className="theme-text-muted truncate text-sm">{label}</span>
       </div>
-    </Link>
+
+      <span className="theme-text shrink-0 text-sm font-bold">{value}</span>
+    </div>
   );
 }
 
@@ -373,321 +527,323 @@ export default function HomeContent({
   courseId: string;
 }) {
   const tr = t[lang];
+  const course = COURSE_META[courseId] ?? COURSE_META.sk;
+
+  const apps: AppItem[] = [
+    {
+      href: "/learning",
+      icon: "lessons",
+      title: tr.lessons,
+      description: tr.lessonsDesc,
+      iconClass:
+        "bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600",
+      glowClass: "bg-cyan-400",
+    },
+    {
+      href: "/learn",
+      icon: "courses",
+      title: tr.courses,
+      description: tr.coursesDesc,
+      iconClass:
+        "bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600",
+      glowClass: "bg-emerald-400",
+    },
+    {
+      href: "/practice",
+      icon: "practice",
+      title: tr.practice,
+      description: tr.practiceDesc,
+      iconClass:
+        "bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500",
+      glowClass: "bg-orange-400",
+    },
+    {
+      href: "/dictionary",
+      icon: "dictionary",
+      title: tr.dictionary,
+      description: tr.dictionaryDesc,
+      iconClass:
+        "bg-gradient-to-br from-violet-400 via-purple-500 to-fuchsia-600",
+      glowClass: "bg-violet-400",
+    },
+    {
+      href: "/grammar",
+      icon: "grammar",
+      title: tr.grammar,
+      description: tr.grammarDesc,
+      iconClass:
+        "bg-gradient-to-br from-sky-400 via-cyan-500 to-blue-600",
+      glowClass: "bg-sky-400",
+    },
+    {
+      href: "#stats",
+      icon: "progress",
+      title: tr.progress,
+      description: tr.progressDesc,
+      iconClass:
+        "bg-gradient-to-br from-yellow-300 via-amber-500 to-orange-600",
+      glowClass: "bg-yellow-400",
+    },
+    {
+      href: "/updates",
+      icon: "updates",
+      title: tr.updates,
+      description: tr.updatesDesc,
+      iconClass:
+        "bg-gradient-to-br from-pink-400 via-fuchsia-500 to-purple-600",
+      glowClass: "bg-fuchsia-400",
+      badge: latestBadge,
+    },
+    {
+      href: "/premium",
+      icon: "premium",
+      title: tr.premium,
+      description: tr.premiumDesc,
+      iconClass:
+        "bg-gradient-to-br from-amber-300 via-orange-500 to-fuchsia-600",
+      glowClass: "bg-amber-400",
+    },
+  ];
 
   return (
-    <div className="space-y-8">
-      <section className="flunio-card relative overflow-hidden rounded-3xl p-7 sm:p-8">
-        <div className="theme-home-glow-border pointer-events-none absolute inset-0 rounded-3xl" />
+    <div className="space-y-6 sm:space-y-8">
+      <section className="flunio-card relative overflow-hidden rounded-[32px] p-5 sm:p-7">
+        <div className="theme-home-glow-border pointer-events-none absolute inset-0 rounded-[32px]" />
 
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-fuchsia-500/22 blur-[80px]" />
 
-        <div className="pointer-events-none absolute -bottom-12 -left-10 h-40 w-40 rounded-full bg-cyan-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-16 h-60 w-60 rounded-full bg-cyan-400/18 blur-[80px]" />
 
-        <div className="relative space-y-5">
-          <h1 className="theme-text text-[31px] font-semibold leading-tight tracking-tight sm:text-5xl">
-            {tr.h1}
-          </h1>
-
-          <p className="theme-text-muted max-w-2xl text-base sm:text-lg">
-            {tr.heroP}
-          </p>
-
-          <div className="pt-1">
-            <Link
-              href="/learning"
-              className="theme-primary-button inline-flex min-h-12 items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
-            >
-              {tr.ctaLearning}
-            </Link>
-          </div>
-
-          <div className="mt-4 flex flex-col items-start gap-3">
-            <div className="theme-home-soft-card inline-flex max-w-2xl items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold shadow-sm">
-              <span>{tr.starterBadge}</span>
+        <div className="relative grid items-center gap-6 lg:grid-cols-[1fr_430px]">
+          <div>
+            <div className="theme-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+              {tr.heroEyebrow}
             </div>
 
-            <div className="theme-home-soft-card inline-flex max-w-2xl items-center gap-2 rounded-2xl px-4 py-3 text-sm">
-              <span>💡</span>
+            <h1 className="theme-text mt-4 max-w-2xl text-[32px] font-semibold leading-[1.12] tracking-tight sm:text-[42px]">
+              {tr.heroTitle}
+            </h1>
 
-              <span>
-                {lang === "ua"
-                  ? "Щоб змінити курс, натисни на аватар зверху праворуч і обери «Обрати курс»."
-                  : lang === "ru"
-                    ? "Чтобы сменить курс, нажми на аватар сверху справа и выбери «Выбрать курс»."
-                    : "To change the course, click your avatar in the top right and choose “Select course”."}
-              </span>
-            </div>
-          </div>
+            <p className="theme-text-muted mt-3 max-w-xl text-sm leading-6 sm:text-base sm:leading-7">
+              {tr.heroSubtitle}
+            </p>
 
-          <div className="theme-text-muted mt-4 space-y-1 text-sm">
-            {tr.free.map((item) => (
-              <div key={item} className="flex items-start gap-2">
-                <span className="text-emerald-400">✔</span>
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3 min-h-[44px]">
-            <Link
-              href="/updates"
-              className="theme-secondary-button inline-flex min-h-11 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition"
-            >
-              ✨ {tr.whatsNew}
-
-              {latestBadge && (
-                <span className="theme-latest-badge rounded-full px-2 py-0.5 font-bold">
-                  {latestBadge}
-                </span>
-              )}
-            </Link>
-          </div>
-
-          <div className="theme-home-soft-card mt-3 rounded-2xl px-4 py-4 shadow-[0_0_20px_rgba(34,211,238,0.08)]">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="theme-text text-sm font-bold">
-                  {tr.telegramTitle}
-                </div>
-
-                <div className="theme-text-muted mt-1 max-w-2xl text-sm">
-                  {tr.telegramDesc}
-                </div>
-              </div>
-
-              <a
-                href="https://t.me/flunio_languages"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_18px_rgba(34,211,238,0.22)] transition hover:-translate-y-0.5 active:translate-y-0"
+            <div className="mt-5">
+              <Link
+                href="/learning"
+                className="theme-primary-button inline-flex min-h-11 w-full items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0 sm:w-auto"
               >
-                {tr.telegramCta}
-              </a>
+                {tr.continueLearning}
+                <span className="ml-2">→</span>
+              </Link>
             </div>
           </div>
 
-          <div className="grid gap-3 pt-3 sm:grid-cols-3">
-            {tr.strip.map((item) => (
-              <StatPill key={item.k} k={item.k} v={item.v} />
-            ))}
+          <div className="relative overflow-hidden rounded-[26px] border border-white/12 bg-black/15 p-4 shadow-[0_20px_45px_rgba(0,0,0,0.2)] backdrop-blur-xl sm:p-5">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-cyan-400/15 blur-3xl" />
+
+            <div className="relative">
+              <div className="theme-text-subtle text-[11px] font-semibold uppercase tracking-[0.15em]">
+                {tr.currentCourse}
+              </div>
+
+              <div className="mt-3 flex items-center gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[21px] border border-white/15 bg-white/10 text-3xl shadow-sm">
+                  {course.flag}
+                </div>
+
+                <div className="min-w-0">
+                  <div className="theme-text truncate text-xl font-bold">
+                    {course.name[lang]}
+                  </div>
+
+                  <div className="theme-text-muted mt-1 text-sm">
+                    {course.code} · {tr.levels}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="rounded-2xl border border-white/10 bg-white/5 px-3.5 py-3">
+                  <div className="theme-text-subtle text-[10px] font-semibold uppercase tracking-wide">
+                    Level
+                  </div>
+
+                  <div className="theme-text mt-1 font-bold">A0–B2</div>
+                </div>
+
+                <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-3.5 py-3">
+                  <div className="text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
+                    Start
+                  </div>
+
+                  <div className="mt-1 text-sm font-bold text-emerald-300">
+                    {tr.freeLevel}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 flex gap-2">
+                <span className="h-1.5 flex-1 rounded-full bg-cyan-400" />
+                <span className="h-1.5 flex-1 rounded-full bg-blue-500" />
+                <span className="h-1.5 flex-1 rounded-full bg-fuchsia-500" />
+                <span className="h-1.5 flex-1 rounded-full bg-white/15" />
+                <span className="h-1.5 flex-1 rounded-full bg-white/15" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="grid items-start gap-4 lg:grid-cols-[1.25fr_0.75fr]">
+      <section className="flunio-card relative overflow-hidden rounded-[32px] p-4 sm:p-6">
+        <div className="pointer-events-none absolute left-1/2 top-0 h-28 w-[70%] -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
+
+        <div className="relative">
+          <div className="mb-5 px-1">
+            <h2 className="theme-text text-xl font-bold sm:text-2xl">
+              {tr.quickTitle}
+            </h2>
+
+            <p className="theme-text-muted mt-1 text-sm">{tr.quickSubtitle}</p>
+          </div>
+
+          <div className="rounded-[27px] border border-white/10 bg-black/10 px-2 py-4 shadow-inner sm:px-4">
+            <div className="grid grid-cols-6 gap-x-1 gap-y-5 sm:grid-cols-4 sm:gap-x-3 xl:grid-cols-8">
+              {apps.map((app, index) => (
+                <div
+                  key={app.href}
+                  className={[
+                    "col-span-2 sm:col-span-1",
+                    index === 6 ? "col-start-2 sm:col-start-auto" : "",
+                    index === 7 ? "col-start-4 sm:col-start-auto" : "",
+                  ].join(" ")}
+                >
+                  <AppLauncherItem {...app} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="stats"
+        className="grid scroll-mt-24 items-stretch gap-5 xl:grid-cols-[1.15fr_0.85fr]"
+      >
         <div className="min-w-0">
           <WordsStatsClient />
         </div>
 
-        <div className="grid gap-4">
-          <FeatureCard
-            href="/grammar"
-            icon="📘"
-            title={tr.grammarTitle}
-            desc={tr.grammarDesc}
-            action={tr.open}
-          />
+        <div className="flunio-card relative flex h-full flex-col overflow-hidden rounded-[30px] p-5 sm:p-6">
+          <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan-400/15 blur-3xl" />
 
-          <FeatureCard
-            href="/dictionary"
-            icon="📚"
-            title={tr.dictTitle}
-            desc={tr.dictDesc}
-            action={tr.open}
-          />
-        </div>
-      </section>
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-fuchsia-500/10 blur-3xl" />
 
-      <section className="space-y-5">
-        <div className="space-y-2 text-center">
-          <h2 className="theme-text text-2xl font-bold sm:text-3xl">
-            {lang === "ua"
-              ? "Обери мову, яку хочеш вивчати"
-              : lang === "ru"
-                ? "Выбери язык, который хочешь изучать"
-                : "Choose the language you want to learn"}
-          </h2>
-
-          <p className="theme-text-muted mx-auto max-w-2xl">
-            {lang === "ua"
-              ? "Кожен курс має послідовні уроки від A0 до B2. Повний рівень A0 доступний безкоштовно."
-              : lang === "ru"
-                ? "Каждый курс содержит последовательные уроки от A0 до B2. Полный уровень A0 доступен бесплатно."
-                : "Every course contains structured lessons from A0 to B2. The complete A0 level is free."}
-          </p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          <CourseCard
-            href="/learn"
-            flag="🇸🇰"
-            title={
-              lang === "ua"
-                ? "Словацька мова"
-                : lang === "ru"
-                  ? "Словацкий язык"
-                  : "Learn Slovak"
-            }
-            description={
-              lang === "ua"
-                ? "Для життя, роботи, навчання та щоденного спілкування у Словаччині."
-                : lang === "ru"
-                  ? "Для жизни, работы, учёбы и ежедневного общения в Словакии."
-                  : "For everyday life, work, study, and communication in Slovakia."
-            }
-            badge={
-              lang === "ua"
-                ? "A0 безкоштовно"
-                : lang === "ru"
-                  ? "A0 бесплатно"
-                  : "A0 free"
-            }
-            action={
-              lang === "ua"
-                ? "Обрати словацький курс →"
-                : lang === "ru"
-                  ? "Выбрать словацкий курс →"
-                  : "Select the Slovak course →"
-            }
-            active={courseId === "sk"}
-          />
-
-          <CourseCard
-            href="/learn"
-            flag="🇨🇿"
-            title={
-              lang === "ua"
-                ? "Чеська мова"
-                : lang === "ru"
-                  ? "Чешский язык"
-                  : "Learn Czech"
-            }
-            description={
-              lang === "ua"
-                ? "Для життя, роботи, навчання та повсякденного спілкування в Чехії."
-                : lang === "ru"
-                  ? "Для жизни, работы, учёбы и повседневного общения в Чехии."
-                  : "For everyday life, work, study, and communication in Czechia."
-            }
-            badge={
-              lang === "ua"
-                ? "A0 безкоштовно"
-                : lang === "ru"
-                  ? "A0 бесплатно"
-                  : "A0 free"
-            }
-            action={
-              lang === "ua"
-                ? "Обрати чеський курс →"
-                : lang === "ru"
-                  ? "Выбрать чешский курс →"
-                  : "Select the Czech course →"
-            }
-            active={courseId === "cs"}
-          />
-
-          <CourseCard
-            href="/learn"
-            flag="🇵🇱"
-            title={
-              lang === "ua"
-                ? "Польська мова"
-                : lang === "ru"
-                  ? "Польский язык"
-                  : "Learn Polish"
-            }
-            description={
-              lang === "ua"
-                ? "Для роботи, переїзду, подорожей та щоденного спілкування в Польщі."
-                : lang === "ru"
-                  ? "Для работы, переезда, путешествий и ежедневного общения в Польше."
-                  : "For work, relocation, travel, and everyday communication in Poland."
-            }
-            badge={
-              lang === "ua"
-                ? "A0 безкоштовно"
-                : lang === "ru"
-                  ? "A0 бесплатно"
-                  : "A0 free"
-            }
-            action={
-              lang === "ua"
-                ? "Обрати польський курс →"
-                : lang === "ru"
-                  ? "Выбрать польский курс →"
-                  : "Select the Polish course →"
-            }
-            active={courseId === "pl"}
-          />
-        </div>
-      </section>
-
-      <section>
-        <LeaderboardBlock lang={lang} limit={5} period="all" compact />
-      </section>
-
-      <section>
-        <div className="flunio-card relative overflow-hidden rounded-3xl p-8">
-          <div className="pointer-events-none absolute -top-20 left-10 h-40 w-40 rounded-full bg-fuchsia-500/20 blur-3xl" />
-
-          <div className="pointer-events-none absolute -bottom-20 right-10 h-40 w-40 rounded-full bg-cyan-400/15 blur-3xl" />
-
-          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-            <div className="space-y-4">
-              <div className="theme-home-soft-card inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
-                Premium
-              </div>
-
-              <h2 className="theme-text text-2xl font-semibold">
-                {tr.premiumTitle}
-              </h2>
-
-              <p className="theme-text-muted max-w-2xl">
-                {tr.premiumSubtitle}
-              </p>
-
-              <ul className="grid gap-2 sm:grid-cols-2">
-                {tr.premiumBullets.map((item) => (
-                  <li
-                    key={item}
-                    className="theme-home-soft-card rounded-2xl px-4 py-2.5 text-sm"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="theme-text-subtle text-sm">
-                {tr.premiumPriceNote}
-              </div>
+          <div className="relative flex h-full flex-col">
+            <div className="theme-pill inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
+              <span>⚡</span>
+              {tr.planEyebrow}
             </div>
 
-            <div className="flex flex-col gap-3 sm:pt-2">
-              <Link
-                href="/premium"
-                className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
-              >
-                {tr.premiumCta}
-              </Link>
+            <h2 className="theme-text mt-4 text-2xl font-bold">
+              {tr.planTitle}
+            </h2>
 
+            <p className="theme-text-muted mt-2 text-sm leading-6">
+              {tr.planSubtitle}
+            </p>
+
+            <div className="mt-5 grid gap-2.5">
+              <PlanRow
+                icon="📖"
+                label={tr.planLesson}
+                value={tr.planLessonValue}
+              />
+
+              <PlanRow
+                icon="🧠"
+                label={tr.planWords}
+                value={tr.planWordsValue}
+              />
+
+              <PlanRow
+                icon="🔁"
+                label={tr.planReview}
+                value={tr.planReviewValue}
+              />
+            </div>
+
+            <div className="mt-auto pt-5">
               <Link
-                href="/premium"
-                className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
+                href="/practice"
+                className="theme-primary-button inline-flex min-h-11 w-full items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:translate-y-0"
               >
-                {tr.trainerLocked}
+                {tr.planCta}
+                <span className="ml-2">→</span>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="flunio-card rounded-3xl p-8">
-        <h2 className="theme-text mb-3 text-xl font-semibold">{tr.seoH2}</h2>
+      <section className="relative overflow-hidden rounded-[30px] border border-amber-300/20 bg-gradient-to-r from-amber-400/15 via-fuchsia-500/14 to-cyan-500/12 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.16)] sm:p-6">
+        <div className="pointer-events-none absolute -right-14 -top-16 h-40 w-40 rounded-full bg-fuchsia-500/25 blur-3xl" />
 
-        <p className="theme-text-muted mb-3">{tr.seoP1}</p>
+        <div className="pointer-events-none absolute -bottom-16 left-1/4 h-36 w-36 rounded-full bg-amber-400/15 blur-3xl" />
 
-        <p className="theme-text-muted">{tr.seoP2}</p>
+        <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-amber-300/25 bg-amber-300/10 text-amber-200">
+              <Glyph name="premium" />
+            </div>
+
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-200">
+                {tr.premiumEyebrow}
+              </div>
+
+              <h2 className="theme-text mt-1 text-2xl font-bold">
+                {tr.premiumTitle}
+              </h2>
+
+              <p className="theme-text-muted mt-2 max-w-3xl text-sm leading-6">
+                {tr.premiumText}
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/premium"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-r from-amber-300 via-orange-400 to-fuchsia-500 px-6 py-3 text-sm font-bold text-slate-950 shadow-[0_12px_28px_rgba(251,191,36,0.2)] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0"
+          >
+            {tr.premiumCta}
+            <span className="ml-2">→</span>
+          </Link>
+        </div>
       </section>
+
+      <section id="leaderboard" className="scroll-mt-24">
+        <LeaderboardBlock lang={lang} limit={3} period="all" compact />
+      </section>
+
+      <details className="flunio-card group overflow-hidden rounded-[28px]">
+        <summary className="theme-text flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-semibold">
+          <span>{tr.aboutTitle}</span>
+
+          <span className="theme-text-muted text-xl transition group-open:rotate-45">
+            +
+          </span>
+        </summary>
+
+        <div className="border-t border-white/10 px-5 pb-6 pt-5">
+          <h2 className="theme-text text-xl font-semibold">{tr.seoH2}</h2>
+
+          <p className="theme-text-muted mt-3 text-sm leading-7">{tr.seoP1}</p>
+
+          <p className="theme-text-muted mt-3 text-sm leading-7">{tr.seoP2}</p>
+        </div>
+      </details>
     </div>
   );
 }

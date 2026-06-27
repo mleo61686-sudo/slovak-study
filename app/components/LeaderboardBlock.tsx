@@ -36,43 +36,48 @@ const UI = {
     subtitle:
       "Рейтинг формується за уроки, повторення, диктанти та аудіопрактику.",
     compactSubtitle:
-      "Учні, які вже активно проходять уроки та тренуються у Flunio.",
+      "Учні, які активно навчаються та набирають найбільше балів.",
     loading: "Завантажуємо рейтинг...",
     emptyTitle: "Рейтинг ще формується",
     emptyText: "Пройди урок і стань першим у рейтингу.",
     points: "балів",
     close: "Закрити",
     leader: "Лідер рейтингу",
+    leaderboard: "Рейтинг",
     top: "TOP",
   },
+
   ru: {
     title: "Лучшие ученики этой недели",
     titleAll: "Лучшие ученики Flunio",
     subtitle:
       "Рейтинг формируется за уроки, повторение, диктанты и аудиопрактику.",
     compactSubtitle:
-      "Ученики, которые уже активно проходят уроки и тренируются во Flunio.",
+      "Ученики, которые активно обучаются и набирают больше всего баллов.",
     loading: "Загружаем рейтинг...",
     emptyTitle: "Рейтинг ещё формируется",
     emptyText: "Пройди урок и стань первым в рейтинге.",
     points: "баллов",
     close: "Закрыть",
     leader: "Лидер рейтинга",
+    leaderboard: "Рейтинг",
     top: "TOP",
   },
+
   en: {
     title: "Top learners this week",
     titleAll: "Top Flunio learners",
     subtitle:
       "Ranking is based on lessons, reviews, dictations and audio practice.",
     compactSubtitle:
-      "Learners who are already actively completing lessons and training on Flunio.",
+      "Learners who actively study and earn the most points.",
     loading: "Loading leaderboard...",
     emptyTitle: "Leaderboard is starting",
     emptyText: "Complete a lesson and become the first learner.",
     points: "pts",
     close: "Close",
     leader: "Leaderboard leader",
+    leaderboard: "Leaderboard",
     top: "TOP",
   },
 } satisfies Record<Lang, Record<string, string>>;
@@ -88,12 +93,14 @@ function getRankIcon(rank: number) {
 function getInitials(name: string) {
   const cleaned = name.trim();
 
-  if (!cleaned) return "G";
+  if (!cleaned) {
+    return "G";
+  }
 
   const parts = cleaned.split(/\s+/).filter(Boolean);
 
   if (parts.length >= 2) {
-    return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
+    return `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase();
   }
 
   return cleaned.slice(0, 2).toUpperCase();
@@ -102,32 +109,39 @@ function getInitials(name: string) {
 function getRankTone(rank: number) {
   if (rank === 1) {
     return {
-      card: "border-yellow-300/40 bg-yellow-300/10",
+      card:
+        "border-yellow-300/35 bg-gradient-to-r from-yellow-300/10 via-amber-300/5 to-transparent",
       glow: "bg-yellow-300/20",
-      badge: "border-yellow-300/35 bg-yellow-300/15",
+      badge: "border-yellow-300/35 bg-yellow-300/15 text-yellow-100",
+      score: "border-yellow-300/30 bg-yellow-300/10 text-yellow-100",
     };
   }
 
   if (rank === 2) {
     return {
-      card: "border-cyan-300/25 bg-cyan-300/10",
+      card:
+        "border-cyan-300/25 bg-gradient-to-r from-cyan-300/10 to-transparent",
       glow: "bg-cyan-300/15",
-      badge: "border-cyan-300/25 bg-cyan-300/10",
+      badge: "border-cyan-300/25 bg-cyan-300/10 text-cyan-100",
+      score: "border-cyan-300/25 bg-cyan-300/10 text-cyan-100",
     };
   }
 
   if (rank === 3) {
     return {
-      card: "border-orange-300/30 bg-orange-300/10",
+      card:
+        "border-orange-300/25 bg-gradient-to-r from-orange-300/10 to-transparent",
       glow: "bg-orange-300/15",
-      badge: "border-orange-300/30 bg-orange-300/10",
+      badge: "border-orange-300/25 bg-orange-300/10 text-orange-100",
+      score: "border-orange-300/25 bg-orange-300/10 text-orange-100",
     };
   }
 
   return {
-    card: "border-cyan-300/15 bg-cyan-300/10",
+    card: "border-white/10 bg-white/[0.035]",
     glow: "bg-cyan-300/10",
-    badge: "border-cyan-300/20 bg-cyan-300/10",
+    badge: "border-white/10 bg-white/5 theme-text",
+    score: "border-cyan-300/20 bg-cyan-300/10 theme-text",
   };
 }
 
@@ -142,6 +156,7 @@ export default function LeaderboardBlock({
 
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+
   const [selectedAvatar, setSelectedAvatar] = useState<{
     src: string;
     name: string;
@@ -167,13 +182,13 @@ export default function LeaderboardBlock({
       setLoading(true);
 
       try {
-        const res = await fetch(apiUrl, {
+        const response = await fetch(apiUrl, {
           method: "GET",
           credentials: "include",
           cache: "no-store",
         });
 
-        if (!res.ok) {
+        if (!response.ok) {
           if (!cancelled) {
             setEntries([]);
           }
@@ -181,10 +196,12 @@ export default function LeaderboardBlock({
           return;
         }
 
-        const data = (await res.json()) as LeaderboardResponse;
+        const data = (await response.json()) as LeaderboardResponse;
 
         if (!cancelled) {
-          setEntries(data.ok && Array.isArray(data.entries) ? data.entries : []);
+          setEntries(
+            data.ok && Array.isArray(data.entries) ? data.entries : [],
+          );
         }
       } catch {
         if (!cancelled) {
@@ -205,7 +222,9 @@ export default function LeaderboardBlock({
   }, [apiUrl]);
 
   function openAvatar(entry: LeaderboardEntry) {
-    if (!entry.avatarUrl) return;
+    if (!entry.avatarUrl) {
+      return;
+    }
 
     setSelectedAvatar({
       src: entry.avatarUrl,
@@ -213,17 +232,21 @@ export default function LeaderboardBlock({
     });
   }
 
-  function renderAvatar(entry: LeaderboardEntry, size: "sm" | "md" | "lg") {
+  function renderAvatar(
+    entry: LeaderboardEntry,
+    size: "sm" | "md" | "lg",
+  ) {
     const sizeClass =
       size === "lg"
         ? "h-20 w-20 text-xl"
         : size === "md"
-          ? "h-14 w-14 text-base"
-          : "h-11 w-11 text-sm";
+          ? "h-12 w-12 text-sm sm:h-14 sm:w-14 sm:text-base"
+          : "h-9 w-9 text-[11px] sm:h-11 sm:w-11 sm:text-sm";
 
     const baseClass = [
       "relative flex shrink-0 items-center justify-center overflow-hidden rounded-full",
-      "border border-white/15 bg-white/10 font-bold theme-text shadow-[0_0_22px_rgba(34,211,238,0.12)]",
+      "border border-white/15 bg-white/10 font-bold theme-text",
+      "shadow-[0_0_20px_rgba(34,211,238,0.10)]",
       sizeClass,
     ].join(" ");
 
@@ -237,7 +260,8 @@ export default function LeaderboardBlock({
         onClick={() => openAvatar(entry)}
         className={[
           baseClass,
-          "transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400/60",
+          "transition hover:scale-105",
+          "focus:outline-none focus:ring-2 focus:ring-cyan-400/60",
         ].join(" ")}
         aria-label={entry.displayName}
       >
@@ -253,14 +277,88 @@ export default function LeaderboardBlock({
     );
   }
 
-  function renderPodiumCard(entry: LeaderboardEntry, variant: "leader" | "side") {
+  function renderCompactRow(entry: LeaderboardEntry) {
+    const tone = getRankTone(entry.rank);
+
+    return (
+      <div
+        className={[
+          "relative w-full min-w-0 overflow-hidden rounded-2xl border",
+          "px-2.5 py-3 sm:px-4",
+          tone.card,
+          entry.rank === 1
+            ? "shadow-[0_12px_35px_rgba(250,204,21,0.08)]"
+            : "",
+        ].join(" ")}
+      >
+        <div
+          className={[
+            "pointer-events-none absolute -right-8 -top-8",
+            "h-20 w-20 rounded-full blur-3xl",
+            tone.glow,
+          ].join(" ")}
+        />
+
+        <div
+          className={[
+            "relative grid min-w-0 items-center",
+            "grid-cols-[32px_36px_minmax(0,1fr)] gap-2",
+            "sm:grid-cols-[36px_44px_minmax(0,1fr)] sm:gap-3",
+          ].join(" ")}
+        >
+          <div
+            className={[
+              "flex h-8 w-8 shrink-0 items-center justify-center",
+              "rounded-xl border text-xs font-extrabold",
+              "sm:h-9 sm:w-9 sm:text-sm",
+              tone.badge,
+            ].join(" ")}
+          >
+            {entry.rank <= 3 ? getRankIcon(entry.rank) : `#${entry.rank}`}
+          </div>
+
+          {renderAvatar(entry, "sm")}
+
+          <div className="min-w-0">
+            <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+              <div className="theme-text min-w-0 flex-1 truncate text-[12px] font-bold sm:text-sm">
+                {entry.displayName}
+              </div>
+
+              <div
+                className={[
+                  "shrink-0 rounded-lg border px-1.5 py-1",
+                  "text-[11px] font-extrabold sm:rounded-xl",
+                  "sm:px-2.5 sm:text-sm",
+                  tone.score,
+                ].join(" ")}
+              >
+                {entry.score}
+              </div>
+            </div>
+
+            <div className="theme-text-muted mt-0.5 truncate text-[10px] sm:text-xs">
+              {entry.rank === 1
+                ? t.leader
+                : `${entry.score} ${t.points}`}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderPodiumCard(
+    entry: LeaderboardEntry,
+    variant: "leader" | "side",
+  ) {
     const tone = getRankTone(entry.rank);
     const isLeader = variant === "leader";
 
     return (
       <div
         className={[
-          "relative overflow-hidden rounded-3xl border",
+          "relative min-w-0 overflow-hidden rounded-3xl border",
           tone.card,
           isLeader
             ? "p-5 shadow-[0_0_38px_rgba(250,204,21,0.10)]"
@@ -275,20 +373,22 @@ export default function LeaderboardBlock({
           ].join(" ")}
         />
 
-        <div className="relative flex flex-col items-center text-center">
+        <div className="relative flex min-w-0 flex-col items-center text-center">
           <div
             className={[
-              "mb-3 inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-bold theme-text",
+              "mb-3 inline-flex items-center gap-1 rounded-full border px-3 py-1",
+              "text-xs font-bold",
               tone.badge,
             ].join(" ")}
           >
             <span>{getRankIcon(entry.rank)}</span>
-            {isLeader ? <span>{t.leader}</span> : <span>#{entry.rank}</span>}
+
+            <span>{isLeader ? t.leader : `#${entry.rank}`}</span>
           </div>
 
           {renderAvatar(entry, isLeader ? "lg" : "md")}
 
-          <div className="mt-3 min-w-0">
+          <div className="mt-3 min-w-0 max-w-full">
             <div
               className={[
                 "theme-text truncate font-bold",
@@ -305,92 +405,13 @@ export default function LeaderboardBlock({
 
           <div
             className={[
-              "theme-pill mt-4 rounded-full border px-4 py-1.5 font-extrabold theme-text",
+              "mt-4 rounded-full border px-4 py-1.5 font-extrabold",
+              tone.score,
               isLeader ? "text-lg" : "text-base",
             ].join(" ")}
           >
             {entry.score}
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderMobileLeader(entry: LeaderboardEntry) {
-    const tone = getRankTone(entry.rank);
-
-    return (
-      <div
-        className={[
-          "relative overflow-hidden rounded-3xl border p-4",
-          tone.card,
-          "shadow-[0_0_32px_rgba(250,204,21,0.10)]",
-        ].join(" ")}
-      >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-yellow-300/20 blur-3xl" />
-
-        <div className="relative">
-          <div className="flex items-start gap-4">
-            {renderAvatar(entry, "md")}
-
-            <div className="min-w-0 flex-1">
-              <div
-                className={[
-                  "mb-2 inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-extrabold theme-text",
-                  tone.badge,
-                ].join(" ")}
-              >
-                🥇 {t.leader}
-              </div>
-
-              <div className="theme-text break-words text-lg font-black leading-snug">
-                {entry.displayName}
-              </div>
-
-              <div className="theme-text-muted mt-1 text-sm">
-                {entry.score} {t.points}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 flex justify-end">
-            <div className="theme-pill rounded-2xl border px-4 py-2 text-lg font-black theme-text">
-              {entry.score}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderMobileRow(entry: LeaderboardEntry) {
-    const tone = getRankTone(entry.rank);
-
-    return (
-      <div className="theme-home-soft-card flex items-center gap-3 rounded-2xl px-3 py-3">
-        <div
-          className={[
-            "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border text-sm font-black theme-text",
-            tone.badge,
-          ].join(" ")}
-        >
-          {entry.rank <= 3 ? getRankIcon(entry.rank) : `#${entry.rank}`}
-        </div>
-
-        {renderAvatar(entry, "sm")}
-
-        <div className="min-w-0 flex-1">
-          <div className="theme-text truncate text-sm font-bold">
-            {entry.displayName}
-          </div>
-
-          <div className="theme-text-muted text-xs">
-            {entry.score} {t.points}
-          </div>
-        </div>
-
-        <div className="theme-pill rounded-full border px-3 py-1 text-sm font-bold theme-text">
-          {entry.score}
         </div>
       </div>
     );
@@ -403,19 +424,22 @@ export default function LeaderboardBlock({
 
   return (
     <>
-      <section className="flunio-card relative overflow-hidden rounded-3xl p-4 shadow-[0_18px_60px_rgba(0,0,0,0.22)] sm:p-5 md:p-7">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-yellow-300/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-14 -left-10 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="pointer-events-none absolute right-1/4 top-1/3 h-36 w-36 rounded-full bg-fuchsia-400/10 blur-3xl" />
+      <section className="flunio-card relative w-full min-w-0 overflow-hidden rounded-[28px] px-3 py-4 shadow-[0_18px_55px_rgba(0,0,0,0.18)] sm:p-5 lg:p-7">
+        <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-yellow-300/10 blur-3xl" />
 
-        <div className="relative">
-          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="theme-pill mb-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold">
-                🏆 Leaderboard
+        <div className="pointer-events-none absolute -bottom-14 -left-10 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
+
+        <div className="pointer-events-none absolute right-1/3 top-1/3 h-32 w-32 rounded-full bg-fuchsia-400/10 blur-3xl" />
+
+        <div className="relative min-w-0">
+          <div className="mb-5 flex min-w-0 items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="theme-pill mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold">
+                <span aria-hidden="true">🏆</span>
+                <span>{t.leaderboard}</span>
               </div>
 
-              <h2 className="theme-text text-2xl font-bold tracking-tight md:text-3xl">
+              <h2 className="theme-text text-[22px] font-bold leading-tight tracking-tight sm:text-2xl lg:text-3xl">
                 {period === "all" ? t.titleAll : t.title}
               </h2>
 
@@ -425,82 +449,58 @@ export default function LeaderboardBlock({
             </div>
 
             {entries.length > 0 && (
-              <div className="theme-home-soft-card inline-flex w-fit rounded-full px-4 py-2 text-xs font-extrabold theme-text">
+              <div className="theme-home-soft-card hidden shrink-0 rounded-full px-4 py-2 text-xs font-extrabold theme-text sm:inline-flex">
                 {t.top} {Math.min(limit, entries.length)}
               </div>
             )}
           </div>
 
           {loading ? (
-            <div className="theme-home-soft-card rounded-2xl p-4 text-sm">
+            <div className="theme-home-soft-card rounded-2xl p-4 text-sm theme-text-muted">
               {t.loading}
             </div>
           ) : entries.length === 0 ? (
             <div className="theme-home-soft-card rounded-2xl p-4">
               <p className="theme-text font-semibold">{t.emptyTitle}</p>
+
               <p className="theme-text-muted mt-1 text-sm">{t.emptyText}</p>
             </div>
           ) : (
             <>
-              <div className="space-y-3 lg:hidden">
-                {leader ? renderMobileLeader(leader) : null}
-
-                <div className="space-y-2">
-                  {entries.slice(1).map((entry) => (
-                    <div key={`${entry.rank}-${entry.displayName}`}>
-                      {renderMobileRow(entry)}
-                    </div>
-                  ))}
-                </div>
+              <div className="grid min-w-0 gap-2.5 lg:hidden">
+                {entries.map((entry) => (
+                  <div
+                    key={`${entry.rank}-${entry.displayName}`}
+                    className="min-w-0"
+                  >
+                    {renderCompactRow(entry)}
+                  </div>
+                ))}
               </div>
 
-              <div className="hidden space-y-4 lg:block">
-                <div className="grid gap-3 lg:grid-cols-[0.82fr_1.25fr_0.82fr] lg:items-end">
-                  {second && (
-                    <div className="order-2 lg:order-1">
-                      {renderPodiumCard(second, "side")}
-                    </div>
-                  )}
+              <div className="hidden min-w-0 space-y-4 lg:block">
+                <div className="grid min-w-0 items-end gap-3 lg:grid-cols-[0.82fr_1.25fr_0.82fr]">
+                  <div className="min-w-0">
+                    {second ? renderPodiumCard(second, "side") : null}
+                  </div>
 
-                  {leader && (
-                    <div className="order-1 lg:order-2">
-                      {renderPodiumCard(leader, "leader")}
-                    </div>
-                  )}
+                  <div className="min-w-0">
+                    {leader ? renderPodiumCard(leader, "leader") : null}
+                  </div>
 
-                  {third && (
-                    <div className="order-3">
-                      {renderPodiumCard(third, "side")}
-                    </div>
-                  )}
+                  <div className="min-w-0">
+                    {third ? renderPodiumCard(third, "side") : null}
+                  </div>
                 </div>
 
                 {rest.length > 0 && (
-                  <div className="grid gap-2">
+                  <div className="grid min-w-0 gap-2">
                     {rest.map((entry) => (
                       <div
                         key={`${entry.rank}-${entry.displayName}`}
-                        className="theme-home-soft-card flex items-center gap-3 rounded-2xl px-3 py-3 transition hover:-translate-y-0.5"
+                        className="min-w-0"
                       >
-                        <div className="flex w-10 shrink-0 justify-center text-base font-extrabold theme-text">
-                          #{entry.rank}
-                        </div>
-
-                        {renderAvatar(entry, "sm")}
-
-                        <div className="min-w-0 flex-1">
-                          <p className="theme-text truncate text-sm font-semibold sm:text-base">
-                            {entry.displayName}
-                          </p>
-
-                          <p className="theme-text-muted text-xs">
-                            {entry.score} {t.points}
-                          </p>
-                        </div>
-
-                        <div className="theme-pill rounded-full border px-3 py-1 text-sm font-bold theme-text">
-                          {entry.score}
-                        </div>
+                        {renderCompactRow(entry)}
                       </div>
                     ))}
                   </div>
@@ -525,7 +525,12 @@ export default function LeaderboardBlock({
             <button
               type="button"
               onClick={() => setSelectedAvatar(null)}
-              className="absolute right-3 top-3 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm font-semibold text-white transition hover:bg-white/15"
+              className={[
+                "absolute right-3 top-3 rounded-full",
+                "border border-white/10 bg-white/10 px-3 py-1",
+                "text-sm font-semibold text-white",
+                "transition hover:bg-white/15",
+              ].join(" ")}
             >
               {t.close}
             </button>
