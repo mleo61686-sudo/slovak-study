@@ -34,6 +34,8 @@ const T: Record<
     pwRuleHint: string;
     soon: string;
     selected: string;
+    emailUpdates: string;
+    emailUpdatesHint: string;
   }
 > = {
   ua: {
@@ -54,7 +56,12 @@ const T: Record<
     pwRuleHint: "Мінімум 8 символів • 1 цифра • 1 велика літера",
     soon: "Скоро",
     selected: "Обрано",
+    emailUpdates:
+      "Отримувати новини та корисні пропозиції від Flunio",
+    emailUpdatesHint:
+      "Інформація про оновлення, нові можливості та іноді нагадування про навчання. Відписатися можна будь-коли.",
   },
+
   ru: {
     title: "Регистрация",
     subtitle: "Сначала выбери курс, который хочешь изучать.",
@@ -73,7 +80,12 @@ const T: Record<
     pwRuleHint: "Минимум 8 символов • 1 цифра • 1 заглавная буква",
     soon: "Скоро",
     selected: "Выбрано",
+    emailUpdates:
+      "Получать новости и полезные предложения от Flunio",
+    emailUpdatesHint:
+      "Информация об обновлениях, новых возможностях и иногда напоминания об обучении. Отписаться можно в любой момент.",
   },
+
   en: {
     title: "Register",
     subtitle: "First choose the course you want to learn.",
@@ -92,30 +104,45 @@ const T: Record<
     pwRuleHint: "Minimum 8 characters • 1 digit • 1 uppercase letter",
     soon: "Coming soon",
     selected: "Selected",
+    emailUpdates:
+      "Receive Flunio updates and useful offers",
+    emailUpdatesHint:
+      "Information about updates, new features, and occasional learning reminders. You can unsubscribe at any time.",
   },
 };
 
-const ERROR_TEXT: Record<string, { ua: string; ru: string; en: string }> = {
+const ERROR_TEXT: Record<
+  string,
+  {
+    ua: string;
+    ru: string;
+    en: string;
+  }
+> = {
   USER_EXISTS: {
     ua: "Користувач вже існує",
     ru: "Пользователь уже существует",
     en: "User already exists",
   },
+
   INVALID_EMAIL: {
     ua: "Некоректний email",
     ru: "Некорректный email",
     en: "Invalid email",
   },
+
   WEAK_PASSWORD: {
     ua: "Слабкий пароль: мінімум 8 символів, 1 цифра, 1 велика літера",
     ru: "Слабый пароль: минимум 8 символов, 1 цифра, 1 заглавная буква",
     en: "Weak password: minimum 8 characters, 1 digit, 1 uppercase letter",
   },
+
   PASSWORD_MISMATCH: {
     ua: "Паролі не співпадають",
     ru: "Пароли не совпадают",
     en: "Passwords do not match",
   },
+
   UNKNOWN_ERROR: {
     ua: "Не вдалося створити акаунт",
     ru: "Не удалось создать аккаунт",
@@ -124,16 +151,24 @@ const ERROR_TEXT: Record<string, { ua: string; ru: string; en: string }> = {
 };
 
 function scorePassword(pw: string) {
-  let s = 0;
-  if (pw.length >= 8) s++;
-  if (/[A-ZА-ЯІЇЄ]/.test(pw)) s++;
-  if (/[a-zа-яіїє]/.test(pw)) s++;
-  if (/\d/.test(pw)) s++;
-  if (/[^A-Za-zА-Яа-яІіЇїЄє0-9]/.test(pw)) s++;
-  return Math.min(s, 5);
+  let score = 0;
+
+  if (pw.length >= 8) score++;
+  if (/[A-ZА-ЯІЇЄ]/.test(pw)) score++;
+  if (/[a-zа-яіїє]/.test(pw)) score++;
+  if (/\d/.test(pw)) score++;
+  if (/[^A-Za-zА-Яа-яІіЇїЄє0-9]/.test(pw)) score++;
+
+  return Math.min(score, 5);
 }
 
-function FlagIcon({ courseId, title }: { courseId: CourseId; title: string }) {
+function FlagIcon({
+  courseId,
+  title,
+}: {
+  courseId: CourseId;
+  title: string;
+}) {
   const src =
     courseId === "sk"
       ? "https://flagcdn.com/w80/sk.png"
@@ -155,30 +190,52 @@ const COURSE_ORDER: CourseId[] = ["sk", "cs", "pl"];
 
 export default function RegisterPage() {
   const { lang } = useLanguage();
-  const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
-  const t = T[L];
 
+  const L: Lang =
+    lang === "ru"
+      ? "ru"
+      : lang === "en"
+        ? "en"
+        : "ua";
+
+  const t = T[L];
   const router = useRouter();
 
-  const [rawCallbackUrl, setRawCallbackUrl] = useState<string | null>(null);
-  const [selectedCourse, setSelectedCourse] = useState<CourseId>("sk");
+  const [rawCallbackUrl, setRawCallbackUrl] =
+    useState<string | null>(null);
+
+  const [selectedCourse, setSelectedCourse] =
+    useState<CourseId>("sk");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
 
+  const [
+    emailRemindersEnabled,
+    setEmailRemindersEnabled,
+  ] = useState(false);
+
   const [loading, setLoading] = useState(false);
-  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [errorCode, setErrorCode] =
+    useState<string | null>(null);
 
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const nextCallbackUrl = params.get("callbackUrl");
+    const params = new URLSearchParams(
+      window.location.search,
+    );
 
-    if (nextCallbackUrl && nextCallbackUrl.startsWith("/")) {
+    const nextCallbackUrl =
+      params.get("callbackUrl");
+
+    if (
+      nextCallbackUrl &&
+      nextCallbackUrl.startsWith("/")
+    ) {
       setRawCallbackUrl(nextCallbackUrl);
     } else {
       setRawCallbackUrl(null);
@@ -201,40 +258,67 @@ export default function RegisterPage() {
   const callbackUrl = rawCallbackUrl ?? "/";
 
   const loginHref = rawCallbackUrl
-    ? `/login?callbackUrl=${encodeURIComponent(rawCallbackUrl)}`
+    ? `/login?callbackUrl=${encodeURIComponent(
+        rawCallbackUrl,
+      )}`
     : "/login";
 
   const emailOk = useMemo(() => {
-    const v = email.trim().toLowerCase();
-    return v.length === 0 ? true : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    const value = email.trim().toLowerCase();
+
+    return value.length === 0
+      ? true
+      : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }, [email]);
 
-  const pwScore = useMemo(() => scorePassword(pw), [pw]);
+  const pwScore = useMemo(
+    () => scorePassword(pw),
+    [pw],
+  );
 
   const pwStrongEnough = useMemo(() => {
-    return pw.length >= 8 && /\d/.test(pw) && /[A-ZА-ЯІЇЄ]/.test(pw);
+    return (
+      pw.length >= 8 &&
+      /\d/.test(pw) &&
+      /[A-ZА-ЯІЇЄ]/.test(pw)
+    );
   }, [pw]);
 
   const errorText = useMemo(() => {
     if (!errorCode) return null;
-    return (ERROR_TEXT[errorCode] ?? ERROR_TEXT.UNKNOWN_ERROR)[L];
+
+    return (
+      ERROR_TEXT[errorCode] ??
+      ERROR_TEXT.UNKNOWN_ERROR
+    )[L];
   }, [errorCode, L]);
 
   function onSelectCourse(courseId: CourseId) {
     const course = COURSE_REGISTRY[courseId];
-    if (!course || course.status !== "live") return;
+
+    if (!course || course.status !== "live") {
+      return;
+    }
 
     setSelectedCourse(courseId);
     setStoredCourseId(courseId);
   }
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onSubmit(
+    event: React.FormEvent,
+  ) {
+    event.preventDefault();
     setErrorCode(null);
 
-    const e2 = email.trim().toLowerCase();
+    const normalizedEmail = email
+      .trim()
+      .toLowerCase();
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e2)) {
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        normalizedEmail,
+      )
+    ) {
       setErrorCode("INVALID_EMAIL");
       return;
     }
@@ -249,51 +333,85 @@ export default function RegisterPage() {
       return;
     }
 
-    const selectedCourseConfig = COURSE_REGISTRY[selectedCourse];
+    const selectedCourseConfig =
+      COURSE_REGISTRY[selectedCourse];
+
     const safeCourse: CourseId =
-      selectedCourseConfig?.status === "live" ? selectedCourse : "sk";
+      selectedCourseConfig?.status === "live"
+        ? selectedCourse
+        : "sk";
 
     setStoredCourseId(safeCourse);
     setLoading(true);
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name.trim() ? name.trim() : null,
-        email: e2,
-        password: pw,
-      }),
-    });
+    try {
+      const response = await fetch(
+        "/api/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.trim()
+              ? name.trim()
+              : null,
 
-    const data = await res.json().catch(() => null);
+            email: normalizedEmail,
+            password: pw,
 
-    if (!res.ok) {
-      setErrorCode(data?.code || "UNKNOWN_ERROR");
+            emailRemindersEnabled,
+            emailLanguage: L,
+            preferredCourse: safeCourse,
+          }),
+        },
+      );
+
+      const data = await response
+        .json()
+        .catch(() => null);
+
+      if (!response.ok) {
+        setErrorCode(
+          data?.code || "UNKNOWN_ERROR",
+        );
+
+        return;
+      }
+
+      // Запускаємо onboarding тільки для
+      // нових зареєстрованих користувачів.
+      localStorage.setItem(
+        "flunio:onboarding:pending",
+        "1",
+      );
+
+      localStorage.removeItem(
+        "flunio:onboarding",
+      );
+
+      const login = await signIn(
+        "credentials",
+        {
+          email: normalizedEmail,
+          password: pw,
+          redirect: false,
+          callbackUrl,
+        },
+      );
+
+      if (!login || login.error) {
+        router.push(loginHref);
+        return;
+      }
+
+      router.push(callbackUrl);
+      router.refresh();
+    } catch {
+      setErrorCode("UNKNOWN_ERROR");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // ✅ запускаємо onboarding тільки для нових зареєстрованих користувачів
-    localStorage.setItem("flunio:onboarding:pending", "1");
-    localStorage.removeItem("flunio:onboarding");
-
-    const login = await signIn("credentials", {
-      email: e2,
-      password: pw,
-      redirect: false,
-      callbackUrl,
-    });
-
-    setLoading(false);
-
-    if (!login || login.error) {
-      router.push(loginHref);
-      return;
-    }
-
-    router.push(callbackUrl);
-    router.refresh();
   }
 
   return (
@@ -302,7 +420,10 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-extrabold tracking-tight theme-text">
           {t.title}
         </h1>
-        <p className="mt-2 text-sm theme-text-muted">{t.subtitle}</p>
+
+        <p className="mt-2 text-sm theme-text-muted">
+          {t.subtitle}
+        </p>
 
         <div className="mt-7">
           <div className="text-sm font-semibold theme-text">
@@ -311,21 +432,29 @@ export default function RegisterPage() {
 
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             {COURSE_ORDER.map((courseId) => {
-              const course = COURSE_REGISTRY[courseId];
+              const course =
+                COURSE_REGISTRY[courseId];
+
               if (!course) return null;
 
-              const isActive = selectedCourse === courseId;
-              const isLive = course.status === "live";
+              const isActive =
+                selectedCourse === courseId;
+
+              const isLive =
+                course.status === "live";
 
               return (
                 <button
                   key={courseId}
                   type="button"
-                  onClick={() => onSelectCourse(courseId)}
+                  onClick={() =>
+                    onSelectCourse(courseId)
+                  }
                   disabled={!isLive}
                   aria-disabled={!isLive}
                   className={[
                     "group relative rounded-2xl border p-4 text-left transition-all duration-200",
+
                     !isLive
                       ? "cursor-not-allowed border-white/10 bg-white/5 opacity-50 theme-simple:border-slate-200 theme-simple:bg-slate-50"
                       : isActive
@@ -334,7 +463,10 @@ export default function RegisterPage() {
                   ].join(" ")}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <FlagIcon courseId={courseId} title={course.title} />
+                    <FlagIcon
+                      courseId={courseId}
+                      title={course.title}
+                    />
 
                     <div className="flex items-center gap-2">
                       {!isLive && (
@@ -355,7 +487,8 @@ export default function RegisterPage() {
                     {course.title}
                   </div>
 
-                  {"nativeTitle" in course && course.nativeTitle ? (
+                  {"nativeTitle" in course &&
+                  course.nativeTitle ? (
                     <div className="mt-1 text-sm theme-text-muted">
                       {String(course.nativeTitle)}
                     </div>
@@ -369,20 +502,26 @@ export default function RegisterPage() {
             })}
           </div>
 
-          <div className="mt-2 text-xs theme-text-subtle">{t.courseHint}</div>
+          <div className="mt-2 text-xs theme-text-subtle">
+            {t.courseHint}
+          </div>
         </div>
 
-        <form onSubmit={onSubmit} className="mt-7 grid gap-4">
+        <form
+          onSubmit={onSubmit}
+          className="mt-7 grid gap-4"
+        >
           <div className="grid gap-1">
             <label className="text-sm font-medium theme-text-muted">
               {t.name}
             </label>
+
             <input
               className="theme-input h-11 rounded-2xl px-3 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
               placeholder={t.name}
               value={name}
-              onChange={(e) => {
-                setName(e.target.value);
+              onChange={(event) => {
+                setName(event.target.value);
                 setErrorCode(null);
               }}
               autoComplete="name"
@@ -393,21 +532,25 @@ export default function RegisterPage() {
             <label className="text-sm font-medium theme-text-muted">
               {t.email}
             </label>
+
             <input
               className={[
                 "theme-input h-11 rounded-2xl px-3 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20",
-                emailOk ? "" : "border-red-400/70",
+                emailOk
+                  ? ""
+                  : "border-red-400/70",
               ].join(" ")}
               placeholder="name@example.com"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
+              onChange={(event) => {
+                setEmail(event.target.value);
                 setErrorCode(null);
               }}
               type="email"
               autoComplete="email"
               required
             />
+
             {!emailOk && (
               <div className="text-xs text-red-300">
                 {ERROR_TEXT.INVALID_EMAIL[L]}
@@ -425,20 +568,29 @@ export default function RegisterPage() {
                 className="theme-input h-11 w-full rounded-2xl px-3 pr-24 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                 placeholder="••••••••"
                 value={pw}
-                onChange={(e) => {
-                  setPw(e.target.value);
+                onChange={(event) => {
+                  setPw(event.target.value);
                   setErrorCode(null);
                 }}
-                type={showPw ? "text" : "password"}
+                type={
+                  showPw
+                    ? "text"
+                    : "password"
+                }
                 autoComplete="new-password"
                 required
               />
+
               <button
                 type="button"
-                onClick={() => setShowPw((v) => !v)}
+                onClick={() =>
+                  setShowPw((value) => !value)
+                }
                 className="theme-secondary-button absolute right-2 top-1/2 -translate-y-1/2 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition"
               >
-                {showPw ? t.hide : t.show}
+                {showPw
+                  ? t.hide
+                  : t.show}
               </button>
             </div>
 
@@ -446,10 +598,15 @@ export default function RegisterPage() {
               <div className="theme-progress-track h-2 w-full overflow-hidden rounded-full">
                 <div
                   className="h-2 rounded-full bg-gradient-to-r from-cyan-400 via-blue-400 to-fuchsia-400 transition-all"
-                  style={{ width: `${(pwScore / 5) * 100}%` }}
+                  style={{
+                    width: `${(pwScore / 5) * 100}%`,
+                  }}
                 />
               </div>
-              <div className="text-xs theme-text-subtle">{t.pwRuleHint}</div>
+
+              <div className="text-xs theme-text-subtle">
+                {t.pwRuleHint}
+              </div>
             </div>
           </div>
 
@@ -463,20 +620,29 @@ export default function RegisterPage() {
                 className="theme-input h-11 w-full rounded-2xl px-3 pr-24 outline-none transition focus:border-cyan-400/55 focus:ring-2 focus:ring-cyan-400/20"
                 placeholder="••••••••"
                 value={pw2}
-                onChange={(e) => {
-                  setPw2(e.target.value);
+                onChange={(event) => {
+                  setPw2(event.target.value);
                   setErrorCode(null);
                 }}
-                type={showPw2 ? "text" : "password"}
+                type={
+                  showPw2
+                    ? "text"
+                    : "password"
+                }
                 autoComplete="new-password"
                 required
               />
+
               <button
                 type="button"
-                onClick={() => setShowPw2((v) => !v)}
+                onClick={() =>
+                  setShowPw2((value) => !value)
+                }
                 className="theme-secondary-button absolute right-2 top-1/2 -translate-y-1/2 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition"
               >
-                {showPw2 ? t.hide : t.show}
+                {showPw2
+                  ? t.hide
+                  : t.show}
               </button>
             </div>
 
@@ -487,12 +653,37 @@ export default function RegisterPage() {
             )}
           </div>
 
+          <label className="theme-inner-card flex cursor-pointer items-start gap-3 rounded-2xl p-4">
+            <input
+              type="checkbox"
+              checked={emailRemindersEnabled}
+              onChange={(event) => {
+                setEmailRemindersEnabled(
+                  event.target.checked,
+                );
+              }}
+              className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-cyan-500"
+            />
+
+            <span className="min-w-0">
+              <span className="block text-sm font-semibold theme-text">
+                {t.emailUpdates}
+              </span>
+
+              <span className="mt-1 block text-xs leading-5 theme-text-muted">
+                {t.emailUpdatesHint}
+              </span>
+            </span>
+          </label>
+
           <button
             disabled={loading}
             className="theme-primary-button h-11 rounded-2xl text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 active:translate-y-0"
             type="submit"
           >
-            {loading ? t.creating : t.create}
+            {loading
+              ? t.creating
+              : t.create}
           </button>
 
           {errorText && (
@@ -503,6 +694,7 @@ export default function RegisterPage() {
 
           <div className="text-sm theme-text-muted">
             {t.have}{" "}
+
             <Link
               className="font-semibold theme-accent-text underline decoration-cyan-300/40 underline-offset-4 transition hover:opacity-80"
               href={loginHref}

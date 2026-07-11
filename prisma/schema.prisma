@@ -8,24 +8,35 @@ datasource db {
 }
 
 model User {
-  id                   String               @id @default(cuid())
-  email                String               @unique
-  name                 String?
-  avatarUrl            String?
-  passwordHash         String
-  createdAt            DateTime             @default(now())
-  resetTokens          PasswordResetToken[]
-  isPremium            Boolean              @default(false)
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  avatarUrl    String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  resetTokens PasswordResetToken[]
+
+  isPremium            Boolean   @default(false)
   premiumUntil         DateTime?
   stripeCustomerId     String?
   stripeSubscriptionId String?
 
-  // ✅ зворотній зв'язок для прогресу
+  // Email-нагадування
+  emailRemindersEnabled    Boolean   @default(false)
+  emailLanguage            String    @default("ua")
+  preferredCourse          String    @default("sk")
+  lastActiveAt             DateTime  @default(now())
+  inactivityReminderSentAt DateTime?
+  updatesEmailSentAt       DateTime?
+  unsubscribeToken         String?   @unique
+
+  // Зворотний зв’язок для прогресу
   progress     UserProgress?
   srsProgress  SrsProgress[]
   errorReports ErrorReport[]
 
-  // ✅ активності для leaderboard / рейтингу
+  // Активності для leaderboard / рейтингу
   leaderboardActivities LeaderboardActivity[]
 }
 
@@ -40,7 +51,7 @@ model UserProgress {
   dailyDate         DateTime?
   dailyCount        Int       @default(0)
 
-  // ✅ глобальний XP користувача між усіма курсами
+  // Глобальний XP користувача між усіма курсами
   xp Int @default(0)
 }
 
@@ -49,13 +60,13 @@ model PasswordResetToken {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Зберігаємо ХЕШ токена (а не токен)
+  // Зберігаємо хеш токена, а не сам токен
   tokenHash String @unique
 
   expiresAt DateTime
   createdAt DateTime @default(now())
 
-  // ✅ Позначка “використано”
+  // Позначка «використано»
   usedAt DateTime?
 }
 
@@ -63,28 +74,28 @@ model ErrorReport {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  // хто відправив (якщо залогінений)
+  // Хто відправив, якщо користувач авторизований
   userId String?
   user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  // контекст де знайшли баг
+  // Контекст, де знайшли помилку
   page      String?
   lessonId  String?
-  exercise  String? // тип вправи: learn/quiz/... (що ти передаси)
-  actionIdx Int? // 1..10 (крок/слово в уроці)
+  exercise  String?
+  actionIdx Int?
 
-  // сам контент, про який скарга
+  // Контент, про який повідомляють
   sk  String?
   ua  String?
   ru  String?
-  key String? // наприклад `${sk}||${ua}` для фраз
+  key String?
 
-  // повідомлення користувача
+  // Повідомлення користувача
   category String?
-  status   String @default("new")
-  message  String // головний текст
+  status   String  @default("new")
+  message  String
 
-  // тех інфа (корисно при дебагу)
+  // Технічна інформація
   userAgent String?
 }
 
@@ -138,8 +149,9 @@ model LeaderboardActivity {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Один урок / диктант / аудіоквіз за тиждень не фармиться нескінченно.
-  // Якщо користувач проходить ще раз — зберігаємо тільки кращий score.
+  // Один урок / диктант / аудіоквіз за тиждень
+  // не може нескінченно збільшувати рейтинг.
+  // Під час повторного проходження зберігається найкращий score.
   @@unique([userId, type, courseId, activityKey, weekStart])
   @@index([weekStart])
   @@index([userId])

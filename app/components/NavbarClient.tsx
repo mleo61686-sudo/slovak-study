@@ -190,7 +190,7 @@ export default function NavbarClient() {
               className={[
                 "absolute right-3 top-[64px] w-[min(92vw,380px)]",
                 "max-h-[calc(100dvh-88px)] overflow-y-auto overscroll-contain",
-                "rounded-3xl border border-white/10 bg-slate-950/92 p-2 text-white",
+                "theme-menu-panel rounded-3xl p-2",
                 "shadow-[0_24px_90px_rgba(0,0,0,0.60)] backdrop-blur-2xl",
               ].join(" ")}
             >
@@ -199,7 +199,7 @@ export default function NavbarClient() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="rounded-2xl px-3 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white active:scale-[0.99]"
+                    className="theme-menu-item rounded-2xl px-3 py-3 text-sm font-semibold transition active:scale-[0.99]"
                     onClick={() => setOpen(false)}
                   >
                     <span className="inline-block min-w-[88px] whitespace-nowrap">
@@ -211,7 +211,7 @@ export default function NavbarClient() {
                 {isAdmin && (
                   <Link
                     href="/admin/reports"
-                    className="mt-1 rounded-2xl border border-cyan-400/25 bg-white/5 px-3 py-3 text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.99]"
+                    className="theme-nav-button mt-1 rounded-2xl border px-3 py-3 text-sm font-semibold transition active:scale-[0.99]"
                     onClick={() => setOpen(false)}
                   >
                     🛠️ <NavLabel k="reports" />
@@ -219,7 +219,7 @@ export default function NavbarClient() {
                 )}
               </nav>
 
-              <div className="my-2 h-px bg-white/10" />
+              <div className="theme-divider my-2" />
 
               {isLoggedIn && (
                 <div className="px-1 pb-2">
@@ -238,7 +238,7 @@ export default function NavbarClient() {
               ) : (
                 <Link
                   href="/login"
-                  className="block rounded-2xl px-3 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white active:scale-[0.99]"
+                  className="theme-menu-item block rounded-2xl px-3 py-3 text-sm font-semibold transition active:scale-[0.99]"
                   onClick={() => setOpen(false)}
                 >
                   <span className="inline-block min-w-[60px] whitespace-nowrap">

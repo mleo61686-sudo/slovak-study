@@ -100,7 +100,7 @@ function ThemeToggle({ lang }: { lang: Lang }) {
     <button
       type="button"
       onClick={toggleTheme}
-      className="mx-2 flex w-[calc(100%-1rem)] items-center justify-between rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2.5 text-left text-sm font-semibold text-cyan-50 transition hover:border-cyan-300/40 hover:bg-cyan-400/15 active:scale-[0.99]"
+      className="user-menu-theme-toggle mx-2 flex w-[calc(100%-1rem)] items-center justify-between rounded-2xl px-3 py-2.5 text-left text-sm font-semibold transition active:scale-[0.99]"
     >
       <span>{theme === "flunio" ? t.themeSimple : t.themeFlunio}</span>
     </button>
@@ -137,7 +137,7 @@ function AvatarCircle({
 }
 
 function Divider() {
-  return <div className="my-2 h-px bg-white/10" />;
+  return <div className="theme-divider my-2" />;
 }
 
 function MenuItem({
@@ -156,7 +156,7 @@ function MenuItem({
       href={href}
       onClick={onClick}
       data-onboarding={onboarding}
-      className="mx-2 flex items-center rounded-2xl px-3 py-2.5 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white"
+      className="theme-menu-item mx-2 flex items-center rounded-2xl px-3 py-2.5 text-sm font-medium transition"
     >
       {children}
     </Link>
@@ -352,7 +352,7 @@ export default function UserMenu({
   const userName = name || t.userFallback;
 
   const userHeader = (
-    <div className="relative overflow-hidden rounded-t-3xl border-b border-white/10 bg-gradient-to-br from-cyan-500/18 via-white/5 to-fuchsia-500/16 px-4 py-4">
+    <div className="user-menu-header relative overflow-hidden rounded-t-3xl px-4 py-4">
       <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-cyan-400/20 blur-2xl" />
       <div className="pointer-events-none absolute -bottom-12 left-8 h-24 w-24 rounded-full bg-fuchsia-400/15 blur-2xl" />
 
@@ -366,7 +366,7 @@ export default function UserMenu({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <div className="truncate text-sm font-bold text-white">
+            <div className="theme-text truncate text-sm font-bold">
               {userName}
             </div>
 
@@ -375,14 +375,14 @@ export default function UserMenu({
                 "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
                 isPremium
                   ? "bg-amber-400/95 text-slate-950"
-                  : "bg-white/10 text-white/70",
+                  : "theme-pill",
               ].join(" ")}
             >
               {isPremium ? t.premium : t.free}
             </span>
           </div>
 
-          <div className="truncate text-xs text-white/60">{email}</div>
+          <div className="theme-text-muted truncate text-xs">{email}</div>
         </div>
       </div>
     </div>
@@ -417,11 +417,11 @@ export default function UserMenu({
         <button
           onClick={openPortal}
           disabled={loadingPortal}
-          className="mx-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm transition hover:bg-white/10 disabled:opacity-50"
+          className="theme-menu-item mx-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm transition disabled:opacity-50"
           type="button"
         >
-          <div className="font-semibold text-white/85">{t.manageSub}</div>
-          <div className="mt-0.5 text-xs leading-snug text-white/45">
+          <div className="theme-text font-semibold">{t.manageSub}</div>
+          <div className="theme-text-muted mt-0.5 text-xs leading-snug">
             {t.manageSubHint}
           </div>
         </button>
@@ -448,7 +448,7 @@ export default function UserMenu({
             setOpen(false);
             signOut({ callbackUrl: "/login" });
           }}
-          className="mx-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm font-semibold text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+          className="user-menu-logout mx-2 w-[calc(100%-1rem)] rounded-2xl px-3 py-2.5 text-left text-sm font-semibold transition"
           type="button"
         >
           {t.logout}
@@ -459,7 +459,7 @@ export default function UserMenu({
 
   if (mobile) {
     return (
-      <div className="rounded-3xl border border-white/10 bg-slate-950/82 text-white shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+      <div className="theme-inner-card overflow-hidden rounded-3xl shadow-[0_24px_80px_rgba(0,0,0,0.24)] backdrop-blur-2xl">
         {menuContent}
       </div>
     );
@@ -491,7 +491,7 @@ export default function UserMenu({
           className={[
             "absolute right-0 top-full z-[100] mt-3 w-[340px]",
             "max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain",
-            "rounded-3xl border border-white/10 bg-slate-950/88 text-white",
+            "theme-menu-panel rounded-3xl",
             "shadow-[0_24px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl",
           ].join(" ")}
           style={{ maxWidth: "calc(100vw - 16px)" }}

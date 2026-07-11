@@ -1,4 +1,5 @@
 import "./globals.css";
+
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
@@ -7,6 +8,7 @@ import FooterVisibility from "./components/FooterVisibility";
 import SessionProviderClient from "./components/SessionProviderClient";
 import ProgressSync from "./components/ProgressSync";
 import SrsSync from "./components/SrsSync";
+import ActivityTracker from "./components/ActivityTracker";
 import CourseBootstrap from "@/app/components/CourseBootstrap";
 import MainShell from "@/app/components/MainShell";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -63,7 +65,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050816", // темний фон Flunio
+  themeColor: "#050816",
 };
 
 export const revalidate = 3600;
@@ -88,13 +90,16 @@ export default function RootLayout({
         "@id": "https://flunio.com/#website",
         url: "https://flunio.com/",
         name: "Flunio",
-        publisher: { "@id": "https://flunio.com/#organization" },
+        publisher: {
+          "@id": "https://flunio.com/#organization",
+        },
         inLanguage: ["uk", "ru", "en"],
         description:
           "Онлайн платформа для вивчення мов зі словацьким і чеським курсами, граматикою, словником і вправами.",
         potentialAction: {
           "@type": "SearchAction",
-          target: "https://flunio.com/dictionary?q={search_term_string}",
+          target:
+            "https://flunio.com/dictionary?q={search_term_string}",
           "query-input": "required name=search_term_string",
         },
       },
@@ -119,16 +124,34 @@ export default function RootLayout({
           content="ca-pub-1760161415033749"
         />
 
-        <link rel="alternate" hrefLang="uk" href="https://flunio.com/" />
-        <link rel="alternate" hrefLang="ru" href="https://flunio.com/" />
-        <link rel="alternate" hrefLang="en" href="https://flunio.com/" />
-        <link rel="alternate" hrefLang="x-default" href="https://flunio.com/" />
+        <link
+          rel="alternate"
+          hrefLang="uk"
+          href="https://flunio.com/"
+        />
+        <link
+          rel="alternate"
+          hrefLang="ru"
+          href="https://flunio.com/"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
+          href="https://flunio.com/"
+        />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://flunio.com/"
+        />
 
         <Script
           id="schema-org"
           type="application/ld+json"
           strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schemaOrg),
+          }}
         />
 
         <Script
@@ -146,6 +169,7 @@ export default function RootLayout({
         <SessionProviderClient>
           <div className="flex min-h-screen flex-col">
             <CourseBootstrap />
+            <ActivityTracker />
             <Navbar />
             <ProgressSync />
             <SrsSync />
@@ -156,6 +180,7 @@ export default function RootLayout({
             <FooterVisibility />
           </div>
         </SessionProviderClient>
+
         <Analytics />
         <SpeedInsights />
       </body>
