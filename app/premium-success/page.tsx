@@ -123,9 +123,16 @@ export default function PremiumSuccess() {
           } | null;
 
           if (data?.isPremium) {
-            await update();
+            const refreshedSession = await update({
+              refreshPremium: true,
+            });
 
             if (cancelled) return;
+
+            if (!refreshedSession?.user?.isPremium) {
+              await wait(500);
+              continue;
+            }
 
             router.refresh();
             setStatus("active");

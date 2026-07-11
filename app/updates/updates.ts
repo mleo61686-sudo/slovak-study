@@ -8,6 +8,34 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-07-11",
+    title: {
+      ua: "Оновлення: нові підказки в курсах, листи Flunio та виправлення світлої теми",
+      ru: "Обновление: новые подсказки в курсах, письма Flunio и исправление светлой темы",
+      en: "Update: new course hints, Flunio emails, and a light theme fix",
+    },
+    items: {
+      ua: [
+        "Додано короткі навчальні підказки для окремих слів і виразів на рівнях A1 та A2 у словацькому, чеському та польському курсах",
+        "Підказки пояснюють важливі відтінки значення, особливості вживання та типові помилки, але зʼявляються лише там, де вони справді потрібні",
+        "Під час реєстрації та у профілі тепер можна ввімкнути листи Flunio з інформацією про оновлення, нові можливості, корисні пропозиції та нагадування про навчання",
+        "Виправлено мобільне меню у світлій темі — кнопка-бургер та елементи меню тепер добре помітні й правильно відображаються",
+      ],
+      ru: [
+        "Добавлены короткие учебные подсказки для отдельных слов и выражений на уровнях A1 и A2 в словацком, чешском и польском курсах",
+        "Подсказки объясняют важные оттенки значения, особенности употребления и типичные ошибки, но появляются только там, где они действительно нужны",
+        "При регистрации и в профиле теперь можно включить письма Flunio с информацией об обновлениях, новых возможностях, полезных предложениях и напоминаниями об обучении",
+        "Исправлено мобильное меню в светлой теме — кнопка-бургер и элементы меню теперь хорошо видны и правильно отображаются",
+      ],
+      en: [
+        "Short learning hints have been added for selected words and expressions at A1 and A2 in the Slovak, Czech, and Polish courses",
+        "The hints explain important nuances, usage details, and common mistakes, while appearing only where they are genuinely useful",
+        "Flunio emails can now be enabled during registration or in the profile to receive updates, new features, useful offers, and learning reminders",
+        "The mobile menu has been fixed in the light theme — the burger button and menu elements are now clearly visible and displayed correctly",
+      ],
+    },
+  },
+  {
     date: "2026-06-18",
     title: {
       ua: "Оновлення: рейтинг учнів Flunio",

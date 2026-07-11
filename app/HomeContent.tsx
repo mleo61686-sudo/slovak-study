@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import WordsStatsClient from "./components/home/WordsStatsClient";
 import LeaderboardBlock from "./components/LeaderboardBlock";
 
@@ -696,6 +697,8 @@ export default function HomeContent({
         </div>
       </section>
 
+
+
       <section className="flunio-card relative overflow-hidden rounded-[32px] p-4 sm:p-6">
         <div className="pointer-events-none absolute left-1/2 top-0 h-28 w-[70%] -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
@@ -705,7 +708,9 @@ export default function HomeContent({
               {tr.quickTitle}
             </h2>
 
-            <p className="theme-text-muted mt-1 text-sm">{tr.quickSubtitle}</p>
+            <p className="theme-text-muted mt-1 text-sm">
+              {tr.quickSubtitle}
+            </p>
           </div>
 
           <div className="rounded-[27px] border border-white/10 bg-black/10 px-2 py-4 shadow-inner sm:px-4">
@@ -715,8 +720,12 @@ export default function HomeContent({
                   key={app.href}
                   className={[
                     "col-span-2 sm:col-span-1",
-                    index === 6 ? "col-start-2 sm:col-start-auto" : "",
-                    index === 7 ? "col-start-4 sm:col-start-auto" : "",
+                    index === 6
+                      ? "col-start-2 sm:col-start-auto"
+                      : "",
+                    index === 7
+                      ? "col-start-4 sm:col-start-auto"
+                      : "",
                   ].join(" ")}
                 >
                   <AppLauncherItem {...app} />
@@ -824,7 +833,12 @@ export default function HomeContent({
       </section>
 
       <section id="leaderboard" className="scroll-mt-24">
-        <LeaderboardBlock lang={lang} limit={3} period="all" compact />
+        <LeaderboardBlock
+          lang={lang}
+          limit={3}
+          period="all"
+          compact
+        />
       </section>
 
       <details className="flunio-card group overflow-hidden rounded-[28px]">
@@ -837,11 +851,17 @@ export default function HomeContent({
         </summary>
 
         <div className="border-t border-white/10 px-5 pb-6 pt-5">
-          <h2 className="theme-text text-xl font-semibold">{tr.seoH2}</h2>
+          <h2 className="theme-text text-xl font-semibold">
+            {tr.seoH2}
+          </h2>
 
-          <p className="theme-text-muted mt-3 text-sm leading-7">{tr.seoP1}</p>
+          <p className="theme-text-muted mt-3 text-sm leading-7">
+            {tr.seoP1}
+          </p>
 
-          <p className="theme-text-muted mt-3 text-sm leading-7">{tr.seoP2}</p>
+          <p className="theme-text-muted mt-3 text-sm leading-7">
+            {tr.seoP2}
+          </p>
         </div>
       </details>
     </div>

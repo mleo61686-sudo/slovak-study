@@ -233,7 +233,7 @@ function playNextRandomTrackGlobal() {
   audio.loop = false;
 
   if (globalAudioContext?.state === "suspended") {
-    void globalAudioContext.resume().catch(() => {});
+    void globalAudioContext.resume().catch(() => { });
   }
 
   void audio.play().catch(() => {
@@ -252,9 +252,9 @@ function loadSavedState(): SavedState {
 
     const volume =
       typeof parsed.volume === "number" &&
-      Number.isFinite(parsed.volume) &&
-      parsed.volume >= 0 &&
-      parsed.volume <= 100
+        Number.isFinite(parsed.volume) &&
+        parsed.volume >= 0 &&
+        parsed.volume <= 100
         ? parsed.volume
         : 10;
 
@@ -403,17 +403,17 @@ export default function FocusMusic() {
   }
 
   return (
-    <div className="mx-2 my-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5 text-white transition hover:border-cyan-400/25">
+    <div className="theme-inner-card mx-2 my-2 rounded-2xl px-3 py-2.5 transition">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-sm">🎵</span>
-            <p className="truncate text-sm font-semibold text-white">
+            <p className="theme-text truncate text-sm font-semibold">
               {t.title}
             </p>
           </div>
 
-          <p className="mt-0.5 text-xs leading-snug text-white/55">
+          <p className="theme-text-muted mt-0.5 text-xs leading-snug">
             {t.subtitle}
           </p>
         </div>
@@ -422,13 +422,7 @@ export default function FocusMusic() {
           type="button"
           onClick={toggleMusic}
           disabled={isLoading}
-          className={[
-            "shrink-0 rounded-xl border px-3 py-2 text-xs font-semibold transition",
-            "active:scale-95 disabled:cursor-not-allowed disabled:opacity-60",
-            isPlaying
-              ? "border-fuchsia-400/40 bg-fuchsia-400/15 text-fuchsia-100 hover:bg-fuchsia-400/25"
-              : "border-cyan-400/40 bg-cyan-400/15 text-cyan-100 hover:bg-cyan-400/25",
-          ].join(" ")}
+          className="theme-secondary-button shrink-0 rounded-xl px-3 py-2 text-xs font-semibold transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isLoading ? t.loading : isPlaying ? t.turnOff : t.turnOn}
         </button>
@@ -436,7 +430,7 @@ export default function FocusMusic() {
 
       {isPlaying ? (
         <div className="mt-2">
-          <div className="mb-1 flex items-center justify-between text-xs text-white/55">
+          <div className="theme-text-muted mb-1 flex items-center justify-between text-xs">
             <span>{t.volume}</span>
             <span>{volume}%</span>
           </div>

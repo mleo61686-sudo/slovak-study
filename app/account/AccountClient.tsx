@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { InfoRow, PasswordField } from "./account-ui";
 import { T, type Lang } from "./account-texts";
+import EmailRemindersSettings from "./EmailRemindersSettings";
 import {
   getUserLevel,
   getXpState,
@@ -68,13 +69,17 @@ export default function AccountClient() {
 
   const levelLabel =
     L === "ru" ? "Уровень" : L === "en" ? "Level" : "Рівень";
-  const xpLabel = L === "ru" ? "Опыт" : L === "en" ? "XP" : "Досвід";
+
+  const xpLabel =
+    L === "ru" ? "Опыт" : L === "en" ? "XP" : "Досвід";
+
   const nextLevelLabel =
     L === "ru"
       ? "до следующего уровня"
       : L === "en"
         ? "to next level"
         : "до наступного рівня";
+
   const levelHelpText =
     L === "ru"
       ? "Получай XP во время повторения слов на главной странице — так растёт твой уровень."
@@ -89,21 +94,26 @@ export default function AccountClient() {
         ? "Go to word review"
         : "Перейти до повторення";
 
-  const soundsTitle = L === "ru" ? "Звуки" : L === "en" ? "Sounds" : "Звуки";
+  const soundsTitle =
+    L === "ru" ? "Звуки" : L === "en" ? "Sounds" : "Звуки";
+
   const answerSoundsTitle =
     L === "ru"
       ? "Звуки правильного / неправильного ответа"
       : L === "en"
         ? "Correct / wrong answer sounds"
         : "Звуки правильної / неправильної відповіді";
+
   const answerSoundsHint =
     L === "ru"
       ? "Можно выключить короткие звуки после выбора ответа в уроках."
       : L === "en"
         ? "Turn off short sounds after choosing an answer in lessons."
         : "Можна вимкнути короткі звуки після вибору відповіді в уроках.";
+
   const soundEnabledLabel =
     L === "ru" ? "Включено" : L === "en" ? "Enabled" : "Увімкнено";
+
   const soundDisabledLabel =
     L === "ru" ? "Выключено" : L === "en" ? "Disabled" : "Вимкнено";
 
@@ -177,13 +187,17 @@ export default function AccountClient() {
           setAvatarUrl("");
         }
       } catch {
-        if (!cancelled) setAvatarUrl("");
+        if (!cancelled) {
+          setAvatarUrl("");
+        }
       } finally {
-        if (!cancelled) setAvatarLoaded(true);
+        if (!cancelled) {
+          setAvatarLoaded(true);
+        }
       }
     }
 
-    loadAvatar();
+    void loadAvatar();
 
     return () => {
       cancelled = true;
@@ -227,10 +241,12 @@ export default function AccountClient() {
 
     try {
       window.localStorage.setItem(ANSWER_SFX_KEY, String(next));
-    } catch { }
+    } catch {}
   }
 
-  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleAvatarChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) {
     const file = e.target.files?.[0];
     e.target.value = "";
 
@@ -266,7 +282,10 @@ export default function AccountClient() {
           reject(new Error("Invalid image result"));
         };
 
-        reader.onerror = () => reject(new Error("Could not read image"));
+        reader.onerror = () => {
+          reject(new Error("Could not read image"));
+        };
+
         reader.readAsDataURL(file);
       });
 
@@ -291,9 +310,11 @@ export default function AccountClient() {
           case "INVALID_IMAGE":
             setAvatarError(t.avatarInvalid);
             break;
+
           case "IMAGE_TOO_LARGE":
             setAvatarError(t.avatarTooLarge);
             break;
+
           default:
             setAvatarError(t.avatarGeneric);
             break;
@@ -306,7 +327,9 @@ export default function AccountClient() {
 
       window.dispatchEvent(
         new CustomEvent("flunio:avatarUpdated", {
-          detail: { avatarUrl: data.avatarUrl },
+          detail: {
+            avatarUrl: data.avatarUrl,
+          },
         }),
       );
 
@@ -327,10 +350,16 @@ export default function AccountClient() {
     try {
       setLoadingPortal(true);
 
-      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const res = await fetch("/api/stripe/portal", {
+        method: "POST",
+      });
+
       const text = await res.text();
 
-      let data: { url?: string; error?: string } = {};
+      let data: {
+        url?: string;
+        error?: string;
+      } = {};
 
       try {
         data = text ? JSON.parse(text) : {};
@@ -354,13 +383,17 @@ export default function AccountClient() {
   async function handleLogout() {
     try {
       setLoggingOut(true);
-      await signOut({ callbackUrl: "/login" });
+      await signOut({
+        callbackUrl: "/login",
+      });
     } finally {
       setLoggingOut(false);
     }
   }
 
-  async function handleSaveName(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSaveName(
+    e: React.FormEvent<HTMLFormElement>,
+  ) {
     e.preventDefault();
 
     setNameError("");
@@ -411,12 +444,15 @@ export default function AccountClient() {
           case "NAME_REQUIRED":
             setNameError(t.errNameRequired);
             break;
+
           case "NAME_TOO_SHORT":
             setNameError(t.errNameTooShort);
             break;
+
           case "NAME_TOO_LONG":
             setNameError(t.errNameTooLong);
             break;
+
           default:
             setNameError(t.errNameGeneric);
             break;
@@ -426,6 +462,7 @@ export default function AccountClient() {
       }
 
       const nextName = data.name?.trim() || trimmed;
+
       setNameValue(nextName);
       setNameSuccess(t.nameSuccess);
 
@@ -443,7 +480,9 @@ export default function AccountClient() {
     }
   }
 
-  async function handleChangePassword(e: React.FormEvent<HTMLFormElement>) {
+  async function handleChangePassword(
+    e: React.FormEvent<HTMLFormElement>,
+  ) {
     e.preventDefault();
 
     setPasswordError("");
@@ -484,18 +523,23 @@ export default function AccountClient() {
           case "MISSING_FIELDS":
             setPasswordError(t.errMissing);
             break;
+
           case "PASSWORDS_DO_NOT_MATCH":
             setPasswordError(t.errMismatch);
             break;
+
           case "WEAK_PASSWORD":
             setPasswordError(t.errWeak);
             break;
+
           case "WRONG_CURRENT_PASSWORD":
             setPasswordError(t.errWrongCurrent);
             break;
+
           case "SAME_AS_CURRENT":
             setPasswordError(t.errSameAsCurrent);
             break;
+
           default:
             setPasswordError(t.errGeneric);
             break;
@@ -519,7 +563,9 @@ export default function AccountClient() {
     return (
       <div className="mx-auto max-w-5xl space-y-6">
         <div className="flunio-card rounded-3xl p-8 theme-text">
-          <div className="text-center theme-text-muted">{t.loading}</div>
+          <div className="text-center theme-text-muted">
+            {t.loading}
+          </div>
         </div>
       </div>
     );
@@ -547,6 +593,7 @@ export default function AccountClient() {
 
               <label className="theme-secondary-button cursor-pointer rounded-full px-3 py-1.5 text-xs font-semibold">
                 {uploadingAvatar ? t.uploadingAvatar : t.changeAvatar}
+
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -574,8 +621,12 @@ export default function AccountClient() {
                 </div>
 
                 <div
-                  className={`mx-auto inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition sm:mx-0 ${isPremium ? "theme-premium-badge" : "theme-pill"
-                    }`}
+                  className={[
+                    "mx-auto inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition sm:mx-0",
+                    isPremium
+                      ? "theme-premium-badge"
+                      : "theme-pill",
+                  ].join(" ")}
                 >
                   {isPremium ? t.premium : t.free}
                 </div>
@@ -597,6 +648,7 @@ export default function AccountClient() {
                     <div className="text-xs font-semibold uppercase tracking-wide text-amber-500">
                       {xpLabel}
                     </div>
+
                     <div className="text-lg font-bold theme-text">
                       {xp.totalXp} XP
                     </div>
@@ -606,7 +658,9 @@ export default function AccountClient() {
                 <div className="theme-progress-track mt-4 h-2 overflow-hidden rounded-full">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 transition-all duration-300"
-                    style={{ width: `${levelInfo.progressPercent}%` }}
+                    style={{
+                      width: `${levelInfo.progressPercent}%`,
+                    }}
                   />
                 </div>
 
@@ -647,7 +701,9 @@ export default function AccountClient() {
         </div>
 
         <div className="px-5 py-5 sm:px-8 sm:py-6">
-          <p className="theme-text-muted">{t.subtitle}</p>
+          <p className="theme-text-muted">
+            {t.subtitle}
+          </p>
         </div>
       </section>
 
@@ -658,32 +714,52 @@ export default function AccountClient() {
           </h2>
 
           <div className="mt-4 grid gap-4">
-            <InfoRow label={t.email} value={displayEmail} />
-            <InfoRow label={t.status} value={isPremium ? t.premium : t.free} />
+            <InfoRow
+              label={t.email}
+              value={displayEmail}
+            />
+
+            <InfoRow
+              label={t.status}
+              value={isPremium ? t.premium : t.free}
+            />
 
             <div className="theme-inner-card rounded-2xl p-4">
-              <form onSubmit={handleSaveName} className="grid gap-3">
+              <form
+                onSubmit={handleSaveName}
+                className="grid gap-3"
+              >
                 <div className="space-y-1">
                   <div className="text-sm font-semibold theme-text">
                     {t.editName}
                   </div>
-                  <div className="text-sm theme-text-muted">{t.nameHint}</div>
+
+                  <div className="text-sm theme-text-muted">
+                    {t.nameHint}
+                  </div>
                 </div>
 
                 <label className="grid gap-1.5">
                   <span className="text-sm font-medium theme-text-muted">
                     {t.name}
                   </span>
+
                   <input
                     type="text"
                     value={nameValue}
                     onChange={(e) => {
                       const next = e.target.value;
+
                       setNameValue(next);
 
-                      if (nameError) setNameError("");
+                      if (nameError) {
+                        setNameError("");
+                      }
 
-                      if (nameSuccess && next.trim() !== normalizedInitialName) {
+                      if (
+                        nameSuccess &&
+                        next.trim() !== normalizedInitialName
+                      ) {
                         setNameSuccess("");
                       }
                     }}
@@ -710,7 +786,9 @@ export default function AccountClient() {
                   disabled={!canSaveName}
                   className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {savingName ? t.savingName : t.saveName}
+                  {savingName
+                    ? t.savingName
+                    : t.saveName}
                 </button>
               </form>
             </div>
@@ -753,14 +831,23 @@ export default function AccountClient() {
               {t.securityHint}
             </div>
 
-            <form onSubmit={handleChangePassword} className="grid gap-3">
+            <form
+              onSubmit={handleChangePassword}
+              className="grid gap-3"
+            >
               <PasswordField
                 label={t.currentPassword}
                 value={currentPassword}
-                onChange={(v) => {
-                  setCurrentPassword(v);
-                  if (passwordError) setPasswordError("");
-                  if (passwordSuccess) setPasswordSuccess("");
+                onChange={(value) => {
+                  setCurrentPassword(value);
+
+                  if (passwordError) {
+                    setPasswordError("");
+                  }
+
+                  if (passwordSuccess) {
+                    setPasswordSuccess("");
+                  }
                 }}
                 autoComplete="current-password"
               />
@@ -768,10 +855,16 @@ export default function AccountClient() {
               <PasswordField
                 label={t.newPassword}
                 value={newPassword}
-                onChange={(v) => {
-                  setNewPassword(v);
-                  if (passwordError) setPasswordError("");
-                  if (passwordSuccess) setPasswordSuccess("");
+                onChange={(value) => {
+                  setNewPassword(value);
+
+                  if (passwordError) {
+                    setPasswordError("");
+                  }
+
+                  if (passwordSuccess) {
+                    setPasswordSuccess("");
+                  }
                 }}
                 autoComplete="new-password"
               />
@@ -779,10 +872,16 @@ export default function AccountClient() {
               <PasswordField
                 label={t.confirmPassword}
                 value={confirmPassword}
-                onChange={(v) => {
-                  setConfirmPassword(v);
-                  if (passwordError) setPasswordError("");
-                  if (passwordSuccess) setPasswordSuccess("");
+                onChange={(value) => {
+                  setConfirmPassword(value);
+
+                  if (passwordError) {
+                    setPasswordError("");
+                  }
+
+                  if (passwordSuccess) {
+                    setPasswordSuccess("");
+                  }
                 }}
                 autoComplete="new-password"
               />
@@ -804,14 +903,18 @@ export default function AccountClient() {
                 disabled={!canSubmitPassword}
                 className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {savingPassword ? t.saving : t.changePassword}
+                {savingPassword
+                  ? t.saving
+                  : t.changePassword}
               </button>
             </form>
           </div>
         </div>
 
         <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
-          <h2 className="text-xl font-semibold theme-text">{soundsTitle}</h2>
+          <h2 className="text-xl font-semibold theme-text">
+            {soundsTitle}
+          </h2>
 
           <div className="mt-4 grid gap-3">
             <div className="theme-inner-card rounded-2xl p-4">
@@ -850,11 +953,15 @@ export default function AccountClient() {
               </div>
 
               <div className="mt-3 text-xs font-semibold theme-text-subtle">
-                {answerSfxEnabled ? soundEnabledLabel : soundDisabledLabel}
+                {answerSfxEnabled
+                  ? soundEnabledLabel
+                  : soundDisabledLabel}
               </div>
             </div>
           </div>
         </div>
+
+        <EmailRemindersSettings lang={L} />
 
         <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
           <h2 className="text-xl font-semibold theme-text">
@@ -868,7 +975,9 @@ export default function AccountClient() {
               className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-red-400/30 bg-red-500/10 px-5 py-3 text-sm font-semibold text-red-300 transition hover:bg-red-500/15 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
               type="button"
             >
-              {loggingOut ? t.opening : t.logout}
+              {loggingOut
+                ? t.opening
+                : t.logout}
             </button>
           </div>
         </div>
