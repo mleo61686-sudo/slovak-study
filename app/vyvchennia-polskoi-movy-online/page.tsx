@@ -12,9 +12,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_URL}/vyvchennia-polskoi-movy-online`,
     languages: {
-      uk: `${SITE_URL}/vyvchennia-polskoi-movy-online`,
-      ru: `${SITE_URL}/ru/learn-polish`,
       en: `${SITE_URL}/learn-polish`,
+      ru: `${SITE_URL}/ru/learn-polish`,
+      uk: `${SITE_URL}/vyvchennia-polskoi-movy-online`,
+      "x-default": `${SITE_URL}/learn-polish`,
     },
   },
 

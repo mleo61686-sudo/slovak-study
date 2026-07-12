@@ -18,12 +18,6 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: `${SITE_URL}/`,
-    languages: {
-      uk: `${SITE_URL}/`,
-      ru: `${SITE_URL}/`,
-      en: `${SITE_URL}/`,
-      "x-default": `${SITE_URL}/`,
-    },
   },
 
   openGraph: {

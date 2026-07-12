@@ -18,23 +18,10 @@ import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
   metadataBase: new URL("https://flunio.com"),
 
-  title: {
-    default: "Flunio — вивчення мов онлайн",
-    template: "%s | Flunio",
-  },
+  title: "Flunio — вивчення мов онлайн",
 
   description:
-    "Flunio — онлайн платформа для вивчення мов: словацька та чеська, уроки A0–B2, граматика, словник, вправи та озвучка.",
-
-  alternates: {
-    canonical: "/",
-    languages: {
-      uk: "/",
-      ru: "/",
-      en: "/",
-      "x-default": "/",
-    },
-  },
+    "Flunio — онлайн-платформа для вивчення словацької, чеської та польської мов: уроки A0–B2, граматика, словник, вправи й озвучка.",
 
   icons: {
     icon: [{ url: "/favicon.ico" }],
@@ -43,8 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Flunio — вивчення мов онлайн",
     description:
-      "Вивчай словацьку та чеську онлайн: уроки A0–B2, граматика, словник, вправи та озвучка.",
-    url: "/",
+      "Вивчай словацьку, чеську та польську онлайн: уроки A0–B2, граматика, словник, вправи й озвучка.",
     siteName: "Flunio",
     type: "website",
     images: ["/opengraph-image"],
@@ -54,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Flunio — вивчення мов онлайн",
     description:
-      "Словацька та чеська мови онлайн: уроки A0–B2, граматика, словник, вправи та озвучка.",
+      "Словацька, чеська та польська онлайн: уроки A0–B2, граматика, словник, вправи й озвучка.",
     images: ["/opengraph-image"],
   },
 
@@ -95,7 +81,7 @@ export default function RootLayout({
         },
         inLanguage: ["uk", "ru", "en"],
         description:
-          "Онлайн платформа для вивчення мов зі словацьким і чеським курсами, граматикою, словником і вправами.",
+          "Онлайн-платформа для вивчення мов зі словацьким, чеським і польським курсами, граматикою, словником і вправами.",
         potentialAction: {
           "@type": "SearchAction",
           target:
@@ -109,7 +95,7 @@ export default function RootLayout({
         url: "https://flunio.com/",
         name: "Flunio",
         description:
-          "Онлайн платформа для вивчення мов: словацька та чеська, уроки A0–B2, граматика, словник, вправи та практика.",
+          "Онлайн-платформа для вивчення словацької, чеської та польської мов: уроки A0–B2, граматика, словник, вправи та практика.",
         inLanguage: ["uk", "ru", "en"],
         educationalUse: "language learning",
       },
@@ -124,26 +110,6 @@ export default function RootLayout({
           content="ca-pub-1760161415033749"
         />
 
-        <link
-          rel="alternate"
-          hrefLang="uk"
-          href="https://flunio.com/"
-        />
-        <link
-          rel="alternate"
-          hrefLang="ru"
-          href="https://flunio.com/"
-        />
-        <link
-          rel="alternate"
-          hrefLang="en"
-          href="https://flunio.com/"
-        />
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href="https://flunio.com/"
-        />
 
         <Script
           id="schema-org"

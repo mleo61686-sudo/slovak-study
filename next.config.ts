@@ -21,6 +21,24 @@ const nextConfig: NextConfig = {
         destination: `${SITE}/:path*`,
         permanent: true,
       },
+
+      // Old Russian URLs used Ukrainian transliteration.
+      // Redirect them to the clean Russian landing pages.
+      {
+        source: "/ru/vyvchennia-slovatskoi-movy-online",
+        destination: "/ru/learn-slovak",
+        permanent: true,
+      },
+      {
+        source: "/ru/vyvchennia-cheskoi-movy-online",
+        destination: "/ru/learn-czech",
+        permanent: true,
+      },
+      {
+        source: "/ru/vyvchennia-polskoi-movy-online",
+        destination: "/ru/learn-polish",
+        permanent: true,
+      },
     ];
   },
 };

@@ -11,6 +11,12 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: `${SITE_URL}/learn-czech`,
+    languages: {
+      en: `${SITE_URL}/learn-czech`,
+      ru: `${SITE_URL}/ru/learn-czech`,
+      uk: `${SITE_URL}/vyvchennia-cheskoi-movy-online`,
+      "x-default": `${SITE_URL}/learn-czech`,
+    },
   },
 
   openGraph: {

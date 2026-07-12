@@ -1,11 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SEO_MAP } from "./seo-pages/seoMap";
-
-const SITE_URL = "https://flunio.com";
+import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-
   const staticUrls: string[] = [
     "/",
 
@@ -39,7 +36,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return urls.map((url) => ({
     url: `${SITE_URL}${url === "/" ? "" : url}`,
-    lastModified: now,
     changeFrequency: "weekly",
     priority: url === "/" ? 1 : 0.7,
   }));
