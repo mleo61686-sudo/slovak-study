@@ -5,16 +5,16 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Polish Vocabulary: Basic Polish Words by Topic | Flunio",
+  title: "Vocabulary in Polish: Basic Words by Topic | Flunio",
   description:
-    "Learn Polish vocabulary for beginners: easy Polish words, basic words by topic, useful phrases, pronunciation tips and audio practice in Flunio.",
+    "Build your vocabulary in Polish with basic words by topic, useful phrases, example sentences, pronunciation tips and audio practice for beginners.",
 
   alternates: {
     canonical: `${SITE_URL}/polish-vocabulary`,
   },
 
   openGraph: {
-    title: "Polish Vocabulary: Basic Polish Words by Topic | Flunio",
+    title: "Vocabulary in Polish: Basic Words by Topic | Flunio",
     description:
       "Learn vocabulary in Polish by topic: greetings, family, food, home, transport, work, verbs, adjectives and pronunciation tips.",
     url: `${SITE_URL}/polish-vocabulary`,
@@ -514,6 +514,25 @@ export default function Page() {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Learn Polish",
+        item: `${SITE_URL}/learn-polish`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Polish vocabulary",
+        item: `${SITE_URL}/polish-vocabulary`,
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
@@ -523,13 +542,20 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      <Script
+        id="breadcrumb-schema-polish-vocabulary"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <section className={`${card} space-y-4 p-8`}>
         <p className="text-sm font-semibold uppercase tracking-wide theme-text-muted">
           Polish vocabulary list for A0–A1 learners
         </p>
 
         <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
-          Polish vocabulary: basic Polish words by topic
+          Vocabulary in Polish: basic words and phrases by topic
         </h1>
 
         <p className="theme-text-muted">

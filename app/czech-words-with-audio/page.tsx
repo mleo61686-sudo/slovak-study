@@ -5,16 +5,16 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-    title: "Czech Words with Audio: Listen and Learn Vocabulary | Flunio",
+    title: "Czech Words with Audio and Pronunciation | Flunio",
     description:
-        "Learn Czech words with audio in Flunio. Listen to pronunciation, practice basic vocabulary, repeat words and build your Czech step by step.",
+        "Learn Czech words with audio and clear pronunciation. Listen, repeat useful beginner vocabulary, practise short phrases and continue with interactive lessons.",
 
     alternates: {
         canonical: `${SITE_URL}/czech-words-with-audio`,
     },
 
     openGraph: {
-        title: "Czech Words with Audio | Flunio",
+        title: "Czech Words with Audio and Pronunciation | Flunio",
         description:
             "Listen to Czech words, learn pronunciation and practice useful vocabulary with Flunio lessons.",
         url: `${SITE_URL}/czech-words-with-audio`,
@@ -85,6 +85,25 @@ export default function Page() {
         })),
     };
 
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            {
+                "@type": "ListItem",
+                position: 1,
+                name: "Learn Czech",
+                item: `${SITE_URL}/learn-czech`,
+            },
+            {
+                "@type": "ListItem",
+                position: 2,
+                name: "Czech words with audio",
+                item: `${SITE_URL}/czech-words-with-audio`,
+            },
+        ],
+    };
+
     return (
         <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
             <Script
@@ -94,9 +113,16 @@ export default function Page() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
 
+            <Script
+                id="breadcrumb-schema-czech-words-with-audio"
+                type="application/ld+json"
+                strategy="beforeInteractive"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+
             <section className={`${card} space-y-4 p-8`}>
                 <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
-                    Czech words with audio
+                    Czech words with audio and pronunciation
                 </h1>
 
                 <p className="theme-text-muted">

@@ -5,21 +5,21 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Типові помилки в словацькій мові | Flunio",
+  title: "12 типових помилок українців у словацькій мові | Flunio",
   description:
-    "Типові помилки в словацькій мові для українців: неправильні слова, схожі форми, переклад дослівно, вимова, дієслова та приклади правильного вживання.",
+    "12 типових помилок українців у словацькій мові: неправильні закінчення, дослівний переклад, відмінки, прийменники та правильні приклади.",
 
   alternates: {
     canonical: `${SITE_URL}/pomylky-v-slovatskii-movi`,
   },
 
   openGraph: {
-    title: "Типові помилки в словацькій мові | Flunio",
+    title: "12 типових помилок українців у словацькій мові | Flunio",
     description:
-      "Розбір частих помилок у словацькій: як не перекладати дослівно, які слова не плутати і як говорити природніше.",
+      "Розбір 12 частих помилок українців у словацькій: неправильні форми, дослівний переклад і природні правильні варіанти.",
     url: `${SITE_URL}/pomylky-v-slovatskii-movi`,
     siteName: "Flunio",
-    type: "website",
+    type: "article",
   },
 
   robots: { index: true, follow: true },
@@ -137,6 +137,25 @@ export default function Page() {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Вивчення словацької",
+        item: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Типові помилки у словацькій",
+        item: `${SITE_URL}/pomylky-v-slovatskii-movi`,
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
@@ -144,6 +163,13 @@ export default function Page() {
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      <Script
+        id="breadcrumb-schema-pomylky-v-slovatskii-movi"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <section className="flunio-card relative overflow-hidden rounded-3xl p-7 sm:p-8">

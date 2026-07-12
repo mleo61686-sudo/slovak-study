@@ -5,16 +5,16 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Як вивчити словацьку мову з нуля — простий план | Flunio",
+  title: "Як вивчити словацьку мову з нуля: покроковий план | Flunio",
   description:
-    "Як вивчити словацьку мову з нуля: покроковий план, поради для початківців, типові помилки, щоденна практика, слова, граматика та вправи онлайн.",
+    "Як самостійно вивчити словацьку мову з нуля: покроковий план для початківців, перші слова, вимова, граматика, практика та типові помилки.",
 
   alternates: {
     canonical: `${SITE_URL}/yak-vyvchyty-slovatsku-movu`,
   },
 
   openGraph: {
-    title: "Як вивчити словацьку мову з нуля — простий план | Flunio",
+    title: "Як вивчити словацьку мову з нуля: покроковий план | Flunio",
     description:
       "Покроковий план для тих, хто хоче почати вивчати словацьку мову з нуля і не загубитися в словах, граматиці та вправах.",
     url: `${SITE_URL}/yak-vyvchyty-slovatsku-movu`,
@@ -72,6 +72,25 @@ export default function Page() {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Вивчення словацької",
+        item: `${SITE_URL}/vyvchennia-slovatskoi-movy-online`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Як вивчити словацьку мову",
+        item: `${SITE_URL}/yak-vyvchyty-slovatsku-movu`,
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
@@ -79,6 +98,13 @@ export default function Page() {
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      <Script
+        id="breadcrumb-schema-yak-vyvchyty-slovatsku-movu"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <section className={`${card} space-y-4 p-8`}>

@@ -5,21 +5,21 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Slovak Grammar Online: Cases, Verbs, Alphabet | Flunio",
+  title: "Slovak Grammar: Cases, Verbs, Tenses & Examples | Flunio",
   description:
-    "Learn Slovak grammar online with clear explanations, examples and practice: alphabet, pronunciation, verbs, cases and sentence structure.",
+    "Learn Slovak grammar step by step with clear examples: alphabet, pronunciation, cases, present, past and future tenses, word endings and sentence structure.",
 
   alternates: {
     canonical: `${SITE_URL}/slovak-grammar`,
   },
 
   openGraph: {
-    title: "Slovak Grammar Online: Cases, Verbs, Alphabet | Flunio",
+    title: "Slovak Grammar: Cases, Verbs, Tenses & Examples | Flunio",
     description:
-      "Learn Slovak grammar step by step: alphabet, pronunciation, verbs, cases and practical examples.",
+      "Learn Slovak grammar step by step: alphabet, pronunciation, cases, verb tenses, word endings and practical examples.",
     url: `${SITE_URL}/slovak-grammar`,
     siteName: "Flunio",
-    type: "website",
+    type: "article",
   },
 
   robots: { index: true, follow: true },
@@ -64,6 +64,25 @@ export default function Page() {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Learn Slovak",
+        item: `${SITE_URL}/learn-slovak`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Slovak grammar",
+        item: `${SITE_URL}/slovak-grammar`,
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
@@ -71,6 +90,13 @@ export default function Page() {
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      <Script
+        id="breadcrumb-schema-slovak-grammar-en"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <section className={`${card} space-y-4 p-8`}>
@@ -266,13 +292,23 @@ export default function Page() {
           easier to recognize similar patterns in new words.
         </p>
 
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="grid gap-3 pt-2 sm:grid-cols-3">
           <Link href="/grammar/verbs-present" className={secondaryButton}>
-            Open present tense →
+            Present tense →
           </Link>
 
-          <Link href="/learning/a0-1" className={secondaryButton}>
-            Start first lesson →
+          <Link href="/grammar/verbs-past" className={secondaryButton}>
+            Past tense →
+          </Link>
+
+          <Link href="/grammar/verbs-future" className={secondaryButton}>
+            Future tense →
+          </Link>
+        </div>
+
+        <div className="pt-1">
+          <Link href="/learning/a0-1" className={textLink}>
+            Practise Slovak vocabulary in the first free A0 lesson →
           </Link>
         </div>
       </section>

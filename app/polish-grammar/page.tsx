@@ -5,7 +5,7 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Polish Grammar for Beginners: Cases, Verbs, Word Order | Flunio",
+  title: "Polish Grammar Rules for Beginners: Cases & Verbs | Flunio",
   description:
     "Learn Polish grammar for beginners: Polish cases, verbs, alphabet, pronunciation, word order, sentence patterns and simple examples with Flunio.",
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Polish Grammar for Beginners | Flunio",
+    title: "Polish Grammar Rules for Beginners | Flunio",
     description:
       "Learn Polish grammar step by step: alphabet, pronunciation, verbs, cases, word order, sentence patterns and practical examples.",
     url: `${SITE_URL}/polish-grammar`,
@@ -236,6 +236,25 @@ export default function Page() {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Learn Polish",
+        item: `${SITE_URL}/learn-polish`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Polish grammar",
+        item: `${SITE_URL}/polish-grammar`,
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-4xl space-y-8 px-4 py-10 theme-text">
       <Script
@@ -243,6 +262,13 @@ export default function Page() {
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      <Script
+        id="breadcrumb-schema-polish-grammar"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <section className={`${card} space-y-4 p-8`}>

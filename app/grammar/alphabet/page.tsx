@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import AlphabetClient from "./AlphabetClient";
 import AlphabetSeo from "./AlphabetSeo";
 
 export const metadata: Metadata = {
-  title: "Алфавіт і вимова | Flunio",
+  title: "Алфавіт і вимова: словацька, чеська та польська | Flunio",
   description:
-    "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
+    "Алфавіт і вимова словацької, чеської та польської мов: правила читання, особливі звуки, приклади, аудіо та міні-тренажер.",
   alternates: {
     canonical: "https://flunio.com/grammar/alphabet",
   },
   openGraph: {
-    title: "Алфавіт і вимова | Flunio",
+    title: "Алфавіт і вимова: словацька, чеська та польська | Flunio",
     description:
-      "Алфавіт і вимова словацької та чеської мов: правила читання, звуки, приклади та міні-тренажер.",
+      "Алфавіт і вимова словацької, чеської та польської мов: правила читання, особливі звуки, приклади, аудіо та міні-тренажер.",
     url: "https://flunio.com/grammar/alphabet",
     siteName: "Flunio",
     type: "article",
