@@ -582,7 +582,7 @@ export default function HomeContent({
       title: tr.progress,
       description: tr.progressDesc,
       iconClass:
-        "bg-gradient-to-br from-yellow-300 via-amber-500 to-orange-600",
+        "home-progress-icon bg-gradient-to-br from-yellow-300 via-amber-500 to-orange-600",
       glowClass: "bg-yellow-400",
     },
     {
@@ -803,12 +803,12 @@ export default function HomeContent({
 
         <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-amber-300/25 bg-amber-300/10 text-amber-200">
+            <div className="home-premium-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-amber-300/25 bg-amber-300/10 text-amber-200">
               <Glyph name="premium" />
             </div>
 
             <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-200">
+              <div className="home-premium-eyebrow text-xs font-semibold uppercase tracking-[0.14em] text-amber-200">
                 {tr.premiumEyebrow}
               </div>
 

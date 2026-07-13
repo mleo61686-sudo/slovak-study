@@ -1082,3 +1082,25 @@
 .theme-simple [class*="shadow-[0_0_38px"] {
     box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08) !important;
 }
+
+/* Home: light-theme contrast fixes */
+
+.theme-simple .home-progress-icon {
+    color: #7c2d12;
+    border-color: rgba(180, 83, 9, 0.24);
+    background: linear-gradient(135deg,
+            #fde68a 0%,
+            #fbbf24 52%,
+            #f97316 100%) !important;
+    box-shadow: 0 12px 26px rgba(245, 158, 11, 0.22);
+}
+
+.theme-simple .home-premium-icon {
+    color: #a16207;
+    border-color: rgba(202, 138, 4, 0.32);
+    background: rgba(251, 191, 36, 0.16);
+}
+
+.theme-simple .home-premium-eyebrow {
+    color: #a16207;
+}
