@@ -2,8 +2,15 @@ import type { Word } from "@/app/learning/data";
 import type { CourseId } from "@/app/learning/courses/registry";
 
 export type Lang = "ua" | "ru" | "en";
-export type Mode = "mcq" | "typing";
-export type SessionMode = "mixed" | "mcq" | "typing" | "blitz";
+export type Mode = "mcq" | "typing" | "listening";
+export type SessionMode = "mixed" | "mcq" | "typing" | "listening" | "blitz";
+
+export type ListeningOption = {
+  sk: string;
+  ua: string;
+  ru: string;
+  en: string;
+};
 
 export type SessionQuestionBase =
   | {
@@ -22,6 +29,15 @@ export type SessionQuestionBase =
       ua: string;
       ru: string;
       en: string;
+    }
+  | {
+      id: string;
+      mode: "listening";
+      sk: string;
+      ua: string;
+      ru: string;
+      en: string;
+      options: ListeningOption[];
     };
 
 export type PracticeClientProps = {
@@ -36,6 +52,7 @@ export type PracticeStats = {
   bestAccuracyPct: number;
   bestStreak: number;
   bestScore: number;
+  bestBlitzPoints: number;
 };
 
 export type PracticeMistake = {

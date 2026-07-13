@@ -8,6 +8,38 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-07-13",
+    title: {
+      ua: "Оновлення: новий тренажер і покращення світлої теми",
+      ru: "Обновление: новый тренажёр и улучшения светлой темы",
+      en: "Update: an upgraded trainer and light theme improvements",
+    },
+    items: {
+      ua: [
+        "Тренажер Flunio отримав оновлений дизайн і зручніший вибір режимів навчання",
+        "Додано новий режим «На слух», у якому потрібно прослухати слово та вибрати правильний переклад без підказки написання",
+        "Режим «Розумний мікс» тепер поєднує завдання на вибір відповіді, написання та розуміння на слух",
+        "Оновлено режим Blitz: додано очки, комбо-множник, бонусний час за серії правильних відповідей та окремий рекорд",
+        "Покращено відображення елементів у світлій темі — іконка прогресу та блок Flunio Premium тепер добре помітні",
+      ],
+      ru: [
+        "Тренажёр Flunio получил обновлённый дизайн и более удобный выбор режимов обучения",
+        "Добавлен новый режим «На слух», в котором нужно прослушать слово и выбрать правильный перевод без подсказки написания",
+        "Режим «Умный микс» теперь объединяет задания на выбор ответа, написание и понимание на слух",
+        "Обновлён режим Blitz: добавлены очки, комбо-множитель, бонусное время за серии правильных ответов и отдельный рекорд",
+        "Улучшено отображение элементов в светлой теме — иконка прогресса и блок Flunio Premium теперь хорошо видны",
+      ],
+      en: [
+        "The Flunio trainer now has an updated design and a more convenient way to choose learning modes",
+        "A new Listening mode has been added, where learners hear a word and choose the correct translation without seeing its spelling",
+        "Smart Mix now combines multiple-choice, typing, and listening exercises",
+        "Blitz mode has been upgraded with points, a combo multiplier, bonus time for correct-answer streaks, and a separate high score",
+        "Light theme styles have been improved — the progress icon and Flunio Premium section are now clearly visible",
+      ],
+    },
+  },
+
+  {
     date: "2026-07-11",
     title: {
       ua: "Оновлення: нові підказки в курсах, листи Flunio та виправлення світлої теми",
@@ -520,68 +552,6 @@ export const UPDATES: UpdateItem[] = [
         "The dictionary has been updated — now it contains only words from levels A0–B1",
         "The trainer has been improved: now it is more convenient to practice and review material",
         "The homepage has been improved — now it is easier to understand how to start learning",
-      ],
-    },
-  },
-  {
-    date: "2026-02-22",
-    title: {
-      ua: "Велике оновлення: завершено A2, нова AI-озвучка та покращений інтерфейс",
-      ru: "Большое обновление: завершён A2, новая AI-озвучка и улучшенный интерфейс",
-      en: "Major update: A2 completed, new AI voice-over, and improved interface",
-    },
-    items: {
-      ua: [
-        "Рівень A2 повністю завершено: уроки, слова та вправи готові до повноцінного навчання",
-        "Для A2 додано відповідні фрази свого рівня — складніші, більш природні та наближені до реального мовлення",
-        "Додана AI-озвучка голосом носія словацької мови для словника, сторінок граматики та рівнів A0/A1/A2",
-        "Покращено дизайн: фото отримали заокруглення, картки стали акуратнішими, інтерфейс виглядає чистіше та сучасніше",
-        "Виправлено численні баги, які дозволяли проходити рівні без помилок",
-        "Допрацьовано сторінки «Алфавіт і вимова», «Дієслова (теперішній час)» та «Відмінки»",
-      ],
-      ru: [
-        "Уровень A2 полностью завершён: уроки, слова и упражнения готовы к полноценному обучению",
-        "Для A2 добавлены соответствующие фразы уровня — более сложные и естественные",
-        "Добавлена AI-озвучка с естественным произношением носителя словацкого языка для словаря, страниц грамматики и уровней A0/A1/A2",
-        "Улучшен дизайн: фото получили скругления, карточки стали аккуратнее, интерфейс выглядит чище и современнее",
-        "Исправлены многочисленные баги, которые позволяли проходить уровни без ошибок",
-        "Доработаны страницы «Алфавит и произношение», «Глаголы (настоящее время)» и «Падежи»",
-      ],
-      en: [
-        "The A2 level has been fully completed: lessons, words, and exercises are ready for full learning",
-        "Matching A2-level phrases have been added — more complex, more natural, and closer to real speech",
-        "AI voice-over with a native Slovak speaker’s voice has been added for the dictionary, grammar pages, and levels A0/A1/A2",
-        "The design has been improved: photos now have rounded corners, cards look cleaner, and the interface feels more modern",
-        "Numerous bugs that allowed users to pass levels without mistakes have been fixed",
-        "The “Alphabet and pronunciation”, “Verbs (present tense)”, and “Cases” pages have been improved",
-      ],
-    },
-  },
-  {
-    date: "2026-02-15",
-    title: {
-      ua: "Покращено сторінку «Оновлення»",
-      ru: "Улучшена страница «Обновления»",
-      en: "The “Updates” page has been improved",
-    },
-    items: {
-      ua: [
-        "Додано архів оновлень із групуванням по місяцях",
-        "Можна перемикатися між оновленнями без перезавантаження сторінки",
-        "На головній сторінці зʼявилася кнопка «Що нового»",
-        "Покращена швидкість завантаження фото",
-      ],
-      ru: [
-        "Добавлен архив обновлений с группировкой по месяцам",
-        "Можно переключаться между обновлениями без перезагрузки страницы",
-        "На главной странице появилась кнопка «Что нового»",
-        "Улучшена скорость загрузки фото",
-      ],
-      en: [
-        "An updates archive grouped by months has been added",
-        "You can switch between updates without reloading the page",
-        "A “What’s new” button has appeared on the homepage",
-        "Photo loading speed has been improved",
       ],
     },
   },

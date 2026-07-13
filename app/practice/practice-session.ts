@@ -1,7 +1,13 @@
 import type { Word } from "@/app/learning/data";
 import type { CourseId } from "@/app/learning/courses/registry";
 import { UI } from "./practice-texts";
-import type { Lang, Mode, SessionMode, SessionQuestionBase } from "./practice-types";
+import type {
+  Lang,
+  ListeningOption,
+  Mode,
+  SessionMode,
+  SessionQuestionBase,
+} from "./practice-types";
 import { getTerm, getTrans, sample, shuffle } from "./practice-utils";
 
 export function getCourseLanguageName(courseId: CourseId, uiLang: Lang): string {
@@ -59,7 +65,14 @@ export function buildSessionBase(
 
     if (sessionMode === "mcq") mode = "mcq";
     else if (sessionMode === "typing") mode = "typing";
-    else mode = i % 3 === 0 ? "typing" : "mcq";
+    else if (sessionMode === "listening") mode = "listening";
+    else if (sessionMode === "blitz") {
+      // Blitz має залишатися швидким: вибір слова + завдання на слух.
+      mode = i % 4 === 3 ? "listening" : "mcq";
+    } else {
+      // Mixed: рівномірно тренує впізнавання, написання та слух.
+      mode = i % 4 === 0 ? "typing" : i % 4 === 2 ? "listening" : "mcq";
+    }
 
     if (mode === "typing") {
       return {
@@ -69,6 +82,32 @@ export function buildSessionBase(
         ua: w.__ua!,
         ru: w.__ru!,
         en: w.__en!,
+      };
+    }
+
+    if (mode === "listening") {
+      const distractors = sample(
+        pool.filter((x) => x.__term !== w.__term),
+        3
+      );
+
+      const options: ListeningOption[] = shuffle([w, ...distractors])
+        .slice(0, 4)
+        .map((option) => ({
+          sk: option.__term,
+          ua: option.__ua!,
+          ru: option.__ru!,
+          en: option.__en!,
+        }));
+
+      return {
+        id: `${w.__id}-listening`,
+        mode: "listening",
+        sk: w.__term,
+        ua: w.__ua!,
+        ru: w.__ru!,
+        en: w.__en!,
+        options,
       };
     }
 
@@ -99,6 +138,13 @@ export function makePromptAndHelper(
   const tr = lang === "en" ? q.en : lang === "ru" ? q.ru : q.ua;
   const t = UI[lang];
   const courseLangName = getCourseLanguageName(courseId, lang);
+
+  if (q.mode === "listening") {
+    return {
+      prompt: t.listeningPrompt,
+      helper: t.helper(q.sk, tr),
+    };
+  }
 
   return {
     prompt:
