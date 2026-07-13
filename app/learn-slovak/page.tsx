@@ -5,9 +5,9 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Learn Slovak Online: Slovak for Beginners A0–B2 | Flunio",
+  title: "Learn Slovak Online: Free A0 Course to B2 | Flunio",
   description:
-    "Learn Slovak online from zero with Flunio: Slovak for beginners, A0 lessons, pronunciation, vocabulary, grammar, phrases and practical exercises.",
+    "Learn Slovak online with free A0 lessons, audio, vocabulary, grammar and interactive exercises. Start from zero and continue through A1, A2, B1 and B2.",
 
   alternates: {
     canonical: `${SITE_URL}/learn-slovak`,
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Learn Slovak Online: Slovak for Beginners | Flunio",
+    title: "Learn Slovak Online: Free A0 Course to B2 | Flunio",
     description:
-      "Start Slovak from zero with short interactive lessons, pronunciation, vocabulary, grammar and practical exercises. Complete A0 for free.",
+      "Start learning Slovak from zero with free A0 lessons, audio, vocabulary, grammar and interactive exercises. Continue through A1, A2, B1 and B2.",
     url: `${SITE_URL}/learn-slovak`,
     siteName: "Flunio",
     type: "website",
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Learn Slovak Online: Slovak for Beginners | Flunio",
+    title: "Learn Slovak Online: Free A0 Course to B2 | Flunio",
     description:
-      "Interactive Slovak lessons with vocabulary, pronunciation and exercises. Start A0 for free.",
+      "Learn Slovak with free A0 lessons, audio, vocabulary and interactive exercises. Continue from A1 to B2 when you are ready.",
   },
 
   robots: {
@@ -50,6 +50,17 @@ type ExamplePhrase = {
   sk: string;
   en: string;
   note: string;
+};
+
+type CourseLevel = {
+  id: string;
+  level: string;
+  title: string;
+  text: string;
+  access: "Free" | "Premium";
+  href: string;
+  cta: string;
+  schemaDescription: string;
 };
 
 const FAQ = [
@@ -80,6 +91,59 @@ const FAQ = [
   {
     q: "How long does one Slovak lesson take?",
     a: "Most lessons are designed for a short study session. You learn a small group of words and immediately practise them through several exercise types.",
+  },
+];
+
+const COURSE_LEVELS: CourseLevel[] = [
+  {
+    id: "slovak-a0",
+    level: "A0",
+    title: "Complete beginner",
+    text: "Start from zero with essential Slovak words, pronunciation, short phrases and guided exercises.",
+    access: "Free",
+    href: "/learning/a0-1",
+    cta: "Start A0 lesson 1",
+    schemaDescription: "Start from zero with essential Slovak words and phrases.",
+  },
+  {
+    id: "slovak-a1",
+    level: "A1",
+    title: "Elementary",
+    text: "Build everyday vocabulary for home, shopping, work, transport and simple conversations.",
+    access: "Premium",
+    href: "/learning/levels/a1",
+    cta: "Explore A1 lessons",
+    schemaDescription: "Build everyday vocabulary for home, work and the city.",
+  },
+  {
+    id: "slovak-a2",
+    level: "A2",
+    title: "Basic communication",
+    text: "Use a wider vocabulary and communicate more confidently in common daily situations.",
+    access: "Premium",
+    href: "/learning/levels/a2",
+    cta: "Explore A2 lessons",
+    schemaDescription: "Communicate more confidently in common daily situations.",
+  },
+  {
+    id: "slovak-b1",
+    level: "B1",
+    title: "Intermediate",
+    text: "Practise longer phrases, descriptions and conversations across practical real-life topics.",
+    access: "Premium",
+    href: "/learning/levels/b1",
+    cta: "Explore B1 lessons",
+    schemaDescription: "Practise longer phrases, descriptions and conversations.",
+  },
+  {
+    id: "slovak-b2",
+    level: "B2",
+    title: "Upper intermediate",
+    text: "Develop more advanced vocabulary, nuance and faster understanding of spoken Slovak.",
+    access: "Premium",
+    href: "/learning/levels/b2",
+    cta: "Explore B2 lessons",
+    schemaDescription: "Develop advanced vocabulary, nuance and comprehension.",
   },
 ];
 
@@ -230,53 +294,62 @@ const secondaryBlock =
   "theme-secondary-button rounded-2xl p-4 font-semibold transition hover:-translate-y-0.5 active:translate-y-0";
 
 export default function Page() {
-  const faqSchema = {
+  const courseListSchema = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQ.map((item) => ({
-      "@type": "Question",
-      name: item.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.a,
+    "@type": "ItemList",
+    itemListElement: COURSE_LEVELS.map((level, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Course",
+        url: `${SITE_URL}/learn-slovak#${level.id}`,
+        name: `Slovak ${level.level} — ${level.title}`,
+        description: level.schemaDescription,
+        provider: {
+          "@type": "Organization",
+          name: "Flunio",
+          sameAs: SITE_URL,
+        },
       },
     })),
   };
 
-  const courseSchema = {
+  const breadcrumbSchema = {
     "@context": "https://schema.org",
-    "@type": "Course",
-    name: "Learn Slovak Online from A0 to B2",
-    description:
-      "An interactive online Slovak course with structured lessons, vocabulary, pronunciation and exercises from A0 to B2.",
-    provider: {
-      "@type": "Organization",
-      name: "Flunio",
-      url: SITE_URL,
-    },
-    url: `${SITE_URL}/learn-slovak`,
-    inLanguage: "en",
-    educationalLevel: "A0–B2",
-    isAccessibleForFree: true,
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Flunio",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Learn Slovak Online",
+        item: `${SITE_URL}/learn-slovak`,
+      },
+    ],
   };
 
   return (
     <main className="mx-auto max-w-6xl space-y-12 px-4 py-8 theme-text sm:py-12">
       <Script
-        id="faq-schema-slovak-en"
+        id="course-list-schema-slovak-en"
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqSchema),
+          __html: JSON.stringify(courseListSchema),
         }}
       />
 
       <Script
-        id="course-schema-slovak-en"
+        id="breadcrumb-schema-slovak-en"
         type="application/ld+json"
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(courseSchema),
+          __html: JSON.stringify(breadcrumbSchema),
         }}
       />
 
@@ -292,13 +365,13 @@ export default function Page() {
 
             <div className="space-y-4">
               <h1 className="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight theme-text sm:text-5xl">
-                Learn Slovak online from zero with short daily lessons
+                Learn Slovak online from A0 to B2
               </h1>
 
               <p className="max-w-2xl text-lg leading-8 theme-text-muted">
-                Start Slovak as a beginner with practical vocabulary,
-                pronunciation, simple phrases and interactive exercises. Flunio
-                gives you a clear path from A0 to more advanced Slovak.
+                Start from zero with free Slovak A0 lessons, pronunciation,
+                practical vocabulary and interactive exercises. Continue through
+                A1, A2, B1 and B2 when you are ready.
               </p>
             </div>
 
@@ -307,8 +380,8 @@ export default function Page() {
                 Start Slovak A0 for free
               </Link>
 
-              <Link href="/learning" className={secondaryButton}>
-                View all course levels
+              <Link href="#course-levels" className={secondaryButton}>
+                See A0–B2 course levels
               </Link>
             </div>
 
@@ -371,6 +444,62 @@ export default function Page() {
               Learn words, then practise them immediately.
             </div>
           </div>
+        </div>
+      </section>
+
+      <section
+        id="course-levels"
+        className={`${card} scroll-mt-24 space-y-6 p-6 sm:p-8`}
+      >
+        <div className="max-w-3xl space-y-3">
+          <div className="text-sm font-bold uppercase tracking-widest theme-accent-text">
+            Slovak course levels
+          </div>
+
+          <h2 className="text-3xl font-extrabold theme-text">
+            Learn Slovak from A0 to B2 in one structured course
+          </h2>
+
+          <p className="leading-7 theme-text-muted">
+            Begin with the complete A0 level for free. Each next level builds on
+            the vocabulary and sentence patterns you already know, so your Slovak
+            language learning follows a clear order instead of random topics.
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          {COURSE_LEVELS.map((level) => (
+            <article
+              id={level.id}
+              key={level.id}
+              className={`${softCard} flex scroll-mt-24 flex-col p-5`}
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-2xl font-extrabold theme-accent-text">
+                  {level.level}
+                </div>
+
+                <div className="theme-pill rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide">
+                  {level.access}
+                </div>
+              </div>
+
+              <h3 className="mt-4 text-lg font-bold theme-text">
+                {level.title}
+              </h3>
+
+              <p className="mt-2 flex-1 text-sm leading-6 theme-text-muted">
+                {level.text}
+              </p>
+
+              <Link
+                href={level.href}
+                className="mt-5 text-sm font-bold theme-accent-text hover:underline"
+              >
+                {level.cta} →
+              </Link>
+            </article>
+          ))}
         </div>
       </section>
 
