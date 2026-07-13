@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_URL}/ru/czech-for-beginners`,
     languages: {
-      ru: `${SITE_URL}/ru/czech-for-beginners`,
       en: `${SITE_URL}/czech-for-beginners`,
-      uk: `${SITE_URL}/vyvchennia-cheskoi-movy-online`,
+      ru: `${SITE_URL}/ru/czech-for-beginners`,
+      "x-default": `${SITE_URL}/czech-for-beginners`,
     },
   },
 

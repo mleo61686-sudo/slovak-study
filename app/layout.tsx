@@ -69,7 +69,7 @@ export default function RootLayout({
         "@id": "https://flunio.com/#organization",
         name: "Flunio",
         url: "https://flunio.com/",
-        logo: "https://flunio.com/logo.png",
+        logo: "https://flunio.com/icon.png",
       },
       {
         "@type": "WebSite",
@@ -82,21 +82,6 @@ export default function RootLayout({
         inLanguage: ["uk", "ru", "en"],
         description:
           "Онлайн-платформа для вивчення мов зі словацьким, чеським і польським курсами, граматикою, словником і вправами.",
-        potentialAction: {
-          "@type": "SearchAction",
-          target:
-            "https://flunio.com/dictionary?q={search_term_string}",
-          "query-input": "required name=search_term_string",
-        },
-      },
-      {
-        "@type": "EducationalWebSite",
-        "@id": "https://flunio.com/#educational-website",
-        url: "https://flunio.com/",
-        name: "Flunio",
-        description:
-          "Онлайн-платформа для вивчення словацької, чеської та польської мов: уроки A0–B2, граматика, словник, вправи та практика.",
-        inLanguage: ["uk", "ru", "en"],
         educationalUse: "language learning",
       },
     ],

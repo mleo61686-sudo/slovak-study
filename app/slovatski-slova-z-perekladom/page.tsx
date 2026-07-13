@@ -11,6 +11,11 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: `${SITE_URL}/slovatski-slova-z-perekladom`,
+    languages: {
+      uk: `${SITE_URL}/slovatski-slova-z-perekladom`,
+      ru: `${SITE_URL}/ru/slovak-vocabulary`,
+      "x-default": `${SITE_URL}/slovatski-slova-z-perekladom`,
+    },
   },
 
   openGraph: {

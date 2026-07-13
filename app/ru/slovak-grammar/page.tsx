@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_URL}/ru/slovak-grammar`,
     languages: {
-      ru: `${SITE_URL}/ru/slovak-grammar`,
       en: `${SITE_URL}/slovak-grammar`,
-      uk: `${SITE_URL}/slovak-grammar`,
+      ru: `${SITE_URL}/ru/slovak-grammar`,
+      "x-default": `${SITE_URL}/slovak-grammar`,
     },
   },
 

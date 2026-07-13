@@ -157,10 +157,10 @@ export const SEO_MAP: SeoMapItem[] = [
     mainKeyword: "словацкий язык онлайн",
     intent:
       "Old Russian landing page for learning Slovak online with Ukrainian-style slug",
-    status: "review",
+    status: "remove_from_sitemap",
     inSitemap: false,
     note:
-      "Old URL with Ukrainian transliteration. Keep alive only if already indexed or receiving traffic, but do not use as the main Russian SEO direction.",
+      "Permanent redirect to the clean Russian landing page. Keep out of sitemap and hreflang.",
   },
   {
     url: "/ru/vyvchennia-cheskoi-movy-online",
@@ -170,10 +170,10 @@ export const SEO_MAP: SeoMapItem[] = [
     mainKeyword: "чешский язык онлайн",
     intent:
       "Old Russian landing page for learning Czech online with Ukrainian-style slug",
-    status: "review",
+    status: "remove_from_sitemap",
     inSitemap: false,
     note:
-      "Old URL with Ukrainian transliteration. Keep alive only if already indexed or receiving traffic, but do not use as the main Russian SEO direction.",
+      "Permanent redirect to the clean Russian landing page. Keep out of sitemap and hreflang.",
   },
   {
     url: "/ru/vyvchennia-polskoi-movy-online",
@@ -183,10 +183,10 @@ export const SEO_MAP: SeoMapItem[] = [
     mainKeyword: "польский язык онлайн",
     intent:
       "Old Russian landing page for learning Polish online with Ukrainian-style slug",
-    status: "review",
+    status: "remove_from_sitemap",
     inSitemap: false,
     note:
-      "Old URL with Ukrainian transliteration. Keep alive only if already indexed or receiving traffic, but do not use as the main Russian SEO direction.",
+      "Permanent redirect to the clean Russian landing page. Keep out of sitemap and hreflang.",
   },
 
   // Russian clean course landing pages.
