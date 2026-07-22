@@ -120,7 +120,10 @@ export default function WordsSrsPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [needLogin, allWords.length, userId, courseId]);
 
-  function startNewSession(nextDb?: Record<string, SrsState>) {
+  function startNewSession(
+    nextDb?: Record<string, SrsState>,
+    options?: { rebuildTodaySession?: boolean }
+  ) {
     if (needLogin) return;
     if (!userId) return;
 
@@ -140,18 +143,28 @@ export default function WordsSrsPage({
 
     let ids: string[] = [];
 
-    if (saved?.date === today) {
+    if (saved?.date === today && !options?.rebuildTodaySession) {
       /*
-       * Якщо сьогоднішня сесія вже була створена, НЕ добираємо нові слова.
-       * Але залишаємо due + weak words.
+       * Якщо сьогоднішня сесія вже була створена, зазвичай продовжуємо її,
+       * не підмішуючи нові слова посеред тренування.
        */
-      ids = saved.ids.filter((id) => {
+      const savedIds = saved.ids.filter((id) => {
         const state = updated[id];
 
         if (!state) return false;
 
         return state.dueAt <= now || isWeakState(state);
       });
+
+      /*
+       * Recovery для старого багу: сторінка могла зберегти порожню денну
+       * сесію ще до натискання «Додати 30 слів». Слова вже були в DB і
+       * денний ліміт уже ставав 30, але картки не показувалися.
+       */
+      ids =
+        savedIds.length === 0 && smartIds.length > 0
+          ? smartIds.slice(0, Math.min(DAILY_REVIEW_LIMIT, SESSION_SIZE))
+          : savedIds;
 
       setDailySession(userId, courseId, ids);
     } else {
@@ -223,7 +236,10 @@ export default function WordsSrsPage({
     saveDb(userId, courseId, updated);
     setDailyState(userId, courseId, daily.count + toAdd.length);
 
-    startNewSession(updated);
+    // The page creates an empty daily session on first load. After adding new
+    // words we must rebuild today's session; otherwise that saved empty session
+    // hides the freshly added due words while the daily counter is already 30.
+    startNewSession(updated, { rebuildTodaySession: true });
   }
 
   async function recordReviewLeaderboardPoint() {
