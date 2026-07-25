@@ -4,20 +4,21 @@ import DictionaryClient from "./DictionaryClient";
 import { SITE_URL } from "@/lib/site";
 import CourseGate from "@/app/components/CourseGate";
 import { getDictionaryForCourse } from "@/app/learning/courses/dictionary";
+import SeoHubLinks from "@/app/components/SeoHubLinks";
 
 export const metadata: Metadata = {
-  title: "Online dictionary | Flunio",
+  title: "Slovak, Czech & Polish Online Dictionary | Flunio",
   description:
-    "Flunio online dictionary: word translations, pronunciation, examples, and convenient search for learning Slovak and Czech.",
+    "Search Slovak, Czech and Polish words with translations, pronunciation and examples. Use the Flunio online dictionary together with lessons and vocabulary guides.",
 
   alternates: {
     canonical: `${SITE_URL}/dictionary`,
   },
 
   openGraph: {
-    title: "Online dictionary | Flunio",
+    title: "Slovak, Czech & Polish Online Dictionary | Flunio",
     description:
-      "Word translations, pronunciation, examples, and convenient search for learning Slovak and Czech.",
+      "Search Slovak, Czech and Polish words with translations, pronunciation, examples and links to beginner vocabulary guides.",
     url: `${SITE_URL}/dictionary`,
     siteName: "Flunio",
     type: "website",
@@ -26,9 +27,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Online dictionary | Flunio",
+    title: "Slovak, Czech & Polish Online Dictionary | Flunio",
     description:
-      "Word translations, pronunciation, examples, and convenient search for learning Slovak and Czech.",
+      "Search Slovak, Czech and Polish words with translations, pronunciation, examples and links to beginner vocabulary guides.",
     images: ["/opengraph-image"],
   },
 
@@ -59,8 +60,15 @@ export default async function DictionaryPage() {
   const dictionary = getDictionaryForCourse(courseId) as DictionaryWord[];
 
   return (
-    <CourseGate>
-      <DictionaryClient initialCourseId={courseId} initialDictionary={dictionary} />
-    </CourseGate>
+    <>
+      <CourseGate>
+        <DictionaryClient
+          initialCourseId={courseId}
+          initialDictionary={dictionary}
+        />
+      </CourseGate>
+
+      <SeoHubLinks kind="dictionary" />
+    </>
   );
 }

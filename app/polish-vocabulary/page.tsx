@@ -5,18 +5,18 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Vocabulary in Polish: Basic Words by Topic | Flunio",
+  title: "Vocabulary in Polish: 60+ Basic Words with Examples | Flunio",
   description:
-    "Build your vocabulary in Polish with basic words by topic, useful phrases, example sentences, pronunciation tips and audio practice for beginners.",
+    "Build vocabulary in Polish with more than 60 basic words by topic, short example sentences, pronunciation tips and links to audio practice for beginners.",
 
   alternates: {
     canonical: `${SITE_URL}/polish-vocabulary`,
   },
 
   openGraph: {
-    title: "Vocabulary in Polish: Basic Words by Topic | Flunio",
+    title: "Vocabulary in Polish: 60+ Basic Words with Examples | Flunio",
     description:
-      "Learn vocabulary in Polish by topic: greetings, family, food, home, transport, work, verbs, adjectives and pronunciation tips.",
+      "Learn more than 60 Polish words by topic: greetings, family, food, home, transport, work, verbs and adjectives, with examples and pronunciation tips.",
     url: `${SITE_URL}/polish-vocabulary`,
     siteName: "Flunio",
     type: "website",
@@ -38,6 +38,10 @@ type VocabularySection = {
 };
 
 const FAQ = [
+  {
+    q: "Can I learn Polish vocabulary online for free?",
+    a: "Yes. This free page gives you more than 60 beginner Polish words grouped by topic, short examples and pronunciation guidance. You can continue with free A0 lessons and a separate audio practice page.",
+  },
   {
     q: "What does “vocabulary in Polish” mean?",
     a: "Vocabulary in Polish means the words and short phrases you need to understand and speak Polish: greetings, everyday nouns, verbs, adjectives, food, transport, work, home and useful expressions.",

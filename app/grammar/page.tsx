@@ -3,16 +3,16 @@ import GrammarClient from "./GrammarClient";
 import CourseGate from "@/app/components/CourseGate";
 
 export const metadata: Metadata = {
-  title: "Граматика | Flunio",
+  title: "Slovak, Czech & Polish Grammar Online | Flunio",
   description:
-    "Граматика словацької та чеської мов: алфавіт, відмінки, дієслова, приклади речень та міні-вправи.",
+    "Learn Slovak, Czech and Polish grammar online: alphabet, pronunciation, cases, verbs, tenses, sentence structure, examples and short exercises.",
   alternates: {
     canonical: "https://flunio.com/grammar",
   },
   openGraph: {
-    title: "Граматика — Flunio",
+    title: "Slovak, Czech & Polish Grammar Online | Flunio",
     description:
-      "Алфавіт, відмінки, дієслова та приклади речень для словацької й чеської мов.",
+      "Grammar guides for Slovak, Czech and Polish: cases, verbs, pronunciation, sentence structure and practical examples.",
     url: "https://flunio.com/grammar",
     siteName: "Flunio",
     type: "website",

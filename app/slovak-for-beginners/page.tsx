@@ -5,9 +5,9 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Slovak for Beginners: Learn Slovak from Zero Step by Step | Flunio",
+  title: "Slovak for Beginners: Free 7-Day & 30-Day Study Plan | Flunio",
   description:
-    "Slovak for beginners: learn how to start from zero, first Slovak words, pronunciation, basic phrases, grammar order and a simple 7-day and 30-day study plan.",
+    "Start Slovak from zero with a free beginner roadmap: first words, pronunciation, basic phrases, common mistakes, a 7-day plan, a 30-day plan and free A0 lessons.",
 
   alternates: {
     canonical: `${SITE_URL}/slovak-for-beginners`,
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Slovak for Beginners: Learn Slovak from Zero | Flunio",
+    title: "Slovak for Beginners: Free 7-Day & 30-Day Plan | Flunio",
     description:
-      "A practical beginner roadmap for learning Slovak: first words, pronunciation, phrases, grammar order, common mistakes and daily practice.",
+      "A free Slovak beginner roadmap with first words, pronunciation, common mistakes, a 7-day plan, a 30-day plan and links to A0 lessons.",
     url: `${SITE_URL}/slovak-for-beginners`,
     siteName: "Flunio",
     type: "website",

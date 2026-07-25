@@ -6,18 +6,18 @@ const SITE_URL = "https://flunio.com";
 const PAGE_URL = `${SITE_URL}/czech-grammar`;
 
 export const metadata: Metadata = {
-  title: "Czech Grammar: Cases, Verbs and Sentence Structure | Flunio",
+  title: "Learn Czech Grammar Online: Cases, Verbs & Word Order | Flunio",
   description:
-    "Learn Czech grammar step by step: seven cases, verb conjugation, grammatical gender, word order, pronunciation and practical examples for beginners.",
+    "Learn Czech grammar online with a free guide to seven cases, verb conjugation, gender, word order, pronunciation and practical beginner examples.",
 
   alternates: {
     canonical: PAGE_URL,
   },
 
   openGraph: {
-    title: "Czech Grammar: Cases, Verbs and Sentence Structure | Flunio",
+    title: "Learn Czech Grammar Online: Cases, Verbs & Word Order | Flunio",
     description:
-      "A practical Czech grammar guide covering cases, verbs, gender, sentence structure, pronunciation and common beginner mistakes.",
+      "Learn Czech grammar online through cases, verbs, gender, word order, pronunciation and practical beginner examples.",
     url: PAGE_URL,
     siteName: "Flunio",
     type: "article",
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Czech Grammar: Cases, Verbs and Sentence Structure | Flunio",
+    title: "Learn Czech Grammar Online: Cases, Verbs & Word Order | Flunio",
     description:
-      "Learn Czech cases, verbs, gender and sentence structure through clear explanations and practical examples.",
+      "Learn Czech grammar online: cases, verbs, gender and word order explained through practical examples.",
   },
 
   robots: {
@@ -45,6 +45,10 @@ export const metadata: Metadata = {
 };
 
 const FAQ = [
+  {
+    q: "Can I learn Czech grammar online for free?",
+    a: "Yes. This free Czech grammar guide explains the main beginner topics online, including cases, verbs, gender, word order and pronunciation. You can then continue with Flunio vocabulary and course exercises.",
+  },
   {
     q: "Is Czech grammar difficult?",
     a: "Czech grammar can seem difficult because nouns and adjectives change through seven cases, verbs change by person and tense, and grammatical gender affects many endings. It becomes much easier when each rule is learned through short phrases and practical examples.",
