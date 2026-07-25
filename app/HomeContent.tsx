@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import WordsStatsClient from "./components/home/WordsStatsClient";
 import LeaderboardBlock from "./components/LeaderboardBlock";
+import MistakesHomeCard from "./components/home/MistakesHomeCard";
 
 type Lang = "ua" | "ru" | "en";
 
@@ -735,6 +736,8 @@ export default function HomeContent({
           </div>
         </div>
       </section>
+
+      <MistakesHomeCard lang={lang} courseId={courseId} />
 
       <section
         id="stats"

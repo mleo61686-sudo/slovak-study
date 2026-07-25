@@ -46,6 +46,7 @@ export type PracticeClientProps = {
   pack: string | null;
   slangLevel: string | null;
   slangCat: string | null;
+  mistakesOnly: boolean;
 };
 
 export type PracticeStats = {

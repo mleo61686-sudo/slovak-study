@@ -32,9 +32,10 @@ model User {
   unsubscribeToken         String?   @unique
 
   // Зворотний зв’язок для прогресу
-  progress     UserProgress?
-  srsProgress  SrsProgress[]
-  errorReports ErrorReport[]
+  progress                 UserProgress?
+  srsProgress              SrsProgress[]
+  practiceMistakeProgress  PracticeMistakeProgress[]
+  errorReports             ErrorReport[]
 
   // Активності для leaderboard / рейтингу
   leaderboardActivities LeaderboardActivity[]
@@ -118,6 +119,20 @@ model SrsProgress {
 
   dailySession  Json?
   dailyNewWords Json?
+
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, courseId])
+  @@index([userId])
+}
+
+model PracticeMistakeProgress {
+  userId   String
+  courseId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  data Json
 
   updatedAt DateTime @updatedAt
 

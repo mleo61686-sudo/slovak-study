@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import SpeakButton from "@/app/components/SpeakButton";
 import { useLanguage } from "@/lib/src/useLanguage";
@@ -19,6 +19,20 @@ import type {
 import { loadStats, saveStats } from "./practice-storage";
 import { getTerm, getTrans, norm } from "./practice-utils";
 import { buildSessionBase, makePromptAndHelper } from "./practice-session";
+import {
+  createEmptyMistakeStore,
+  getActiveMistakes,
+  recordCorrectMistakeAnswer,
+  recordPracticeMistake,
+  type PracticeMistakeStore,
+} from "./practice-mistakes";
+import {
+  hydrateMistakeStore,
+  loadLocalMistakeStore,
+  PRACTICE_MISTAKES_UPDATED_EVENT,
+  saveLocalMistakeStore,
+  scheduleMistakeStoreSync,
+} from "./practice-mistakes-storage";
 
 const BLITZ_SECONDS = 60;
 const BLITZ_MAX_SECONDS = 75;
@@ -63,6 +77,7 @@ export default function PracticeClient({
   pack,
   slangLevel,
   slangCat,
+  mistakesOnly,
 }: PracticeClientProps) {
   const { lang } = useLanguage();
   const uiLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
@@ -98,11 +113,57 @@ export default function PracticeClient({
   const [typedChecked, setTypedChecked] = useState<null | { ok: boolean }>(null);
   const [revealAutoKey, setRevealAutoKey] = useState(0);
   const [mistakes, setMistakes] = useState<PracticeMistake[]>([]);
+  const [mistakeStore, setMistakeStore] = useState<PracticeMistakeStore>(() =>
+    createEmptyMistakeStore()
+  );
+  const mistakeStoreRef = useRef<PracticeMistakeStore>(mistakeStore);
+  const [mistakesHydrated, setMistakesHydrated] = useState(false);
+  const [practiceSource, setPracticeSource] = useState<"regular" | "mistakes">(
+    "regular"
+  );
+  const [resolvedThisSession, setResolvedThisSession] = useState(0);
+  const autoStartedMistakesRef = useRef(false);
 
   useEffect(() => {
-    setReady(true);
     setStats(loadStats());
-  }, []);
+    setMistakesHydrated(false);
+    autoStartedMistakesRef.current = false;
+
+    const local = loadLocalMistakeStore(courseId);
+    mistakeStoreRef.current = local;
+    setMistakeStore(local);
+    setReady(true);
+
+    let cancelled = false;
+
+    void hydrateMistakeStore(courseId).then((next) => {
+      if (cancelled) return;
+      mistakeStoreRef.current = next;
+      setMistakeStore(next);
+      setMistakesHydrated(true);
+    });
+
+    const onMistakesUpdated = (event: Event) => {
+      const detail = (
+        event as CustomEvent<{
+          courseId?: typeof courseId;
+          store?: PracticeMistakeStore;
+        }>
+      ).detail;
+
+      if (detail?.courseId === courseId && detail.store) {
+        mistakeStoreRef.current = detail.store;
+        setMistakeStore(detail.store);
+      }
+    };
+
+    window.addEventListener(PRACTICE_MISTAKES_UPDATED_EVENT, onMistakesUpdated);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener(PRACTICE_MISTAKES_UPDATED_EVENT, onMistakesUpdated);
+    };
+  }, [courseId]);
 
   useEffect(() => {
     if (!timeBonusFlash) return;
@@ -136,6 +197,15 @@ export default function PracticeClient({
       })
       .map((x) => x.sk);
   }, [pack, slangLevel, slangCat, courseId]);
+
+  const savedMistakes = useMemo(
+    () => getActiveMistakes(mistakeStore, courseId),
+    [mistakeStore, courseId]
+  );
+  const savedMistakeTerms = useMemo(
+    () => savedMistakes.map((item) => item.sk),
+    [savedMistakes]
+  );
 
   const qBase = useMemo(() => {
     if (phase !== "quiz" || !session.length) return null;
@@ -304,21 +374,41 @@ export default function PracticeClient({
     setTypedChecked(null);
   }
 
-  function startNew(customTermList?: string[]) {
+  function commitMistakeStore(next: PracticeMistakeStore) {
+    mistakeStoreRef.current = next;
+    setMistakeStore(next);
+    saveLocalMistakeStore(next, courseId);
+    scheduleMistakeStoreSync(courseId, next);
+  }
+
+  function startNew(
+    customTermList?: string[],
+    source: "regular" | "mistakes" = "regular",
+    modeOverride?: SessionMode
+  ) {
+    const modeForSession = modeOverride ?? sessionMode;
     const countForSession =
-      sessionMode === "blitz"
+      modeForSession === "blitz"
         ? Math.min(Math.max(poolCount, 40), 60)
         : customTermList?.length
-          ? Math.min(questionCount, customTermList.length)
+          ? Math.min(source === "mistakes" ? 20 : questionCount, customTermList.length)
           : questionCount;
 
-    const built = buildSessionBase(words, countForSession, sessionMode, customTermList);
+    const built = buildSessionBase(
+      words,
+      countForSession,
+      modeForSession,
+      customTermList
+    );
 
+    setSessionMode(modeForSession);
+    setPracticeSource(source);
     setSession(built);
     setCurrent(0);
     setScore(0);
     setAnsweredCount(0);
     setMistakes([]);
+    setResolvedThisSession(0);
     setStreak(0);
     setBestStreakSession(0);
     setBlitzPoints(0);
@@ -331,9 +421,25 @@ export default function PracticeClient({
       return;
     }
 
-    setTimeLeft(sessionMode === "blitz" ? BLITZ_SECONDS : null);
+    setTimeLeft(modeForSession === "blitz" ? BLITZ_SECONDS : null);
     setPhase("quiz");
   }
+
+  function startMistakePractice() {
+    if (!savedMistakeTerms.length) return;
+    startNew(savedMistakeTerms, "mistakes", "mixed");
+  }
+
+  useEffect(() => {
+    if (!mistakesOnly || !mistakesHydrated || autoStartedMistakesRef.current) {
+      return;
+    }
+
+    autoStartedMistakesRef.current = true;
+    startMistakePractice();
+    // Start only once after local/server mistake data has been merged.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mistakesOnly, mistakesHydrated]);
 
   function goNext() {
     const next = current + 1;
@@ -357,6 +463,17 @@ export default function PracticeClient({
         your,
       },
     ]);
+
+    const next = recordPracticeMistake(mistakeStoreRef.current, {
+      courseId,
+      sk: qBase.sk,
+      ua: qBase.ua,
+      ru: qBase.ru,
+      en: qBase.en,
+      mode: qBase.mode,
+      your,
+    });
+    commitMistakeStore(next);
   }
 
   function skip() {
@@ -372,6 +489,21 @@ export default function PracticeClient({
     if (!ok) {
       setStreak(0);
       return;
+    }
+
+    if (qBase) {
+      const result = recordCorrectMistakeAnswer(
+        mistakeStoreRef.current,
+        courseId,
+        qBase.sk
+      );
+
+      if (result.changed) {
+        commitMistakeStore(result.store);
+        if (result.resolvedNow) {
+          setResolvedThisSession((value) => value + 1);
+        }
+      }
     }
 
     const nextStreak = streak + 1;
@@ -486,12 +618,21 @@ export default function PracticeClient({
           <p className="mt-1 max-w-2xl text-sm theme-text-muted">{t.subtitle}</p>
         </div>
 
-        <Link
-          href="/practice/words"
-          className="theme-secondary-button w-fit rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5"
-        >
-          {t.wordsSrs}
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/practice/mistakes"
+            className="theme-secondary-button w-fit rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5"
+          >
+            {t.myMistakes}
+            {savedMistakes.length ? ` (${savedMistakes.length})` : ""}
+          </Link>
+          <Link
+            href="/practice/words"
+            className="theme-secondary-button w-fit rounded-2xl px-4 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5"
+          >
+            {t.wordsSrs}
+          </Link>
+        </div>
       </div>
 
       {notEnough ? (
@@ -512,6 +653,60 @@ export default function PracticeClient({
                   ? "Каждый режим тренирует отдельный навык для реальной жизни."
                   : "Кожен режим тренує окрему навичку для реального життя."}
             </p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-3xl border border-rose-400/25 bg-gradient-to-r from-rose-500/10 via-fuchsia-500/8 to-cyan-500/8 p-4">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-rose-400/15 blur-3xl" />
+            <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2 font-black theme-text">
+                  <span className="text-xl">🎯</span>
+                  {t.mistakesBankTitle}
+                </div>
+                <p className="mt-1 max-w-xl text-sm leading-5 theme-text-muted">
+                  {t.mistakesBankDesc}
+                </p>
+                <div className="mt-3 text-sm font-bold text-rose-400">
+                  {savedMistakes.length
+                    ? t.mistakesBankCount(savedMistakes.length)
+                    : t.mistakesBankEmpty}
+                </div>
+                {savedMistakes.length ? (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {savedMistakes.slice(0, 4).map((item) => (
+                      <span
+                        key={item.id}
+                        className="theme-pill rounded-full px-3 py-1 text-xs font-semibold"
+                      >
+                        {item.sk}
+                      </span>
+                    ))}
+                    {savedMistakes.length > 4 ? (
+                      <span className="theme-pill rounded-full px-3 py-1 text-xs font-semibold">
+                        +{savedMistakes.length - 4}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <Link
+                  href="/practice/mistakes"
+                  className="theme-secondary-button rounded-2xl px-4 py-2.5 text-sm font-bold"
+                >
+                  {t.mistakesBankView}
+                </Link>
+                <button
+                  type="button"
+                  onClick={startMistakePractice}
+                  disabled={!savedMistakes.length}
+                  className="theme-primary-button rounded-2xl px-4 py-2.5 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {t.mistakesBankTrain} →
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -616,7 +811,7 @@ export default function PracticeClient({
           </div>
 
           <button
-            onClick={() => startNew(slangTermList ?? undefined)}
+            onClick={() => startNew(slangTermList ?? undefined, "regular")}
             disabled={notEnough}
             className="theme-primary-button w-full rounded-2xl px-5 py-3.5 font-bold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 active:translate-y-0 sm:w-auto"
           >
@@ -638,6 +833,12 @@ export default function PracticeClient({
               </div>
             </div>
           </div>
+
+          {resolvedThisSession > 0 ? (
+            <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm font-bold text-emerald-400">
+              {t.mistakesResolved(resolvedThisSession)}
+            </div>
+          ) : null}
 
           <div className={`grid gap-2 ${isBlitz ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3"}`}>
             <div className="theme-pill rounded-2xl px-3 py-3 text-sm theme-text-muted">
@@ -662,14 +863,20 @@ export default function PracticeClient({
 
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => startNew(slangTermList ?? undefined)}
-              className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-bold transition hover:-translate-y-0.5 active:translate-y-0"
+              onClick={() =>
+                practiceSource === "mistakes"
+                  ? startNew(savedMistakeTerms, "mistakes", "mixed")
+                  : startNew(slangTermList ?? undefined, "regular")
+              }
+              disabled={practiceSource === "mistakes" && savedMistakeTerms.length === 0}
+              className="theme-primary-button rounded-2xl px-5 py-3 text-sm font-bold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40 active:translate-y-0"
             >
               {uiLang === "en" ? "Play again 🔁" : uiLang === "ru" ? "Ещё раз 🔁" : "Ще раз 🔁"}
             </button>
 
             <button
               onClick={() => {
+                setPracticeSource("regular");
                 setPhase("setup");
                 setSession([]);
                 setTimeLeft(null);
@@ -684,7 +891,7 @@ export default function PracticeClient({
             </button>
 
             <button
-              onClick={() => startNew(mistakes.map((mistake) => mistake.sk))}
+              onClick={() => startNew(mistakes.map((mistake) => mistake.sk), "mistakes", "mixed")}
               disabled={mistakes.length === 0}
               className="theme-secondary-button rounded-2xl px-5 py-3 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-40"
             >

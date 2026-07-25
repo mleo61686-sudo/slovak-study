@@ -10,6 +10,7 @@ type PracticePageProps = {
     pack?: string | string[];
     level?: string | string[];
     cat?: string | string[];
+    mistakes?: string | string[];
   }>;
 };
 
@@ -33,6 +34,7 @@ export default async function PracticePage({ searchParams }: PracticePageProps) 
   const pack = getSingleParam(params?.pack) ?? null;
   const level = getSingleParam(params?.level) ?? null;
   const cat = getSingleParam(params?.cat) ?? null;
+  const mistakesOnly = getSingleParam(params?.mistakes) === "1";
 
   const initialWords = getSrsWordsForCourse(courseId) as Word[];
 
@@ -44,6 +46,7 @@ export default async function PracticePage({ searchParams }: PracticePageProps) 
         pack={pack}
         slangLevel={level}
         slangCat={cat}
+        mistakesOnly={mistakesOnly}
       />
     </CourseGate>
   );
