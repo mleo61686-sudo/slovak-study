@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { useLanguage } from "@/lib/src/useLanguage";
 
@@ -157,10 +158,33 @@ export default function PremiumTrialWelcome() {
   const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = COPY[safeLang];
   const { data: session, update } = useSession();
+  const router = useRouter();
+  const refreshInFlight = useRef(false);
 
   const [mode, setMode] = useState<Mode | null>(null);
   const [resending, setResending] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  const refreshSessionFromDatabase = useCallback(async () => {
+    if (refreshInFlight.current) return null;
+
+    refreshInFlight.current = true;
+
+    try {
+      // auth.ts treats trigger="update" as a forced DB refresh,
+      // bypassing the normal 15-minute JWT cache.
+      const freshSession = await update({});
+
+      // Refresh Server Components and premium guards that read auth() on the server.
+      router.refresh();
+
+      return freshSession;
+    } catch {
+      return null;
+    } finally {
+      refreshInFlight.current = false;
+    }
+  }, [router, update]);
 
   useEffect(() => {
     const result = new URLSearchParams(window.location.search).get("trial") as Mode | null;
@@ -170,7 +194,7 @@ export default function PremiumTrialWelcome() {
       localStorage.removeItem("flunio:trial-result:pending");
       clearEmailVerificationSnooze();
       setMode(resultMode);
-      void update();
+      void refreshSessionFromDatabase();
     }
 
     if (result && ["started", "used", "verified", "expired", "invalid"].includes(result)) {
@@ -214,7 +238,7 @@ export default function PremiumTrialWelcome() {
     return () => {
       window.removeEventListener("flunio:onboarding:finished", showPendingAfterOnboarding);
     };
-  }, [session?.user?.isEmailVerified, update]);
+  }, [refreshSessionFromDatabase, session?.user?.isEmailVerified]);
 
   useEffect(() => {
     if (session?.user?.isEmailVerified) {
@@ -223,6 +247,34 @@ export default function PremiumTrialWelcome() {
       if (mode === "verify") setMode(null);
     }
   }, [mode, session?.user?.isEmailVerified]);
+
+  useEffect(() => {
+    const pending =
+      localStorage.getItem("flunio:email-verification:pending") === "1";
+
+    if (!pending || session?.user?.isEmailVerified) return;
+
+    const refreshWhenUserReturns = () => {
+      void refreshSessionFromDatabase();
+    };
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") {
+        refreshWhenUserReturns();
+      }
+    };
+
+    // Covers the common flow where the confirmation link is opened in Gmail
+    // or another tab and the user then comes back to Flunio.
+    refreshWhenUserReturns();
+    window.addEventListener("focus", refreshWhenUserReturns);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+
+    return () => {
+      window.removeEventListener("focus", refreshWhenUserReturns);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [refreshSessionFromDatabase, session?.user?.isEmailVerified]);
 
   const premiumUntil = useMemo(() => {
     const raw = session?.user?.premiumUntil;
