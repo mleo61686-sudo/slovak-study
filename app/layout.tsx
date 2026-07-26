@@ -13,6 +13,7 @@ import CourseBootstrap from "@/app/components/CourseBootstrap";
 import MainShell from "@/app/components/MainShell";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import OnboardingOverlay from "./components/OnboardingOverlay";
+import PremiumTrialWelcome from "./components/PremiumTrialWelcome";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
@@ -125,6 +126,7 @@ export default function RootLayout({
             <ProgressSync />
             <SrsSync />
             <OnboardingOverlay />
+            <PremiumTrialWelcome />
 
             <MainShell>{children}</MainShell>
 

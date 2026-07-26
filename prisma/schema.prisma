@@ -13,9 +13,13 @@ model User {
   name         String?
   avatarUrl    String?
   passwordHash String
-  createdAt    DateTime @default(now())
+  createdAt       DateTime  @default(now())
+  emailVerifiedAt DateTime?
+  trialStartedAt  DateTime?
 
-  resetTokens PasswordResetToken[]
+  resetTokens        PasswordResetToken[]
+  verificationTokens EmailVerificationToken[]
+  premiumTrialClaim  PremiumTrialClaim?
 
   isPremium            Boolean   @default(false)
   premiumUntil         DateTime?
@@ -54,6 +58,35 @@ model UserProgress {
 
   // Глобальний XP користувача між усіма курсами
   xp Int @default(0)
+}
+
+
+model EmailVerificationToken {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash String @unique
+  deviceHash String
+  ipHash     String?
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  usedAt    DateTime?
+
+  @@index([userId])
+}
+
+model PremiumTrialClaim {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  deviceHash String @unique
+  ipHash     String?
+  claimedAt  DateTime @default(now())
+
+  @@index([ipHash, claimedAt])
 }
 
 model PasswordResetToken {

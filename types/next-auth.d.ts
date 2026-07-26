@@ -6,6 +6,8 @@ declare module "next-auth" {
       id: string;
       isPremium?: boolean;
       premiumUntil?: Date | null;
+      isEmailVerified?: boolean;
+      trialStartedAt?: Date | null;
       isAdmin?: boolean;
     };
   }
@@ -14,6 +16,8 @@ declare module "next-auth" {
     id: string;
     isPremium?: boolean;
     premiumUntil?: Date | null;
+    emailVerifiedAt?: Date | null;
+    trialStartedAt?: Date | null;
     isAdmin?: boolean;
   }
 }
@@ -24,6 +28,8 @@ declare module "next-auth/jwt" {
     email?: string | null;
     isPremium?: boolean;
     premiumUntil?: Date | null;
+    emailVerifiedAt?: Date | null;
+    trialStartedAt?: Date | null;
     premiumCheckedAt?: number;
     isAdmin?: boolean;
   }

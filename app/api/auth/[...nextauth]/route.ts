@@ -1,23 +1,21 @@
 /**
  * NextAuth API endpoint для аутентифікації у Flunio.
  *
- * Що робить:
- * Підключає стандартні обробники NextAuth (GET і POST) через auth.ts
- * і робить їх доступними за маршрутом /api/auth/*.
- *
- * Як працює:
- * Всі auth-запити (login, logout, session, callbacks) автоматично
- * передаються у handlers із конфігурації auth.
- *
- * Пов’язані файли:
- * - auth.ts (основна конфігурація NextAuth)
- * - компоненти логіну/реєстрації
- * - middleware / auth() виклики у серверних компонентах
- *
- * Роль у Flunio:
- * Центральна точка авторизації користувачів (NextAuth API route).
+ * Окремо перехоплюємо старі посилання /api/auth/verify-email,
+ * щоб уже надіслані листи не потрапляли в catch-all NextAuth.
  */
 import { handlers } from "@/auth";
+import { handleEmailVerification } from "@/lib/email-verification";
 
-export const GET = handlers.GET;
+export const GET = async (...args: Parameters<typeof handlers.GET>) => {
+  const req = args[0];
+  const pathname = new URL(req.url).pathname.replace(/\/$/, "");
+
+  if (pathname === "/api/auth/verify-email") {
+    return handleEmailVerification(req);
+  }
+
+  return handlers.GET(...args);
+};
+
 export const POST = handlers.POST;

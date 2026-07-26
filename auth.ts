@@ -64,6 +64,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!token.id) {
         token.isPremium = false;
         token.premiumUntil = null;
+        token.emailVerifiedAt = null;
+        token.trialStartedAt = null;
         token.premiumCheckedAt = 0;
         return token;
       }
@@ -83,7 +85,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       try {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { isPremium: true, premiumUntil: true },
+          select: {
+            isPremium: true,
+            premiumUntil: true,
+            emailVerifiedAt: true,
+            trialStartedAt: true,
+          },
         });
 
         const premiumUntil = dbUser?.premiumUntil ?? null;
@@ -93,10 +100,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         token.isPremium = isPremium;
         token.premiumUntil = premiumUntil;
+        token.emailVerifiedAt = dbUser?.emailVerifiedAt ?? null;
+        token.trialStartedAt = dbUser?.trialStartedAt ?? null;
         token.premiumCheckedAt = now;
       } catch {
         token.isPremium = Boolean(token.isPremium);
         token.premiumUntil = (token.premiumUntil as any) ?? null;
+        token.emailVerifiedAt = (token.emailVerifiedAt as any) ?? null;
+        token.trialStartedAt = (token.trialStartedAt as any) ?? null;
       }
 
       return token;
@@ -109,6 +120,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.email = typeof token.email === "string" ? token.email : "";
         session.user.isPremium = Boolean(token.isPremium);
         session.user.premiumUntil = token.premiumUntil as Date | null;
+        session.user.isEmailVerified = Boolean(token.emailVerifiedAt);
+        session.user.trialStartedAt = token.trialStartedAt as Date | null;
         session.user.isAdmin = Boolean(token.isAdmin);
       }
 

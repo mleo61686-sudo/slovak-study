@@ -143,12 +143,41 @@ const ERROR_TEXT: Record<
     en: "Passwords do not match",
   },
 
+  EMAIL_SEND_FAILED: {
+    ua: "Не вдалося надіслати лист підтвердження. Спробуй ще раз трохи пізніше.",
+    ru: "Не удалось отправить письмо с подтверждением. Попробуйте ещё раз немного позже.",
+    en: "Could not send the confirmation email. Please try again shortly.",
+  },
+
+  DEVICE_ID_REQUIRED: {
+    ua: "Не вдалося підготувати пробний доступ. Онови сторінку й спробуй ще раз.",
+    ru: "Не удалось подготовить пробный доступ. Обновите страницу и попробуйте ещё раз.",
+    en: "Could not prepare the trial. Refresh the page and try again.",
+  },
+
   UNKNOWN_ERROR: {
     ua: "Не вдалося створити акаунт",
     ru: "Не удалось создать аккаунт",
     en: "Could not create account",
   },
 };
+
+function getOrCreateTrialDeviceId() {
+  const key = "flunio:trial-device-id";
+  const existing = localStorage.getItem(key)?.trim();
+
+  if (existing && existing.length >= 16) return existing;
+
+  const created =
+    typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random()
+          .toString(36)
+          .slice(2)}`;
+
+  localStorage.setItem(key, created);
+  return created;
+}
 
 function scorePassword(pw: string) {
   let score = 0;
@@ -363,6 +392,7 @@ export default function RegisterPage() {
             emailRemindersEnabled,
             emailLanguage: L,
             preferredCourse: safeCourse,
+            trialDeviceId: getOrCreateTrialDeviceId(),
           }),
         },
       );
@@ -388,6 +418,17 @@ export default function RegisterPage() {
 
       localStorage.removeItem(
         "flunio:onboarding",
+      );
+
+      localStorage.setItem(
+        "flunio:email-verification:pending",
+        "1",
+      );
+
+      // Новий акаунт повинен побачити підказку, навіть якщо
+      // попередній користувач натискав «Пізніше» в цьому браузері.
+      localStorage.removeItem(
+        "flunio:email-verification:snoozed-until",
       );
 
       const login = await signIn(

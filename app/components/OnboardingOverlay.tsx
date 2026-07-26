@@ -222,6 +222,7 @@ export default function OnboardingOverlay() {
     localStorage.removeItem("flunio:onboarding:pending");
     setStepIndex(null);
     setRect(null);
+    window.dispatchEvent(new Event("flunio:onboarding:finished"));
   }
 
   function openMobileMenu() {
