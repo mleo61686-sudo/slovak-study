@@ -8,6 +8,37 @@ export type UpdateItem = {
 
 export const UPDATES: UpdateItem[] = [
   {
+    date: "2026-07-27",
+    title: {
+      ua: "Оновлення: нові аудіотексти та диктанти A1–A2",
+      ru: "Обновление: новые аудиотексты и диктанты A1–A2",
+      en: "Update: new A1–A2 audio texts and dictations",
+    },
+    items: {
+      ua: [
+        "Додано 10 нових аудіотекстів для тренування розуміння мови на слух і письма",
+        "Словацький курс отримав два нові тексти рівня A2",
+        "До чеського та польського курсів додано по два нові тексти для рівнів A1 і A2",
+        "Кожен текст доступний у двох режимах: слухання з питаннями та диктант із перевіркою повного тексту",
+        "Нові вправи присвячені практичним повсякденним ситуаціям: роботі, подорожам, покупкам, житлу та міському життю",
+      ],
+      ru: [
+        "Добавлено 10 новых аудиотекстов для тренировки понимания речи на слух и письма",
+        "Словацкий курс получил два новых текста уровня A2",
+        "В чешский и польский курсы добавлено по два новых текста для уровней A1 и A2",
+        "Каждый текст доступен в двух режимах: слушание с вопросами и диктант с проверкой полного текста",
+        "Новые упражнения посвящены практическим повседневным ситуациям: работе, поездкам, покупкам, жилью и городской жизни",
+      ],
+      en: [
+        "Ten new audio texts have been added for practising listening comprehension and writing",
+        "The Slovak course now includes two new A2 texts",
+        "The Czech and Polish courses each received two new texts at both A1 and A2",
+        "Every text is available in two modes: listening with questions and full-text dictation",
+        "The new exercises cover practical everyday situations such as work, travel, shopping, housing, and city life",
+      ],
+    },
+  },
+  {
     date: "2026-07-25",
     title: {
       ua: "Оновлення: персональний розділ «Мої помилки»",
@@ -555,34 +586,6 @@ export const UPDATES: UpdateItem[] = [
         "The page includes example sentences, translations, and audio for words and phrases",
         "The dictionary has been improved — now it is easier to use and faster to find the words you need",
         "The site’s speed and stability have been improved",
-      ],
-    },
-  },
-  {
-    date: "2026-02-27",
-    title: {
-      ua: "Оновлення: завершено B1, оновлено словник, тренажер і головну сторінку",
-      ru: "Обновление: завершён B1, обновлены словарь, тренажёр и главная страница",
-      en: "Update: B1 completed, dictionary, trainer, and homepage updated",
-    },
-    items: {
-      ua: [
-        "Завершено рівень B1: уроки, слова та вправи готові",
-        "Словник оновлено — тепер він містить лише слова з рівнів A0–B1",
-        "Покращено тренажер: зручніше тренуватися та повторювати матеріал",
-        "Покращено головну сторінку — тепер легше зрозуміти, як почати навчання",
-      ],
-      ru: [
-        "Завершён уровень B1: уроки, слова и упражнения готовы",
-        "Словарь обновлён — теперь он содержит только слова из уровней A0–B1",
-        "Улучшен тренажёр: стало удобнее тренироваться и повторять материал",
-        "Улучшена главная страница — теперь проще понять, как начать обучение",
-      ],
-      en: [
-        "The B1 level has been completed: lessons, words, and exercises are ready",
-        "The dictionary has been updated — now it contains only words from levels A0–B1",
-        "The trainer has been improved: now it is more convenient to practice and review material",
-        "The homepage has been improved — now it is easier to understand how to start learning",
       ],
     },
   },
