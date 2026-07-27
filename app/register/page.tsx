@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 import {
@@ -229,6 +229,7 @@ export default function RegisterPage() {
 
   const t = T[L];
   const router = useRouter();
+  const { status: sessionStatus } = useSession();
 
   const [rawCallbackUrl, setRawCallbackUrl] =
     useState<string | null>(null);
@@ -263,13 +264,31 @@ export default function RegisterPage() {
 
     if (
       nextCallbackUrl &&
-      nextCallbackUrl.startsWith("/")
+      nextCallbackUrl.startsWith("/") &&
+      !nextCallbackUrl.startsWith("//")
     ) {
       setRawCallbackUrl(nextCallbackUrl);
     } else {
       setRawCallbackUrl(null);
     }
   }, []);
+
+  useEffect(() => {
+    if (sessionStatus !== "authenticated") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const requestedCallbackUrl = params.get("callbackUrl");
+    const destination =
+      requestedCallbackUrl?.startsWith("/") &&
+      !requestedCallbackUrl.startsWith("//")
+        ? requestedCallbackUrl
+        : "/";
+
+    // An authenticated user must never remain on the registration form.
+    // A full navigation also guarantees that the freshly issued auth cookie
+    // is used by server components and the navbar immediately.
+    window.location.replace(destination);
+  }, [sessionStatus]);
 
   useEffect(() => {
     const stored = getStoredCourseId();
@@ -446,8 +465,11 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push(callbackUrl);
-      router.refresh();
+      // Do not call router.refresh() immediately after router.push():
+      // it can refresh /register before the client navigation finishes.
+      // A hard replace reliably leaves the registration page and loads the
+      // new session cookie in both client and server components.
+      window.location.replace(callbackUrl);
     } catch {
       setErrorCode("UNKNOWN_ERROR");
     } finally {

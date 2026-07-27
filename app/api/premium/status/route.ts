@@ -14,6 +14,8 @@ export async function GET() {
       {
         isPremium: false,
         premiumUntil: null,
+        isEmailVerified: false,
+        trialStartedAt: null,
       },
       { status: 401 }
     );
@@ -24,6 +26,8 @@ export async function GET() {
     select: {
       isPremium: true,
       premiumUntil: true,
+      emailVerifiedAt: true,
+      trialStartedAt: true,
     },
   });
 
@@ -34,5 +38,7 @@ export async function GET() {
   return NextResponse.json({
     isPremium,
     premiumUntil,
+    isEmailVerified: Boolean(user?.emailVerifiedAt),
+    trialStartedAt: user?.trialStartedAt ?? null,
   });
 }

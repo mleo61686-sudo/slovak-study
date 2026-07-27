@@ -157,9 +157,10 @@ export default function PremiumTrialWelcome() {
   const { lang } = useLanguage();
   const safeLang: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = COPY[safeLang];
-  const { data: session, update } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   const refreshInFlight = useRef(false);
+  const lastStatusCheckAt = useRef(0);
 
   const [mode, setMode] = useState<Mode | null>(null);
   const [resending, setResending] = useState(false);
@@ -167,13 +168,16 @@ export default function PremiumTrialWelcome() {
 
   const refreshSessionFromDatabase = useCallback(async () => {
     if (refreshInFlight.current) return null;
+    if (status !== "authenticated") return null;
 
     refreshInFlight.current = true;
 
     try {
       // auth.ts treats trigger="update" as a forced DB refresh,
       // bypassing the normal 15-minute JWT cache.
-      const freshSession = await update({});
+      const freshSession = await update({
+        forcePremiumRefresh: Date.now(),
+      });
 
       // Refresh Server Components and premium guards that read auth() on the server.
       router.refresh();
@@ -184,17 +188,72 @@ export default function PremiumTrialWelcome() {
     } finally {
       refreshInFlight.current = false;
     }
-  }, [router, update]);
+  }, [router, status, update]);
+
+  const syncPremiumStatus = useCallback(
+    async (force = false) => {
+      if (status !== "authenticated") return;
+
+      const now = Date.now();
+      if (!force && now - lastStatusCheckAt.current < 5_000) return;
+      lastStatusCheckAt.current = now;
+
+      try {
+        const response = await fetch("/api/premium/status", {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        });
+
+        if (!response.ok) return;
+
+        const databaseStatus = (await response.json()) as {
+          isPremium?: boolean;
+          premiumUntil?: string | null;
+          isEmailVerified?: boolean;
+          trialStartedAt?: string | null;
+        };
+
+        const sessionPremiumUntil = session?.user?.premiumUntil
+          ? new Date(session.user.premiumUntil).getTime()
+          : null;
+        const databasePremiumUntil = databaseStatus.premiumUntil
+          ? new Date(databaseStatus.premiumUntil).getTime()
+          : null;
+
+        const sessionTrialStartedAt = session?.user?.trialStartedAt
+          ? new Date(session.user.trialStartedAt).getTime()
+          : null;
+        const databaseTrialStartedAt = databaseStatus.trialStartedAt
+          ? new Date(databaseStatus.trialStartedAt).getTime()
+          : null;
+
+        const sessionIsStale =
+          Boolean(session?.user?.isPremium) !== Boolean(databaseStatus.isPremium) ||
+          Boolean(session?.user?.isEmailVerified) !==
+            Boolean(databaseStatus.isEmailVerified) ||
+          sessionPremiumUntil !== databasePremiumUntil ||
+          sessionTrialStartedAt !== databaseTrialStartedAt;
+
+        if (sessionIsStale) {
+          await refreshSessionFromDatabase();
+        }
+      } catch {
+        // A failed background check must never block the page.
+      }
+    },
+    [refreshSessionFromDatabase, session, status]
+  );
 
   useEffect(() => {
     const result = new URLSearchParams(window.location.search).get("trial") as Mode | null;
 
     function showResult(resultMode: Mode) {
-      localStorage.removeItem("flunio:email-verification:pending");
       localStorage.removeItem("flunio:trial-result:pending");
       clearEmailVerificationSnooze();
       setMode(resultMode);
-      void refreshSessionFromDatabase();
+      void syncPremiumStatus(true);
     }
 
     if (result && ["started", "used", "verified", "expired", "invalid"].includes(result)) {
@@ -203,6 +262,12 @@ export default function PremiumTrialWelcome() {
         localStorage.getItem("flunio:onboarding:pending") === "1" && !onboardingDone;
 
       cleanTrialQuery();
+
+      // Premium is already written to the database before this redirect.
+      // Refresh the JWT immediately, even while onboarding is still open.
+      // Previously this refresh was postponed until onboarding finished,
+      // which left the interface in the old Free state until the next login.
+      void syncPremiumStatus(true);
 
       if (onboardingPending) {
         localStorage.setItem("flunio:trial-result:pending", result);
@@ -228,7 +293,7 @@ export default function PremiumTrialWelcome() {
         !session?.user?.isEmailVerified &&
         !isEmailVerificationSnoozed()
       ) {
-        setMode("verify");
+        setMode((currentMode) => currentMode ?? "verify");
       }
     }
 
@@ -238,7 +303,7 @@ export default function PremiumTrialWelcome() {
     return () => {
       window.removeEventListener("flunio:onboarding:finished", showPendingAfterOnboarding);
     };
-  }, [refreshSessionFromDatabase, session?.user?.isEmailVerified]);
+  }, [session?.user?.isEmailVerified, syncPremiumStatus]);
 
   useEffect(() => {
     if (session?.user?.isEmailVerified) {
@@ -255,7 +320,7 @@ export default function PremiumTrialWelcome() {
     if (!pending || session?.user?.isEmailVerified) return;
 
     const refreshWhenUserReturns = () => {
-      void refreshSessionFromDatabase();
+      void syncPremiumStatus(true);
     };
 
     const refreshWhenVisible = () => {
@@ -274,7 +339,28 @@ export default function PremiumTrialWelcome() {
       window.removeEventListener("focus", refreshWhenUserReturns);
       document.removeEventListener("visibilitychange", refreshWhenVisible);
     };
-  }, [refreshSessionFromDatabase, session?.user?.isEmailVerified]);
+  }, [session?.user?.isEmailVerified, syncPremiumStatus]);
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+
+    const syncWhenVisible = () => {
+      if (document.visibilityState === "visible") {
+        void syncPremiumStatus();
+      }
+    };
+
+    // Keeps Premium/email verification in sync after returning from an email
+    // app, another tab, Stripe, or any other flow that changes the database.
+    void syncPremiumStatus();
+    window.addEventListener("focus", syncWhenVisible);
+    document.addEventListener("visibilitychange", syncWhenVisible);
+
+    return () => {
+      window.removeEventListener("focus", syncWhenVisible);
+      document.removeEventListener("visibilitychange", syncWhenVisible);
+    };
+  }, [status, syncPremiumStatus]);
 
   const premiumUntil = useMemo(() => {
     const raw = session?.user?.premiumUntil;
