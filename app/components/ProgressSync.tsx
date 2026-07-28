@@ -295,11 +295,45 @@ export default function ProgressSync() {
           })
         );
 
-        if (typeof data?.xpTotal === "number") {
-          setXpState(userId, { totalXp: data.xpTotal }, { emit: false });
-        }
+        const serverXp =
+          typeof data?.xpTotal === "number"
+            ? Math.max(0, Math.floor(data.xpTotal))
+            : 0;
+        const localXp = getXpState(userId, courseId).totalXp;
+        const mergedXp = Math.max(serverXp, localXp);
+
+        // Старий код безумовно замінював локальний XP серверним. Якщо на
+        // сервері було 0, користувач міг втратити вже зароблений локальний XP.
+        // Тепер XP, як і прогрес уроків, зливається без зменшення.
+        setXpState(userId, { totalXp: mergedXp }, { emit: false });
 
         await retryPendingIfAny(userId, courseId);
+
+        if (mergedXp > serverXp) {
+          const recoveryPayload = {
+            userId,
+            courseId,
+            lessonsProgress: mergedLessons,
+            xpTotal: mergedXp,
+          };
+
+          try {
+            const recoveryResponse = await fetch("/api/progress", {
+              method: "PUT",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(recoveryPayload),
+            });
+
+            if (recoveryResponse.ok) {
+              clearPending(userId, courseId);
+            } else {
+              savePending(userId, courseId, recoveryPayload);
+            }
+          } catch {
+            savePending(userId, courseId, recoveryPayload);
+          }
+        }
 
         emitSyncState("idle");
       } catch {

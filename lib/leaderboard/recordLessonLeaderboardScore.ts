@@ -10,7 +10,7 @@ type RecordLessonLeaderboardScoreArgs = {
 };
 
 function clampScore(value: unknown) {
-  const n = typeof value === "number" && Number.isFinite(value) ? value : LESSON_MAX_SCORE;
+  const n = typeof value === "number" && Number.isFinite(value) ? value : 0;
 
   return Math.max(0, Math.min(LESSON_MAX_SCORE, Math.round(n)));
 }
@@ -41,6 +41,13 @@ async function recordLessonLeaderboardScore({
   }
 
   const nextScore = clampScore(score);
+
+  // A completed lesson with zero correct answers gives no ranking points.
+  // Do not create a zero-value activity that could place the user in an empty board.
+  if (nextScore === 0) {
+    return;
+  }
+
   const weekStart = getWeekStartUtc();
 
   const where = {

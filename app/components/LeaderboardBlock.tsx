@@ -1,6 +1,7 @@
 "use client";
 
 import { type MouseEvent, useEffect, useMemo, useState } from "react";
+import { getUserLevel } from "@/app/components/words-srs/words-srs-storage";
 
 import styles from "./LeaderboardBlock.module.css";
 
@@ -13,6 +14,9 @@ type LeaderboardEntry = {
   displayName: string;
   avatarUrl: string | null;
   score: number;
+  publicId: string;
+  xp: number;
+  age: number | null;
 };
 
 type LeaderboardResponse = {
@@ -48,6 +52,15 @@ const UI = {
     top: "TOP",
     honorBoard: "Дошка пошани",
     activeLearners: "Рейтинг активних учнів",
+    profileTitle: "Картка учня",
+    xp: "Досвід",
+    age: "Вік",
+    rankTitle: "Звання",
+    level: "Рівень",
+    flunioId: "ID Flunio",
+    notSpecified: "Не вказано",
+    rankingPoints: "Бали рейтингу",
+    experienceHint: "XP нараховується за повторення слів.",
   },
 
   ru: {
@@ -66,6 +79,15 @@ const UI = {
     top: "TOP",
     honorBoard: "Доска почёта",
     activeLearners: "Рейтинг активных учеников",
+    profileTitle: "Карточка ученика",
+    xp: "Опыт",
+    age: "Возраст",
+    rankTitle: "Звание",
+    level: "Уровень",
+    flunioId: "ID Flunio",
+    notSpecified: "Не указано",
+    rankingPoints: "Баллы рейтинга",
+    experienceHint: "XP начисляется за повторение слов.",
   },
 
   en: {
@@ -84,6 +106,15 @@ const UI = {
     top: "TOP",
     honorBoard: "Honor board",
     activeLearners: "Active learner ranking",
+    profileTitle: "Learner card",
+    xp: "Experience",
+    age: "Age",
+    rankTitle: "Title",
+    level: "Level",
+    flunioId: "Flunio ID",
+    notSpecified: "Not specified",
+    rankingPoints: "Ranking points",
+    experienceHint: "XP is earned through word review.",
   },
 } satisfies Record<Lang, Record<string, string>>;
 
@@ -111,10 +142,11 @@ function getRankClass(rank: number) {
   return styles.rankOther;
 }
 
+
 export default function LeaderboardBlock({
   lang = "ua",
   courseId = null,
-  limit = 5,
+  limit = 10,
   period = "all",
   compact = true,
 }: LeaderboardBlockProps) {
@@ -124,10 +156,32 @@ export default function LeaderboardBlock({
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const [selectedAvatar, setSelectedAvatar] = useState<{
-    src: string;
-    name: string;
-  } | null>(null);
+  const [selectedProfile, setSelectedProfile] =
+    useState<LeaderboardEntry | null>(null);
+
+  const duplicateNameKeys = useMemo(() => {
+    const counts = new Map<string, number>();
+
+    for (const entry of entries) {
+      const key = entry.displayName.trim().toLocaleLowerCase();
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    return new Set(
+      [...counts.entries()]
+        .filter(([, count]) => count > 1)
+        .map(([key]) => key),
+    );
+  }, [entries]);
+
+  const selectedLevel = useMemo(
+    () => (selectedProfile ? getUserLevel(selectedProfile.xp) : null),
+    [selectedProfile],
+  );
+
+  const selectedLevelTitle = selectedLevel
+    ? selectedLevel.title[lang] ?? selectedLevel.title.ua
+    : "";
 
   const apiUrl = useMemo(() => {
     const params = new URLSearchParams();
@@ -189,6 +243,20 @@ export default function LeaderboardBlock({
   }, [apiUrl, refreshKey]);
 
   useEffect(() => {
+    if (!selectedProfile) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setSelectedProfile(null);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProfile]);
+
+  useEffect(() => {
     const refreshLeaderboard = () => {
       setRefreshKey((value) => value + 1);
     };
@@ -206,41 +274,28 @@ export default function LeaderboardBlock({
     };
   }, []);
 
-  function openAvatar(entry: LeaderboardEntry) {
-    if (!entry.avatarUrl) {
-      return;
-    }
-
-    setSelectedAvatar({
-      src: entry.avatarUrl,
-      name: entry.displayName,
-    });
+  function openProfile(entry: LeaderboardEntry) {
+    setSelectedProfile(entry);
   }
 
   function renderBoardAvatar(entry: LeaderboardEntry) {
-    const content = entry.avatarUrl ? (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={entry.avatarUrl}
-        alt=""
-        className={styles.studentAvatarImage}
-      />
-    ) : (
-      <span>{getInitials(entry.displayName)}</span>
-    );
-
-    if (!entry.avatarUrl) {
-      return <div className={styles.studentAvatar}>{content}</div>;
-    }
-
     return (
       <button
         type="button"
-        onClick={() => openAvatar(entry)}
+        onClick={() => openProfile(entry)}
         className={`${styles.studentAvatar} ${styles.studentAvatarButton}`}
-        aria-label={entry.displayName}
+        aria-label={`${t.profileTitle}: ${entry.displayName}`}
       >
-        {content}
+        {entry.avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={entry.avatarUrl}
+            alt=""
+            className={styles.studentAvatarImage}
+          />
+        ) : (
+          <span>{getInitials(entry.displayName)}</span>
+        )}
       </button>
     );
   }
@@ -321,7 +376,7 @@ export default function LeaderboardBlock({
                     <div className={styles.leaderList}>
                       {entries.map((entry) => (
                         <div
-                          key={`${entry.rank}-${entry.displayName}`}
+                          key={`${entry.publicId}-${entry.rank}`}
                           className={styles.leaderRow}
                         >
                           <div className={`${styles.rankBadge} ${getRankClass(entry.rank)}`}>
@@ -330,7 +385,18 @@ export default function LeaderboardBlock({
 
                           <div className={styles.studentIdentity}>
                             {renderBoardAvatar(entry)}
-                            <div className={styles.studentName}>{entry.displayName}</div>
+                            <div className={styles.studentText}>
+                              <div className={styles.studentName}>
+                                {entry.displayName}
+                              </div>
+                              {duplicateNameKeys.has(
+                                entry.displayName.trim().toLocaleLowerCase(),
+                              ) ? (
+                                <div className={styles.studentPublicId}>
+                                  #{entry.publicId}
+                                </div>
+                              ) : null}
+                            </div>
                           </div>
 
                           <div className={`${styles.studentScore} ${getRankClass(entry.rank)}`}>
@@ -361,47 +427,102 @@ export default function LeaderboardBlock({
         </div>
       </section>
 
-      {selectedAvatar && (
+      {selectedProfile && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-5 backdrop-blur-sm"
-          onClick={() => setSelectedAvatar(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+          onClick={() => setSelectedProfile(null)}
           role="dialog"
           aria-modal="true"
+          aria-label={`${t.profileTitle}: ${selectedProfile.displayName}`}
         >
           <div
-            className="relative w-full max-w-sm rounded-3xl border border-white/10 bg-slate-950 p-5 shadow-2xl"
+            className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-950 p-5 text-white shadow-2xl sm:p-6"
             onClick={(event: MouseEvent<HTMLDivElement>) => event.stopPropagation()}
           >
+            <div className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-cyan-400/15 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full bg-fuchsia-500/15 blur-3xl" />
+
             <button
               type="button"
-              onClick={() => setSelectedAvatar(null)}
-              className={[
-                "absolute right-3 top-3 rounded-full",
-                "border border-white/10 bg-white/10 px-3 py-1",
-                "text-sm font-semibold text-white",
-                "transition hover:bg-white/15",
-              ].join(" ")}
+              onClick={() => setSelectedProfile(null)}
+              className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/10 text-xl font-semibold text-white transition hover:bg-white/15"
+              aria-label={t.close}
             >
-              {t.close}
+              ×
             </button>
 
-            <div className="pt-8 text-center">
-              <div className="mx-auto h-48 w-48 overflow-hidden rounded-full border border-white/15 bg-white/10 shadow-[0_0_40px_rgba(34,211,238,0.12)]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={selectedAvatar.src}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
+            <div className="relative pt-3 text-center">
+              <div className="mx-auto grid h-28 w-28 place-items-center overflow-hidden rounded-full border-2 border-cyan-300/45 bg-gradient-to-br from-cyan-500/30 to-fuchsia-500/30 text-3xl font-extrabold shadow-[0_0_40px_rgba(34,211,238,0.16)]">
+                {selectedProfile.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={selectedProfile.avatarUrl}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  getInitials(selectedProfile.displayName)
+                )}
               </div>
 
-              <div className="mt-4 text-lg font-bold text-white">
-                {selectedAvatar.name}
+              <div className="mt-4 text-xl font-bold">
+                {selectedProfile.displayName}
+              </div>
+              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                {t.flunioId}: {selectedProfile.publicId}
               </div>
             </div>
+
+            <div className="relative mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-amber-300/15 bg-amber-300/10 p-3">
+                <div className="text-xs font-semibold uppercase tracking-wide text-amber-300">
+                  {t.xp}
+                </div>
+                <div className="mt-1 text-lg font-extrabold">
+                  {selectedProfile.xp} XP
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-cyan-300/15 bg-cyan-300/10 p-3">
+                <div className="text-xs font-semibold uppercase tracking-wide text-cyan-300">
+                  {t.rankingPoints}
+                </div>
+                <div className="mt-1 text-lg font-extrabold">
+                  {selectedProfile.score}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  {t.age}
+                </div>
+                <div className="mt-1 font-bold">
+                  {selectedProfile.age ?? t.notSpecified}
+                </div>
+              </div>
+
+              <div className="min-w-0 rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  {t.rankTitle}
+                </div>
+                <div className="mt-1 truncate font-bold" title={selectedLevelTitle}>
+                  ⭐ {selectedLevelTitle || t.notSpecified}
+                </div>
+                {selectedLevel ? (
+                  <div className="mt-1 text-xs text-slate-400">
+                    {t.level} {selectedLevel.level}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <p className="relative mt-4 text-center text-xs leading-5 text-slate-400">
+              {t.experienceHint}
+            </p>
           </div>
         </div>
       )}
+
     </>
   );
 }

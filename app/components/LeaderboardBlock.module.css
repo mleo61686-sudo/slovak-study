@@ -353,6 +353,11 @@
   object-fit: cover;
 }
 
+.studentText {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .studentName {
   min-width: 0;
   overflow: hidden;
@@ -366,6 +371,19 @@
   text-shadow:
     0 0 1px rgba(255, 255, 255, 0.9),
     0 0 7px rgba(255, 255, 255, 0.07);
+}
+
+.studentPublicId {
+  margin-top: 0.08rem;
+  overflow: hidden;
+  color: rgba(247, 247, 237, 0.58);
+  font-family: "Segoe Print", "Comic Sans MS", cursive;
+  font-size: clamp(0.52rem, 1vw, 0.68rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .studentScore {
@@ -702,7 +720,14 @@
   }
 
   .studentAvatar {
-    display: none;
+    width: 1.65rem;
+    height: 1.65rem;
+    border-width: 1px;
+    font-size: 0.55rem;
+  }
+
+  .studentIdentity {
+    gap: 0.38rem;
   }
 
   .pointerStick {

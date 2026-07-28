@@ -61,13 +61,10 @@ function getSafeAvatarUrl(value: string | null) {
   }
 
   /**
-   * У тебе avatarUrl може бути base64:
-   * data:image/png;base64,...
-   * data:image/jpeg;base64,...
-   *
-   * Для MVP дозволяємо це, щоб рейтинг показував реальну аватарку.
+   * Only raster formats accepted by the avatar upload endpoint are public.
+   * Do not pass arbitrary data:image payloads (for example SVG) through.
    */
-  if (raw.startsWith("data:image/")) {
+  if (/^data:image\/(?:jpeg|png|webp);base64,/.test(raw)) {
     return raw;
   }
 
@@ -138,8 +135,33 @@ export async function GET(req: Request) {
         id: true,
         name: true,
         avatarUrl: true,
+        age: true,
+        progress: {
+          select: {
+            xp: true,
+          },
+        },
       },
     });
+
+    const reviewTotals = await prisma.leaderboardActivity.groupBy({
+      by: ["userId"],
+      where: {
+        userId: { in: userIds },
+        type: "REVIEW",
+        activityKey: {
+          startsWith: "review:",
+        },
+      },
+      _sum: { score: true },
+    });
+
+    const reviewXpByUserId = new Map(
+      reviewTotals.map((item) => [
+        item.userId,
+        Math.max(0, (item._sum.score ?? 0) * 10),
+      ]),
+    );
 
     const userById = new Map(users.map((user) => [user.id, user]));
 
@@ -153,6 +175,18 @@ export async function GET(req: Request) {
           : `Guest ${item.userId.slice(-4).toUpperCase()}`,
         avatarUrl: user ? getSafeAvatarUrl(user.avatarUrl) : null,
         score: item._sum.score ?? 0,
+        publicId: user
+          ? user.id.slice(-6).toUpperCase()
+          : item.userId.slice(-6).toUpperCase(),
+        // XP у Flunio нараховується лише за повторення слів: 10 XP за одне
+        // прийняте повторення. Беремо максимум між синхронізованим UserProgress
+        // та серверними REVIEW-активностями, щоб не показувати помилковий 0 для
+        // старих користувачів, у яких XP колись залишився тільки локально.
+        xp: Math.max(
+          user?.progress?.xp ?? 0,
+          reviewXpByUserId.get(item.userId) ?? 0,
+        ),
+        age: user?.age ?? null,
       };
     });
 

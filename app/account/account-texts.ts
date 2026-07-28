@@ -102,7 +102,7 @@ export const T: Record<Lang, TDict> = {
     uploadingAvatar: "Завантажую…",
     avatarSuccess: "Аватар оновлено.",
     avatarInvalid: "Обери JPG, PNG або WebP зображення.",
-    avatarTooLarge: "Зображення завелике. Максимум 700 KB.",
+    avatarTooLarge: "Зображення завелике. Максимум 12 MB.",
     avatarGeneric: "Не вдалося оновити аватар.",
 
     errMissing: "Заповни всі поля.",
@@ -160,7 +160,7 @@ export const T: Record<Lang, TDict> = {
     uploadingAvatar: "Загружаю…",
     avatarSuccess: "Аватар обновлён.",
     avatarInvalid: "Выбери JPG, PNG или WebP изображение.",
-    avatarTooLarge: "Изображение слишком большое. Максимум 700 KB.",
+    avatarTooLarge: "Изображение слишком большое. Максимум 12 MB.",
     avatarGeneric: "Не удалось обновить аватар.",
 
     errMissing: "Заполни все поля.",
@@ -218,7 +218,7 @@ export const T: Record<Lang, TDict> = {
     uploadingAvatar: "Uploading…",
     avatarSuccess: "Avatar updated.",
     avatarInvalid: "Choose a JPG, PNG, or WebP image.",
-    avatarTooLarge: "Image is too large. Maximum size is 700 KB.",
+    avatarTooLarge: "Image is too large. Maximum size is 12 MB.",
     avatarGeneric: "Could not update avatar.",
 
     errMissing: "Please fill in all fields.",

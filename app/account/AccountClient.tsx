@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { InfoRow, PasswordField } from "./account-ui";
 import { T, type Lang } from "./account-texts";
 import EmailRemindersSettings from "./EmailRemindersSettings";
+import AvatarCropModal from "./AvatarCropModal";
 import {
   getUserLevel,
   getXpState,
@@ -14,6 +15,43 @@ import {
 } from "@/app/components/words-srs/words-srs-storage";
 
 const ANSWER_SFX_KEY = "flunio.answerSfx.enabled";
+const MAX_AVATAR_SOURCE_BYTES = 12 * 1024 * 1024;
+
+const PROFILE_UI = {
+  ua: {
+    title: "Публічна картка учня",
+    hint: "Вік необов’язковий. Звання визначається автоматично за досвідом із повторення слів і показується в рейтингу.",
+    age: "Вік",
+    rank: "Звання",
+    save: "Зберегти вік →",
+    saving: "Зберігаю…",
+    success: "Вік у профілі оновлено.",
+    genericError: "Не вдалося оновити дані профілю.",
+    invalidAge: "Вік має бути цілим числом від 13 до 100.",
+  },
+  ru: {
+    title: "Публичная карточка ученика",
+    hint: "Возраст необязателен. Звание определяется автоматически по опыту за повторение слов и показывается в рейтинге.",
+    age: "Возраст",
+    rank: "Звание",
+    save: "Сохранить возраст →",
+    saving: "Сохраняю…",
+    success: "Возраст в профиле обновлён.",
+    genericError: "Не удалось обновить данные профиля.",
+    invalidAge: "Возраст должен быть целым числом от 13 до 100.",
+  },
+  en: {
+    title: "Public learner card",
+    hint: "Age is optional. Your title is calculated automatically from word-review XP and appears in the leaderboard.",
+    age: "Age",
+    rank: "Title",
+    save: "Save age →",
+    saving: "Saving…",
+    success: "Profile age updated.",
+    genericError: "Could not update profile details.",
+    invalidAge: "Age must be a whole number from 13 to 100.",
+  },
+} as const;
 
 type SessionUserLike = {
   id?: string | null;
@@ -28,6 +66,7 @@ export default function AccountClient() {
 
   const L: Lang = lang === "ru" ? "ru" : lang === "en" ? "en" : "ua";
   const t = T[L];
+  const profileUi = PROFILE_UI[L];
 
   const user = session?.user as SessionUserLike | undefined;
   const userId = String(user?.id ?? "");
@@ -80,6 +119,9 @@ export default function AccountClient() {
         ? "to next level"
         : "до наступного рівня";
 
+  const maxLevelLabel =
+    L === "ru" ? "Максимальный уровень" : L === "en" ? "Maximum level" : "Максимальний рівень";
+
   const levelHelpText =
     L === "ru"
       ? "Получай XP во время повторения слов на главной странице — так растёт твой уровень."
@@ -122,6 +164,14 @@ export default function AccountClient() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [avatarError, setAvatarError] = useState("");
   const [avatarSuccess, setAvatarSuccess] = useState("");
+  const [avatarCropFile, setAvatarCropFile] = useState<File | null>(null);
+
+  const [profileAge, setProfileAge] = useState("");
+  const [savedProfileAge, setSavedProfileAge] = useState("");
+  const [profileDetailsLoaded, setProfileDetailsLoaded] = useState(false);
+  const [savingProfileDetails, setSavingProfileDetails] = useState(false);
+  const [profileDetailsError, setProfileDetailsError] = useState("");
+  const [profileDetailsSuccess, setProfileDetailsSuccess] = useState("");
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -132,6 +182,19 @@ export default function AccountClient() {
 
   const canSubmitPassword =
     !savingPassword && !!currentPassword && !!newPassword && !!confirmPassword;
+
+  const parsedProfileAge = profileAge.trim() ? Number(profileAge) : null;
+  const profileAgeInvalid =
+    parsedProfileAge !== null &&
+    (!Number.isInteger(parsedProfileAge) ||
+      parsedProfileAge < 13 ||
+      parsedProfileAge > 100);
+  const profileDetailsChanged = profileAge.trim() !== savedProfileAge;
+  const canSaveProfileDetails =
+    profileDetailsLoaded &&
+    profileDetailsChanged &&
+    !profileAgeInvalid &&
+    !savingProfileDetails;
 
   useEffect(() => {
     try {
@@ -153,10 +216,12 @@ export default function AccountClient() {
     }
 
     window.addEventListener("slovakStudy:srsChanged", handleSrsChanged);
+    window.addEventListener("slovakStudy:xpChanged", handleSrsChanged);
     window.addEventListener("storage", handleSrsChanged);
 
     return () => {
       window.removeEventListener("slovakStudy:srsChanged", handleSrsChanged);
+      window.removeEventListener("slovakStudy:xpChanged", handleSrsChanged);
       window.removeEventListener("storage", handleSrsChanged);
     };
   }, [status, userId]);
@@ -205,6 +270,50 @@ export default function AccountClient() {
   }, [status]);
 
   useEffect(() => {
+    if (status !== "authenticated") return;
+
+    let cancelled = false;
+    setProfileDetailsLoaded(false);
+
+    async function loadProfileDetails() {
+      try {
+        const res = await fetch("/api/account/profile-details", {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        const data = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          age?: number | null;
+        };
+
+        if (cancelled) return;
+
+        const nextAge =
+          res.ok && data?.ok && typeof data.age === "number"
+            ? String(data.age)
+            : "";
+        setProfileAge(nextAge);
+        setSavedProfileAge(nextAge);
+      } catch {
+        if (!cancelled) {
+          setProfileDetailsError(profileUi.genericError);
+        }
+      } finally {
+        if (!cancelled) {
+          setProfileDetailsLoaded(true);
+        }
+      }
+    }
+
+    void loadProfileDetails();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [profileUi.genericError, status]);
+
+  useEffect(() => {
     if (!nameSuccess) return;
 
     const timer = window.setTimeout(() => {
@@ -234,6 +343,16 @@ export default function AccountClient() {
     return () => window.clearTimeout(timer);
   }, [avatarSuccess]);
 
+  useEffect(() => {
+    if (!profileDetailsSuccess) return;
+
+    const timer = window.setTimeout(() => {
+      setProfileDetailsSuccess("");
+    }, 3500);
+
+    return () => window.clearTimeout(timer);
+  }, [profileDetailsSuccess]);
+
   function handleToggleAnswerSfx() {
     const next = !answerSfxEnabled;
 
@@ -244,9 +363,7 @@ export default function AccountClient() {
     } catch {}
   }
 
-  async function handleAvatarChange(
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) {
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = "";
 
@@ -262,41 +379,26 @@ export default function AccountClient() {
       return;
     }
 
-    if (file.size > 700 * 1024) {
+    if (file.size > MAX_AVATAR_SOURCE_BYTES) {
       setAvatarError(t.avatarTooLarge);
       return;
     }
 
+    setAvatarCropFile(file);
+  }
+
+  async function handleAvatarCropConfirm(avatarDataUrl: string) {
     try {
       setUploadingAvatar(true);
-
-      const avatarDataUrl = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = () => {
-          if (typeof reader.result === "string") {
-            resolve(reader.result);
-            return;
-          }
-
-          reject(new Error("Invalid image result"));
-        };
-
-        reader.onerror = () => {
-          reject(new Error("Could not read image"));
-        };
-
-        reader.readAsDataURL(file);
-      });
+      setAvatarError("");
+      setAvatarSuccess("");
 
       const res = await fetch("/api/account/update-avatar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          avatarUrl: avatarDataUrl,
-        }),
+        body: JSON.stringify({ avatarUrl: avatarDataUrl }),
       });
 
       const data = (await res.json().catch(() => ({}))) as {
@@ -310,34 +412,80 @@ export default function AccountClient() {
           case "INVALID_IMAGE":
             setAvatarError(t.avatarInvalid);
             break;
-
           case "IMAGE_TOO_LARGE":
             setAvatarError(t.avatarTooLarge);
             break;
-
           default:
             setAvatarError(t.avatarGeneric);
             break;
         }
-
         return;
       }
 
       setAvatarUrl(data.avatarUrl);
+      setAvatarCropFile(null);
 
       window.dispatchEvent(
         new CustomEvent("flunio:avatarUpdated", {
-          detail: {
-            avatarUrl: data.avatarUrl,
-          },
+          detail: { avatarUrl: data.avatarUrl },
         }),
       );
+      window.dispatchEvent(new Event("slovakStudy:leaderboardChanged"));
 
       setAvatarSuccess(t.avatarSuccess);
     } catch {
       setAvatarError(t.avatarGeneric);
     } finally {
       setUploadingAvatar(false);
+    }
+  }
+
+  async function handleSaveProfileDetails(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setProfileDetailsError("");
+    setProfileDetailsSuccess("");
+
+    if (profileAgeInvalid) {
+      setProfileDetailsError(profileUi.invalidAge);
+      return;
+    }
+
+    try {
+      setSavingProfileDetails(true);
+
+      const res = await fetch("/api/account/profile-details", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          age: parsedProfileAge,
+        }),
+      });
+
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        code?: string;
+        age?: number | null;
+      };
+
+      if (!res.ok || !data?.ok) {
+        if (data?.code === "INVALID_AGE") {
+          setProfileDetailsError(profileUi.invalidAge);
+        } else {
+          setProfileDetailsError(profileUi.genericError);
+        }
+        return;
+      }
+
+      const nextAge = typeof data.age === "number" ? String(data.age) : "";
+
+      setProfileAge(nextAge);
+      setSavedProfileAge(nextAge);
+      window.dispatchEvent(new Event("slovakStudy:leaderboardChanged"));
+      setProfileDetailsSuccess(profileUi.success);
+    } catch {
+      setProfileDetailsError(profileUi.genericError);
+    } finally {
+      setSavingProfileDetails(false);
     }
   }
 
@@ -572,7 +720,8 @@ export default function AccountClient() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <>
+      <div className="mx-auto max-w-5xl space-y-8">
       <section className="flunio-card overflow-hidden rounded-3xl theme-text transition hover:shadow-[0_0_28px_rgba(34,211,238,0.12)]">
         <div className="account-hero-header px-5 py-6 sm:px-8 sm:py-8">
           <div className="grid gap-6 md:grid-cols-[120px_1fr] md:items-start">
@@ -602,6 +751,7 @@ export default function AccountClient() {
                   onChange={handleAvatarChange}
                 />
               </label>
+
             </div>
 
             <div className="min-w-0">
@@ -665,8 +815,8 @@ export default function AccountClient() {
                 </div>
 
                 <div className="mt-2 text-sm font-semibold text-amber-500">
-                  {levelInfo.level >= 6
-                    ? "Max level"
+                  {levelInfo.level >= 20
+                    ? maxLevelLabel
                     : `${xpToNext} XP ${nextLevelLabel}`}
                 </div>
 
@@ -707,8 +857,9 @@ export default function AccountClient() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2">
-        <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
+      <section className="flex min-w-0 flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
+        <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-4">
+        <div className="order-1 theme-home-soft-card w-full min-w-0 max-w-full overflow-hidden rounded-3xl p-5 theme-text transition hover:-translate-y-0.5 sm:p-6 lg:order-none">
           <h2 className="text-xl font-semibold theme-text">
             {t.accountCard}
           </h2>
@@ -724,10 +875,10 @@ export default function AccountClient() {
               value={isPremium ? t.premium : t.free}
             />
 
-            <div className="theme-inner-card rounded-2xl p-4">
+            <div className="theme-inner-card min-w-0 rounded-2xl p-4">
               <form
                 onSubmit={handleSaveName}
-                className="grid gap-3"
+                className="grid min-w-0 gap-3"
               >
                 <div className="space-y-1">
                   <div className="text-sm font-semibold theme-text">
@@ -765,7 +916,7 @@ export default function AccountClient() {
                     }}
                     minLength={2}
                     maxLength={40}
-                    className="theme-input min-h-11 rounded-2xl px-4 py-3 text-sm outline-none transition"
+                    className="theme-input min-h-11 w-full min-w-0 rounded-2xl px-4 py-3 text-sm outline-none transition"
                   />
                 </label>
 
@@ -792,48 +943,87 @@ export default function AccountClient() {
                 </button>
               </form>
             </div>
+
+            <div className="theme-inner-card min-w-0 rounded-2xl p-4">
+              <form onSubmit={handleSaveProfileDetails} className="grid min-w-0 gap-3">
+                <div className="space-y-1">
+                  <div className="text-sm font-semibold theme-text">
+                    {profileUi.title}
+                  </div>
+                  <div className="text-sm leading-6 theme-text-muted">
+                    {profileUi.hint}
+                  </div>
+                </div>
+
+                <div className="grid min-w-0 gap-3 sm:grid-cols-[120px_minmax(0,1fr)]">
+                  <label className="grid min-w-0 gap-1.5">
+                    <span className="text-sm font-medium theme-text-muted">
+                      {profileUi.age}
+                    </span>
+                    <input
+                      type="number"
+                      min={13}
+                      max={100}
+                      inputMode="numeric"
+                      value={profileAge}
+                      onChange={(event) => {
+                        setProfileAge(event.target.value);
+                        setProfileDetailsError("");
+                        setProfileDetailsSuccess("");
+                      }}
+                      className="theme-input min-h-11 w-full min-w-0 rounded-2xl px-4 py-3 text-sm outline-none transition"
+                    />
+                  </label>
+
+                  <div className="theme-inner-card min-w-0 rounded-2xl px-4 py-3">
+                    <div className="text-sm font-medium theme-text-muted">
+                      {profileUi.rank}
+                    </div>
+                    <div className="mt-1 truncate text-sm font-bold theme-text sm:text-base">
+                      ⭐ {levelTitle}
+                    </div>
+                    <div className="mt-1 text-xs theme-text-subtle">
+                      {levelLabel} {levelInfo.level} · {xp.totalXp} XP
+                    </div>
+                  </div>
+                </div>
+
+                {profileDetailsError ? (
+                  <div className="rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                    {profileDetailsError}
+                  </div>
+                ) : null}
+
+                {profileDetailsSuccess ? (
+                  <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">
+                    {profileDetailsSuccess}
+                  </div>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={!canSaveProfileDetails}
+                  className="theme-secondary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {savingProfileDetails ? profileUi.saving : profileUi.save}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-
-        <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
-          <h2 className="text-xl font-semibold theme-text">
-            {t.subscriptionCard}
-          </h2>
-
-          <div className="mt-4 grid gap-3">
-            <InfoRow
-              label={t.currentPlan}
-              value={isPremium ? t.premium : t.free}
-            />
-
-            <button
-              onClick={handleManageSubscription}
-              disabled={loadingPortal}
-              className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
-              type="button"
-            >
-              {loadingPortal
-                ? t.opening
-                : isPremium
-                  ? t.manageSubscription
-                  : t.getPremium}
-            </button>
-          </div>
-        </div>
-
-        <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
+        <div className="order-3 theme-home-soft-card w-full min-w-0 max-w-full overflow-hidden rounded-3xl p-5 theme-text transition hover:-translate-y-0.5 sm:p-6 lg:order-none">
           <h2 className="text-xl font-semibold theme-text">
             {t.securityCard}
           </h2>
 
           <div className="mt-4 space-y-4">
-            <div className="theme-inner-card rounded-2xl px-4 py-3 text-sm theme-text-muted">
+            <div className="theme-inner-card min-w-0 rounded-2xl px-4 py-3 text-sm theme-text-muted">
               {t.securityHint}
             </div>
 
             <form
               onSubmit={handleChangePassword}
-              className="grid gap-3"
+              className="grid min-w-0 gap-3"
             >
               <PasswordField
                 label={t.currentPassword}
@@ -910,16 +1100,46 @@ export default function AccountClient() {
             </form>
           </div>
         </div>
+          <div className="order-5 min-w-0 lg:order-none">
+            <EmailRemindersSettings lang={L} />
+          </div>
+        </div>
 
-        <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
+        <div className="contents lg:flex lg:min-w-0 lg:flex-col lg:gap-4">
+        <div className="order-2 theme-home-soft-card w-full min-w-0 max-w-full overflow-hidden rounded-3xl p-5 theme-text transition hover:-translate-y-0.5 sm:p-6 lg:order-none">
+          <h2 className="text-xl font-semibold theme-text">
+            {t.subscriptionCard}
+          </h2>
+
+          <div className="mt-4 grid min-w-0 gap-3">
+            <InfoRow
+              label={t.currentPlan}
+              value={isPremium ? t.premium : t.free}
+            />
+
+            <button
+              onClick={handleManageSubscription}
+              disabled={loadingPortal}
+              className="theme-primary-button inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50"
+              type="button"
+            >
+              {loadingPortal
+                ? t.opening
+                : isPremium
+                  ? t.manageSubscription
+                  : t.getPremium}
+            </button>
+          </div>
+        </div>
+        <div className="order-4 theme-home-soft-card w-full min-w-0 max-w-full overflow-hidden rounded-3xl p-5 theme-text transition hover:-translate-y-0.5 sm:p-6 lg:order-none">
           <h2 className="text-xl font-semibold theme-text">
             {soundsTitle}
           </h2>
 
-          <div className="mt-4 grid gap-3">
-            <div className="theme-inner-card rounded-2xl p-4">
-              <div className="flex items-center justify-between gap-4">
-                <div>
+          <div className="mt-4 grid min-w-0 gap-3">
+            <div className="theme-inner-card min-w-0 rounded-2xl p-4">
+              <div className="flex min-w-0 items-center justify-between gap-4">
+                <div className="min-w-0">
                   <div className="text-sm font-semibold theme-text">
                     {answerSoundsTitle}
                   </div>
@@ -960,15 +1180,12 @@ export default function AccountClient() {
             </div>
           </div>
         </div>
-
-        <EmailRemindersSettings lang={L} />
-
-        <div className="theme-home-soft-card rounded-3xl p-6 theme-text transition hover:-translate-y-0.5">
+        <div className="order-6 theme-home-soft-card w-full min-w-0 max-w-full overflow-hidden rounded-3xl p-5 theme-text transition hover:-translate-y-0.5 sm:p-6 lg:order-none">
           <h2 className="text-xl font-semibold theme-text">
             {t.sessionCard}
           </h2>
 
-          <div className="mt-4 grid gap-3">
+          <div className="mt-4 grid min-w-0 gap-3">
             <button
               onClick={handleLogout}
               disabled={loggingOut}
@@ -981,7 +1198,21 @@ export default function AccountClient() {
             </button>
           </div>
         </div>
+        </div>
       </section>
-    </div>
+      </div>
+
+      {avatarCropFile ? (
+        <AvatarCropModal
+          file={avatarCropFile}
+          lang={L}
+          busy={uploadingAvatar}
+          onCancel={() => {
+            if (!uploadingAvatar) setAvatarCropFile(null);
+          }}
+          onConfirm={handleAvatarCropConfirm}
+        />
+      ) : null}
+    </>
   );
 }
