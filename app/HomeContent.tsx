@@ -838,7 +838,7 @@ export default function HomeContent({
       <section id="leaderboard" className="scroll-mt-24">
         <LeaderboardBlock
           lang={lang}
-          limit={3}
+          limit={5}
           period="all"
           compact
         />

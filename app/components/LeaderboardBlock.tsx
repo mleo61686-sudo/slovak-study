@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type MouseEvent, useEffect, useMemo, useState } from "react";
+
+import styles from "./LeaderboardBlock.module.css";
 
 type Lang = "ua" | "ru" | "en";
 type CourseId = "sk" | "cs" | "pl";
@@ -42,9 +44,10 @@ const UI = {
     emptyText: "Пройди урок і стань першим у рейтингу.",
     points: "балів",
     close: "Закрити",
-    leader: "Лідер рейтингу",
     leaderboard: "Рейтинг",
     top: "TOP",
+    honorBoard: "Дошка пошани",
+    activeLearners: "Рейтинг активних учнів",
   },
 
   ru: {
@@ -59,9 +62,10 @@ const UI = {
     emptyText: "Пройди урок и стань первым в рейтинге.",
     points: "баллов",
     close: "Закрыть",
-    leader: "Лидер рейтинга",
     leaderboard: "Рейтинг",
     top: "TOP",
+    honorBoard: "Доска почёта",
+    activeLearners: "Рейтинг активных учеников",
   },
 
   en: {
@@ -76,19 +80,12 @@ const UI = {
     emptyText: "Complete a lesson and become the first learner.",
     points: "pts",
     close: "Close",
-    leader: "Leaderboard leader",
     leaderboard: "Leaderboard",
     top: "TOP",
+    honorBoard: "Honor board",
+    activeLearners: "Active learner ranking",
   },
 } satisfies Record<Lang, Record<string, string>>;
-
-function getRankIcon(rank: number) {
-  if (rank === 1) return "🥇";
-  if (rank === 2) return "🥈";
-  if (rank === 3) return "🥉";
-
-  return `#${rank}`;
-}
 
 function getInitials(name: string) {
   const cleaned = name.trim();
@@ -106,43 +103,12 @@ function getInitials(name: string) {
   return cleaned.slice(0, 2).toUpperCase();
 }
 
-function getRankTone(rank: number) {
-  if (rank === 1) {
-    return {
-      card:
-        "border-yellow-300/35 bg-gradient-to-r from-yellow-300/10 via-amber-300/5 to-transparent",
-      glow: "bg-yellow-300/20",
-      badge: "border-yellow-300/35 bg-yellow-300/15 text-yellow-100",
-      score: "border-yellow-300/30 bg-yellow-300/10 text-yellow-100",
-    };
-  }
+function getRankClass(rank: number) {
+  if (rank === 1) return styles.rankFirst;
+  if (rank === 2) return styles.rankSecond;
+  if (rank === 3) return styles.rankThird;
 
-  if (rank === 2) {
-    return {
-      card:
-        "border-cyan-300/25 bg-gradient-to-r from-cyan-300/10 to-transparent",
-      glow: "bg-cyan-300/15",
-      badge: "border-cyan-300/25 bg-cyan-300/10 text-cyan-100",
-      score: "border-cyan-300/25 bg-cyan-300/10 text-cyan-100",
-    };
-  }
-
-  if (rank === 3) {
-    return {
-      card:
-        "border-orange-300/25 bg-gradient-to-r from-orange-300/10 to-transparent",
-      glow: "bg-orange-300/15",
-      badge: "border-orange-300/25 bg-orange-300/10 text-orange-100",
-      score: "border-orange-300/25 bg-orange-300/10 text-orange-100",
-    };
-  }
-
-  return {
-    card: "border-white/10 bg-white/[0.035]",
-    glow: "bg-cyan-300/10",
-    badge: "border-white/10 bg-white/5 theme-text",
-    score: "border-cyan-300/20 bg-cyan-300/10 theme-text",
-  };
+  return styles.rankOther;
 }
 
 export default function LeaderboardBlock({
@@ -156,6 +122,7 @@ export default function LeaderboardBlock({
 
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [selectedAvatar, setSelectedAvatar] = useState<{
     src: string;
@@ -219,7 +186,25 @@ export default function LeaderboardBlock({
     return () => {
       cancelled = true;
     };
-  }, [apiUrl]);
+  }, [apiUrl, refreshKey]);
+
+  useEffect(() => {
+    const refreshLeaderboard = () => {
+      setRefreshKey((value) => value + 1);
+    };
+
+    window.addEventListener(
+      "slovakStudy:leaderboardChanged",
+      refreshLeaderboard,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "slovakStudy:leaderboardChanged",
+        refreshLeaderboard,
+      );
+    };
+  }, []);
 
   function openAvatar(entry: LeaderboardEntry) {
     if (!entry.avatarUrl) {
@@ -232,195 +217,33 @@ export default function LeaderboardBlock({
     });
   }
 
-  function renderAvatar(
-    entry: LeaderboardEntry,
-    size: "sm" | "md" | "lg",
-  ) {
-    const sizeClass =
-      size === "lg"
-        ? "h-20 w-20 text-xl"
-        : size === "md"
-          ? "h-12 w-12 text-sm sm:h-14 sm:w-14 sm:text-base"
-          : "h-9 w-9 text-[11px] sm:h-11 sm:w-11 sm:text-sm";
-
-    const baseClass = [
-      "relative flex shrink-0 items-center justify-center overflow-hidden rounded-full",
-      "border border-white/15 bg-white/10 font-bold theme-text",
-      "shadow-[0_0_20px_rgba(34,211,238,0.10)]",
-      sizeClass,
-    ].join(" ");
+  function renderBoardAvatar(entry: LeaderboardEntry) {
+    const content = entry.avatarUrl ? (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={entry.avatarUrl}
+        alt=""
+        className={styles.studentAvatarImage}
+      />
+    ) : (
+      <span>{getInitials(entry.displayName)}</span>
+    );
 
     if (!entry.avatarUrl) {
-      return <div className={baseClass}>{getInitials(entry.displayName)}</div>;
+      return <div className={styles.studentAvatar}>{content}</div>;
     }
 
     return (
       <button
         type="button"
         onClick={() => openAvatar(entry)}
-        className={[
-          baseClass,
-          "transition hover:scale-105",
-          "focus:outline-none focus:ring-2 focus:ring-cyan-400/60",
-        ].join(" ")}
+        className={`${styles.studentAvatar} ${styles.studentAvatarButton}`}
         aria-label={entry.displayName}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={entry.avatarUrl}
-          alt=""
-          className="h-full w-full object-cover"
-        />
-
-        <span className="pointer-events-none absolute inset-0 rounded-full bg-black/0 transition hover:bg-black/10" />
+        {content}
       </button>
     );
   }
-
-  function renderCompactRow(entry: LeaderboardEntry) {
-    const tone = getRankTone(entry.rank);
-
-    return (
-      <div
-        className={[
-          "relative w-full min-w-0 overflow-hidden rounded-2xl border",
-          "px-2.5 py-3 sm:px-4",
-          tone.card,
-          entry.rank === 1
-            ? "shadow-[0_12px_35px_rgba(250,204,21,0.08)]"
-            : "",
-        ].join(" ")}
-      >
-        <div
-          className={[
-            "pointer-events-none absolute -right-8 -top-8",
-            "h-20 w-20 rounded-full blur-3xl",
-            tone.glow,
-          ].join(" ")}
-        />
-
-        <div
-          className={[
-            "relative grid min-w-0 items-center",
-            "grid-cols-[32px_36px_minmax(0,1fr)] gap-2",
-            "sm:grid-cols-[36px_44px_minmax(0,1fr)] sm:gap-3",
-          ].join(" ")}
-        >
-          <div
-            className={[
-              "flex h-8 w-8 shrink-0 items-center justify-center",
-              "rounded-xl border text-xs font-extrabold",
-              "sm:h-9 sm:w-9 sm:text-sm",
-              tone.badge,
-            ].join(" ")}
-          >
-            {entry.rank <= 3 ? getRankIcon(entry.rank) : `#${entry.rank}`}
-          </div>
-
-          {renderAvatar(entry, "sm")}
-
-          <div className="min-w-0">
-            <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
-              <div className="theme-text min-w-0 flex-1 truncate text-[12px] font-bold sm:text-sm">
-                {entry.displayName}
-              </div>
-
-              <div
-                className={[
-                  "shrink-0 rounded-lg border px-1.5 py-1",
-                  "text-[11px] font-extrabold sm:rounded-xl",
-                  "sm:px-2.5 sm:text-sm",
-                  tone.score,
-                ].join(" ")}
-              >
-                {entry.score}
-              </div>
-            </div>
-
-            <div className="theme-text-muted mt-0.5 truncate text-[10px] sm:text-xs">
-              {entry.rank === 1
-                ? t.leader
-                : `${entry.score} ${t.points}`}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderPodiumCard(
-    entry: LeaderboardEntry,
-    variant: "leader" | "side",
-  ) {
-    const tone = getRankTone(entry.rank);
-    const isLeader = variant === "leader";
-
-    return (
-      <div
-        className={[
-          "relative min-w-0 overflow-hidden rounded-3xl border",
-          tone.card,
-          isLeader
-            ? "p-5 shadow-[0_0_38px_rgba(250,204,21,0.10)]"
-            : "p-4",
-        ].join(" ")}
-      >
-        <div
-          className={[
-            "pointer-events-none absolute -right-10 -top-10 rounded-full blur-3xl",
-            tone.glow,
-            isLeader ? "h-28 w-28" : "h-20 w-20",
-          ].join(" ")}
-        />
-
-        <div className="relative flex min-w-0 flex-col items-center text-center">
-          <div
-            className={[
-              "mb-3 inline-flex items-center gap-1 rounded-full border px-3 py-1",
-              "text-xs font-bold",
-              tone.badge,
-            ].join(" ")}
-          >
-            <span>{getRankIcon(entry.rank)}</span>
-
-            <span>{isLeader ? t.leader : `#${entry.rank}`}</span>
-          </div>
-
-          {renderAvatar(entry, isLeader ? "lg" : "md")}
-
-          <div className="mt-3 min-w-0 max-w-full">
-            <div
-              className={[
-                "theme-text truncate font-bold",
-                isLeader ? "text-xl" : "text-base",
-              ].join(" ")}
-            >
-              {entry.displayName}
-            </div>
-
-            <div className="theme-text-muted mt-1 text-sm">
-              {entry.score} {t.points}
-            </div>
-          </div>
-
-          <div
-            className={[
-              "mt-4 rounded-full border px-4 py-1.5 font-extrabold",
-              tone.score,
-              isLeader ? "text-lg" : "text-base",
-            ].join(" ")}
-          >
-            {entry.score}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const leader = entries[0] ?? null;
-  const second = entries[1] ?? null;
-  const third = entries[2] ?? null;
-  const rest = entries.slice(3);
 
   return (
     <>
@@ -466,47 +289,74 @@ export default function LeaderboardBlock({
               <p className="theme-text-muted mt-1 text-sm">{t.emptyText}</p>
             </div>
           ) : (
-            <>
-              <div className="grid min-w-0 gap-2.5 lg:hidden">
-                {entries.map((entry) => (
-                  <div
-                    key={`${entry.rank}-${entry.displayName}`}
-                    className="min-w-0"
-                  >
-                    {renderCompactRow(entry)}
-                  </div>
-                ))}
-              </div>
+            <div className={styles.easelStage}>
+              <div className={styles.easelBackLeg} aria-hidden="true" />
+              <div className={`${styles.easelLeg} ${styles.easelLegLeft}`} aria-hidden="true" />
+              <div className={`${styles.easelLeg} ${styles.easelLegRight}`} aria-hidden="true" />
+              <div className={styles.easelCrossbar} aria-hidden="true" />
 
-              <div className="hidden min-w-0 space-y-4 lg:block">
-                <div className="grid min-w-0 items-end gap-3 lg:grid-cols-[0.82fr_1.25fr_0.82fr]">
-                  <div className="min-w-0">
-                    {second ? renderPodiumCard(second, "side") : null}
+              <div className={styles.boardFrame}>
+                <span className={`${styles.frameScrew} ${styles.screwTopLeft}`} aria-hidden="true" />
+                <span className={`${styles.frameScrew} ${styles.screwTopRight}`} aria-hidden="true" />
+                <span className={`${styles.frameScrew} ${styles.screwBottomLeft}`} aria-hidden="true" />
+                <span className={`${styles.frameScrew} ${styles.screwBottomRight}`} aria-hidden="true" />
+
+                <div className={styles.boardSurface}>
+                  <div className={styles.chalkStarLeft} aria-hidden="true">☆</div>
+                  <div className={styles.chalkStarRight} aria-hidden="true">☆</div>
+
+                  <div className={styles.boardHeading}>
+                    <div className={styles.boardTitle}>{t.honorBoard}</div>
+                    <div className={styles.boardTitleUnderline} aria-hidden="true" />
+                    <div className={styles.boardSubtitle}>{t.activeLearners}</div>
                   </div>
 
-                  <div className="min-w-0">
-                    {leader ? renderPodiumCard(leader, "leader") : null}
+                  <div className={styles.boardBody}>
+                    <div className={styles.trophyDrawing} aria-hidden="true">
+                      <div className={styles.trophyCup}>☆</div>
+                      <div className={styles.trophyStem} />
+                      <div className={styles.trophyBase} />
+                    </div>
+
+                    <div className={styles.leaderList}>
+                      {entries.map((entry) => (
+                        <div
+                          key={`${entry.rank}-${entry.displayName}`}
+                          className={styles.leaderRow}
+                        >
+                          <div className={`${styles.rankBadge} ${getRankClass(entry.rank)}`}>
+                            {entry.rank}
+                          </div>
+
+                          <div className={styles.studentIdentity}>
+                            {renderBoardAvatar(entry)}
+                            <div className={styles.studentName}>{entry.displayName}</div>
+                          </div>
+
+                          <div className={`${styles.studentScore} ${getRankClass(entry.rank)}`}>
+                            {entry.score} <span>{t.points}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="min-w-0">
-                    {third ? renderPodiumCard(third, "side") : null}
+                  <div className={styles.pointerStick} aria-hidden="true">
+                    <span className={styles.pointerHandle} />
                   </div>
+
+                  <div className={styles.chalkDoodle} aria-hidden="true">✦</div>
                 </div>
 
-                {rest.length > 0 && (
-                  <div className="grid min-w-0 gap-2">
-                    {rest.map((entry) => (
-                      <div
-                        key={`${entry.rank}-${entry.displayName}`}
-                        className="min-w-0"
-                      >
-                        {renderCompactRow(entry)}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <div className={styles.boardTray} aria-hidden="true">
+                  <span className={`${styles.chalkPiece} ${styles.chalkWhite}`} />
+                  <span className={`${styles.chalkPiece} ${styles.chalkPink}`} />
+                  <span className={`${styles.chalkPiece} ${styles.chalkBlue}`} />
+                  <span className={`${styles.chalkPiece} ${styles.chalkYellow}`} />
+                  <span className={styles.eraser} />
+                </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       </section>
@@ -520,7 +370,7 @@ export default function LeaderboardBlock({
         >
           <div
             className="relative w-full max-w-sm rounded-3xl border border-white/10 bg-slate-950 p-5 shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event: MouseEvent<HTMLDivElement>) => event.stopPropagation()}
           >
             <button
               type="button"
