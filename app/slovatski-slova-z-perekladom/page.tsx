@@ -5,9 +5,9 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Словацькі слова з перекладом українською | Flunio",
+  title: "64 словацькі слова з перекладом українською | Flunio",
   description:
-    "Базові словацькі слова з перекладом українською: привітання, їжа, дім, робота, транспорт, час, дієслова та корисні фрази для початківців.",
+    "64 словацькі слова з перекладом українською за темами та 6 корисних фраз: як сказати добрий день, привіт, дякую й до побачення словацькою.",
 
   alternates: {
     canonical: `${SITE_URL}/slovatski-slova-z-perekladom`,
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Словацькі слова з перекладом українською | Flunio",
+    title: "64 словацькі слова з перекладом українською | Flunio",
     description:
       "Добірка базових словацьких слів для початківців: теми, переклад, поради для запам’ятовування і посилання на уроки.",
     url: `${SITE_URL}/slovatski-slova-z-perekladom`,
@@ -34,6 +34,14 @@ const FAQ = [
   {
     q: "Які словацькі слова вчити першими?",
     a: "Почни з привітань, базових дієслів, чисел, їжі, дому, транспорту, роботи та слів для щоденного спілкування.",
+  },
+  {
+    q: "Як буде «добрий день» словацькою?",
+    a: "Словацькою «добрий день» — Dobrý deň. Це ввічливе привітання, яке підходить у магазині, установі, на роботі або під час знайомства.",
+  },
+  {
+    q: "Як сказати «привіт» словацькою?",
+    a: "Неформальне «привіт» словацькою — Ahoj. Його використовують із друзями та знайомими. Для ввічливого привітання краще сказати Dobrý deň.",
   },
   {
     q: "Скільки слів потрібно знати для базового спілкування?",
@@ -152,6 +160,15 @@ const sections = [
   },
 ];
 
+const quickSlovakPhrases = [
+  { sk: "Dobrý deň!", uk: "Добрий день!", when: "Ввічливе привітання в магазині, установі чи на роботі" },
+  { sk: "Ahoj!", uk: "Привіт!", when: "Неформальне привітання друзів і знайомих" },
+  { sk: "Dobré ráno!", uk: "Доброго ранку!", when: "Привітання вранці" },
+  { sk: "Dobrý večer!", uk: "Добрий вечір!", when: "Привітання ввечері" },
+  { sk: "Ďakujem!", uk: "Дякую!", when: "Подяка за допомогу чи послугу" },
+  { sk: "Dovidenia!", uk: "До побачення!", when: "Ввічливе прощання" },
+];
+
 const card = "flunio-card rounded-3xl";
 const softCard = "theme-home-soft-card rounded-2xl";
 const primaryButton =
@@ -191,7 +208,7 @@ export default function Page() {
         </div>
 
         <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
-          Словацькі слова з перекладом українською
+          64 словацькі слова з перекладом українською
         </h1>
 
         <p className="theme-text-muted">
@@ -226,6 +243,31 @@ export default function Page() {
             Вивчення словацької онлайн
           </Link>
         </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Як сказати «добрий день» і «привіт» словацькою?
+        </h2>
+        <p className="theme-text-muted">
+          Ввічливе «добрий день» словацькою — <strong className="theme-text">Dobrý deň</strong>.
+          Так вітаються в магазині, установі або з незнайомою людиною.
+          Слово <strong className="theme-text">Ahoj</strong> означає «привіт»
+          і підходить у неформальному спілкуванні. Ось ще кілька фраз,
+          які корисно вивчити разом із першими словами.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {quickSlovakPhrases.map((phrase) => (
+            <div key={phrase.sk} className={`${softCard} p-4`}>
+              <p className="font-semibold theme-text">{phrase.sk}</p>
+              <p className="mt-1 theme-text-muted">{phrase.uk}</p>
+              <p className="mt-2 text-sm theme-text-muted">{phrase.when}</p>
+            </div>
+          ))}
+        </div>
+        <Link href="/vyvchennia-slovatskoi-movy-online" className={secondaryButton}>
+          Перейти до курсу словацької →
+        </Link>
       </section>
 
       <section className={`${card} space-y-4 p-6`}>

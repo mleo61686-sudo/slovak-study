@@ -5,24 +5,18 @@ import Script from "next/script";
 const SITE_URL = "https://flunio.com";
 
 export const metadata: Metadata = {
-  title: "Vocabulary in Polish: 60+ Basic Words with Examples | Flunio",
+  title: "Polish Vocabulary for Beginners: 64 Words & Examples | Flunio",
   description:
-    "Build vocabulary in Polish with more than 60 basic words by topic, short example sentences, pronunciation tips and links to audio practice for beginners.",
+    "Learn 64 useful Polish words with English translations, example sentences and pronunciation tips. Start with greetings, food, work and transport vocabulary.",
 
   alternates: {
     canonical: `${SITE_URL}/polish-vocabulary`,
-    languages: {
-      en: `${SITE_URL}/polish-vocabulary`,
-      uk: `${SITE_URL}/polski-slova-z-perekladom`,
-      ru: `${SITE_URL}/ru/polish-vocabulary`,
-      "x-default": `${SITE_URL}/polish-vocabulary`,
-    },
   },
 
   openGraph: {
-    title: "Vocabulary in Polish: 60+ Basic Words with Examples | Flunio",
+    title: "Polish Vocabulary for Beginners: 64 Words & Examples | Flunio",
     description:
-      "Learn more than 60 Polish words by topic: greetings, family, food, home, transport, work, verbs and adjectives, with examples and pronunciation tips.",
+      "Explore 64 Polish words with English meanings, simple example sentences and six everyday phrases for beginners.",
     url: `${SITE_URL}/polish-vocabulary`,
     siteName: "Flunio",
     type: "website",
@@ -46,7 +40,11 @@ type VocabularySection = {
 const FAQ = [
   {
     q: "Can I learn Polish vocabulary online for free?",
-    a: "Yes. This free page gives you more than 60 beginner Polish words grouped by topic, short examples and pronunciation guidance. You can continue with free A0 lessons and a separate audio practice page.",
+    a: "Yes. This free page has 64 Polish vocabulary words with English translations, short sentence examples and pronunciation tips. You can continue with free A0 lessons and audio practice.",
+  },
+  {
+    q: "How do you say hello, thank you and please in Polish?",
+    a: "Say Dzień dobry for a polite hello, Cześć for an informal hi, Dziękuję for thank you and Proszę for please. These are useful first phrases to practise aloud.",
   },
   {
     q: "What does “vocabulary in Polish” mean?",
@@ -468,6 +466,15 @@ const easyPolishWords = [
   ["mały", "small"],
 ];
 
+const quickPolishPhrases = [
+  { pl: "Dzień dobry!", en: "Hello! / Good day!", context: "A polite greeting in shops and offices" },
+  { pl: "Cześć!", en: "Hi! / Bye!", context: "Informal chats with friends" },
+  { pl: "Poproszę wodę.", en: "I'd like some water, please.", context: "Ordering something politely" },
+  { pl: "Nie rozumiem.", en: "I don't understand.", context: "When you need clarification" },
+  { pl: "Ile to kosztuje?", en: "How much does it cost?", context: "Shopping or asking about prices" },
+  { pl: "Gdzie jest przystanek?", en: "Where is the bus stop?", context: "Asking for directions" },
+];
+
 const pronunciationTips = [
   {
     sound: "sz",
@@ -565,14 +572,14 @@ export default function Page() {
         </p>
 
         <h1 className="text-3xl font-extrabold theme-text sm:text-4xl">
-          Vocabulary in Polish: basic words and phrases by topic
+          Polish vocabulary for beginners: 64 words and examples
         </h1>
 
         <p className="theme-text-muted">
-          If you search for vocabulary in Polish, start with the words you can
-          use in real life: greetings, family, home, food, transport, work,
-          common verbs and simple adjectives. A short, practical Polish
-          vocabulary list is more useful than a huge word list you never review.
+          Learn 64 basic Polish words with English translations, grouped into
+          eight everyday topics: greetings, family, home, food, transport,
+          work, verbs and adjectives. Every word comes with a short Polish
+          sentence showing how to use it in real life.
         </p>
 
         <p className="theme-text-muted">
@@ -599,6 +606,29 @@ export default function Page() {
             Polish grammar
           </Link>
         </div>
+      </section>
+
+      <section className={`${card} space-y-4 p-6`}>
+        <h2 className="text-2xl font-bold theme-text">
+          Six useful Polish phrases with English translations
+        </h2>
+        <p className="theme-text-muted">
+          Memorising individual words is a start, but short phrases help you
+          use them in conversations. Try saying these aloud, then swap a word
+          to make your own sentence.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {quickPolishPhrases.map((phrase) => (
+            <div key={phrase.pl} className={`${softCard} p-4`}>
+              <p className="font-semibold theme-text">{phrase.pl}</p>
+              <p className="mt-1 theme-text-muted">{phrase.en}</p>
+              <p className="mt-2 text-sm theme-text-muted">{phrase.context}</p>
+            </div>
+          ))}
+        </div>
+        <Link href="/polish-words-with-audio" className={secondaryButton}>
+          Continue with Polish words and audio →
+        </Link>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
@@ -866,14 +896,6 @@ export default function Page() {
               <p className="mt-2 theme-text-muted">{item.a}</p>
             </div>
           ))}
-        </div>
-      </section>
-          <section className="flunio-card rounded-3xl p-6">
-        <h2 className="text-xl font-bold theme-text">Other language explanations</h2>
-        <p className="mt-2 theme-text-muted">Read Polish vocabulary with Ukrainian or Russian translations:</p>
-        <div className="mt-3 flex flex-wrap gap-3">
-          <Link href="/polski-slova-z-perekladom" hrefLang="uk" className="theme-secondary-button rounded-xl px-4 py-2">Українська</Link>
-          <Link href="/ru/polish-vocabulary" hrefLang="ru" className="theme-secondary-button rounded-xl px-4 py-2">Русский</Link>
         </div>
       </section>
     </main>
