@@ -1,3 +1,4 @@
+import CourseSeoNavigation from "@/app/components/CourseSeoNavigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
@@ -183,7 +184,7 @@ export default function Page() {
   };
 
   return (
-    <main className="mx-auto max-w-4xl space-y-10 px-4 py-10 theme-text">
+    <main lang="ru" className="mx-auto max-w-4xl space-y-10 px-4 py-10 theme-text">
       <Script
         id="faq-schema-slovak-ru"
         type="application/ld+json"
@@ -513,6 +514,7 @@ export default function Page() {
           ))}
         </div>
       </section>
+      <CourseSeoNavigation course="sk" lang="ru" />
     </main>
   );
 }

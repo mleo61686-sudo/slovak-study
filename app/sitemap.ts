@@ -83,8 +83,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/learning/levels/a0",
     "/learning/levels/a1",
     "/learning/levels/a2",
-    "/learning/levels/b1",
-    "/learning/levels/b2",
 
     // Grammar topics.
     "/grammar/alphabet",
