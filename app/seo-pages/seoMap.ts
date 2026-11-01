@@ -346,6 +346,39 @@ export const SEO_MAP: SeoMapItem[] = [
     inSitemap: true,
   },
 
+
+  // Localized vocabulary guides, one useful page per search intent and language.
+  {
+    url: "/cheski-slova-z-perekladom",
+    lang: "uk",
+    course: "cs",
+    intentType: "vocabulary",
+    mainKeyword: "чеські слова з перекладом",
+    intent: "Ukrainian examples and Czech words for everyday life, work and transport",
+    status: "keep",
+    inSitemap: true,
+  },
+  {
+    url: "/polski-slova-z-perekladom",
+    lang: "uk",
+    course: "pl",
+    intentType: "vocabulary",
+    mainKeyword: "польські слова з перекладом",
+    intent: "Ukrainian translations and Polish beginner vocabulary grouped by topic",
+    status: "keep",
+    inSitemap: true,
+  },
+  {
+    url: "/ru/polish-vocabulary",
+    lang: "ru",
+    course: "pl",
+    intentType: "vocabulary",
+    mainKeyword: "польские слова с переводом на русский",
+    intent: "Russian Polish word guide for shopping, work, travel and false friends",
+    status: "keep",
+    inSitemap: true,
+  },
+
   // Existing narrow pages that should not drive the main SEO strategy
   {
     url: "/slovak-for-ukrainians",

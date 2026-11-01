@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/ru/czech-vocabulary`,
     languages: {
       en: `${SITE_URL}/czech-vocabulary`,
+      uk: `${SITE_URL}/cheski-slova-z-perekladom`,
       ru: `${SITE_URL}/ru/czech-vocabulary`,
       "x-default": `${SITE_URL}/czech-vocabulary`,
     },
@@ -505,6 +506,13 @@ export default function Page() {
               <div className="mt-2 theme-text-muted">{item.a}</div>
             </div>
           ))}
+        </div>
+      </section>
+          <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-xl font-bold theme-text">Чешский словарь на других языках</h2>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <Link href="/cheski-slova-z-perekladom" hrefLang="uk" className="theme-secondary-button rounded-xl px-4 py-2">Українська</Link>
+          <Link href="/czech-vocabulary" hrefLang="en" className="theme-secondary-button rounded-xl px-4 py-2">English</Link>
         </div>
       </section>
     </main>

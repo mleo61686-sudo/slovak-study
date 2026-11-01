@@ -354,7 +354,7 @@ export default function Page() {
             Чеська для початківців
           </Link>
 
-          <Link href="/czech-vocabulary" className={secondaryButton}>
+          <Link href="/cheski-slova-z-perekladom" className={secondaryButton}>
             Чеські слова
           </Link>
 
@@ -509,7 +509,7 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/czech-vocabulary" className={secondaryButton}>
+          <Link href="/cheski-slova-z-perekladom" className={secondaryButton}>
             Чеська лексика →
           </Link>
 
@@ -681,7 +681,7 @@ export default function Page() {
             Перейти до навчання →
           </Link>
 
-          <Link href="/czech-vocabulary" className={secondaryButton}>
+          <Link href="/cheski-slova-z-perekladom" className={secondaryButton}>
             Чеські слова
           </Link>
 

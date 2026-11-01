@@ -11,6 +11,12 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: `${SITE_URL}/polish-vocabulary`,
+    languages: {
+      en: `${SITE_URL}/polish-vocabulary`,
+      uk: `${SITE_URL}/polski-slova-z-perekladom`,
+      ru: `${SITE_URL}/ru/polish-vocabulary`,
+      "x-default": `${SITE_URL}/polish-vocabulary`,
+    },
   },
 
   openGraph: {
@@ -860,6 +866,14 @@ export default function Page() {
               <p className="mt-2 theme-text-muted">{item.a}</p>
             </div>
           ))}
+        </div>
+      </section>
+          <section className="flunio-card rounded-3xl p-6">
+        <h2 className="text-xl font-bold theme-text">Other language explanations</h2>
+        <p className="mt-2 theme-text-muted">Read Polish vocabulary with Ukrainian or Russian translations:</p>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <Link href="/polski-slova-z-perekladom" hrefLang="uk" className="theme-secondary-button rounded-xl px-4 py-2">Українська</Link>
+          <Link href="/ru/polish-vocabulary" hrefLang="ru" className="theme-secondary-button rounded-xl px-4 py-2">Русский</Link>
         </div>
       </section>
     </main>

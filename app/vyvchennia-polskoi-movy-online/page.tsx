@@ -335,7 +335,7 @@ export default function Page() {
             Польська для початківців
           </Link>
 
-          <Link href="/polish-vocabulary" className={secondaryButton}>
+          <Link href="/polski-slova-z-perekladom" className={secondaryButton}>
             Польські слова
           </Link>
 
@@ -490,7 +490,7 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link href="/polish-vocabulary" className={secondaryButton}>
+          <Link href="/polski-slova-z-perekladom" className={secondaryButton}>
             Польська лексика →
           </Link>
 
@@ -641,7 +641,7 @@ export default function Page() {
             Перейти до навчання →
           </Link>
 
-          <Link href="/polish-vocabulary" className={secondaryButton}>
+          <Link href="/polski-slova-z-perekladom" className={secondaryButton}>
             Польські слова
           </Link>
 

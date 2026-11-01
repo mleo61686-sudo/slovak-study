@@ -33,7 +33,7 @@ const COPY: Record<HubKind, Record<Lang, HubCopy>> = {
           text: "Перші слова, вимова та план навчання на 30 днів.",
         },
         {
-          href: "/czech-vocabulary",
+          href: "/cheski-slova-z-perekladom",
           title: "Чеська лексика",
           text: "Базові чеські слова за повсякденними темами.",
         },
@@ -43,7 +43,7 @@ const COPY: Record<HubKind, Record<Lang, HubCopy>> = {
           text: "Слухай поширені слова та тренуй вимову.",
         },
         {
-          href: "/polish-vocabulary",
+          href: "/polski-slova-z-perekladom",
           title: "Польська лексика",
           text: "Понад 60 базових польських слів із прикладами.",
         },
@@ -71,7 +71,7 @@ const COPY: Record<HubKind, Record<Lang, HubCopy>> = {
           text: "Первые слова, произношение и план обучения на 30 дней.",
         },
         {
-          href: "/czech-vocabulary",
+          href: "/ru/czech-vocabulary",
           title: "Чешская лексика",
           text: "Базовые чешские слова по повседневным темам.",
         },
@@ -81,7 +81,7 @@ const COPY: Record<HubKind, Record<Lang, HubCopy>> = {
           text: "Слушай распространённые слова и тренируй произношение.",
         },
         {
-          href: "/polish-vocabulary",
+          href: "/ru/polish-vocabulary",
           title: "Польская лексика",
           text: "Более 60 базовых польских слов с примерами.",
         },

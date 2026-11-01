@@ -495,6 +495,10 @@ export default function Page() {
             Открыть уроки
           </Link>
 
+          <Link href="/ru/polish-vocabulary" className={secondaryButton}>
+            Польские слова с переводом
+          </Link>
+
           <Link href="/dictionary" className={secondaryButton}>
             Польский словарь
           </Link>

@@ -69,6 +69,32 @@ const COURSE_LANGUAGE_ALTERNATES: Record<string, Record<string, string>> = {
   },
 };
 
+
+const VOCABULARY_LANGUAGE_ALTERNATES: Record<string, Record<string, string>> = {
+  ...Object.fromEntries(
+    ["/czech-vocabulary", "/ru/czech-vocabulary", "/cheski-slova-z-perekladom"].map((path) => [
+      path,
+      {
+        en: `${SITE_URL}/czech-vocabulary`,
+        ru: `${SITE_URL}/ru/czech-vocabulary`,
+        uk: `${SITE_URL}/cheski-slova-z-perekladom`,
+        "x-default": `${SITE_URL}/czech-vocabulary`,
+      },
+    ])
+  ),
+  ...Object.fromEntries(
+    ["/polish-vocabulary", "/ru/polish-vocabulary", "/polski-slova-z-perekladom"].map((path) => [
+      path,
+      {
+        en: `${SITE_URL}/polish-vocabulary`,
+        ru: `${SITE_URL}/ru/polish-vocabulary`,
+        uk: `${SITE_URL}/polski-slova-z-perekladom`,
+        "x-default": `${SITE_URL}/polish-vocabulary`,
+      },
+    ])
+  ),
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticUrls: string[] = [
     "/",
@@ -111,7 +137,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       item.lastModified = lastModified;
     }
 
-    const languages = COURSE_LANGUAGE_ALTERNATES[path];
+    const languages = COURSE_LANGUAGE_ALTERNATES[path] ?? VOCABULARY_LANGUAGE_ALTERNATES[path];
     if (languages) {
       item.alternates = { languages };
     }
