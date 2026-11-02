@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import LearningHubIcon from "../components/LearningHubIcon";
+import Image from "next/image";
+import styles from "../LearningHubV2.module.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useLanguage } from "@/lib/src/useLanguage";
@@ -171,94 +174,92 @@ export default function DailyLearningPlan({
   const journey = useMemo(() => buildLearningJourney(planInput), [planInput]);
 
   return (
-    <div className="mt-6 space-y-5">
-      <section id="learning-journey" aria-labelledby="learning-journey-heading" className="flunio-card scroll-mt-24 rounded-3xl p-6">
-        <h2 id="learning-journey-heading" className="text-xl font-bold theme-text">{t.pathway}</h2>
-        <p className="mt-2 text-sm leading-6 theme-text-muted">{t.pathwayIntro}</p>
-        {ready ? <>
-          <ol className="mt-5 grid gap-3 sm:grid-cols-2" aria-label={t.pathway}>
-            {journey.steps.map((step, index) => {
-              const content = <>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="theme-pill inline-flex h-7 min-w-7 items-center justify-center rounded-full text-xs font-bold">{index + 1}</span>
-                  <span className="text-xs theme-text-subtle">{t.pathwayStatus[step.status]}</span>
-                </div>
-                <h3 className="mt-3 font-semibold theme-text">{t.pathwayArea[step.area]}</h3>
-                {step.total !== null && step.area !== "reviews" && <p className="mt-1 text-xs theme-text-muted">{step.completed ?? 0} / {step.total}</p>}
-                {step.area === "reviews" && step.total !== null && <p className="mt-1 text-xs theme-text-muted">{t.reviewsNote(step.total)}</p>}
-                {step.detail && <p className="mt-1 text-xs theme-text-subtle">{step.detail}</p>}
-              </>;
-              return <li key={step.area} className="list-none">
-                {step.href ? (
-                  <Link href={step.href} className="theme-inner-card block min-h-full rounded-2xl p-4 transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">{content}</Link>
-                ) : <div className="theme-inner-card min-h-full rounded-2xl p-4">{content}</div>}
-              </li>;
-            })}
-          </ol>
-          {journey.focus ? <div className="theme-inner-card mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
-            <div><p className="text-xs font-semibold theme-accent-text">{t.pathwayNext}</p>
-              <p className="mt-1 font-semibold theme-text">{taskName(journey.focus, t)}{journey.focus.detail ? ` · ${journey.focus.detail}` : ""}</p></div>
-            <Link href={journey.focus.href} className="theme-primary-button inline-flex min-h-11 items-center rounded-xl px-4 py-2 text-sm font-semibold">{t.action}</Link>
-          </div> : <p className="mt-4 text-sm theme-text-muted">{t.pathwayIdle}</p>}
-        </> : <p className="mt-4 text-sm theme-text-muted" role="status">{t.loading}</p>}
-      </section>
-
-      <section aria-labelledby="daily-learning-heading" className="flunio-card rounded-3xl p-6">
-        <div className="flex flex-wrap items-start justify-between gap-2">
-          <div>
-            <p className="text-xs font-semibold theme-accent-text">✦ {t.today}</p>
-            <h2 id="daily-learning-heading" className="mt-1 text-xl font-bold theme-text">{t.heading}</h2>
-            <p className="mt-2 text-sm leading-6 theme-text-muted">{t.intro}</p>
+    <div className="space-y-3">
+      <section aria-labelledby="daily-learning-heading" className={styles.feature}>
+        <div className={styles.featureMain}>
+          <Image src="/learning/hub/next.svg" alt="" width={112} height={112} unoptimized className={styles.featureArt} aria-hidden="true" />
+          <div className={styles.featureContent}>
+            <p className={styles.featureKicker}>{t.today} · FLUNIO</p>
+            <h2 id="daily-learning-heading" className={`${styles.featureTitle} theme-text`}>{t.pathwayNext}</h2>
+            {ready ? (
+              <p className={`${styles.featureDesc} theme-text-muted`}>
+                {journey.focus ? (
+                  <>{taskName(journey.focus, t)}{journey.focus.detail && journey.focus.key !== "mission" && journey.focus.key !== "story" ? ` · ${journey.focus.detail}` : ""} · ≈ {journey.focus.minutes} {t.minutes}</>
+                ) : t.pathwayIdle}
+              </p>
+            ) : <p className={`${styles.featureDesc} theme-text-muted`} role="status">{t.loading}</p>}
           </div>
-          <span className="theme-pill rounded-full px-3 py-1 text-xs font-semibold">{summary.tasks.reduce((sum, task) => sum + task.minutes, 0)} {t.minutes}</span>
+          {ready && journey.focus && (
+            <Link href={journey.focus.href} className={`${styles.featureButton} theme-primary-button`}>{t.action}</Link>
+          )}
         </div>
-        {ready ? (
-          summary.tasks.length > 0 ? (
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {summary.tasks.map((task, index) => (
-                <Link key={task.key} href={task.href} className="theme-inner-card group flex flex-col rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-cyan-400/35 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="theme-pill inline-flex h-7 min-w-7 items-center justify-center rounded-full text-xs font-bold">{index + 1}</span>
-                    <span className="text-xs theme-text-subtle">≈ {task.minutes} {t.minutes}</span>
-                  </div>
-                  <h3 className="mt-3 font-semibold theme-text">{taskName(task, t)}</h3>
-                  <p className="mt-1 flex-1 text-xs leading-5 theme-text-muted">{taskDescription(task, t)}{task.detail && task.key !== "mission" && task.key !== "story" ? ` · ${task.detail}` : ""}</p>
-                  <span className="mt-3 text-sm font-semibold theme-accent-text">{t.action}</span>
-                </Link>
-              ))}
-            </div>
-          ) : <p className="theme-inner-card mt-4 rounded-2xl p-4 text-sm theme-text-muted">{t.noTasks}</p>
-        ) : <p className="mt-4 text-sm theme-text-muted" role="status">{t.loading}</p>}
-        {status === "unauthenticated" && (
-          <p className="mt-4 text-xs theme-text-subtle">{t.signIn} <Link className="font-semibold theme-accent-text underline" href="/login">{t.signInLink}</Link></p>
+        {(ready && summary.tasks.length > 1 || status === "unauthenticated") && (
+          <div className={styles.featureFooter}>
+            {ready && summary.tasks.length > 1 && (
+              <details className="border-t border-current/10 pt-3">
+                <summary className={`${styles.featureMore} theme-text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}>
+                  {t.heading} · {summary.tasks.length}
+                </summary>
+                <div className="mt-2 space-y-1">
+                  {summary.tasks.slice(1).map(task => (
+                    <Link key={task.key} href={task.href} className={styles.featureLink}>
+                      <span className="min-w-0 text-sm theme-text">{taskName(task, t)}</span>
+                      <span className="shrink-0 text-xs theme-text-muted">≈ {task.minutes} {t.minutes} →</span>
+                    </Link>
+                  ))}
+                </div>
+              </details>
+            )}
+            {status === "unauthenticated" && (
+              <p className="mt-2 text-xs theme-text-subtle">{t.signIn} <Link className="font-semibold theme-accent-text underline" href="/login">{t.signInLink}</Link></p>
+            )}
+          </div>
         )}
-        {srs && srs.due > 0 && <p className="mt-3 text-xs theme-text-subtle">{t.weakDue(srs.weakDue)} · {t.doneToday(srs.reviewedToday)}</p>}
       </section>
 
-      <section aria-labelledby="study-profile-heading" className="flunio-card rounded-3xl p-6">
-        <h2 id="study-profile-heading" className="text-xl font-bold theme-text">{t.profile}</h2>
-        <p className="mt-2 text-sm leading-6 theme-text-muted">{t.profileDesc}</p>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <Metric title={t.doneLessons} value={`${summary.completed}/${lessonIds.length}`} />
-          <Metric title={t.mastery} value={`${summary.mastered}`} note={`${summary.measurable} ${t.covered}`} />
-          <Metric title={t.vocabulary} value={srs ? `${srs.tracked}` : "—"} note={srs ? `${srs.learned} / ${srs.mastered} ✓` : t.unmeasured} />
-          <Metric title={t.practiced} value={summary.lastLessonAccuracy === null ? "—" : `${summary.lastLessonAccuracy}%`} note={t.accuracy} />
-          <Metric title={t.missions} value={`${summary.missionsCompleted}/3`} note={`${summary.missionsMastered} ✓`} />
-          <Metric title={t.stories} value={`${summary.storiesCompleted}/3`} note={`${summary.storiesMastered} ✓`} />
-          <Metric title={t.listening} value="—" note={t.unmeasured} />
-          <Metric title={t.speaking} value="—" note={t.unmeasured} />
+      <details id="learning-journey" className="theme-inner-card group scroll-mt-24 rounded-2xl">
+        <summary className="flex min-h-16 cursor-pointer list-none items-center gap-3 px-4 py-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-5 [&::-webkit-details-marker]:hidden">
+          <span className="theme-pill flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
+            <LearningHubIcon name="progress" className="h-5 w-5" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold theme-text">{t.profile}</span>
+            <span className="mt-0.5 block text-xs leading-5 theme-text-muted">{t.doneLessons}: {summary.completed} · {t.missions}: {summary.missionsCompleted} · {t.stories}: {summary.storiesCompleted}</span>
+          </span>
+          <LearningHubIcon name="chevron" className="h-4 w-4 shrink-0 theme-text-subtle transition-transform group-open:rotate-90" />
+        </summary>
+        <div className="mx-4 border-t border-current/10 pb-4 pt-3 sm:mx-5">
+          <p className="text-xs leading-5 theme-text-muted">{t.profileDesc}</p>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <Metric title={t.doneLessons} value={`${summary.completed}/${lessonIds.length}`} />
+            <Metric title={t.mastery} value={`${summary.mastered}`} note={`${summary.measurable} ${t.covered}`} />
+            <Metric title={t.vocabulary} value={srs ? `${srs.tracked}` : "—"} note={srs ? `${srs.learned} / ${srs.mastered} ✓` : t.unmeasured} />
+            <Metric title={t.practiced} value={summary.lastLessonAccuracy === null ? "—" : `${summary.lastLessonAccuracy}%`} note={t.accuracy} />
+            <Metric title={t.missions} value={`${summary.missionsCompleted}/3`} />
+            <Metric title={t.stories} value={`${summary.storiesCompleted}/3`} />
+          </div>
+          <h3 className="mt-4 text-sm font-semibold theme-text">{t.pathway}</h3>
+          <div className="mt-2 divide-y divide-current/10">
+            {journey.steps.map(step => (
+              <div key={step.area} className="flex min-h-10 items-center justify-between gap-3 py-2 text-xs">
+                <span className="font-medium theme-text">{t.pathwayArea[step.area]}</span>
+                <span className="theme-text-muted">{t.pathwayStatus[step.status]}{step.total !== null && step.area !== "reviews" ? ` · ${step.completed ?? 0}/${step.total}` : ""}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs theme-text-subtle">{t.listening}, {t.speaking}: {t.unmeasured}</p>
         </div>
-      </section>
+      </details>
     </div>
   );
 }
 
 function Metric({ title, value, note }: { title: string; value: string; note?: string }) {
   return (
-    <div className="theme-inner-card rounded-2xl p-4">
+    <div className="rounded-xl border border-current/10 p-3">
       <p className="text-xs leading-5 theme-text-muted">{title}</p>
-      <p className="mt-2 text-xl font-bold tabular-nums theme-text">{value}</p>
-      {note ? <p className="mt-1 text-xs theme-text-subtle">{note}</p> : null}
+      <p className="mt-1 text-lg font-bold tabular-nums theme-text">{value}</p>
+      {note ? <p className="mt-0.5 text-xs theme-text-subtle">{note}</p> : null}
     </div>
   );
 }

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" fill="none" role="img" aria-label="Об'ємна відкрита книга">
+ <defs>
+ <linearGradient id="coverL" x1="16" y1="30" x2="57" y2="88" gradientUnits="userSpaceOnUse"><stop stop-color="#BAA3E9"/><stop offset="1" stop-color="#7055AD"/></linearGradient>
+ <linearGradient id="coverR" x1="56" y1="30" x2="98" y2="85" gradientUnits="userSpaceOnUse"><stop stop-color="#E9C09A"/><stop offset="1" stop-color="#B57C91"/></linearGradient>
+ <linearGradient id="paper" x1="29" y1="28" x2="85" y2="75" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFDF5"/><stop offset="1" stop-color="#D5D6F4"/></linearGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="3.5"/></filter>
+ </defs>
+ <ellipse cx="56" cy="94" rx="39" ry="6" fill="#37285C" opacity=".25" filter="url(#blur)"/>
+ <path d="M15 37c15-7 28-3 41 5 13-8 26-12 41-5v44C81 77 68 80 56 88 44 80 31 77 15 81V37Z" fill="#4C356D"/>
+ <path d="M15 33c15-7 28-3 41 5v45c-13-8-27-12-41-7V33Z" fill="url(#coverL)"/>
+ <path d="M56 38c13-8 26-12 41-5v43c-14-5-28-1-41 7V38Z" fill="url(#coverR)"/>
+ <path d="M22 24c14-4 25 0 34 8v46c-11-8-23-10-34-7V24Z" fill="url(#paper)"/>
+ <path d="M56 32c10-9 22-12 34-8v47c-12-3-24 1-34 7V32Z" fill="#F8F6F0"/>
+ <path d="M56 32v46" stroke="#B7AAC7" stroke-width="2"/>
+ <path d="m28 36 18 6m-18 3 18 6m-18 3 13 4M65 42l16-6m-16 15 16-6m-16 15 12-5" stroke="#B4ADCE" stroke-width="2.2" opacity=".8" stroke-linecap="round"/>
+ <path d="m86 8 4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1 4-9Z" fill="#FFD480" stroke="#F4A85A" stroke-width="1.8"/>
+ <circle cx="16" cy="17" r="3" fill="#DFC4FA"/>
+</svg>

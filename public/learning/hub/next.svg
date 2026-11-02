@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" fill="none" role="img" aria-label="Об'ємний компас навчання">
+<defs><linearGradient id="ring" x1="22" y1="17" x2="92" y2="93" gradientUnits="userSpaceOnUse"><stop stop-color="#B4E1D9"/><stop offset=".6" stop-color="#5EA9B4"/><stop offset="1" stop-color="#237C8B"/></linearGradient><linearGradient id="face" x1="30" y1="20" x2="75" y2="85" gradientUnits="userSpaceOnUse"><stop stop-color="#F9FFFF"/><stop offset="1" stop-color="#C8E4E7"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="3"/></filter></defs>
+<ellipse cx="56" cy="99" rx="31" ry="6" fill="#18505A" opacity=".25" filter="url(#blur)"/>
+<circle cx="56" cy="56" r="37" fill="#195E69"/>
+<circle cx="56" cy="51" r="37" fill="url(#ring)" stroke="#D2FAF6" stroke-width="1.5"/>
+<circle cx="56" cy="51" r="28" fill="url(#face)" stroke="#1F8498" stroke-opacity=".45"/>
+<path d="M56 28v5m0 36v5M33 51h5m36 0h5" stroke="#62A4A8" stroke-width="2.2" stroke-linecap="round"/>
+<path d="m46 62 10-28 10 28-10-4-10 4Z" fill="#395BBA"/>
+<path d="m56 34 10 28-10-4V34Z" fill="#89A2EC"/>
+<circle cx="56" cy="53" r="4.5" fill="#FCFFFF" stroke="#468F9E" stroke-width="2"/>
+<path d="M91 18v10m-5-5h10" stroke="#F3BA82" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

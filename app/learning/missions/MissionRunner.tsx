@@ -37,8 +37,8 @@ export default function MissionRunner({ mission }: { mission: Mission }) {
     change: l === "ua" ? "Перемкнися на відповідний курс, щоб пройти цю місію." : l === "ru" ? "Выбери соответствующий курс для этой миссии." : "Switch to the matching language course for this mission.", listen: `🔊 ${l === "en" ? "Play" : l === "ru" ? "Озвучить" : "Озвучити"} ${textByCourse[mission.course][l]}`, placeholder: `${l === "ua" ? "Напиши" : l === "ru" ? "Напиши" : "Write in"} ${textByCourse[mission.course][l]}…` };
   const { courseId } = useActiveCourse();
   const { status, data: session } = useSession();
-  const speak = (text: string, setError: (value: boolean) => void, audioSrc?: string) => {
-    void playPracticeAudio(mission.course, text, audioSrc).then(ok => setError(!ok));
+  const speak = (text: string, setError: (value: boolean) => void, audioSrc?: string, speaker = "") => {
+    void playPracticeAudio(mission.course, text, audioSrc, speaker).then(ok => setError(!ok));
   };
   const draftUser = status === "authenticated" ? (session?.user?.id || "authenticated") : "guest";
   const draftKey = `flunio:mission:draft:v2:${draftUser}:${mission.slug}`;
@@ -243,7 +243,7 @@ export default function MissionRunner({ mission }: { mission: Mission }) {
           <div className="mt-7">
             <p className="text-sm font-semibold theme-accent-text">{step.speaker}</p>
             <h2 id="mission-step-title" className="mt-3 text-2xl font-bold leading-normal theme-text">{step.sk}</h2>
-            <button type="button" className="theme-secondary-button mt-5 rounded-xl px-4 py-2 text-sm font-semibold" onClick={() => speak(step.sk, setAudioError, step.audioSrc)}>{t.listen}</button>
+            <button type="button" className="theme-secondary-button mt-5 rounded-xl px-4 py-2 text-sm font-semibold" onClick={() => speak(step.sk, setAudioError, step.audioSrc, step.speaker)}>{t.listen}</button>
             {audioError ? <p role="status" className="mt-2 text-xs theme-text-muted">{t.noAudio}</p> : null}
             <button type="button" className="ml-2 mt-3 rounded-xl px-3 py-2 text-sm theme-accent-text underline" onClick={() => setTranslationOpen((x) => !x)}>{translationOpen ? t.hide : t.translate}</button>
             {translationOpen ? <p className="theme-inner-card mt-4 rounded-xl p-4 text-sm theme-text-muted">{step.translation[l]}</p> : null}
@@ -259,7 +259,7 @@ export default function MissionRunner({ mission }: { mission: Mission }) {
             <div className="mt-3 space-y-2">
               {step.choices.map((c) => <button key={c.id} type="button" disabled={checked} onClick={() => setSelected(c.id)} className={`theme-inner-card block min-h-14 w-full rounded-xl border p-4 text-left text-sm font-medium transition ${selected === c.id ? "border-cyan-500 ring-2 ring-cyan-500/25" : ""} ${checked && c.id === step.correctId ? "border-emerald-500" : ""} disabled:cursor-default`} aria-pressed={selected === c.id}>{c.sk}</button>)}
             </div>
-            {checked ? <div className="theme-inner-card mt-5 rounded-xl p-4" role="status"><strong className="theme-text">{selected === step.correctId ? t.correct : t.mistaken}</strong><p className="mt-2 text-sm theme-text-muted">{step.explanation[l]}</p><p className="mt-3 text-sm theme-text">✓ {step.choices.find((c) => c.id === step.correctId)?.sk}</p><p className="mt-3 text-xs theme-text-subtle">{t.follow}:</p><p className="mt-1 font-semibold theme-text">{step.nextLine}</p><button type="button" onClick={() => speak(step.nextLine, setAudioError, step.nextAudioSrc)} className="mt-2 text-sm theme-accent-text underline">{t.listen}</button>{audioError ? <p className="mt-1 text-xs theme-text-muted">{t.noAudio}</p> : null}</div> : null}
+            {checked ? <div className="theme-inner-card mt-5 rounded-xl p-4" role="status"><strong className="theme-text">{selected === step.correctId ? t.correct : t.mistaken}</strong><p className="mt-2 text-sm theme-text-muted">{step.explanation[l]}</p><p className="mt-3 text-sm theme-text">✓ {step.choices.find((c) => c.id === step.correctId)?.sk}</p><p className="mt-3 text-xs theme-text-subtle">{t.follow}:</p><p className="mt-1 font-semibold theme-text">{step.nextLine}</p><button type="button" onClick={() => speak(step.nextLine, setAudioError, step.nextAudioSrc, step.speaker)} className="mt-2 text-sm theme-accent-text underline">{t.listen}</button>{audioError ? <p className="mt-1 text-xs theme-text-muted">{t.noAudio}</p> : null}</div> : null}
             <button type="button" disabled={!checked && !selected} className="theme-primary-button mt-6 w-full rounded-2xl px-5 py-3 font-semibold disabled:cursor-not-allowed disabled:opacity-50" onClick={checked ? advance : confirmObjective}>{checked ? t.next : t.check}</button>
           </div>
         ) : step.kind === "arrange" ? (

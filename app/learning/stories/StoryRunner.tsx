@@ -6,7 +6,7 @@ import { useLanguage } from "@/lib/src/useLanguage";
 import { useActiveCourse } from "@/app/learning/courses/useActiveCourse";
 import { getNode, gradeStory, type Story, type UiLang } from "./data";
 import { saveGuestStory } from "./progress";
-import { playPracticeAudio, stopPracticeAudio } from "../audio/practiceAudio";
+import { playPracticeAudio, recordedPracticeAudio, stopPracticeAudio } from "../audio/practiceAudio";
 
 type Draft = { cursor: string; selections: Record<string, string>; checked: boolean; started: boolean };
 const COPY = {
@@ -65,8 +65,8 @@ export default function StoryRunner({ story }: { story: Story }) {
 
   useEffect(() => () => stopPracticeAudio(), []);
 
-  const speak = (text: string, audioSrc?: string) => {
-    void playPracticeAudio(story.course, text, audioSrc).then(ok => setAudioError(!ok));
+  const speak = (text: string, audioSrc?: string, speaker = "") => {
+    void playPracticeAudio(story.course, text, audioSrc, speaker).then(ok => setAudioError(!ok));
   };
 
   const persistFinishedResult = (completedSelections: Record<string, string>) => {
@@ -133,9 +133,9 @@ export default function StoryRunner({ story }: { story: Story }) {
       {node.kind === "scene" ? <>
         <p className="mt-7 text-sm font-semibold theme-accent-text">{node.speaker}</p>
         <h1 id="story-card-heading" className="mt-3 text-xl font-bold">{t.read}</h1>
-        {!node.listenFirst || showSceneText ? <p className="mt-4 whitespace-pre-line text-xl leading-9">{node.sk}</p> : <p className="theme-inner-card mt-4 rounded-xl p-4 text-sm theme-text-muted">🎧 {t.voiceNote}</p>}
+        {!node.listenFirst || showSceneText ? <p className="mt-4 whitespace-pre-line text-xl leading-9">{node.sk}</p> : <p className="theme-inner-card mt-4 rounded-xl p-4 text-sm theme-text-muted">🎧 {(node.audioSrc || recordedPracticeAudio(story.course, node.sk, node.speaker)) ? (l === "ua" ? "Прослухай сцену, перш ніж відкривати текст." : l === "ru" ? "Прослушай сцену до открытия текста." : "Listen before revealing the text.") : t.voiceNote}</p>}
         <div className="mt-5 flex flex-wrap gap-2">
-          <button type="button" onClick={() => speak(node.sk, node.audioSrc)} className="theme-secondary-button rounded-xl px-4 py-2 text-sm">{t.listen}</button>
+          <button type="button" onClick={() => speak(node.sk, node.audioSrc, node.speaker)} className="theme-secondary-button rounded-xl px-4 py-2 text-sm">{t.listen}</button>
           {node.listenFirst && !showSceneText && <button type="button" onClick={() => setShowSceneText(true)} className="theme-secondary-button rounded-xl px-4 py-2 text-sm">{t.read}</button>}
           {(!node.listenFirst || showSceneText) && <button type="button" onClick={() => setTranslationOpen(v => !v)} className="theme-secondary-button rounded-xl px-4 py-2 text-sm">{translationOpen ? t.hide : t.translation}</button>}
         </div>
