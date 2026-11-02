@@ -21,13 +21,14 @@ type LessonExerciseScreenProps = {
   lang: Lang;
   courseId: CourseId;
   exercise: ExerciseDef;
-  exerciseIndex: number;
   wordIndex: number;
   exerciseTitle: string;
   exerciseScreenKey: string;
   quizAutoKey: number;
   audioUnlocked: boolean;
-  exercisesCount: number;
+  questionNumber: number;
+  questionsCount: number;
+  isReview: boolean;
   onUnlockAudio: () => void;
   onNextPerWord: (correct: boolean) => void;
   onDoneWhole: (correctCount: number) => void;
@@ -278,13 +279,14 @@ export default function LessonExerciseScreen({
   lang,
   courseId,
   exercise,
-  exerciseIndex,
   wordIndex,
   exerciseTitle,
   exerciseScreenKey,
   quizAutoKey,
   audioUnlocked,
-  exercisesCount,
+  questionNumber,
+  questionsCount,
+  isReview,
   onUnlockAudio,
   onNextPerWord,
   onDoneWhole,
@@ -304,14 +306,14 @@ export default function LessonExerciseScreen({
     >
       <div className="text-xs font-medium leading-snug theme-text-subtle sm:text-sm">
         <span className="sm:hidden">
-          {t.exercise} {exerciseIndex + 1}/{exercisesCount} ·{" "}
+          {isReview ? exerciseTitle : t.exercise} {questionNumber}/{questionsCount} ·{" "}
           {exercise.mode === "perWord"
             ? `${t.word} ${wordIndex + 1}/${words.length}`
             : t.lesson}
         </span>
 
         <span className="hidden sm:inline">
-          {t.exercise} {exerciseIndex + 1} / {exercisesCount} •{" "}
+          {isReview ? exerciseTitle : t.exercise} {questionNumber} / {questionsCount} •{" "}
           {exerciseTitle} •{" "}
           {exercise.mode === "perWord" ? (
             <>

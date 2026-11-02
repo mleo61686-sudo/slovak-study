@@ -1,0 +1,48 @@
+/** Run: npm run test:journey-v2 (no browser / database needed). */
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const ts = require('typescript');
+const src = path.join(__dirname, '../app/learning/personal-plan/');
+const { loadTS } = require('./ts-module-loader.cjs');
+const { buildLearningJourney } = loadTS(path.join(src,'journey.ts'));
+const base = { course: 'sk', lessonIds: ['a0-1', 'a0-2', 'a1-1', 'a2-1', 'b1-1','b2-1'], lessons: {}, missions: {}, stories: {}, srs: null, hasPremium: false };
+const steps = input => buildLearningJourney(input).steps;
+const step = (input, area) => steps(input).find(s => s.area === area);
+const first = buildLearningJourney(base);
+assert.deepEqual(first.steps.map(s => s.area), ['lesson','reviews','mission','story']);
+assert.equal(first.focus?.href,'/learning/a0-1');
+assert.equal(step(base,'lesson').detail, 'A0-1');
+assert.equal(step(base,'reviews').status, 'not-started');
+assert.equal(step(base,'mission').href, '/learning/missions/shop');
+assert.equal(step(base,'story').href, '/learning/stories/lost-keys');
+for(const path of first.steps.map(s=>s.href).filter(Boolean)) assert.ok(!/\/(a1|a2|b1|b2)-/.test(path));
+const withDue = { ...base, srs: { tracked: 31, learned: 5, mastered: 0, due: 7, weakDue: 2, reviewedToday: 3 } };
+assert.equal(buildLearningJourney(withDue).focus?.key, 'reviews');
+assert.equal(step(withDue,'reviews').total, 7);
+assert.equal(step(withDue,'reviews').status, 'ready');
+assert.equal(step({ ...withDue, srs: {...withDue.srs, due: 0}}, 'reviews').status, 'caught-up');
+const freeFinished = {...base, lessons: {'a0-1':true,'a0-2':true}, missions:{ shop:{ done:true, mastered:true } }, stories:{'lost-keys': {done:true,mastered:true}}};
+assert.equal(step(freeFinished,'lesson').status, 'locked');
+assert.equal(step(freeFinished,'lesson').href, null);
+assert.equal(step(freeFinished,'mission').status, 'caught-up');
+assert.equal(step(freeFinished,'story').status, 'caught-up');
+assert.equal(buildLearningJourney(freeFinished).focus, null);
+const premium = {...base, hasPremium:true, lessons:{'a0-1':true,'a0-2':true,'a1-1':true,'a2-1':true,'b1-1':true}, missions:{shop:{done:true,mastered:true}, doctor:{done:true, mastered:false}}, stories:{'lost-keys':{done:true,mastered:true}}};
+assert.equal(step(premium,'mission').href,'/learning/missions/doctor');
+assert.equal(step(premium,'story').href,'/learning/stories/shift-change');
+const b2 = {...premium, lessons: {...premium.lessons,'b2-1':true}, missions:{ shop:{done:true,mastered:true}, doctor:{done:true,mastered:true}, work:{done:true,mastered:false} }, stories:{'lost-keys':{done:true,mastered:true},'shift-change':{done:true,mastered:true}}};
+assert.equal(step(b2,'story').href, '/learning/stories/building-meeting');
+const polish = {...base, course:'pl', missions:{shop:{done:true,mastered:true}}, stories:{'lost-keys':{done:true,mastered:true}}};
+assert.equal(step(polish,'mission').href, '/learning/missions/pl-shop');
+assert.equal(step(polish,'story').href, '/learning/stories/pl-lost-keys');
+assert.equal(step(polish,'mission').completed, 0);
+assert.equal(step(polish,'story').completed, 0);
+for(const file of ['components/LevelClient/LessonFinished.tsx','missions/MissionRunner.tsx','stories/StoryRunner.tsx']) {
+  const content = fs.readFileSync(path.join(src,'..',file),'utf8');
+  assert.ok(content.includes('/learning#learning-journey'),`No return-to-path link in ${file}`);
+  assert.ok(!content.includes('bg-black') && !content.includes('text-white'),`Hardcoded theme in ${file}`);
+}
+const home = fs.readFileSync(path.join(src,'../LearningClient.tsx'),'utf8');
+assert.ok(!home.includes('courseId === "sk"'), 'Missions and stories should be available in every course');
+console.log('Flunio journey v2: PASS (priorities, course separation, Free/Premium, no false SRS mastery, end-screen navigation)');

@@ -3,16 +3,12 @@
 import type { Lang } from "@/lib/src/language";
 import type { Word } from "./types";
 
-import { phraseKey } from "@/app/learning/phrases/phraseKey";
+import { findPhraseInDict, findBuildUaSentenceInDict } from "./verified-content";
 import {
   getPhrasesForLevel,
-  type Phrase,
-  type PhraseDict,
 } from "@/app/learning/phrases/registry";
 import {
   getBuildUaSentencesForLevel,
-  type BuildSentenceTranslationItem,
-  type BuildUaSentenceDict,
 } from "@/app/learning/build-ua-sentences/registry";
 
 export function shuffle<T>(arr: T[]) {
@@ -30,15 +26,6 @@ export function normalizeSentence(s: string) {
 export const trWord = (w: Word, lang: Lang) =>
   lang === "en" ? w.en ?? w.ua : lang === "ru" ? w.ru ?? w.ua : w.ua;
 
-function normalizeKeyPart(value: string | number) {
-  return String(value)
-    .normalize("NFC")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/\s+([.,!?;:])/g, "$1");
-}
-
 function getAudioBase(courseId: string = "sk") {
   return courseId === "sk" ? "/audio" : `/audio/${courseId}`;
 }
@@ -49,74 +36,6 @@ function splitSentenceToTokens(sentence: string) {
     .trim()
     .split(/\s+/)
     .filter(Boolean);
-}
-
-function findPhraseInDict(
-  dict: PhraseDict,
-  sk: string,
-  ua: string,
-  levelId: string
-): Phrase | undefined {
-  const lessonNorm = normalizeKeyPart(levelId);
-  const skNorm = normalizeKeyPart(sk);
-  const uaNorm = normalizeKeyPart(ua);
-
-  const canonical = dict[phraseKey(sk, levelId)];
-  if (canonical) return canonical;
-
-  const compat = dict[phraseKey(sk, ua, levelId)];
-  if (compat) return compat;
-
-  const legacyKey = `${skNorm}||${uaNorm}||${lessonNorm}`;
-  const legacy = dict[legacyKey];
-  if (legacy) return legacy;
-
-  const suffix = `||${lessonNorm}`;
-
-  const hitKey = Object.keys(dict).find((k) => {
-    const key = normalizeKeyPart(k);
-
-    return (
-      key === `${skNorm}||${lessonNorm}` ||
-      (key.startsWith(`${skNorm}||`) && key.endsWith(suffix))
-    );
-  });
-
-  return hitKey ? dict[hitKey] : undefined;
-}
-
-function findBuildUaSentenceInDict(
-  dict: BuildUaSentenceDict,
-  sk: string,
-  ua: string,
-  levelId: string
-): BuildSentenceTranslationItem | undefined {
-  const lessonNorm = normalizeKeyPart(levelId);
-  const skNorm = normalizeKeyPart(sk);
-  const uaNorm = normalizeKeyPart(ua);
-
-  const canonical = dict[phraseKey(sk, levelId)];
-  if (canonical) return canonical;
-
-  const compat = dict[phraseKey(sk, ua, levelId)];
-  if (compat) return compat;
-
-  const legacyKey = `${skNorm}||${uaNorm}||${lessonNorm}`;
-  const legacy = dict[legacyKey];
-  if (legacy) return legacy;
-
-  const suffix = `||${lessonNorm}`;
-
-  const hitKey = Object.keys(dict).find((k) => {
-    const key = normalizeKeyPart(k);
-
-    return (
-      key === `${skNorm}||${lessonNorm}` ||
-      (key.startsWith(`${skNorm}||`) && key.endsWith(suffix))
-    );
-  });
-
-  return hitKey ? dict[hitKey] : undefined;
 }
 
 export function getPhraseForWord(

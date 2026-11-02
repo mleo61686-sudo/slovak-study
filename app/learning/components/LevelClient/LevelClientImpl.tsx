@@ -11,6 +11,10 @@ import {
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { finishLessonQuiz } from "@/lib/src/progress";
+import { useSession } from "next-auth/react";
+import { buildLessonPlan, buildMistakeReview, LESSON_MASTERY_PERCENT, type LessonStep } from "./lesson-plan";
+import { enrollLessonWords } from "./enrollLessonWords";
+import type { VerifiedContextKind } from "./verified-content";
 
 import type { Word, ExerciseDef } from "./types";
 import LessonIntro from "./LessonIntro";
@@ -49,7 +53,7 @@ const UI = {
     exercise: "Вправа",
     word: "Слово",
     lesson: "Урок",
-    levelDone: "Рівень пройдено 🎉",
+    levelDone: "Урок завершено 🎉",
     result: "Результат",
     nextLockedTitle: "Наступний урок входить у Premium 🔒",
     nextLockedDefault:
@@ -57,8 +61,18 @@ const UI = {
     reviewAgain: "Переглянути слова знову",
     goNextLevel: "Перейти до наступного рівня →",
     toLessonsList: "До списку уроків",
+    toPathway: "До мого маршруту →",
     notAvailableFree: "Недоступно у free",
     saving: "Зберігаю прогрес…",
+    mastered: "Матеріал засвоєно",
+    needsPractice: "Урок завершено — варто потренуватися ще",
+    masteryHint: "Для позначки «засвоєно» потрібно щонайменше 80% правильних відповідей з першої спроби.",
+    mistakesLabel: "Слів для додаткового повторення",
+    addToSrs: "Додати слова до повторення",
+    addedToSrs: "Додано до повторення",
+    allInSrs: "Слова вже є в повторенні",
+    dailySrsLimit: "Денний ліміт нових слів вичерпано. Інші можна додати завтра.",
+    repeatPhase: "Робота над помилками",
 
     premiumA1Locked:
       "A1 відкривається з Premium. A0 можна пройти безкоштовно без денного ліміту.",
@@ -77,7 +91,7 @@ const UI = {
       "Не треба зубрити їх одразу. Просто ознайомся — далі вправи допоможуть усе закріпити.",
     introReadyTitle: "Починаємо?",
     introReadyText:
-      "Спочатку легкі вибори, потім аудіо, письмо, пари й речення.",
+      "Спочатку впізнавання слів, потім пригадування й перевірені речення. Помилки повторимо окремо.",
     courseSk: "Словацька",
     courseCs: "Чеська",
     coursePl: "Польська",
@@ -98,7 +112,7 @@ const UI = {
     exercise: "Упражнение",
     word: "Слово",
     lesson: "Урок",
-    levelDone: "Уровень пройден 🎉",
+    levelDone: "Урок завершён 🎉",
     result: "Результат",
     nextLockedTitle: "Следующий урок входит в Premium 🔒",
     nextLockedDefault:
@@ -106,8 +120,18 @@ const UI = {
     reviewAgain: "Посмотреть слова снова",
     goNextLevel: "Перейти к следующему уровню →",
     toLessonsList: "К списку уроков",
+    toPathway: "К моему маршруту →",
     notAvailableFree: "Недоступно в free",
     saving: "Сохраняю прогресс…",
+    mastered: "Материал усвоен",
+    needsPractice: "Урок завершён — стоит потренироваться ещё",
+    masteryHint: "Для отметки «усвоено» нужно минимум 80% правильных ответов с первой попытки.",
+    mistakesLabel: "Слов для дополнительного повторения",
+    addToSrs: "Добавить слова в повторение",
+    addedToSrs: "Добавлено в повторение",
+    allInSrs: "Слова уже в повторении",
+    dailySrsLimit: "Дневной лимит новых слов исчерпан. Остальные можно добавить завтра.",
+    repeatPhase: "Работа над ошибками",
 
     premiumA1Locked:
       "A1 открывается с Premium. A0 можно пройти бесплатно без дневного лимита.",
@@ -126,7 +150,7 @@ const UI = {
       "Не нужно сразу всё зубрить. Просто познакомься со словами — дальше упражнения помогут закрепить.",
     introReadyTitle: "Начинаем?",
     introReadyText:
-      "Сначала лёгкий выбор, потом аудио, письмо, пары и предложения.",
+      "Сначала узнавание слов, затем вспоминание и проверенные предложения. Ошибки повторим отдельно.",
     courseSk: "Словацкий",
     courseCs: "Чешский",
     coursePl: "Польский",
@@ -147,7 +171,7 @@ const UI = {
     exercise: "Exercise",
     word: "Word",
     lesson: "Lesson",
-    levelDone: "Level completed 🎉",
+    levelDone: "Lesson completed 🎉",
     result: "Result",
     nextLockedTitle: "The next lesson is Premium 🔒",
     nextLockedDefault:
@@ -155,8 +179,18 @@ const UI = {
     reviewAgain: "Review words again",
     goNextLevel: "Go to the next level →",
     toLessonsList: "Back to lessons list",
+    toPathway: "My learning pathway →",
     notAvailableFree: "Not available in free",
     saving: "Saving progress…",
+    mastered: "Material mastered",
+    needsPractice: "Lesson completed — more practice recommended",
+    masteryHint: "Mastery requires at least 80% correct on the first attempt.",
+    mistakesLabel: "Words to practise again",
+    addToSrs: "Add words to review",
+    addedToSrs: "Added to review",
+    allInSrs: "Words are already in review",
+    dailySrsLimit: "Daily new-word limit reached. Add the remaining words tomorrow.",
+    repeatPhase: "Mistake review",
 
     premiumA1Locked:
       "A1 unlocks with Premium. You can complete A0 for free without a daily limit.",
@@ -175,7 +209,7 @@ const UI = {
       "No need to memorise everything right now. Get familiar with the words — the exercises will help you lock them in.",
     introReadyTitle: "Ready?",
     introReadyText:
-      "First simple choices, then audio, typing, matching and sentences.",
+      "First recognise words, then recall them and practise verified sentences. Mistakes get an extra round.",
     courseSk: "Slovak",
     courseCs: "Czech",
     coursePl: "Polish",
@@ -286,6 +320,7 @@ export default function LevelClient({
   lockedReason,
   onLockedNextRedirect = "/learning",
   courseId = "sk",
+  contextKinds = [],
 }: {
   levelId: string;
   words: Word[];
@@ -293,15 +328,24 @@ export default function LevelClient({
   lockedReason?: string;
   onLockedNextRedirect?: string;
   courseId?: CourseId;
+  contextKinds?: VerifiedContextKind[];
 }) {
   const router = useRouter();
+  const { data: session } = useSession();
   const { lang } = useLanguage();
   const t = UI[uiLangFrom(lang)];
   const nextLevelId = getNextLevelId(levelId);
 
   const [mode, setMode] = useState<"learn" | "quiz">("learn");
-  const [exerciseIndex, setExerciseIndex] = useState(0);
-  const [wordIndex, setWordIndex] = useState(0);
+  const lessonPlan = useMemo(
+    () => buildLessonPlan(words, levelId, contextKinds),
+    [words, levelId, contextKinds]
+  );
+  const [stepIndex, setStepIndex] = useState(0);
+  const [reviewSteps, setReviewSteps] = useState<LessonStep[]>([]);
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const mistakesRef = useRef<Set<number>>(new Set());
+  const [srsStatus, setSrsStatus] = useState("");
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [quizAutoKey, setQuizAutoKey] = useState(0);
@@ -343,8 +387,11 @@ export default function LevelClient({
     finishingRef.current = false;
     advancingRef.current = false;
     setMode("learn");
-    setExerciseIndex(0);
-    setWordIndex(0);
+    setStepIndex(0);
+    setReviewSteps([]);
+    setReviewIndex(0);
+    mistakesRef.current = new Set();
+    setSrsStatus("");
     setScore(0);
     setFinished(false);
   }
@@ -356,8 +403,11 @@ export default function LevelClient({
     advancingRef.current = false;
     setQuizAutoKey((k) => k + 1);
     setMode("quiz");
-    setExerciseIndex(0);
-    setWordIndex(0);
+    setStepIndex(0);
+    setReviewSteps([]);
+    setReviewIndex(0);
+    mistakesRef.current = new Set();
+    setSrsStatus("");
     setScore(0);
     setFinished(false);
   }
@@ -369,7 +419,7 @@ export default function LevelClient({
 
   useEffect(() => {
     advancingRef.current = false;
-  }, [mode, exerciseIndex, wordIndex, finished]);
+  }, [mode, stepIndex, reviewIndex, reviewSteps, finished]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -434,22 +484,14 @@ export default function LevelClient({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [mode]);
 
-  const totalQuestions = useMemo(() => {
-    return EXERCISES.reduce((sum, ex) => {
-      return sum + (ex.mode === "perWord" ? words.length : words.length);
-    }, 0);
-  }, [words.length]);
+  const totalQuestions = lessonPlan.length;
+  const inReview = reviewSteps.length > 0;
+  const activeStep = inReview ? reviewSteps[reviewIndex] : lessonPlan[stepIndex];
 
   function finishLesson(finalScore: number) {
     if (finishingRef.current) return;
     finishingRef.current = true;
 
-    /**
-     * ВАЖЛИВО:
-     * Спочатку блокуємо Next і показуємо saving state.
-     * Інакше користувач може натиснути "Перейти далі"
-     * раніше, ніж сервер оновив lastUnlockedLevel.
-     */
     setSavingNext(true);
     setCanGoNextNow(false);
     setLockedReasonNow(undefined);
@@ -473,42 +515,25 @@ export default function LevelClient({
             totalQuestions,
           }),
         });
-
         const data = await res.json().catch(() => ({}));
-
         if (!res.ok || !data?.ok) {
-          console.error("Save server progress failed:", {
-            status: res.status,
-            data,
-          });
-
+          console.error("Save server progress failed:", { status: res.status, data });
           setCanGoNextNow(false);
           setLockedReasonNow("unknown_lesson");
           return;
         }
 
         const nextIsFree = isFreeLesson(nextLevelId);
-
         if (nextIsFree) {
           setCanGoNextNow(true);
           setLockedReasonNow(undefined);
         } else {
           setCanGoNextNow(canGoNext);
-          setLockedReasonNow(
-            canGoNext
-              ? undefined
-              : lockedReason ?? getLockedLessonReason(nextLevelId)
-          );
+          setLockedReasonNow(canGoNext ? undefined : lockedReason ?? getLockedLessonReason(nextLevelId));
         }
-
-        /**
-         * Оновлює server components / router cache,
-         * щоб наступний перехід бачив вже новий lastUnlockedLevel.
-         */
         router.refresh();
       } catch (e) {
         console.error("Save server progress error", e);
-
         setCanGoNextNow(false);
         setLockedReasonNow("unknown_lesson");
       } finally {
@@ -521,42 +546,50 @@ export default function LevelClient({
     if (advancingRef.current || finishingRef.current) return;
     advancingRef.current = true;
 
+    if (inReview) {
+      if (reviewIndex < reviewSteps.length - 1) {
+        setReviewIndex((i) => i + 1);
+      } else {
+        // Reinforcement never inflates the first-attempt assessment score.
+        finishLesson(score);
+      }
+      return;
+    }
+
+    if (!correct && activeStep) mistakesRef.current.add(activeStep.wordIndex);
     const updatedScore = score + (correct ? 1 : 0);
     if (correct) setScore((s) => s + 1);
 
-    const lastWord = wordIndex >= words.length - 1;
-    const lastExercise = exerciseIndex >= EXERCISES.length - 1;
-
-    if (!lastWord) {
-      setWordIndex((i) => i + 1);
+    if (stepIndex < lessonPlan.length - 1) {
+      setStepIndex((i) => i + 1);
       return;
     }
 
-    if (!lastExercise) {
-      setExerciseIndex((e) => e + 1);
-      setWordIndex(0);
-      return;
+    const repeats = buildMistakeReview(mistakesRef.current, words, levelId);
+    if (repeats.length > 0) {
+      setReviewSteps(repeats);
+      setReviewIndex(0);
+    } else {
+      finishLesson(updatedScore);
     }
-
-    finishLesson(updatedScore);
   }
 
   function doneWhole(correctCount: number) {
-    if (advancingRef.current || finishingRef.current) return;
-    advancingRef.current = true;
+    // Kept for the existing matching exercise; it is not part of the v2 plan.
+    nextPerWord(correctCount === words.length);
+  }
 
-    const updatedScore = score + correctCount;
-    setScore((s) => s + correctCount);
-
-    const lastExercise = exerciseIndex >= EXERCISES.length - 1;
-
-    if (!lastExercise) {
-      setExerciseIndex((e) => e + 1);
-      setWordIndex(0);
-      return;
+  function addLessonWordsToSrs() {
+    if (!session?.user?.id) return;
+    try {
+      const result = enrollLessonWords(session.user.id, courseId, words);
+      const message = result.added > 0
+        ? `${t.addedToSrs}: ${result.added}. ${result.dailyLimitReached ? t.dailySrsLimit : ""}`
+        : result.dailyLimitReached ? t.dailySrsLimit : t.allInSrs;
+      setSrsStatus(message);
+    } catch (error) {
+      console.error("Could not enroll lesson words in SRS", error);
     }
-
-    finishLesson(updatedScore);
   }
 
   function goTo(path: string) {
@@ -584,9 +617,10 @@ export default function LevelClient({
     );
   }
 
-  const exercise = EXERCISES[exerciseIndex];
-  const exerciseTitle = getExerciseTitle(exercise.kind, t);
-  const exerciseScreenKey = `${exercise.kind}-${wordIndex}-${quizAutoKey}`;
+  const exercise = EXERCISES.find((item) => item.kind === activeStep?.kind) ?? EXERCISES[0];
+  const exerciseTitle = inReview ? t.repeatPhase : getExerciseTitle(exercise.kind, t);
+  const wordIndex = activeStep?.wordIndex ?? 0;
+  const exerciseScreenKey = `${inReview ? "review" : "core"}-${exercise.kind}-${wordIndex}-${stepIndex}-${reviewIndex}-${quizAutoKey}`;
 
   if (finished) {
     return (
@@ -594,6 +628,10 @@ export default function LevelClient({
         t={t}
         score={score}
         totalQuestions={totalQuestions}
+        mastered={totalQuestions > 0 && (score / totalQuestions) * 100 >= LESSON_MASTERY_PERCENT}
+        mistakeCount={mistakesRef.current.size}
+        srsStatus={srsStatus}
+        onEnrollSrs={session?.user?.id ? addLessonWordsToSrs : undefined}
         savingNext={savingNext}
         canGoNextNow={canGoNextNow}
         lockedReasonNow={getLockedReasonText(lockedReasonNow, t)}
@@ -613,13 +651,14 @@ export default function LevelClient({
       lang={lang}
       courseId={courseId}
       exercise={exercise}
-      exerciseIndex={exerciseIndex}
       wordIndex={wordIndex}
       exerciseTitle={exerciseTitle}
       exerciseScreenKey={exerciseScreenKey}
       quizAutoKey={quizAutoKey}
       audioUnlocked={audioUnlocked}
-      exercisesCount={EXERCISES.length}
+      questionNumber={inReview ? reviewIndex + 1 : stepIndex + 1}
+      questionsCount={inReview ? reviewSteps.length : lessonPlan.length}
+      isReview={inReview}
       onUnlockAudio={unlockInsideLesson}
       onNextPerWord={nextPerWord}
       onDoneWhole={doneWhole}

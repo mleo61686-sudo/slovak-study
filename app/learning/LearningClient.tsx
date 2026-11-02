@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 import type { CefrBand, Lang, LocalizedText } from "./data";
 import type {
@@ -13,6 +14,8 @@ import type {
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { isPremiumLesson } from "@/app/learning/access/lessonAccess";
+import DailyLearningPlan from "./personal-plan/DailyLearningPlan";
+import { useActiveCourse } from "./courses/useActiveCourse";
 
 type LearningDict = {
   title: string;
@@ -32,6 +35,12 @@ type LearningDict = {
   availableNow: string;
   lastDone: string;
   freeA0: string;
+  missionTitle: string;
+  missionDesc: string;
+  missionButton: string;
+  storiesTitle: string;
+  storiesDesc: string;
+  storiesButton: string;
 };
 
 type SessionUserLike = {
@@ -68,6 +77,12 @@ const dict: Record<Lang, LearningDict> = {
     availableNow: "Доступний зараз:",
     lastDone: "Останній пройдений:",
     freeA0: "A0 безкоштовно — без денного ліміту",
+    missionTitle: "Життєві місії 🗣️",
+    missionDesc: "Практикуй справжні розмови: магазин, лікар, робота. Від коротких фраз до самостійних відповідей.",
+    missionButton: "Відкрити місії →",
+    storiesTitle: "Інтерактивні історії 📖",
+    storiesDesc: "Читайте живі словацькі історії, слухайте репліки та впливайте на сюжет своїми рішеннями.",
+    storiesButton: "Перейти до історій →",
   },
   ru: {
     title: "Обучение 📚",
@@ -88,6 +103,12 @@ const dict: Record<Lang, LearningDict> = {
     availableNow: "Доступно сейчас:",
     lastDone: "Последний пройденный:",
     freeA0: "A0 бесплатно — без дневного лимита",
+    missionTitle: "Жизненные миссии 🗣️",
+    missionDesc: "Тренируй реальные разговоры: магазин, врач, работа. От коротких фраз до собственных ответов.",
+    missionButton: "Открыть миссии →",
+    storiesTitle: "Интерактивные истории 📖",
+    storiesDesc: "Читай настоящие словацкие диалоги, слушай реплики и меняй развитие сюжета.",
+    storiesButton: "Перейти к историям →",
   },
   en: {
     title: "Learning 📚",
@@ -108,6 +129,12 @@ const dict: Record<Lang, LearningDict> = {
     availableNow: "Available now:",
     lastDone: "Last completed:",
     freeA0: "A0 is free — no daily limit",
+    missionTitle: "Real-life missions 🗣️",
+    missionDesc: "Practise real conversations at shops, doctors’ offices and work. From short phrases to your own replies.",
+    missionButton: "Explore missions →",
+    storiesTitle: "Interactive stories 📖",
+    storiesDesc: "Read Slovak stories, listen to dialogue and change the plot with your decisions.",
+    storiesButton: "Explore stories →",
   },
 };
 
@@ -224,6 +251,7 @@ function getLocalized(value: LocalizedText, lang: Lang) {
 
 export default function LearningPage({ bands }: { bands: CefrBand[] }) {
   const router = useRouter();
+  const { courseId } = useActiveCourse();
   const { data: session } = useSession();
   const user = session?.user as SessionUserLike | undefined;
   const isPremium = user?.isPremium === true;
@@ -363,6 +391,27 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
           ) : null}
         </div>
       </div>
+
+      <DailyLearningPlan
+        lessons={progress}
+        lessonIds={bands.flatMap(band => band.lessons.map(lesson => lesson.id))}
+        hasPremium={isPremium || isAdmin}
+      />
+
+      <>
+      <section className="flunio-card mt-6 rounded-3xl p-6">
+        <h2 className="text-xl font-bold theme-text">{t.missionTitle}</h2>
+        <p className="mt-2 text-sm leading-6 theme-text-muted">{t.missionDesc}</p>
+        <Link href="/learning/missions" className="theme-primary-button mt-4 inline-flex min-h-11 items-center rounded-xl px-5 py-3 text-sm font-semibold">{t.missionButton}</Link>
+      </section>
+
+      <section className="flunio-card mt-6 rounded-3xl p-6">
+        <h2 className="text-xl font-bold theme-text">{t.storiesTitle}</h2>
+        <p className="mt-2 text-sm leading-6 theme-text-muted">{t.storiesDesc}</p>
+        <Link href="/learning/stories" className="theme-primary-button mt-4 inline-flex min-h-11 items-center rounded-xl px-5 py-3 text-sm font-semibold">{t.storiesButton}</Link>
+      </section>
+
+      </>
 
       <div className="mt-8 space-y-8">
         {bands.map((band) => {
