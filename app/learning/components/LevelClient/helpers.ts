@@ -38,6 +38,26 @@ function splitSentenceToTokens(sentence: string) {
     .filter(Boolean);
 }
 
+/**
+ * Grammatically safe practice sentence for words without authored examples.
+ * The target item is quoted as a dictionary entry, not incorrectly inflected.
+ * Prefer authored lesson phrases whenever present.
+ */
+function neutralWordSentence(word: Word, lang: Lang, courseId: string) {
+  const sk = courseId === "cs"
+    ? `Zapamatuj si výraz „${word.sk}“.`
+    : courseId === "pl"
+      ? `Zapamiętaj wyrażenie „${word.sk}“.`
+      : `Zapamätaj si výraz „${word.sk}“.`;
+  const translation = trWord(word, lang);
+  const target = lang === "en"
+    ? `Remember the expression “${translation}”.`
+    : lang === "ru"
+      ? `Запомни выражение «${translation}».`
+      : `Запам'ятай вираз «${translation}».`;
+  return { sk, target };
+}
+
 export function getPhraseForWord(
   word: Word,
   lang: Lang,
@@ -49,7 +69,7 @@ export function getPhraseForWord(
   if (dict) {
     const p = findPhraseInDict(dict, word.sk, word.ua, levelId);
 
-    if (p) {
+    if (p?.sk?.trim() && p?.ua?.trim() && p.tokens?.length >= 2) {
       const target =
         lang === "en"
           ? p.en ?? p.ua
@@ -61,7 +81,7 @@ export function getPhraseForWord(
     }
   }
 
-  if (word.phrase) {
+  if (word.phrase?.sk?.trim() && word.phrase?.ua?.trim() && word.phrase.tokens?.length >= 2) {
     const target =
       lang === "en"
         ? word.phrase.en ?? word.phrase.ua
@@ -72,16 +92,8 @@ export function getPhraseForWord(
     return { sk: word.phrase.sk, target, tokens: word.phrase.tokens };
   }
 
-  const sk = `To je ${word.sk}.`;
-  const target =
-    lang === "en"
-      ? `This is ${word.en ?? word.ua}.`
-      : lang === "ru"
-        ? `Это ${word.ru ?? word.ua}.`
-        : `Це ${word.ua}.`;
-  const tokens = ["To", "je", word.sk, "."];
-
-  return { sk, target, tokens };
+  const fallback = neutralWordSentence(word, lang, courseId);
+  return { ...fallback, tokens: splitSentenceToTokens(fallback.sk) };
 }
 
 export function getBuildUaSentenceForWord(
@@ -133,17 +145,16 @@ export function getBuildUaSentenceForWord(
     }
   }
 
-  const fallbackSentence =
-    lang === "en" ? word.en ?? word.ua : lang === "ru" ? word.ru ?? word.ua : word.ua;
-
-  const fallbackTokens = splitSentenceToTokens(fallbackSentence);
-
+  // Reuse a complete authored example if the translation-specific dictionary
+  // is unavailable; otherwise use a safe neutral sentence in both languages.
+  const phrase = getPhraseForWord(word, lang, levelId, courseId);
+  const answerTokens = splitSentenceToTokens(phrase.target);
   return {
-    sk: word.phrase?.sk ?? `To je ${word.sk}.`,
-    target: fallbackSentence,
-    answerTokens: fallbackTokens,
+    sk: phrase.sk,
+    target: phrase.target,
+    answerTokens,
     extraTokens: [],
-    validAnswers: [fallbackTokens],
+    validAnswers: [answerTokens],
   };
 }
 

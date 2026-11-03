@@ -35,6 +35,7 @@ model User {
   lastActiveAt             DateTime  @default(now())
   inactivityReminderSentAt DateTime?
   updatesEmailSentAt       DateTime?
+  lastSeenUpdateKey        String?   // Last update opened in the Updates page
   unsubscribeToken         String?   @unique
 
   // Зворотний зв’язок для прогресу

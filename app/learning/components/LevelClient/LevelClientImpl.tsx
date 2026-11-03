@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/src/useLanguage";
 import { finishLessonQuiz } from "@/lib/src/progress";
 import { useSession } from "next-auth/react";
-import { buildLessonPlan, buildMistakeReview, LESSON_MASTERY_PERCENT, type LessonStep } from "./lesson-plan";
+import { buildLessonPlan, buildMistakeReview, lessonStepPoints, LESSON_MASTERY_PERCENT, type LessonStep } from "./lesson-plan";
 import { enrollLessonWords } from "./enrollLessonWords";
 import type { VerifiedContextKind } from "./verified-content";
 
@@ -91,7 +91,7 @@ const UI = {
       "Не треба зубрити їх одразу. Просто ознайомся — далі вправи допоможуть усе закріпити.",
     introReadyTitle: "Починаємо?",
     introReadyText:
-      "Спочатку впізнавання слів, потім пригадування й перевірені речення. Помилки повторимо окремо.",
+      "На тебе чекають усі 7 видів вправ: переклад, вибір слова, письмо, аудіо, пари й речення. Наприкінці повторимо помилки.",
     courseSk: "Словацька",
     courseCs: "Чеська",
     coursePl: "Польська",
@@ -150,7 +150,7 @@ const UI = {
       "Не нужно сразу всё зубрить. Просто познакомься со словами — дальше упражнения помогут закрепить.",
     introReadyTitle: "Начинаем?",
     introReadyText:
-      "Сначала узнавание слов, затем вспоминание и проверенные предложения. Ошибки повторим отдельно.",
+      "Все 7 видов упражнений: перевод, выбор слова, письмо, аудио, пары и предложения. В конце повторим ошибки.",
     courseSk: "Словацкий",
     courseCs: "Чешский",
     coursePl: "Польский",
@@ -209,7 +209,7 @@ const UI = {
       "No need to memorise everything right now. Get familiar with the words — the exercises will help you lock them in.",
     introReadyTitle: "Ready?",
     introReadyText:
-      "First recognise words, then recall them and practise verified sentences. Mistakes get an extra round.",
+      "All seven exercise types: translation, word choice, spelling, audio, matching and sentences. We will review mistakes at the end.",
     courseSk: "Slovak",
     courseCs: "Czech",
     coursePl: "Polish",
@@ -484,7 +484,15 @@ export default function LevelClient({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [mode]);
 
-  const totalQuestions = lessonPlan.length;
+  // Matching is a single board worth one point for each word; count it once.
+  const totalQuestions = useMemo(
+    () => lessonPlan.reduce((sum, step) => sum + lessonStepPoints(step, words.length), 0),
+    [lessonPlan, words.length]
+  );
+  const currentQuestionNumber = useMemo(
+    () => lessonPlan.slice(0, stepIndex).reduce((sum, step) => sum + lessonStepPoints(step, words.length), 1),
+    [lessonPlan, stepIndex, words.length]
+  );
   const inReview = reviewSteps.length > 0;
   const activeStep = inReview ? reviewSteps[reviewIndex] : lessonPlan[stepIndex];
 
@@ -542,24 +550,7 @@ export default function LevelClient({
     })();
   }
 
-  function nextPerWord(correct: boolean) {
-    if (advancingRef.current || finishingRef.current) return;
-    advancingRef.current = true;
-
-    if (inReview) {
-      if (reviewIndex < reviewSteps.length - 1) {
-        setReviewIndex((i) => i + 1);
-      } else {
-        // Reinforcement never inflates the first-attempt assessment score.
-        finishLesson(score);
-      }
-      return;
-    }
-
-    if (!correct && activeStep) mistakesRef.current.add(activeStep.wordIndex);
-    const updatedScore = score + (correct ? 1 : 0);
-    if (correct) setScore((s) => s + 1);
-
+  function advanceCore(updatedScore: number) {
     if (stepIndex < lessonPlan.length - 1) {
       setStepIndex((i) => i + 1);
       return;
@@ -574,9 +565,40 @@ export default function LevelClient({
     }
   }
 
+  function nextPerWord(correct: boolean) {
+    if (advancingRef.current || finishingRef.current) return;
+    if (!activeStep || activeStep.kind === "matchColumns") return;
+    advancingRef.current = true;
+
+    if (inReview) {
+      if (reviewIndex < reviewSteps.length - 1) {
+        setReviewIndex((i) => i + 1);
+      } else {
+        // Practice after mistakes never inflates the initial lesson score.
+        finishLesson(score);
+      }
+      return;
+    }
+
+    if (!correct) mistakesRef.current.add(activeStep.wordIndex);
+    const updatedScore = score + (correct ? 1 : 0);
+    if (correct) setScore((s) => s + 1);
+    advanceCore(updatedScore);
+  }
+
   function doneWhole(correctCount: number) {
-    // Kept for the existing matching exercise; it is not part of the v2 plan.
-    nextPerWord(correctCount === words.length);
+    if (advancingRef.current || finishingRef.current) return;
+    if (!activeStep || activeStep.kind !== "matchColumns" || inReview) return;
+    advancingRef.current = true;
+
+    const validCount = Number.isFinite(correctCount)
+      ? Math.max(0, Math.min(words.length, Math.trunc(correctCount)))
+      : 0;
+    const updatedScore = score + validCount;
+    setScore((s) => s + validCount);
+    // MatchColumns does not report which individual pairs were missed.
+    // The other six rounds already track mistakes by their word index.
+    advanceCore(updatedScore);
   }
 
   function addLessonWordsToSrs() {
@@ -656,8 +678,8 @@ export default function LevelClient({
       exerciseScreenKey={exerciseScreenKey}
       quizAutoKey={quizAutoKey}
       audioUnlocked={audioUnlocked}
-      questionNumber={inReview ? reviewIndex + 1 : stepIndex + 1}
-      questionsCount={inReview ? reviewSteps.length : lessonPlan.length}
+      questionNumber={inReview ? reviewIndex + 1 : currentQuestionNumber}
+      questionsCount={inReview ? reviewSteps.length : totalQuestions}
       isReview={inReview}
       onUnlockAudio={unlockInsideLesson}
       onNextPerWord={nextPerWord}

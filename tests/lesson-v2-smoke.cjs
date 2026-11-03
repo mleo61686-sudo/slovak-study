@@ -53,17 +53,20 @@ const verifiedContexts = resolved.map((kind, index) =>
 );
 const a0 = planner.buildLessonPlan(words, "a0-1", verifiedContexts);
 const b1 = planner.buildLessonPlan(words, "b1-1", verifiedContexts);
-assert.equal(a0.length, 23, "10 recognition + 10 recall + 3 verified contexts");
-assert.equal(b1.length, 23);
-assert.equal(a0.filter((step) => step.phase === "recognition").length, 10);
-assert.equal(a0.filter((step) => step.phase === "recall").length, 10);
-assert.equal(a0.filter((step) => step.phase === "context").length, 3);
-assert.ok(a0.filter((step) => step.phase === "recall").every((step) => step.kind === "chooseSlovak"));
-assert.ok(b1.filter((step) => step.phase === "recall").every((step) => step.kind === "writeWord"));
-assert.deepEqual(
-  a0.filter((step) => step.phase === "context").map((step) => step.wordIndex),
-  [1, 4, 8]
-);
+const expectedKinds = [
+  "chooseTranslation", "chooseSlovak", "writeWord", "audioQuiz",
+  "matchColumns", "buildSentence", "buildUaSentence"
+];
+for (const plan of [a0, b1]) {
+  assert.equal(plan.length, 61, "six rounds of ten plus one matching board");
+  assert.deepEqual([...new Set(plan.map((step) => step.kind))], expectedKinds);
+  assert.deepEqual(plan.filter((step) => step.kind === "matchColumns").map((step) => step.wordIndex), [0]);
+  for (const kind of expectedKinds.filter((kind) => kind !== "matchColumns")) {
+    assert.deepEqual(plan.filter((step) => step.kind === kind).map((step) => step.wordIndex),
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  }
+  assert.equal(plan.reduce((sum, step) => sum + planner.lessonStepPoints(step, words.length), 0), 70);
+}
 assert.equal(planner.buildLessonPlan([], "a0-1", []).length, 0);
 assert.deepEqual(
   planner.buildMistakeReview(new Set([9, 1, 1, -1, 20]), words, "a0-1").map((step) => step.wordIndex),
@@ -71,6 +74,26 @@ assert.deepEqual(
 );
 assert.equal(planner.LESSON_MASTERY_PERCENT, 80);
 
+// Fallbacks must be grammatical: no synthetic "To je <verb>" sentences.
+const helpers = loadTsModule("app/learning/components/LevelClient/helpers.ts", {
+  "./verified-content": {
+    findPhraseInDict: () => undefined,
+    findBuildUaSentenceInDict: () => undefined,
+  },
+  "@/app/learning/phrases/registry": { getPhrasesForLevel: () => null },
+  "@/app/learning/build-ua-sentences/registry": { getBuildUaSentencesForLevel: () => null },
+});
+const verb = { sk: "ísť", ua: "йти", ru: "идти", en: "to go" };
+for (const [course, begins] of [["sk", "Zapamätaj"], ["cs", "Zapamatuj"], ["pl", "Zapamiętaj"]]) {
+  const phrase = helpers.getPhraseForWord(verb, "ua", "a0-1", course);
+  assert.ok(phrase.sk.startsWith(begins));
+  assert.ok(phrase.sk.includes("ísť"));
+  assert.ok(!phrase.sk.includes("To je ísť"));
+  assert.ok(phrase.tokens.length >= 3);
+  const translation = helpers.getBuildUaSentenceForWord(verb, "ua", "a0-1", course);
+  assert.ok(translation.target.includes("йти"));
+  assert.ok(translation.answerTokens.length >= 3);
+}
 const db = { slovo2: { id: "slovo2", dueAt: 999, reps: 8 } };
 let dailyCount = 29;
 let sessionIds = ["old"];
@@ -102,4 +125,4 @@ assert.equal(saves, 1);
 const second = enroll.enrollLessonWords("user", "sk", words);
 assert.equal(second.added, 0, "daily limit must be preserved");
 assert.equal(saves, 1, "do not write an unchanged SRS store");
-console.log("Lesson v2 smoke tests: PASS (plan, verified contexts, mistakes, SRS limit, history)");
+console.log("Lesson classic-7 smoke tests: PASS (7 exercises, 70 points, sentence fallback, SRS, review)");
