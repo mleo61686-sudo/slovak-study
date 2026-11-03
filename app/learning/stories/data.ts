@@ -1,3 +1,4 @@
+import { EXTRA_STORIES } from "./content-extra";
 /** Flunio Interactive Stories: curated target-language text and deterministic reading checks.
  * The browser's optional speech synthesis is NOT a recorded native speaker or
  * a validated listening/speaking assessment. Score = reading comprehension only.
@@ -119,7 +120,7 @@ export const STORIES: Story[] = [
   },
 ];
 
-export const ALL_STORIES: readonly Story[] = [...STORIES, ...CS_STORIES, ...PL_STORIES];
+export const ALL_STORIES: readonly Story[] = [...STORIES, ...CS_STORIES, ...PL_STORIES, ...EXTRA_STORIES];
 export function getStoriesForCourse(course: Course): readonly Story[] { return ALL_STORIES.filter(story => story.course === course); }
 export function getStory(slug: string): Story | undefined { return ALL_STORIES.find(s => s.slug === slug); }
 export function getNode(story: Story, id: string): StoryNode | undefined { return story.nodes.find(n => n.id === id); }

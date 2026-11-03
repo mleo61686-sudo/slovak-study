@@ -4,13 +4,13 @@ const {loadTS} = require('./ts-module-loader.cjs');
 const {getMission, getMissionsForCourse, objectiveSteps, gradeMission, ALL_MISSIONS} = loadTS('app/learning/missions/data.ts');
 const {getStory, getStoriesForCourse, gradeStory, getNode, ALL_STORIES} = loadTS('app/learning/stories/data.ts');
 const {scenarioCatalog} = loadTS('app/learning/personal-plan/scenarioCatalog.ts');
-assert.equal(ALL_MISSIONS.length, 9);
-assert.equal(ALL_STORIES.length, 9);
-assert.equal(new Set(ALL_MISSIONS.map(m=>m.slug)).size,9);
-assert.equal(new Set(ALL_STORIES.map(s=>s.slug)).size,9);
+assert.equal(ALL_MISSIONS.length, 15);
+assert.equal(ALL_STORIES.length, 15);
+assert.equal(new Set(ALL_MISSIONS.map(m=>m.slug)).size,15);
+assert.equal(new Set(ALL_STORIES.map(s=>s.slug)).size,15);
 for (const course of ['sk','cs','pl']) {
-  assert.equal(getMissionsForCourse(course).length,3);
-  assert.equal(getStoriesForCourse(course).length,3);
+  assert.equal(getMissionsForCourse(course).length,5);
+  assert.equal(getStoriesForCourse(course).length,5);
   assert.deepEqual(getMissionsForCourse(course).map(m=>m.slug),scenarioCatalog(course,'mission').map(m=>m.slug));
   assert.deepEqual(getStoriesForCourse(course).map(s=>s.slug),scenarioCatalog(course,'story').map(s=>s.slug));
   for(const mission of getMissionsForCourse(course)) {
@@ -48,4 +48,4 @@ for (const course of ['sk','cs','pl']) {
 const audio=fs.readFileSync('app/learning/audio/practiceAudio.ts','utf8');
 assert.match(audio,/cs-CZ/);assert.match(audio,/pl-PL/);
 for(const path of ['app/learning/missions/MissionRunner.tsx','app/learning/stories/StoryRunner.tsx'])assert.match(fs.readFileSync(path,'utf8'),/playPracticeAudio/);
-console.log('Multilanguage v2 PASS: 9 missions, 9 stories, language isolation, branches, scoring, audio locales.');
+console.log('Multilanguage v2 PASS: 15 missions, 15 stories, language isolation, branches, scoring, audio locales.');

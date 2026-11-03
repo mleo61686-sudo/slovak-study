@@ -8,11 +8,15 @@ export function scenarioCatalog(course: Course, type: ScenarioType): ScenarioInf
     { slug: `${prefix}shop`, level: "A0–A1", premium: false, minutes: 8 },
     { slug: `${prefix}doctor`, level: "A2", premium: true, minutes: 10 },
     { slug: `${prefix}work`, level: "B1", premium: true, minutes: 12 },
+    { slug: `${prefix}cafe`, level: "A0–A1", premium: false, minutes: 8 },
+    { slug: `${prefix}apartment`, level: "A2", premium: true, minutes: 11 },
   ];
   return [
     { slug: `${prefix}lost-keys`, level: "A1", premium: false, minutes: 6 },
     { slug: `${prefix}shift-change`, level: "B1", premium: true, minutes: 8 },
     { slug: `${prefix}building-meeting`, level: "B2", premium: true, minutes: 9 },
+    { slug: `${prefix}train`, level: "A1", premium: false, minutes: 7 },
+    { slug: `${prefix}interview`, level: "B1", premium: true, minutes: 9 },
   ];
 }
 export function availableScenarios(course: Course, type: ScenarioType, completed: string[], hasPremium: boolean): ScenarioInfo[] {

@@ -1,3 +1,4 @@
+import { EXTRA_MISSIONS } from "./content-extra";
 /** Curated real-life scenarios. `sk` is a backwards-compatible target-text property for all course languages. */
 import { CS_MISSIONS } from "./content-cs";
 import { PL_MISSIONS } from "./content-pl";
@@ -113,7 +114,7 @@ export const MISSIONS: readonly Mission[] = [
   },
 ];
 
-export const ALL_MISSIONS: readonly Mission[] = [...MISSIONS, ...CS_MISSIONS, ...PL_MISSIONS];
+export const ALL_MISSIONS: readonly Mission[] = [...MISSIONS, ...CS_MISSIONS, ...PL_MISSIONS, ...EXTRA_MISSIONS];
 export function getMissionsForCourse(course: Course): readonly Mission[] {
   return ALL_MISSIONS.filter(mission => mission.course === course);
 }
