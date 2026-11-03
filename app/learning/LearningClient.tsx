@@ -1,270 +1,140 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 
 import type { CefrBand, Lang, LocalizedText } from "./data";
-import type {
-  LessonsProgress,
-  LessonProgressObj,
-  LessonProgressValue,
-} from "@/lib/src/progress";
+import type { LessonsProgress } from "@/lib/src/progress";
 import { getLessonsProgress } from "@/lib/src/progress";
 import { useLanguage } from "@/lib/src/useLanguage";
-import { isPremiumLesson } from "@/app/learning/access/lessonAccess";
+import DailyLearningPlan from "./personal-plan/DailyLearningPlan";
+import LearningHubIcon from "./components/LearningHubIcon";
+import Image from "next/image";
+import styles from "./LearningHubV2.module.css";
 
-type LearningDict = {
+type SessionUserLike = { email?: string | null; isPremium?: boolean };
+
+type Labels = {
   title: string;
   subtitle: string;
-  done: string;
+  progress: string;
+  chooser: string;
+  chooserHelp: string;
+  levels: string;
+  levelsDesc: string;
+  levelAction: string;
+  levelLocked: string;
+  levelDone: string;
   lessons: string;
-  words: string;
-  allLessons: string;
-  soon: string;
-  wordsCount: (n: number) => string;
-  repeat: string;
-  start: string;
-  locked: string;
-  premiumOnly: string;
-  buyPremium: string;
-  premiumActive: string;
-  availableNow: string;
-  lastDone: string;
-  freeA0: string;
+  reviews: string;
+  reviewsDesc: string;
+  missions: string;
+  missionsDesc: string;
+  stories: string;
+  storiesDesc: string;
+  free: string;
+  premium: string;
+  freeNote: string;
+  empty: string;
+  entryLessons: string; entryReviews: string; entryMissions: string; entryStories: string;
+  progressShort: string;
 };
 
-type SessionUserLike = {
-  email?: string | null;
-  isPremium?: boolean;
-};
-
-type LessonStats = {
-  lastCorrect: number;
-  lastWrong: number;
-  lastTotal: number;
+const I18N: Record<Lang, Labels> = {
+  ua: {
+    title: "Навчання", subtitle: "Обери формат — і переходь до практики.", progress: "Пройдено уроків",
+    chooser: "Що хочеш вивчати?", chooserHelp: "Усі розділи в одному місці",
+    levels: "Уроки за рівнями", levelsDesc: "Слова, фрази та граматика від A0 до B2",
+    levelAction: "Відкрити уроки", levelLocked: "Доступ із Premium", levelDone: "пройдено", lessons: "уроків",
+    reviews: "Повторення слів", reviewsDesc: "Закріплюй вивчене та повертай слова в пам’ять",
+    missions: "Життєві місії", missionsDesc: "Практикуй розмови в реальних ситуаціях",
+    stories: "Інтерактивні історії", storiesDesc: "Читай, слухай і вибирай розвиток сюжету",
+    free: "Безкоштовно", premium: "Premium", freeNote: "Рівень A0 доступний безкоштовно", empty: "Уроки скоро з’являться", entryLessons: "ОСНОВА", entryReviews: "ПАМ’ЯТЬ", entryMissions: "ПРАКТИКА", entryStories: "ІСТОРІЇ", progressShort: "Уроки",
+  },
+  ru: {
+    title: "Обучение", subtitle: "Выбери формат и переходи к практике.", progress: "Пройдено уроков",
+    chooser: "Что хочешь изучать?", chooserHelp: "Все разделы в одном месте",
+    levels: "Уроки по уровням", levelsDesc: "Слова, фразы и грамматика от A0 до B2",
+    levelAction: "Открыть уроки", levelLocked: "Доступ с Premium", levelDone: "пройдено", lessons: "уроков",
+    reviews: "Повторение слов", reviewsDesc: "Закрепляй изученное и освежай слова в памяти",
+    missions: "Жизненные миссии", missionsDesc: "Тренируй общение в реальных ситуациях",
+    stories: "Интерактивные истории", storiesDesc: "Читай, слушай и выбирай ход сюжета",
+    free: "Бесплатно", premium: "Premium", freeNote: "Уровень A0 доступен бесплатно", empty: "Уроки скоро появятся", entryLessons: "ОСНОВА", entryReviews: "ПАМЯТЬ", entryMissions: "ПРАКТИКА", entryStories: "ИСТОРИИ", progressShort: "Уроки",
+  },
+  en: {
+    title: "Learning", subtitle: "Choose how you want to practise.", progress: "Lessons completed",
+    chooser: "What would you like to learn?", chooserHelp: "Every learning activity in one place",
+    levels: "Lessons by level", levelsDesc: "Words, phrases and grammar from A0 to B2",
+    levelAction: "Open lessons", levelLocked: "Premium access", levelDone: "completed", lessons: "lessons",
+    reviews: "Word review", reviewsDesc: "Remember what you have learned with regular reviews",
+    missions: "Real-life missions", missionsDesc: "Practise conversations in everyday situations",
+    stories: "Interactive stories", storiesDesc: "Read, listen and choose what happens next",
+    free: "Free", premium: "Premium", freeNote: "Level A0 is free", empty: "Lessons coming soon", entryLessons: "FOUNDATION", entryReviews: "MEMORY", entryMissions: "PRACTICE", entryStories: "STORIES", progressShort: "Lessons",
+  },
 };
 
 const PROGRESS_EVENT = "slovakStudy:progressChanged";
 const SYNC_EVENT = "slovakStudy:syncState";
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
+  .split(",")
+  .map(value => value.trim().toLowerCase())
+  .filter(Boolean);
 
-const dict: Record<Lang, LearningDict> = {
-  ua: {
-    title: "Навчання 📚",
-    subtitle:
-      "Почни з A0 безкоштовно. A1, A2, B1 і B2 відкриваються з Premium.",
-    done: "Пройдено уроків:",
-    lessons: "Уроків:",
-    words: "Слів:",
-    allLessons: "Всі уроки →",
-    soon: "Скоро додамо уроки для цього рівня ✅",
-    wordsCount: (n: number) => `${n} слів`,
-    repeat: "Повторити",
-    start: "Почати",
-    locked: "Закрито 🔒",
-    premiumOnly: "Доступно лише для Premium ⭐",
-    buyPremium: "Відкрити Premium",
-    premiumActive: "⭐ Premium активний — повний доступ",
-    availableNow: "Доступний зараз:",
-    lastDone: "Останній пройдений:",
-    freeA0: "A0 безкоштовно — без денного ліміту",
-  },
-  ru: {
-    title: "Обучение 📚",
-    subtitle:
-      "Начни с A0 бесплатно. A1, A2, B1 и B2 открываются с Premium.",
-    done: "Пройдено уроков:",
-    lessons: "Уроков:",
-    words: "Слов:",
-    allLessons: "Все уроки →",
-    soon: "Скоро добавим уроки для этого уровня ✅",
-    wordsCount: (n: number) => `${n} слов`,
-    repeat: "Повторить",
-    start: "Начать",
-    locked: "Закрыто 🔒",
-    premiumOnly: "Доступно только для Premium ⭐",
-    buyPremium: "Открыть Premium",
-    premiumActive: "⭐ Premium активен — полный доступ",
-    availableNow: "Доступно сейчас:",
-    lastDone: "Последний пройденный:",
-    freeA0: "A0 бесплатно — без дневного лимита",
-  },
-  en: {
-    title: "Learning 📚",
-    subtitle:
-      "Start with A0 for free. A1, A2, B1 and B2 unlock with Premium.",
-    done: "Completed lessons:",
-    lessons: "Lessons:",
-    words: "Words:",
-    allLessons: "All lessons →",
-    soon: "Lessons for this level will be added soon ✅",
-    wordsCount: (n: number) => `${n} words`,
-    repeat: "Repeat",
-    start: "Start",
-    locked: "Locked 🔒",
-    premiumOnly: "Available only for Premium ⭐",
-    buyPremium: "Unlock Premium",
-    premiumActive: "⭐ Premium active — full access",
-    availableNow: "Available now:",
-    lastDone: "Last completed:",
-    freeA0: "A0 is free — no daily limit",
-  },
-};
-
-const LESSONS_LIMITS: Partial<Record<string, number>> = {
-  b1: 35,
-  b2: 50,
-};
-
-function parseLevelId(id: string) {
-  const m = /^(a0|a1|a2|b1|b2)-(\d+)$/i.exec(String(id).toLowerCase());
-  if (!m) return null;
-  return { band: m[1].toLowerCase(), n: Number(m[2]) };
+function isDone(progress: LessonsProgress, id: string) {
+  const value = progress[id.toLowerCase()] ?? progress[id];
+  return value === true || (typeof value === "object" && value !== null && value.done === true);
 }
 
-function bandOrder(band: string) {
-  const b = String(band).toLowerCase();
-
-  if (b === "a0") return 0;
-  if (b === "a1") return 1;
-  if (b === "a2") return 2;
-  if (b === "b1") return 3;
-  if (b === "b2") return 4;
-
-  return 0;
-}
-
-function compareLevel(a: string, b: string) {
-  const pa = parseLevelId(a);
-  const pb = parseLevelId(b);
-
-  if (!pa || !pb) return 0;
-
-  const ba = bandOrder(pa.band);
-  const bb = bandOrder(pb.band);
-
-  if (ba !== bb) return ba < bb ? -1 : 1;
-
-  if (pa.n === pb.n) return 0;
-  return pa.n < pb.n ? -1 : 1;
-}
-
-function getLessonProgressValue(
-  progress: LessonsProgress,
-  id: string
-): LessonProgressValue | undefined {
-  const key = id.toLowerCase();
-  return progress[key] ?? progress[id];
-}
-
-function getLessonProgressObj(
-  progress: LessonsProgress,
-  id: string
-): LessonProgressObj | null {
-  const value = getLessonProgressValue(progress, id);
-
-  if (!value || value === true || typeof value !== "object") {
-    return null;
-  }
-
-  return value;
-}
-
-function getLastDone(progress: LessonsProgress) {
-  let best: string | null = null;
-
-  for (const [idRaw, val] of Object.entries(progress ?? {})) {
-    const id = String(idRaw).toLowerCase();
-    const p = parseLevelId(id);
-
-    if (!p) continue;
-
-    const done = val === true || (typeof val === "object" && val.done === true);
-
-    if (!done) continue;
-
-    if (!best) {
-      best = id;
-    } else if (compareLevel(id, best) === 1) {
-      best = id;
-    }
-  }
-
-  return best;
-}
-
-function isDoneId(progress: LessonsProgress, id: string) {
-  const value = getLessonProgressValue(progress, id);
-
-  return value === true || (typeof value === "object" && value?.done === true);
-}
-
-function getAllowedSequential(progress: LessonsProgress, bands: CefrBand[]) {
-  const allIds = bands
-    .flatMap((b) => b.lessons.map((l) => l.id))
-    .sort((a, b) => compareLevel(a, b));
-
-  for (const id of allIds) {
-    if (isPremiumLesson(id)) {
-      return id.toLowerCase();
-    }
-
-    if (!isDoneId(progress, id)) {
-      return id.toLowerCase();
-    }
-  }
-
-  const last = allIds[allIds.length - 1];
-  return last ? last.toLowerCase() : "a0-1";
-}
-
-function getLocalized(value: LocalizedText, lang: Lang) {
+function localize(value: LocalizedText, lang: Lang) {
   return value[lang] ?? value.ua ?? value.ru ?? "";
 }
 
+type HubArtwork = "review" | "missions" | "stories";
+
+function HubRow({ artwork, tag, title, description, href }: {
+  artwork: HubArtwork; tag: string; title: string; description: string; href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`${styles.tile} ${styles[artwork]} group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
+    >
+      <span className={styles.art} aria-hidden="true">
+        <Image src={`/learning/hub/${artwork === "review" ? "review" : artwork}.svg`} alt="" width={108} height={108} unoptimized className={styles.artImage} />
+      </span>
+      <span className={styles.tileText}>
+        <span className={styles.tileLabel}>{tag}</span>
+        <span className={`${styles.tileTitle} theme-text`}>{title}</span>
+        <span className={`${styles.tileDesc} theme-text-muted`}>{description}</span>
+      </span>
+      <span className={`${styles.tileArrow} theme-text-subtle`} aria-hidden="true">
+        <LearningHubIcon name="chevron" className="h-4 w-4" />
+      </span>
+    </Link>
+  );
+}
+
 export default function LearningPage({ bands }: { bands: CefrBand[] }) {
-  const router = useRouter();
+  const { lang } = useLanguage() as { lang: Lang };
+  const t = I18N[lang] ?? I18N.ua;
   const { data: session } = useSession();
   const user = session?.user as SessionUserLike | undefined;
-  const isPremium = user?.isPremium === true;
-  const [isPending, startTransition] = useTransition();
-
-  const adminEmails = useMemo(() => {
-    return (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "")
-      .split(",")
-      .map((s) => s.trim().toLowerCase())
-      .filter(Boolean);
-  }, []);
-
-  const myEmail = (user?.email ?? "").toLowerCase();
-  const isAdmin = myEmail !== "" && adminEmails.includes(myEmail);
-
+  const email = (user?.email ?? "").toLowerCase();
+  const canAccessPremium = user?.isPremium === true || (email !== "" && ADMIN_EMAILS.includes(email));
   const [progress, setProgress] = useState<LessonsProgress>({});
 
-  const { lang } = useLanguage() as { lang: Lang };
-  const t = dict[lang] ?? dict.ua;
-
   useEffect(() => {
-    const refresh = () => {
-      setProgress(getLessonsProgress());
-    };
-
-    refresh();
-
+    const refresh = () => setProgress(getLessonsProgress());
     const onSyncState = (event: Event) => {
-      const detail = (event as CustomEvent<{ state?: string }>).detail;
-
-      if (detail?.state === "idle") {
-        refresh();
-      }
+      if ((event as CustomEvent<{ state?: string }>).detail?.state === "idle") refresh();
     };
-
+    refresh();
     window.addEventListener("focus", refresh);
     window.addEventListener("storage", refresh);
     window.addEventListener(PROGRESS_EVENT, refresh);
     window.addEventListener(SYNC_EVENT, onSyncState);
     document.addEventListener("visibilitychange", refresh);
-
     return () => {
       window.removeEventListener("focus", refresh);
       window.removeEventListener("storage", refresh);
@@ -274,238 +144,83 @@ export default function LearningPage({ bands }: { bands: CefrBand[] }) {
     };
   }, []);
 
-  const isDone = (id: string) => isDoneId(progress, id);
+  const lessonIds = useMemo(() => bands.flatMap(band => band.lessons.map(lesson => lesson.id)), [bands]);
+  const doneCount = lessonIds.filter(id => isDone(progress, id)).length;
 
-  const getStats = (id: string): LessonStats | null => {
-    const value = getLessonProgressObj(progress, id);
-
-    if (!value) return null;
-
-    if (typeof value.lastTotal === "number" && value.lastTotal > 0) {
-      const lastCorrect = Number(value.lastCorrect ?? 0);
-      const lastWrong =
-        typeof value.lastWrong === "number"
-          ? value.lastWrong
-          : Math.max(0, value.lastTotal - Number(value.lastCorrect ?? 0));
-
-      return { lastCorrect, lastWrong, lastTotal: value.lastTotal };
-    }
-
-    return null;
-  };
-
-  const completedCount = useMemo(() => {
-    return Object.values(progress).filter(
-      (v) => v === true || (typeof v === "object" && v?.done === true)
-    ).length;
-  }, [progress]);
-
-  const allowed = useMemo(() => {
-    return getAllowedSequential(progress, bands);
-  }, [progress, bands]);
-
-  const lastDone = useMemo(() => getLastDone(progress), [progress]);
-
-  function isBandPremiumOnly(bandId: string) {
-    return bandId !== "a0";
-  }
-
-  function isLessonUnlockedGlobal(lessonId: string) {
-    if (isPremium || isAdmin) return true;
-
-    const done = isDone(lessonId);
-    if (done) return true;
-
-    if (isPremiumLesson(lessonId)) return false;
-
-    return compareLevel(lessonId, allowed) <= 0;
-  }
-
-  function goTo(path: string) {
-    startTransition(() => {
-      router.push(path);
-    });
-  }
+  const lessonPercent = lessonIds.length > 0 ? Math.round(doneCount * 100 / lessonIds.length) : 0;
 
   return (
-    <div className="relative mx-auto max-w-3xl px-4 py-10 theme-text">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-cyan-500/10 via-transparent to-fuchsia-500/10 blur-3xl" />
-
-      <div className="flunio-card rounded-3xl p-6">
-        <h1 className="text-3xl font-bold theme-text">{t.title}</h1>
-
-        <p className="mt-2 theme-text-muted">{t.subtitle}</p>
-
-        <p className="mt-3 text-sm theme-text-muted">
-          {t.done}{" "}
-          <span className="font-semibold theme-text">{completedCount}</span>
-        </p>
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          <div className="theme-pill inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold">
-            {t.freeA0}
+    <main className={`${styles.hub} mx-auto max-w-5xl px-4 pb-12 pt-6 theme-text sm:px-6 sm:pt-9`}>
+      <header className={`${styles.header} mb-6 sm:mb-7`}>
+        <div className={styles.headerText}>
+          <p className={`${styles.kicker} theme-accent-text`}>FLUNIO / LEARNING</p>
+          <h1 className={`${styles.headerTitle} mt-2 text-[29px] font-bold leading-tight theme-text sm:text-4xl`}>{t.title}</h1>
+          <p className="mt-1 text-sm leading-6 theme-text-muted">{t.subtitle}</p>
+        </div>
+        <div className={styles.progressPanel}>
+          <p className={`${styles.progressLabel} theme-text-muted`}>
+            <span>{t.progressShort}</span>
+            <strong className="font-semibold tabular-nums theme-text">{doneCount}/{lessonIds.length}</strong>
+          </p>
+          <div className={styles.progressRail} role="progressbar" aria-label={t.progress} aria-valuemin={0} aria-valuemax={100} aria-valuenow={lessonPercent}>
+            <div className={styles.progressFill} style={{ width: `${lessonPercent}%` }} />
           </div>
-
-          {(isPremium || isAdmin) && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300/25 bg-yellow-300/10 px-3 py-1 text-xs font-semibold text-yellow-500">
-              {t.premiumActive}
-            </div>
-          )}
         </div>
+      </header>
 
-        <div className="mt-3 text-xs theme-text-subtle">
-          {t.availableNow}{" "}
-          <span className="font-semibold theme-accent-text">{allowed}</span>
-          {lastDone ? (
-            <span className="ml-2 theme-text-subtle">
-              · {t.lastDone} {lastDone}
-            </span>
-          ) : null}
+      <DailyLearningPlan lessons={progress} lessonIds={lessonIds} hasPremium={canAccessPremium} />
+
+      <section aria-labelledby="learning-sections-heading" className="mt-7">
+        <div className={styles.sectionHead}>
+          <h2 id="learning-sections-heading" className={`${styles.sectionHeading} text-lg theme-text sm:text-xl`}>{t.chooser}</h2>
+          <span className={`${styles.sectionCount} theme-text-subtle`}>01 — 04</span>
         </div>
-      </div>
-
-      <div className="mt-8 space-y-8">
-        {bands.map((band) => {
-          const limit = LESSONS_LIMITS[band.id] ?? band.lessons.length;
-          const lessonsTotal = Math.min(band.lessons.length, limit);
-          const wordsTotal = lessonsTotal * 10;
-
-          const bandPremiumOnly = isBandPremiumOnly(band.id);
-          const isBandLocked = bandPremiumOnly && !isPremium && !isAdmin;
-
-          return (
-            <section key={band.id} className="flunio-card rounded-3xl p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-xl font-semibold theme-text">
-                    {getLocalized(band.title, lang)}
-                  </h2>
-
-                  <p className="mt-1 text-sm theme-text-muted">
-                    {getLocalized(band.subtitle, lang)}
-                  </p>
-
-                  <p className="mt-2 text-xs theme-text-subtle">
-                    {t.lessons} {lessonsTotal} · {t.words} {wordsTotal}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {isBandLocked ? (
-                    <button
-                      type="button"
-                      onClick={() => goTo("/premium")}
-                      disabled={isPending}
-                      className="theme-primary-button rounded-xl px-3 py-1 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {t.buyPremium}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => goTo(`/learning/levels/${band.id}`)}
-                      disabled={isPending}
-                      className="theme-secondary-button rounded-xl px-3 py-1 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {t.allLessons}
-                    </button>
-                  )}
-
-                  <span className="theme-pill rounded-full px-3 py-1 text-xs font-semibold">
-                    {band.id.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-
-              {band.lessons.length === 0 ? (
-                <div className="theme-inner-card mt-5 rounded-2xl p-4 text-sm theme-text-muted">
-                  {t.soon}
-                </div>
-              ) : isBandLocked ? (
-                <div className="theme-inner-card mt-5 flex items-center justify-between rounded-2xl p-4">
-                  <div className="text-sm font-medium theme-text">
-                    🔒 {t.premiumOnly}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => goTo("/premium")}
-                    disabled={isPending}
-                    className="theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+        <div className={styles.tileGrid}>
+          <details className={styles.levelDetails}>
+            <summary className={`${styles.tile} ${styles.levels} ${styles.levelSummary} group`}>
+              <span className={styles.art} aria-hidden="true">
+                <Image src="/learning/hub/lessons.svg" alt="" width={108} height={108} unoptimized className={styles.artImage} />
+              </span>
+              <span className={styles.tileText}>
+                <span className={styles.tileLabel}>{t.entryLessons}</span>
+                <span className={`${styles.tileTitle} theme-text`}>{t.levels}</span>
+                <span className={`${styles.tileDesc} theme-text-muted`}>{t.levelsDesc}</span>
+              </span>
+              <span className={`${styles.tileArrow} theme-text-subtle`} aria-hidden="true">
+                <LearningHubIcon name="chevron" className="h-4 w-4" />
+              </span>
+            </summary>
+            <div className={styles.levelPanel}>
+              {bands.map(band => {
+                const completed = band.lessons.filter(lesson => isDone(progress, lesson.id)).length;
+                const locked = band.id !== "a0" && !canAccessPremium;
+                const levelName = localize(band.title, lang).replace(/^(A0|A1|A2|B1|B2)\s*[—-]\s*/i, "");
+                return (
+                  <Link
+                    key={band.id}
+                    href={locked ? "/premium" : `/learning/levels/${band.id}`}
+                    className={`${styles.levelRow} group/level focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
                   >
-                    {t.buyPremium}
-                  </button>
-                </div>
-              ) : (
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  {band.lessons.slice(0, 4).map((lesson) => {
-                    const unlocked = isLessonUnlockedGlobal(lesson.id);
-                    const done = isDone(lesson.id);
-                    const stats = getStats(lesson.id);
-                    const isStart = lesson.id === allowed && !done;
-                    const lessonPath = `/learning/${lesson.id}`;
-
-                    const lockedText = isPremiumLesson(lesson.id)
-                      ? t.premiumOnly
-                      : t.locked;
-
-                    return (
-                      <div
-                        key={lesson.id}
-                        className={[
-                          "theme-inner-card rounded-2xl p-4 transition",
-                          unlocked
-                            ? "hover:-translate-y-0.5 hover:border-cyan-400/35"
-                            : "opacity-50",
-                        ].join(" ")}
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="font-medium theme-text">
-                            {getLocalized(lesson.title, lang)}{" "}
-                            {done ? "✅" : ""}
-                          </div>
-
-                          <div className="text-sm theme-text-subtle">
-                            {t.wordsCount(lesson.wordsCount)}
-                          </div>
-                        </div>
-
-                        {stats && (
-                          <div className="mt-1 text-xs theme-text-subtle">
-                            ✅ {stats.lastCorrect} • ❌ {stats.lastWrong} /{" "}
-                            {stats.lastTotal}
-                          </div>
-                        )}
-
-                        <div className="mt-3 flex justify-end">
-                          {unlocked ? (
-                            <button
-                              type="button"
-                              onClick={() => goTo(lessonPath)}
-                              disabled={isPending}
-                              className="theme-primary-button rounded-xl px-4 py-2 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                              {isStart ? t.start : t.repeat}
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              disabled
-                              className="theme-secondary-button rounded-xl px-4 py-2 text-sm opacity-70"
-                            >
-                              {lockedText}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
-          );
-        })}
-      </div>
-    </div>
+                    <span className={styles.levelChip}>{band.id.toUpperCase()}</span>
+                    <span className={styles.levelInfo}>
+                      <span className="block text-sm font-medium theme-text">{levelName}</span>
+                      <span className="block text-xs theme-text-subtle">
+                        {band.lessons.length > 0 ? `${completed}/${band.lessons.length} ${t.levelDone}` : t.empty}
+                      </span>
+                    </span>
+                    <span className={`${styles.levelAction} theme-text-muted`}>{locked ? t.premium : t.levelAction}</span>
+                    <LearningHubIcon name={locked ? "lock" : "chevron"} className="h-4 w-4 shrink-0 theme-text-subtle" />
+                  </Link>
+                );
+              })}
+              <p className="px-2 pt-2 text-xs theme-text-subtle">{t.freeNote}</p>
+            </div>
+          </details>
+          <HubRow artwork="review" tag={t.entryReviews} title={t.reviews} description={t.reviewsDesc} href="/words" />
+          <HubRow artwork="missions" tag={t.entryMissions} title={t.missions} description={t.missionsDesc} href="/learning/missions" />
+          <HubRow artwork="stories" tag={t.entryStories} title={t.stories} description={t.storiesDesc} href="/learning/stories" />
+        </div>
+      </section>
+    </main>
   );
 }

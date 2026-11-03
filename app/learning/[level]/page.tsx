@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import LevelClient from "./LevelClient";
+import { getVerifiedContextKinds } from "@/app/learning/components/LevelClient/verified-content";
 import { getLessonsByBand, type CourseId } from "../courses/registry";
 
 import { prisma } from "@/lib/prisma";
@@ -358,6 +359,7 @@ export default async function Page({
       levelId={levelId}
       words={lesson.words}
       courseId={activeCourseId}
+      contextKinds={getVerifiedContextKinds(lesson.words, levelId, activeCourseId)}
       canGoNext={canGoNext}
       lockedReason={lockedReason}
       onLockedNextRedirect="/learning"

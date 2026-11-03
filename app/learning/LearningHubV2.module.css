@@ -1,0 +1,100 @@
+/* Learning hub v2 — strictly local styling, with both existing Flunio themes preserved. */
+.hub { width: 100%; }
+.kicker { font-size: 10px; font-weight: 800; letter-spacing: .20em; text-transform: uppercase; opacity: .72; }
+.header { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+.headerText { flex: 1; min-width: 0; }
+.headerTitle { letter-spacing: -.045em; }
+.progressPanel { width: 175px; flex-shrink: 0; padding-bottom: 5px; }
+.progressLabel { font-size: 11px; display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.progressRail { height: 5px; border-radius: 20px; overflow: hidden; background: rgba(148, 163, 184, .19); }
+.progressFill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #47B0B3, #7D8DD8); transition: width .3s ease; }
+.sectionHead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.sectionHeading { font-weight: 700; letter-spacing: -.02em; }
+.sectionCount { font-size: 11px; letter-spacing: .1em; white-space: nowrap; }
+.tileGrid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; align-items: start; }
+.tile { --accent: #677CC0; position: relative; display: flex; align-items: center; min-height: 128px; gap: 11px; padding: 10px 14px 10px 6px; border-radius: 21px; border: 1px solid transparent; color: inherit; text-decoration: none; cursor: pointer; isolation: isolate; transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+.tile:hover { transform: translateY(-2px); }
+.tile:focus-visible { outline: 3px solid #59B8D3; outline-offset: 3px; }
+.levels { --accent: #8183D6; }
+.review { --accent: #32A18D; }
+.missions { --accent: #D28672; }
+.stories { --accent: #A778BB; }
+.art { position: relative; flex: 0 0 108px; height: 106px; display: flex; align-items: center; justify-content: center; }
+.art::before { position: absolute; content: ""; width: 77px; height: 77px; border-radius: 23px; background: color-mix(in srgb, var(--accent) 13%, transparent); transform: rotate(-13deg); opacity: .82; }
+.artImage { position: relative; width: 108px; height: 108px; display: block; object-fit: contain; filter: drop-shadow(0 7px 9px rgba(5, 10, 25, .12)); transition: transform .22s ease; }
+.tile:hover .artImage, .levelDetails[open] .artImage { transform: translateY(-3px) rotate(-3deg); }
+.tileText { min-width: 0; flex: 1; align-self: center; }
+.tileLabel { display: block; font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: .105em; text-transform: uppercase; margin-bottom: 7px; }
+.tileTitle { display: block; font-size: 17px; font-weight: 750; letter-spacing: -.024em; line-height: 1.18; }
+.tileDesc { display: block; margin-top: 7px; font-size: 12px; line-height: 1.5; }
+.tileArrow { display: flex; width: 26px; height: 26px; flex: 0 0 26px; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid currentColor; opacity: .55; transition: transform .18s ease; }
+.tile:hover .tileArrow { transform: translateX(3px); opacity: 1; }
+.levelDetails { min-width: 0; }
+.levelSummary { list-style: none; }
+.levelSummary::-webkit-details-marker { display: none; }
+.levelDetails[open] .tileArrow { transform: rotate(90deg); }
+.levelPanel { margin: 6px 0 0; padding: 7px 10px 10px; border-radius: 17px; }
+.levelRow { display: flex; align-items: center; gap: 11px; min-height: 54px; padding: 7px 8px; border-radius: 11px; text-decoration: none; }
+.levelRow:hover { background: rgba(137, 151, 186, .09); }
+.levelChip { display: flex; width: 44px; height: 33px; flex-shrink: 0; justify-content: center; align-items: center; border-radius: 9px; font-size: 12px; font-weight: 750; }
+.levelInfo { flex: 1; min-width: 0; }
+.levelAction { font-size: 11px; font-weight: 650; white-space: nowrap; }
+.levelRow:focus-visible { outline: 2px solid #59B8D3; outline-offset: 2px; }
+/* Bespoke featured recommendation — no change to global theme styles. */
+.feature { position: relative; border-radius: 23px; overflow: hidden; border: 1px solid transparent; }
+.featureMain { display: flex; align-items: center; min-height: 115px; gap: 10px; padding: 11px 16px 11px 5px; }
+.featureArt { width: 112px; height: 92px; flex: 0 0 112px; object-fit: contain; filter: drop-shadow(0 9px 13px rgba(17, 32, 60, .15)); }
+.featureContent { flex: 1; min-width: 0; }
+.featureKicker { font-size: 10px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+.featureTitle { font-size: 17px; font-weight: 750; letter-spacing: -.02em; line-height: 1.3; margin-top: 5px; }
+.featureDesc { font-size: 12px; line-height: 1.5; margin-top: 5px; }
+.featureButton { border-radius: 12px; min-height: 42px; padding: 10px 17px; font-size: 12px; font-weight: 700; white-space: nowrap; text-align: center; text-decoration: none; }
+.featureFooter { padding: 0 18px 15px; }
+.featureMore { font-size: 12px; cursor: pointer; }
+.featureLink { display: flex; min-height: 40px; align-items: center; justify-content: space-between; gap: 10px; border-radius: 8px; padding: 7px 5px; text-decoration: none; }
+/* Dark mode uses the established Flunio navy background palette. */
+:global(.theme-flunio) .tile, :global(.theme-flunio) .levelPanel { background: linear-gradient(135deg, rgba(39, 53, 85, .88), rgba(16, 29, 54, .88)); border-color: rgba(158, 175, 210, .16); }
+:global(.theme-flunio) .tile:hover { border-color: rgba(144, 178, 220, .45); box-shadow: 0 13px 25px rgba(3, 9, 26, .16); }
+:global(.theme-flunio) .tileDesc, :global(.theme-flunio) .featureDesc { color: rgba(241, 247, 255, .65); }
+:global(.theme-flunio) .tileArrow { border-color: rgba(203, 216, 244, .4); }
+:global(.theme-flunio) .levelChip { background: rgba(138, 161, 221, .16); color: #DCE9FE; }
+:global(.theme-flunio) .feature { background: linear-gradient(110deg, rgba(27, 55, 73, .94), rgba(24, 35, 66, .94)); border-color: rgba(121, 195, 199, .27); }
+:global(.theme-flunio) .featureKicker { color: #86D1D4; }
+/* Light mode stays white and restrained; accent is concentrated in the dimensional art. */
+:global(.theme-simple) .tile, :global(.theme-simple) .levelPanel { background: #FFFFFF; border-color: #E3E7F0; box-shadow: 0 5px 16px rgba(19, 36, 69, .04); }
+:global(.theme-simple) .tile:hover { border-color: #BEC9DC; box-shadow: 0 13px 26px rgba(19, 36, 69, .09); }
+:global(.theme-simple) .tileDesc, :global(.theme-simple) .featureDesc { color: #58667D; }
+:global(.theme-simple) .levelChip { color: #334766; background: #F0F3F8; }
+:global(.theme-simple) .feature { background: linear-gradient(112deg, #F1F8F7, #EEF2FA); border-color: #DDE7ED; }
+:global(.theme-simple) .featureKicker { color: #267C7D; }
+@media (max-width: 760px) {
+ .tileGrid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+ .progressPanel { width: 130px; }
+ .tile { min-height: 108px; border-radius: 18px; padding: 8px 13px 8px 5px; gap: 9px; }
+ .art { flex-basis: 86px; height: 91px; }
+ .art::before { width: 65px; height: 65px; border-radius: 19px; }
+ .artImage { width: 94px; height: 94px; }
+ .tileTitle { font-size: 16px; }
+ .tileDesc { font-size: 12px; margin-top: 5px; }
+ .tileLabel { font-size: 9px; margin-bottom: 5px; }
+ .tileArrow { width: 25px; height: 25px; flex-basis: 25px; }
+ .featureMain { gap: 6px; min-height: 112px; padding: 10px 13px 10px 3px; flex-wrap: wrap; }
+ .featureArt { width: 84px; height: 89px; flex-basis: 84px; }
+ .featureContent { flex-basis: calc(100% - 96px); }
+ .featureButton { width: 100%; margin: 0 1px 2px; }
+}
+@media (max-width: 390px) {
+ .header { display: block; }
+ .progressPanel { width: 100%; max-width: 190px; margin-top: 12px; }
+ .tileTitle { font-size: 15px; }
+ .tileDesc { font-size: 11px; }
+ .art { flex-basis: 76px; height: 84px; }
+ .artImage { width: 86px; height: 86px; }
+ .tile { gap: 7px; padding-right: 9px; }
+ .featureArt { flex-basis: 73px; width: 73px; }
+ .featureContent { flex-basis: calc(100% - 84px); }
+}
+@media (prefers-reduced-motion: reduce) {
+ .tile, .artImage, .tileArrow, .progressFill { transition: none !important; }
+ .tile:hover, .tile:hover .artImage { transform: none; }
+}

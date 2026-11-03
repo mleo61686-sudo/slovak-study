@@ -296,10 +296,20 @@ export async function POST(req: Request) {
 
   const previousResult = getStoredLessonResult(prevObj);
   const hasBetterResult = isBetterLessonResult(lessonResult, previousResult);
+  const passedMastery = lessonResult.correctAnswers * 100 >= lessonResult.totalQuestions * 80;
+  const wasMastered = prevObj.mastered === true || Boolean(
+    previousResult && previousResult.correctAnswers / previousResult.totalQuestions >= 0.8
+  );
 
   const nextLessonValue = {
     ...prevObj,
     done: true,
+    // Completion still unlocks lessons; mastery is a separate, stricter signal.
+    mastered: wasMastered || passedMastery,
+    lastResultPercent: lessonResult.resultPercent,
+    ...(passedMastery && !prevObj.masteredAt
+      ? { masteredAt: nowIso }
+      : {}),
     doneAt:
       typeof prevObj.doneAt === "string" && prevObj.doneAt
         ? prevObj.doneAt
@@ -357,6 +367,7 @@ export async function POST(req: Request) {
     dailyCount: 0,
     alreadyDone: wasDone,
     resultPercent: lessonResult.resultPercent,
+    mastered: nextLessonValue.mastered,
     leaderboardScore: lessonResult.leaderboardScore,
     bestResultUpdated: hasBetterResult,
   });

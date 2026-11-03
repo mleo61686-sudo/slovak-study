@@ -301,6 +301,21 @@ export async function PUT(req: Request) {
               ...clientLessonsProgress,
             };
 
+            // Missions have their own authenticated endpoint, which grades each attempt
+            // on the server. A general lesson/XP sync may arrive with an older local
+            // __missions snapshot. Never let that snapshot overwrite graded results.
+            {
+              // Both mission and story results are graded on their own server routes
+              // for sk/cs/pl. Ignore stale client snapshots for either namespace.
+              for (const protectedKey of ["__missions", "__stories"]) {
+                if (Object.prototype.hasOwnProperty.call(prevCourseLessons, protectedKey)) {
+                  lessonsForCourse[protectedKey] = prevCourseLessons[protectedKey];
+                } else {
+                  delete lessonsForCourse[protectedKey];
+                }
+              }
+            }
+
             const fullLessonsProgress = updateLessonsForCourse(
               prevRow?.lessonsProgress ?? null,
               courseId,

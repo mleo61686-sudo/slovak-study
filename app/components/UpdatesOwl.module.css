@@ -1,0 +1,51 @@
+.root {
+  position: absolute;
+  top: -32px;
+  left: calc(50% + 9px);
+  z-index: 5;
+  width: 66px;
+  height: 72px;
+  pointer-events: none;
+  filter: drop-shadow(0 7px 8px rgba(20, 25, 45, .24));
+  transform: rotate(6deg);
+}
+
+.owl { width: 100%; height: 100%; overflow: visible; }
+.wing {
+  transform-box: fill-box;
+  transform-origin: 90% 38%;
+  animation: owl-wave 7s ease-in-out 2;
+}
+.eyelids {
+  animation: owl-blink 6s ease-in-out 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleY(0);
+}
+.dot {
+  position: absolute;
+  top: 5px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(255,255,255,.95);
+  border-radius: 50%;
+  background: #f97365;
+  box-shadow: 0 2px 7px rgba(249,115,101,.35);
+}
+@keyframes owl-wave {
+  0%, 3%, 12%, 100% { transform: rotate(0deg); }
+  5%, 9% { transform: rotate(-23deg); }
+  7% { transform: rotate(8deg); }
+}
+@keyframes owl-blink {
+  0%, 72%, 76%, 100% { transform: scaleY(0); }
+  74% { transform: scaleY(1); }
+}
+@media (max-width: 640px) {
+  .root { top: -27px; left: calc(50% + 8px); width: 53px; height: 58px; }
+  .dot { width: 9px; height: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wing, .eyelids { animation: none; }
+}

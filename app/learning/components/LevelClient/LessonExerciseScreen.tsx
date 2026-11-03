@@ -21,13 +21,14 @@ type LessonExerciseScreenProps = {
   lang: Lang;
   courseId: CourseId;
   exercise: ExerciseDef;
-  exerciseIndex: number;
   wordIndex: number;
   exerciseTitle: string;
   exerciseScreenKey: string;
   quizAutoKey: number;
   audioUnlocked: boolean;
-  exercisesCount: number;
+  questionNumber: number;
+  questionsCount: number;
+  isReview: boolean;
   onUnlockAudio: () => void;
   onNextPerWord: (correct: boolean) => void;
   onDoneWhole: (correctCount: number) => void;
@@ -278,13 +279,14 @@ export default function LessonExerciseScreen({
   lang,
   courseId,
   exercise,
-  exerciseIndex,
   wordIndex,
   exerciseTitle,
   exerciseScreenKey,
   quizAutoKey,
   audioUnlocked,
-  exercisesCount,
+  questionNumber,
+  questionsCount,
+  isReview,
   onUnlockAudio,
   onNextPerWord,
   onDoneWhole,
@@ -304,16 +306,16 @@ export default function LessonExerciseScreen({
     >
       <div className="text-xs font-medium leading-snug theme-text-subtle sm:text-sm">
         <span className="sm:hidden">
-          {t.exercise} {exerciseIndex + 1}/{exercisesCount} ·{" "}
-          {exercise.mode === "perWord"
+          {isReview ? exerciseTitle : t.exercise} {questionNumber}/{questionsCount} ·{" "}
+          {(exercise.mode === "perWord" && exercise.kind !== "matchColumns")
             ? `${t.word} ${wordIndex + 1}/${words.length}`
             : t.lesson}
         </span>
 
         <span className="hidden sm:inline">
-          {t.exercise} {exerciseIndex + 1} / {exercisesCount} •{" "}
+          {isReview ? exerciseTitle : t.exercise} {questionNumber} / {questionsCount} •{" "}
           {exerciseTitle} •{" "}
-          {exercise.mode === "perWord" ? (
+          {(exercise.mode === "perWord" && exercise.kind !== "matchColumns") ? (
             <>
               {t.word} {wordIndex + 1} / {words.length}
             </>
@@ -330,12 +332,12 @@ export default function LessonExerciseScreen({
         context={{
           lessonId: levelId,
           exercise: `quiz:${exercise.kind}`,
-          actionIdx: exercise.mode === "perWord" ? wordIndex + 1 : undefined,
-          sk: exercise.mode === "perWord" ? currentWord?.sk : undefined,
-          ua: exercise.mode === "perWord" ? currentWord?.ua : undefined,
-          ru: exercise.mode === "perWord" ? currentWord?.ru : undefined,
+          actionIdx: (exercise.mode === "perWord" && exercise.kind !== "matchColumns") ? wordIndex + 1 : undefined,
+          sk: (exercise.mode === "perWord" && exercise.kind !== "matchColumns") ? currentWord?.sk : undefined,
+          ua: (exercise.mode === "perWord" && exercise.kind !== "matchColumns") ? currentWord?.ua : undefined,
+          ru: (exercise.mode === "perWord" && exercise.kind !== "matchColumns") ? currentWord?.ru : undefined,
           key:
-            exercise.mode === "perWord" && currentWord?.sk && currentWord?.ua
+            (exercise.mode === "perWord" && exercise.kind !== "matchColumns") && currentWord?.sk && currentWord?.ua
               ? phraseKey(currentWord.sk, currentWord.ua, levelId)
               : undefined,
         }}

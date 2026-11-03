@@ -8,7 +8,16 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "tts": "tsx scripts/tts-elevenlabs.ts"
+    "tts": "tsx scripts/tts-elevenlabs.ts",
+    "test:lesson-v2": "node tests/lesson-v2-smoke.cjs",
+    "test:missions-v2": "node tests/missions-v2-smoke.cjs && node tests/missions-api-v2-smoke.cjs",
+    "test:personal-plan-v2": "node tests/personal-plan-v2-smoke.cjs && node tests/personal-plan-sync-v2-smoke.cjs",
+    "test:stories-v2": "node tests/stories-v2-smoke.cjs && node tests/stories-api-v2-smoke.cjs",
+    "test:journey-v2": "node tests/journey-v2-smoke.cjs",
+    "test:final-audit-v2": "node tests/final-audit-v2-smoke.cjs",
+    "test:multilang-v2": "node tests/multilang-v2-smoke.cjs",
+    "tts:learning": "tsx scripts/tts-learning-voice.ts",
+    "test:voice-v2": "node tests/voice-v2-smoke.cjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

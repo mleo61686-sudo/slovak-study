@@ -7,6 +7,45 @@ export type UpdateItem = {
 };
 
 export const UPDATES: UpdateItem[] = [
+
+  {
+    date: "2026-11-03",
+    title: {
+      ua: "Оновлення: нові способи навчання, історії та покращене озвучення",
+      ru: "Обновление: новые способы обучения, истории и улучшенная озвучка",
+      en: "Update: New learning activities, stories, and improved audio",
+    },
+    items: {
+      ua: [
+        "Додано інтерактивні життєві ситуації для практики спілкування словацькою, чеською та польською мовами",
+        "Додано інтерактивні історії з можливістю впливати на розвиток подій і перевіряти розуміння тексту",
+        "Для нових історій і життєвих ситуацій додано якісніше озвучення з природнішою вимовою",
+        "Оновлено сторінку навчання: нові ілюстрації, компактніша навігація та зручніше розташування розділів",
+        "Додано персональний навчальний план із рекомендаціями на основі прогресу учня",
+        "Покращено повторення слів і додано додаткове тренування помилок після уроків",
+        "У звичайних уроках збережено всі 7 типів вправ, а прогрес навчання став детальнішим",
+      ],
+      ru: [
+        "Добавлены интерактивные жизненные ситуации для практики общения на словацком, чешском и польском языках",
+        "Добавлены интерактивные истории с возможностью влиять на развитие событий и проверять понимание текста",
+        "Для новых историй и жизненных ситуаций добавлена более качественная озвучка с естественным произношением",
+        "Обновлена страница обучения: новые иллюстрации, более компактная навигация и удобное расположение разделов",
+        "Добавлен персональный учебный план с рекомендациями на основе прогресса ученика",
+        "Улучшено повторение слов и добавлена дополнительная тренировка ошибок после уроков",
+        "В обычных уроках сохранены все 7 типов упражнений, а отслеживание прогресса стало подробнее",
+      ],
+      en: [
+        "Added interactive real-life scenarios for practicing communication in Slovak, Czech, and Polish",
+        "Added interactive stories where learners can influence the plot and check their reading comprehension",
+        "Added higher-quality audio with more natural pronunciation for the new stories and real-life scenarios",
+        "Redesigned the learning page with new illustrations, more compact navigation, and better section organization",
+        "Added a personalized learning plan with recommendations based on each student's progress",
+        "Improved vocabulary review and added extra practice for mistakes made during lessons",
+        "Kept all 7 exercise types in regular lessons and introduced more detailed progress tracking",
+      ],
+    },
+  },
+
   {
     date: "2026-07-28",
     title: {
