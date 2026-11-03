@@ -14,7 +14,9 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { ALL_MISSIONS } from "../app/learning/missions/data";
+import { EXTRA_MISSIONS } from "../app/learning/missions/content-extra";
 import { ALL_STORIES } from "../app/learning/stories/data";
+import { EXTRA_STORIES } from "../app/learning/stories/content-extra";
 
 loadEnv({ path: ".env.local", override: true, quiet: true });
 
@@ -35,6 +37,10 @@ const limitArg = parsedOption("limit");
 const generate = process.argv.includes("--generate");
 const all = process.argv.includes("--all");
 const force = process.argv.includes("--force");
+// Limits billing to the recently added authored content, even if old MP3 files are absent.
+const newScenarios = process.argv.includes("--new-scenarios");
+// Explicit permission to use the course default voice when a role-specific one is absent.
+const allowVoiceFallback = process.argv.includes("--allow-voice-fallback");
 const help = process.argv.includes("--help");
 if (courseArg && !["sk", "cs", "pl"].includes(courseArg)) throw Error("--course must be sk, cs, or pl");
 if (sectionArg && !["missions", "stories"].includes(sectionArg)) throw Error("--section must be missions or stories");
@@ -46,26 +52,37 @@ const keyFor = (clip: Pick<Clip, "course" | "speaker" | "text">) =>
   JSON.stringify([clip.course, clip.speaker, normalizeText(clip.text)]);
 
 const roleGender: Record<Course, { female: Set<string>; male: Set<string> }> = {
-  sk: { female: new Set(["Predavačka", "Recepcia", "Vedúca", "Suseda", "Susedka"]), male: new Set(["Kolega", "Kolega (telefonát)", "Martin", "Správca domu", "Rozprávač"]) },
-  cs: { female: new Set(["Prodavačka", "Recepční", "Sousedka", "Eva"]), male: new Set(["Kolega", "Petr", "Soused", "Správce", "Vypravěč"]) },
-  pl: { female: new Set(["Sprzedawczyni", "Rejestratorka", "Sąsiadka", "Kasia"]), male: new Set(["Kierownik", "Kolega", "Piotr", "Sąsiad", "Zarządca", "Narrator"]) },
+  sk: { female: new Set(["Predavačka", "Recepcia", "Vedúca", "Suseda", "Susedka", "Čašníčka", "Majiteľka bytu", "Cestujúca", "Personalistka"]), male: new Set(["Kolega", "Kolega (telefonát)", "Martin", "Správca domu", "Rozprávač", "Sprievodca", "Uchádzač"]) },
+  cs: { female: new Set(["Prodavačka", "Recepční", "Sousedka", "Eva", "Číšnice", "Majitelka bytu", "Cestující", "Personalistka"]), male: new Set(["Kolega", "Petr", "Soused", "Správce", "Vypravěč", "Průvodčí", "Uchazeč"]) },
+  pl: { female: new Set(["Sprzedawczyni", "Rejestratorka", "Sąsiadka", "Kasia", "Kelnerka", "Właścicielka mieszkania", "Pasażerka", "Rekruterka"]), male: new Set(["Kierownik", "Kolega", "Piotr", "Sąsiad", "Zarządca", "Narrator", "Konduktor", "Kandydat"]) },
 };
 const voices: Record<Course, { default?: string; male?: string; female?: string }> = {
   sk: { default: process.env.ELEVENLABS_VOICE_ID_Slovak_Female, female: process.env.ELEVENLABS_VOICE_ID_Slovak_Female, male: process.env.ELEVENLABS_VOICE_ID_Slovak_Male },
   cs: { default: process.env.ELEVENLABS_VOICE_ID_Czech_Male, male: process.env.ELEVENLABS_VOICE_ID_Czech_Male, female: process.env.ELEVENLABS_VOICE_ID_Czech_Female },
   pl: { default: process.env.ELEVENLABS_VOICE_ID_Polish, male: process.env.ELEVENLABS_VOICE_ID_Polish_Male, female: process.env.ELEVENLABS_VOICE_ID_Polish_Female },
 };
-function pickVoice(clip: Clip): string | undefined {
+type VoiceSelection = { voice?: string; fallback?: "male" | "female" };
+function pickVoice(clip: Clip): VoiceSelection {
   const configured = voices[clip.course];
   const role = roleGender[clip.course];
-  if (role.female.has(clip.speaker)) return configured.female || configured.default;
-  if (role.male.has(clip.speaker)) return configured.male || configured.default;
-  return configured.default;
+  if (role.female.has(clip.speaker)) {
+    if (configured.female) return { voice: configured.female };
+    return { voice: configured.default, fallback: configured.default ? "female" : undefined };
+  }
+  if (role.male.has(clip.speaker)) {
+    if (configured.male) return { voice: configured.male };
+    return { voice: configured.default, fallback: configured.default ? "male" : undefined };
+  }
+  return { voice: configured.default };
+}
+function fallbackEnvName(course: Course, gender: "male" | "female"): string {
+  const language = { sk: "Slovak", cs: "Czech", pl: "Polish" }[course];
+  return `ELEVENLABS_VOICE_ID_${language}_${gender === "male" ? "Male" : "Female"}`;
 }
 function uniqueClips(): Clip[] {
   const lines: Clip[] = [];
   if (!sectionArg || sectionArg === "missions") {
-    for (const mission of ALL_MISSIONS) {
+    for (const mission of newScenarios ? EXTRA_MISSIONS : ALL_MISSIONS) {
       if (courseArg && mission.course !== courseArg) continue;
       for (const step of mission.steps) {
         if (step.kind === "dialogue") lines.push({ course: mission.course, speaker: step.speaker, text: step.sk, origin: `mission:${mission.slug}:${step.id}` });
@@ -74,7 +91,7 @@ function uniqueClips(): Clip[] {
     }
   }
   if (!sectionArg || sectionArg === "stories") {
-    for (const story of ALL_STORIES) {
+    for (const story of newScenarios ? EXTRA_STORIES : ALL_STORIES) {
       if (courseArg && story.course !== courseArg) continue;
       for (const node of story.nodes) {
         if (node.kind === "scene") lines.push({ course: story.course, speaker: node.speaker, text: node.sk, origin: `story:${story.slug}:${node.id}` });
@@ -126,10 +143,12 @@ function saveManifest(manifest: Saved) {
 }
 async function main() {
   if (help) {
-    console.log("Preview: npm run tts:learning -- --course=sk");
-    console.log("Paid pilot: npm run tts:learning -- --course=sk --generate --limit=5");
-    console.log("Paid full generation: npm run tts:learning -- --generate --all");
-    console.log("Options: --course=sk|cs|pl --section=missions|stories --force");
+    console.log("Preview new content only: npm run tts:learning -- --new-scenarios");
+    console.log("Preview all content: npm run tts:learning -- --course=sk");
+    console.log("Paid pilot: npm run tts:learning -- --new-scenarios --course=sk --generate --limit=3");
+    console.log("Paid full generation for NEW scenarios only: npm run tts:learning -- --new-scenarios --generate --all");
+    console.log("Paid full generation (all material): npm run tts:learning -- --generate --all");
+    console.log("Options: --new-scenarios --course=sk|cs|pl --section=missions|stories --force --allow-voice-fallback");
     return;
   }
   const manifest: Saved = existsSync(manifestFile) ? JSON.parse(readFileSync(manifestFile, "utf8")) : {};
@@ -137,11 +156,17 @@ async function main() {
   const pending: Array<{ clip: Clip; voice: string; path: ReturnType<typeof audioLocation> }> = [];
   let existing = 0;
   let voiceMissing = 0;
+  let roleFallbacks = 0;
+  const fallbackExamples = new Set<string>();
   for (const clip of clips) {
-    const configuredVoice = pickVoice(clip);
-    if (!configuredVoice) voiceMissing++;
+    const selection = pickVoice(clip);
+    if (!selection.voice) voiceMissing++;
+    if (selection.fallback) {
+      roleFallbacks++;
+      fallbackExamples.add(`${clip.course} / ${clip.speaker}: ${fallbackEnvName(clip.course, selection.fallback)}`);
+    }
     // A dry-run can still count characters when no paid account is configured.
-    const voice = configuredVoice || "VOICE_NOT_CONFIGURED";
+    const voice = selection.voice || "VOICE_NOT_CONFIGURED";
     const path = audioLocation(clip, voice);
     if (!force && existsSync(path.absolute) && statSync(path.absolute).size > 1000) {
       manifest[keyFor(clip)] = path.publicPath;
@@ -151,13 +176,19 @@ async function main() {
     pending.push({ clip, voice, path });
   }
   const chars = pending.reduce((total, x) => total + normalizeText(x.clip.text).length, 0);
-  console.log(`FLUNIO VOICE | ${generate ? "PAID GENERATION" : "DRY RUN (no charge)"}`);
+  console.log(`FLUNIO VOICE | ${generate ? "PAID GENERATION" : "DRY RUN (no charge)"}${newScenarios ? " | NEW SCENARIOS ONLY" : ""}`);
   console.log(`Unique lines: ${clips.length}; existing MP3: ${existing}; pending: ${pending.length}; missing voice configuration: ${voiceMissing}`);
+  console.log(`Role-specific voice fallbacks: ${roleFallbacks} (using a configured course default voice)`);
+  if (fallbackExamples.size) {
+    console.log("Role voice IDs not configured (no secret values displayed):");
+    for (const entry of [...fallbackExamples].sort()) console.log(`  ${entry}`);
+  }
   console.log(`Pending characters: ${chars} (~${chars} credits with Eleven Multilingual v2; confirm current ElevenLabs billing)`);
   console.log("By course:", Object.fromEntries((["sk", "cs", "pl"] as Course[]).map(c => [c, pending.filter(x => x.clip.course === c).length])));
   for (const x of pending.slice(0, 6)) console.log(`  ${x.clip.course} / ${x.clip.speaker}: ${normalizeText(x.clip.text).slice(0, 100)}`);
   if (!generate) { console.log("No generation performed. Use --generate --limit=5 to create a small paid sample."); return; }
-  if (voiceMissing) throw Error("Missing a base voice ID for a selected language in .env.local; no API calls were sent.");
+  if (voiceMissing) throw Error("Missing a voice even for some course defaults in .env.local; no API calls were sent.");
+  if (roleFallbacks && !allowVoiceFallback) throw Error("Some speakers would use a course default voice instead of a matching male/female voice. Configure the IDs shown above or explicitly add --allow-voice-fallback; no API calls were sent.");
   if (!process.env.ELEVENLABS_API_KEY) throw Error("Missing ELEVENLABS_API_KEY in .env.local; no API calls were sent.");
   const batch = all ? pending : pending.slice(0, Number(limitArg));
   console.log(`Approved batch: ${batch.length} clips / ${batch.reduce((n, v) => n + normalizeText(v.clip.text).length, 0)} characters`);
