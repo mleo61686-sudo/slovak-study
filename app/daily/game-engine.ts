@@ -1,11 +1,13 @@
 import type { DailyCourse } from "./question-bank";
 import { EXPRESSIONS, GAPS, type Expression, type Gap, type Level } from "./game-data";
 import { utcDayIndex } from "./question-bank";
+import { SENTENCE_BANK } from "./sentence-bank";
 
 export type Mode = "meaning" | "order" | "gap" | "truth" | "pairs" | "type";
 export type GameRound = {
   mode: Mode;
   id: string;
+  orderSource?: "lesson";
   expression?: Expression;
   gap?: Gap;
   choices?: string[];
@@ -16,7 +18,7 @@ export type GameRound = {
   shuffledPairIds?: number[];
 };
 
-const SEQUENCE: Mode[] = ["meaning", "order", "gap", "truth", "pairs", "type", "gap", "truth", "order", "meaning", "type", "pairs"];
+const SEQUENCE: Mode[] = ["order", "meaning", "gap", "truth", "order", "pairs", "type", "order", "meaning", "gap", "type", "order"];
 export const ROUND_COUNT = SEQUENCE.length;
 
 function createRng(seed: number) {
@@ -37,6 +39,28 @@ function shuffle<T>(input: readonly T[], random: () => number): T[] {
   return result;
 }
 
+/** Four different course sentences per day, in nonoverlapping deterministic blocks.
+ * A sentence never reappears in a daily mission until its entire level deck has rotated.
+ * A fixed four-sentence block protects adjacent dates at deck wraparound.
+ */
+export const LESSON_SENTENCES_PER_DAY = 4;
+export function dailyLessonSentences(course: DailyCourse, level: Level, day: string): readonly string[] {
+  const pool = SENTENCE_BANK[course][level];
+  const blocks = Math.floor(pool.length / LESSON_SENTENCES_PER_DAY);
+  if (!blocks) throw new Error(`No lesson sentences for ${course}/${level}`);
+  const start = ((utcDayIndex(day) % blocks) * LESSON_SENTENCES_PER_DAY);
+  return pool.slice(start, start + LESSON_SENTENCES_PER_DAY);
+}
+
+/** A lesson phrase is used strictly as a sentence-building prompt, never as a
+ * fabricated translation, definition, or multiple-choice distractor.
+ */
+export function makeLessonOrderRound(sentence: string, id: string, rng: () => number): GameRound {
+  const tokens = shuffle(sentence.trim().split(/\s+/).map((text, index) => ({id:index,text})),rng);
+  if (tokens.length > 1 && tokens.every((token,i) => token.id === i)) tokens.push(tokens.shift()!);
+  return {mode:"order",id,orderSource:"lesson",expression:{phrase:sentence,example:sentence,answer:"",wrong:["",""]},tokens};
+}
+
 /** Repeatable for the same day, course and level, without a backend or per-visit AI calls. */
 export function createDailyRounds(course: DailyCourse, level: Level, day: string): GameRound[] {
   const dayIndex = utcDayIndex(day);
@@ -45,11 +69,13 @@ export function createDailyRounds(course: DailyCourse, level: Level, day: string
   const random = createRng((dayIndex * 2654435761 + courseIndex * 73939 + levelIndex * 19997) >>> 0);
   const deck = shuffle(EXPRESSIONS[course][level], random);
   const gaps = shuffle(GAPS[course][level], random);
-  let expressionIndex = 0, gapIndex = 0;
+  let expressionIndex = 0, gapIndex = 0, lessonIndex = 0;
+  const lessons = dailyLessonSentences(course, level, day);
   const chosenModes = SEQUENCE;
 
   return chosenModes.map((mode, index) => {
     const id = `${course}-${level}-${day}-${index}`;
+    if (mode === "order") return makeLessonOrderRound(lessons[lessonIndex++],id,random);
     if (mode === "gap" || mode === "type") {
       const item = gaps[gapIndex++ % gaps.length];
       if (mode === "type") return {mode, id, gap: item};

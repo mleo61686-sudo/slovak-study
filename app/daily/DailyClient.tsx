@@ -14,7 +14,7 @@ import type { Level } from "./game-data";
 const LOCALE: Record<DailyCourse, string> = {sk:"sk-SK",cs:"cs-CZ",pl:"pl-PL"};
 const COPY = {
   sk: {
-    kicker:"Jazyková aréna", daily:"Denná výzva", title:"Každý deň o úroveň vyššie.", tagline:"12 kôl. Šesť spôsobov, ako si preveriť jazyk. Každý deň nový mix.",
+    kicker:"Jazyková aréna", daily:"Denná výzva", title:"Každý deň o úroveň vyššie.", tagline:"12 kôl, šesť typov úloh a štyri nové vety z kurzov každý deň.",
     level:"Obtiažnosť", starter:"Základy", everyday:"V praxi", advanced:"Pokročilý", starterSub:"A0–A1", everydaySub:"A2–B1", advancedSub:"B2–C1",
     play:"Spustiť výzvu", resume:"Pokračovať v hre", again:"Hrať znova", other:"Ďalšie jazyky", current:"Aktuálny kurz", change:"Zmeniť kurz", day:"Dnes",
     modes:"Čo ťa čaká", stats:"Tvoja bilancia", streak:"Séria dní", days:"Aktívne dni", best:"Najlepšia séria", rounds:"kôl", pts:"body", round:"Kolo", points:"Body",
@@ -27,7 +27,7 @@ const COPY = {
     finishedToday:"Dnešná misia je splnená", nextDay:"Zajtra príde nová denná zostava.", practice:"Voľný tréning", practiceInfo:"Nová zostava pri každom spustení. Trénuj vlastným tempom.", review:"Oprav svoje chyby", reviewInfo:"Vráť sa k slovám, ktoré ti zatiaľ nešli.", emptyReview:"Zatiaľ nemáš čo opakovať.", weekly:"Tvoj týždeň", weeklyGoal:"Cieľ: 5 dní zo 7", weeklyDone:"Týždenný cieľ splnený!", trainingDone:"Tréning dokončený", reviewDone:"Opakovanie dokončené", dailyRecord:"Dnešný výsledok", keepGoing:"Ďalší tréning", goLobby:"Späť do arény", weakCount:"Na opakovanie", practiceCount:"Tréningové kolá", courseNote:"Jazyk sa riadi aktívnym kurzom v profile.", privacy:"Výsledky sa ukladajú v tomto prehliadači, nie do účtu.", introHint:"Vyber si úroveň, potom vstúp do arény.", back:"Naspäť", game:"Hra", linkLearn:"Kurzy a lekcie",
   },
   cs: {
-    kicker:"Jazyková aréna", daily:"Denní výzva", title:"Každý den o úroveň výš.", tagline:"12 kol. Šest způsobů, jak si ověřit jazyk. Každý den nový mix.",
+    kicker:"Jazyková aréna", daily:"Denní výzva", title:"Každý den o úroveň výš.", tagline:"12 kol, šest typů úloh a čtyři nové věty z kurzů každý den.",
     level:"Obtížnost", starter:"Základy", everyday:"V praxi", advanced:"Pokročilý", starterSub:"A0–A1", everydaySub:"A2–B1", advancedSub:"B2–C1",
     play:"Spustit výzvu", resume:"Pokračovat ve hře", again:"Hrát znovu", other:"Další jazyky", current:"Aktuální kurz", change:"Změnit kurz", day:"Dnes",
     modes:"Co tě čeká", stats:"Tvoje bilance", streak:"Série dnů", days:"Aktivní dny", best:"Nejlepší série", rounds:"kol", pts:"body", round:"Kolo", points:"Body",
@@ -40,7 +40,7 @@ const COPY = {
     finishedToday:"Dnešní mise je splněná", nextDay:"Zítra přijde nová denní sestava.", practice:"Volný trénink", practiceInfo:"Nová sestava při každém spuštění. Trénuj vlastním tempem.", review:"Oprav své chyby", reviewInfo:"Vrať se ke slovům, která ti ještě nešla.", emptyReview:"Zatím nemáš co opakovat.", weekly:"Tvůj týden", weeklyGoal:"Cíl: 5 dní ze 7", weeklyDone:"Týdenní cíl splněn!", trainingDone:"Trénink dokončen", reviewDone:"Opakování dokončeno", dailyRecord:"Dnešní výsledek", keepGoing:"Další trénink", goLobby:"Zpět do arény", weakCount:"K opakování", practiceCount:"Tréninková kola", courseNote:"Jazyk se řídí aktivním kurzem v profilu.", privacy:"Výsledky se ukládají v tomto prohlížeči, ne do účtu.", introHint:"Vyber si úroveň a vstup do arény.", back:"Zpět", game:"Hra", linkLearn:"Kurzy a lekce",
   },
   pl: {
-    kicker:"Arena językowa", daily:"Codzienne wyzwanie", title:"Każdego dnia poziom wyżej.", tagline:"12 rund. Sześć sposobów sprawdzenia języka. Codziennie nowy zestaw.",
+    kicker:"Arena językowa", daily:"Codzienne wyzwanie", title:"Każdego dnia poziom wyżej.", tagline:"12 rund, sześć typów zadań i cztery nowe zdania z kursów każdego dnia.",
     level:"Poziom trudności", starter:"Podstawy", everyday:"W praktyce", advanced:"Zaawansowany", starterSub:"A0–A1", everydaySub:"A2–B1", advancedSub:"B2–C1",
     play:"Rozpocznij wyzwanie", resume:"Wróć do gry", again:"Zagraj ponownie", other:"Inne języki", current:"Aktualny kurs", change:"Zmień kurs", day:"Dzisiaj",
     modes:"Co cię czeka", stats:"Twoje wyniki", streak:"Dni z rzędu", days:"Aktywne dni", best:"Najlepsza seria", rounds:"rund", pts:"pkt", round:"Runda", points:"Punkty",
@@ -150,6 +150,7 @@ export default function DailyClient() {
     const draft=readDraft(course,level,day);
     setStep(draft?.step??0);setScore(draft?.score??0);setMistakes(draft?.mistakes??0);
     clearRound();setPhase("game");
+    try{track("daily_arcade_started",{course,level,resume:!!draft});}catch{/* optional */}
   }
   function startPractice() {
     if(!day)return;
@@ -159,12 +160,14 @@ export default function DailyClient() {
     const generated=createPracticeRounds(course,level,day,run,[...recent,...todaySubjects]);
     writeRecent(course,level,generated.flatMap(subjectsForRound));
     setSessionRounds(generated);setPlayMode("practice");resetPlay();setPhase("game");
+    try{track("daily_arcade_practice_started",{course,level,run});}catch{/* optional */}
   }
   function startReview() {
     if(!day)return;
     const generated=createReviewRounds(course,level,readWeak(course,level),day);
     if(!generated.length){setWeak([]);return;}
     setSessionRounds(generated);setPlayMode("review");resetPlay();setPhase("game");
+    try{track("daily_arcade_review_started",{course,level,rounds:generated.length});}catch{/* optional */}
   }
   function resolve(isCorrect: boolean, option: number | null = null) {
     if (resolved) return;
@@ -209,6 +212,9 @@ export default function DailyClient() {
       }else if(playMode==="practice"){
         addPracticeCompletion(course,level,roundCount);
         setPracticeCompleted(readPracticeCompletions(course,level));
+        try{track("daily_arcade_practice_completed",{course,level,score:nextScore,rounds:roundCount});}catch{/* optional */}
+      }else if(playMode==="review"){
+        try{track("daily_arcade_review_completed",{course,level,score:nextScore,rounds:roundCount});}catch{/* optional */}
       }
       setPhase("done");
     }else{

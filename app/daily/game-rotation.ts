@@ -2,11 +2,14 @@
  * This is a finite, curated offline question bank, NOT an infinite stream of new content. */
 import {EXPRESSIONS, GAPS, type Expression, type Gap, type Level} from './game-data';
 import type {DailyCourse} from './question-bank';
-import type {GameRound, Mode} from './game-engine';
+import { makeLessonOrderRound, dailyLessonSentences, LESSON_SENTENCES_PER_DAY, type GameRound, type Mode } from './game-engine';
+import { SENTENCE_BANK } from './sentence-bank';
+import { utcDayIndex } from './question-bank';
 
 export const PRACTICE_ROUND_COUNT = 8;
 export function subjectsForRound(round: GameRound): string[] {
   if (round.pairs) return round.pairs.map(pair => `e:${pair.phrase}`);
+  if (round.orderSource === 'lesson' && round.expression) return [`s:${round.expression.example}`];
   if (round.expression) return [`e:${round.expression.phrase}`];
   if (round.gap) return [`g:${round.gap.before}|${round.gap.answer}`];
   return [];
@@ -55,6 +58,15 @@ export function createPracticeRounds(course:DailyCourse,level:Level,day:string,r
       return makeRound(mode,id,rng,undefined,undefined,selected);
     }
     if(mode==='gap'||mode==='type')return makeRound(mode,id,rng,undefined,gaps[gp++%gaps.length]);
+    if(mode==='order'){
+      const corpus=SENTENCE_BANK[course][level];
+      // Skip all four lesson sentences from the current daily mission.
+      // Repeated practice runs advance through the remaining sentences.
+      const today=dailyLessonSentences(course,level,day);
+      let offset=(utcDayIndex(day)*LESSON_SENTENCES_PER_DAY + LESSON_SENTENCES_PER_DAY + Math.max(0,run-1))%corpus.length;
+      for(let attempt=0;attempt<corpus.length && today.includes(corpus[offset]);attempt++)offset=(offset+1)%corpus.length;
+      return makeLessonOrderRound(corpus[offset],id,rng);
+    }
     return makeRound(mode,id,rng,expr[ep++%expr.length]);
   });
 }
@@ -64,9 +76,12 @@ export function createReviewRounds(course:DailyCourse,level:Level,keys:readonly 
   const rng=randomFrom(`${course}|${level}|${day}|review|${keys.join('/')}`);
   const expressions=new Map(EXPRESSIONS[course][level].map(e=>[`e:${e.phrase}`,e]));
   const gaps=new Map(GAPS[course][level].map(g=>[`g:${g.before}|${g.answer}`,g]));
+  const sentences=new Set(SENTENCE_BANK[course][level]);
   const rounds:GameRound[]=[];
   for(const key of keys.slice(0,8)){
-    if(expressions.has(key)){
+    if(key.startsWith('s:') && sentences.has(key.slice(2))){
+      rounds.push(makeLessonOrderRound(key.slice(2),`review-${rounds.length}`,rng));
+    }else if(expressions.has(key)){
       const e=expressions.get(key)!;
       const mode:Mode=rounds.length%3===0?'order':rounds.length%2===0?'truth':'meaning';
       rounds.push(makeRound(mode,`review-${key}-${rounds.length}`,rng,e));

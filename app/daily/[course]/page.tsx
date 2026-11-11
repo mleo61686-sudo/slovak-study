@@ -7,10 +7,10 @@ import "../daily.css";
 const LANGUAGES = {
   slovak: {
     lang: "sk", title: "Denné cvičenia slovenčiny – jazyková hra", name: "slovenčinu",
-    description: "Precvičuj slovenčinu každý deň v jazykovej hre Flunio: denná misia, skladanie viet, slovné hádanky a opakovanie chýb. Tri úrovne A0–C1.",
+    description: "Precvičuj slovenčinu každý deň v jazykovej hre Flunio: denná misia, skladanie viet, slovné hádanky a opakovanie chýb. Tri úrovne A0–C1, každý deň štyri nové vety z kurzov.",
     section: "Slovenčina, ktorá zostáva v hlave.", about: "Nestačí si nové slová iba prečítať. Vyskúšaj ich v hre: poskladaj vetu, nájdi správny význam, spoj dvojice a zapamätaj si výrazy, ktoré využiješ v rozhovore.",
     items: [
-      { no: "01", icon: "✦", title: "Denná misia", text: "Každý deň jedna výzva s dvanástimi kolami. Sleduj svoje výsledky a buduj sériu dní." },
+      { no: "01", icon: "✦", title: "Denná misia", text: "Každý deň 12 kôl vrátane štyroch nových viet z kurzov. Sleduj výsledky a buduj sériu dní." },
       { no: "02", icon: "◈", title: "Voľný tréning", text: "Pokračuj po dennej misii ďalšími kolami. Precvič si jazyk vlastným tempom." },
       { no: "03", icon: "◎", title: "Opakovanie chýb", text: "Vraciaš sa k slovám, ktoré ti robili problémy, namiesto opakovania všetkého odznova." },
     ],
@@ -19,10 +19,10 @@ const LANGUAGES = {
   },
   czech: {
     lang: "cs", title: "Denní cvičení češtiny – jazyková hra", name: "češtinu",
-    description: "Procvičuj češtinu každý den ve hře Flunio: denní mise, skládání vět, slovní hádanky a opakování chyb. Tři úrovně A0–C1.",
+    description: "Procvičuj češtinu každý den ve hře Flunio: denní mise, skládání vět, slovní hádanky a opakování chyb. Tři úrovně A0–C1, každý den čtyři nové věty z kurzů.",
     section: "Čeština, kterou si zapamatuješ.", about: "Nestačí se jen dívat na nová slova. Zahraj si s nimi: slož větu, odhal význam, spoj dvojice a vyzkoušej fráze, které se hodí v běžném rozhovoru.",
     items: [
-      { no: "01", icon: "✦", title: "Denní mise", text: "Každý den jedna výzva o dvanácti kolech. Sleduj výsledky a buduj sérii dnů." },
+      { no: "01", icon: "✦", title: "Denní mise", text: "Každý den 12 kol včetně čtyř nových vět z kurzů. Sleduj výsledky a buduj sérii dnů." },
       { no: "02", icon: "◈", title: "Volný trénink", text: "Po denní misi pokračuj dalšími koly. Procvičuj si češtinu svým tempem." },
       { no: "03", icon: "◎", title: "Opakování chyb", text: "Vracej se k výrazům, které ti ještě nejdou, místo neustálého začínání od nuly." },
     ],
@@ -31,10 +31,10 @@ const LANGUAGES = {
   },
   polish: {
     lang: "pl", title: "Codzienne ćwiczenia z polskiego – gra językowa", name: "polski",
-    description: "Ćwicz polski codziennie w grze Flunio: wyzwanie dnia, układanie zdań, zagadki słowne i powtórki błędów. Trzy poziomy A0–C1.",
+    description: "Ćwicz polski codziennie w grze Flunio: wyzwanie dnia, układanie zdań, zagadki słowne i powtórki błędów. Trzy poziomy A0–C1, każdego dnia cztery nowe zdania z kursów.",
     section: "Polski, który zostaje w pamięci.", about: "Samo czytanie nowych słów nie wystarczy. Wykorzystaj je w grze: ułóż zdanie, odkryj znaczenie, połącz pary i przećwicz zwroty przydatne w rozmowie.",
     items: [
-      { no: "01", icon: "✦", title: "Wyzwanie dnia", text: "Codziennie jedna misja z dwunastoma rundami. Sprawdzaj wyniki i buduj serię dni." },
+      { no: "01", icon: "✦", title: "Wyzwanie dnia", text: "Codziennie 12 rund, w tym cztery nowe zdania z kursów. Sprawdzaj wyniki i buduj serię dni." },
       { no: "02", icon: "◈", title: "Trening swobodny", text: "Po wyzwaniu dnia kontynuuj kolejne rundy. Ćwicz we własnym tempie." },
       { no: "03", icon: "◎", title: "Powtórka błędów", text: "Wracaj do zwrotów, które sprawiały ci trudności, zamiast zaczynać wszystko od początku." },
     ],
