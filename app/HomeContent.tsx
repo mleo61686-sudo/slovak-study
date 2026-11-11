@@ -7,6 +7,7 @@ import MistakesHomeCard from "./components/home/MistakesHomeCard";
 type Lang = "ua" | "ru" | "en";
 
 type IconName =
+  | "daily"
   | "lessons"
   | "courses"
   | "practice"
@@ -34,6 +35,9 @@ type HomeTranslations = {
 
   courses: string;
   coursesDesc: string;
+
+  daily: string;
+  dailyDesc: string;
 
   practice: string;
   practiceDesc: string;
@@ -84,7 +88,7 @@ const t: Record<Lang, HomeTranslations> = {
 
     currentCourse: "Поточний курс",
     levels: "Рівні A0–B2",
-    freeLevel: "A0 безкоштовний",
+    freeLevel: "A0 · початок",
     continueLearning: "Продовжити навчання",
 
     quickTitle: "Швидкий доступ",
@@ -95,6 +99,9 @@ const t: Record<Lang, HomeTranslations> = {
 
     courses: "Курси",
     coursesDesc: "Змінити мову",
+
+    daily: "Щоденна гра",
+    dailyDesc: "12 ігрових раундів",
 
     practice: "Тренажер",
     practiceDesc: "Закріпити знання",
@@ -152,7 +159,7 @@ const t: Record<Lang, HomeTranslations> = {
 
     currentCourse: "Текущий курс",
     levels: "Уровни A0–B2",
-    freeLevel: "A0 бесплатный",
+    freeLevel: "A0 · начало",
     continueLearning: "Продолжить обучение",
 
     quickTitle: "Быстрый доступ",
@@ -163,6 +170,9 @@ const t: Record<Lang, HomeTranslations> = {
 
     courses: "Курсы",
     coursesDesc: "Сменить язык",
+
+    daily: "Игра дня",
+    dailyDesc: "12 игровых раундов",
 
     practice: "Тренажёр",
     practiceDesc: "Закрепить знания",
@@ -220,7 +230,7 @@ const t: Record<Lang, HomeTranslations> = {
 
     currentCourse: "Current course",
     levels: "Levels A0–B2",
-    freeLevel: "A0 is free",
+    freeLevel: "A0 · start",
     continueLearning: "Continue learning",
 
     quickTitle: "Quick access",
@@ -231,6 +241,9 @@ const t: Record<Lang, HomeTranslations> = {
 
     courses: "Courses",
     coursesDesc: "Change language",
+
+    daily: "Daily game",
+    dailyDesc: "12 game rounds",
 
     practice: "Trainer",
     practiceDesc: "Practise your skills",
@@ -334,6 +347,13 @@ function Glyph({ name }: { name: IconName }) {
   };
 
   switch (name) {
+    case "daily":
+      return (
+        <svg {...sharedProps}>
+          <path d="m13 2-8 11h6l-1 9 9-12h-6l1-8Z" />
+          <path d="m3 4 1 2M20 19l1 2" />
+        </svg>
+      );
     case "lessons":
       return (
         <svg {...sharedProps}>
@@ -551,6 +571,14 @@ export default function HomeContent({
       glowClass: "bg-emerald-400",
     },
     {
+      href: `/daily/${courseId === "pl" ? "polish" : courseId === "cs" ? "czech" : "slovak"}`,
+      icon: "daily",
+      title: tr.daily,
+      description: tr.dailyDesc,
+      iconClass: "bg-gradient-to-br from-cyan-400 via-indigo-500 to-fuchsia-600",
+      glowClass: "bg-fuchsia-400",
+    },
+    {
       href: "/practice",
       icon: "practice",
       title: tr.practice,
@@ -715,19 +743,11 @@ export default function HomeContent({
           </div>
 
           <div className="rounded-[27px] border border-white/10 bg-black/10 px-2 py-4 shadow-inner sm:px-4">
-            <div className="grid grid-cols-6 gap-x-1 gap-y-5 sm:grid-cols-4 sm:gap-x-3 xl:grid-cols-8">
-              {apps.map((app, index) => (
+            <div className="grid grid-cols-6 gap-x-1 gap-y-5 sm:grid-cols-6 sm:gap-x-3 xl:grid-cols-9">
+              {apps.map((app) => (
                 <div
                   key={app.href}
-                  className={[
-                    "col-span-2 sm:col-span-1",
-                    index === 6
-                      ? "col-start-2 sm:col-start-auto"
-                      : "",
-                    index === 7
-                      ? "col-start-4 sm:col-start-auto"
-                      : "",
-                  ].join(" ")}
+                  className="col-span-2 xl:col-span-1"
                 >
                   <AppLauncherItem {...app} />
                 </div>

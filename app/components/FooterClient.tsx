@@ -125,6 +125,10 @@ export default function FooterClient() {
             aria-label="Footer"
             className="flex flex-wrap items-center gap-x-5 gap-y-2"
           >
+            <Link href="/daily" className="theme-footer-link transition hover:underline">
+              {safeLang === "ua" ? "Виклик дня" : safeLang === "ru" ? "Задание дня" : "Daily challenge"}
+            </Link>
+
             <Link
               href="/support"
               className="theme-footer-link transition hover:underline"

@@ -883,6 +883,10 @@ export default function Page() {
           <Link href="/learning" className={secondaryBlock}>
             Start learning in Flunio →
           </Link>
+
+          <Link href="/daily/polish" className={secondaryBlock}>
+            Play the daily Polish language game →
+          </Link>
         </div>
       </section>
 

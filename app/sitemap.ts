@@ -104,6 +104,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/dictionary",
     "/grammar",
     "/updates",
+    "/daily",
+    "/daily/slovak",
+    "/daily/czech",
+    "/daily/polish",
 
     // Level pages.
     "/learning/levels/a0",
